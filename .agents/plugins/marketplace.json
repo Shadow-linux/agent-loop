@@ -8,7 +8,7 @@
       "name": "agent-loop",
       "source": {
         "source": "local",
-        "path": "./"
+        "path": "./plugins/agent-loop"
       },
       "policy": {
         "installation": "AVAILABLE",
