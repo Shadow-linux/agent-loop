@@ -1,7 +1,7 @@
 {
   "name": "agent-loop",
   "version": "1.0.0",
-  "description": "A reusable skill for single-human, agent-assisted development workflows—from goal intake to verified close.",
+  "description": "Agent-guided single-human development loop. The agent controls workflow mechanics—stage classification, reference loading, artifact production, and human gates. Human controls goals and decisions. TDD by default.",
   "author": {
     "name": "Shadow-linux",
     "url": "https://github.com/Shadow-linux"
@@ -15,13 +15,13 @@
     "tdd",
     "planning",
     "development",
-    "agent-assisted"
+    "agent-guided"
   ],
   "skills": "./",
   "interface": {
     "displayName": "Agent Loop",
-    "shortDescription": "Single-human agent-assisted development workflow",
-    "longDescription": "Run a single-human, CLI-agent development loop from goal intake to verified close. Includes stage guides, artifact templates, and project memory protocols.",
+    "shortDescription": "Agent-guided development loop from goal intake to verified close",
+    "longDescription": "The agent acts as controller: inspects project state, classifies the entry scenario, loads stage-specific references, produces or updates agent-loop artifacts, and stops at human gates. The human controls goals, source requirements, and stage approvals. TDD is default. No stage skipping.",
     "developerName": "Shadow-linux",
     "category": "Coding",
     "capabilities": [
