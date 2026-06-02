@@ -43,12 +43,12 @@ New human source material should be archived inside a requirement set directory.
 | `tests.md` | test design, matrix, and links to test details | raw test output |
 | `plan.md` | active execution plan pointer or compact plan | historical execution record |
 | `notes.md` | decisions, evidence, drift, pause/close | original requirements |
-| `contracts.md` | delivery contract index, compact contracts, status, and verification links | temporary subagent assignments |
+| `contracts.md` | optional confirmed delivery contract index, compact contracts, status, and verification links | temporary subagent assignments |
 | `tasks/*` | detailed task instructions when complex mode is triggered | feature-wide ledger |
 | `tests/*` | detailed test cases when complex mode is triggered | raw test output |
 | `plans/*` | dated plan cycles when complex mode is triggered | current-state summary |
 | `handoffs/*` | subagent briefs and returned summaries when subagent mode is triggered | authoritative task status |
-| `contracts/*` | durable producer-consumer contract details when interface detail is needed | temporary task logs |
+| `contracts/*` | optional confirmed durable producer-consumer contract details when interface detail is needed | temporary task logs |
 
 ## Status Values
 
@@ -233,7 +233,7 @@ task set/order changed -> update tasks.md
 test strategy changed -> update tests.md
 active execution changed -> update plan.md
 actual execution/evidence changed -> update notes.md
-producer-consumer API/event/data/UI/library/runtime interface changed -> update contracts.md and matching contracts/* detail; list affected consumers; ask human confirmation before accepting a breaking change
+confirmed producer-consumer API/event/public-data/UI-state/SDK-library/runtime interface changed -> update contracts.md and matching contracts/* detail after human confirmation; list affected consumers; ask human confirmation before accepting a breaking change
 long-term project fact changed -> update project.md in simple mode, or matching project/*.md in enterprise mode
 submission/integration happened -> update notes.md Submit / Integrate
 new long-lived boundary directory created -> update project.md Directory Map in simple mode, or project/boundaries.md in enterprise mode, and propose directory AGENTS.md

@@ -112,7 +112,7 @@ contracts/LIB<nnn>-<slug>.md
 contracts/RUNTIME<nnn>-<slug>.md
 ```
 
-`contracts.md` remains the stable Delivery Contract index or compact contract file. Use `contracts/` for details when the producer-consumer boundary needs schemas, examples, errors, compatibility notes, history, or multiple consumer notes. Delivery Contracts are not limited to complex artifact mode.
+`contracts.md` remains the optional stable Delivery Contract index or compact contract file. Use `contracts/` for details only after human confirmation when the producer-consumer boundary needs schemas, examples, errors, compatibility notes, history, or multiple consumer notes. Delivery Contracts are not limited to complex artifact mode, but they are not default artifacts.
 
 Use stable IDs inside files too:
 

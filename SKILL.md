@@ -5,6 +5,8 @@ description: Use when starting, continuing, resuming, structuring, testing, impl
 
 # Agent Loop
 
+Version: 1.0.0
+
 Run a single-human, CLI-agent development loop from goal intake to verified close. This skill is a controller: it decides the current stage, loads the right reference, produces or updates `agent-loop` artifacts, and stops at human gates.
 
 ## Design Source Rule
@@ -77,6 +79,7 @@ templates/                         copy-ready artifact templates
 examples/login-feature/            small finished feature workspace
 examples/complex-saas-project/     larger takeover + feature execution workspace
 examples/remote-entry/             local empty directory pointing to a remote project
+CHANGELOG.md                        skill maintenance history; append meaningful future changes
 ```
 
 ## Required Runtime Behavior
@@ -91,7 +94,7 @@ examples/remote-entry/             local empty directory pointing to a remote pr
 8. Load `references/requirement-management.md` before copying, moving, renaming, indexing, or referencing human source requirements.
 9. Load `references/product-brief.md` when a feature needs product intent, product consensus, user stories, product scope, or PRD-like synthesis.
 10. Load `references/e2e-discovery.md` before designing or executing Web E2E/browser verification.
-10a. Load `references/delivery-contracts.md` when work crosses a frontend/backend, service, event, data, library, UI-behavior, or runtime boundary; before accepting or changing a consumer-facing interface; and during drift checks for those boundaries.
+10a. Load `references/delivery-contracts.md` when the human requests cross-boundary handoff/API/interface documentation, or when the agent detects a likely downstream consumer boundary such as frontend/backend, service, event, public data, SDK/library, UI state, or runtime behavior. Delivery Contracts are not created by default.
 11. Load `references/existing-project-onboarding.md` when taking over an existing project without reliable `agent-loop` memory.
 12. Load `references/large-projects.md` when the repo is large, old, unfamiliar, multi-package, or likely above 100k LOC.
 13. Load `references/complex-artifacts.md` when story/task/test/plan complexity crosses its trigger conditions.
@@ -147,9 +150,11 @@ If the local directory is only a remote-project entry point, create only thin lo
 - Whole-feature execution requires explicit human confirmation and only fits tiny features.
 - A feature may contain many stories and many tasks; `tasks.md` is the feature task ledger.
 - Use `product.md` for feature-level product intent when needed; durable cross-feature product consensus belongs in `project.md` Product Context.
-- Use `contracts.md` and optional `contracts/` detail files for durable producer-consumer delivery boundaries such as API, event, data, UI-behavior, library, or runtime interfaces. Keep temporary subagent assignment notes in `handoffs/`.
-- During Work Breakdown, Technical Design / Code Context, Plan, Review, and Drift Check, proactively detect whether a Delivery Contract is needed.
-- In Feature Auto-Loop, the agent may draft Delivery Contracts. Human confirmation is still required before a contract becomes `accepted` and before any breaking contract change.
+- Do not create `contracts.md` or `contracts/` by default. Use them only for durable producer-consumer delivery boundaries such as API, event, public data, UI state/behavior, SDK/library, or runtime interfaces.
+- Create or update Delivery Contract files only after human confirmation. The agent may proactively recommend one when it detects downstream impact, but simple single-person tasks, pure internal logic, and changes with no downstream consumer should skip contracts.
+- During Work Breakdown, Technical Design / Code Context, Plan, Review, and Drift Check, detect whether a Delivery Contract should be recommended.
+- Feature Auto-Loop and Task Auto-Run do not silently create Delivery Contract files. They must pause before contract file creation, contract acceptance, or breaking contract changes.
+- Keep temporary subagent assignment notes in `handoffs/`.
 - `plan.md` is the active plan for the current task/story, not the default whole-feature plan.
 - If `plan.md` is created, it must be construction-grade: exact paths, code context, interfaces, parameters, test code, commands, expected RED/GREEN output, and self-review.
 - Do not date the core `plan.md` filename. Date each plan cycle with `Plan ID`, `Created`, `Updated`, and record completed plan cycles in `notes.md`.

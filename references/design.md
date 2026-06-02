@@ -28,12 +28,12 @@ The core constraints inherited from the design sources are:
 - `requirements/` stores human source material packages as requirement set directories: requirements, prototypes, feedback, screenshots, recordings, links, and follow-up notes
 - requirement-set dates mean archive date only, not deadlines or feature lifecycle dates
 - `product.md` is optional feature-level product understanding when needed
-- each feature has stable `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`; `contracts.md` is added when producer-consumer boundaries exist
+- each feature has stable `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`; `contracts.md` is added only after human confirmation when producer-consumer boundaries need explicit handoff
 - stories live in `spec.md`; optional `tasks/USn/` or `tests/USn/` folders are detail grouping, not separate story workspaces
 - tasks live together in `tasks.md` by default; complex artifact mode may add linked detail files under `tasks/`
 - `plan.md` is for the active task/story, not the whole feature by default
 - submit/integrate is explicit and never commits, opens PRs, merges, or publishes without human confirmation
-- Delivery Contracts live in `contracts.md` and optional `contracts/*`; contract acceptance and breaking changes require human confirmation
+- Delivery Contracts live in `contracts.md` and optional `contracts/*`; file creation/update, contract acceptance, and breaking changes require human confirmation
 - non-trivial human confirmations use table-first Human Review Summary; complete artifacts remain source of truth
 - first version does not include multiplayer, roadmap graph, roadmap adapter, tdd-guard, complex ADR, global install, or automatic directory-level AGENTS.md without human confirmation
 

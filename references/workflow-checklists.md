@@ -142,8 +142,8 @@ Before human approval for non-trivial stage output:
 - [ ] Use only linear, parallel, and barrier structure.
 - [ ] Record dependencies and verification hints.
 - [ ] If a task creates a long-lived boundary directory, mark whether directory-level `AGENTS.md` should be proposed.
-- [ ] Detect durable producer-consumer boundaries: API, service, event, async workflow, data, UI behavior, library, or runtime.
-- [ ] Route to Delivery Contract If Needed before downstream implementation relies on assumptions.
+- [ ] Detect likely durable producer-consumer boundaries: API, service, event, async workflow, public data, UI state/behavior, SDK/library, or runtime.
+- [ ] Recommend Delivery Contract If Needed before downstream implementation relies on assumptions.
 - [ ] Do not use roadmap graph in v1.
 - [ ] Present task breakdown approval with Human Review Summary table.
 - [ ] Ask human to approve task granularity.
@@ -152,13 +152,14 @@ Before human approval for non-trivial stage output:
 
 - [ ] Load `delivery-contracts.md`.
 - [ ] Confirm that work crosses a durable producer-consumer boundary.
+- [ ] Confirm this is not a simple internal change with no downstream consumer.
 - [ ] Identify producer and named consumers.
+- [ ] Ask human confirmation before creating or updating contract files.
 - [ ] Create or update `contracts.md`.
 - [ ] Create `contracts/<ID>-<slug>.md` detail when schema, examples, errors, history, or multiple consumers need more space.
 - [ ] Record interface shape, inputs, outputs, errors, side effects, permissions, compatibility, producer verification, and consumer notes.
 - [ ] Keep temporary subagent assignments in `handoffs/`, not Delivery Contracts.
-- [ ] In Strict Mode, ask before writing contract files.
-- [ ] In Feature Auto-Loop, allow draft creation but stop before `accepted`.
+- [ ] In all modes, including Feature Auto-Loop and Task Auto-Run, ask before writing contract files.
 - [ ] Ask human confirmation before status becomes `accepted`.
 - [ ] Ask human confirmation and list affected consumers before a breaking contract change.
 

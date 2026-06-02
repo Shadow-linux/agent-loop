@@ -1,6 +1,8 @@
 # Delivery Contracts
 
-Use Delivery Contracts when feature work crosses a durable producer-consumer boundary. A contract lets a downstream developer, agent, frontend, service, worker, library user, or deployment operator continue without reverse-engineering upstream code.
+Use Delivery Contracts only when feature work crosses a durable producer-consumer boundary. A contract lets a downstream developer, agent, frontend, service, worker, library user, or deployment operator continue without reverse-engineering upstream code.
+
+Default rule: do not create a Delivery Contract for every feature. Simple single-person tasks, pure internal logic, and changes with no downstream consumer should use only `spec.md`, `tasks.md`, `tests.md`, `plan.md`, and `notes.md`.
 
 ## Core Rule
 
@@ -23,7 +25,20 @@ During Work Breakdown, Technical Design / Code Context, Plan, Review, or Drift C
 - a UI behavior contract handed from product/design/backend to frontend
 - a runtime, deployment, environment-variable, or integration boundary
 
-The agent should detect the need proactively. The human does not need to know a command.
+Human-requested triggers:
+
+- frontend/backend handoff
+- API documentation, API contract, interface contract, SDK contract, or event contract
+- material for another agent or human to continue downstream work
+- explicit request for a handoff document between producer and consumer work
+
+Agent-suggested triggers:
+
+- API, event, public data structure, SDK/library, UI state, runtime behavior, or shared schema will affect downstream work
+- another task/story clearly depends on a producer interface being stable
+- code review or drift check finds that downstream consumers are relying on undocumented behavior
+
+The agent should detect the need proactively and recommend one with a short reason. The human does not need to know a command. However, the agent must not create or update contract files until the human confirms the recommendation.
 
 ## Location
 
@@ -71,7 +86,7 @@ draft -> accepted -> implemented -> verified -> superseded
 ## Human Gates
 
 - In Strict Mode, ask before creating or changing contract files.
-- In Feature Auto-Loop, the agent may create or update a `draft` contract without pausing.
+- In Feature Auto-Loop and Task Auto-Run, the agent may recommend a contract but must pause before creating or updating contract files.
 - Moving a contract from `draft` to `accepted` always requires human confirmation.
 - A breaking change to an `accepted`, `implemented`, or `verified` contract always requires affected-consumer analysis first, then a separate human confirmation.
 - The human saying "just change it" before seeing affected consumers is not enough. Present the impact table, compatibility options, migration risk, and then ask again.

@@ -129,7 +129,7 @@ For each feature, identify boundaries in `spec.md` or `tasks.md`:
 
 If the affected boundaries are unclear, stop and clarify or run a bounded scan before task split.
 
-When a boundary has downstream consumers, load `delivery-contracts.md` and propose a Delivery Contract. Keep temporary subagent briefs in `handoffs/`; keep durable interface handoffs in `contracts.md` and optional `contracts/` details.
+When a boundary has downstream consumers, load `delivery-contracts.md` and propose a Delivery Contract. Write `contracts.md` or optional `contracts/` details only after human confirmation. Keep temporary subagent briefs in `handoffs/`; keep confirmed durable interface handoffs in `contracts.md` and optional `contracts/` details.
 
 For old-project onboarding, also record each stable boundary in `project.md` with its guidance status:
 
@@ -237,7 +237,7 @@ Large projects drift often. Classify drift:
 - detail artifact drift -> `tasks/*`, `tests/*`, or `plans/*` plus the matching index
 - evidence/decision drift -> `notes.md`
 - architectural or long-term fact drift -> `project.md`
-- producer-consumer interface drift -> `contracts.md` and matching `contracts/*` details, with affected consumers and human approval for breaking changes
+- producer-consumer interface drift -> propose `contracts.md` and matching `contracts/*` details, update after human confirmation, and require affected consumers plus human approval for breaking changes
 
 If a change affects future features, it belongs in `project.md` even if discovered during one feature.
 

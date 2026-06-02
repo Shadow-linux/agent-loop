@@ -394,8 +394,8 @@ Rules:
 - use `Agent-ready` only when acceptance, boundaries, and verification are clear enough for autonomous execution
 - for large projects, group tasks by stage and barrier in a single `tasks.md`
 - if complex artifact trigger conditions are met, load `complex-artifacts.md` and propose `tasks/` detail files
-- detect durable producer-consumer boundaries such as API, event, data, UI-behavior, library, or runtime interfaces
-- when a durable producer-consumer boundary exists, route to Delivery Contract If Needed before downstream implementation relies on assumptions
+- detect likely durable producer-consumer boundaries such as API, event, public data, UI state/behavior, SDK/library, or runtime interfaces
+- when a durable producer-consumer boundary likely exists, recommend Delivery Contract If Needed with a reason before downstream implementation relies on assumptions
 
 Exit:
 
@@ -404,7 +404,7 @@ Exit:
 
 ## Delivery Contract If Needed
 
-Entry: accepted spec or tasks reveal a durable producer-consumer boundary, or Technical Design, Review, or Drift Check discovers one later.
+Entry: the human requests frontend/backend handoff, API/interface documentation, an API contract, or material for another agent/person to continue downstream work; or accepted spec/tasks, Technical Design, Review, or Drift Check reveal a likely durable producer-consumer boundary.
 
 Load:
 
@@ -420,7 +420,7 @@ Detect:
 - public library/plugin API
 - runtime, deployment, environment-variable, or external integration boundary
 
-Write:
+Write after confirmation:
 
 - `contracts.md`
 - optional `contracts/<ID>-<slug>.md` details
@@ -429,9 +429,10 @@ Write:
 Rules:
 
 - keep temporary subagent assignment notes in `handoffs/`; do not use them as durable interface docs
+- Delivery Contracts are not default feature artifacts
+- skip Delivery Contracts for simple single-person tasks, pure internal logic, or changes with no downstream consumer
 - agent proactively recommends a Delivery Contract; the human does not need to request one by name
-- in Strict Mode, ask before writing contract files
-- in Feature Auto-Loop, draft contract files may be created or updated automatically
+- ask before writing contract files in every mode, including Feature Auto-Loop and Task Auto-Run
 - human confirmation is required before status becomes `accepted`
 - human confirmation after affected-consumer analysis is required before changing producer code, tests, or contract files for any breaking change to accepted, implemented, or verified contracts
 - creating a new `draft` or `superseded` contract cannot bypass the breaking-change gate when existing consumers would observe changed behavior

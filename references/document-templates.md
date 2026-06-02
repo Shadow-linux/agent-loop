@@ -128,13 +128,15 @@ Create after human confirmation. Prefer no file over a duplicated or low-informa
 
 ## Delivery Contracts
 
-Use `templates/contracts.md` when work crosses a durable producer-consumer boundary such as API, event, data, UI behavior, library, or runtime behavior.
+Use `templates/contracts.md` only after human confirmation when work crosses a durable producer-consumer boundary such as API, event, public data, UI state/behavior, SDK/library, or runtime behavior.
 
 Use `templates/delivery-contract.md` for detailed contracts under `contracts/`.
 
 Keep `handoffs/` for temporary subagent briefs and returned summaries. Delivery Contracts are durable interface handoffs for downstream consumers.
 
-Human confirmation is required before a contract becomes `accepted` and before breaking changes to accepted contracts.
+Human confirmation is required before creating/updating contract files, before a contract becomes `accepted`, and before breaking changes to accepted contracts.
+
+Do not create Delivery Contract files for simple single-person tasks, pure internal logic, or changes with no downstream consumer.
 
 ## `remote.md`
 

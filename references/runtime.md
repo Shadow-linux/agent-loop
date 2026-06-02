@@ -150,7 +150,7 @@ Feature Auto-Loop means:
 Feature Auto-Loop = give one feature a bounded release lane.
 ```
 
-In this mode, the agent may continue through Work Breakdown, Delivery Contract drafting if needed, Test Design, E2E Discovery if Web, Technical Design / Code Context, Plan if Needed, Analyze Consistency, Execute Agent-ready Tasks, Verify, Review, Drift Check, and Project Memory Update for the current feature. It must stop before contract acceptance, breaking contract changes, Submit / Integrate, and Pause / Close.
+In this mode, the agent may continue through Work Breakdown, Delivery Contract recommendation if needed, Test Design, E2E Discovery if Web, Technical Design / Code Context, Plan if Needed, Analyze Consistency, Execute Agent-ready Tasks, Verify, Review, Drift Check, and Project Memory Update for the current feature. It must stop before creating or updating Delivery Contract files, contract acceptance, breaking contract changes, Submit / Integrate, and Pause / Close.
 
 Task Auto-Run means:
 

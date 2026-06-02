@@ -84,10 +84,10 @@ When you start a conversation, the agent classifies the project into exactly one
 - **Rule**: Default to vertical slices. Task IDs: `T001`. Story labels: `US1`. Mark each task `Agent-ready` or `Human-gated`.
 
 ### Delivery Contract (If Needed)
-- **Entry**: Durable producer-consumer boundary detected.
+- **Entry**: Human asks for frontend/backend handoff, API/interface docs, contract material for another agent/person, or the agent detects likely downstream impact.
 - **Load**: `delivery-contracts.md`.
-- **Write**: `contracts.md` + optional `contracts/<ID>-<slug>.md`.
-- **Rule**: Human confirmation required before a contract becomes `accepted`. Breaking changes require affected-consumer analysis.
+- **Write after confirmation**: `contracts.md` + optional `contracts/<ID>-<slug>.md`.
+- **Rule**: Not default for every feature. Skip for simple single-person tasks, pure internal logic, and changes with no downstream consumer. Human confirmation is required before creating/updating contract files, before a contract becomes `accepted`, and before breaking changes after affected-consumer analysis.
 
 ### Test Design
 - **Entry**: Accepted tasks.
@@ -128,8 +128,8 @@ When you start a conversation, the agent classifies the project into exactly one
 
 ### Drift Check
 - **Entry**: After implementation or before close.
-- **Check**: Implementation vs `spec.md`. Completed work vs `tasks.md`. Test reality vs `tests.md`. Long-term changes vs `project.md`. Interfaces vs `contracts.md`.
-- **Write after confirmation**: Update feature docs, `project.md`, `notes.md`, `contracts.md`.
+- **Check**: Implementation vs `spec.md`. Completed work vs `tasks.md`. Test reality vs `tests.md`. Long-term changes vs `project.md`. Confirmed interfaces vs `contracts.md` when present.
+- **Write after confirmation**: Update feature docs, `project.md`, `notes.md`, and confirmed `contracts.md` changes when applicable.
 
 ### Project Memory Update
 - **Entry**: After Drift Check, before Submit / Integrate, Pause, or Close.
@@ -182,7 +182,7 @@ Stop conditions for auto modes:
 - Risky changes
 - Failed verification
 - Drift needing approval
-- Delivery Contract acceptance or breaking changes
+- Delivery Contract file creation, acceptance, or breaking changes
 - Submit, pause, or close
 
 ---
@@ -197,7 +197,7 @@ Stop conditions for auto modes:
 | `tests.md` | Test design, matrix | Raw test output |
 | `plan.md` | Active execution plan | Historical record |
 | `notes.md` | Decisions, evidence, drift, pause/close | Original requirements |
-| `contracts.md` | Delivery contract index | Temporary subagent assignments |
+| `contracts.md` | Optional delivery contract index for confirmed producer-consumer boundaries | Temporary subagent assignments |
 | `product.md` | Feature-level product intent | Engineering execution plan |
 
 ---
@@ -247,7 +247,7 @@ When something changes, update the right artifact:
 | Test strategy changed | `tests.md` |
 | Active execution changed | `plan.md` |
 | Evidence/execution happened | `notes.md` |
-| Producer-consumer interface changed | `contracts.md` + matching `contracts/*` |
+| Confirmed producer-consumer interface changed | `contracts.md` + matching `contracts/*` |
 | Long-term project fact changed | `project.md` |
 | Submission/integration happened | `notes.md` Submit / Integrate |
 
@@ -261,4 +261,4 @@ When something changes, update the right artifact:
 2. **Keep tasks small.** A task should form a narrow, verifiable loop through the necessary layers.
 3. **Record evidence immediately.** Verification output belongs in `notes.md` right after it runs.
 4. **Update `project.md` after every feature.** Future agents resume from here.
-5. **Use Delivery Contracts for boundaries.** API, events, data schemas, UI-behavior handoffs—these deserve explicit contracts.
+5. **Suggest Delivery Contracts only when needed.** API, events, public data schemas, UI state/behavior handoffs, SDKs, runtime integrations, or human-requested handoffs may deserve explicit contracts. Simple internal work should skip them.

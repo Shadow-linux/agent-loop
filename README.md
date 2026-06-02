@@ -1,5 +1,7 @@
 # Agent Loop
 
+**Current version:** 1.0.0
+
 A reusable [Codex](https://github.com/openai/codex) / CLI-agent skill for single-person software development workflows—from goal intake to verified close.
 
 ## What It Is
@@ -40,7 +42,7 @@ Project Entry → Requirement Archive → Feature Spec → Work Breakdown
 | **Plan** | Construction-grade execution plan for the active task/story |
 | **Evidence** | Fresh proof: test output, build output, API results, E2E checks, logs |
 | **Drift** | Mismatch between docs, code reality, or human decisions |
-| **Delivery Contract** | Durable producer-consumer boundary (API, event, data, UI-behavior, library) |
+| **Delivery Contract** | Optional producer-consumer boundary handoff. Used only when API, event, public data, UI state/behavior, SDK/library, runtime, or explicit cross-agent/human handoff needs a stable contract. |
 
 ## Artifact Layout
 
@@ -119,6 +121,12 @@ The agent reads `agent-loop/project.md`, finds the active feature, and resumes f
 | **Strict Mode** (default) | Agent asks before and after every stage |
 | **Feature Auto-Loop** | After Feature Spec acceptance, agent advances Agent-ready stages automatically |
 | **Task Auto-Run** | After plan acceptance, agent completes one task/story through TDD, verification, review, and drift check |
+
+## Delivery Contracts Are Optional
+
+`contracts.md` is not a default artifact for every feature. The agent should suggest a Delivery Contract only when the human asks for cross-boundary handoff/API/interface documentation, or when the agent detects a likely downstream consumer such as frontend, another service, SDK user, shared event, public data schema, UI state contract, or runtime integration.
+
+Simple single-person tasks, pure internal logic, and changes with no downstream consumer should skip contract files.
 
 ## When to Use
 

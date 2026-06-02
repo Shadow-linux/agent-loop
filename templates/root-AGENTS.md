@@ -19,7 +19,7 @@ Guidance language should follow this project's language preference. Keep stable 
 - For non-trivial confirmations, present a table-first Human Review Summary before asking the human to approve.
 - After each stage, summarize changed artifacts, evidence, drift, and the next recommended stage.
 - Before completion claims, run fresh verification and record evidence.
-- When work crosses a durable producer-consumer boundary such as API, event, data, UI behavior, library, or runtime, propose or read the feature Delivery Contract. Drafts may be created in Feature Auto-Loop, but human confirmation is required before acceptance and before breaking changes.
+- Do not create Delivery Contracts by default. When the human asks for cross-boundary handoff/API/interface docs, or when work likely affects downstream consumers such as API, event, public data, UI state/behavior, SDK/library, or runtime behavior, propose a Delivery Contract and ask before writing `contracts.md` or `contracts/` files. Human confirmation is required before acceptance and before breaking changes.
 - After likely feature completion, before starting a new feature, or when resuming with an active feature, run Feature Completion Check and recommend close/pause/continue as appropriate.
 - Before recommending or performing feature close, run Feature Close Review, drift check, and update project memory when long-term facts changed.
 - During onboarding, re-adoption, drift check, or project memory update, recommend Enterprise Memory Mode when `project.md` is no longer a fast reliable entry point.
