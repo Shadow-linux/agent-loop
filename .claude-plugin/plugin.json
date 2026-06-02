@@ -1,0 +1,19 @@
+{
+  "name": "agent-loop",
+  "description": "A reusable skill for single-human, agent-assisted development workflows—from goal intake to verified close.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Shadow-linux"
+  },
+  "homepage": "https://github.com/Shadow-linux/agent-loop",
+  "repository": "https://github.com/Shadow-linux/agent-loop",
+  "license": "MIT",
+  "keywords": [
+    "agent-loop",
+    "workflow",
+    "tdd",
+    "planning",
+    "development",
+    "agent-assisted"
+  ]
+}
