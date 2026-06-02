@@ -1,0 +1,8 @@
+interface:
+  display_name: "Agent Loop"
+  short_description: "Agent-guided single-human development loop from goal intake to verified close"
+  brand_color: "#2563EB"
+  default_prompt: "Use $agent-loop to run the workflow. The agent owns the loop: classify the stage, load the right reference, produce artifacts, and stop at human gates. Do not skip stages. TDD is default."
+
+policy:
+  allow_implicit_invocation: true

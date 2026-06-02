@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "command": "echo 'Agent Loop plugin loaded'"
+      }
+    ]
+  }
+}
