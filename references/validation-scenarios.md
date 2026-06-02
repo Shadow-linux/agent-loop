@@ -550,7 +550,7 @@ Update agent-loop behavior for a complex project.
 
 Expected:
 
-- check the change against `dratf_agent_loop_struct.md`
+- check the change against `draft_agent_loop_struct.md`
 - check the change against `final_agent_loop_skill_design.md`
 - preserve the design model `Feature -> Stories -> Tasks -> Steps`
 - preserve `agent-loop/project.md`, `requirements/`, and `features/<feature>/spec/tasks/tests/plan/notes`

@@ -4,7 +4,7 @@ Use this file for old, unfamiliar, multi-package, multi-service, or large reposi
 
 For long-term project memory structure, pair this file with `project-memory-mode.md`. Large-project operating mode is about how to work; Project Memory Mode is about how to store durable knowledge.
 
-This file extends `dratf_agent_loop_struct.md` and `final_agent_loop_skill_design.md`. It must not change the core design:
+This file extends `draft_agent_loop_struct.md` and `final_agent_loop_skill_design.md`. It must not change the core design:
 
 ```text
 Feature -> Stories -> Tasks -> Steps

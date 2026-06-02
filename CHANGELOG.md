@@ -1,5 +1,18 @@
 # Agent Loop Changelog
 
+## 1.0.1 — 2026-06-03
+
+### Fixed
+- Corrected the misspelled design source filename to `draft_agent_loop_struct.md`.
+- Aligned `runtime.md` Stage Order and `design.md` Main Flow.
+- Added `Re-Adopt Agent Loop Project if Needed` to the design main flow.
+- Added `Targeted Feature Scan if Needed` to the design/runtime stage order before Feature Spec.
+- Unified `Brainstorm` and `Clarify` into `Brainstorm / Clarify if Needed` in the main flow.
+
+### Added
+- Added `AGENTS.md` and `CLAUDE.md` for skill repository maintenance guidance.
+- Added a draft proposal for using Superpowers as `agent-loop` stage plugins without changing agent-loop artifact paths, gates, or task/feature ownership.
+
 ## 1.0.0 — 2026-06-02
 
 ### Added

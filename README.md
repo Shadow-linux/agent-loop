@@ -1,6 +1,6 @@
 # Agent Loop
 
-**Current version:** 1.0.0
+**Current version:** 1.0.1
 
 A reusable [Codex](https://github.com/openai/codex) / CLI-agent skill for single-person software development workflows—from goal intake to verified close.
 
@@ -154,7 +154,7 @@ See [`examples/`](./examples/):
 
 This skill stays aligned with:
 
-- `dratf_agent_loop_struct.md`
+- `draft_agent_loop_struct.md`
 - `final_agent_loop_skill_design.md`
 
 If a reference conflicts with either design source, the design source wins.

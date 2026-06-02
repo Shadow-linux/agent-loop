@@ -5,7 +5,7 @@ description: Use when starting, continuing, resuming, structuring, testing, impl
 
 # Agent Loop
 
-Version: 1.0.0
+Version: 1.0.1
 
 Run a single-human, CLI-agent development loop from goal intake to verified close. This skill is a controller: it decides the current stage, loads the right reference, produces or updates `agent-loop` artifacts, and stops at human gates.
 
@@ -14,7 +14,7 @@ Run a single-human, CLI-agent development loop from goal intake to verified clos
 This skill must stay aligned with the repo design sources:
 
 ```text
-dratf_agent_loop_struct.md
+draft_agent_loop_struct.md
 final_agent_loop_skill_design.md
 ```
 
@@ -215,6 +215,7 @@ Stop when:
 - a stage would modify human original requirements
 - the task needs non-TDD execution
 - verification repeatedly fails
+- subagents are needed but not yet approved
 - submit is requested without evidence, drift check, diff review, or human confirmation
 - close is requested without evidence or drift check
 - the work would require first-version exclusions

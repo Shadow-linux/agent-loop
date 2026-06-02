@@ -7,7 +7,7 @@ Use this reference when the main skill needs definitions, entry scenarios, or fl
 This reference is a condensed operational extract of:
 
 ```text
-dratf_agent_loop_struct.md
+draft_agent_loop_struct.md
 final_agent_loop_skill_design.md
 ```
 
@@ -206,11 +206,12 @@ Then continue feature work.
 ```text
 Project Entry
 → Remote Project Discovery if Needed
+→ Re-Adopt Agent Loop Project if Needed
 → Requirement Archive
-→ Brainstorm if Needed
 → Product Brief if Needed
+→ Brainstorm / Clarify if Needed
+→ Targeted Feature Scan if Needed
 → Feature Spec
-→ Clarify
 → Requirement Checklist
 → Work Breakdown
 → Delivery Contract if Needed

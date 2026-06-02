@@ -91,8 +91,9 @@ Project Entry
 Remote Project Discovery if Needed
 Re-Adopt Agent Loop Project if Needed
 Requirement Archive
-Brainstorm / Clarify
 Product Brief if Needed
+Brainstorm / Clarify if Needed
+Targeted Feature Scan if Needed
 Feature Spec
 Requirement Checklist
 Work Breakdown
