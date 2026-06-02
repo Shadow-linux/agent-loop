@@ -1,0 +1,5 @@
+{
+  "name": "agent-loop",
+  "version": "1.0.0",
+  "description": "A reusable skill for single-human, agent-assisted development workflows—from goal intake to verified close."
+}

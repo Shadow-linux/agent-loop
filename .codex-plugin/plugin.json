@@ -1,0 +1,19 @@
+{
+  "name": "agent-loop",
+  "version": "1.0.0",
+  "description": "A reusable skill for single-human, agent-assisted development workflows—from goal intake to verified close.",
+  "skills": "./",
+  "interface": {
+    "displayName": "Agent Loop",
+    "shortDescription": "Single-human agent-assisted development workflow",
+    "longDescription": "Run a single-human, CLI-agent development loop from goal intake to verified close. Includes stage guides, artifact templates, and project memory protocols.",
+    "developerName": "Shadow-linux",
+    "category": "Coding",
+    "capabilities": ["Interactive", "Read", "Write"],
+    "defaultPrompt": [
+      "I want to initialize agent-loop for this project.",
+      "Let's continue the current feature."
+    ],
+    "websiteURL": "https://github.com/Shadow-linux/agent-loop"
+  }
+}
