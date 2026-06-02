@@ -31,6 +31,7 @@ This repository contains the `agent-loop` skill source.
 - Update `CHANGELOG.md` for meaningful behavior, gate, artifact, template, or example changes.
 - Before committing any meaningful skill change, bump the skill version and update `CHANGELOG.md`.
 - Commit messages should include the version, for example `v1.0.1: clarify delivery contract gates`.
+- Stable release branches use the exact version name, for example `v1.0.1`, not `release/1.0.1`.
 
 ## Hard Red Lines
 

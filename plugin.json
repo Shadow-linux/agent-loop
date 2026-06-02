@@ -1,6 +1,6 @@
 {
   "name": "agent-loop",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Agent-guided single-human development loop. The agent controls workflow mechanics—stage classification, reference loading, artifact production, and human gates. Human controls goals and decisions. TDD by default.",
   "author": {
     "name": "Shadow-linux",

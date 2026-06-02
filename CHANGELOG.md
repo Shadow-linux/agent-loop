@@ -1,5 +1,10 @@
 # Agent Loop Changelog
 
+## 1.0.2 — 2026-06-03
+
+### Added
+- Added the stable release branch naming rule: stable release branches use exact version names such as `v1.0.2`, not `release/1.0.2`.
+
 ## 1.0.1 — 2026-06-03
 
 ### Fixed
