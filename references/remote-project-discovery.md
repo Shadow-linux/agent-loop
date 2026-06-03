@@ -8,12 +8,12 @@ Enter this stage before Init Project or Existing Project Onboarding when any are
 
 - the human says this is a remote project
 - the human mentions SSH, remote server, remote IDE, devcontainer, Docker container, Codespaces, tunnel, or remote workspace
-- the local directory is empty or nearly empty
-- the local directory has no reliable project markers such as `.git`, README, manifests, source directories, or test configs
+- the local directory is empty or nearly empty and the human, local files, environment, or tool context provides a remote-entry hint
+- the local directory has no reliable project markers such as `.git`, README, manifests, source directories, or test configs, and a remote-entry hint exists
 - local commands cannot represent the real project, but a remote path or remote URL exists
 - browser URL, runtime, tests, or deploy target clearly live outside the local directory
 
-Do not create a full local `agent-loop` project memory for an empty local entry directory. First discover whether the source of truth is remote.
+An empty local directory alone is not enough to classify the project as remote. Without a remote-entry hint, route to `new-project`. Do not create a full local `agent-loop` project memory for a confirmed empty remote-entry directory. First discover whether the source of truth is remote.
 
 ## Core Rule
 

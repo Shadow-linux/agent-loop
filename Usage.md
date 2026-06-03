@@ -20,12 +20,12 @@ When you start a conversation, the agent classifies the project into exactly one
 
 | State | Condition | What Happens |
 |---|---|---|
-| **new-project** | No `agent-loop/`; little or no code | Init Project |
-| **existing-project** | No `agent-loop/`; meaningful code | Existing Project Onboarding |
+| **new-project** | No `agent-loop/` or legacy `.agent-loop/`; little or no code | Init Project |
+| **existing-project** | No `agent-loop/` or legacy `.agent-loop/`; meaningful code | Existing Project Onboarding |
 | **remote-entry** | Project is remote / container / SSH | Remote Project Discovery |
-| **resume** | `agent-loop/` exists; memory looks current | Resume feature work |
-| **re-adopt** | `agent-loop/` exists but recent work bypassed it | Recovery Backfill |
-| **stale-memory** | `agent-loop/` exists but docs conflict with code | Reconcile Project Context |
+| **resume** | `agent-loop/` or legacy `.agent-loop/` exists; memory looks current | Resume feature work |
+| **re-adopt** | `agent-loop/` or legacy `.agent-loop/` exists but recent work bypassed it | Recovery Backfill |
+| **stale-memory** | `agent-loop/` or legacy `.agent-loop/` exists but docs conflict with code | Reconcile Project Context |
 | **active-feature** | Active feature exists; next action is clear | Continue current stage |
 | **blocked** | Blocker prevents next stage | Ask / Diagnose |
 
@@ -64,14 +64,14 @@ When you start a conversation, the agent classifies the project into exactly one
 - **Rule**: Archive as a requirement set directory. Do not overwrite original requirements. Do not create flat files directly under `requirements/`.
 - **Write**: `agent-loop/requirements/YYYY-MM-DD-<topic>/README.md` + original materials.
 
-### Brainstorm / Clarify
-- **Entry**: Goal is vague, scope unclear, or meaningful approaches differ.
-- **Rule**: Ask 1–5 high-impact questions. Do not ask filler questions. Inspect docs/code first when possible.
-
 ### Product Brief (Optional)
 - **Entry**: PRD-style synthesis needed before engineering spec.
 - **Load**: `product-brief.md`.
 - **Write**: `product.md` (feature-level product intent).
+
+### Brainstorm / Clarify
+- **Entry**: Goal is vague, scope unclear, or meaningful approaches differ.
+- **Rule**: Ask 1–5 high-impact questions. Do not ask filler questions. Inspect docs/code first when possible.
 
 ### Feature Spec
 - **Entry**: Goal and requirements are clear.
@@ -183,7 +183,26 @@ Stop conditions for auto modes:
 - Failed verification
 - Drift needing approval
 - Delivery Contract file creation, acceptance, or breaking changes
-- Submit, pause, or close
+- Subagent dispatch without explicit approval
+- Submit, pause, close, commit, PR, merge, release, or publish
+
+---
+
+## External Skill Adapters
+
+When Superpowers or another external skill is available, the agent may use it inside the current stage:
+
+| Stage Need | External Skill Role | Agent Loop Still Owns |
+|---|---|---|
+| Clarification / product discovery | Better questions, options, product thinking | `product.md`, `spec.md`, human approval |
+| Planning | Construction-grade plan quality | `plan.md` / `plans/*`, execution mode |
+| TDD / debugging / verification / review | Method discipline and evidence rigor | `notes.md`, Task Done Gate, drift decision |
+| Finishing | Branch/submission decision support | Submit gate, diff review, final confirmation |
+| Subagents | Bounded independent execution help | Dispatch approval, briefs, review, merge, status |
+
+External skill paths are advisory. Do not create `docs/superpowers/*` or other native external directories unless the human explicitly asks and confirms again after the agent explains the agent-loop path override.
+
+Feature Auto-Loop and Task Auto-Run do not imply subagent approval. Subagents require explicit dispatch confirmation, or one bounded task-group confirmation with task IDs, boundaries, briefs, stop conditions, and main-agent review responsibility.
 
 ---
 
@@ -211,7 +230,7 @@ Core files:         spec.md, tasks.md, tests.md, plan.md, notes.md (stable names
 Plan metadata:      Plan ID: YYYY-MM-DD-<task>-<slug>
 ```
 
-Dates are **archive dates only**. They are not deadlines, start dates, or end dates.
+Requirement set dates are **archive dates only**. They are not deadlines, start dates, or end dates. Feature directory dates identify when the feature workspace was created or adopted; do not infer delivery deadlines or feature duration from them.
 
 ---
 

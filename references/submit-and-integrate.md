@@ -14,7 +14,7 @@ Submit packages code for integration.
 Close ends the feature in agent-loop.
 ```
 
-Never commit, open a PR, merge, or claim submission readiness without human confirmation.
+Never commit, open a PR, merge, release, publish, or claim submission readiness without human confirmation.
 
 ## Entry Conditions
 
@@ -40,6 +40,7 @@ commit
 pull request text
 merge note
 release note
+publish/release action
 skip submit for now
 ```
 
@@ -99,7 +100,7 @@ Append to `notes.md`:
 
 - Date:
 - Scope:
-- Action: prepare only | commit | PR text | merge note | release note | skipped
+- Action: prepare only | commit | PR text | merge note | release note | publish/release action | skipped
 - Diff Summary:
 - Verification:
 - Drift Check:

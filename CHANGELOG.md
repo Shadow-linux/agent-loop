@@ -1,5 +1,30 @@
 # Agent Loop Changelog
 
+## 1.1.0 — 2026-06-03
+
+### Added
+- Added `references/external-skill-adapters.md` to define Superpowers and external skill adapter rules.
+- Added path override rules so external skill outputs are written to agent-loop artifacts instead of external default directories.
+- Added gate override rules so external skills cannot bypass human gates, task status rules, feature close, submit, project memory, or Delivery Contract controls.
+- Connected Superpowers adapters to Brainstorm / Clarify, Plan If Needed, Execute Task / Story, Diagnose Failure, Verify, Review, Submit / Integrate, and subagent execution.
+- Added validation scenarios for Superpowers brainstorming path override, writing-plans path override, TDD with Task Done Gate, and subagent approval.
+- Added Subagent Execution If Approved as a formal stage with workflow checklist and validation coverage.
+- Added explicit Submit / Integrate adapter rules so external finishing skills cannot bypass diff inspection, verification, review, drift check, project memory status, or final human confirmation.
+- Added external skill checklist coverage and path-pressure validation for native Superpowers output requests.
+- Added second-confirmation requirements before creating native external skill directories such as `docs/superpowers/*`.
+- Added Superpowers pressure scenarios for feature close, project memory update, Delivery Contract acceptance, and release/publish actions.
+- Aligned Usage, README, stage guides, and workflow checklists with legacy `.agent-loop/`, Product Brief ordering, Project Memory before Submit, and requirement-date semantics.
+- Hardened `templates/subagent-brief.md` so dispatched subagents cannot submit, update project memory or guidance directly, accept Delivery Contracts, approve breaking changes, or mark tasks `done`.
+- Clarified that an empty local directory alone is not a remote-project signal; Remote Project Discovery now requires a remote-entry hint.
+- Added legacy `.agent-loop/` lookup and active-memory-root guidance to generated root `AGENTS.md`.
+- Clarified that existing codebases with no agent-loop memory route through Existing Project Onboarding before recovery/backfill.
+- Resolved the Superpowers adapter proposal open questions to match the implemented v1.1.0 adapter behavior.
+- Clarified subagent dispatch confirmation: Feature Auto-Loop and Task Auto-Run do not imply subagent approval, and bounded task-group approval requires explicit scope, boundaries, briefs, stop conditions, and main-agent review responsibility.
+- Added pressure scenarios for review-vs-done, subagent-return merge review, Feature Auto-Loop Human-gated stop, Delivery Contract stop, and submit/close/release stop.
+- Marked the Superpowers adapter proposal as implemented and documented external skill adapter behavior in README and Usage.
+- Aligned autonomous execution stop conditions across README, Usage, project guidance, generated root guidance, and validation scenarios.
+- Aligned top-level `SKILL.md` Stop And Ask gates with runtime hard stop conditions.
+
 ## 1.0.2 — 2026-06-03
 
 ### Added

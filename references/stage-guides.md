@@ -240,29 +240,6 @@ Exit:
 
 - requirements archived or original paths recorded
 
-## Brainstorm / Clarify
-
-Entry: goal is vague, scope unclear, or meaningful approaches differ.
-
-Rules:
-
-- Ask 1-5 high-impact questions.
-- Default to one question at a time.
-- Questions must affect scope, UX, data, architecture, testing, or acceptance.
-- Do not ask filler questions.
-- If a question can be answered by reading project docs, code, tests, source requirements, `project.md`, or `product.md`, inspect those first instead of asking the human.
-- When product terminology is fuzzy or conflicts with `project.md` Domain Language, propose a canonical meaning and ask only if still ambiguous.
-
-Write:
-
-- accepted product clarifications into `product.md` when it exists
-- accepted engineering clarifications into `spec.md`
-- human decisions into `notes.md`
-
-Exit:
-
-- intent stable enough for Feature Spec
-
 ## Product Brief If Needed
 
 Entry: source requirements or conversation need product/PRD-style synthesis before engineering specification.
@@ -296,6 +273,34 @@ Write after confirmation:
 Exit:
 
 - product intent is stable enough for Feature Spec
+
+## Brainstorm / Clarify
+
+Entry: goal is vague, scope unclear, or meaningful approaches differ.
+
+Load:
+
+- `external-skill-adapters.md` when Superpowers or another brainstorming/product-discovery skill is available
+
+Rules:
+
+- when Superpowers is available, use the Brainstorming Adapter while keeping output in `product.md`, `spec.md`, and `notes.md`
+- Ask 1-5 high-impact questions.
+- Default to one question at a time.
+- Questions must affect scope, UX, data, architecture, testing, or acceptance.
+- Do not ask filler questions.
+- If a question can be answered by reading project docs, code, tests, source requirements, `project.md`, or `product.md`, inspect those first instead of asking the human.
+- When product terminology is fuzzy or conflicts with `project.md` Domain Language, propose a canonical meaning and ask only if still ambiguous.
+
+Write:
+
+- accepted product clarifications into `product.md` when it exists
+- accepted engineering clarifications into `spec.md`
+- human decisions into `notes.md`
+
+Exit:
+
+- intent stable enough for Feature Spec
 
 ## Feature Spec
 
@@ -524,6 +529,7 @@ Entry: selected task/story is complex, multi-file, subagent-bound, or human requ
 Load:
 
 - `implementation-planning.md`
+- `external-skill-adapters.md` when Superpowers or another plan-writing skill is available
 
 Write:
 
@@ -541,6 +547,7 @@ Rules:
 - implementation steps must be bite-sized and executable
 - no placeholders such as TBD, TODO, "add proper error handling", "write tests", or "similar to previous task"
 - run plan self-review: spec coverage, placeholder scan, and type/signature consistency
+- when Superpowers is available, use the Writing-Plans Adapter quality bar, but write to `plan.md` or `plans/*`, not external docs paths
 - if complex artifact mode is active, write the full dated plan to `plans/` and keep `plan.md` as the current pointer
 
 Exit:
@@ -568,6 +575,45 @@ Exit:
 
 - ready for execution or revise upstream docs
 
+## Subagent Execution If Approved
+
+Entry: human explicitly approves subagent use for an independent task/story group, onboarding scan lane, or bounded implementation lane.
+
+Load:
+
+- `skill-routing.md`
+- `external-skill-adapters.md`
+- `templates/subagent-brief.md`
+
+Use:
+
+- Superpowers `subagent-driven-development` when available and appropriate
+
+Rules:
+
+- subagents are optional and never implied by task count alone
+- ask human confirmation before dispatching subagents
+- Feature Auto-Loop or Task Auto-Run approval is not subagent approval
+- one confirmation may cover a bounded task group only after listing task/story IDs or scan lanes, allowed boundaries, one brief per subagent, stop conditions, and main-agent review responsibility
+- verify tasks or scan lanes are independent, bounded, and reviewable by the main agent
+- create one clear brief per subagent using `templates/subagent-brief.md`
+- write briefs and returned summaries under `handoffs/*`
+- main agent owns synthesis, review, merge decisions, and status updates
+- subagents may not close a feature, submit code, update project memory directly, accept Delivery Contracts, approve breaking changes, or mark tasks `done`
+- if independence, boundaries, or review responsibility are unclear, do not dispatch; continue single-agent execution or mark the work `Human-gated`
+
+Write:
+
+- `handoffs/<date>-<task-or-scan>-brief.md`
+- `handoffs/<date>-<task-or-scan>-return.md`
+- summary and evidence links in `notes.md`
+- `tasks.md` status updates only after main-agent review
+
+Exit:
+
+- returned work reviewed and merged into agent-loop artifacts
+- or subagent path declined/blocked and execution returns to single-agent mode
+
 ## Execute Task / Story
 
 Entry: selected execution unit accepted.
@@ -580,6 +626,7 @@ Rules:
 - in Feature Auto-Loop, execute only Agent-ready tasks and stop at Human-gated tasks
 - in Task Auto-Run, execute only the selected task/story and stop after evidence/review/drift updates and Task Done Gate status update
 - TDD by default
+- when Superpowers is available, use the TDD Adapter, but task status and evidence remain controlled by agent-loop
 - verify RED before implementation
 - verify GREEN after implementation
 - record evidence
@@ -602,8 +649,13 @@ Exit:
 
 Entry: test/build/E2E/behavior failure.
 
+Load:
+
+- `external-skill-adapters.md` when Superpowers or another systematic debugging skill is available
+
 Rules:
 
+- when Superpowers is available, use the Debugging Adapter and find root cause before proposing fixes
 - reproduce before fixing
 - find root cause
 - form one hypothesis at a time
@@ -621,8 +673,13 @@ Exit:
 
 Entry: before any completion claim.
 
+Load:
+
+- `external-skill-adapters.md` when Superpowers or another verification skill is available
+
 Rules:
 
+- when Superpowers is available, use the verification adapter, but completion is still controlled by agent-loop
 - identify proof command/action
 - run fresh verification
 - read output
@@ -641,6 +698,10 @@ Exit:
 
 Entry: after implementation and verification, before any task is marked `done`, before Submit / Integrate, and before recommending or performing feature close.
 
+Load:
+
+- `external-skill-adapters.md` when Superpowers or another code-review skill is available
+
 Check:
 
 - Spec Review: implementation matches `product.md` when present, `spec.md`, acceptance criteria, scope, and out-of-scope
@@ -652,6 +713,7 @@ Check:
 
 Rules:
 
+- when Superpowers is available, use the review adapter, but findings must be recorded in `notes.md` and cannot directly mark tasks `done`
 - perform lightweight Spec Review for every task before marking it `done`
 - perform Feature Close Review before recommending or performing close
 - Feature Close Review includes feature-level Spec Review against product/spec/tasks/tests/acceptance/out-of-scope
@@ -697,34 +759,6 @@ Exit:
 
 - docs and code reality aligned enough to continue/close
 
-## Submit / Integrate
-
-Entry: after Verify, Review, Drift Check, and Project Memory Update when human asks to submit, commit, prepare PR text, or package work for integration.
-
-Load:
-
-- `submit-and-integrate.md`
-
-Rules:
-
-- inspect diff and untracked files
-- separate product code changes from `agent-loop` artifact changes
-- identify unrelated dirty work
-- never commit, create final PR text, merge, or claim submission readiness without human confirmation
-- a human saying "commit" starts Submit / Integrate but is not final commit approval; ask again after diff, verification, review, and drift summary
-- default to prepare-only if the human has not explicitly requested commit/PR/merge
-
-Write after confirmation:
-
-- `notes.md` submit/integrate record
-- commit only if explicitly confirmed
-
-Exit:
-
-- recommend Close if feature is done
-- recommend next task/story if work remains
-- recommend Pause if submit is prepared but not performed
-
 ## Project Memory Update
 
 Entry: after Drift Check, before Submit / Integrate, Pause, or Close when long-term project facts changed.
@@ -761,6 +795,36 @@ Write after confirmation:
 Exit:
 
 - future agents can resume from `project.md` and, in enterprise mode, only the linked detail files relevant to the next stage
+
+## Submit / Integrate
+
+Entry: after Verify, Review, Drift Check, and Project Memory Update when human asks to submit, commit, prepare PR text, or package work for integration.
+
+Load:
+
+- `submit-and-integrate.md`
+- `external-skill-adapters.md` when Superpowers or another finishing/branch skill is available
+
+Rules:
+
+- inspect diff and untracked files
+- separate product code changes from `agent-loop` artifact changes
+- identify unrelated dirty work
+- if using an external finishing skill, use it only for completion options and branch hygiene; agent-loop still owns the submit gate
+- never commit, create final PR text, merge, release, publish, or claim submission readiness without human confirmation
+- a human saying "commit" starts Submit / Integrate but is not final commit approval; ask again after diff, verification, review, and drift summary
+- default to prepare-only if the human has not explicitly requested commit/PR/merge
+
+Write after confirmation:
+
+- `notes.md` submit/integrate record
+- commit only if explicitly confirmed
+
+Exit:
+
+- recommend Close if feature is done
+- recommend next task/story if work remains
+- recommend Pause if submit is prepared but not performed
 
 ## Feature Completion Check
 

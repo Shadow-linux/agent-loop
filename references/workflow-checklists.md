@@ -9,10 +9,21 @@ Before human approval for non-trivial stage output:
 - [ ] Include artifacts, evidence, risk/blockers, human decision, and next stage.
 - [ ] Keep full source-of-truth content in artifact files.
 
+Before using an external skill or plugin inside a stage:
+
+- [ ] Load `skill-routing.md` and `external-skill-adapters.md`.
+- [ ] Confirm the external skill is improving the current agent-loop stage, not replacing the stage controller.
+- [ ] Treat external default artifact paths as advisory only.
+- [ ] Write results to the owning agent-loop artifact.
+- [ ] Do not create external default directories such as `docs/superpowers/*` unless the human explicitly requests native external output and then confirms after the agent explains the agent-loop path override.
+- [ ] Do not let the external skill mark tasks `done`, close a feature, submit code, update project memory, accept Delivery Contracts, approve breaking changes, or skip human gates.
+
 ## Project Entry
 
 - [ ] Inspect whether `agent-loop/` exists.
-- [ ] If present, read `project.md`.
+- [ ] If `agent-loop/` is missing, inspect whether legacy `.agent-loop/` exists.
+- [ ] If `agent-loop/` or legacy `.agent-loop/` is present, read `project.md`.
+- [ ] If legacy `.agent-loop/` is present, use it for the current run and ask before migration or renaming.
 - [ ] If `project.md` says `Memory Mode: enterprise`, read only the needed linked project-memory detail files.
 - [ ] Locate active or paused feature.
 - [ ] If an Active Feature exists, consider Feature Completion Check before starting new feature work.
@@ -85,15 +96,6 @@ Before human approval for non-trivial stage output:
 - [ ] If legacy `agent-loop/inputs/` exists, propose migration to `agent-loop/requirements/` before new feature work.
 - [ ] Recommend `requirements/INDEX.md` only if index triggers apply.
 
-## Brainstorm / Clarify
-
-- [ ] Use only when goal is unstable, scope unclear, or meaningful approaches differ.
-- [ ] Check project docs, code, tests, source requirements, Product Context, and Domain Language before asking.
-- [ ] Ask 1-5 high-impact questions.
-- [ ] Prefer one question at a time unless a short batch is clearer.
-- [ ] Questions must affect scope, UX, data, architecture, testing, or acceptance.
-- [ ] Write accepted answers back into `spec.md`.
-
 ## Product Brief If Needed
 
 - [ ] Load `product-brief.md`.
@@ -104,6 +106,15 @@ Before human approval for non-trivial stage output:
 - [ ] Include the recommended answer with the question.
 - [ ] Write `product.md` only after human confirmation.
 - [ ] Mark long-term product consensus candidates for Project Memory Update.
+
+## Brainstorm / Clarify
+
+- [ ] Use only when goal is unstable, scope unclear, or meaningful approaches differ.
+- [ ] Check project docs, code, tests, source requirements, Product Context, and Domain Language before asking.
+- [ ] Ask 1-5 high-impact questions.
+- [ ] Prefer one question at a time unless a short batch is clearer.
+- [ ] Questions must affect scope, UX, data, architecture, testing, or acceptance.
+- [ ] Write accepted answers back into `spec.md`.
 
 ## Feature Spec
 
@@ -228,6 +239,21 @@ Checklist:
 - [ ] If the human seems slowed by confirmations, explain Task Auto-Run as a safe task/story-level option.
 - [ ] Before Task Auto-Run, list assumptions, risk points, verification commands, and stop conditions.
 
+## Subagent Execution If Approved
+
+- [ ] Confirm the human explicitly approved this subagent dispatch.
+- [ ] Do not treat Feature Auto-Loop or Task Auto-Run approval as subagent approval.
+- [ ] If using one approval for a bounded task group, list included task/story IDs or scan lanes, allowed boundaries, one brief per subagent, stop conditions, and main-agent review responsibility before asking.
+- [ ] Load `skill-routing.md`.
+- [ ] Load `external-skill-adapters.md`.
+- [ ] Verify tasks or scan lanes are independent, bounded, and reviewable.
+- [ ] Create one `templates/subagent-brief.md`-style brief per subagent.
+- [ ] Store briefs and returned summaries under `handoffs/*`.
+- [ ] Require returned changed files, commands, evidence, drift, open questions, and next step.
+- [ ] Main agent reviews returned work before updating `tasks.md`, `tests.md`, `notes.md`, or proposed `project.md`.
+- [ ] Prevent subagents from closing features, submitting code, updating project memory directly, accepting Delivery Contracts, approving breaking changes, or marking tasks `done`.
+- [ ] If independence or review responsibility is unclear, do not dispatch; continue single-agent execution or mark `Human-gated`.
+
 ## Execute Task / Story
 
 - [ ] Confirm execution scope: task by default, story only by explicit choice.
@@ -298,19 +324,6 @@ Checklist:
 - [ ] Record drift decisions in `notes.md`.
 - [ ] Present drift decisions with Human Review Summary table.
 
-## Submit / Integrate
-
-- [ ] Load `submit-and-integrate.md`.
-- [ ] Inspect diff and untracked files.
-- [ ] Separate product code from `agent-loop` artifact changes.
-- [ ] Identify unrelated dirty work.
-- [ ] Confirm fresh verification evidence exists.
-- [ ] Confirm drift check result and known drift.
-- [ ] Present submit/integrate decision with Human Review Summary table.
-- [ ] Ask human which action to take: prepare only, commit, PR text, merge note, release note, or skip.
-- [ ] Only commit after explicit human confirmation.
-- [ ] Record submit/integrate result in `notes.md`.
-
 ## Project Memory Update
 
 - [ ] Load `project-memory-mode.md`.
@@ -328,6 +341,22 @@ Checklist:
 - [ ] Resolve or add Onboarding Uncertainties when confidence changes.
 - [ ] Ask before changing root or directory-level `AGENTS.md`.
 - [ ] Present proposed memory updates with Human Review Summary table.
+
+## Submit / Integrate
+
+- [ ] Load `submit-and-integrate.md`.
+- [ ] If Superpowers or another finishing/branch skill is available, load `external-skill-adapters.md`.
+- [ ] Use external finishing skills only for completion options and branch hygiene.
+- [ ] Inspect diff and untracked files.
+- [ ] Separate product code from `agent-loop` artifact changes.
+- [ ] Identify unrelated dirty work.
+- [ ] Confirm fresh verification evidence exists.
+- [ ] Confirm drift check result and known drift.
+- [ ] Confirm required review has passed or record why submit must stop.
+- [ ] Present submit/integrate decision with Human Review Summary table.
+- [ ] Ask human which action to take: prepare only, commit, PR text, merge note, release note, publish/release note, or skip.
+- [ ] Only commit, publish, release, merge, or create final PR text after explicit human confirmation.
+- [ ] Record submit/integrate result in `notes.md`.
 
 ## Feature Completion Check
 

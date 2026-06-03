@@ -7,8 +7,10 @@ Guidance language should follow this project's language preference. Keep stable 
 ## Agent Loop
 
 - Before development work, inspect `agent-loop/`.
+- If `agent-loop/` is missing, also inspect legacy `.agent-loop/`. Use legacy memory for the current run and ask before migrating or renaming it.
+- Resolve later project-memory and feature paths relative to the active memory root: `agent-loop/` by default, or legacy `.agent-loop/` for the current run.
 - If `agent-loop/project.md` says `Status: remote-entry`, read `agent-loop/remote.md`, verify the remote project, and continue from the remote project memory or local-shadow memory.
-- If `agent-loop/` is missing, propose Init Project and ask for confirmation.
+- If neither `agent-loop/` nor legacy `.agent-loop/` exists, propose Init Project or Existing Project Onboarding and ask for confirmation.
 - If `agent-loop/` exists, read `agent-loop/project.md` and the active feature docs before acting.
 - If `agent-loop/project.md` says `Memory Mode: enterprise`, read only the linked `agent-loop/project/*.md` detail files needed for the current stage.
 - If the project used `agent-loop` before but recent development bypassed it, route to Re-Adopt Agent Loop Project: compare code reality with `agent-loop` docs, propose backfill, and ask human confirmation before continuing feature work.
@@ -41,7 +43,7 @@ Guidance language should follow this project's language preference. Keep stable 
 - Never mark a task `done` from code changes alone. After implementation and fresh verification, keep or move the task to `review` until the Task Done Gate passes.
 - Task Done Gate: implementation complete, required tests or substitute verification run fresh, evidence recorded, lightweight Spec Review recorded, Standards Review recorded when triggered, drift decision recorded, and task status linked to evidence.
 - During autonomous execution, fix verification failures when the failure is inside accepted scope and does not require a new product, architecture, data, security, or external-service decision.
-- Stop and ask when scope changes, requirements are ambiguous, tests require unavailable infrastructure, security/data boundaries change, broad architecture changes are needed, repeated verification fails, unrelated dirty work blocks progress, or submit/close/commit/PR/merge is requested.
+- Stop and ask when scope changes, requirements are ambiguous, tests require unavailable infrastructure, security/data boundaries change, broad architecture changes are needed, repeated verification fails, unrelated dirty work blocks progress, a Delivery Contract needs creation/acceptance/breaking-change approval, subagents are needed but not yet explicitly approved, or submit/close/commit/PR/merge/release/publish is requested.
 - At the end of autonomous execution, summarize changed files, tests run, evidence, review findings, drift/backfill updates, remaining risks, and the recommended next action.
 
 ## Project Commands
@@ -63,4 +65,4 @@ Guidance language should follow this project's language preference. Keep stable 
 - Directory-level `AGENTS.md` files are for long-lived boundary rules only.
 - When creating a new app root, package root, test root, security/data boundary, plugin root, or docs root, propose a directory-level `AGENTS.md` and ask for human confirmation before writing it.
 - Do not create directory-level `AGENTS.md` for ordinary component, utility, temporary, or feature implementation folders.
-- Auto modes do not bypass submit, commit, PR, merge, release, pause, close, risky change, or Human-gated decision confirmations.
+- Auto modes do not bypass Delivery Contract creation/acceptance/breaking-change approval, subagent dispatch approval, submit, commit, PR, merge, release, publish, pause, close, risky change, or Human-gated decision confirmations.

@@ -1,6 +1,6 @@
 # Agent Loop
 
-**Current version:** 1.0.2
+**Current version:** 1.1.0
 
 A reusable [Codex](https://github.com/openai/codex) / CLI-agent skill for single-person software development workflows—from goal intake to verified close.
 
@@ -27,9 +27,17 @@ Without a structured loop, agents tend to:
 Agent Loop fixes this with a repeatable, inspectable workflow:
 
 ```
-Project Entry → Requirement Archive → Feature Spec → Work Breakdown
-→ Test Design → Plan → Execute → Verify → Review → Drift Check
-→ Project Memory Update → Submit / Integrate → Pause / Close
+Project Entry → Remote Project Discovery if needed
+→ Re-Adopt Agent Loop Project if needed → Requirement Archive
+→ Product Brief if needed → Brainstorm / Clarify if needed
+→ Targeted Feature Scan if needed → Feature Spec → Requirement Checklist
+→ Work Breakdown → Delivery Contract if needed → Test Design
+→ E2E Discovery if Web → Technical Design / Code Context
+→ Plan if needed → Analyze Consistency
+→ Subagent Execution if approved → Execute Task / Story
+→ Verify → Review → Drift Check → Project Memory Update
+→ Feature Completion Check → Submit / Integrate if requested
+→ Pause / Close
 ```
 
 ## Core Concepts
@@ -48,7 +56,9 @@ Project Entry → Requirement Archive → Feature Spec → Work Breakdown
 
 ```
 agent-loop/
+  remote.md                           # optional local-entry pointer for remote projects
   project.md                          # Long-term project memory
+  project/                            # optional enterprise memory detail files
   requirements/
     YYYY-MM-DD-<topic>/
       README.md
@@ -68,6 +78,7 @@ agent-loop/
       tasks/        (optional complex details)
       tests/        (optional complex details)
       plans/        (optional dated plan cycles)
+      handoffs/     (optional subagent briefs and returns)
       contracts/    (optional contract details)
 ```
 
@@ -121,6 +132,14 @@ The agent reads `agent-loop/project.md`, finds the active feature, and resumes f
 | **Strict Mode** (default) | Agent asks before and after every stage |
 | **Feature Auto-Loop** | After Feature Spec acceptance, agent advances Agent-ready stages automatically |
 | **Task Auto-Run** | After plan acceptance, agent completes one task/story through TDD, verification, review, and drift check |
+
+Auto modes still stop for Human-gated decisions, risky changes, failed verification, Delivery Contract creation/acceptance/breaking changes, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, or publish.
+
+## External Skill Adapters
+
+Agent Loop can use external skills such as Superpowers for brainstorming, construction-grade planning, TDD, debugging, verification, review, finishing, and bounded subagent execution.
+
+External skills are stage helpers only. Agent Loop still owns artifact paths, human gates, task status, project memory, drift, submit, pause, and close. Native external directories such as `docs/superpowers/*` are not created by default.
 
 ## Delivery Contracts Are Optional
 

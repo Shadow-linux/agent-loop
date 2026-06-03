@@ -29,7 +29,8 @@ This repository contains the `agent-loop` skill source.
 - Do not add unsupported frontmatter fields to `SKILL.md`; keep the YAML frontmatter limited to stable loader fields unless the loader requirement changes.
 - Keep references and templates consistent with `SKILL.md`, `README.md`, and `Usage.md`.
 - Update `CHANGELOG.md` for meaningful behavior, gate, artifact, template, or example changes.
-- Before committing any meaningful skill change, bump the skill version and update `CHANGELOG.md`.
+- Do not bump the skill version unless the human explicitly approves the version upgrade.
+- If a meaningful skill change is committed without a human-approved version bump, record it under the current unreleased or in-progress changelog section instead of changing version numbers.
 - Commit messages should include the version, for example `v1.0.1: clarify delivery contract gates`.
 - Stable release branches use the exact version name, for example `v1.0.1`, not `release/1.0.1`.
 

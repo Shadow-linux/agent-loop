@@ -1,7 +1,7 @@
 # Proposal: Superpowers As Agent-Loop Stage Plugins
 
-Status: Draft
-Version target: v1.1.0 or later
+Status: Implemented for v1.1.0
+Version target: v1.1.0
 Created: 2026-06-02
 
 ## Purpose
@@ -83,7 +83,7 @@ Allowed:
 Not allowed:
 
 - skip `agent-loop` human gates
-- create external default directories without explicit human request
+- create external default directories without explicit human request plus second confirmation after the agent explains the agent-loop path override
 - mark tasks `done`
 - close a feature
 - commit, PR, merge, release, or publish
@@ -103,7 +103,7 @@ All external skill artifact paths are overridden by `agent-loop` paths.
 | review findings | `features/<feature>/notes.md` |
 | subagent brief / return | `features/<feature>/handoffs/*` |
 
-Do not create `docs/superpowers/` in a target project unless the human explicitly asks for native Superpowers output.
+Do not create `docs/superpowers/` in a target project unless the human explicitly asks for native Superpowers output and then confirms the external directory after the agent explains the agent-loop path override. A request such as "use Superpowers" or "save it where Superpowers normally saves it" is not enough by itself.
 
 ### 3. Human Gate Override
 
@@ -158,7 +158,7 @@ When `Brainstorm / Clarify if Needed` starts and Superpowers is available:
 6. Write approved content to:
    - `features/<feature>/product.md` when product intent is substantial
    - `features/<feature>/spec.md` when behavior and acceptance are clear
-7. Do not write `docs/superpowers/specs/*` unless the human explicitly requests native Superpowers docs.
+7. Do not write `docs/superpowers/specs/*` unless the human explicitly requests native Superpowers docs and confirms the external directory after path-override explanation.
 8. Do not automatically transition to `superpowers:writing-plans`; recommend the next `agent-loop` stage instead.
 
 ## Writing-Plans Adapter Detail
@@ -177,7 +177,7 @@ When `Plan If Needed` starts and Superpowers is available:
 3. Save the plan to:
    - `features/<feature>/plan.md` for the active task/story
    - `features/<feature>/plans/YYYY-MM-DD-<task>-<slug>.md` in complex artifact mode
-4. Do not write `docs/superpowers/plans/*` unless the human explicitly requests native Superpowers docs.
+4. Do not write `docs/superpowers/plans/*` unless the human explicitly requests native Superpowers docs and confirms the external directory after path-override explanation.
 5. Do not let the external skill decide execution mode. Offer agent-loop modes:
    - Strict Mode
    - Feature Auto-Loop
@@ -205,7 +205,9 @@ When verification fails or unexpected behavior appears:
 
 ## Subagent Adapter Detail
 
-Subagents are optional and must be human-approved.
+Subagents are optional and must be human-approved before dispatch. A Feature Auto-Loop or Task Auto-Run grant is not subagent approval.
+
+One confirmation may cover a bounded task group only when the agent first lists task/story IDs or scan lanes, allowed boundaries, one brief per subagent, stop conditions, and main-agent review responsibility.
 
 Use only when:
 
@@ -232,13 +234,13 @@ Subagents may not:
 - make breaking contract changes
 - mark tasks `done` without main-agent Task Done Gate review
 
-## Open Questions
+## Resolved Decisions
 
-1. Should `superpowers:brainstorming` be preferred only when requirements are vague, or for every new feature?
-2. Should `superpowers:writing-plans` be required for every `plan.md`, or only complex tasks?
-3. Should adapter usage be recorded in `notes.md` every time, or only when it affects decisions/evidence?
-4. Should native Superpowers docs ever be allowed by default in this skill repo's example projects?
-5. Should subagent-driven execution remain opt-in per task, or can Feature Auto-Loop ask once for a bounded task group?
+1. `superpowers:brainstorming` is preferred when clarification, product discovery, or meaningful approach comparison is needed. It is not mandatory for every new feature.
+2. `superpowers:writing-plans` is preferred for `Plan If Needed`, complex task/story plans, subagent-bound plans, and human-requested plans. It is not mandatory for every simple task.
+3. Adapter usage is recorded in `notes.md` only when it affects durable decisions, evidence, review findings, drift decisions, or the next recommended stage. Do not record long process narration or generic skill-use logs.
+4. Native Superpowers docs are never default in target projects or example projects. Creating `docs/superpowers/*` requires an explicit human request plus a second confirmation after the agent explains the agent-loop path override.
+5. Subagent execution remains human-approved. Default approval scope is one task/story, but the agent may propose one bounded task group when tasks are independent, context is bounded, each subagent gets a clear brief, and the main agent can review and merge outputs. Feature Auto-Loop may recommend grouped subagent execution, but cannot enable it silently.
 
 ## Proposed Implementation Steps
 
@@ -259,4 +261,4 @@ Subagents may not:
    - Superpowers writing-plans path override
    - TDD evidence still controlled by Task Done Gate
    - subagent approval stop condition
-7. Bump version and update `CHANGELOG.md`.
+7. Update `CHANGELOG.md`; update version only when the human explicitly approves the version change.

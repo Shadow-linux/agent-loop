@@ -1,6 +1,6 @@
 # Recovery And Backfill
 
-Use this file when `agent-loop` is missing, stale, incomplete, or when a feature must continue from code that already exists.
+Use this file when `agent-loop` memory is stale, incomplete, or when a feature must continue from code that already exists. For an existing codebase with no `agent-loop` memory at all, route to Existing Project Onboarding first and use this protocol only when onboarding discovers backfill work.
 
 ## Core Rule
 
@@ -18,7 +18,7 @@ Code reality can correct `agent-loop` documents after human confirmation. It mus
 
 Use this protocol when:
 
-- existing code has no `agent-loop`
+- Existing Project Onboarding finds code reality that should be backfilled into newly proposed `agent-loop` memory
 - `agent-loop/project.md` is stale
 - the project used `agent-loop` before, but recent development happened without updating `agent-loop`
 - the human says "re-adopt", "re-take-over", "re-sync", "重新托管", "重新接管", "回补 agent-loop", or similar

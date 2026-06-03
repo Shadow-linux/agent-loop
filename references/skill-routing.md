@@ -2,6 +2,8 @@
 
 Use this file when a stage can be improved by another skill or plugin. The `agent-loop` controller stays responsible for state, gates, artifacts, and drift. Other skills are helpers.
 
+When an external skill is available for the current stage, also load `external-skill-adapters.md`.
+
 ## Routing Principle
 
 ```text
@@ -13,11 +15,13 @@ agent-loop records the result
 
 Do not force the human to learn external command systems. Translate every external method into the local `agent-loop` artifacts.
 
+External skill default paths are advisory only. If a preferred skill says to write under its own docs directory, write to the owning `agent-loop` artifact instead.
+
 ## Preferred Skills
 
 | Stage | Preferred Skill Type | Fallback |
 |---|---|---|
-| Brainstorm / Clarify | brainstorming / product discovery | Ask 1-5 high-impact questions from `stage-guides.md` |
+| Brainstorm / Clarify if Needed | brainstorming / product discovery | Ask 1-5 high-impact questions from `stage-guides.md` |
 | Product Brief If Needed | PRD/product synthesis, grill-with-docs | Use `templates/product.md` |
 | Feature Spec | spec writing | Use `templates/spec.md` |
 | Human Review Summary | approval summary / decision table | Use `human-review-summary.md` |
@@ -40,15 +44,15 @@ Do not force the human to learn external command systems. Translate every extern
 If Superpowers is available, these map cleanly:
 
 - `using-superpowers`: reminder that relevant skills should be loaded before acting.
-- `brainstorming`: Brainstorm / Clarify.
+- `brainstorming`: Brainstorm / Clarify if Needed; translate output to `product.md` or `spec.md`, not `docs/superpowers/specs/`.
 - PRD/product skills such as mattpocock `to-prd`: Product Brief If Needed, translated into local `product.md`.
-- `writing-plans`: Plan If Needed; translate into construction-grade `plan.md` with exact paths, code/test snippets, commands, expected output, no placeholders, and self-review.
-- `test-driven-development`: Execute Task / Story.
-- `systematic-debugging`: Diagnose Failure.
-- `verification-before-completion`: Verify and Close.
-- `requesting-code-review`: Review.
-- `finishing-a-development-branch`: Submit / Integrate and Close decision support.
-- `subagent-driven-development`: for explicitly parallel independent tasks, or bounded large-project onboarding scans when the human confirms.
+- `writing-plans`: Plan If Needed; translate into construction-grade `plan.md` or `plans/*`, not `docs/superpowers/plans/`.
+- `test-driven-development`: Execute Task / Story; evidence still goes to `notes.md` and task status still follows Task Done Gate.
+- `systematic-debugging`: Diagnose Failure; root cause and fix evidence go to `notes.md`.
+- `verification-before-completion`: Verify and Close; completion still requires agent-loop evidence, review, drift, memory, and human gates.
+- `requesting-code-review`: Review; findings go to `notes.md` and cannot directly mark tasks `done`.
+- `finishing-a-development-branch`: Submit / Integrate and Close decision support; agent-loop submit/close gates still apply.
+- `subagent-driven-development`: for explicitly parallel independent tasks, or bounded large-project onboarding scans when the human confirms; briefs and returns go to `handoffs/*`.
 
 Browser, Chrome, and computer-use tools are execution tools, not assumptions. Use them for Web E2E only after `e2e-discovery.md` has established the app URL, start command, auth/test data, and appropriate automation route.
 
@@ -56,7 +60,9 @@ Browser, Chrome, and computer-use tools are execution tools, not assumptions. Us
 
 Subagents are optional. In v1, use them only when:
 
-- the human confirms subagent use
+- the human confirms this specific subagent dispatch
+- or the human explicitly confirms one bounded task group after the agent lists task boundaries, subagent briefs, stop conditions, and main-agent review responsibility
+- Feature Auto-Loop or Task Auto-Run approval is not subagent approval
 - tasks or scan lanes are independent
 - each subagent has a bounded task/story or onboarding scan lane
 - each implementation subagent receives a `templates/subagent-brief.md`-style brief

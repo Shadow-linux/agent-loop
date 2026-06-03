@@ -103,6 +103,7 @@ E2E Discovery if Web
 Technical Design / Code Context
 Plan if Needed
 Analyze Consistency
+Subagent Execution If Approved
 Execute Task / Story
 Verify
 Review
@@ -203,7 +204,7 @@ Offer auto modes proactively, without waiting for the human to know the terms:
 Recommended wording:
 
 ```text
-Strict Mode is safest and asks before each stage. If you want fewer confirmations, I can enable Feature Auto-Loop for this feature, or Task Auto-Run just for the selected task/story. Auto modes still stop for Human-gated decisions, risky changes, failed verification, drift, submit, pause, and close.
+Strict Mode is safest and asks before each stage. If you want fewer confirmations, I can enable Feature Auto-Loop for this feature, or Task Auto-Run just for the selected task/story. Auto modes still stop for Human-gated decisions, risky changes, failed verification, drift, Delivery Contract creation/acceptance/breaking changes, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, and publish.
 ```
 
 Do not offer an auto mode as a substitute for missing clarification. If scope, acceptance, test approach, data rules, or affected boundaries are unclear, clarify first.

@@ -220,6 +220,7 @@ Project Entry
 → Technical Design / Code Context
 → Plan if Needed
 → Analyze Consistency
+→ Subagent Execution If Approved
 → Execute Task / Story
 → Verify
 → Review

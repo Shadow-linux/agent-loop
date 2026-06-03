@@ -5,7 +5,7 @@ description: Use when starting, continuing, resuming, structuring, testing, impl
 
 # Agent Loop
 
-Version: 1.0.2
+Version: 1.1.0
 
 Run a single-human, CLI-agent development loop from goal intake to verified close. This skill is a controller: it decides the current stage, loads the right reference, produces or updates `agent-loop` artifacts, and stops at human gates.
 
@@ -71,6 +71,7 @@ references/human-review-summary.md table-first approval summaries for human gate
 references/stage-guides.md         stage-by-stage procedures
 references/artifact-rules.md       artifact ownership, drift, status, and naming
 references/skill-routing.md        optional preferred skills and fallback behavior
+references/external-skill-adapters.md stage plugin rules for Superpowers and other external skills
 references/submit-and-integrate.md explicit git submit / commit / PR gate
 references/validation-scenarios.md pressure scenarios for checking this skill works
 references/document-templates.md   inline markdown templates
@@ -103,11 +104,12 @@ CHANGELOG.md                        skill maintenance history; append meaningful
 16. Load `references/feature-completion-check.md` after verification/project-memory updates, before starting a new feature when another is active, and when resuming an active feature that may already be complete.
 17. Load `references/human-review-summary.md` before asking the human to approve or confirm a stage, unless the confirmation is trivial enough for a 3-line summary.
 18. Load `references/skill-routing.md` when a stage might benefit from an external or platform skill.
-19. Load `references/submit-and-integrate.md` before creating commits, PR text, merge notes, or any submission claim.
-20. Summarize current state in the response.
-21. Recommend exactly one next stage.
-22. Ask for human confirmation before mutating files, crossing stages, or enabling an auto mode.
-23. After the stage, update artifacts, summarize evidence, and ask whether to continue, revise, pause, submit, or close.
+19. Load `references/external-skill-adapters.md` when Superpowers or another external skill is available for the current stage. Agent-loop paths, gates, task status, project memory, submit, pause, and close rules override external skill defaults.
+20. Load `references/submit-and-integrate.md` before creating commits, PR text, merge notes, or any submission claim.
+21. Summarize current state in the response.
+22. Recommend exactly one next stage.
+23. Ask for human confirmation before mutating files, crossing stages, or enabling an auto mode.
+24. After the stage, update artifacts, summarize evidence, and ask whether to continue, revise, pause, submit, or close.
 
 ## Artifact Layout
 
@@ -182,7 +184,7 @@ If the local directory is only a remote-project entry point, create only thin lo
 - Feature Auto-Loop may run Agent-ready feature work after Feature Spec acceptance and explicit human confirmation.
 - Task Auto-Run may run one task/story after its plan is accepted and explicit human confirmation.
 - If the human appears slowed down by repeated confirmations, or when starting a feature/task execution lane, proactively explain the available gate modes and recommend either Feature Auto-Loop or Task Auto-Run when safe.
-- Auto modes stop at Human-gated work, unclear decisions, risky changes, failed verification, drift needing approval, Delivery Contract acceptance or breaking changes, directory guidance changes, subagent approval, submit, pause, or close.
+- Auto modes stop at Human-gated work, unclear decisions, risky changes, failed verification, drift needing approval, Delivery Contract creation/acceptance/breaking changes, directory guidance changes, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, or publish.
 - Human confirmations should use table-first Human Review Summary by default; full artifacts remain the source of truth.
 - Root `AGENTS.md` / `CLAUDE.md` guidance must tell future agents to own the workflow: classify the stage, recommend one next action, propose missing artifacts, and keep responsibility for sequencing, diagnosis, verification, drift checks, and project-memory updates.
 - Root guidance must also explain autonomous execution after approval: Feature Auto-Loop may continue Agent-ready feature work after accepted Feature Spec and explicit enablement; Task Auto-Run may complete one accepted task/story plan through TDD, implementation, verification, bug fixing, review, drift, status update, and final report.
@@ -210,12 +212,17 @@ If no external skill exists, continue with the fallback procedures in `reference
 
 Stop when:
 
-- intent or scope cannot be resolved from files
-- project memory and code reality materially disagree
+- a task is `Human-gated`
+- intent, scope, product, design, architecture, security, data, approval, or public-interface decisions cannot be resolved from files
 - a stage would modify human original requirements
-- the task needs non-TDD execution
-- verification repeatedly fails
+- spec, product scope, or acceptance criteria would change
+- project memory and code reality materially disagree
+- code reality conflicts with feature docs
+- a new dependency, migration, destructive operation, credential, external service, or long-lived boundary directory is needed
+- directory-level `AGENTS.md` creation/update is recommended
+- a Delivery Contract needs creation, human acceptance, or an accepted contract needs a breaking change
+- TDD cannot be followed or verification repeatedly fails
+- review finds behavior, scope, or architecture changes
 - subagents are needed but not yet approved
-- submit is requested without evidence, drift check, diff review, or human confirmation
-- close is requested without evidence or drift check
+- submit, commit, PR, merge, release, publish, pause, or close is requested
 - the work would require first-version exclusions

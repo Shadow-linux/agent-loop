@@ -58,7 +58,7 @@ Keep it short and long-lived:
 - ask human confirmation before each agent-loop stage
 - use table-first Human Review Summary for non-trivial confirmations
 - Autonomous Execution After Approval: after explicit Feature Auto-Loop or Task Auto-Run enablement, agents may continue inside the accepted scope through implementation, testing, fixing, review, drift, status update, and final report
-- autonomous stop conditions: scope change, ambiguity, unavailable infrastructure, security/data boundary changes, broad architecture changes, repeated verification failure, unrelated dirty work, submit, close, commit, PR, merge, or release
+- autonomous stop conditions: scope change, ambiguity, unavailable infrastructure, security/data boundary changes, broad architecture changes, repeated verification failure, unrelated dirty work, Delivery Contract creation/acceptance/breaking-change approval, subagent dispatch without explicit approval, submit, close, commit, PR, merge, release, or publish
 - run fresh verification before completion claims
 - run Feature Completion Check after likely completion, before starting a new feature, or when resuming with an active feature
 - perform Feature Close Review, drift check, and project memory update before close
