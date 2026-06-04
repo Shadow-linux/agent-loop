@@ -6,13 +6,13 @@ Guidance language should follow this project's language preference. Keep stable 
 
 ## Agent Loop
 
-- Before development work, inspect `agent-loop/`.
-- If `agent-loop/` is missing, also inspect legacy `.agent-loop/`. Use legacy memory for the current run and ask before migrating or renaming it.
-- Resolve later project-memory and feature paths relative to the active memory root: `agent-loop/` by default, or legacy `.agent-loop/` for the current run.
-- If `agent-loop/project.md` says `Status: remote-entry`, read `agent-loop/remote.md`, verify the remote project, and continue from the remote project memory or local-shadow memory.
-- If neither `agent-loop/` nor legacy `.agent-loop/` exists, propose Init Project or Existing Project Onboarding and ask for confirmation.
-- If `agent-loop/` exists, read `agent-loop/project.md` and the active feature docs before acting.
-- If `agent-loop/project.md` says `Memory Mode: enterprise`, read only the linked `agent-loop/project/*.md` detail files needed for the current stage.
+- Before development work, inspect `.agent-loop/`.
+- If `.agent-loop/` is missing, also inspect legacy `agent-loop/`. Use legacy memory for the current run and ask before migrating or renaming it.
+- Resolve later project-memory and feature paths relative to the active memory root: `.agent-loop/` by default, or legacy `agent-loop/` for the current run.
+- If `.agent-loop/project.md` says `Status: remote-entry`, read `.agent-loop/remote.md`, verify the remote project, and continue from the remote project memory or local-shadow memory.
+- If neither `.agent-loop/` nor legacy `agent-loop/` exists, propose Init Project or Existing Project Onboarding and ask for confirmation.
+- If `.agent-loop/` exists, read `.agent-loop/project.md` and the active feature docs before acting.
+- If `.agent-loop/project.md` says `Memory Mode: enterprise`, read only the linked `.agent-loop/project/*.md` detail files needed for the current stage.
 - If the project used `agent-loop` before but recent development bypassed it, route to Re-Adopt Agent Loop Project: compare code reality with `agent-loop` docs, propose backfill, and ask human confirmation before continuing feature work.
 - When working inside a subdirectory, also check for the nearest directory-level `AGENTS.md`.
 - Treat architecture as DDD-inspired by default, but respect this project's language, framework, and existing directory conventions.
@@ -56,11 +56,11 @@ Guidance language should follow this project's language preference. Keep stable 
 
 ## Boundaries
 
-- Keep task status, execution evidence, and feature notes inside `agent-loop/`.
+- Keep task status, execution evidence, and feature notes inside `.agent-loop/`.
 - Keep durable producer-consumer interface handoffs in feature `contracts.md` and optional `contracts/` details. Keep temporary subagent assignments in `handoffs/`.
-- Keep original human materials in requirement set directories under `agent-loop/requirements/`, or reference their original paths when the human declines copying.
-- Do not create new flat files directly under `agent-loop/requirements/`; group requirements, prototypes, feedback, screenshots, recordings, links, and follow-up notes for the same intake/topic together.
-- If legacy `agent-loop/inputs/` exists, treat it as read-only compatibility and propose migration to `agent-loop/requirements/` before new feature work.
+- Keep original human materials in requirement set directories under `.agent-loop/requirements/`, or reference their original paths when the human declines copying.
+- Do not create new flat files directly under `.agent-loop/requirements/`; group requirements, prototypes, feedback, screenshots, recordings, links, and follow-up notes for the same intake/topic together.
+- If legacy `.agent-loop/inputs/` or visible-root `agent-loop/inputs/` exists, treat it as read-only compatibility and propose migration to `.agent-loop/requirements/` before new feature work.
 - Do not write temporary task logs into `AGENTS.md`.
 - Directory-level `AGENTS.md` files are for long-lived boundary rules only.
 - When creating a new app root, package root, test root, security/data boundary, plugin root, or docs root, propose a directory-level `AGENTS.md` and ask for human confirmation before writing it.

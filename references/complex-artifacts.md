@@ -45,7 +45,7 @@ Before creating directories, explain why the trigger applies and ask human confi
 ## Directory Layout
 
 ```text
-agent-loop/features/YYYY-MM-DD-<feature>/
+.agent-loop/features/YYYY-MM-DD-<feature>/
   product.md optional
   spec.md
   tasks.md

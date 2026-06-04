@@ -10,8 +10,8 @@ Entry: any use of this skill.
 
 Read:
 
-- `agent-loop/project.md` if present
-- enterprise `agent-loop/project/*.md` detail files only when referenced by `project.md` and needed for the current stage
+- `.agent-loop/project.md` if present
+- enterprise `.agent-loop/project/*.md` detail files only when referenced by `project.md` and needed for the current stage
 - active feature docs if present
 - repo docs/scripts only as needed
 
@@ -26,7 +26,7 @@ Exit:
 
 ## Init Project
 
-Entry: no `agent-loop/` or legacy `.agent-loop/`, little or no code.
+Entry: no `.agent-loop/` or legacy `agent-loop/`, little or no code.
 
 If the human says the project is remote, or the local directory appears to be only a remote entry point, do not initialize a normal local project. Route to Remote Project Discovery first.
 
@@ -45,9 +45,9 @@ Before writing:
 
 Write after confirmation:
 
-- `agent-loop/project.md`
-- `agent-loop/requirements/`
-- `agent-loop/features/`
+- `.agent-loop/project.md`
+- `.agent-loop/requirements/`
+- `.agent-loop/features/`
 - root `AGENTS.md`
 - root `CLAUDE.md -> AGENTS.md` when supported
 
@@ -70,7 +70,7 @@ Load:
 
 Inspect:
 
-- local `agent-loop/project.md` and `agent-loop/remote.md` if present
+- local `.agent-loop/project.md` and `.agent-loop/remote.md` if present
 - local connection docs, README, scripts, SSH/devcontainer/container hints, or notes
 - remote files only if the human has already granted access or the access method is already configured and safe to use
 
@@ -79,7 +79,7 @@ Do not:
 - create a full local project memory for an empty entry directory
 - treat local files as code reality when source of truth is remote
 - run remote install/build/test/dev-server commands without confirmation
-- create remote `agent-loop/`, `AGENTS.md`, or `CLAUDE.md` without confirmation
+- create remote `.agent-loop/`, `AGENTS.md`, or `CLAUDE.md` without confirmation
 
 Output before writing:
 
@@ -92,9 +92,9 @@ Output before writing:
 
 Write after confirmation:
 
-- local `agent-loop/remote.md`
-- thin local `agent-loop/project.md` with `Status: remote-entry` when local is only an entry point
-- remote `agent-loop/project.md`, `requirements/`, `features/`, root `AGENTS.md`, and `CLAUDE.md` only if remote writes are confirmed
+- local `.agent-loop/remote.md`
+- thin local `.agent-loop/project.md` with `Status: remote-entry` when local is only an entry point
+- remote `.agent-loop/project.md`, `requirements/`, `features/`, root `AGENTS.md`, and `CLAUDE.md` only if remote writes are confirmed
 
 Exit:
 
@@ -104,7 +104,7 @@ Exit:
 
 ## Existing Project Onboarding
 
-Entry: existing code, no `agent-loop/` or legacy `.agent-loop/`.
+Entry: existing code, no `.agent-loop/` or legacy `agent-loop/`.
 
 If the existing code is remote, perform onboarding against the remote source of truth. If local-shadow mode is active, all findings must include remote evidence labels.
 
@@ -163,10 +163,10 @@ Directory guidance:
 
 Write after confirmation:
 
-- `agent-loop/project.md`
-- enterprise `agent-loop/project/*.md` files only when recommended and confirmed
-- `agent-loop/requirements/`
-- `agent-loop/features/`
+- `.agent-loop/project.md`
+- enterprise `.agent-loop/project/*.md` files only when recommended and confirmed
+- `.agent-loop/requirements/`
+- `.agent-loop/features/`
 - root `AGENTS.md` / `CLAUDE.md` guidance, if missing or stale
 - directory-level `AGENTS.md` only if specific boundary directories are confirmed
 
@@ -221,19 +221,19 @@ Rules:
 - Never silently modify original requirements.
 - Normalize names only after confirmation.
 - Requirement archive dates are archive dates only, not deadlines or feature lifecycle dates.
-- Use a requirement set directory with `README.md`; do not create new flat files directly under `agent-loop/requirements/`.
+- Use a requirement set directory with `README.md`; do not create new flat files directly under `.agent-loop/requirements/`.
 - Group all materials from the same intake/topic together: requirement documents, prototypes, screenshots, feedback, recordings, links, and follow-up notes.
 - Do not overwrite old requirement materials when requirements change.
 
 Write:
 
-- `agent-loop/requirements/<archive-date>-<topic>/README.md`
-- `agent-loop/requirements/<archive-date>-<topic>/requirement.*`
-- `agent-loop/requirements/<archive-date>-<topic>/prototype.*`
+- `.agent-loop/requirements/<archive-date>-<topic>/README.md`
+- `.agent-loop/requirements/<archive-date>-<topic>/requirement.*`
+- `.agent-loop/requirements/<archive-date>-<topic>/prototype.*`
 - optional feedback, screenshot, recording, design-link, meeting-note, and other source files inside the same requirement set
 - optional change-request files inside the same requirement set
-- optional `agent-loop/requirements/INDEX.md` only when trigger conditions apply
-- legacy `agent-loop/inputs/` migration proposal when old projects still use it
+- optional `.agent-loop/requirements/INDEX.md` only when trigger conditions apply
+- legacy `.agent-loop/inputs/` or visible-root `agent-loop/inputs/` migration proposal when old projects still use it
 - source references in `spec.md`
 
 Exit:

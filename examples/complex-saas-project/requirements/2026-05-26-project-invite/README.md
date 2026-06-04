@@ -18,8 +18,8 @@ Source Files:
 - Other:
 
 Used By:
-- agent-loop/features/2026-05-26-project-invite-permissions/product.md
-- agent-loop/features/2026-05-26-project-invite-permissions/spec.md
+- .agent-loop/features/2026-05-26-project-invite-permissions/product.md
+- .agent-loop/features/2026-05-26-project-invite-permissions/spec.md
 
 Notes:
 -

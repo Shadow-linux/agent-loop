@@ -19,7 +19,7 @@ Code reality can correct `agent-loop` documents after human confirmation. It mus
 Use this protocol when:
 
 - Existing Project Onboarding finds code reality that should be backfilled into newly proposed `agent-loop` memory
-- `agent-loop/project.md` is stale
+- `.agent-loop/project.md` is stale
 - the project used `agent-loop` before, but recent development happened without updating `agent-loop`
 - the human says "re-adopt", "re-take-over", "re-sync", "重新托管", "重新接管", "回补 agent-loop", or similar
 - a feature was partly built but docs are incomplete
@@ -30,11 +30,11 @@ Use this protocol when:
 
 ## Re-Adopt Agent Loop Project
 
-Use this when `agent-loop/` exists but a period of development happened outside the loop.
+Use this when `.agent-loop/` or legacy `agent-loop/` exists but a period of development happened outside the loop.
 
 Do not start new feature work first. The agent should:
 
-1. Read `agent-loop/project.md` and active or paused feature docs. If `project.md` says `Memory Mode: enterprise`, read only the relevant linked `agent-loop/project/*.md` files.
+1. Read the active memory root's `project.md` and active or paused feature docs. If `project.md` says `Memory Mode: enterprise`, read only the relevant linked `.agent-loop/project/*.md` or legacy `agent-loop/project/*.md` files.
 2. Inspect current code reality only as needed: README, scripts, tests, obvious changed areas, entry points, and relevant recent feature files.
 3. Compare current code/tests/scripts against `project.md`, `spec.md`, `tasks.md`, `tests.md`, `plan.md`, and `notes.md`.
 4. Produce the Compare Matrix.

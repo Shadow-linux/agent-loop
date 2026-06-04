@@ -22,12 +22,12 @@ Classify the project into exactly one state:
 
 | State | Condition | Next Stage |
 |---|---|---|
-| `new-project` | No `agent-loop/` or `.agent-loop/`; little/no existing code | Init Project |
+| `new-project` | No `.agent-loop/` or legacy `agent-loop/`; little/no existing code | Init Project |
 | `remote-entry` | Human says project is remote/SSH/devcontainer/container/tunnel, or local files contain remote-entry hints and real source of truth is outside local path | Remote Project Discovery |
-| `existing-project` | No `agent-loop/` or `.agent-loop/`; meaningful existing code | Existing Project Onboarding |
-| `resume` | `agent-loop/` or legacy `.agent-loop/` exists and project memory looks current | Resume / Start Feature |
-| `re-adopt` | `agent-loop/` or legacy `.agent-loop/` exists, but recent work happened outside the loop or the human asks to re-adopt/re-take-over/re-sync the project | Re-Adopt Agent Loop Project / Recovery Backfill |
-| `stale-memory` | `agent-loop/` or legacy `.agent-loop/` exists but docs conflict with code reality | Reconcile Project Context / Recovery Backfill |
+| `existing-project` | No `.agent-loop/` or legacy `agent-loop/`; meaningful existing code | Existing Project Onboarding |
+| `resume` | `.agent-loop/` or legacy `agent-loop/` exists and project memory looks current | Resume / Start Feature |
+| `re-adopt` | `.agent-loop/` or legacy `agent-loop/` exists, but recent work happened outside the loop or the human asks to re-adopt/re-take-over/re-sync the project | Re-Adopt Agent Loop Project / Recovery Backfill |
+| `stale-memory` | `.agent-loop/` or legacy `agent-loop/` exists but docs conflict with code reality | Reconcile Project Context / Recovery Backfill |
 | `active-feature` | active feature exists and next action is clear | Continue Current Stage |
 | `blocked` | blocker or missing decision prevents next stage | Ask Human / Diagnose |
 
@@ -35,7 +35,7 @@ Classify the project into exactly one state:
 
 Use this order:
 
-1. Check `agent-loop/`; if missing, check legacy `.agent-loop/`.
+1. Check `.agent-loop/`; if missing, check legacy `agent-loop/`.
 2. If present, read `<memory-root>/project.md`.
 3. If `project.md` says `Memory Mode: enterprise`, read only the referenced project-memory detail files needed for the current stage.
 4. If `project.md` says `Status: remote-entry`, read `<memory-root>/remote.md` and route through Remote Project Discovery before local onboarding.
@@ -49,7 +49,7 @@ Use this order:
 
 If code reality and the memory root disagree, or if the human says the project used `agent-loop` before but recent work bypassed it, classify as `re-adopt` or `stale-memory`, treat code as the current fact base for agent-maintained docs, preserve human requirements as original intent, and load `references/recovery-and-backfill.md`.
 
-Default memory root for new projects is `agent-loop/`. If legacy `.agent-loop/` exists, use it for the current run and ask before migrating.
+Default memory root for new projects is `.agent-loop/`. If legacy `agent-loop/` exists, use it for the current run and ask before migrating.
 
 For existing projects without reliable memory, load `references/existing-project-onboarding.md`. Build a shallow, evidence-backed project map before feature work. Do not do a whole-repo deep read unless a targeted feature scan requires it.
 

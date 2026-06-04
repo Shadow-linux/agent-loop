@@ -20,12 +20,12 @@ When you start a conversation, the agent classifies the project into exactly one
 
 | State | Condition | What Happens |
 |---|---|---|
-| **new-project** | No `agent-loop/` or legacy `.agent-loop/`; little or no code | Init Project |
-| **existing-project** | No `agent-loop/` or legacy `.agent-loop/`; meaningful code | Existing Project Onboarding |
+| **new-project** | No `.agent-loop/` or legacy `agent-loop/`; little or no code | Init Project |
+| **existing-project** | No `.agent-loop/` or legacy `agent-loop/`; meaningful code | Existing Project Onboarding |
 | **remote-entry** | Project is remote / container / SSH | Remote Project Discovery |
-| **resume** | `agent-loop/` or legacy `.agent-loop/` exists; memory looks current | Resume feature work |
-| **re-adopt** | `agent-loop/` or legacy `.agent-loop/` exists but recent work bypassed it | Recovery Backfill |
-| **stale-memory** | `agent-loop/` or legacy `.agent-loop/` exists but docs conflict with code | Reconcile Project Context |
+| **resume** | `.agent-loop/` or legacy `agent-loop/` exists; memory looks current | Resume feature work |
+| **re-adopt** | `.agent-loop/` or legacy `agent-loop/` exists but recent work bypassed it | Recovery Backfill |
+| **stale-memory** | `.agent-loop/` or legacy `agent-loop/` exists but docs conflict with code | Reconcile Project Context |
 | **active-feature** | Active feature exists; next action is clear | Continue current stage |
 | **blocked** | Blocker prevents next stage | Ask / Diagnose |
 
@@ -40,29 +40,29 @@ When you start a conversation, the agent classifies the project into exactly one
 - **Exit**: One recommended next stage.
 
 ### Init Project
-- **Entry**: New project, no `agent-loop/`.
+- **Entry**: New project, no `.agent-loop/` or legacy `agent-loop/`.
 - **Load**: `project-guidance.md`, `project-memory-mode.md`, `project-architecture-init.md`.
-- **Write after confirmation**: `agent-loop/project.md`, root `AGENTS.md` / `CLAUDE.md`.
+- **Write after confirmation**: `.agent-loop/project.md`, root `AGENTS.md` / `CLAUDE.md`.
 
 ### Existing Project Onboarding
-- **Entry**: Existing code, no `agent-loop/`.
+- **Entry**: Existing code, no `.agent-loop/` or legacy `agent-loop/`.
 - **Load**: `existing-project-onboarding.md`, `project-guidance.md`, `project-memory-mode.md`.
 - **Inspect**: README, docs, package/test scripts, key directories (layered scan).
 - **Write after confirmation**: `project.md`, `AGENTS.md`.
 
 ### Remote Project Discovery
 - **Entry**: Human says project is remote, or local is only an entry point.
-- **Write after confirmation**: `agent-loop/remote.md`, thin `project.md` with `Status: remote-entry`.
+- **Write after confirmation**: `.agent-loop/remote.md`, thin `project.md` with `Status: remote-entry`.
 
 ### Reconcile / Re-Adopt
-- **Entry**: `agent-loop/` exists but memory is stale, or recent work bypassed the loop.
+- **Entry**: `.agent-loop/` exists but memory is stale, or recent work bypassed the loop.
 - **Action**: Compare code reality with `project.md` and feature docs. Propose backfill. Ask before writing.
 
 ### Requirement Archive
 - **Entry**: Human provides requirement/prototype/materials.
 - **Load**: `requirement-management.md`.
 - **Rule**: Archive as a requirement set directory. Do not overwrite original requirements. Do not create flat files directly under `requirements/`.
-- **Write**: `agent-loop/requirements/YYYY-MM-DD-<topic>/README.md` + original materials.
+- **Write**: `.agent-loop/requirements/YYYY-MM-DD-<topic>/README.md` + original materials.
 
 ### Product Brief (Optional)
 - **Entry**: PRD-style synthesis needed before engineering spec.
@@ -224,8 +224,8 @@ Feature Auto-Loop and Task Auto-Run do not imply subagent approval. Subagents re
 ## Naming Conventions
 
 ```
-Feature directory:  agent-loop/features/YYYY-MM-DD-<feature-slug>/
-Requirement set:    agent-loop/requirements/YYYY-MM-DD-<topic>/
+Feature directory:  .agent-loop/features/YYYY-MM-DD-<feature-slug>/
+Requirement set:    .agent-loop/requirements/YYYY-MM-DD-<topic>/
 Core files:         spec.md, tasks.md, tests.md, plan.md, notes.md (stable names)
 Plan metadata:      Plan ID: YYYY-MM-DD-<task>-<slug>
 ```

@@ -49,4 +49,4 @@ Last Verified: 2026-05-27
 Evidence: `[remote:/srv/yuanjing/app] pwd`
 Confidence: medium
 
-Next Step: Read remote `agent-loop/project.md` and continue the active feature.
+Next Step: Read remote `.agent-loop/project.md` and continue the active feature.

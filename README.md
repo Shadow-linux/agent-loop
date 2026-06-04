@@ -1,6 +1,6 @@
 # Agent Loop
 
-**Current version:** 1.1.0
+**Current version:** 1.1.1
 
 A reusable [Codex](https://github.com/openai/codex) / CLI-agent skill for single-person software development workflows—from goal intake to verified close.
 
@@ -44,7 +44,7 @@ Project Entry → Remote Project Discovery if needed
 
 | Concept | Meaning |
 |---|---|
-| **Feature** | One behavior-changing work area under `agent-loop/features/<date>-<slug>/` |
+| **Feature** | One behavior-changing work area under `.agent-loop/features/<date>-<slug>/` |
 | **Story** | User-perspective slice inside a feature (e.g. `US1`, `US2`) |
 | **Task** | Default executable engineering unit. Small, verifiable, tied to a story. |
 | **Plan** | Construction-grade execution plan for the active task/story |
@@ -55,7 +55,7 @@ Project Entry → Remote Project Discovery if needed
 ## Artifact Layout
 
 ```
-agent-loop/
+.agent-loop/
   remote.md                           # optional local-entry pointer for remote projects
   project.md                          # Long-term project memory
   project/                            # optional enterprise memory detail files
@@ -82,6 +82,8 @@ agent-loop/
       contracts/    (optional contract details)
 ```
 
+New target projects use `.agent-loop/` by default. Existing visible `agent-loop/` roots remain readable as legacy memory and should be migrated only after human confirmation.
+
 ## Quick Start
 
 ### 1. Install the Skill
@@ -106,7 +108,7 @@ The agent will:
 - Inspect the repo
 - Classify the entry scenario (new / existing / remote / resume)
 - Load the right references
-- Propose `agent-loop/project.md` and root `AGENTS.md`
+- Propose `.agent-loop/project.md` and root `AGENTS.md`
 
 ### 3. Start a Feature
 
@@ -123,7 +125,7 @@ The agent will:
 
 > "Continue the login feature."
 
-The agent reads `agent-loop/project.md`, finds the active feature, and resumes from the last checkpoint.
+The agent reads `.agent-loop/project.md`, finds the active feature, and resumes from the last checkpoint.
 
 ## Execution Modes
 

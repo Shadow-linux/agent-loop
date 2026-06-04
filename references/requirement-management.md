@@ -4,7 +4,7 @@ Use this file before copying, moving, renaming, indexing, or referencing human-p
 
 ## Core Rule
 
-`agent-loop/requirements/` stores original human source material or references to it, grouped into requirement set directories.
+`.agent-loop/requirements/` stores original human source material or references to it, grouped into requirement set directories.
 
 It is not a working spec, PRD, task plan, or edited summary.
 
@@ -14,7 +14,7 @@ human source requirement -> requirements archive/reference -> spec Source Requir
 
 Never silently modify, rewrite, summarize over, or replace original human requirements.
 
-`agent-loop/requirements/` is canonical. Legacy `agent-loop/inputs/` is read-only compatibility. Do not create new `agent-loop/inputs/` archives.
+`.agent-loop/requirements/` is canonical. Legacy `.agent-loop/inputs/` and visible-root `agent-loop/inputs/` are read-only compatibility. Do not create new inputs archives.
 
 ## Date Meaning
 
@@ -32,7 +32,7 @@ Do not infer:
 Example:
 
 ```text
-agent-loop/requirements/2026-05-26-login/
+.agent-loop/requirements/2026-05-26-login/
 ```
 
 Means:
@@ -45,12 +45,12 @@ It does not mean the login feature must finish on that date.
 
 ## Requirement Set Layout
 
-For new archives, use requirement set directories. Do not create new flat files directly under `agent-loop/requirements/`.
+For new archives, use requirement set directories. Do not create new flat files directly under `.agent-loop/requirements/`.
 
 A requirement set is one human intake package: requirement documents, prototypes, screenshots, design links, feedback, recordings, meeting notes, and follow-up notes that belong to the same topic or intake moment.
 
 ```text
-agent-loop/requirements/
+.agent-loop/requirements/
   2026-05-26-login/
     README.md
     requirement.md
@@ -62,17 +62,17 @@ agent-loop/requirements/
 Flat files are legacy-compatible read-only shape for old projects. Do not use this shape for new requirement archives:
 
 ```text
-agent-loop/inputs/2026-05-26-login-requirement.md
-agent-loop/inputs/2026-05-26-login-prototype.png
+.agent-loop/inputs/2026-05-26-login-requirement.md
+.agent-loop/inputs/2026-05-26-login-prototype.png
 ```
 
 ## Legacy Inputs Migration
 
-If `agent-loop/inputs/` exists:
+If `.agent-loop/inputs/` or visible-root `agent-loop/inputs/` exists:
 
 1. Read it as legacy requirement source material.
 2. Do not create new files inside it.
-3. Find references to `agent-loop/inputs/` in `product.md`, `spec.md`, `tests.md`, `notes.md`, `project.md`, and enterprise `project/*.md`.
+3. Find references to `.agent-loop/inputs/` or `agent-loop/inputs/` in `product.md`, `spec.md`, `tests.md`, `notes.md`, `project.md`, and enterprise `project/*.md`.
 4. Present a migration table before changing anything:
 
 ```text
@@ -82,9 +82,9 @@ Risk
 Human Decision
 ```
 
-5. After human confirmation, move legacy requirement sets to `agent-loop/requirements/`.
+5. After human confirmation, move legacy requirement sets to `.agent-loop/requirements/`.
 6. Update `Source Inputs` headings to `Source Requirements`.
-7. Update all paths from `agent-loop/inputs/...` to `agent-loop/requirements/...`.
+7. Update all paths from `.agent-loop/inputs/...` or `agent-loop/inputs/...` to `.agent-loop/requirements/...`.
 8. Record the migration in the affected feature `notes.md` or `project.md`.
 
 ## Requirement Set README
@@ -112,7 +112,7 @@ Source Files:
 - Other:
 
 Used By:
-- agent-loop/features/<feature>/spec.md
+- .agent-loop/features/<feature>/spec.md
 
 Notes:
 - 
@@ -127,7 +127,7 @@ If the human provides files outside the repo, ask before copying or renaming.
 If human confirms copy:
 
 ```text
-copy into agent-loop/requirements/YYYY-MM-DD-<topic>/
+copy into .agent-loop/requirements/YYYY-MM-DD-<topic>/
 ```
 
 If human declines copy:
@@ -146,7 +146,7 @@ Do not overwrite earlier requirement materials when requirements change.
 For small follow-up changes on the same topic or intake package, append a new file to the same requirement set:
 
 ```text
-agent-loop/requirements/2026-05-26-login/
+.agent-loop/requirements/2026-05-26-login/
   requirement.md
   prototype.png
   2026-05-29-change-request.md
@@ -155,7 +155,7 @@ agent-loop/requirements/2026-05-26-login/
 For a major new direction or separate feature, create a new requirement set:
 
 ```text
-agent-loop/requirements/2026-06-04-login-sso/
+.agent-loop/requirements/2026-06-04-login-sso/
 ```
 
 The feature `spec.md` must reference all source requirements that shaped the current scope.
@@ -164,7 +164,7 @@ The feature `spec.md` must reference all source requirements that shaped the cur
 
 Do not force an index for small projects.
 
-Recommend `agent-loop/requirements/INDEX.md` when any are true:
+Recommend `.agent-loop/requirements/INDEX.md` when any are true:
 
 - more than 10 requirement sets
 - multiple active features share source requirements
@@ -182,7 +182,7 @@ Ask before:
 - moving source files
 - renaming source files
 - creating a requirement set
-- migrating legacy `agent-loop/inputs/`
+- migrating legacy `.agent-loop/inputs/` or visible-root `agent-loop/inputs/`
 - creating or updating `requirements/INDEX.md`
 
 After archiving, update `spec.md` `Source Requirements` with exact paths.

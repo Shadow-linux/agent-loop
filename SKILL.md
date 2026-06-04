@@ -5,7 +5,7 @@ description: Use when starting, continuing, resuming, structuring, testing, impl
 
 # Agent Loop
 
-Version: 1.1.0
+Version: 1.1.1
 
 Run a single-human, CLI-agent development loop from goal intake to verified close. This skill is a controller: it decides the current stage, loads the right reference, produces or updates `agent-loop` artifacts, and stops at human gates.
 
@@ -85,7 +85,7 @@ CHANGELOG.md                        skill maintenance history; append meaningful
 
 ## Required Runtime Behavior
 
-1. Inspect `agent-loop/`; if missing, also check legacy `.agent-loop/`.
+1. Inspect `.agent-loop/`; if missing, also check legacy `agent-loop/`.
 2. Classify the entry scenario.
 3. Load the stage guide for the current scenario.
 4. Load `references/project-guidance.md` during project init/onboarding or when long-term agent instructions may need sync.
@@ -114,7 +114,7 @@ CHANGELOG.md                        skill maintenance history; append meaningful
 ## Artifact Layout
 
 ```text
-agent-loop/
+.agent-loop/
   remote.md optional local-entry pointer for remote projects
   project.md
   project/ optional enterprise memory detail files
@@ -141,9 +141,9 @@ agent-loop/
       contracts/ optional delivery contract details
 ```
 
-`agent-loop/` is the human-friendly default. If an older project already has `.agent-loop/`, read it and ask before migrating or renaming.
+`.agent-loop/` is the hidden default for target projects. If an older project already has `agent-loop/`, read it and ask before migrating or renaming.
 
-If the local directory is only a remote-project entry point, create only thin local entry memory after confirmation: `agent-loop/remote.md` plus a thin `project.md` with `Status: remote-entry`. Put full project memory next to the remote source of truth when remote writes are allowed; otherwise use local-shadow mode and label every code fact with remote evidence.
+If the local directory is only a remote-project entry point, create only thin local entry memory after confirmation: `.agent-loop/remote.md` plus a thin `project.md` with `Status: remote-entry`. Put full project memory next to the remote source of truth when remote writes are allowed; otherwise use local-shadow mode and label every code fact with remote evidence.
 
 ## Execution Defaults
 
@@ -169,10 +169,10 @@ If the local directory is only a remote-project entry point, create only thin lo
 - Historical execution evidence belongs in `notes.md`.
 - Web E2E capability is discovered from the real project environment. Stable E2E capability belongs in `project.md`; feature-specific E2E cases belong in `tests.md` or `tests/e2e/*`.
 - Human source requirements are archived as requirement set directories, not new flat files. Each requirement set groups the human's requirement, prototype, feedback, screenshots, recordings, links, and follow-up notes for one intake event or topic.
-- `agent-loop/requirements/` is canonical. Legacy `agent-loop/inputs/` is read-only compatibility; if present, recommend migration before new feature work and ask human confirmation before moving files or updating references.
+- `.agent-loop/requirements/` is canonical. Legacy `.agent-loop/inputs/` and visible-root `agent-loop/inputs/` are read-only compatibility; if present, recommend migration before new feature work and ask human confirmation before moving files or updating references.
 - Human source requirement archive dates mean archive date only; never infer deadlines, scope duration, or lifecycle from input paths.
 - Project Memory Mode is either `simple` or `enterprise`. Default to simple. Recommend enterprise when any hard trigger applies, including about 200k+ LOC, 5+ durable boundaries, 2+ test systems, 3+ execution environments, `project.md` above about 600 lines, repeated re-scans, or 5+ directory-level guidance files.
-- In enterprise mode, `project.md` is an index and current-state summary. Long-term project knowledge moves into optional `agent-loop/project/*.md` files created only after human confirmation and only when useful.
+- In enterprise mode, `project.md` is an index and current-state summary. Long-term project knowledge moves into optional `.agent-loop/project/*.md` files created only after human confirmation and only when useful.
 - Architecture is DDD-inspired by default: domain language first, bounded contexts, business rules outside UI glue, application/use-case orchestration, and infrastructure adapters for external systems.
 - Code layout suggestions are reference scaffolds, not mandates. Adapt them to project shape, language, framework conventions, and existing code reality. New projects may scaffold after confirmation; existing projects are recorded as-is unless the human explicitly approves refactoring.
 - During recovery/backfill, code reality is the current fact base for agent-maintained docs, but human original requirements are never overwritten.

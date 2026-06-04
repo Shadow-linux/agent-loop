@@ -21,15 +21,15 @@ If simple:
 - This file is the main long-term project memory body.
 
 If enterprise:
-- Architecture: agent-loop/project/architecture.md | none
-- Boundaries: agent-loop/project/boundaries.md | none
-- Commands: agent-loop/project/commands.md | none
-- Capabilities: agent-loop/project/capabilities.md | none
-- Product Context: agent-loop/project/product-context.md | none
-- Domain Language: agent-loop/project/domain-language.md | none
-- Testing: agent-loop/project/testing.md | none
-- Environments: agent-loop/project/environments.md | none
-- Guidance Inventory: agent-loop/project/guidance-inventory.md | none
+- Architecture: .agent-loop/project/architecture.md | none
+- Boundaries: .agent-loop/project/boundaries.md | none
+- Commands: .agent-loop/project/commands.md | none
+- Capabilities: .agent-loop/project/capabilities.md | none
+- Product Context: .agent-loop/project/product-context.md | none
+- Domain Language: .agent-loop/project/domain-language.md | none
+- Testing: .agent-loop/project/testing.md | none
+- Environments: .agent-loop/project/environments.md | none
+- Guidance Inventory: .agent-loop/project/guidance-inventory.md | none
 
 Memory Mode Evidence:
 - 
@@ -87,7 +87,7 @@ Gate Mode Stop Conditions:
 ## Remote Entry
 
 Mode: none | remote-entry | local-shadow
-Remote Entry File: agent-loop/remote.md | none
+Remote Entry File: .agent-loop/remote.md | none
 Remote Project Memory:
 - Location: remote | local-shadow | undecided | none
 - Path:

@@ -45,7 +45,7 @@ The agent should detect the need proactively and recommend one with a short reas
 Use stable feature-level entry files:
 
 ```text
-agent-loop/features/<feature>/
+.agent-loop/features/<feature>/
   contracts.md
   contracts/
     API001-<slug>.md

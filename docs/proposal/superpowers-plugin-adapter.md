@@ -61,9 +61,9 @@ Superpowers default:
 docs/superpowers/plans/YYYY-MM-DD-feature.md
 
 agent-loop override:
-agent-loop/features/<feature>/plan.md
+.agent-loop/features/<feature>/plan.md
 or
-agent-loop/features/<feature>/plans/YYYY-MM-DD-<task>-<slug>.md
+.agent-loop/features/<feature>/plans/YYYY-MM-DD-<task>-<slug>.md
 ```
 
 ## Adapter Rules

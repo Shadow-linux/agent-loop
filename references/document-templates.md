@@ -7,7 +7,7 @@ Use these templates when creating or refreshing `agent-loop` artifacts. Keep fil
 ```text
 AGENTS.md
 CLAUDE.md -> AGENTS.md
-agent-loop/
+.agent-loop/
   remote.md optional when local directory is a remote-project entry point
   project.md
   project/ optional enterprise project memory details
@@ -86,7 +86,7 @@ Requirement archive dates are archive dates only. They are not deadlines, featur
 Preferred requirement-set layout:
 
 ```text
-agent-loop/requirements/2026-05-26-login/
+.agent-loop/requirements/2026-05-26-login/
   README.md
   requirement.md
   prototype.png
@@ -113,7 +113,7 @@ Purpose:
 - teach future agents to use `agent-loop`
 - tell future agents that they own workflow steering instead of waiting for the human to name every next step
 - state stable startup rules and core commands
-- point task state back to `agent-loop/`
+- point task state back to `.agent-loop/`
 - explain the active gate modes: Strict Mode, Feature Auto-Loop, and Task Auto-Run
 - explain what autonomous execution is allowed to do after Feature Auto-Loop or Task Auto-Run is explicitly enabled
 - tell agents to proactively offer auto modes when repeated confirmations slow the human down
@@ -176,15 +176,15 @@ If simple:
 - This file is the main long-term project memory body.
 
 If enterprise:
-- Architecture: agent-loop/project/architecture.md | none
-- Boundaries: agent-loop/project/boundaries.md | none
-- Commands: agent-loop/project/commands.md | none
-- Capabilities: agent-loop/project/capabilities.md | none
-- Product Context: agent-loop/project/product-context.md | none
-- Domain Language: agent-loop/project/domain-language.md | none
-- Testing: agent-loop/project/testing.md | none
-- Environments: agent-loop/project/environments.md | none
-- Guidance Inventory: agent-loop/project/guidance-inventory.md | none
+- Architecture: .agent-loop/project/architecture.md | none
+- Boundaries: .agent-loop/project/boundaries.md | none
+- Commands: .agent-loop/project/commands.md | none
+- Capabilities: .agent-loop/project/capabilities.md | none
+- Product Context: .agent-loop/project/product-context.md | none
+- Domain Language: .agent-loop/project/domain-language.md | none
+- Testing: .agent-loop/project/testing.md | none
+- Environments: .agent-loop/project/environments.md | none
+- Guidance Inventory: .agent-loop/project/guidance-inventory.md | none
 
 Memory Mode Evidence:
 -
@@ -242,7 +242,7 @@ Gate Mode Stop Conditions:
 ## Remote Entry
 
 Mode: none | remote-entry | local-shadow
-Remote Entry File: agent-loop/remote.md | none
+Remote Entry File: .agent-loop/remote.md | none
 Remote Project Memory:
 - Location: remote | local-shadow | undecided | none
 - Path:

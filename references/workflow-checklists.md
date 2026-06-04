@@ -20,10 +20,10 @@ Before using an external skill or plugin inside a stage:
 
 ## Project Entry
 
-- [ ] Inspect whether `agent-loop/` exists.
-- [ ] If `agent-loop/` is missing, inspect whether legacy `.agent-loop/` exists.
-- [ ] If `agent-loop/` or legacy `.agent-loop/` is present, read `project.md`.
-- [ ] If legacy `.agent-loop/` is present, use it for the current run and ask before migration or renaming.
+- [ ] Inspect whether `.agent-loop/` exists.
+- [ ] If `.agent-loop/` is missing, inspect whether legacy `agent-loop/` exists.
+- [ ] If `.agent-loop/` or legacy `agent-loop/` is present, read `project.md`.
+- [ ] If legacy `agent-loop/` is present, use it for the current run and ask before migration or renaming.
 - [ ] If `project.md` says `Memory Mode: enterprise`, read only the needed linked project-memory detail files.
 - [ ] Locate active or paused feature.
 - [ ] If an Active Feature exists, consider Feature Completion Check before starting new feature work.
@@ -39,7 +39,7 @@ Before using an external skill or plugin inside a stage:
 ## Remote Project Discovery
 
 - [ ] Load `remote-project-discovery.md`.
-- [ ] Check existing local `agent-loop/remote.md` and thin `project.md`.
+- [ ] Check existing local `.agent-loop/remote.md` and thin `project.md`.
 - [ ] Inspect local connection docs or remote hints.
 - [ ] Confirm Remote Host, Remote Path, and Access Method.
 - [ ] Confirm whether the agent may read remote files.
@@ -49,9 +49,9 @@ Before using an external skill or plugin inside a stage:
 - [ ] Record command locations for install, build, unit tests, API tests, E2E tests, and dev server.
 - [ ] Record browser URL, port forwards, tunnel, and auth when applicable.
 - [ ] Record sync model and stale risk.
-- [ ] Write local `agent-loop/remote.md` only after confirmation.
+- [ ] Write local `.agent-loop/remote.md` only after confirmation.
 - [ ] Write thin local `project.md` with `Status: remote-entry` only after confirmation.
-- [ ] Create remote `agent-loop/`, `AGENTS.md`, or `CLAUDE.md` only after explicit confirmation.
+- [ ] Create remote `.agent-loop/`, `AGENTS.md`, or `CLAUDE.md` only after explicit confirmation.
 - [ ] If local-shadow mode is used, label every code fact and command evidence with remote location.
 
 ## Existing Project Onboarding
@@ -79,7 +79,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Recommend enterprise when any hard trigger applies, including about 200k+ LOC, 5+ durable boundaries, 2+ test systems, 3+ execution environments, `project.md` above about 600 lines, repeated re-scans, or 5+ directory-level guidance files.
 - [ ] List onboarding uncertainties and follow-up scans.
 - [ ] Summarize proposed `project.md` before writing.
-- [ ] Ask human confirmation before writing `agent-loop/`, root guidance, or directory guidance.
+- [ ] Ask human confirmation before writing `.agent-loop/`, root guidance, or directory guidance.
 
 ## Requirement Archive
 
@@ -87,13 +87,13 @@ Before using an external skill or plugin inside a stage:
 - [ ] Identify requirement and prototype source materials.
 - [ ] Ask before copying, moving, or renaming human files.
 - [ ] Explain that requirement archive dates mean archive date only.
-- [ ] Use `agent-loop/requirements/YYYY-MM-DD-<topic>/` requirement set directory for new archives.
+- [ ] Use `.agent-loop/requirements/YYYY-MM-DD-<topic>/` requirement set directory for new archives.
 - [ ] Group all same-topic intake materials in the requirement set: requirements, prototypes, screenshots, feedback, recordings, links, and notes.
 - [ ] Create or update requirement-set `README.md`.
 - [ ] Normalize names only after confirmation.
 - [ ] Record source paths in `spec.md`.
 - [ ] Do not overwrite old requirement materials.
-- [ ] If legacy `agent-loop/inputs/` exists, propose migration to `agent-loop/requirements/` before new feature work.
+- [ ] If legacy `.agent-loop/inputs/` or visible-root `agent-loop/inputs/` exists, propose migration to `.agent-loop/requirements/` before new feature work.
 - [ ] Recommend `requirements/INDEX.md` only if index triggers apply.
 
 ## Product Brief If Needed

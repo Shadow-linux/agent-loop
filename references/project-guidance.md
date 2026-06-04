@@ -6,14 +6,14 @@ Use this file when initializing/onboarding a project, syncing long-term project 
 
 ```text
 AGENTS.md / CLAUDE.md = agent startup guidance
-agent-loop/project.md = agent-loop project memory
-agent-loop/project/* = optional enterprise project memory details
-agent-loop/remote.md = local entry pointer for remote projects
-agent-loop/features/* = feature execution state
-agent-loop/requirements/<archive-date>-<topic>/* = human source material package
+.agent-loop/project.md = agent-loop project memory
+.agent-loop/project/* = optional enterprise project memory details
+.agent-loop/remote.md = local entry pointer for remote projects
+.agent-loop/features/* = feature execution state
+.agent-loop/requirements/<archive-date>-<topic>/* = human source material package
 ```
 
-Default memory root is `agent-loop/` because it is visible to humans. If a project already has `.agent-loop/`, use it for the current run and ask before migration.
+Default memory root is `.agent-loop/` because it is workflow metadata, not product code. If a project already has legacy `agent-loop/`, use it for the current run and ask before migration.
 
 Do not use `AGENTS.md` as a task log. Do not use `project.md` as the startup instruction file for every agent.
 
@@ -46,14 +46,14 @@ Keep it short and long-lived:
 
 - project uses `agent-loop`
 - guidance language follows project language; keep stable artifact/stage names in English
-- before development, inspect `agent-loop/`
+- before development, inspect `.agent-loop/`
 - if missing, initialize it
-- if present, read `agent-loop/project.md` and active feature docs
-- if `project.md` says `Status: remote-entry`, read `agent-loop/remote.md` and verify the remote project before acting
+- if present, read `.agent-loop/project.md` and active feature docs
+- if `project.md` says `Status: remote-entry`, read `.agent-loop/remote.md` and verify the remote project before acting
 - if the project used `agent-loop` before but recent development bypassed it, route to Re-Adopt Agent Loop Project before new feature work
 - when working in a subdirectory, check for the nearest directory-level `AGENTS.md`
 - when creating a new long-lived boundary directory, propose a directory-level `AGENTS.md` before or alongside the directory creation
-- keep new human source materials in requirement set directories under `agent-loop/requirements/`, not flat files
+- keep new human source materials in requirement set directories under `.agent-loop/requirements/`, not flat files
 - Agent Ownership: agents steer the loop, classify the current stage, recommend exactly one next action, propose missing artifacts, and own diagnosis, sequencing, verification, drift checks, and project-memory updates
 - ask human confirmation before each agent-loop stage
 - use table-first Human Review Summary for non-trivial confirmations
@@ -74,11 +74,11 @@ Keep it short and long-lived:
 - raw requirements or prototype content
 - long duplicated documentation
 
-Those belong in `agent-loop/` or project docs.
+Those belong in `.agent-loop/` or project docs.
 
 ## `project.md` Should Contain
 
-Use `agent-loop/project.md` for richer memory:
+Use `.agent-loop/project.md` for richer memory:
 
 - project summary
 - guidance language
@@ -101,7 +101,7 @@ Use `agent-loop/project.md` for richer memory:
 
 In simple mode, `project.md` may contain the long-term project memory body.
 
-In enterprise mode, keep `project.md` short: current work, next suggested action, memory index, and open uncertainties. Put detailed long-term knowledge under `agent-loop/project/*.md`. Use `project-memory-mode.md` for triggers and routing.
+In enterprise mode, keep `project.md` short: current work, next suggested action, memory index, and open uncertainties. Put detailed long-term knowledge under `.agent-loop/project/*.md`. Use `project-memory-mode.md` for triggers and routing.
 
 Architecture defaults are DDD-inspired, but code layouts are advisory and stack-adapted. New projects may use a confirmed scaffold. Existing projects should record current structure and framework conventions instead of being reshaped without explicit human approval.
 
@@ -155,7 +155,7 @@ Boundary directories include new app roots, package roots, service roots, test r
 
 If it is a boundary directory:
 
-1. Add or update the directory entry in `agent-loop/project.md`.
+1. Add or update the directory entry in `.agent-loop/project.md`.
 2. Propose a directory-level `AGENTS.md` using `templates/directory-AGENTS.md`.
 3. Ask human confirmation before writing it.
 4. If declined, record `Guidance: not needed` or `Guidance: deferred` in `project.md`.

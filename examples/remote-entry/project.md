@@ -21,11 +21,11 @@ Memory Mode Evidence:
 
 ## Remote Entry
 
-See: agent-loop/remote.md
+See: .agent-loop/remote.md
 
 Remote Project Memory:
 - Location: remote
-- Path: `/srv/yuanjing/app/agent-loop/project.md`
+- Path: `/srv/yuanjing/app/.agent-loop/project.md`
 - Status: active
 
 ## Current Work
@@ -40,7 +40,7 @@ Gate Mode: Strict Mode
 Local Workspace:
 - Path: `/Users/example/workspace/remote-entry`
 - Purpose: remote-entry
-- Evidence: local directory contains only `agent-loop/remote.md` and pointer memory.
+- Evidence: local directory contains only `.agent-loop/remote.md` and pointer memory.
 - Confidence: high
 
 Remote Workspace:
@@ -59,7 +59,7 @@ Execution Locus:
 - E2E Tests: remote/browser URL
 - Dev Server: remote
 - Database: remote test database
-- Evidence: commands are recorded in remote `agent-loop/project.md`.
+- Evidence: commands are recorded in remote `.agent-loop/project.md`.
 - Confidence: medium
 
 Sync Model:

@@ -32,7 +32,7 @@ Inspect likely sources:
 
 ## Record Locations
 
-Project-level stable E2E capability goes in `agent-loop/project.md`:
+Project-level stable E2E capability goes in `.agent-loop/project.md`:
 
 ```md
 ## E2E Environment
@@ -66,13 +66,13 @@ External Services:
 - Confidence:
 ```
 
-Feature-level E2E design goes in `agent-loop/features/<feature>/tests.md`:
+Feature-level E2E design goes in `.agent-loop/features/<feature>/tests.md`:
 
 ```md
 ## E2E Environment Discovery
 
 Project E2E Capability:
-- Source: agent-loop/project.md
+- Source: .agent-loop/project.md
 - Status: usable | partial | blocked | unknown
 
 Feature E2E Cases:

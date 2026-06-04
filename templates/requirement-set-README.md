@@ -26,7 +26,7 @@ Status: active | superseded | reference-only
 
 ## Used By
 
-- `agent-loop/features/<feature>/spec.md`
+- `.agent-loop/features/<feature>/spec.md`
 
 ## Notes
 

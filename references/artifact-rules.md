@@ -9,9 +9,9 @@ Code reality wins when reconciling stale memory, but human confirms updates.
 Code reality does not overwrite human original requirements.
 ```
 
-Default root is `agent-loop/`. If legacy `.agent-loop/` exists, read it for the current run and ask before migration.
+Default root is `.agent-loop/`. If legacy `agent-loop/` exists, read it for the current run and ask before migration.
 
-If the local directory is only a remote-project entry point, local `agent-loop/remote.md` is the local entry source of truth. Full project memory should live next to the remote source of truth when remote writes are allowed. If remote writes are not allowed, use local-shadow mode and attach remote evidence to every code fact.
+If the local directory is only a remote-project entry point, local `.agent-loop/remote.md` is the local entry source of truth. Full project memory should live next to the remote source of truth when remote writes are allowed. If remote writes are not allowed, use local-shadow mode and attach remote evidence to every code fact.
 
 ## Reality Layers
 
@@ -133,7 +133,7 @@ superseded
 Feature directory:
 
 ```text
-agent-loop/features/YYYY-MM-DD-<feature-slug>/
+.agent-loop/features/YYYY-MM-DD-<feature-slug>/
 ```
 
 Core feature files keep stable names:
@@ -160,7 +160,7 @@ contracts/
 Requirement set directory:
 
 ```text
-agent-loop/requirements/YYYY-MM-DD-<topic>/
+.agent-loop/requirements/YYYY-MM-DD-<topic>/
 ```
 
 The date is the archive date only. It is not a deadline, feature duration, implementation start date, or implementation end date.

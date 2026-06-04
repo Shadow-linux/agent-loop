@@ -18,11 +18,11 @@ The core constraints inherited from the design sources are:
 - single-person + CLI agent first
 - human controls goals, source requirements, and stage gates
 - agent controls workflow mechanics, artifacts, implementation, verification, and backfill
-- `agent-loop/` is the default workflow memory root; legacy `.agent-loop/` may be read and migrated only after confirmation
-- local remote-entry directories use thin local `agent-loop/remote.md` and `project.md`; full memory should live with the remote source of truth when possible
+- `.agent-loop/` is the default workflow memory root; legacy `agent-loop/` may be read and migrated only after confirmation
+- local remote-entry directories use thin local `.agent-loop/remote.md` and `project.md`; full memory should live with the remote source of truth when possible
 - root `AGENTS.md` / `CLAUDE.md` are startup guidance artifacts that teach agents to use `agent-loop`
 - `project.md` is project-level long-term memory
-- Project Memory Mode is `simple` by default; in `enterprise`, `project.md` becomes an index and long-term details move to optional `agent-loop/project/*.md`
+- Project Memory Mode is `simple` by default; in `enterprise`, `project.md` becomes an index and long-term details move to optional `.agent-loop/project/*.md`
 - `project.md` owns cross-feature Product Context and Domain Language
 - stable Web E2E capability belongs in `project.md`; feature-specific E2E cases belong in feature `tests.md` or `tests/e2e/*`
 - `requirements/` stores human source material packages as requirement set directories: requirements, prototypes, feedback, screenshots, recordings, links, and follow-up notes
@@ -62,9 +62,9 @@ Behavior Intent
 
 ## Definitions
 
-**Project**: current codebase or repository. Long-term memory lives in `agent-loop/project.md` by default.
+**Project**: current codebase or repository. Long-term memory lives in `.agent-loop/project.md` by default.
 
-**Remote Entry**: local entry directory for a remote project. It stores `agent-loop/remote.md` and a thin `project.md` so future agents can reconnect to the remote source of truth.
+**Remote Entry**: local entry directory for a remote project. It stores `.agent-loop/remote.md` and a thin `project.md` so future agents can reconnect to the remote source of truth.
 
 **Local Shadow Mode**: fallback when remote project memory cannot be written remotely. Agent-loop artifacts stay local, but every code fact must cite remote evidence.
 
@@ -72,7 +72,7 @@ Behavior Intent
 
 **Prototype**: human-provided design artifact, screenshot, wireframe, or interaction reference.
 
-**Feature**: one behavior-changing work area under `agent-loop/features/<feature-id>/`.
+**Feature**: one behavior-changing work area under `.agent-loop/features/<feature-id>/`.
 
 **Stories**: user-perspective slices inside a feature. They live in `spec.md`. Use labels such as `US1`, `US2` in `tasks.md`; complex artifact mode may group detail files under `tasks/USn/` or `tests/USn/` without making stories separate workspaces.
 
@@ -105,7 +105,7 @@ If plan.md exists, it must be construction-grade: exact paths, code context, int
 Condition:
 
 ```text
-No agent-loop/
+No .agent-loop/
 Little or no existing code
 ```
 
@@ -148,7 +148,7 @@ Condition:
 
 ```text
 Existing code
-No agent-loop/
+No .agent-loop/
 ```
 
 Action:
@@ -165,7 +165,7 @@ Ask human to confirm before starting feature work.
 Condition:
 
 ```text
-agent-loop/ exists
+.agent-loop/ exists
 project.md appears current enough
 ```
 
@@ -184,7 +184,7 @@ Ask human to confirm next stage.
 Condition:
 
 ```text
-agent-loop/ exists
+.agent-loop/ exists
 project.md or feature docs appear stale compared with code reality
 ```
 

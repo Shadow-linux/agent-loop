@@ -1,6 +1,6 @@
 # Project Memory Mode
 
-Use this file when deciding how much long-term project memory belongs in `agent-loop/project.md`.
+Use this file when deciding how much long-term project memory belongs in `.agent-loop/project.md`.
 
 ## Core Rule
 
@@ -33,7 +33,7 @@ Use simple mode when:
 Recommended layout:
 
 ```text
-agent-loop/
+.agent-loop/
   project.md
   requirements/
   features/
@@ -41,12 +41,12 @@ agent-loop/
 
 ## Enterprise Mode
 
-`project.md` becomes the index, current-state summary, and reading router. Long-term project knowledge moves into optional files under `agent-loop/project/`.
+`project.md` becomes the index, current-state summary, and reading router. Long-term project knowledge moves into optional files under `.agent-loop/project/`.
 
 Recommended layout:
 
 ```text
-agent-loop/
+.agent-loop/
   project.md
   project/
     architecture.md
@@ -111,13 +111,13 @@ Before switching:
 
 1. Load `human-review-summary.md`.
 2. Present trigger evidence as a table.
-3. Show proposed files under `agent-loop/project/`.
+3. Show proposed files under `.agent-loop/project/`.
 4. Show which `project.md` sections will move to which files.
 5. Ask human confirmation.
 
 After confirmation:
 
-1. Create only the needed `agent-loop/project/*.md` files.
+1. Create only the needed `.agent-loop/project/*.md` files.
 2. Move detailed long-term content out of `project.md`.
 3. Keep `project.md` as an index, current work summary, and routing guide.
 4. Update root `AGENTS.md` only if future agents need a new startup rule.
@@ -130,7 +130,7 @@ Do not delete detail from `project.md` until the target file exists and is linke
 In enterprise mode, always read:
 
 ```text
-agent-loop/project.md
+.agent-loop/project.md
 ```
 
 Read detail files only when needed:

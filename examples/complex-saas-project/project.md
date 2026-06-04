@@ -33,7 +33,7 @@ Out of Scope Across Product: unaudited access changes and organization-wide priv
 - Tenant isolation is a product invariant.
 - Permission checks belong in service/API boundaries, not only in the UI.
 - Every behavior-changing feature needs module/API coverage and at least one browser path when web-visible.
-- Human-provided requirements, prototypes, feedback, links, and other source materials stay immutable in requirement set directories under `agent-loop/requirements/`.
+- Human-provided requirements, prototypes, feedback, links, and other source materials stay immutable in requirement set directories under `.agent-loop/requirements/`.
 
 ## Development Rules
 
@@ -51,9 +51,9 @@ Out of Scope Across Product: unaudited access changes and organization-wide priv
 
 ## Current Work
 
-Active Feature: `agent-loop/features/2026-05-26-project-invite-permissions/`
+Active Feature: `.agent-loop/features/2026-05-26-project-invite-permissions/`
 Paused Features:
-- `agent-loop/features/2026-05-18-billing-invoices/` paused after API tests; needs browser invoice download case.
+- `.agent-loop/features/2026-05-18-billing-invoices/` paused after API tests; needs browser invoice download case.
 
 Next Suggested Action:
 - Continue `2026-05-26-project-invite-permissions` at `Analyze Consistency`, then execute `T003`.

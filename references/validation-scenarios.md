@@ -2,7 +2,7 @@
 
 Use these scenarios to check whether the skill can drive a real loop. A passing agent should inspect, classify, ask gates, update artifacts, verify, check drift, and avoid unsupported v1 features.
 
-## 1. New Project Without `agent-loop/`
+## 1. New Project Without `.agent-loop/` Or Legacy `agent-loop/`
 
 Prompt:
 
@@ -14,10 +14,10 @@ Expected:
 
 - classify `new-project`
 - propose Init Project
-- ask before creating `agent-loop`
+- ask before creating `.agent-loop/`
 - create `project.md`, `requirements/`, `features/`, root `AGENTS.md`, and `CLAUDE.md` guidance only after confirmation
 
-## 2. Existing Codebase Without `agent-loop/`
+## 2. Existing Codebase Without `.agent-loop/` Or Legacy `agent-loop/`
 
 Prompt:
 
@@ -53,10 +53,10 @@ Expected:
 - load `remote-project-discovery.md`
 - do not initialize a normal local project memory
 - ask for or discover Remote Host, Remote Path, Access Method, permissions, command locations, browser URL, and sync model
-- ask where durable `agent-loop` docs should live: remote, local-shadow, or undecided
-- write local `agent-loop/remote.md` only after confirmation
+- ask where durable `.agent-loop` docs should live: remote, local-shadow, or undecided
+- write local `.agent-loop/remote.md` only after confirmation
 - write a thin local `project.md` with `Status: remote-entry` only after confirmation
-- create remote `agent-loop/`, `AGENTS.md`, or `CLAUDE.md` only after explicit confirmation
+- create remote `.agent-loop/`, `AGENTS.md`, or `CLAUDE.md` only after explicit confirmation
 - continue Existing Project Onboarding against the remote source of truth after remote facts are verified
 
 ## 2c. Resume From Local Remote Entry
@@ -69,15 +69,15 @@ Use agent-loop and continue this remote project from the same local entry folder
 
 Expected:
 
-- read local `agent-loop/project.md`
+- read local `.agent-loop/project.md` or legacy `agent-loop/project.md`
 - detect `Status: remote-entry`
-- read local `agent-loop/remote.md`
+- read local `.agent-loop/remote.md` or legacy `agent-loop/remote.md`
 - verify remote host/path/access still work
-- read remote `agent-loop/project.md` when remote memory exists
+- read remote `.agent-loop/project.md` or legacy `agent-loop/project.md` when remote memory exists
 - if remote memory is unavailable and local-shadow mode is active, continue locally but label all command/code evidence with remote location
 - update `remote.md` after confirmation if remote facts changed
 
-## 3. Existing `agent-loop/` With Active Feature
+## 3. Existing `.agent-loop/` Or Legacy `agent-loop/` With Active Feature
 
 Prompt:
 
@@ -104,10 +104,10 @@ Expected:
 
 - propose Requirement Archive
 - ask before copying/renaming
-- use `agent-loop/requirements/YYYY-MM-DD-<topic>/` requirement set after confirmation
+- use `.agent-loop/requirements/YYYY-MM-DD-<topic>/` requirement set after confirmation
 - create requirement-set `README.md`
 - keep requirement, prototype, feedback, screenshots, recordings, links, and notes for the same topic inside the same requirement set
-- do not create new flat files directly under `agent-loop/requirements/`
+- do not create new flat files directly under `.agent-loop/requirements/`
 - state that requirement-set date is archive date only, not deadline or feature lifecycle
 - reference sources in `spec.md`
 
@@ -133,16 +133,16 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. This project still has agent-loop/inputs/.
+Use agent-loop. This project still has .agent-loop/inputs/ or legacy agent-loop/inputs/.
 ```
 
 Expected:
 
 - load `requirement-management.md`
-- treat `agent-loop/inputs/` as legacy read-only requirement source material
-- do not create new files inside `agent-loop/inputs/`
-- find references to `agent-loop/inputs/` in feature and project memory docs
-- present a migration table from `agent-loop/inputs/...` to `agent-loop/requirements/...`
+- treat `.agent-loop/inputs/` or `agent-loop/inputs/` as legacy read-only requirement source material
+- do not create new files inside inputs archives
+- find references to `.agent-loop/inputs/` or `agent-loop/inputs/` in feature and project memory docs
+- present a migration table from legacy inputs paths to `.agent-loop/requirements/...`
 - ask human confirmation before moving files or updating references
 - after confirmation, update `Source Inputs` headings to `Source Requirements`
 - record the migration in `notes.md` or `project.md`
@@ -439,7 +439,7 @@ Expected:
 - classify `re-adopt` or `stale-memory`
 - load `recovery-and-backfill.md`
 - do not start a new feature first
-- read `agent-loop/project.md` and active or paused feature docs
+- read `.agent-loop/project.md` and active or paused feature docs
 - scan current code reality, scripts, tests, and obvious changed areas only as needed
 - compare current code/tests/scripts against existing `agent-loop` docs
 - present observed reality, mismatch, recommended backfill target files, risk, and human decisions
@@ -536,7 +536,7 @@ Expected:
 - do not create enterprise files immediately
 - present a Human Review Summary table explaining why enterprise mode is recommended
 - propose `project.md` as index/current-state summary
-- propose only useful `agent-loop/project/*.md` detail files, such as `agent-loop/project/boundaries.md`, `agent-loop/project/commands.md`, `agent-loop/project/testing.md`, and `agent-loop/project/environments.md`
+- propose only useful `.agent-loop/project/*.md` detail files, such as `.agent-loop/project/boundaries.md`, `.agent-loop/project/commands.md`, `.agent-loop/project/testing.md`, and `.agent-loop/project/environments.md`
 - ask human confirmation before switching from simple to enterprise
 - after confirmation, keep `project.md` short and route long-term details to the relevant `project/*.md` files
 
@@ -553,7 +553,7 @@ Expected:
 - check the change against `draft_agent_loop_struct.md`
 - check the change against `final_agent_loop_skill_design.md`
 - preserve the design model `Feature -> Stories -> Tasks -> Steps`
-- preserve `agent-loop/project.md`, `requirements/`, and `features/<feature>/spec/tasks/tests/plan/notes`
+- preserve `.agent-loop/project.md`, `requirements/`, and `features/<feature>/spec/tasks/tests/plan/notes`
 - preserve human gates
 - treat new behavior as extension, not a replacement
 - do not introduce roadmap graph, multiplayer workflow, tdd-guard, complex ADR, global install, or automatic directory-level AGENTS.md without human confirmation in v1
@@ -638,7 +638,7 @@ Use agent-loop in this project for the first time.
 Expected:
 
 - inspect existing `AGENTS.md` / `CLAUDE.md`
-- propose `agent-loop/` memory root
+- propose `.agent-loop/` memory root
 - propose root `AGENTS.md` that tells agents to use `agent-loop`
 - root `AGENTS.md` includes Agent Ownership so future agents classify the stage, recommend one next action, and own sequencing, verification, drift, and project-memory updates
 - root `AGENTS.md` includes Autonomous Execution After Approval so future agents can continue inside Feature Auto-Loop or Task Auto-Run after explicit human enablement and stop at risk gates

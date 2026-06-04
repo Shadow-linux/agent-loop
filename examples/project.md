@@ -21,7 +21,7 @@ Memory Mode Evidence:
 
 ## Current Work
 
-Active Feature: `agent-loop/features/2026-05-26-login/`
+Active Feature: `.agent-loop/features/2026-05-26-login/`
 Current Stage: Close ready
 
 ## Next Suggested Action

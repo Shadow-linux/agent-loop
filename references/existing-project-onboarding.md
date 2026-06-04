@@ -12,7 +12,7 @@ Do not read the whole repository. Build a trustworthy project map quickly:
 startup docs -> shallow structure -> commands -> architecture profile -> capabilities -> boundaries -> guidance -> uncertainties -> human confirmation
 ```
 
-The result is a draft `agent-loop/project.md` that is useful enough for the next feature, with evidence and confidence labels.
+The result is a draft `.agent-loop/project.md` that is useful enough for the next feature, with evidence and confidence labels.
 
 For remote projects, the draft `project.md` should live next to the remote source of truth when remote writes are allowed. If not, keep it in local-shadow mode and label code facts with remote location.
 
@@ -23,7 +23,7 @@ For remote projects, the draft `project.md` should live next to the remote sourc
 - CI/build scripts reveal real commands.
 - Low-confidence findings must be labeled, not silently treated as truth.
 - Do not start feature implementation during onboarding.
-- Ask human confirmation before writing `agent-loop/`, `project.md`, `AGENTS.md`, `CLAUDE.md`, or directory-level guidance.
+- Ask human confirmation before writing `.agent-loop/`, `project.md`, `AGENTS.md`, `CLAUDE.md`, or directory-level guidance.
 - Subagents are optional accelerators for large-project onboarding, not a dependency.
 - Use DDD-inspired architecture mapping, but record existing code reality. Do not rename or move code during onboarding.
 
@@ -253,9 +253,9 @@ Human gate:
 After human confirmation, write or update:
 
 ```text
-agent-loop/project.md
-agent-loop/requirements/
-agent-loop/features/
+.agent-loop/project.md
+.agent-loop/requirements/
+.agent-loop/features/
 AGENTS.md
 CLAUDE.md -> AGENTS.md or pointer
 directory AGENTS.md only when explicitly confirmed

@@ -60,7 +60,7 @@ These are relatively stable across stacks:
 ```text
 AGENTS.md
 CLAUDE.md
-agent-loop/
+.agent-loop/
 docs/ optional
 scripts/ optional
 deploy/ or infra/ optional

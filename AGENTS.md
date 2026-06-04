@@ -6,7 +6,7 @@ This repository contains the `agent-loop` skill source.
 
 - Maintain the reusable `agent-loop` skill.
 - This is a skill source repository, not a target project using `agent-loop`.
-- Do not create target-project `agent-loop/requirements/` or feature docs here unless editing examples.
+- Do not create target-project `.agent-loop/requirements/` or feature docs here unless editing examples.
 - The skill should make agents own workflow diagnosis and sequencing while keeping required human gates explicit.
 
 ## Source Of Truth

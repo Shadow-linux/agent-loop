@@ -1,5 +1,13 @@
 # Agent Loop Changelog
 
+## 1.1.1 — 2026-06-04
+
+### Changed
+- Changed the default target-project memory root from visible `agent-loop/` to hidden `.agent-loop/`.
+- Kept visible `agent-loop/` as legacy-compatible memory that agents must read for the current run and migrate only after human confirmation.
+- Updated generated root guidance, runtime rules, usage docs, templates, examples, and validation scenarios to prefer `.agent-loop/`.
+- Preserved skill installation paths such as `~/.codex/skills/agent-loop/`.
+
 ## 1.1.0 — 2026-06-03
 
 ### Added
@@ -13,10 +21,10 @@
 - Added external skill checklist coverage and path-pressure validation for native Superpowers output requests.
 - Added second-confirmation requirements before creating native external skill directories such as `docs/superpowers/*`.
 - Added Superpowers pressure scenarios for feature close, project memory update, Delivery Contract acceptance, and release/publish actions.
-- Aligned Usage, README, stage guides, and workflow checklists with legacy `.agent-loop/`, Product Brief ordering, Project Memory before Submit, and requirement-date semantics.
+- Aligned Usage, README, stage guides, and workflow checklists with legacy `agent-loop/`, Product Brief ordering, Project Memory before Submit, and requirement-date semantics.
 - Hardened `templates/subagent-brief.md` so dispatched subagents cannot submit, update project memory or guidance directly, accept Delivery Contracts, approve breaking changes, or mark tasks `done`.
 - Clarified that an empty local directory alone is not a remote-project signal; Remote Project Discovery now requires a remote-entry hint.
-- Added legacy `.agent-loop/` lookup and active-memory-root guidance to generated root `AGENTS.md`.
+- Added legacy `agent-loop/` lookup and active-memory-root guidance to generated root `AGENTS.md`.
 - Clarified that existing codebases with no agent-loop memory route through Existing Project Onboarding before recovery/backfill.
 - Resolved the Superpowers adapter proposal open questions to match the implemented v1.1.0 adapter behavior.
 - Clarified subagent dispatch confirmation: Feature Auto-Loop and Task Auto-Run do not imply subagent approval, and bounded task-group approval requires explicit scope, boundaries, briefs, stop conditions, and main-agent review responsibility.
@@ -65,7 +73,7 @@
 - Updated README/Usage guidance for contract file skipping rules.
 
 ### Design Source Alignment
-- Added Enterprise Project Memory Mode (`project.md` as entry index, optional details under `agent-loop/project/`).
+- Added Enterprise Project Memory Mode (`project.md` as entry index, optional details under `.agent-loop/project/`).
 - Added `Delivery Contract if Needed` to design source and operational `design.md`.
 
 ---

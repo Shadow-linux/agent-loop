@@ -28,14 +28,14 @@ Preferred layout:
 
 ```text
 local-entry/
-  agent-loop/
+  .agent-loop/
     remote.md
     project.md   thin remote-entry pointer
 
 remote-project/
   AGENTS.md
   CLAUDE.md -> AGENTS.md
-  agent-loop/
+  .agent-loop/
     project.md
     requirements/
     features/
@@ -45,7 +45,7 @@ If the remote project is not writable, use local shadow mode:
 
 ```text
 local-entry/
-  agent-loop/
+  .agent-loop/
     remote.md
     project.md
     requirements/
@@ -76,7 +76,7 @@ Minimum required facts before onboarding:
 
 ## Remote Entry Template
 
-Write local `agent-loop/remote.md` after human confirmation:
+Write local `.agent-loop/remote.md` after human confirmation:
 
 ```md
 # Remote Project Entry
@@ -135,7 +135,7 @@ Next Step:
 
 ## Thin Local Project Memory
 
-If the local directory is only a remote entry, write a thin local `agent-loop/project.md` after confirmation:
+If the local directory is only a remote entry, write a thin local `.agent-loop/project.md` after confirmation:
 
 ```md
 # Project Memory
@@ -150,7 +150,7 @@ This local directory is an agent-loop entry point for a remote project.
 
 ## Remote Entry
 
-See: agent-loop/remote.md
+See: .agent-loop/remote.md
 
 Remote Project Memory:
 - Location: remote | local-shadow | undecided
@@ -182,8 +182,8 @@ After remote facts are confirmed:
 
 Stop and ask human before:
 
-- creating `agent-loop/` in the local entry directory
-- creating `agent-loop/` in the remote project
+- creating `.agent-loop/` in the local entry directory
+- creating `.agent-loop/` in the remote project
 - writing root `AGENTS.md` / `CLAUDE.md` remotely
 - running remote install/build/test/dev-server commands
 - using credentials, VPN, tunnels, or port forwards
@@ -193,10 +193,10 @@ Stop and ask human before:
 
 On every future entry from the same local directory:
 
-1. Read local `agent-loop/project.md`.
-2. If `Status: remote-entry`, read local `agent-loop/remote.md`.
+1. Read local `.agent-loop/project.md`.
+2. If `Status: remote-entry`, read local `.agent-loop/remote.md`.
 3. Verify remote host/path/access still work.
-4. Verify whether remote `agent-loop/project.md` exists and is current.
+4. Verify whether remote `.agent-loop/project.md` exists and is current.
 5. If remote facts changed, update `remote.md` after human confirmation.
 6. Then continue with remote project memory or local-shadow memory.
 

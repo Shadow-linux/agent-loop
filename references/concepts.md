@@ -18,13 +18,13 @@ First version excludes:
 
 **Human Goal**: Human intent, requirement, prototype, bug, or continuation request.
 
-**Project**: Current codebase. Long-term project memory is `agent-loop/project.md`.
+**Project**: Current codebase. Long-term project memory is `.agent-loop/project.md`.
 
-**Project Memory Mode**: The structure used for durable project knowledge. `simple` means `project.md` is the main memory body. `enterprise` means `project.md` is an index and current-state summary, with optional details under `agent-loop/project/*.md`.
+**Project Memory Mode**: The structure used for durable project knowledge. `simple` means `project.md` is the main memory body. `enterprise` means `project.md` is an index and current-state summary, with optional details under `.agent-loop/project/*.md`.
 
 **Architecture Profile**: The project shape, language adapter, framework adapter, and DDD intensity used to guide code layout and boundary decisions. It is descriptive for existing projects and advisory for new scaffolds.
 
-**Remote Entry**: A local directory that mainly exists to help the agent find and continue a remote project. It owns local `agent-loop/remote.md` and a thin `project.md` with `Status: remote-entry`.
+**Remote Entry**: A local directory that mainly exists to help the agent find and continue a remote project. It owns local `.agent-loop/remote.md` and a thin `project.md` with `Status: remote-entry`.
 
 **Local Shadow Mode**: A fallback where `agent-loop` memory is kept locally because the remote project is not writable. Every code fact, command, test result, and browser observation must include remote evidence.
 
@@ -32,7 +32,7 @@ First version excludes:
 
 **Prototype**: Human-provided design artifact, screenshot, diagram, or interaction reference.
 
-**Feature**: One behavior-changing work area under `agent-loop/features/<feature-id>/`. A feature can contain many stories and many tasks.
+**Feature**: One behavior-changing work area under `.agent-loop/features/<feature-id>/`. A feature can contain many stories and many tasks.
 
 **Product Brief**: Optional feature-level product understanding in `product.md`: problem, users, user stories, product scope, product decisions, and open product questions.
 
@@ -52,7 +52,7 @@ First version excludes:
 
 **Drift**: Mismatch between docs, code reality, or human decisions.
 
-**Re-Adopt Agent Loop Project**: Recovery path for a project that already has `agent-loop/`, but recent development happened outside the loop. The agent compares code reality to existing memory, proposes backfill, asks human confirmation, then resumes or starts feature work.
+**Re-Adopt Agent Loop Project**: Recovery path for a project that already has `.agent-loop/` or legacy `agent-loop/`, but recent development happened outside the loop. The agent compares code reality to existing memory, proposes backfill, asks human confirmation, then resumes or starts feature work.
 
 **Submit / Integrate**: The explicit stage that packages verified work for commit, PR text, merge note, or release note. It requires human confirmation and records the result in `notes.md`.
 
@@ -90,7 +90,7 @@ contracts.md = optional delivery contract index or compact contract
 contracts/ = optional durable producer-consumer contract details
 ```
 
-`AGENTS.md` / `CLAUDE.md` live outside `agent-loop/` and tell future agents how to enter the workflow. They do not own task state.
+`AGENTS.md` / `CLAUDE.md` live outside `.agent-loop/` and tell future agents how to enter the workflow. They do not own task state.
 
 Requirement-set dates are archive dates only. They do not define deadlines, requirement duration, or feature lifecycle.
 

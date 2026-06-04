@@ -5,8 +5,8 @@ Updated: 2026-05-26
 Status: active
 
 Source Requirements:
-- Requirement: agent-loop/requirements/2026-05-26-login/requirement.md
-- Prototype: agent-loop/requirements/2026-05-26-login/prototype.md
+- Requirement: .agent-loop/requirements/2026-05-26-login/requirement.md
+- Prototype: .agent-loop/requirements/2026-05-26-login/prototype.md
 
 Summary:
 - Existing users can log in with email and password.

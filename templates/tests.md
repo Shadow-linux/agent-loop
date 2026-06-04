@@ -21,7 +21,7 @@ Status: active
 ## E2E Environment Discovery
 
 Project E2E Capability:
-- Source: agent-loop/project.md
+- Source: .agent-loop/project.md
 - Status: usable | partial | blocked | unknown
 
 Feature E2E Cases:

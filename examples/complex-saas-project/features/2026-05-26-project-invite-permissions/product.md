@@ -5,8 +5,8 @@ Updated: 2026-05-26
 Status: accepted
 
 Source Requirements:
-- Requirement: `agent-loop/requirements/2026-05-26-project-invite/requirement.md`
-- Prototype: `agent-loop/requirements/2026-05-26-project-invite/prototype.md`
+- Requirement: `.agent-loop/requirements/2026-05-26-project-invite/requirement.md`
+- Prototype: `.agent-loop/requirements/2026-05-26-project-invite/prototype.md`
 
 Summary:
 - Let project managers invite collaborators without granting organization-wide admin rights.

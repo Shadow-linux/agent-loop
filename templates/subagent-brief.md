@@ -18,12 +18,12 @@ Out of Scope:
 ## Required Context
 
 Read first:
-- `agent-loop/project.md`
-- `agent-loop/features/<feature>/spec.md`
-- `agent-loop/features/<feature>/tasks.md`
-- `agent-loop/features/<feature>/tests.md`
-- `agent-loop/features/<feature>/plan.md`
-- `agent-loop/features/<feature>/contracts.md` and relevant `contracts/*` details when the assignment crosses a producer-consumer boundary
+- `.agent-loop/project.md`
+- `.agent-loop/features/<feature>/spec.md`
+- `.agent-loop/features/<feature>/tasks.md`
+- `.agent-loop/features/<feature>/tests.md`
+- `.agent-loop/features/<feature>/plan.md`
+- `.agent-loop/features/<feature>/contracts.md` and relevant `contracts/*` details when the assignment crosses a producer-consumer boundary
 - <task/test/plan detail files if relevant>
 
 Relevant code boundaries:
@@ -46,7 +46,7 @@ Additional verification:
 - You are a subagent. Stay inside this assignment and return findings to the main agent.
 - Do not close the feature.
 - Do not submit code, commit, create PR text, merge, release, or publish.
-- Do not update `agent-loop/project.md`, enterprise `agent-loop/project/*.md`, root `AGENTS.md`, `CLAUDE.md`, or directory guidance directly. Return proposed durable memory/guidance updates instead.
+- Do not update `.agent-loop/project.md`, enterprise `.agent-loop/project/*.md`, root `AGENTS.md`, `CLAUDE.md`, or directory guidance directly. Return proposed durable memory/guidance updates instead.
 - Do not accept Delivery Contracts, approve breaking contract changes, or change accepted/verified contract status.
 - Do not mark tasks `done`. Return evidence and recommended status; the main agent owns Task Done Gate review.
 - Do not rewrite original human requirements.

@@ -18,7 +18,7 @@ Source Files:
 - Other:
 
 Used By:
-- agent-loop/features/2026-05-26-login/spec.md
+- .agent-loop/features/2026-05-26-login/spec.md
 
 Notes:
 -
