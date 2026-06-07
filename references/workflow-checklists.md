@@ -28,6 +28,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Locate active or paused feature.
 - [ ] If an Active Feature exists, consider Feature Completion Check before starting new feature work.
 - [ ] Check whether memory appears stale compared with obvious repo reality.
+- [ ] If the human says re-adopt, re-sync, 重新接管, resume after outside-loop work, or says recent work bypassed `agent-loop`, route to Reconcile Project Context / Re-Adopt Agent Loop Project before new feature work.
 - [ ] Check whether local directory is empty/ambiguous or appears to be a remote entry point.
 - [ ] If human says remote project, SSH, devcontainer, container, tunnel, or remote workspace, route to Remote Project Discovery.
 - [ ] Check root `AGENTS.md` / `CLAUDE.md` and any obvious directory-level guidance.
@@ -58,6 +59,8 @@ Before using an external skill or plugin inside a stage:
 
 - [ ] Load `existing-project-onboarding.md`.
 - [ ] Load `project-architecture-init.md`.
+- [ ] Explain Quick Onboarding, Deep Project Onboarding Scan, and Targeted Onboarding Scan when the human wants project takeover or project understanding.
+- [ ] If Deep or Targeted is selected, load `project-onboarding-scan.md`, `onboarding-db.md`, and `onboarding-db-templates.md`.
 - [ ] Read startup docs first.
 - [ ] Inspect shallow repo shape.
 - [ ] Decide whether large-project triggers apply.
@@ -79,7 +82,11 @@ Before using an external skill or plugin inside a stage:
 - [ ] Recommend enterprise when any hard trigger applies, including about 200k+ LOC, 5+ durable boundaries, 2+ test systems, 3+ execution environments, `project.md` above about 600 lines, repeated re-scans, or 5+ directory-level guidance files.
 - [ ] List onboarding uncertainties and follow-up scans.
 - [ ] Summarize proposed `project.md` before writing.
-- [ ] Ask human confirmation before writing `.agent-loop/`, root guidance, or directory guidance.
+- [ ] If Deep is selected, choose or recommend Compact / Standard / Expanded Layout Mode before proposing onboarding-db files.
+- [ ] If Deep is selected, run P0 before P1 and P2.
+- [ ] If Targeted is selected, limit scan and onboarding-db updates to the selected module, flow, async task, deployment path, or problem area.
+- [ ] Use Batch Human Review before writing `.agent-loop/onboarding-db/`, multiple project memory facts, root guidance, or directory guidance.
+- [ ] Ask human confirmation before writing `.agent-loop/`, root guidance, directory guidance, onboarding-db, or diagrams.
 
 ## Requirement Archive
 

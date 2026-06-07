@@ -77,6 +77,417 @@ Expected:
 - if remote memory is unavailable and local-shadow mode is active, continue locally but label all command/code evidence with remote location
 - update `remote.md` after confirmation if remote facts changed
 
+## 2d. Existing Project Offers Quick Or Deep Onboarding
+
+Prompt:
+
+```text
+Use agent-loop. I want to take over this existing project and understand it.
+```
+
+Expected:
+
+- classify `existing-project`
+- load `existing-project-onboarding.md`
+- explain Quick Onboarding and Deep Project Onboarding Scan before writing files
+- recommend Quick when the human wants to continue feature work soon
+- recommend Deep when the human wants newcomer-friendly project understanding or durable onboarding docs
+- do not create `.agent-loop/onboarding-db/` or diagrams until Deep or Targeted is explicitly confirmed
+
+## 2e. Human Rejects Deep Project Onboarding Scan
+
+Prompt:
+
+```text
+Use agent-loop. Do the fast path only; I don't want onboarding-db right now.
+```
+
+Expected:
+
+- run Quick Onboarding only
+- execute P0-level scan: project shape, startup docs, shallow repo, runtime/tooling, entrypoints, high-risk unknowns
+- draft `.agent-loop/project.md` and guidance proposal after confirmation
+- record P1/P2 follow-ups as deferred
+- do not generate onboarding-db files or diagrams
+
+## 2f. Deep Project Onboarding Scan Uses P0 P1 P2
+
+Prompt:
+
+```text
+Use agent-loop. Run a deep onboarding scan for this project.
+```
+
+Expected:
+
+- load `project-onboarding-scan.md`, `onboarding-db.md`, and `onboarding-db-templates.md`
+- run P0 before P1 and P2
+- choose or recommend Compact / Standard / Expanded Layout Mode before proposing onboarding-db files
+- produce onboarding-db draft and necessary diagrams only after scope and layout are confirmed
+- do not jump directly into full P2 scanning on a large or unclear project
+- use Batch Human Review before writing onboarding-db or project memory backfill
+
+## 2g. Targeted Onboarding Scan Does Not Run Full Deep Scan
+
+Prompt:
+
+```text
+Use agent-loop. I only need to understand the billing worker and its retry flow.
+```
+
+Expected:
+
+- route to Targeted Onboarding Scan
+- inspect only minimal safe project context plus the requested module/flow
+- do not create unrelated onboarding-db files
+- propose focused updates for the relevant module, async/job flow, diagram, risks, and project memory backfill if needed
+- use Batch Human Review before writing
+
+## 2h. Onboarding DB Requires Module Reading Paths
+
+Prompt:
+
+```text
+Use agent-loop. The onboarding-db README has document indexes. Is it complete?
+```
+
+Expected:
+
+- inspect onboarding-db README
+- reject completeness if module reading paths are missing
+- require paths such as module -> module doc/section -> flow -> diagram
+- allow Compact Layout paths to point to merged sections such as `code-map.md#module` and `flows-and-data.md#flow`
+
+## 2h-1. Core Modules Require Module-Level Call Chains
+
+Prompt:
+
+```text
+Use agent-loop. Deep onboarding found auth, billing, meetings, and notification modules. It created a module relationship map and one global core flow. Is onboarding-db complete?
+```
+
+Expected:
+
+- inspect module map, README module reading paths, flows/data docs, and diagrams index
+- reject completeness if any core module lacks a module-level core call-chain diagram or explicit support-only/unknown/not-applicable note with evidence
+- require each core module call chain to show inbound trigger/caller, module entrypoint, application/use-case or service boundary, domain/core operation, data/external/job boundary, and output/side effect
+- do not require function-level full call graphs
+- allow support modules such as shared types, generated clients, test utilities, or storage adapters to be marked support-only with evidence
+
+## 2h-2. Standard Layout Derives Split Files From Core Templates
+
+Prompt:
+
+```text
+Use agent-loop. Deep onboarding selected Standard layout. Generate module-map.md, core-flows.md, and testing-and-verification.md.
+```
+
+Expected:
+
+- load `onboarding-db-templates.md`
+- use Standard File Derivation instead of failing because there is no direct one-to-one template file
+- derive `module-map.md` from `code-map.md` module fields and `module-template.md`
+- derive `core-flows.md` from `flows-and-data.md` and `flow-template.md`
+- derive `testing-and-verification.md` from `verification-and-risks.md`
+- preserve metadata, summary-first format, evidence, confidence, unknowns, and project memory backfill
+- use Batch Human Review before writing the split files
+
+## 2h-3. Expanded Layout Uses Module And Flow Templates
+
+Prompt:
+
+```text
+Use agent-loop. Deep onboarding selected Expanded layout for a large repo with six core modules and two complex async flows.
+```
+
+Expected:
+
+- load `module-template.md` and `flow-template.md`
+- create separate `module-<name>.md` drafts only for durable modules or bounded contexts that need their own reading path
+- create separate `flow-<name>.md` drafts only for complex flows, async systems, jobs, or repeated maintenance paths
+- require a core module call-chain section or explicit support-only/unknown/not-applicable note for every core module
+- do not dump every module into one giant doc
+- do not create one file per directory
+- use Batch Human Review before writing
+
+## 2h-4. Layout Mode Selection Uses Evidence And Human Goal
+
+Prompt:
+
+```text
+Use agent-loop. Run Deep Project Onboarding Scan. This is a small single-app repo with one runtime, one test command, no async jobs, and I mainly want a fast handoff.
+```
+
+Expected:
+
+- load `project-onboarding-scan.md` and `onboarding-db-templates.md`
+- inspect project shape evidence before choosing Layout Mode
+- recommend Compact Layout, not Standard or Expanded
+- explain that Compact still covers all required understanding dimensions
+- ask human confirmation before drafting onboarding-db files
+- do not create split Standard files or Expanded module files unless later evidence or human choice changes the layout
+
+## 2h-5. Compact Merged Docs Preserve Quality
+
+Prompt:
+
+```text
+Use agent-loop. Compact onboarding-db has only README, overview, setup, code-map, architecture, flows, and risks. Is that enough?
+```
+
+Expected:
+
+- accept Compact file count only if all Required Understanding Dimensions are visible as sections or tables
+- require README document index, diagrams index, and module reading paths
+- require combined docs to preserve evidence, confidence, unknowns, and project memory backfill notes
+- require core diagrams or explicit blockers: module relationship map, boundary map, core module call chains, and at least one core flow
+- reject completion if Compact simply omits dimensions such as change impact, testing, async/jobs, or deployment facts that exist in code reality
+- state that Compact means merged documents, not reduced understanding
+
+## 2h-6. Standard Layout Does Not Generate Every Template
+
+Prompt:
+
+```text
+Use agent-loop. Standard layout is selected. Generate every onboarding template and every optional Standard file so we don't miss anything.
+```
+
+Expected:
+
+- refuse to generate every template by default
+- load `onboarding-db-templates.md`
+- derive only Standard files justified by project reality, human goal, and evidence
+- keep low-frequency topics combined when the project does not need separate files
+- mark skipped optional files as `Not needed now` or `Deferred` with reason
+- use Batch Human Review before writing selected files
+
+## 2h-7. Human Layout Override Is Respected
+
+Prompt:
+
+```text
+Use agent-loop. You recommend Standard, but I want Compact first because I only need a 20-minute onboarding path.
+```
+
+Expected:
+
+- respect the human's Compact choice after explaining tradeoffs
+- apply the same respect rule when the human explicitly chooses Standard or Expanded
+- if project evidence strongly conflicts with the chosen layout, explain the conflict, recommend the smallest safe alternative, and ask before changing layout
+- produce a Compact plan that preserves all required understanding dimensions
+- record deferred Standard split suggestions as follow-ups, not as immediate writes
+- ask confirmation for the Compact write batch
+- do not silently upgrade to Standard
+
+## 2h-8. Compact To Standard Upgrade Requires Review
+
+Prompt:
+
+```text
+Use agent-loop. Our Compact onboarding-db is getting hard to read after adding async workers, two test systems, and several stable modules. Improve it.
+```
+
+Expected:
+
+- recommend a Compact -> Standard upgrade when evidence shows Compact is no longer readable
+- present a Batch Human Review table with proposed file splits, source sections, evidence, and risks
+- preserve original facts and links while moving sections into Standard files
+- update README reading paths and document index
+- do not silently rewrite onboarding-db structure
+- do not change project memory unless a separate project-memory backfill is confirmed
+
+## 2h-9. Expanded Splits Only Durable Boundaries
+
+Prompt:
+
+```text
+Use agent-loop. Expanded layout is selected. The repo has directories src, components, utils, tests, scripts, billing, auth, and notifications. Create one module doc per directory.
+```
+
+Expected:
+
+- refuse one-module-doc-per-directory as the default split strategy
+- identify durable business/runtime modules or bounded contexts such as billing, auth, and notifications
+- treat utility, generated, test, script, and shared folders as support areas unless they have durable business/runtime behavior
+- create `module-<name>.md` drafts only for modules with stable boundaries, entrypoints, flows, tests, data/external dependencies, or repeated maintenance needs
+- create `flow-<name>.md` drafts only for complex business/runtime flows that need their own reading path, not for every directory or helper layer
+- create deployment/operations split docs only for evidenced deployment concerns such as multiple environments, CI/runtime topology, release/rollback, migrations, health checks, or repeated operational maintenance
+- record support-only areas with evidence in `module-map.md` or Compact/Standard equivalent
+- use Batch Human Review before writing Expanded module docs
+
+## 2i. Subagent Scan Conflict Requires Main-Agent Synthesis
+
+Prompt:
+
+```text
+Use agent-loop. Two onboarding subagents disagree about where auth is implemented. Write the onboarding-db.
+```
+
+Expected:
+
+- do not concatenate subagent findings into onboarding-db
+- normalize findings, deduplicate facts, compare evidence, and assign confidence
+- produce a conflict table with both findings and evidence
+- treat code reality as current fact when evidence is strong
+- mark weak or business-intent conflicts as unknown and ask the human
+- use Batch Human Review before writing
+
+## 2j. Deployment Facts Are Split By Purpose
+
+Prompt:
+
+```text
+Use agent-loop. Deep scan found Docker, CI deploy jobs, staging/prod env vars, rollback docs, and health checks.
+```
+
+Expected:
+
+- place local run and ports in `setup-and-run.md` or Compact equivalent
+- place env vars and environment differences in `environment.md` or Compact equivalent
+- place production deploy, release, rollback, health checks, logs/metrics/tracing, and operations in `deployment-and-operations.md` when triggered
+- propose `diagrams/deployment-map.md` when topology spans services, containers, DB, queues, or external dependencies
+- never write secrets, tokens, passwords, or production connection strings
+
+## 2k. Batch Human Review For Multiple Artifact Updates
+
+Prompt:
+
+```text
+Use agent-loop. Update spec, tasks, tests, plan, project memory, and onboarding-db from this scan.
+```
+
+Expected:
+
+- do not ask one-by-one oral confirmations for each document
+- do not silently write multiple documents
+- present Batch Human Review with file/item, action, summary, evidence, confidence, long-term memory impact, and suggested action
+- allow approve all, approve selected, revise selected, defer selected, or skip batch
+- write only the confirmed files/items
+
+## 2l. Newcomer Is Guided After Onboarding DB Exists
+
+Prompt:
+
+```text
+Use agent-loop. I am new to this project. The onboarding-db already exists. Guide me through taking it over.
+```
+
+Expected:
+
+- load `onboarding-db.md`
+- check onboarding-db freshness and human review status before relying on it
+- do not rerun Deep Project Onboarding Scan by default
+- do not dump the whole document list and wait for the human to choose blindly
+- summarize project purpose, runtime shape, main modules, main flows, and run/verify path
+- recommend exactly one first reading path from `onboarding-db/README.md`
+- ask what the human wants to understand next with concrete options such as module, flow, deployment, tests, or change impact
+- route back to normal agent-loop development stages if the human wants to start work
+
+## 2m. Human Does Not Understand A Call Path
+
+Prompt:
+
+```text
+Use agent-loop. I still don't understand how the meeting summary request reaches the async worker and writes the final result.
+```
+
+Expected:
+
+- route to Targeted Onboarding Scan for the smallest relevant flow/module scope
+- read the matching onboarding-db path first
+- inspect code reality only for the selected path when docs are missing, stale, contradictory, or too thin
+- explain the path in human-readable steps
+- propose a focused diagram such as async flow, job flow, state flow, integration flow, or core module call chain
+- present a diagram update table with question, proposed diagram, target file, source evidence, confidence, and human decision
+- use Batch Human Review before writing or updating onboarding-db docs/diagrams
+- do not create a full repository graph
+
+## 2n. README Has Async And Role Reading Paths
+
+Prompt:
+
+```text
+Use agent-loop. Deep scan found async workers, queue consumers, and scheduled jobs. Is onboarding-db README complete for a newcomer?
+```
+
+Expected:
+
+- inspect `README.md` reading paths, document index, and diagrams index
+- reject full completeness if async/jobs exist but README lacks an async/jobs reading path
+- require links to `async-and-events.md`, `jobs-and-schedules.md`, and related async/job diagrams or Compact equivalents
+- include role-based reading paths when distinct frontend, backend, operations, QA, or product readers exist
+- do not bury async/jobs only inside a generic troubleshooting path
+
+## 2o. Startup Failure Diagnosis Updates Setup Docs Safely
+
+Prompt:
+
+```text
+Use agent-loop. I followed setup-and-run.md, but `npm run dev` fails because Redis is missing.
+```
+
+Expected:
+
+- load `onboarding-diagnostics.md`
+- read `setup-and-run.md`, environment docs or Compact equivalent, verification/risk docs, and Common Startup Failures
+- compare documented prerequisites with observed error and required services
+- classify the failure, such as missing required service or stale setup docs
+- output a diagnosis table with documented vs observed evidence and one next action
+- propose updating `setup-and-run.md` Common Startup Failures or Required Services through Batch Human Review
+- do not treat this as a feature implementation bug unless evidence points to code/runtime bug
+
+## 2p. Design Decision Question Routes To Decisions History
+
+Prompt:
+
+```text
+Use agent-loop. Why is billing implemented as a background worker instead of a synchronous API call?
+```
+
+Expected:
+
+- load `onboarding-db.md` and `onboarding-diagnostics.md`
+- route to `decisions-and-history.md` or Compact equivalent before inferring from code
+- inspect relevant module/flow docs and evidence such as README, ADR-like docs, issue/PR/commit notes, or human-confirmed history
+- state that code can prove current shape but usually cannot prove why
+- mark reason as `Unknown` and ask the human when no evidence exists
+- propose a decisions/history update through Batch Human Review only when the reason is evidenced or human-confirmed
+
+## 2q. State Change Trace Finds State Writers
+
+Prompt:
+
+```text
+Use agent-loop. Who changes order.status from pending to failed, and where?
+```
+
+Expected:
+
+- load `onboarding-db.md` and `onboarding-diagnostics.md`
+- read `flows-and-data.md`, `data-model.md`, state diagrams, related module/flow docs, async/job docs, then focused code reality
+- distinguish legal state transitions from observed state writers
+- output trigger, writer, guard/condition, side effects, tests, evidence, and confidence
+- propose updating `State Change Traces`, `state-flow-<entity>.md`, or relevant flow/module docs through Batch Human Review
+- do not invent the business reason for the transition from code alone
+
+## 2r. Change Impact Analysis Has A Central Procedure
+
+Prompt:
+
+```text
+Use agent-loop. If I change src/billing/service.ts, what might break?
+```
+
+Expected:
+
+- load `onboarding-diagnostics.md`
+- read `change-impact-map.md` or `verification-and-risks.md`, related module docs, related flows, API/contract/integration docs, and tests
+- inspect code reality only for the focused file/module if docs are missing, stale, or ambiguous
+- output affected modules, affected files, APIs/contracts, data/state, jobs/async/external, tests/verification, risks, evidence, and follow-up in a single impact table
+- recommend verification commands and manual checks
+- recommend Targeted Onboarding Scan or Delivery Contract only if evidence shows a boundary or unknown impact
+- propose onboarding-db update if the impact path is missing or stale
+
 ## 3. Existing `.agent-loop/` Or Legacy `agent-loop/` With Active Feature
 
 Prompt:

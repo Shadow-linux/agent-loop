@@ -1,6 +1,6 @@
 # Agent Loop
 
-**Current version:** 1.1.1
+**Current version:** 1.2.0
 
 A reusable [Codex](https://github.com/openai/codex) / CLI-agent skill for single-person software development workflows—from goal intake to verified close.
 
@@ -28,7 +28,8 @@ Agent Loop fixes this with a repeatable, inspectable workflow:
 
 ```
 Project Entry → Remote Project Discovery if needed
-→ Re-Adopt Agent Loop Project if needed → Requirement Archive
+→ Re-Adopt Agent Loop Project if needed
+→ Project Onboarding Scan if needed → Requirement Archive
 → Product Brief if needed → Brainstorm / Clarify if needed
 → Targeted Feature Scan if needed → Feature Spec → Requirement Checklist
 → Work Breakdown → Delivery Contract if needed → Test Design
@@ -59,6 +60,7 @@ Project Entry → Remote Project Discovery if needed
   remote.md                           # optional local-entry pointer for remote projects
   project.md                          # Long-term project memory
   project/                            # optional enterprise memory detail files
+  onboarding-db/                      # optional human-readable project onboarding docs
   requirements/
     YYYY-MM-DD-<topic>/
       README.md
@@ -110,18 +112,33 @@ The agent will:
 - Load the right references
 - Propose `.agent-loop/project.md` and root `AGENTS.md`
 
+For existing projects, the agent offers onboarding modes:
+
+| Mode | Use When |
+|---|---|
+| **Quick Onboarding** | Build enough project memory to continue feature work soon |
+| **Deep Project Onboarding Scan** | Generate newcomer-readable `.agent-loop/onboarding-db/`, diagrams, and backfill proposals |
+| **Targeted Onboarding Scan** | Understand one module, flow, async task, deployment path, or problem area |
+
 ### 3. Start a Feature
 
 > "I want to add login."
 
-The agent will:
+After project init/onboarding is accepted, the agent will:
+
 - Archive your requirement
 - Write `spec.md` with stories and acceptance criteria
 - Break down `tasks.md`
 - Design `tests.md`
 - Execute tasks with TDD
 
-### 4. Continue Later
+### 4. Get Guided Through An Existing Project
+
+> "带我熟悉这个项目，从哪里开始看？"
+
+If `.agent-loop/onboarding-db/` exists, the agent uses it first: it checks freshness, gives a short orientation, recommends one reading path, answers targeted questions, and proposes focused diagram/doc updates only after confirmation.
+
+### 5. Continue Later
 
 > "Continue the login feature."
 

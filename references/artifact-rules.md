@@ -36,6 +36,7 @@ New human source material should be archived inside a requirement set directory.
 | `remote.md` | how to find, verify, and access a remote project from a local entry directory | feature logs or project capabilities |
 | `project.md` | long-term project facts in simple mode; memory index and current state in enterprise mode | task logs |
 | `project/*.md` | enterprise long-term project memory details | feature execution logs |
+| `onboarding-db/*` | human-readable project onboarding, reading paths, module/flow/boundary/deployment explanations, diagrams, evidence/confidence | current task status, feature execution logs, raw test output, human original requirements |
 | `requirements/<archive-date>-<topic>/*` | original human material package: requirements, prototypes, feedback, screenshots, recordings, links, and references | edited specs |
 | `product.md` | feature-level product intent, users, stories, product scope | engineering execution plan |
 | `spec.md` | intended feature behavior | execution logs |
@@ -164,6 +165,28 @@ Requirement set directory:
 ```
 
 The date is the archive date only. It is not a deadline, feature duration, implementation start date, or implementation end date.
+
+Onboarding DB directory:
+
+```text
+.agent-loop/onboarding-db/
+```
+
+Use stable, human-readable names. Layout Mode controls physical files:
+
+```text
+Compact: combined docs such as code-map.md, architecture-and-integrations.md
+Standard: topic docs such as module-map.md, core-flows.md, testing-and-verification.md
+Expanded: focused docs such as module-<name>.md or flow-<name>.md only when complexity justifies them
+```
+
+Diagrams live under:
+
+```text
+.agent-loop/onboarding-db/diagrams/
+```
+
+Do not create whole-repo function graphs or full file dependency graphs by default.
 
 ## Plan Lifecycle
 

@@ -23,12 +23,14 @@ Enter this stage only after:
 - implementation for the selected task/story/feature is complete
 - fresh verification evidence exists in `notes.md`
 - required Review is complete: Spec Review always, Standards Review when triggered
-- drift check is complete or the human explicitly chooses to submit with known drift
+- drift check is complete
 - long-term project facts are updated in `project.md`, or no long-term project facts changed
 - `tasks.md` reflects current task status
 - `plan.md` is closed, superseded, or points to the next active unit
 
 If any item is missing, recommend the missing upstream stage first.
+
+If the human explicitly chooses to submit with known drift, still perform and record a minimum Drift Check before submit. The record must state the known drift, affected artifacts, risk, and the human decision to submit despite the unresolved drift. Human choice can accept known risk; it cannot skip drift inspection.
 
 ## Submit Options
 

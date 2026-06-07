@@ -1,5 +1,7 @@
 # Agent Loop — Usage Guide
 
+**Version:** 1.2.0
+
 This guide explains how the **Agent Loop** skill works, what each stage does, and how to read and write its artifacts.
 
 ## The Loop
@@ -48,7 +50,13 @@ When you start a conversation, the agent classifies the project into exactly one
 - **Entry**: Existing code, no `.agent-loop/` or legacy `agent-loop/`.
 - **Load**: `existing-project-onboarding.md`, `project-guidance.md`, `project-memory-mode.md`.
 - **Inspect**: README, docs, package/test scripts, key directories (layered scan).
-- **Write after confirmation**: `project.md`, `AGENTS.md`.
+- **Write after confirmation**: `.agent-loop/project.md`, `.agent-loop/requirements/`, `.agent-loop/features/`, root `AGENTS.md` / `CLAUDE.md` when missing or stale, optional enterprise `.agent-loop/project/*.md`, and optional `.agent-loop/onboarding-db/` when Deep or Targeted onboarding docs are confirmed.
+- **Modes**:
+  - **Quick Onboarding**: enough project memory and guidance to continue work safely.
+  - **Deep Project Onboarding Scan**: adds `.agent-loop/onboarding-db/`, reading paths, diagrams, evidence/confidence, and project-memory backfill proposal.
+  - **Targeted Onboarding Scan**: scans one module, flow, async task, deployment path, or problem area.
+- **Deep/Targeted Load**: `project-onboarding-scan.md`, `onboarding-db.md`, `onboarding-db-templates.md`.
+- **Rule**: onboarding-db writes use Batch Human Review and require human confirmation.
 
 ### Remote Project Discovery
 - **Entry**: Human says project is remote, or local is only an entry point.
@@ -57,6 +65,7 @@ When you start a conversation, the agent classifies the project into exactly one
 ### Reconcile / Re-Adopt
 - **Entry**: `.agent-loop/` exists but memory is stale, or recent work bypassed the loop.
 - **Action**: Compare code reality with `project.md` and feature docs. Propose backfill. Ask before writing.
+- **Rule**: If the human says re-adopt, re-sync, resume after outside-loop work, or take over an old agent-loop project, route here before new feature work.
 
 ### Requirement Archive
 - **Entry**: Human provides requirement/prototype/materials.
@@ -211,6 +220,7 @@ Feature Auto-Loop and Task Auto-Run do not imply subagent approval. Subagents re
 | File | Owns | Does Not Own |
 |---|---|---|
 | `project.md` | Long-term project facts | Task logs |
+| `onboarding-db/` | Human-readable project understanding, reading paths, diagrams, evidence/confidence | Current task status or execution logs |
 | `spec.md` | Intended feature behavior | Execution logs |
 | `tasks.md` | Work breakdown, status | Full test evidence |
 | `tests.md` | Test design, matrix | Raw test output |

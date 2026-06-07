@@ -28,6 +28,7 @@ Classify the project into exactly one state:
 | `resume` | `.agent-loop/` or legacy `agent-loop/` exists and project memory looks current | Resume / Start Feature |
 | `re-adopt` | `.agent-loop/` or legacy `agent-loop/` exists, but recent work happened outside the loop or the human asks to re-adopt/re-take-over/re-sync the project | Re-Adopt Agent Loop Project / Recovery Backfill |
 | `stale-memory` | `.agent-loop/` or legacy `agent-loop/` exists but docs conflict with code reality | Reconcile Project Context / Recovery Backfill |
+| `guided-onboarding` | `.agent-loop/onboarding-db/` exists and the human asks to be onboarded, guided through the project, or helped understand where to start | Guided Newcomer Onboarding |
 | `active-feature` | active feature exists and next action is clear | Continue Current Stage |
 | `blocked` | blocker or missing decision prevents next stage | Ask Human / Diagnose |
 
@@ -47,11 +48,15 @@ Use this order:
 10. Compare project memory with obvious repo reality.
 11. Choose the next stage.
 
+If `.agent-loop/onboarding-db/` exists and the human asks to be guided through the project, understand where to start, or explain project structure before coding, classify as `guided-onboarding`, load `references/onboarding-db.md`, and use Guided Newcomer Onboarding before normal resume. Do not rerun Deep Project Onboarding Scan by default.
+
 If code reality and the memory root disagree, or if the human says the project used `agent-loop` before but recent work bypassed it, classify as `re-adopt` or `stale-memory`, treat code as the current fact base for agent-maintained docs, preserve human requirements as original intent, and load `references/recovery-and-backfill.md`.
 
 Default memory root for new projects is `.agent-loop/`. If legacy `agent-loop/` exists, use it for the current run and ask before migrating.
 
 For existing projects without reliable memory, load `references/existing-project-onboarding.md`. Build a shallow, evidence-backed project map before feature work. Do not do a whole-repo deep read unless a targeted feature scan requires it.
+
+When the human wants newcomer-friendly project understanding, a guided takeover, or durable onboarding documents, route Existing Project Onboarding through Deep Project Onboarding Scan after explaining Quick / Deep / Targeted options. Load `references/project-onboarding-scan.md`, `references/onboarding-db.md`, and `references/onboarding-db-templates.md` only when Deep or Targeted onboarding is selected or onboarding-db is being read/written/refreshed.
 
 For local entry directories that point to a remote project, load `references/remote-project-discovery.md` before Init Project or Existing Project Onboarding. Do not treat the local empty directory as the code reality.
 
@@ -90,6 +95,7 @@ Default order:
 Project Entry
 Remote Project Discovery if Needed
 Re-Adopt Agent Loop Project if Needed
+Project Onboarding Scan if Needed
 Requirement Archive
 Product Brief if Needed
 Brainstorm / Clarify if Needed

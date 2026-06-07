@@ -18,6 +18,7 @@ risk / blocker / human decision = never hidden
 Use before human confirmation for:
 
 - Project Entry / Existing Project Onboarding
+- Project Onboarding Scan / Onboarding DB
 - Remote Project Discovery
 - Requirement Archive
 - Product Brief
@@ -33,6 +34,7 @@ Use before human confirmation for:
 - Submit / Integrate
 - Pause / Close
 - directory-level `AGENTS.md` creation or update
+- multi-file or multi-fact updates that should use Batch Human Review
 
 For tiny one-line changes, a short 3-line summary is acceptable:
 
@@ -55,6 +57,36 @@ Every Human Review Summary should include:
 - evidence column when facts are claimed
 - explicit human decision requested
 - recommended next stage
+
+## Batch Human Review
+
+Use Batch Human Review when the agent proposes to create or update multiple documents, multiple rows, multiple facts, or multiple long-term memory entries in one stage.
+
+Required table:
+
+| File / Item | Action | Change Summary | Source Evidence | Confidence | Affects Long-Term Memory | Suggested Action |
+|---|---|---|---|---|---|---|
+
+Allowed human choices:
+
+```text
+approve all
+approve selected
+revise selected
+defer selected
+skip this batch
+```
+
+Use Batch Human Review for:
+
+- onboarding-db document creation or refresh
+- project memory backfill with multiple facts
+- AGENTS.md / CLAUDE.md or directory guidance updates
+- drift check backfill
+- feature close final document sync
+- spec/tasks/tests/plan changes when multiple items are affected
+
+High-confidence rows can be drafted, but cannot become reviewed or written as accepted long-term fact without human confirmation.
 
 ## Stage Table Patterns
 
@@ -131,6 +163,26 @@ For breaking changes, list every affected consumer, scan evidence, compatibility
 | Capability |  |  |  |  | accept / skip |
 | Directory Map |  |  |  |  | accept / skip |
 | Domain Language |  |  |  |  | accept / skip |
+
+### Project Onboarding Scan Approval
+
+| Item | Summary | Evidence | Confidence | Human Decision |
+|---|---|---|---|---|
+| Mode | Quick / Deep / Targeted |  |  | approve / revise |
+| Layout | Compact / Standard / Expanded / none |  |  | approve / revise |
+| Scope |  |  |  | approve / revise |
+| Subagents | none / proposed lanes |  |  | approve / skip |
+| Write Plan | project memory / onboarding-db / guidance |  |  | approve / revise |
+
+### Onboarding DB Batch
+
+| File / Item | Action | Change Summary | Source Evidence | Confidence | Affects Long-Term Memory | Suggested Action |
+|---|---|---|---|---|---|---|
+
+If subagent scan results conflict, include:
+
+| Conflict | Finding A | Finding B | Evidence A | Evidence B | Current Judgment | Action |
+|---|---|---|---|---|---|---|
 
 ### Feature Completion Check
 

@@ -1,5 +1,37 @@
 # Agent Loop Changelog
 
+## 1.2.0 — 2026-06-07
+
+### Added
+- Added Project Onboarding Scan as a formal existing-project onboarding capability with Quick, Deep, and Targeted modes.
+- Added `references/project-onboarding-scan.md` for Deep/Targeted scan rules, P0/P1/P2 scan priority, Layout Mode, diagrams, deployment placement, subagent scan synthesis, and completion criteria.
+- Added `references/onboarding-db.md` for onboarding-db reading, writing, freshness, problem routing, learning, and project memory backfill rules.
+- Added `references/onboarding-db-templates.md` for onboarding-db metadata, Compact/Standard/Expanded layout mapping, module cards, deployment, decision history, diagram, and batch review templates.
+- Added core `templates/onboarding-db/*` templates for newcomer-readable project onboarding documents.
+- Added validation scenarios for Quick/Deep/Targeted onboarding, P0/P1/P2 ordering, module reading paths, subagent conflict synthesis, deployment fact placement, and Batch Human Review.
+- Added a core-module call-chain requirement so Deep Project Onboarding Scan must document a module-level call chain for each core module or explicitly mark it support-only, unknown, or not applicable with evidence.
+- Added copy-ready `module-template.md` and `flow-template.md` for Expanded onboarding layouts.
+- Added Standard and Expanded onboarding-db derivation rules so split documents stay executable without reintroducing dozens of templates.
+- Added validation scenarios for Standard split-file derivation and Expanded module/flow template usage.
+- Added onboarding layout pressure scenarios for mode selection, Compact merged-doc quality, Standard template restraint, human layout override, Compact-to-Standard upgrade, and Expanded durable-boundary / complex-flow / deployment-concern splitting.
+- Added Guided Newcomer Onboarding rules for using an existing onboarding-db to lead a human through project takeover instead of dumping documents.
+- Added On-Demand Explanation and Diagram Update rules for targeted call-path, async/job, flow, deployment, state, and boundary questions.
+- Added validation scenarios for newcomer guided takeover and targeted diagram updates after onboarding-db exists.
+- Added `references/onboarding-diagnostics.md` for startup failure diagnosis, change impact analysis, state-change trace, and design decision routing.
+- Added onboarding validation scenarios for async/job reading paths, startup failure diagnosis, design decision routing, state-change trace, and centralized change impact analysis.
+- Added role-based README reading paths and bilingual glossary fields to onboarding-db templates.
+- Tightened Change Impact Analysis output fields and aligned glossary derivation with the bilingual glossary template.
+- Added a standalone onboarding-db `glossary.md` template and aligned proposal glossary fields with bilingual terminology rules.
+
+### Changed
+- Wired existing project onboarding to explain Quick / Deep / Targeted onboarding modes before writing onboarding-db artifacts.
+- Expanded Human Review Summary with Batch Human Review for multi-document, multi-fact, and long-term-memory changes.
+- Updated runtime and stage routing so onboarding-db is loaded only when Deep/Targeted onboarding or onboarding-db read/write/refresh is needed.
+- Aligned version metadata across `SKILL.md`, `README.md`, `Usage.md`, `plugin.json`, and the changelog.
+- Hardened Submit / Integrate so known drift still requires a minimum recorded Drift Check before submit.
+- Clarified Existing Project Onboarding write targets, explicit re-adoption routing, and Guided Newcomer Onboarding entry from an existing onboarding-db.
+- Clarified Layout Mode decision rules and anti-misuse rules for Compact, Standard, Expanded, human overrides, and layout upgrades.
+
 ## 1.1.1 — 2026-06-04
 
 ### Changed

@@ -111,10 +111,19 @@ If the existing code is remote, perform onboarding against the remote source of 
 Load:
 
 - `existing-project-onboarding.md`
+- `project-onboarding-scan.md` only when the human chooses Deep Project Onboarding Scan, asks for guided onboarding, or asks for a targeted module/flow/deployment/async scan
+- `onboarding-db.md` and `onboarding-db-templates.md` only when reading, writing, refreshing, or drafting `.agent-loop/onboarding-db/`
 - `large-projects.md` when old, unfamiliar, multi-package, multi-service, or likely 100k+ LOC
 - `project-guidance.md`
 - `project-memory-mode.md`
 - `project-architecture-init.md`
+
+First decision:
+
+- Explain Quick Onboarding and Deep Project Onboarding Scan when the human asks to take over or understand an existing project.
+- Default to Quick Onboarding when the human wants to continue feature work quickly.
+- Use Deep Project Onboarding Scan when the human wants newcomer-friendly project understanding or long-term onboarding docs.
+- Use Targeted Onboarding Scan when the human asks about one module, flow, async task, deployment path, or problem area.
 
 Inspect:
 
@@ -140,6 +149,21 @@ Do not read the whole repository. Do not start feature implementation during onb
 
 If subagents are used, the main agent keeps ownership of synthesis and all writes. Subagents only return findings, evidence, confidence, uncertainties, files read, and suggested `project.md` entries.
 
+If Deep Project Onboarding Scan is selected:
+
+- run P0 before P1 and P2
+- choose Compact / Standard / Expanded Layout Mode before proposing onboarding-db files
+- draft onboarding-db with `templates/onboarding-db/*`
+- create diagrams only when they answer a concrete onboarding question
+- use Batch Human Review before writing onboarding-db, project memory backfill, or guidance changes
+- keep code reality as current fact when docs conflict with code
+
+If Targeted Onboarding Scan is selected:
+
+- inspect only the minimal safe context plus the selected module, flow, async task, deployment path, or problem area
+- propose focused onboarding-db updates only for that target
+- do not create unrelated onboarding-db files
+
 Output before writing:
 
 - project summary
@@ -150,6 +174,8 @@ Output before writing:
 - boundary map with evidence and confidence
 - discovered commands with evidence and confidence
 - recommended Project Memory Mode: simple or enterprise, with trigger evidence
+- recommended onboarding mode: Quick | Deep | Targeted, with reason
+- recommended Onboarding DB Layout Mode when Deep is selected
 - existing/proposed guidance files
 - low-confidence findings and recommended follow-up
 - one recommended next action
@@ -164,6 +190,7 @@ Directory guidance:
 Write after confirmation:
 
 - `.agent-loop/project.md`
+- `.agent-loop/onboarding-db/` only when Deep or Targeted onboarding docs are confirmed
 - enterprise `.agent-loop/project/*.md` files only when recommended and confirmed
 - `.agent-loop/requirements/`
 - `.agent-loop/features/`
@@ -185,7 +212,7 @@ Inspect:
 - active feature docs
 - obvious code reality: scripts, directories, README, current tests
 
-Load `recovery-and-backfill.md` when code reality should repair project or feature docs.
+Load `recovery-and-backfill.md` for every explicit re-adoption request. Also load it whenever code reality should repair project or feature docs.
 
 For re-adoption, do not start new feature work first. Compare current code/tests/scripts with existing `agent-loop` docs, then propose backfill.
 
