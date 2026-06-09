@@ -142,7 +142,9 @@ Data-model detail rule:
 
 ## Diagram Rules
 
-Onboarding diagrams are flowchart-first. Generate small diagrams that answer one question. Do not create full function graphs, full file dependency graphs, or whole-repo knowledge graphs.
+Onboarding diagrams are flowchart-first. **Deep Scan 的图要尽可能完整**，把模块/流程/数据模型的全貌画出来，不能只画一个简略概览。Quick Scan 可以保持精简，但 Deep Scan 必须完整。不要创建全仓库文件依赖图或 whole-repo knowledge graphs。
+
+**Diagram completeness rule**: 一张图不够描述就分多张。模块调用链路可以画多张流程图，每张覆盖一个子流程或一个入口点。
 
 Default diagram rules:
 
@@ -150,60 +152,66 @@ Default diagram rules:
 - use `subgraph` to separate User, API, Domain, DB, Jobs/Workers, External Services, State, and Runtime layers
 - use color classes for layer identity when the diagram has 4+ node types
 - include key route, task, table/model, state, queue, external service, and object-storage names when evidenced
-- keep diagrams at business/process/module level, not function level
-- write a short "How To Read" note for each non-trivial diagram
+- **Deep Scan 下， diagrams 画到 Service/UseCase/Domain/Repository/External 级别**，展示完整的调用链路，不能只画一个抽象的 "Service" 节点
+- **每个图必须有 "How To Read" 说明**，解释这张图回答什么问题、怎么看、颜色/形状的含义
 
-Use `sequenceDiagram` only when a module/process flowchart already exists and the human needs exact call order, protocol handshake, retry timing, callback order, or another narrow interaction detail. Do not use sequence diagrams as the first or only onboarding diagram for a module, flow, or system.
+Use `sequenceDiagram` **当核心模块涉及异步 jobs、外部服务调用、回调/webhook、WebSocket、重试补偿、或多服务交互时**。Sequence diagram 不是可选补充，而是上述场景下的**强制要求**。对于没有异步/外部交互的简单模块，flowchart 即可。
 
 Initial Deep Scan must propose:
 
 - module relationship map
 - boundary map
-- one core module call-chain diagram for each core module, or an explicit `support-only`, `Unknown`, or `Not applicable` note with evidence
-- at least one core flow diagram
-- data entity map when persistent data exists
+- **at least one complete diagram for each core module** (flowchart showing the full call chain from entry to exit; support-only modules may be marked with evidence)
+- **sequence diagram for each core module with async/external/callback/WebSocket interactions**
+- at least one core flow diagram (split into multiple diagrams if one is not enough)
+- **complete data entity map** when persistent data exists (all core entities with key fields and relationships; split into subgraphs if the project is large)
+- **model usage flow map** showing which flows/APIs/jobs use which entities
 - single-entity relationship diagram when a core entity is too complex to understand from the global data entity map
 - deployment map when multiple environments, containers, or remote services exist
 
-Core module call-chain diagrams are module-level flowcharts, not function-level graphs. They should show:
+Core module call-chain diagrams should show the **complete path** from entry to exit:
 
 ```text
 inbound trigger / caller
--> module entrypoint
--> application/use-case or service boundary
--> domain rule / core operation
--> data/external/job boundary
--> output / side effect
+-> module entrypoint (specific API route / handler / WebSocket event)
+-> application/use-case or service boundary (specific Service class / UseCase)
+-> domain rule / core operation (specific domain functions / business rules)
+-> data/external/job boundary (specific Repository / ORM model / External API client / Task dispatcher)
+-> output / side effect (specific response / DB write / async job trigger / external callback)
 ```
 
-Do not draw every function call. The goal is to help a newcomer understand how a core module is entered, what it orchestrates, which dependencies it touches, and where behavior exits.
+**Deep Scan 下，把每个关键节点都画出来**，不能只写一个抽象的 "Service" 或 "Domain"。如果一张图放不下，分成多张：一张给 API 入口、一张给后台任务、一张给外部回调等。目标是让 newcomer 看完图就能说出"这个模块从哪进、经过哪些服务、调了哪些库、最后到哪结束"。
 
 Discovery-triggered diagrams:
 
-| Discovery | Diagram |
-|---|---|
-| durable module with business/runtime behavior | core module call chain |
-| project-level business process | layered process flowchart |
-| queue / broker / consumer / subscriber | async flow |
-| cron / scheduler / worker / background job | job flow |
-| state field and transitions | state flow |
-| callback / webhook | integration flow |
-| auth/token/role/permission flow | auth flow |
-| object storage/upload/download/callback | file flow |
-| retry/rollback/DLQ/manual compensation | failure recovery flow |
-| persistent business entities / ORM / schema / migrations | data entity map |
-| complex core entity with many relationships or writers | single-entity relationship map |
-| exact call order after a flowchart already exists | sequence detail diagram |
+| Discovery | Diagram | Deep Scan Requirement |
+|---|---|---|
+| durable module with business/runtime behavior | core module call chain | **mandatory** |
+| module with async jobs, external APIs, callbacks, WebSocket, or retry/compensation | **sequence diagram** | **mandatory** |
+| project-level business process | layered process flowchart | **mandatory** |
+| queue / broker / consumer / subscriber | async flow | mandatory if present |
+| cron / scheduler / worker / background job | job flow | mandatory if present |
+| state field and transitions | state flow | mandatory if present |
+| callback / webhook | integration flow | mandatory if present |
+| auth/token/role/permission flow | auth flow | mandatory if present |
+| object storage/upload/download/callback | file flow | mandatory if present |
+| retry/rollback/DLQ/manual compensation | failure recovery flow | mandatory if present |
+| persistent business entities / ORM / schema / migrations | data entity map | **mandatory** |
+| which flows/APIs/jobs use which entities | **model usage flow map** | **mandatory** |
+| complex core entity with many relationships or writers | single-entity relationship map | mandatory if entity is complex |
+| entity lifecycle (who creates/reads/updates/deletes) | **entity lifecycle flow map** | mandatory if entity is complex |
 
 When state/status fields are important to a core flow, also capture state-change trace evidence: trigger, writer, guard/condition, side effects, tests, and confidence. A legal state-flow diagram is not enough to answer "who changed this state?".
 
 Diagram quality rules:
 
 - every standalone or embedded diagram must answer one explicit question
+- **Deep Scan 下，图要尽可能完整**，把能确认的路径都画出来，不能只画一个简略概览
 - prefer layered color-coded flowcharts for onboarding summaries
 - diagram nodes and edges should be traceable to an Evidence Chain entry in the same doc or target doc
-- when a human question reveals an unclear path, propose the smallest useful diagram update in the most relevant doc instead of generating a global graph
+- when a human question reveals an unclear path, propose a **complete diagram update** for the relevant scope, not a minimal patch
 - if evidence is insufficient, mark the missing part `Unknown` or `Not enough evidence`; do not guess
+- **所有图必须有 "How To Read" 说明**，缺少此说明的图视为不完整
 
 ## Deployment Placement
 
@@ -292,14 +300,15 @@ If the update adds or changes diagrams for a targeted question, include:
 Deep Scan is complete only when:
 
 - Layout Mode is recorded
-- README has reading paths and module reading paths
+- README has reading paths, module reading paths, **data-model reading path**, and **diagrams index**
 - overview/setup/code map are usable for a newcomer
 - module relationship map and boundary map exist or are explicitly blocked
-- every core module has a core module call-chain diagram, or an explicit support-only/unknown/not-applicable note with evidence
-- at least one core flow exists or is explicitly unknown
+- **every core module has at least one complete diagram** (flowchart); modules with async/external/callback/WebSocket interactions also have a sequence diagram; support-only modules may be marked with evidence
+- at least one core flow exists or is explicitly unknown; **complex flows are split into multiple diagrams when one is insufficient**
 - module index and module detail coverage are clear: each core module has either a dedicated `modules/<module>.md` or an explicit reason it remains index-only
-- persistent data is documented in `domain/data-model.md` or Compact equivalent, with entity detail coverage for complex core entities
+- persistent data is documented in `domain/data-model.md` or Compact equivalent, with **complete entity relationship map** (not a minimal subset) and **model usage flow map**
 - core docs include Evidence Chain entries for key module, flow, state, async/job, and verification claims
+- **all diagrams have "How To Read" notes**
 - commands and tests have evidence/confidence
 - risks and unknowns are recorded
 - project memory backfill proposal was shown

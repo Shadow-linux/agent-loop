@@ -1,5 +1,23 @@
 # Agent Loop Changelog
 
+## [Unreleased] — Onboarding Diagram Hardening
+
+### Added
+- Added mandatory sequence diagram requirement for core modules with async jobs, external APIs, callbacks, WebSocket, retry/compensation, or multi-service interactions.
+- Added `Model Usage Flow Map` to `templates/onboarding-db/data-model.md` to show which flows/APIs/jobs interact with which entities.
+- Added `Entity Lifecycle Flow Map` to `templates/onboarding-db/entity-template.md` to visualize who creates/reads/updates/deletes an entity.
+- Added unified diagram style guide in `templates/onboarding-db/diagram.md` covering flowchart layers, color classes, node shapes, arrow types, naming conventions, and sequence diagram participant/message/branch standards.
+- Added diagram coverage check to Batch Review Template in `references/onboarding-db-templates.md`.
+- Added "How To Read" as a mandatory requirement for every diagram.
+
+### Changed
+- Hardened `references/project-onboarding-scan.md` Diagram Rules: Deep Scan diagrams must be complete, not "small diagrams that answer one question".
+- Removed "Do not draw every function call" restriction from module call-chain diagrams; Deep Scan requires Service/UseCase/Domain/Repository/External-level detail.
+- Removed "Do not draw a full database ERD unless very small" restriction from data-model diagrams; Deep Scan requires complete ERD with all core entities, key fields, and relationships.
+- Tightened Completion Criteria so core modules must have diagrams (text-only fallback removed), sequence diagrams are mandatory for async/external modules, and all diagrams require "How To Read" notes.
+- Updated `templates/onboarding-db/module-template.md` with complete call-chain flowchart example and mandatory sequence diagram section with Mermaid template.
+- Updated Minimum Completion Standard in `references/onboarding-db-templates.md` to require model usage flow maps and sequence diagrams for async/external interactions.
+
 ## 1.2.0 — 2026-06-07
 
 ### Added

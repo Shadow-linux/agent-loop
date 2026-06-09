@@ -203,6 +203,8 @@ Diagram index table:
 | Diagram | Question Answered | Target Doc | Evidence Chain | Last Verified | Confidence |
 |---|---|---|---|---|---|
 
+**Diagram coverage check**: The diagrams index must also list modules/flows/entities that **do not yet have diagrams**, with a reason and planned action. If a core module, core flow, or complex entity is missing a diagram, onboarding-db is **usable but incomplete**.
+
 ## Module Card
 
 Core fields:
@@ -216,11 +218,13 @@ Entrypoints:
 Core Call Chain:
 Core Flows:
 Key Files:
-Related Diagram:
+Related Diagrams:
 Evidence Chain:
 Evidence:
 Confidence:
 ```
+
+**Diagram requirement**: `Related Diagrams` must list **all diagrams** for this module: at minimum one call-chain flowchart, plus sequence diagrams for async/external/callback interactions. A module card without diagrams is incomplete.
 
 Optional fields:
 
@@ -498,13 +502,7 @@ Color convention:
 | `external` | third-party service, object storage, remote runtime |
 | `state` | status transition, failure state, manual gate |
 
-Use `sequenceDiagram` only when:
-
-- a module/process flowchart already exists
-- exact call order or callback timing matters
-- the human asks for a narrow interaction detail
-
-Do not use a sequence diagram as the first or only onboarding diagram for a project, module, or core flow.
+Use `sequenceDiagram` **when a core module has async jobs, external APIs, callbacks, WebSocket, retry/compensation, or multi-service interactions**. Sequence diagrams are **mandatory** for these scenarios, not optional. For simple modules without async/external behavior, a flowchart is sufficient.
 
 ## Batch Review Template
 
@@ -514,6 +512,13 @@ Do not use a sequence diagram as the first or only onboarding diagram for a proj
 | File / Item | Action | Change Summary | Source Evidence | Confidence | Affects Long-Term Memory | Suggested Action |
 |---|---|---|---|---|---|---|
 ```
+
+**Diagram coverage check** (add to every Architecture, Flows And Data, or targeted batch):
+
+| Module / Flow / Entity | Required Diagrams | Has Diagram? | Diagram Type | How To Read? | Action |
+|---|---|---|---|---|---|
+
+If any core module, core flow, or complex entity is missing a required diagram, flag it in the Batch Review and do not mark onboarding-db complete until resolved.
 
 For onboarding-db batches:
 
@@ -529,12 +534,13 @@ For onboarding-db batches:
 
 Onboarding-db is complete only when:
 
-- README has reading paths, module reading paths, document index, and diagrams index
+- README has reading paths, module reading paths, data-model reading path, document index, and **diagrams index with coverage check**
 - overview explains purpose, users, stack, and capabilities
 - setup/run path is usable or blocked with evidence
 - code map tells where to start reading
 - modules and boundaries are mapped
-- diagrams include module map, boundary map, one core module call chain per core module, and at least one core flow or an explicit blocker
+- **diagrams include module map, boundary map, at least one complete diagram per core module, sequence diagrams for async/external interactions, at least one core flow, and model usage flow map when persistent data exists**
+- **all diagrams have "How To Read" notes**
 - async/jobs/deployment/data are documented or marked not applicable/unknown
 - tests and verification commands have confidence labels
 - risks and unknowns are recorded

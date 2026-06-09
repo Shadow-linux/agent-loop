@@ -47,6 +47,61 @@ Explain what business object this entity represents, why it matters, and which m
 | Flow | Entity Role | Flow Doc | Evidence | Confidence |
 |---|---|---|---|---|
 
+## Entity Lifecycle Flow Map
+
+**展示这个实体被谁创建（Create）、读取（Read）、更新（Update）、删除/归档（Delete/Archive）**。把每个能操作该实体的 flow、API、job、service 都画出来，用不同颜色区分操作类型。
+
+```mermaid
+flowchart LR
+    subgraph Create["创建 / Create"]
+        C1["API: POST /meetings"]
+        C2["Flow: 导入会议"]
+    end
+
+    subgraph Read["读取 / Read"]
+        R1["API: GET /meetings/{id}"]
+        R2["Task: generate_minutes"]
+        R3["Service: MeetingService.list()"]
+    end
+
+    subgraph Update["更新 / Update"]
+        U1["API: PATCH /meetings/{id}"]
+        U2["Task: update_status"]
+        U3["Callback: ASR result"]
+    end
+
+    subgraph Delete["删除 / Delete"]
+        D1["API: DELETE /meetings/{id}"]
+        D2["Cron: cleanup_expired"]
+    end
+
+    Create --> E[(Entity)]
+    E --> Read
+    Update --> E
+    Delete -.-> E
+
+    classDef create fill:#e1f5ff,stroke:#01579b,stroke-width:2px,color:#000
+    classDef read fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#000
+    classDef update fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#000
+    classDef delete fill:#ffebee,stroke:#c62828,stroke-width:2px,color:#000
+    classDef entity fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#000
+
+    class C1,C2 create
+    class R1,R2,R3 read
+    class U1,U2,U3 update
+    class D1,D2 delete
+    class E entity
+```
+
+## How To Read This Lifecycle
+
+- **创建（蓝色）**：哪些 API/Flow/Job 会创建这个实体的新记录
+- **读取（绿色）**：哪些模块会查询/读取这个实体
+- **更新（黄色）**：哪些操作会修改该实体的字段或状态
+- **删除（红色）**：哪些操作会删除或归档该实体
+- **虚线箭头（-.->）**：软删除或归档操作
+- 每个节点应包含具体的 API 端点、任务名或服务方法名
+
 ## Migrations / History
 
 | File Path | Change | Why It Exists | Compatibility Note | Evidence | Confidence |
