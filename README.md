@@ -142,7 +142,7 @@ After project init/onboarding is accepted, the agent will:
 
 > "带我熟悉这个项目，从哪里开始看？"
 
-If `.agent-loop/onboarding-db/` exists, the agent uses it first: it checks freshness, gives a short orientation, recommends one reading path, answers targeted questions, and proposes focused diagram/doc updates only after confirmation. Deep onboarding may use categorized docs such as `maps/`, `modules/`, `flows/`, `runtime/`, `domain/`, and `quality/`, while Compact mode may keep equivalent content in merged files. Onboarding-db human-readable docs default to Chinese, while code symbols, file paths, commands, API names, and artifact names stay as-is.
+If `.agent-loop/onboarding-db/` exists, the agent uses it first: it checks freshness, gives a short orientation, recommends one reading path, answers targeted questions, and proposes focused diagram/doc updates only after confirmation. Deep onboarding defaults to Expanded onboarding-db output with categorized docs such as `maps/`, `modules/`, `flows/`, `runtime/`, `domain/`, and `quality/`. Compact or Standard onboarding-db layouts are used only when the human explicitly requests fewer/simpler files, or when maintaining an existing onboarding-db already organized that way. Onboarding-db human-readable docs default to Chinese, while code symbols, file paths, commands, API names, and artifact names stay as-is.
 
 ### 5. Continue Later
 

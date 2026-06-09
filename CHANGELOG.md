@@ -3,6 +3,8 @@
 ## [Unreleased] — Onboarding Diagram Hardening
 
 ### Added
+- Added `agent-loop:managed-start` / `agent-loop:managed-end` block rules for root `AGENTS.md`, including bootstrap, ownership, gates, completion, artifacts, architecture, commands, and hard-constraints sections.
+- Added validation scenarios to prevent whole-file `AGENTS.md` overwrites and to stop on broken or duplicated managed block markers.
 - Added mandatory sequence diagram requirement for core modules with async jobs, external APIs, callbacks, WebSocket, retry/compensation, or multi-service interactions.
 - Added `Model Usage Flow Map` to `templates/onboarding-db/data-model.md` to show which flows/APIs/jobs interact with which entities.
 - Added `Entity Lifecycle Flow Map` to `templates/onboarding-db/entity-template.md` to visualize who creates/reads/updates/deletes an entity.
@@ -11,6 +13,9 @@
 - Added "How To Read" as a mandatory requirement for every diagram.
 
 ### Changed
+- Rewrote `Usage.md` as a Chinese human-facing guide focused on what humans can say to trigger agent-loop capabilities.
+- Clarified human-facing onboarding guidance in `Usage.md`, including Quick/Deep/Targeted choices, Expanded onboarding-db default, Batch Human Review, and root `AGENTS.md` managed blocks.
+- Changed Deep Project Onboarding Scan to default to Expanded Onboarding DB Layout Mode; Compact and Standard are now reserved for explicit human requests or existing onboarding-db preservation.
 - Hardened `references/project-onboarding-scan.md` Diagram Rules: Deep Scan diagrams must be complete, not "small diagrams that answer one question".
 - Removed "Do not draw every function call" restriction from module call-chain diagrams; Deep Scan requires Service/UseCase/Domain/Repository/External-level detail.
 - Removed "Do not draw a full database ERD unless very small" restriction from data-model diagrams; Deep Scan requires complete ERD with all core entities, key fields, and relationships.

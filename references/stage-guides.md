@@ -154,7 +154,7 @@ If subagents are used, the main agent keeps ownership of synthesis and all write
 If Deep Project Onboarding Scan is selected:
 
 - run P0 before P1 and P2
-- choose Compact / Standard / Expanded Layout Mode before proposing onboarding-db files
+- record Onboarding DB Layout Mode before proposing onboarding-db files; default to Expanded unless the human explicitly requests Compact/Standard or an existing onboarding-db already uses it
 - draft onboarding-db with `templates/onboarding-db/*`
 - create diagrams only when they answer a concrete onboarding question
 - use Batch Human Review before writing onboarding-db, project memory backfill, or guidance changes

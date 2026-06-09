@@ -41,6 +41,7 @@ Every time `agent-loop` is used inside a target project, check root guidance bef
 - Required Stops: unclear scope, risky changes, Delivery Contract gates, subagent dispatch, submit, close, commit, PR, merge, release, publish
 - Completion Rules: fresh verification, review, drift check, project memory update, Feature Completion Check, Feature Close Review
 - root/directory guidance boundaries and requirement archive rules
+- managed block markers are missing for `agent-loop` maintained sections, unless the file is intentionally fully human-owned and the human has deferred managed block adoption
 
 `CLAUDE.md` is stale when it duplicates independent long-lived rules, diverges from `AGENTS.md`, or does not clearly point Claude Code to `AGENTS.md`.
 
@@ -85,6 +86,52 @@ For a local directory that is only a remote-project entry point, create local ro
 
 Never overwrite an existing ordinary `CLAUDE.md` or `AGENTS.md` without reading it, summarizing the proposed migration, and getting human confirmation.
 
+## Managed Blocks
+
+Use managed blocks to mark content maintained by `agent-loop` inside root `AGENTS.md`:
+
+```md
+<!-- agent-loop:managed-start section:<name> source:<path-or-artifact> -->
+...
+<!-- agent-loop:managed-end section:<name> -->
+```
+
+Recommended section names:
+
+```text
+bootstrap
+ownership
+gates
+required-stops
+completion
+artifacts
+directory-guidance
+architecture
+commands
+hard-constraints
+```
+
+Rules:
+
+- `agent-loop` may propose updates inside managed blocks when the source artifact changes.
+- Managed blocks must include `section`; they should include `source` when the content comes from a stable artifact such as `.agent-loop/project.md`, `.agent-loop/project/*.md`, `.agent-loop/onboarding-db/README.md`, or `ARCHITECTURE.md`.
+- Content outside managed blocks is human/project-owned. Do not rewrite it automatically.
+- If an existing `AGENTS.md` has no managed blocks, propose adding the minimal needed managed blocks instead of replacing the whole file.
+- If a managed block source is missing, stale, or contradictory, classify the block as stale and propose either source correction or block refresh through Human Review Summary.
+- If marker pairs are broken, duplicated, nested, or ambiguous, stop and ask before editing.
+- Do not put task status, feature progress, raw requirements, plans, or test output inside managed blocks.
+- `CLAUDE.md` should point to `AGENTS.md`; it should not duplicate managed blocks.
+
+Managed block update flow:
+
+1. Read the existing `AGENTS.md`.
+2. Identify managed blocks and their sources.
+3. Compare source facts with block content.
+4. Present a table with block, source, current summary, proposed change, and risk.
+5. Ask human confirmation.
+6. Update only approved managed blocks; preserve all other content byte-for-byte where practical.
+7. Record guidance status and source evidence in `project.md`.
+
 ## Root `AGENTS.md` Should Contain
 
 Keep it short and long-lived:
@@ -109,6 +156,7 @@ Keep it short and long-lived:
 - run Feature Completion Check after likely completion, before starting a new feature, or when resuming with an active feature
 - perform Feature Close Review, drift check, and project memory update before close
 - stable project commands and hard constraints, only if every agent should know them immediately
+- managed block markers for `agent-loop` maintained sections, so future updates do not overwrite human-owned content
 - stale detection: if future agents cannot learn Agent Ownership, Gate Modes, Required Stops, and Completion Rules from root guidance, propose a root `AGENTS.md` update
 
 ## Root `AGENTS.md` Should Not Contain

@@ -136,29 +136,31 @@ Onboarding DB 的核心目标是更好阅读，不是为了缩减而省略关键
 
 ## Onboarding DB Layout Mode
 
-Deep Project Onboarding Scan 应该先判断或询问 `Onboarding DB Layout Mode`，再决定生成多少物理文件。
+Deep Project Onboarding Scan 应该先记录 `Onboarding DB Layout Mode`，再决定生成多少物理文件。
+
+当前实现决策：新 Deep Scan 默认 `Expanded`。`Compact` / `Standard` 只在人类明确要求更少文件、合并文件，或维护已有 Compact/Standard onboarding-db 时使用。项目大小只影响扫描优先级、P2 覆盖范围和拆分深度，不再自动把小项目降级为 Compact。
 
 | 模式 | 适用项目 | 文件策略 | 目标 |
 |---|---|---|---|
-| Compact | 单一应用、单一技术栈、模块少、异步少、测试体系简单 | 5 到 7 个核心文档，合并相近主题 | 让新人 10 到 20 分钟能读完主路径 |
-| Standard | 常规业务系统，有 UI/API/DB/jobs 或多个长期模块 | 8 到 12 个文档，核心主题独立，低频主题合并 | 在可读性和完整性之间平衡 |
-| Expanded | 10 万行以上、5 个以上长期模块、2 套以上测试系统、复杂异步/多环境/多外部集成 | 12 到 18 个文档，必要主题独立拆分 | 支持大项目接管和长期维护 |
+| Expanded | 新 Deep Scan 默认模式 | 分类目录 + 必要主题独立拆分 | 支持接管和长期维护 |
+| Standard | 人类明确要求更少文件，或已有 onboarding-db 是 Standard | 较少分类文档，低频主题合并 | 在可读性和文件数量之间折中 |
+| Compact | 人类明确要求 Compact / 合并文件 / 最少文件，或已有 onboarding-db 是 Compact | 少量合并文档，README 必须映射主题位置 | 减少物理文件，不减少理解维度 |
 
 切换信号：
 
 | 信号 | 建议 |
 |---|---|
-| 单一应用、单一运行命令、无复杂异步 | Compact |
-| 有前后端/API/DB/background job 中的多个边界 | Standard |
+| 单一应用、单一运行命令、无复杂异步 | 仍默认 Expanded；只减少 P2 扫描范围，不自动降级文件布局 |
+| 有前后端/API/DB/background job 中的多个边界 | 仍默认 Expanded；按边界拆分必要文档 |
 | 5 个以上长期模块或 bounded context | Expanded |
 | 2 套以上测试系统 | Expanded |
-| 多环境、多部署入口、多外部集成 | Standard 或 Expanded |
-| 人类明确要求快速接管 | Compact，后续按问题补充 |
-| 人类明确要求完整接管文档 | Standard 或 Expanded |
+| 多环境、多部署入口、多外部集成 | Expanded |
+| 人类明确要求 Compact / 少文件 / 合并文件 | Compact，后续按问题补充 |
+| 人类明确要求 Standard / 折中文件数量 | Standard |
 
 Layout Mode 只影响“怎么组织文档”，不影响“必须理解什么”。
 
-例如 Compact 模式下，`api-surface`、`integrations`、`async-and-events` 可以合并到 `architecture-and-integrations.md`；`data-model`、`jobs-and-schedules` 可以合并到 `operations-and-data.md`。如果扫描发现某一块复杂度上升，Agent 应该建议把对应主题从合并文档拆出来。
+例如在人类明确选择 Compact 模式下，`api-surface`、`integrations`、`async-and-events` 可以合并到 `architecture-and-integrations.md`；`data-model`、`jobs-and-schedules` 可以合并到 `operations-and-data.md`。如果扫描发现某一块复杂度上升，Agent 应该建议通过人工确认重塑为 Expanded 文档结构。
 
 建议文件布局：
 

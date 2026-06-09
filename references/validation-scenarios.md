@@ -123,7 +123,7 @@ Expected:
 
 - load `project-onboarding-scan.md`, `onboarding-db.md`, and `onboarding-db-templates.md`
 - run P0 before P1 and P2
-- choose or recommend Compact / Standard / Expanded Layout Mode before proposing onboarding-db files
+- record Onboarding DB Layout Mode before proposing onboarding-db files, defaulting new Deep Scan output to Expanded unless the human explicitly requests Compact/Standard or an existing onboarding-db already uses one
 - produce onboarding-db draft and necessary diagrams only after scope and layout are confirmed
 - do not jump directly into full P2 scanning on a large or unclear project
 - use Batch Human Review before writing onboarding-db or project memory backfill
@@ -157,7 +157,7 @@ Expected:
 - inspect onboarding-db README
 - reject completeness if module reading paths are missing
 - require paths such as module -> module doc/section -> flow -> diagram
-- allow Compact Layout paths to point to merged sections such as `code-map.md#module` and `flows-and-data.md#flow`
+- allow Compact onboarding-db layout paths to point to merged sections such as `code-map.md#module` and `flows-and-data.md#flow`
 
 ## 2h-1. Core Modules Require Module-Level Call Chains
 
@@ -175,12 +175,12 @@ Expected:
 - do not require function-level full call graphs
 - allow support modules such as shared types, generated clients, test utilities, or storage adapters to be marked support-only with evidence
 
-## 2h-2. Standard Layout Derives Split Files From Core Templates
+## 2h-2. Standard onboarding-db layout Derives Split Files From Core Templates
 
 Prompt:
 
 ```text
-Use agent-loop. Deep onboarding selected Standard layout. Generate module-map.md, core-flows.md, and testing-and-verification.md.
+Use agent-loop. The human explicitly selected Standard onboarding-db layout during Deep onboarding. Generate module-map.md, core-flows.md, and testing-and-verification.md.
 ```
 
 Expected:
@@ -193,12 +193,12 @@ Expected:
 - preserve metadata, summary-first format, evidence, confidence, unknowns, and project memory backfill
 - use Batch Human Review before writing the split files
 
-## 2h-3. Expanded Layout Uses Module And Flow Templates
+## 2h-3. Expanded onboarding-db layout Uses Module And Flow Templates
 
 Prompt:
 
 ```text
-Use agent-loop. Deep onboarding selected Expanded layout for a large repo with six core modules and two complex async flows.
+Use agent-loop. Deep onboarding selected Expanded onboarding-db layout for a large repo with six core modules and two complex async flows.
 ```
 
 Expected:
@@ -211,7 +211,7 @@ Expected:
 - do not create one file per directory
 - use Batch Human Review before writing
 
-## 2h-4. Layout Mode Selection Uses Evidence And Human Goal
+## 2h-4. Onboarding DB Layout Mode Defaults To Expanded
 
 Prompt:
 
@@ -222,18 +222,18 @@ Use agent-loop. Run Deep Project Onboarding Scan. This is a small single-app rep
 Expected:
 
 - load `project-onboarding-scan.md` and `onboarding-db-templates.md`
-- inspect project shape evidence before choosing Layout Mode
-- recommend Compact Layout, not Standard or Expanded
-- explain that Compact still covers all required understanding dimensions
+- inspect project shape evidence before choosing Onboarding DB Layout Mode
+- recommend Expanded onboarding-db layout by default, even when the repo appears small
+- explain that Compact or Standard is available only if the human explicitly chooses fewer/simpler onboarding-db files
 - ask human confirmation before drafting onboarding-db files
-- do not create split Standard files or Expanded module files unless later evidence or human choice changes the layout
+- do not downgrade to Compact or Standard just because the repo appears small or the human asks for a fast handoff
 
 ## 2h-5. Compact Merged Docs Preserve Quality
 
 Prompt:
 
 ```text
-Use agent-loop. Compact onboarding-db has only README, overview, setup, code-map, architecture, flows, and risks. Is that enough?
+Use agent-loop. I explicitly chose Compact onboarding-db. It has only README, overview, setup, code-map, architecture, flows, and risks. Is that enough?
 ```
 
 Expected:
@@ -245,12 +245,12 @@ Expected:
 - reject completion if Compact simply omits dimensions such as change impact, testing, async/jobs, or deployment facts that exist in code reality
 - state that Compact means merged documents, not reduced understanding
 
-## 2h-6. Standard Layout Does Not Generate Every Template
+## 2h-6. Standard onboarding-db layout Does Not Generate Every Template
 
 Prompt:
 
 ```text
-Use agent-loop. Standard layout is selected. Generate every onboarding template and every optional Standard file so we don't miss anything.
+Use agent-loop. I explicitly chose Standard onboarding-db layout. Generate every onboarding template and every optional Standard file so we don't miss anything.
 ```
 
 Expected:
@@ -267,20 +267,20 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. You recommend Standard, but I want Compact first because I only need a 20-minute onboarding path.
+Use agent-loop. You recommend Expanded, but I want Compact first because I only need a 20-minute onboarding path.
 ```
 
 Expected:
 
 - respect the human's Compact choice after explaining tradeoffs
 - apply the same respect rule when the human explicitly chooses Standard or Expanded
-- if project evidence strongly conflicts with the chosen layout, explain the conflict, recommend the smallest safe alternative, and ask before changing layout
+- if project evidence strongly conflicts with the chosen layout, explain the conflict, recommend Expanded, and ask before changing layout
 - produce a Compact plan that preserves all required understanding dimensions
-- record deferred Standard split suggestions as follow-ups, not as immediate writes
+- record deferred Expanded split suggestions as follow-ups, not as immediate writes
 - ask confirmation for the Compact write batch
-- do not silently upgrade to Standard
+- do not silently upgrade to Expanded
 
-## 2h-8. Compact To Standard Upgrade Requires Review
+## 2h-8. Compact To Expanded Reshape Requires Review
 
 Prompt:
 
@@ -290,9 +290,9 @@ Use agent-loop. Our Compact onboarding-db is getting hard to read after adding a
 
 Expected:
 
-- recommend a Compact -> Standard upgrade when evidence shows Compact is no longer readable
+- recommend a Compact -> Expanded reshape when evidence shows Compact is no longer readable
 - present a Batch Human Review table with proposed file splits, source sections, evidence, and risks
-- preserve original facts and links while moving sections into Standard files
+- preserve original facts and links while moving sections into Expanded categorized files
 - update README reading paths and document index
 - do not silently rewrite onboarding-db structure
 - do not change project memory unless a separate project-memory backfill is confirmed
@@ -302,7 +302,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Expanded layout is selected. The repo has directories src, components, utils, tests, scripts, billing, auth, and notifications. Create one module doc per directory.
+Use agent-loop. Expanded onboarding-db layout is selected. The repo has directories src, components, utils, tests, scripts, billing, auth, and notifications. Create one module doc per directory.
 ```
 
 Expected:
@@ -1036,7 +1036,7 @@ Use agent-loop. 接管这个项目，我想快速知道怎么启动、怎么测�
 Fixture:
 
 - `.agent-loop/project.md` exists
-- `project.md` says `Onboarding Layout: Expanded`
+- `project.md` says `Onboarding DB Layout Mode: Expanded`
 - `project.md` lists `.agent-loop/onboarding-db/README.md` or onboarding-db docs
 - root `AGENTS.md` or `CLAUDE.md` tells newcomers to start from `.agent-loop/onboarding-db/README.md`
 - `.agent-loop/onboarding-db/` or `.agent-loop/onboarding-db/README.md` is missing
@@ -1302,6 +1302,41 @@ Expected:
 - propose converting `CLAUDE.md` to a short pointer using `templates/root-CLAUDE.md`
 - preserve `AGENTS.md` as the primary maintained startup guidance
 - ask human confirmation before writing
+
+## 15a-3. AGENTS Managed Blocks Prevent Whole-File Overwrite
+
+Prompt:
+
+```text
+Use agent-loop. This repo has an AGENTS.md with human-written project notes and no agent-loop managed blocks. Sync the architecture and commands from project memory.
+```
+
+Expected:
+
+- read the existing `AGENTS.md` before proposing changes
+- load `project-guidance.md`
+- classify root guidance as needing managed block adoption, not as permission to rewrite the whole file
+- propose adding or updating only `agent-loop:managed-start` / `agent-loop:managed-end` blocks for the relevant sections such as `architecture` and `commands`
+- preserve human-written content outside managed blocks
+- present a Human Review Summary table with block, source, current summary, proposed change, and risk
+- ask human confirmation before writing
+- do not duplicate managed content into `CLAUDE.md`; keep `CLAUDE.md` as a pointer to `AGENTS.md`
+
+## 15a-4. Broken Managed Blocks Stop Editing
+
+Prompt:
+
+```text
+Use agent-loop. AGENTS.md has two `agent-loop:managed-start section:commands` comments and one missing end marker. Update the test command.
+```
+
+Expected:
+
+- detect broken, duplicated, nested, or ambiguous managed block markers
+- stop before editing `AGENTS.md`
+- ask the human to approve marker repair or manual cleanup
+- do not guess which block to update
+- do not rewrite the full file to make the update easier
 
 ## 15b. Project Language Guidance
 

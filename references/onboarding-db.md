@@ -175,7 +175,7 @@ Critical onboarding-db writes should prefer categorized target paths such as:
 - `domain/entities/<entity>.md`
 - `quality/<topic>.md`
 
-Compact layout may keep equivalent content in merged files when README clearly maps where each dimension lives.
+Compact onboarding-db layout may keep equivalent content in merged files only when the human explicitly requested Compact or the existing onboarding-db already uses Compact. The README must clearly map where each dimension lives.
 
 ## Batch Choices
 

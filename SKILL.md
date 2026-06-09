@@ -69,7 +69,7 @@ references/large-projects.md       rules for complex or 100k+ LOC projects
 references/existing-project-onboarding.md layered scan for taking over old projects
 references/project-onboarding-scan.md    deep/targeted project understanding scan and onboarding-db drafting
 references/onboarding-db.md              onboarding-db lifecycle, reading, writing, freshness, and problem routing
-references/onboarding-db-templates.md    onboarding-db layout modes, metadata, document, and diagram templates
+references/onboarding-db-templates.md    onboarding-db layout mode, metadata, document, and diagram templates
 references/onboarding-diagnostics.md     startup failure, change impact, and state-change trace procedures
 references/complex-artifacts.md    triggered tasks/tests/plans directory mode
 references/implementation-planning.md construction-grade task/story planning rules
@@ -183,7 +183,7 @@ If the local directory is only a remote-project entry point, create only thin lo
 - Task Done Gate: mark a task `done` only after implementation is complete, required tests or substitute verification have run fresh, evidence is recorded in `notes.md`, lightweight Spec Review is recorded, Standards Review is recorded when triggered, drift decision is recorded, and `tasks.md` links or names the evidence.
 - During large-project onboarding, recommend bounded subagent scanning when available and human-confirmed; otherwise use single-agent layered scan.
 - During existing-project onboarding, offer Quick Onboarding by default and explain Deep Project Onboarding Scan when human onboarding or long-term project understanding would benefit from `.agent-loop/onboarding-db/`.
-- Deep Project Onboarding Scan writes onboarding-db only after human confirmation, uses Compact / Standard / Expanded Layout Mode, and applies Batch Human Review for document writes.
+- Deep Project Onboarding Scan writes onboarding-db only after human confirmation, defaults to Expanded Onboarding DB Layout Mode, and applies Batch Human Review for document writes. Use Compact or Standard only when the human explicitly requests that lower-granularity onboarding-db output, or when maintaining an existing onboarding-db that already uses it.
 - Targeted Onboarding Scan is preferred when the human asks about one module, flow, async task, deployment path, or problem area.
 - When local and remote project reality are split, discover the remote environment before onboarding or initializing project memory.
 - Historical execution evidence belongs in `notes.md`.

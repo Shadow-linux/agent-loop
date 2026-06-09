@@ -172,12 +172,12 @@ Onboarding DB directory:
 .agent-loop/onboarding-db/
 ```
 
-Use stable, human-readable names. Layout Mode controls physical files:
+Use stable, human-readable names. Onboarding DB Layout Mode controls onboarding-db physical files only:
 
 ```text
-Compact: combined docs such as code-map.md, architecture-and-integrations.md
-Standard: categorized docs such as maps/module-map.md, modules/<module>.md, flows/<flow>.md
-Expanded: categorized docs plus focused splits for runtime/domain/quality topics only when complexity justifies them
+Expanded: default for new Deep Scan; categorized docs plus focused splits for maps/modules/flows/runtime/domain/quality
+Standard: only when human-requested or preserving existing Standard; fewer categorized docs
+Compact: only when human-requested or preserving existing Compact; combined docs such as code-map.md, architecture-and-integrations.md
 ```
 
 Standalone diagrams live under:

@@ -39,41 +39,44 @@ The scan is prioritized, not a mechanical linear checklist.
 Rules:
 
 - Quick Onboarding runs P0 only and records P1/P2 follow-ups.
-- Deep Scan runs P0, then P1, then only the P2 areas justified by project reality and Layout Mode.
+- Deep Scan runs P0, then P1, then the P2 areas justified by project reality.
 - Targeted Scan runs the minimum P0 context needed for safety, then the selected target area.
 - Large or unclear projects should not jump directly to P2.
 
-## Layout Mode
+## Onboarding DB Layout Mode
 
-Deep Scan must choose or recommend an Onboarding DB Layout Mode before proposing files.
+Deep Scan must record an Onboarding DB Layout Mode before proposing files.
+
+Default: `Expanded`.
+
+Use `Compact` or `Standard` only when the human explicitly requests fewer/simpler onboarding-db files, or when maintaining an existing onboarding-db already organized that way. Compact and Standard reduce physical file count only; they must not reduce explanation depth, diagram coverage, evidence chains, or required understanding dimensions.
 
 | Layout | Trigger | File Strategy |
 |---|---|---|
-| Compact | single app, few modules, one main runtime, little async, simple tests | 5-7 combined docs |
-| Standard | ordinary business system with multiple boundaries such as UI/API/DB/jobs | categorized docs with default `maps/`, `modules/`, and `flows/`; other categories only when justified |
-| Expanded | 100k+ LOC, 5+ durable modules, 2+ test systems, multiple environments/integrations, complex async/deployment | categorized docs with focused module/flow/runtime/domain/quality splits; never one file per directory |
+| Expanded | default for new Deep Scan | categorized docs such as `maps/`, `modules/`, `flows/`, `runtime/`, `domain/`, and `quality`; split by durable business/runtime boundary, not by code directory |
+| Standard | human explicitly asks for fewer files, or existing onboarding-db is Standard | categorized docs with fewer focused splits; keep low-frequency topics combined |
+| Compact | human explicitly asks for Compact, minimal files, fewer files, or merged docs; or existing onboarding-db is Compact | combined docs with clear README section map |
 
-Layout controls physical file granularity, not understanding coverage. Do not omit a core understanding dimension just because the layout is Compact.
+Onboarding DB Layout Mode controls physical file granularity, not understanding coverage. Do not omit a core understanding dimension just because the layout is Compact or Standard.
 
-## Layout Mode Decision Rules
+## Onboarding DB Layout Mode Decision Rules
 
-Choose or recommend Layout Mode from both project reality and human intent:
+Choose or recommend Onboarding DB Layout Mode from human intent first, with Expanded as the default:
 
 1. Inspect evidence first: project shape, durable modules, runtimes, test systems, async/deployment complexity, environments, and onboarding goal.
-2. Recommend the smallest layout that still preserves all Required Understanding Dimensions.
-3. Default toward Compact when the project is small, unclear, or the human wants a fast takeover.
-4. Recommend Standard when multiple stable boundaries need independent reading paths.
-5. Recommend Expanded only when durable module boundaries, complex flows, multiple test systems/environments, or repeated maintenance needs justify split files.
-6. If the human explicitly chooses a layout, respect it after explaining risks and tradeoffs. Do not silently override the human's layout choice.
-7. If the selected layout later becomes insufficient, propose a layout upgrade through Batch Human Review; do not reorganize onboarding-db silently.
+2. Default to Expanded for new Deep Scan output, even for small projects.
+3. Offer Compact or Standard only as a human-controlled tradeoff for fewer files, not as the agent's default recommendation.
+4. If the human explicitly chooses Compact or Standard, respect it after explaining that the same understanding dimensions, diagrams, and evidence still apply.
+5. If an existing onboarding-db uses Compact or Standard, keep that organization unless the human confirms reshaping.
+6. If Compact or Standard later becomes hard to read, propose reshaping to Expanded through Batch Human Review; do not reorganize onboarding-db silently.
 
 Default physical layout:
 
 | Layout | Default physical structure |
 |---|---|
-| Compact | may stay flat or lightly grouped; merged docs are allowed when README clearly maps sections |
-| Standard | default to `maps/`, `modules/`, and `flows/`; add `runtime/`, `domain/`, or `quality/` only when project reality justifies them |
-| Expanded | use categorized structure such as `maps/`, `modules/`, `flows/`, `runtime/`, `domain/`, `quality/`, and optional `diagrams/` for standalone diagrams |
+| Expanded | default; use categorized structure such as `maps/`, `modules/`, `flows/`, `runtime/`, `domain/`, `quality/`, and optional `diagrams/` for standalone diagrams |
+| Standard | human-requested or existing Standard; use fewer categorized docs and combine low-frequency topics |
+| Compact | human-requested or existing Compact; may stay flat or lightly grouped, with README clearly mapping sections |
 
 Categorized layout is for reading, not for mirroring the code tree. Keep it at most two levels deep under `onboarding-db/`.
 
@@ -112,11 +115,11 @@ If something is not found or not applicable, say `Not found`, `Not applicable`, 
 13. Deployment / Operations: separate local setup, environment config, production deployment, rollback, health checks, logs/metrics/tracing, and deployment topology.
 14. Commands / Tests Verification: classify commands as high/medium/low confidence based on run evidence, CI usage, or script inference.
 15. Evidence Chain Extraction: for every core module, core flow, core entity, major state change, async/job path, and major verification claim, record file path, symbol/object, key parameters/fields, what it does, and what it proves.
-16. Onboarding DB Draft: draft human-readable docs according to Layout Mode.
+16. Onboarding DB Draft: draft human-readable docs according to Onboarding DB Layout Mode; default to Expanded for new Deep Scan output.
 17. Batch Human Review: show files/facts/evidence/confidence before writing.
 18. Project Memory Backfill Proposal: propose only stable long-term summaries for `project.md` or `project/*.md`.
 
-When Standard or Expanded Layout Mode is selected, use `onboarding-db-templates.md` derivation tables to decide whether a file should be copied from a concrete template or derived from a Compact template section. Missing one-to-one templates are not a reason to skip required understanding dimensions.
+Use `onboarding-db-templates.md` derivation tables to decide whether a file should be copied from a concrete template or derived from another template section. Missing one-to-one templates are not a reason to skip required understanding dimensions.
 
 Core-module detail rule:
 
@@ -299,7 +302,7 @@ If the update adds or changes diagrams for a targeted question, include:
 
 Deep Scan is complete only when:
 
-- Layout Mode is recorded
+- Onboarding DB Layout Mode is recorded, defaulting to Expanded unless the human explicitly requested Compact/Standard or the agent is preserving an existing Compact/Standard onboarding-db
 - README has reading paths, module reading paths, **data-model reading path**, and **diagrams index**
 - overview/setup/code map are usable for a newcomer
 - module relationship map and boundary map exist or are explicitly blocked

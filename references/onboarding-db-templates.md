@@ -2,7 +2,9 @@
 
 Use this before creating or updating `.agent-loop/onboarding-db/` documents.
 
-Templates define understanding dimensions, not mandatory one-to-one physical files. Layout Mode decides how many files carry those dimensions.
+Templates define understanding dimensions, not mandatory one-to-one physical files. Onboarding DB Layout Mode decides how many files carry those dimensions.
+
+For new Deep Project Onboarding Scan output, default to `Expanded`. Use `Compact` or `Standard` only when the human explicitly requests fewer/simpler onboarding-db files, or when maintaining an existing onboarding-db already organized that way.
 
 ## Common Metadata
 
@@ -49,7 +51,7 @@ Use this structure when it helps readability:
 ## Project Memory Backfill
 ```
 
-Compact docs may combine `Evidence`, `Unknowns`, and `Project Memory Backfill` into short tables under each section.
+Compact docs may combine `Evidence`, `Unknowns`, and `Project Memory Backfill` into short tables under each section only when Compact was human-requested or inherited from an existing onboarding-db.
 
 ## Human-Readable Format
 
@@ -63,26 +65,27 @@ Use tables for comparisons, command lists, directories, modules, APIs, jobs, ris
 
 Onboarding-db human-readable documents default to Chinese. Keep stable artifact names, file names, commands, API names, and code symbols in English/as-is. Use another language only when the human explicitly requests it or the target project has a strong documented language requirement.
 
-## Layout Mapping
+## Onboarding DB Layout Mapping
 
 | Layout | Template Strategy |
 |---|---|
-| Compact | combine related dimensions into 5-7 files |
-| Standard | default to categorized `maps/`, `modules/`, and `flows/`; keep low-frequency topics combined unless needed |
-| Expanded | categorized docs with focused splits for modules, flows, deployment, security, observability, or decision history |
+| Expanded | default for new Deep Scan; categorized docs with focused splits for modules, flows, runtime, domain, quality, deployment, security, observability, or decision history |
+| Standard | human-requested or existing Standard; categorized docs with fewer focused splits; keep low-frequency topics combined |
+| Compact | human-requested or existing Compact; combine related dimensions into fewer files |
 
 Anti-misuse rules:
 
 - Compact means fewer physical files, not less understanding. Keep all required dimensions as visible sections, tables, diagrams, evidence, confidence, unknowns, and reading paths.
-- Standard is not "generate every template." Create only files justified by project reality, human goal, and the Standard File Derivation table.
+- Standard is not "generate every template." Create only files justified by project reality, human goal, and the File Derivation tables.
 - Expanded is not "one file per directory." Split only durable business/runtime modules, bounded contexts, complex flows, deployment/operations concerns, or repeated maintenance paths.
-- Human layout choice wins after risks are explained. If the agent recommends a different layout, ask before changing.
-- Layout upgrades or file reshaping require Batch Human Review.
+- Expanded is the default; do not downgrade to Compact or Standard just because the project appears small.
+- Human onboarding-db layout choice wins after risks are explained. If the human requests Compact or Standard, preserve all understanding dimensions and ask confirmation before writing.
+- Onboarding-db layout reshaping requires Batch Human Review.
 - Categorization is for reading, not for mirroring the repo tree. Keep onboarding-db at most two levels deep.
 - `module-map.md` is an index and navigation doc. Module detail belongs in `modules/<module>.md` when a dedicated module doc is warranted.
 - Complex flow details belong in `flows/<flow>.md` when a single merged flow section becomes hard to read. Keep merged Compact sections only when the flow remains small and clearly navigable from README.
 
-Compact suggested files:
+Compact suggested files when human-requested or preserving existing Compact:
 
 | File | Carries |
 |---|---|
@@ -94,7 +97,7 @@ Compact suggested files:
 | `flows-and-data.md` | core flows, jobs, data model, states |
 | `verification-and-risks.md` | tests, change impact, risks, unknowns, glossary summary |
 
-Standard may split:
+Standard may split when human-requested or preserving existing Standard:
 
 ```text
 maps/module-map.md
@@ -111,7 +114,7 @@ quality/testing-and-verification.md
 quality/risks-and-unknowns.md
 ```
 
-Expanded may add:
+Expanded default split:
 
 ```text
 modules/<name>.md (copy from templates/onboarding-db/module-template.md)
@@ -125,7 +128,7 @@ diagrams/<name>.md for standalone diagrams only when embedding is not enough
 
 ## Standard File Derivation
 
-Standard layout does not require a direct template file for every topic. Use the Compact templates as source shapes, then split by this table.
+Onboarding-db layout does not require a direct template file for every topic. Use existing templates as source shapes, then split by this table. For new Deep Scan output, prefer Expanded-style standalone files when they create useful reading paths.
 
 | Standard File | Derive From | Required Content |
 |---|---|---|
@@ -146,7 +149,7 @@ When deriving a Standard file, keep the common metadata block, summary-first sha
 
 ## Expanded File Derivation
 
-Expanded layout splits only areas that are complex enough to deserve their own reading path.
+Expanded onboarding-db layout is the default for new Deep Scan output, but it still splits only areas that are complex enough to deserve their own reading path.
 
 | Expanded File | Use / Derive From | Required Content |
 |---|---|---|

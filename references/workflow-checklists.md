@@ -88,7 +88,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Recommend enterprise when any hard trigger applies, including about 200k+ LOC, 5+ durable boundaries, 2+ test systems, 3+ execution environments, `project.md` above about 600 lines, repeated re-scans, or 5+ directory-level guidance files.
 - [ ] List onboarding uncertainties and follow-up scans.
 - [ ] Summarize proposed `project.md` before writing.
-- [ ] If Deep is selected, choose or recommend Compact / Standard / Expanded Layout Mode before proposing onboarding-db files.
+- [ ] If Deep is selected, record Onboarding DB Layout Mode before proposing onboarding-db files; default to Expanded unless the human explicitly requests Compact/Standard or an existing onboarding-db already uses it.
 - [ ] If Deep is selected, run P0 before P1 and P2.
 - [ ] If Targeted is selected, limit scan and onboarding-db updates to the selected module, flow, async task, deployment path, or problem area.
 - [ ] Use Batch Human Review before writing `.agent-loop/onboarding-db/`, multiple project memory facts, root guidance, or directory guidance.

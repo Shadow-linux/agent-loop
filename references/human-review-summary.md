@@ -169,7 +169,7 @@ For breaking changes, list every affected consumer, scan evidence, compatibility
 | Item | Summary | Evidence | Confidence | Human Decision |
 |---|---|---|---|---|
 | Mode | Quick / Deep / Targeted |  |  | approve / revise |
-| Layout | Compact / Standard / Expanded / none |  |  | approve / revise |
+| Onboarding DB Layout | Expanded default / Compact human-requested / Standard human-requested / preserve existing |  |  | approve / revise |
 | Scope |  |  |  | approve / revise |
 | Subagents | none / proposed lanes |  |  | approve / skip |
 | Write Plan | project memory / onboarding-db / guidance |  |  | approve / revise |

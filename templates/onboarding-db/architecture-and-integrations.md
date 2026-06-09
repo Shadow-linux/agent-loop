@@ -36,7 +36,7 @@ Use this section for compact deployment notes. Complex deployment belongs in `de
 
 ## Decisions And History
 
-Use this section in Compact Layout. Standard or Expanded layouts may use `decisions-and-history.md`.
+Use this section in Compact onboarding-db layout only when Compact was human-requested or inherited from an existing onboarding-db. Standard or Expanded onboarding-db layouts may use `decisions-and-history.md`.
 
 ## Related Diagrams
 

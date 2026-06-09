@@ -248,7 +248,7 @@ Self-Test Harness 的主要输入来自：
 | 场景组 | 重点验证 |
 |---|---|
 | 大仓库 / enterprise memory | 不把所有事实塞进 project.md |
-| Compact -> Standard 升级 | 复杂度上升时建议拆文档 |
+| Compact -> Expanded 重塑 | 复杂度上升时建议通过人工确认拆成 Expanded onboarding-db |
 | Expanded 模块拆分 | 只按业务边界拆，不按目录机械拆 |
 | Remote Project | 本地空目录不会误初始化普通项目 |
 | Re-Adopt | 一段时间没用 agent-loop 后能重新托管 |
