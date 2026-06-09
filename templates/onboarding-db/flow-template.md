@@ -1,6 +1,8 @@
 # Flow: <name>
 
-Document Language:
+Document Language: 中文
+Created:
+Last Updated:
 Last Verified:
 Confidence:
 Source Evidence:
@@ -8,39 +10,116 @@ Human Review Status: draft
 
 ## Purpose
 
-## Flow Summary
+## One Diagram To Understand The Flow
 
-| Start | Main Actors / Systems | End State | User / Business Outcome | Evidence | Confidence |
-|---|---|---|---|---|---|
+Use a small layered flowchart that answers one flow question. Do not start with a sequence diagram. Use `sequenceDiagram` only later for a narrow interaction detail after this flowchart exists.
 
-## Diagram
+```mermaid
+flowchart TB
+  subgraph API_Entry["① API / Entry"]
+    USER([用户 / Client])
+    API["API / Route / Trigger"]
+  end
 
-Use a small diagram that answers one question. Prefer module/process-level steps over function-level calls.
+  subgraph DomainLayer["② Domain / Service"]
+    SERVICE["Service / Use Case"]
+    DOMAIN["Domain Rule"]
+  end
 
-## Steps
+  subgraph DataLayer["③ Data / State"]
+    DB[(Database / Model)]
+    STATE["State Change"]
+  end
 
-| Step | Actor / Module | Action | Data / State | Failure Path | Evidence | Confidence |
-|---|---|---|---|---|---|---|
+  subgraph RuntimeLayer["④ Jobs / External"]
+    TASK["Job / Worker / Queue"]
+    EXT["External Service / Storage"]
+  end
 
-## Entrypoints And Exits
+  USER --> API --> SERVICE --> DOMAIN
+  SERVICE --> DB
+  SERVICE --> STATE
+  SERVICE -.-> TASK
+  TASK --> EXT
+  TASK --> DB
 
-| Type | Path / System | Meaning | Evidence | Confidence |
+  classDef user fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#000
+  classDef api fill:#e1f5ff,stroke:#01579b,stroke-width:2px,color:#000
+  classDef domain fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#000
+  classDef task fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:#000
+  classDef db fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#000
+  classDef external fill:#ffebee,stroke:#c62828,stroke-width:2px,color:#000
+  classDef state fill:#fffde7,stroke:#f9a825,stroke-width:2px,color:#000
+
+  class USER user
+  class API api
+  class SERVICE,DOMAIN domain
+  class DB db
+  class TASK task
+  class EXT external
+  class STATE state
+```
+
+## Main Flow Quick Notes
+
+```text
+Start
+-> entrypoint receives request or trigger
+-> service or use case applies business rule
+-> state is written or job is triggered
+-> async / external steps if any
+-> final state or side effect
+```
+
+## Call Chain Details
+
+| Stage | Trigger | File Path | Function / Object | Parameters / Fields | What It Does | Next Step | Evidence | Confidence |
+|---|---|---|---|---|---|---|---|---|
+
+## API Entrypoints
+
+| API / Route | Method | File Path | Handler / Object | Request Fields | Response / Side Effect | Evidence | Confidence |
+|---|---|---|---|---|---|---|---|
+
+## Task / Job Entrypoints
+
+| Task / Job | Trigger | Queue / Scheduler | File Path | Function / Object | Parameters / Fields | Retry / Recovery | Evidence | Confidence |
+|---|---|---|---|---|---|---|---|---|
+
+## Module / Service Responsibility Boundaries
+
+| Module / Service | Responsibility In This Flow | Not Responsible For | Evidence | Confidence |
 |---|---|---|---|---|
 
-## Data / State Changes
+## Key State Changes
 
-| Data / State | Change | Owner | Evidence | Confidence |
-|---|---|---|---|---|
+| Object / Entity | Field | Transition | Writer | Trigger / Guard | Side Effects | Evidence | Confidence |
+|---|---|---|---|---|---|---|---|
 
-## Async / Job / External Behavior
+## Retry / Compensation / Failure Paths
 
-| Trigger | Queue / Job / Callback / Service | Consumer / Handler | Retry / Recovery | Evidence | Confidence |
+| Failure / Delay | Where It Happens | Retry / Compensation | User / System Impact | Evidence | Confidence |
 |---|---|---|---|---|---|
 
-## Verification
+## Code Reading Order
+
+| Order | File / Symbol | Why Read This | Next |
+|---|---|---|---|
+
+## Common Misunderstandings
+
+| Misunderstanding | Correct Reading | Evidence |
+|---|---|---|
+
+## Verification Hints
 
 | Check | Command / File / Scenario | What It Proves | Evidence | Confidence |
 |---|---|---|---|---|
+
+## Evidence Chain
+
+| File Path | Symbol / Object | Parameters / Fields | Description | Proves | Confidence |
+|---|---|---|---|---|---|
 
 ## Risks And Unknowns
 

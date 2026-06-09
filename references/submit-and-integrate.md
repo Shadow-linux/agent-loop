@@ -75,10 +75,49 @@ When committing:
 
 - include only the intended files
 - avoid unrelated workspace changes
-- use a concise message tied to the feature/task
+- use the repository's commit message rules when present, such as `AGENTS.md`
+- for `agent-loop` skill repository commits, prefer Chinese and use type + version scope with a multi-line body
 - record commit hash in `notes.md`
 
 If unrelated changes exist, stop and ask whether to exclude them, split commits, or pause.
+
+## Commit Message Format
+
+For meaningful commits, do not use one-line-only messages.
+
+Preferred format:
+
+```text
+<type>(v<version>): <Chinese summary>
+
+- <concrete behavior/template/reference/scenario/doc change>
+- <concrete behavior/template/reference/scenario/doc change>
+- <concrete behavior/template/reference/scenario/doc change>
+```
+
+Allowed types:
+
+```text
+feat, fix, docs, refactor, test, chore
+```
+
+For the `agent-loop` skill repository:
+
+- prefer Chinese in the summary and body
+- include the current skill version scope, for example `docs(v1.2.0): 更新 onboarding scan 文档结构`
+- use 3-7 concrete bullet lines for behavior, gate, artifact, template, reference, validation scenario, or documentation changes
+- keep version numbers unchanged unless the human explicitly approves a version bump
+
+Example:
+
+```text
+docs(v1.2.0): 更新 onboarding scan 文档结构
+
+- 调整 onboarding-db 为分类目录结构
+- 增加 module-map 索引与 modules 详解分工
+- 补充 flow 文档的人类可读模板
+- 增加 Evidence Chain 与图索引要求
+```
 
 ## Pull Request Text
 

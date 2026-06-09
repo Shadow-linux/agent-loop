@@ -4,6 +4,10 @@
 
 ### Added
 - Added Project Onboarding Scan as a formal existing-project onboarding capability with Quick, Deep, and Targeted modes.
+- Added a v1.3.0 self-test harness proposal extension for real-project sampling where source code remains read-only and candidate onboarding outputs are written under `examples/<project-name>/`.
+- Added `examples/ai-meeting-minutes-backend/` as the designated output container for validating onboarding behavior against the real ai-meeting-minutes-backend project without copying source code.
+- Added onboarding memory integrity rules so `project.md` / root guidance claims about onboarding-db must be checked before reliance.
+- Added a validation scenario for projects whose memory points newcomers to a missing `.agent-loop/onboarding-db/README.md`.
 - Added `references/project-onboarding-scan.md` for Deep/Targeted scan rules, P0/P1/P2 scan priority, Layout Mode, diagrams, deployment placement, subagent scan synthesis, and completion criteria.
 - Added `references/onboarding-db.md` for onboarding-db reading, writing, freshness, problem routing, learning, and project memory backfill rules.
 - Added `references/onboarding-db-templates.md` for onboarding-db metadata, Compact/Standard/Expanded layout mapping, module cards, deployment, decision history, diagram, and batch review templates.
@@ -22,6 +26,20 @@
 - Added role-based README reading paths and bilingual glossary fields to onboarding-db templates.
 - Tightened Change Impact Analysis output fields and aligned glossary derivation with the bilingual glossary template.
 - Added a standalone onboarding-db `glossary.md` template and aligned proposal glossary fields with bilingual terminology rules.
+- Added root `CLAUDE.md` pointer template and validation coverage so onboarded projects keep `AGENTS.md` as the primary maintained startup guidance.
+- Added Plan Gate rules so agents cannot create tasks and immediately execute without either an accepted plan or a recorded No-Plan Decision for a trivial task.
+- Added categorized onboarding-db support with `maps/`, `modules/`, `flows/`, `runtime/`, `domain/`, and `quality/` layout rules for Standard/Expanded onboarding.
+- Added `templates/onboarding-db/module-map.md` and upgraded onboarding templates to capture module-detail docs, human-readable flow docs, and concrete Evidence Chain tables.
+- Added onboarding validation scenarios for module-map-as-index, human-readable flow quality, concrete evidence chains, and targeted diagram updates.
+- Added `agent-loop` repository commit message rules requiring type + version scope, Chinese-first summaries, and multi-line bodies for meaningful changes.
+- Added first-class onboarding data-model rules so persistent entities, storage mapping, relationships, ownership, fields, writers/readers, migrations, tests, and evidence cannot be hidden only inside flow docs.
+- Added `templates/onboarding-db/data-model.md` and `templates/onboarding-db/entity-template.md` for data-model indexes and complex entity detail docs.
+- Added onboarding validation scenarios for missing data-model docs and complex entity split behavior.
+- Added focused onboarding templates for boundary maps, directory maps, change-impact maps, state-flow docs, and state-trace docs.
+- Added onboarding validation scenarios for complex flow splitting and Chinese-default onboarding-db output.
+- Added Root Agent Bootstrap Gate rules so `AGENTS.md` is treated as the startup node for agent-loop ownership, gate modes, stops, and completion rules.
+- Added validation scenarios for stale root `AGENTS.md` bootstrap guidance and duplicated/divergent `CLAUDE.md` guidance.
+- Added flowchart-first onboarding diagram rules and validation so sequence diagrams are reserved for narrow detail views after process/module flowcharts exist.
 
 ### Changed
 - Wired existing project onboarding to explain Quick / Deep / Targeted onboarding modes before writing onboarding-db artifacts.
@@ -31,6 +49,16 @@
 - Hardened Submit / Integrate so known drift still requires a minimum recorded Drift Check before submit.
 - Clarified Existing Project Onboarding write targets, explicit re-adoption routing, and Guided Newcomer Onboarding entry from an existing onboarding-db.
 - Clarified Layout Mode decision rules and anti-misuse rules for Compact, Standard, Expanded, human overrides, and layout upgrades.
+- Hardened Existing Project Onboarding so root `AGENTS.md` / `CLAUDE.md` status must be present, created, or explicitly deferred before onboarding can be considered complete.
+- Hardened Task Auto-Run so it always requires an accepted task/story plan.
+- Changed onboarding routing and templates so categorized onboarding-db docs are first-class, while Compact mode may still use merged docs when README maps the content clearly.
+- Changed module and flow documentation quality bars to require stronger human-readable structure and concrete evidence paths for key claims.
+- Changed Submit / Integrate commit guidance so meaningful commits are not described as one-line concise messages by default.
+- Changed onboarding README requirements and template to include a data-model reading path when persistent data exists.
+- Changed onboarding-db human-readable documents to default to Chinese while keeping code symbols, file paths, commands, API names, and artifact names as-is.
+- Changed complex flow handling so cross-module, async, stateful, failure-prone, or repeatedly maintained flows are split into `flows/<flow>.md` instead of remaining only as merged summary rows.
+- Changed `templates/root-AGENTS.md` into an Agent Loop Bootstrap protocol with explicit Agent Ownership, Gate Modes, Required Stops, Completion Rules, artifact boundaries, and directory guidance rules.
+- Changed onboarding diagram templates to prefer colored layered Mermaid flowcharts for project, module, flow, and boundary understanding.
 
 ## 1.1.1 — 2026-06-04
 

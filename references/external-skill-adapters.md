@@ -65,7 +65,7 @@ Use Superpowers when available for these stages, while applying the path and gat
 | Brainstorm / Clarify if Needed | `superpowers:brainstorming` | context exploration, one-question-at-a-time, options, design approval | write to `product.md` / `spec.md`; do not write `docs/superpowers/specs/`; do not auto-transition to `writing-plans` |
 | Product Brief If Needed | `superpowers:brainstorming` plus product/PRD skills when available | product intent, alternatives, user outcomes | write to `product.md`; long-term consensus only via Project Memory Update |
 | Feature Spec | brainstorming/spec methods | ambiguity removal, scope check, acceptance thinking | write to `spec.md`; use agent-loop Human Review Summary |
-| Plan If Needed | `superpowers:writing-plans` | construction-grade plan, exact paths, test code, commands, expected outputs, no placeholders, self-review | write to `plan.md` or `plans/*`; do not write `docs/superpowers/plans/`; execution mode remains agent-loop controlled |
+| Plan Gate / Plan If Needed | `superpowers:writing-plans` | decide plan vs recorded No-Plan Decision; construction-grade plan, exact paths, test code, commands, expected outputs, no placeholders, self-review | write to `plan.md` or `plans/*`, or record No-Plan Decision only for trivial tasks; do not write `docs/superpowers/plans/`; execution mode remains agent-loop controlled |
 | Execute Task / Story | `superpowers:test-driven-development` | RED, verify RED, GREEN, verify GREEN, refactor | task status still controlled by Task Done Gate; evidence to `notes.md` |
 | Diagnose Failure | `superpowers:systematic-debugging` | reproduce, isolate, trace root cause before fixing | findings to `notes.md`; return to Execute / Verify / Review |
 | Verify | `superpowers:verification-before-completion` | evidence before completion claim | evidence to `notes.md`; completion still controlled by agent-loop |
@@ -88,13 +88,16 @@ When `Brainstorm / Clarify if Needed` starts and Superpowers is available:
 
 ## Writing-Plans Adapter
 
-When `Plan If Needed` starts and Superpowers is available:
+When `Plan Gate / Plan If Needed` starts and Superpowers is available:
 
 1. Use `superpowers:writing-plans` as the preferred method.
-2. Require exact files, code context, test code, commands, expected RED/GREEN output, no placeholders, and self-review.
-3. Save the plan to `plan.md` for the active task/story, or to `plans/YYYY-MM-DD-<task>-<slug>.md` in complex artifact mode.
-4. Do not create `docs/superpowers/plans/*` unless the human explicitly requests native Superpowers docs and confirms the external directory after path-override explanation.
-5. Do not let the external skill choose execution mode. Offer agent-loop modes: Strict Mode, Feature Auto-Loop, Task Auto-Run, or human-approved subagent execution.
+2. First decide whether the selected task/story requires a construction-grade plan.
+3. Require a construction-grade plan when the task is multi-file, behavior-changing, test-changing, interface-changing, data/API/async/security/deployment-related, cross-module, TDD-heavy, subagent-based, or human-requested.
+4. If a plan is required, require exact files, code context, test code, commands, expected RED/GREEN output, no placeholders, and self-review.
+5. Save the plan to `plan.md` for the active task/story, or to `plans/YYYY-MM-DD-<task>-<slug>.md` in complex artifact mode.
+6. If a plan is not required, record the No-Plan Decision in `notes.md` and the selected task row/detail with exact files, exact verification command, and why no trigger applies.
+7. Do not create `docs/superpowers/plans/*` unless the human explicitly requests native Superpowers docs and confirms the external directory after path-override explanation.
+8. Do not let the external skill choose execution mode. Offer agent-loop modes: Strict Mode, Feature Auto-Loop, Task Auto-Run, or human-approved subagent execution. Task Auto-Run still requires an accepted plan.
 
 ## TDD Adapter
 

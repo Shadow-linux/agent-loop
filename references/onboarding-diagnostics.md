@@ -67,7 +67,7 @@ Read order:
 
 1. `README.md` reading path and module path
 2. `change-impact-map.md` or `verification-and-risks.md` Change Impact Map
-3. relevant module doc or `module-map.md`
+3. relevant module doc such as `modules/<module>.md` or `maps/module-map.md`
 4. relevant flow doc or `core-flows.md`
 5. API/contract/integration docs when a boundary is involved
 6. related tests and verification commands
@@ -139,7 +139,7 @@ Rules:
 
 - If no writer is found, say `Unknown`, list searched evidence, and recommend a targeted scan.
 - Do not infer business reason from code alone. Use decisions/history docs or ask the human.
-- If a stable trace is discovered, propose updates to `data-model.md`, `flows-and-data.md`, `state-flow-<entity>.md`, or the relevant flow/module docs.
+- If a stable trace is discovered, propose updates to `domain/data-model.md`, `flows/<flow>.md`, `domain/state-flow-<entity>.md`, `domain/state-trace-<entity>.md`, or Compact-equivalent docs.
 
 ## Design Decision Routing
 

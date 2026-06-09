@@ -34,7 +34,7 @@ Project Entry → Remote Project Discovery if needed
 → Targeted Feature Scan if needed → Feature Spec → Requirement Checklist
 → Work Breakdown → Delivery Contract if needed → Test Design
 → E2E Discovery if Web → Technical Design / Code Context
-→ Plan if needed → Analyze Consistency
+→ Plan Gate / Plan if needed → Analyze Consistency
 → Subagent Execution if approved → Execute Task / Story
 → Verify → Review → Drift Check → Project Memory Update
 → Feature Completion Check → Submit / Integrate if requested
@@ -61,6 +61,12 @@ Project Entry → Remote Project Discovery if needed
   project.md                          # Long-term project memory
   project/                            # optional enterprise memory detail files
   onboarding-db/                      # optional human-readable project onboarding docs
+    maps/                             # optional categorized navigation docs
+    modules/                          # optional core module detail docs
+    flows/                            # optional flow detail docs
+    runtime/                          # optional run / async / deploy docs
+    domain/                           # optional data / state / glossary docs
+    quality/                          # optional testing / risk docs
   requirements/
     YYYY-MM-DD-<topic>/
       README.md
@@ -110,7 +116,7 @@ The agent will:
 - Inspect the repo
 - Classify the entry scenario (new / existing / remote / resume)
 - Load the right references
-- Propose `.agent-loop/project.md` and root `AGENTS.md`
+- Propose `.agent-loop/project.md`, root `AGENTS.md`, and a `CLAUDE.md` pointer to `AGENTS.md`
 
 For existing projects, the agent offers onboarding modes:
 
@@ -136,7 +142,7 @@ After project init/onboarding is accepted, the agent will:
 
 > "带我熟悉这个项目，从哪里开始看？"
 
-If `.agent-loop/onboarding-db/` exists, the agent uses it first: it checks freshness, gives a short orientation, recommends one reading path, answers targeted questions, and proposes focused diagram/doc updates only after confirmation.
+If `.agent-loop/onboarding-db/` exists, the agent uses it first: it checks freshness, gives a short orientation, recommends one reading path, answers targeted questions, and proposes focused diagram/doc updates only after confirmation. Deep onboarding may use categorized docs such as `maps/`, `modules/`, `flows/`, `runtime/`, `domain/`, and `quality/`, while Compact mode may keep equivalent content in merged files. Onboarding-db human-readable docs default to Chinese, while code symbols, file paths, commands, API names, and artifact names stay as-is.
 
 ### 5. Continue Later
 

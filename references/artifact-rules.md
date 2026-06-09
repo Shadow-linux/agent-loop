@@ -176,17 +176,17 @@ Use stable, human-readable names. Layout Mode controls physical files:
 
 ```text
 Compact: combined docs such as code-map.md, architecture-and-integrations.md
-Standard: topic docs such as module-map.md, core-flows.md, testing-and-verification.md
-Expanded: focused docs such as module-<name>.md or flow-<name>.md only when complexity justifies them
+Standard: categorized docs such as maps/module-map.md, modules/<module>.md, flows/<flow>.md
+Expanded: categorized docs plus focused splits for runtime/domain/quality topics only when complexity justifies them
 ```
 
-Diagrams live under:
+Standalone diagrams live under:
 
 ```text
 .agent-loop/onboarding-db/diagrams/
 ```
 
-Do not create whole-repo function graphs or full file dependency graphs by default.
+Embedded diagrams inside module/flow/runtime docs are preferred when they answer the question locally. Do not create whole-repo function graphs or full file dependency graphs by default.
 
 ## Plan Lifecycle
 

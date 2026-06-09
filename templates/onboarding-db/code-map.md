@@ -1,6 +1,8 @@
 # Code Map
 
-Document Language:
+Document Language: 中文
+Created:
+Last Updated:
 Last Verified:
 Confidence:
 Source Evidence:
@@ -12,33 +14,29 @@ Human Review Status: draft
 
 ## Main Directories
 
-| Path | Responsibility | Read First? | Related Module | Evidence | Confidence |
-|---|---|---|---|---|---|
+| Path | Responsibility | Read First? | Related Module | Important Symbols / Objects | Evidence | Confidence |
+|---|---|---|---|---|---|---|
 
 ## Entrypoints
 
-| Entrypoint | Type | Path | What Starts Here | Related Module | Evidence | Confidence |
-|---|---|---|---|---|---|---|
+| Entrypoint | Type | File Path | Function / Object | What Starts Here | Related Module | Evidence | Confidence |
+|---|---|---|---|---|---|---|---|
 
 ## Module Summary
 
-## Module: <name>
-
-Purpose:
-Boundary:
-Entrypoints:
-Core Call Chain:
-Core Flows:
-Key Files:
-Related Diagram:
-Evidence:
-Confidence:
+| Module | Responsibility | Detail Level | Read First | Then Read | Call Chain / Related Diagram | Evidence | Confidence |
+|---|---|---|---|---|---|---|---|
 
 ## Generated / Vendor / Ignored Areas
 
 ## Test Directories
 
 ## Config And Scripts
+
+## Evidence Chain
+
+| File Path | Symbol / Object | Parameters / Fields | Description | Proves | Confidence |
+|---|---|---|---|---|---|
 
 ## Evidence
 

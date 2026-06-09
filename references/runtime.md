@@ -27,7 +27,7 @@ Classify the project into exactly one state:
 | `existing-project` | No `.agent-loop/` or legacy `agent-loop/`; meaningful existing code | Existing Project Onboarding |
 | `resume` | `.agent-loop/` or legacy `agent-loop/` exists and project memory looks current | Resume / Start Feature |
 | `re-adopt` | `.agent-loop/` or legacy `agent-loop/` exists, but recent work happened outside the loop or the human asks to re-adopt/re-take-over/re-sync the project | Re-Adopt Agent Loop Project / Recovery Backfill |
-| `stale-memory` | `.agent-loop/` or legacy `agent-loop/` exists but docs conflict with code reality | Reconcile Project Context / Recovery Backfill |
+| `stale-memory` | `.agent-loop/` or legacy `agent-loop/` exists but docs conflict with code reality, or long-term memory indexes point to missing/stale artifacts | Reconcile Project Context / Recovery Backfill |
 | `guided-onboarding` | `.agent-loop/onboarding-db/` exists and the human asks to be onboarded, guided through the project, or helped understand where to start | Guided Newcomer Onboarding |
 | `active-feature` | active feature exists and next action is clear | Continue Current Stage |
 | `blocked` | blocker or missing decision prevents next stage | Ask Human / Diagnose |
@@ -45,12 +45,15 @@ Use this order:
 7. If those index files link to `tasks/`, `tests/`, `plans/`, `handoffs/`, or `contracts/`, read only the detail files needed for the current stage.
 8. Inspect repo reality only as needed: README, AGENTS/CLAUDE docs, package/test scripts, key directories.
 9. If local repo reality points to remote execution, or the human says this is a remote project, load `references/remote-project-discovery.md`. An empty local directory alone is not enough; if there are no remote hints, classify as `new-project`.
-10. Compare project memory with obvious repo reality.
-11. Choose the next stage.
+10. Verify long-term memory index targets before trusting them. If `project.md`, root guidance, or current artifacts point to onboarding-db, enterprise `project/*.md`, feature docs, contracts, or guidance files, check that the referenced path exists before relying on it.
+11. Compare project memory with obvious repo reality.
+12. Choose the next stage.
 
 If `.agent-loop/onboarding-db/` exists and the human asks to be guided through the project, understand where to start, or explain project structure before coding, classify as `guided-onboarding`, load `references/onboarding-db.md`, and use Guided Newcomer Onboarding before normal resume. Do not rerun Deep Project Onboarding Scan by default.
 
-If code reality and the memory root disagree, or if the human says the project used `agent-loop` before but recent work bypassed it, classify as `re-adopt` or `stale-memory`, treat code as the current fact base for agent-maintained docs, preserve human requirements as original intent, and load `references/recovery-and-backfill.md`.
+If code reality and the memory root disagree, if long-term memory indexes point to missing artifacts, or if the human says the project used `agent-loop` before but recent work bypassed it, classify as `re-adopt` or `stale-memory`, treat code as the current fact base for agent-maintained docs, preserve human requirements as original intent, and load `references/recovery-and-backfill.md`.
+
+If `project.md` claims an onboarding layout, lists onboarding-db files, or root `AGENTS.md` / `CLAUDE.md` tells newcomers to start from `.agent-loop/onboarding-db/README.md`, but `.agent-loop/onboarding-db/` or its README is missing, classify as `stale-memory`. Do not run Guided Newcomer Onboarding from the missing path. Recommend the smallest onboarding memory reconcile: report the missing index target, use existing docs/code as evidence, and ask before updating `project.md`, root guidance, or creating onboarding-db.
 
 Default memory root for new projects is `.agent-loop/`. If legacy `agent-loop/` exists, use it for the current run and ask before migrating.
 
@@ -107,7 +110,7 @@ Delivery Contract If Needed
 Test Design
 E2E Discovery if Web
 Technical Design / Code Context
-Plan if Needed
+Plan Gate / Plan if Needed
 Analyze Consistency
 Subagent Execution If Approved
 Execute Task / Story
@@ -158,7 +161,7 @@ Feature Auto-Loop means:
 Feature Auto-Loop = give one feature a bounded release lane.
 ```
 
-In this mode, the agent may continue through Work Breakdown, Delivery Contract recommendation if needed, Test Design, E2E Discovery if Web, Technical Design / Code Context, Plan if Needed, Analyze Consistency, Execute Agent-ready Tasks, Verify, Review, Drift Check, and Project Memory Update for the current feature. It must stop before creating or updating Delivery Contract files, contract acceptance, breaking contract changes, Submit / Integrate, and Pause / Close.
+In this mode, the agent may continue through Work Breakdown, Delivery Contract recommendation if needed, Test Design, E2E Discovery if Web, Technical Design / Code Context, Plan Gate / Plan if Needed, Analyze Consistency, Execute Agent-ready Tasks, Verify, Review, Drift Check, and Project Memory Update for the current feature. It must not skip Plan Gate before execution. It must stop before creating or updating Delivery Contract files, contract acceptance, breaking contract changes, Submit / Integrate, and Pause / Close.
 
 Task Auto-Run means:
 

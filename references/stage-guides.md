@@ -49,7 +49,7 @@ Write after confirmation:
 - `.agent-loop/requirements/`
 - `.agent-loop/features/`
 - root `AGENTS.md`
-- root `CLAUDE.md -> AGENTS.md` when supported
+- root `CLAUDE.md -> AGENTS.md` pointer; if symlink/include is not supported, write a short pointer file
 
 Use `templates/project.md`.
 Use `templates/root-AGENTS.md` for project guidance.
@@ -57,6 +57,8 @@ Use `templates/root-AGENTS.md` for project guidance.
 Exit:
 
 - project memory drafted and accepted
+- root `AGENTS.md` status is `present`, `created`, or `human-deferred`
+- root `CLAUDE.md` status is `points-to-AGENTS`, `created-pointer`, or `human-deferred`
 - next stage: Requirement Archive when the human supplied requirements/prototypes in chat or files; otherwise Brainstorm / Clarify, Product Brief if Needed, or Feature Spec when intent is already stable
 
 ## Remote Project Discovery
@@ -183,6 +185,7 @@ Output before writing:
 Directory guidance:
 
 - identify existing root and directory-level `AGENTS.md` / `CLAUDE.md`
+- verify whether `CLAUDE.md` loads or points to `AGENTS.md`; do not maintain two independent root guidance bodies
 - record guidance status in `project.md`
 - propose directory-level `AGENTS.md` only for long-lived boundary directories
 - ask human confirmation before creating or changing guidance files
@@ -200,6 +203,8 @@ Write after confirmation:
 Exit:
 
 - human accepts project memory
+- root guidance status is `present`, `created`, or `human-deferred` for `AGENTS.md`
+- `CLAUDE.md` status is `points-to-AGENTS`, `created-pointer`, or `human-deferred`
 - next stage: Start Feature or Targeted Feature Scan
 
 ## Reconcile Project Context / Re-Adopt Agent Loop Project
@@ -222,6 +227,7 @@ Output before writing:
 - what code reality shows
 - which recent outside-loop changes appear relevant
 - whether original human requirements conflict with code
+- root `AGENTS.md` and `CLAUDE.md` guidance status, including whether `CLAUDE.md` points to `AGENTS.md`
 - what should update
 - what should stay unchanged
 
@@ -229,6 +235,7 @@ Write after confirmation:
 
 - `project.md` and/or feature docs
 - reconciliation note in `notes.md` when feature-specific
+- root `AGENTS.md` / `CLAUDE.md` pointer only if startup guidance is missing, stale, duplicated, or human-confirmed for sync
 
 Exit:
 
@@ -549,21 +556,30 @@ Exit:
 
 - code context is concrete enough for a construction-grade plan, or the task becomes Human-gated
 
-## Plan If Needed
+## Plan Gate / Plan If Needed
 
-Entry: selected task/story is complex, multi-file, subagent-bound, or human requests plan.
+Entry: selected task/story has accepted tasks and tests, and Technical Design / Code Context has enough evidence to decide whether a construction plan is required.
+
+This is a mandatory gate before Execute Task / Story. Do not create tasks and then immediately implement.
 
 Load:
 
 - `implementation-planning.md`
 - `external-skill-adapters.md` when Superpowers or another plan-writing skill is available
 
-Write:
+Write one of:
 
 - `plan.md`
+- No-Plan Decision in `notes.md` and the selected task row/detail
 
 Rules:
 
+- decide whether a plan is required before any code implementation
+- create `plan.md` when the task/story is complex, multi-file, changes behavior, changes tests, touches interfaces, crosses module boundaries, involves data/API/async/security/deployment behavior, needs TDD design, needs subagents, or the human asks for a plan
+- a No-Plan Decision is allowed only for a trivial, low-risk, single-file or documentation-only task with clear acceptance, exact files, and exact verification command
+- in Strict Mode, ask human confirmation before executing from a No-Plan Decision
+- in Feature Auto-Loop, a No-Plan Decision may proceed only if the task is Agent-ready and no plan trigger applies
+- Task Auto-Run always requires an accepted task/story plan; No-Plan Decision cannot enable Task Auto-Run
 - plan scope is `task` or `story`
 - default scope is task
 - assume the executor has near-zero codebase context
@@ -579,19 +595,19 @@ Rules:
 
 Exit:
 
-- human accepts plan
+- human accepts plan, or human accepts/Feature Auto-Loop records the No-Plan Decision
 - after acceptance, explain that Strict Mode asks before each stage and offer Task Auto-Run for this task/story if the human wants fewer confirmations
 
 ## Analyze Consistency
 
-Entry: before implementation when spec/tasks/tests/plan exist.
+Entry: before implementation when spec/tasks/tests and either plan or a recorded No-Plan Decision exist.
 
 Check:
 
 - each accepted requirement has task coverage
 - each task maps to spec or explicit technical need
 - tests cover acceptance criteria
-- plan scope matches selected task/story
+- plan scope matches selected task/story, or No-Plan Decision is limited to a trivial task with exact files and verification
 
 Write:
 
@@ -643,13 +659,16 @@ Exit:
 
 ## Execute Task / Story
 
-Entry: selected execution unit accepted.
+Entry: selected execution unit accepted and Plan Gate has passed.
 
 Rules:
 
 - default unit is task
 - story execution requires explicit human choice
 - whole-feature execution requires explicit human confirmation and only for tiny features
+- do not execute a task directly after task creation; first confirm accepted plan or recorded No-Plan Decision
+- if neither accepted plan nor No-Plan Decision exists, route back to Plan Gate / Plan If Needed
+- Task Auto-Run requires an accepted plan for the selected task/story
 - in Feature Auto-Loop, execute only Agent-ready tasks and stop at Human-gated tasks
 - in Task Auto-Run, execute only the selected task/story and stop after evidence/review/drift updates and Task Done Gate status update
 - TDD by default

@@ -20,6 +20,7 @@ Use this protocol when:
 
 - Existing Project Onboarding finds code reality that should be backfilled into newly proposed `agent-loop` memory
 - `.agent-loop/project.md` is stale
+- `.agent-loop/project.md`, root guidance, or feature artifacts point to missing long-term memory files such as `.agent-loop/onboarding-db/README.md`, enterprise `project/*.md`, contracts, or guidance files
 - the project used `agent-loop` before, but recent development happened without updating `agent-loop`
 - the human says "re-adopt", "re-take-over", "re-sync", "重新托管", "重新接管", "回补 agent-loop", or similar
 - a feature was partly built but docs are incomplete
@@ -35,12 +36,13 @@ Use this when `.agent-loop/` or legacy `agent-loop/` exists but a period of deve
 Do not start new feature work first. The agent should:
 
 1. Read the active memory root's `project.md` and active or paused feature docs. If `project.md` says `Memory Mode: enterprise`, read only the relevant linked `.agent-loop/project/*.md` or legacy `agent-loop/project/*.md` files.
-2. Inspect current code reality only as needed: README, scripts, tests, obvious changed areas, entry points, and relevant recent feature files.
-3. Compare current code/tests/scripts against `project.md`, `spec.md`, `tasks.md`, `tests.md`, `plan.md`, and `notes.md`.
-4. Produce the Compare Matrix.
-5. Propose backfill grouped by target file.
-6. Ask human confirmation before changing any `agent-loop` docs.
-7. After backfill, recommend exactly one next stage: continue old feature, run verification, close completed feature, pause, or start a new feature.
+2. Check that project-memory index targets exist before relying on them: onboarding-db README and indexed docs, enterprise project detail files, active feature docs, contracts, root guidance, and directory guidance.
+3. Inspect current code reality only as needed: README, scripts, tests, obvious changed areas, entry points, and relevant recent feature files.
+4. Compare current code/tests/scripts and index-target existence against `project.md`, `spec.md`, `tasks.md`, `tests.md`, `plan.md`, and `notes.md`.
+5. Produce the Compare Matrix.
+6. Propose backfill grouped by target file.
+7. Ask human confirmation before changing any `agent-loop` docs.
+8. After backfill, recommend exactly one next stage: continue old feature, run verification, close completed feature, pause, or start a new feature.
 
 If code behavior contradicts original human requirements, stop and ask whether to keep code, change code, or update scope. Never rewrite original requirement files.
 
@@ -51,6 +53,7 @@ Minimum reconciliation cannot be bypassed. If the human asks to skip old-documen
 - Active Feature and Paused Features truth
 - affected code boundaries for the next requested feature
 - known code-vs-doc conflicts that could change the next task
+- missing long-term index targets that the next task or newcomer guidance would rely on
 - whether project memory mode should remain simple or be recommended as enterprise
 
 Only after these are trustworthy enough may the agent continue to a new feature or targeted feature scan.
@@ -121,6 +124,18 @@ Action:
 - mark related tasks as `todo` or `blocked`
 - recommend Work Breakdown, Plan, or Execute
 - do not pretend the feature is complete
+
+### Index Points To Missing Artifact
+
+`project.md`, root guidance, or a feature index points to a file or directory that does not exist.
+
+Action:
+
+- classify as `stale-memory`
+- do not rely on the missing artifact
+- use code reality and existing docs for temporary answers
+- propose one of: create the missing artifact, remove/correct the index, or mark it planned/deferred
+- ask human confirmation before changing memory or creating onboarding-db
 
 ### Code Conflicts With Human Requirements
 

@@ -44,19 +44,21 @@ When you start a conversation, the agent classifies the project into exactly one
 ### Init Project
 - **Entry**: New project, no `.agent-loop/` or legacy `agent-loop/`.
 - **Load**: `project-guidance.md`, `project-memory-mode.md`, `project-architecture-init.md`.
-- **Write after confirmation**: `.agent-loop/project.md`, root `AGENTS.md` / `CLAUDE.md`.
+- **Write after confirmation**: `.agent-loop/project.md`, root `AGENTS.md`, and `CLAUDE.md` pointer to `AGENTS.md`.
 
 ### Existing Project Onboarding
 - **Entry**: Existing code, no `.agent-loop/` or legacy `agent-loop/`.
 - **Load**: `existing-project-onboarding.md`, `project-guidance.md`, `project-memory-mode.md`.
 - **Inspect**: README, docs, package/test scripts, key directories (layered scan).
-- **Write after confirmation**: `.agent-loop/project.md`, `.agent-loop/requirements/`, `.agent-loop/features/`, root `AGENTS.md` / `CLAUDE.md` when missing or stale, optional enterprise `.agent-loop/project/*.md`, and optional `.agent-loop/onboarding-db/` when Deep or Targeted onboarding docs are confirmed.
+- **Write after confirmation**: `.agent-loop/project.md`, `.agent-loop/requirements/`, `.agent-loop/features/`, root `AGENTS.md` plus `CLAUDE.md` pointer when missing or stale, optional enterprise `.agent-loop/project/*.md`, and optional `.agent-loop/onboarding-db/` when Deep or Targeted onboarding docs are confirmed.
+- **Completion gate**: onboarding is not complete until root `AGENTS.md` is present/created/deferred and `CLAUDE.md` points to `AGENTS.md`, is created as a pointer, or is explicitly deferred.
 - **Modes**:
   - **Quick Onboarding**: enough project memory and guidance to continue work safely.
   - **Deep Project Onboarding Scan**: adds `.agent-loop/onboarding-db/`, reading paths, diagrams, evidence/confidence, and project-memory backfill proposal.
   - **Targeted Onboarding Scan**: scans one module, flow, async task, deployment path, or problem area.
 - **Deep/Targeted Load**: `project-onboarding-scan.md`, `onboarding-db.md`, `onboarding-db-templates.md`.
 - **Rule**: onboarding-db writes use Batch Human Review and require human confirmation.
+- **Language**: onboarding-db human-readable prose defaults to Chinese; keep file paths, commands, API names, artifact names, and code symbols as-is.
 
 ### Remote Project Discovery
 - **Entry**: Human says project is remote, or local is only an entry point.
@@ -66,6 +68,7 @@ When you start a conversation, the agent classifies the project into exactly one
 - **Entry**: `.agent-loop/` exists but memory is stale, or recent work bypassed the loop.
 - **Action**: Compare code reality with `project.md` and feature docs. Propose backfill. Ask before writing.
 - **Rule**: If the human says re-adopt, re-sync, resume after outside-loop work, or take over an old agent-loop project, route here before new feature work.
+- **Guidance check**: Re-check root `AGENTS.md` and `CLAUDE.md`; if `CLAUDE.md` no longer points to `AGENTS.md`, propose converting it to a pointer after confirmation.
 
 ### Requirement Archive
 - **Entry**: Human provides requirement/prototype/materials.
@@ -108,18 +111,19 @@ When you start a conversation, the agent classifies the project into exactly one
 - **Inspect**: Exact files likely to change, nearby tests, existing functions, data flow, call chain, auth, validation, side effects.
 - **Rule**: Do not invent signatures or file paths. Prefer existing local patterns.
 
-### Plan (If Needed)
-- **Entry**: Selected task/story is complex, multi-file, or human requests a plan.
+### Plan Gate / Plan (If Needed)
+- **Entry**: Selected task/story is ready for execution decision.
 - **Load**: `implementation-planning.md`.
-- **Write**: `plan.md`.
-- **Rule**: Construction-grade. Exact paths, signatures, test code, commands, expected RED/GREEN output, rollback, risks. No placeholders like "TBD" or "write tests".
+- **Write**: `plan.md`, or a recorded No-Plan Decision for a trivial task.
+- **Rule**: Do not execute immediately after task creation. A non-trivial task needs construction-grade plan with exact paths, signatures, test code, commands, expected RED/GREEN output, rollback, risks. No placeholders like "TBD" or "write tests".
+- **Task Auto-Run**: requires an accepted plan; No-Plan Decision is not enough.
 
 ### Analyze Consistency
-- **Entry**: Before implementation when spec/tasks/tests/plan exist.
-- **Check**: Every requirement has task coverage. Every task maps to spec or technical need. Tests cover acceptance criteria. Plan scope matches selected task/story.
+- **Entry**: Before implementation when spec/tasks/tests and plan or No-Plan Decision exist.
+- **Check**: Every requirement has task coverage. Every task maps to spec or technical need. Tests cover acceptance criteria. Plan scope matches selected task/story, or No-Plan Decision is justified.
 
 ### Execute Task / Story
-- **Entry**: Selected execution unit accepted.
+- **Entry**: Selected execution unit accepted and Plan Gate passed.
 - **Rule**: TDD by default. Verify RED before implementation. Verify GREEN after. Record evidence.
 - **Task status flow**: `todo → in-progress → review → done`.
 - **Important**: A task enters `review` after implementation and verification. It enters `done` only after the **Task Done Gate** passes.
@@ -241,6 +245,19 @@ Plan metadata:      Plan ID: YYYY-MM-DD-<task>-<slug>
 ```
 
 Requirement set dates are **archive dates only**. They are not deadlines, start dates, or end dates. Feature directory dates identify when the feature workspace was created or adopted; do not infer delivery deadlines or feature duration from them.
+
+Onboarding-db may use categorized docs such as:
+
+```text
+maps/
+modules/
+flows/
+runtime/
+domain/
+quality/
+```
+
+Compact mode may keep the same understanding dimensions in merged files when `README.md` clearly maps where each topic lives.
 
 ---
 

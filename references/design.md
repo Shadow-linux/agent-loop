@@ -218,7 +218,7 @@ Project Entry
 → Test Design
 → E2E Discovery if Web
 → Technical Design / Code Context
-→ Plan if Needed
+→ Plan Gate / Plan if Needed
 → Analyze Consistency
 → Subagent Execution If Approved
 → Execute Task / Story

@@ -15,7 +15,8 @@ Expected:
 - classify `new-project`
 - propose Init Project
 - ask before creating `.agent-loop/`
-- create `project.md`, `requirements/`, `features/`, root `AGENTS.md`, and `CLAUDE.md` guidance only after confirmation
+- create `project.md`, `requirements/`, `features/`, root `AGENTS.md`, and `CLAUDE.md -> AGENTS.md` pointer only after confirmation
+- do not consider Init Project complete unless root `AGENTS.md` is present/created/deferred and root `CLAUDE.md` points to `AGENTS.md`, is created as a pointer, or is explicitly deferred
 
 ## 2. Existing Codebase Without `.agent-loop/` Or Legacy `agent-loop/`
 
@@ -314,6 +315,152 @@ Expected:
 - create deployment/operations split docs only for evidenced deployment concerns such as multiple environments, CI/runtime topology, release/rollback, migrations, health checks, or repeated operational maintenance
 - record support-only areas with evidence in `module-map.md` or Compact/Standard equivalent
 - use Batch Human Review before writing Expanded module docs
+
+## 2h-10. Module Map Stays An Index
+
+Prompt:
+
+```text
+Use agent-loop. Deep onboarding found eight core modules. Put all the full module details into module-map.md so everything is in one place.
+```
+
+Expected:
+
+- refuse to use `module-map.md` as the only giant encyclopedia by default
+- keep `module-map.md` as index, relationship map, dependency summary, and module coverage view
+- create or recommend `modules/<module>.md` for core modules that need durable reading paths
+- allow support-only areas to remain index-only with evidence
+- keep README module reading paths pointing to module docs or Compact-equivalent sections
+
+## 2h-11. Flow Docs Must Be Human-Readable
+
+Prompt:
+
+```text
+Use agent-loop. The core flow doc has a diagram and a generic steps table. Mark it complete.
+```
+
+Expected:
+
+- reject completion for human onboarding
+- require main-flow quick notes, call-chain details, API entrypoints, task/job entrypoints when present, state changes, retry/compensation, code reading order, and verification hints
+- require the flow question answered by the diagram to be clear
+- require evidence chain entries for key stages and state changes
+- use Batch Human Review before replacing the flow doc
+
+## 2h-12. Evidence Chain Must Be Concrete
+
+Prompt:
+
+```text
+Use agent-loop. Evidence for the auth module and order flow says only "source code" and "README".
+```
+
+Expected:
+
+- reject the evidence chain as too vague for key claims
+- require real file paths, concrete symbols or objects, relevant parameters or fields, a brief description, what the evidence proves, and confidence
+- allow `Unknown`, `Not found`, or `Not applicable` when evidence is missing
+- do not invent functions, parameters, or paths to fill the table
+- ensure key diagrams, call chains, and verification claims can be traced to evidence entries
+
+## 2h-13. Targeted Question Can Propose A Small Diagram Update
+
+Prompt:
+
+```text
+Use agent-loop. I still do not understand how the invoice retry job picks up failed records and updates the final status.
+```
+
+Expected:
+
+- route to Targeted Onboarding Scan for the smallest relevant module/flow/runtime scope
+- answer the question first using existing docs plus focused code reality
+- propose the smallest useful diagram update in the most relevant target doc, not a global repository graph
+- include question, proposed diagram, target file, and key evidence table in Batch Human Review
+- if the answer touches a state writer or retry path, require evidence chain updates together with the diagram proposal
+
+## 2h-14. Data Model Cannot Hide Inside Flow Docs
+
+Prompt:
+
+```text
+Use agent-loop. Deep onboarding found ORM models, migrations, and core entities, but onboarding only mentions data fields inside flow docs. Is onboarding-db complete?
+```
+
+Expected:
+
+- reject completion when persistent data exists but there is no `domain/data-model.md` or Compact-equivalent Data Model section
+- require core entities, storage/model mapping, relationships, ownership, key fields, state fields, writers/readers, API/flow/job usage, migrations/seeds, tests, evidence, and confidence
+- require README data-model reading path when persistent data exists
+- require a data entity map or explicit blocker
+- use Batch Human Review before writing or reorganizing data-model docs
+
+## 2h-15. Complex Entity Needs Entity Detail Doc
+
+Prompt:
+
+```text
+Use agent-loop. The Meeting entity has many fields, status transitions, migrations, async writers, and several flows reading it. Put everything in domain/data-model.md.
+```
+
+Expected:
+
+- keep `domain/data-model.md` as an index and relationship map instead of a giant field dump
+- create or recommend `domain/entities/meeting.md` using `entity-template.md`
+- require storage mapping, fields, relationships, state fields, writers, readers/consumers, related flows, migrations/history, tests, risks, evidence chain, and confidence
+- require a single-entity relationship diagram when the entity is too complex to understand from the global data entity map
+- do not create entity detail docs for simple lookup/config tables or join tables without business meaning
+- use Batch Human Review before writing the entity doc
+
+## 2h-16. Complex Flow Needs Its Own Flow Doc
+
+Prompt:
+
+```text
+Use agent-loop. The payment settlement flow crosses API, billing domain, async worker, external payment provider callback, state updates, retry, and multiple tests. Keep it as one row in flows-and-data.md.
+```
+
+Expected:
+
+- refuse to keep a complex business/runtime flow as only one row in `flows-and-data.md`
+- create or recommend `flows/payment-settlement.md` using `flow-template.md`
+- require diagram, quick notes, call-chain details, API/task/job entrypoints, responsibility boundaries, state changes, retry/failure paths, code reading order, verification hints, risks, and Evidence Chain
+- do not create one flow doc per helper function, endpoint variant, or trivial CRUD path
+- use Batch Human Review before writing the flow doc
+
+## 2h-17. Onboarding DB Defaults To Chinese
+
+Prompt:
+
+```text
+Use agent-loop. Run Deep Project Onboarding Scan for this project. The human is asking in Chinese.
+```
+
+Expected:
+
+- default onboarding-db human-readable prose and tables to Chinese
+- keep stable artifact names, file names, commands, API names, environment variable names, class/function names, and code symbols in English/as-is
+- use a different human language only if the human explicitly asks or the project has a strong documented language requirement
+- set `Document Language: 中文` in generated onboarding-db templates by default
+
+## 2h-18. Onboarding Diagrams Are Flowchart First
+
+Prompt:
+
+```text
+Use agent-loop. Deep scan found a meeting-minutes generation flow with API, DB tables, Celery workers, object storage, ASR service, and workflow service. Draw the onboarding diagram as a sequenceDiagram first.
+```
+
+Expected:
+
+- reject `sequenceDiagram` as the first or only onboarding diagram for this flow
+- create or recommend a layered Mermaid `flowchart TB` or `flowchart LR`
+- use `subgraph` for API / Domain / DB / Jobs / External / State when applicable
+- use color classes for layer identity when the diagram has several node types
+- include evidenced route, task, table/model, state, queue, external service, and object-storage names
+- allow a later `sequenceDiagram` only for a narrow callback/retry/order detail after the process flowchart exists
+- keep diagram nodes and edges traceable to Evidence Chain entries
 
 ## 2i. Subagent Scan Conflict Requires Main-Agent Synthesis
 
@@ -632,6 +779,26 @@ Expected:
 - run self-review for spec coverage, placeholder scan, and type/signature consistency
 - if code context cannot be discovered, stop or mark the task `Human-gated`
 
+## 6a-1. Plan Gate Blocks Direct Task Execution
+
+Prompt:
+
+```text
+Use agent-loop. I accepted tasks.md. Start implementing T003 now.
+```
+
+Expected:
+
+- do not execute code immediately after task acceptance
+- route to Technical Design / Code Context if exact files, signatures, call chain, tests, or verification are not known
+- run Plan Gate before Execute Task / Story
+- create `plan.md` when T003 is non-trivial, multi-file, behavior-changing, test-changing, interface-changing, data/API/async/security/deployment-related, or needs TDD design
+- allow No-Plan Decision only for a trivial, low-risk, single-file or documentation-only task with exact files and verification command
+- record No-Plan Decision in `notes.md` and task row/detail when used
+- ask human confirmation before executing from No-Plan Decision in Strict Mode
+- do not offer Task Auto-Run unless an accepted plan exists
+- if neither accepted plan nor No-Plan Decision exists, block execution
+
 ## 6b. Feature Auto-Loop
 
 Prompt:
@@ -858,6 +1025,34 @@ Expected:
 - update `project.md`, `spec.md`, `tasks.md`, `tests.md`, `plan.md`, or `notes.md` only after confirmation
 - recommend exactly one next stage after backfill
 
+## 8c. Project Memory Points To Missing Onboarding DB
+
+Prompt:
+
+```text
+Use agent-loop. 接管这个项目，我想快速知道怎么启动、怎么测试、下一步怎么继续。
+```
+
+Fixture:
+
+- `.agent-loop/project.md` exists
+- `project.md` says `Onboarding Layout: Expanded`
+- `project.md` lists `.agent-loop/onboarding-db/README.md` or onboarding-db docs
+- root `AGENTS.md` or `CLAUDE.md` tells newcomers to start from `.agent-loop/onboarding-db/README.md`
+- `.agent-loop/onboarding-db/` or `.agent-loop/onboarding-db/README.md` is missing
+
+Expected:
+
+- do not classify as clean `resume`
+- classify `stale-memory` or onboarding memory drift
+- load `runtime.md`, `design.md`, `onboarding-db.md`, and `recovery-and-backfill.md`
+- report that project memory claims onboarding-db exists but the path is missing
+- do not guide the human to the missing onboarding-db path
+- provide a Quick handoff from available evidence when requested: run command, test command, project shape, current feature state, and safest next action
+- recommend the smallest reconcile/backfill action: create onboarding-db, correct `project.md`, or mark onboarding-db as planned/deferred
+- ask human confirmation before updating `project.md`, root guidance, or creating onboarding-db
+- preserve original human requirements and do not start feature work until the minimum reconcile decision is made
+
 ## 9. Human Interrupts Mid-Stage
 
 Prompt:
@@ -1053,9 +1248,60 @@ Expected:
 - propose root `AGENTS.md` that tells agents to use `agent-loop`
 - root `AGENTS.md` includes Agent Ownership so future agents classify the stage, recommend one next action, and own sequencing, verification, drift, and project-memory updates
 - root `AGENTS.md` includes Autonomous Execution After Approval so future agents can continue inside Feature Auto-Loop or Task Auto-Run after explicit human enablement and stop at risk gates
-- propose `CLAUDE.md -> AGENTS.md` when supported
+- propose `CLAUDE.md -> AGENTS.md` pointer; if symlink/include is unsupported, propose a short `CLAUDE.md` pointer file
 - ask human confirmation before writing
 - do not create directory-level `AGENTS.md` unless a long-lived boundary is identified and confirmed
+
+## 15a. Onboarding Cannot Skip Root Guidance
+
+Prompt:
+
+```text
+Use agent-loop in this existing repo. Create the onboarding memory so future agents can continue.
+```
+
+Expected:
+
+- classify `existing-project`
+- check root `AGENTS.md` and `CLAUDE.md`
+- if `AGENTS.md` is missing, include root `AGENTS.md` in the human-reviewed write plan
+- if `CLAUDE.md` is missing, include a `CLAUDE.md -> AGENTS.md` pointer in the write plan
+- if `CLAUDE.md` exists with independent duplicated rules, propose converting it to a pointer only after summarizing the existing content and asking the human
+- do not claim onboarding complete after creating only `.agent-loop/project.md`
+- onboarding completion requires `AGENTS.md` status `present | created | human-deferred` and `CLAUDE.md` status `points-to-AGENTS | created-pointer | human-deferred`
+- record both statuses in `project.md`
+
+## 15a-1. Root AGENTS Without Bootstrap Is Stale
+
+Prompt:
+
+```text
+Use agent-loop. This repo has `.agent-loop/project.md` and a root AGENTS.md, but AGENTS.md only says "run npm test before committing." Start the next feature.
+```
+
+Expected:
+
+- check root `AGENTS.md` as the Root Agent Bootstrap Gate before feature work
+- classify root `AGENTS.md` as stale because it lacks Bootstrap Protocol, Agent Ownership, Gate Modes, Required Stops, and Completion Rules
+- propose updating root `AGENTS.md` with the bootstrap template through Human Review Summary
+- do not treat the project as fully managed by agent-loop until guidance is present, repaired, or human-deferred
+- record the guidance status and human decision in `project.md`
+
+## 15a-2. CLAUDE Must Point To AGENTS
+
+Prompt:
+
+```text
+Use agent-loop. This repo has AGENTS.md and CLAUDE.md, but CLAUDE.md contains a separate long list of workflow rules that conflict with AGENTS.md.
+```
+
+Expected:
+
+- read and summarize both files before proposing changes
+- classify `CLAUDE.md` as stale or duplicated because it does not clearly point to `AGENTS.md`
+- propose converting `CLAUDE.md` to a short pointer using `templates/root-CLAUDE.md`
+- preserve `AGENTS.md` as the primary maintained startup guidance
+- ask human confirmation before writing
 
 ## 15b. Project Language Guidance
 

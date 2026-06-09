@@ -32,6 +32,8 @@ Before using an external skill or plugin inside a stage:
 - [ ] Check whether local directory is empty/ambiguous or appears to be a remote entry point.
 - [ ] If human says remote project, SSH, devcontainer, container, tunnel, or remote workspace, route to Remote Project Discovery.
 - [ ] Check root `AGENTS.md` / `CLAUDE.md` and any obvious directory-level guidance.
+- [ ] Treat root `AGENTS.md` as stale if it lacks Bootstrap Protocol, Agent Ownership, Gate Modes, Required Stops, or Completion Rules.
+- [ ] Treat root `CLAUDE.md` as stale if it duplicates independent long-lived rules or does not clearly point to `AGENTS.md`.
 - [ ] Determine guidance language from existing docs or human preference; default to English only if unclear.
 - [ ] For old or large projects, record directory guidance status in `project.md`.
 - [ ] Summarize state and recommend one next action.
@@ -76,7 +78,11 @@ Before using an external skill or plugin inside a stage:
 - [ ] Build capability map from routes/pages/actions/schema/tests/docs.
 - [ ] Build boundary map from durable directories.
 - [ ] Inventory root and directory-level guidance files.
+- [ ] Check whether root `AGENTS.md` exists, is stale, or must be created.
+- [ ] If root `AGENTS.md` exists, verify it contains Bootstrap Protocol, Agent Ownership, Gate Modes, Required Stops, and Completion Rules.
+- [ ] Check whether root `CLAUDE.md` exists and loads or points to `AGENTS.md`; if it duplicates or diverges, propose converting it to a pointer.
 - [ ] Record guidance language and evidence in `project.md`.
+- [ ] Record root guidance status in `project.md`: `AGENTS.md` present/created/stale/missing/human-deferred and `CLAUDE.md` points-to-AGENTS/created-pointer/stale/missing/human-deferred.
 - [ ] Attach evidence and confidence to commands, capabilities, and boundaries.
 - [ ] Decide whether Project Memory Mode should be `simple` or `enterprise`.
 - [ ] Recommend enterprise when any hard trigger applies, including about 200k+ LOC, 5+ durable boundaries, 2+ test systems, 3+ execution environments, `project.md` above about 600 lines, repeated re-scans, or 5+ directory-level guidance files.
@@ -87,6 +93,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If Targeted is selected, limit scan and onboarding-db updates to the selected module, flow, async task, deployment path, or problem area.
 - [ ] Use Batch Human Review before writing `.agent-loop/onboarding-db/`, multiple project memory facts, root guidance, or directory guidance.
 - [ ] Ask human confirmation before writing `.agent-loop/`, root guidance, directory guidance, onboarding-db, or diagrams.
+- [ ] Do not mark onboarding complete until root `AGENTS.md` is present/created/human-deferred and root `CLAUDE.md` is points-to-AGENTS/created-pointer/human-deferred.
 
 ## Requirement Archive
 
@@ -215,15 +222,30 @@ Before using an external skill or plugin inside a stage:
 - [ ] Stop or mark `Human-gated` if signatures, parameters, return shapes, or file paths cannot be discovered or safely defined.
 - [ ] Update task detail or plan with the discovered context.
 
-## Plan If Needed
+## Plan Gate / Plan If Needed
+
+Before Execute Task / Story:
+
+- [ ] Do not execute immediately after task creation.
+- [ ] Decide whether this task/story requires construction-grade `plan.md`.
 
 Create `plan.md` when:
 
 - [ ] task/story touches multiple files or modules
+- [ ] task/story changes behavior, tests, interfaces, data, API, async, security, deployment, or cross-module behavior
 - [ ] TDD steps need explicit design
 - [ ] subagent execution is planned
 - [ ] human asks to review a plan first
 - [ ] function signatures, parameters, data contracts, or call chains need to be fixed before coding
+
+No-Plan Decision is allowed only when:
+
+- [ ] task is trivial, low-risk, single-file or documentation-only
+- [ ] acceptance is clear
+- [ ] exact file(s) and exact verification command are known
+- [ ] no plan trigger above applies
+- [ ] decision is recorded in `notes.md` and the selected task row/detail
+- [ ] Strict Mode asks human confirmation before execution, or Feature Auto-Loop records why the Agent-ready task can proceed
 
 Checklist:
 
@@ -243,6 +265,7 @@ Checklist:
 - [ ] Present plan approval with Human Review Summary table.
 - [ ] Human approves plan before execution.
 - [ ] After approval, ask whether to stay in Strict Mode or enable Task Auto-Run for this task/story.
+- [ ] Do not offer Task Auto-Run without an accepted plan.
 - [ ] If the human seems slowed by confirmations, explain Task Auto-Run as a safe task/story-level option.
 - [ ] Before Task Auto-Run, list assumptions, risk points, verification commands, and stop conditions.
 
@@ -264,6 +287,8 @@ Checklist:
 ## Execute Task / Story
 
 - [ ] Confirm execution scope: task by default, story only by explicit choice.
+- [ ] Confirm Plan Gate passed: accepted `plan.md` / `plans/*`, or recorded No-Plan Decision for a trivial task.
+- [ ] If Task Auto-Run is enabled, confirm an accepted plan exists; No-Plan Decision is insufficient.
 - [ ] If Feature Auto-Loop is enabled, execute only Agent-ready tasks.
 - [ ] If Task Auto-Run is enabled, execute only the selected task/story and stop after evidence/review/drift updates and Task Done Gate status update.
 - [ ] Stop at Human-gated tasks or any stop condition.

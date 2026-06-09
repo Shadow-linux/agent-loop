@@ -49,6 +49,8 @@ If the human rejects Deep, do Quick only. Do not create onboarding-db or diagram
 - Ask human confirmation before creating `.agent-loop/onboarding-db/` or onboarding diagrams.
 - Subagents are optional accelerators for large-project onboarding, not a dependency.
 - Use DDD-inspired architecture mapping, but record existing code reality. Do not rename or move code during onboarding.
+- Root `AGENTS.md` and `CLAUDE.md` are startup guidance artifacts for every `agent-loop`-managed project. During onboarding, check both. `CLAUDE.md` must load or point to `AGENTS.md`; do not maintain duplicated root guidance in two files.
+- Do not finish onboarding after writing only `.agent-loop/project.md`. Root guidance must be present, created, or explicitly deferred by the human, and that status must be recorded in `project.md`.
 
 ## Large Project Trigger
 
@@ -285,6 +287,15 @@ After human confirmation, write or update:
 AGENTS.md
 CLAUDE.md -> AGENTS.md or pointer
 directory AGENTS.md only when explicitly confirmed
+```
+
+Exit requirements:
+
+```text
+project.md accepted by human
+AGENTS.md status = present | created | human-deferred
+CLAUDE.md status = points-to-AGENTS | created-pointer | human-deferred
+next stage selected
 ```
 
 ## Feature Continuation

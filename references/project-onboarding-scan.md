@@ -50,8 +50,8 @@ Deep Scan must choose or recommend an Onboarding DB Layout Mode before proposing
 | Layout | Trigger | File Strategy |
 |---|---|---|
 | Compact | single app, few modules, one main runtime, little async, simple tests | 5-7 combined docs |
-| Standard | ordinary business system with multiple boundaries such as UI/API/DB/jobs | 8-12 docs, core topics independent |
-| Expanded | 100k+ LOC, 5+ durable modules, 2+ test systems, multiple environments/integrations, complex async/deployment | 12-18 docs, split only genuinely complex modules/flows |
+| Standard | ordinary business system with multiple boundaries such as UI/API/DB/jobs | categorized docs with default `maps/`, `modules/`, and `flows/`; other categories only when justified |
+| Expanded | 100k+ LOC, 5+ durable modules, 2+ test systems, multiple environments/integrations, complex async/deployment | categorized docs with focused module/flow/runtime/domain/quality splits; never one file per directory |
 
 Layout controls physical file granularity, not understanding coverage. Do not omit a core understanding dimension just because the layout is Compact.
 
@@ -67,6 +67,16 @@ Choose or recommend Layout Mode from both project reality and human intent:
 6. If the human explicitly chooses a layout, respect it after explaining risks and tradeoffs. Do not silently override the human's layout choice.
 7. If the selected layout later becomes insufficient, propose a layout upgrade through Batch Human Review; do not reorganize onboarding-db silently.
 
+Default physical layout:
+
+| Layout | Default physical structure |
+|---|---|
+| Compact | may stay flat or lightly grouped; merged docs are allowed when README clearly maps sections |
+| Standard | default to `maps/`, `modules/`, and `flows/`; add `runtime/`, `domain/`, or `quality/` only when project reality justifies them |
+| Expanded | use categorized structure such as `maps/`, `modules/`, `flows/`, `runtime/`, `domain/`, `quality/`, and optional `diagrams/` for standalone diagrams |
+
+Categorized layout is for reading, not for mirroring the code tree. Keep it at most two levels deep under `onboarding-db/`.
+
 ## Required Understanding Dimensions
 
 Every layout must cover:
@@ -78,7 +88,9 @@ Every layout must cover:
 | Code navigation | major directories, modules, entrypoints, key files |
 | Architecture | UI/API/domain/DB/jobs/external boundaries and call direction |
 | Business flows | core user/business paths and state changes |
+| Data model | core entities, storage mapping, relationships, ownership, key fields, state fields, writers/readers, and migrations |
 | Change impact | likely modules, APIs, data, tests affected by common changes |
+| Evidence chain | file paths, symbols/objects, key parameters/fields, and what each source proves |
 | Risks | unknowns, doc/code conflicts, unverified commands, missing diagrams |
 
 If something is not found or not applicable, say `Not found`, `Not applicable`, or `Unknown` with evidence.
@@ -90,22 +102,58 @@ If something is not found or not applicable, say `Not found`, `Not applicable`, 
 3. Shallow Repo: inspect top-level app/package/service/test/config/CI/deployment directories. Avoid whole-repo deep reads.
 4. Runtime / Tooling: inspect manifests, task runners, Docker/CI/test configs. Record commands with confidence.
 5. Entrypoints: locate runtime, UI, API, config, service, model, worker, job, integration, and test entrypoints.
-6. Module Map: identify durable modules or bounded contexts. Record purpose, boundary, entrypoints, flows, key files, evidence, confidence.
+6. Module Map: identify durable modules or bounded contexts. Record purpose, boundary, entrypoints, flows, key files, evidence, confidence, and whether a dedicated module doc is required.
 7. Boundary Map: map UI, API, domain, DB/migrations, jobs/workers, external services, auth, shared/generated packages.
 8. Core Module Call Chain Extraction: for each core module, document the module-level call chain or explicitly mark why it is support-only, unknown, or not applicable.
 9. Core Flow Extraction: document 3-7 most important flows when possible; at least one initial core flow must be diagrammed or explicitly marked unknown.
-10. Async / Events / Jobs: if queues, subscriptions, callbacks, workers, schedulers, retries, DLQs, or compensation exist, draft docs and focused diagrams.
-11. Deployment / Operations: separate local setup, environment config, production deployment, rollback, health checks, logs/metrics/tracing, and deployment topology.
-12. Commands / Tests Verification: classify commands as high/medium/low confidence based on run evidence, CI usage, or script inference.
-13. Onboarding DB Draft: draft human-readable docs according to Layout Mode.
-14. Batch Human Review: show files/facts/evidence/confidence before writing.
-15. Project Memory Backfill Proposal: propose only stable long-term summaries for `project.md` or `project/*.md`.
+10. Data Model Extraction: if persistent data exists, draft or update `domain/data-model.md` or Compact equivalent; record core entities, storage mapping, relationships, ownership, key fields, state fields, writers/readers, API/flow/job usage, migrations/seeds, tests, and evidence.
+11. Entity Detail Split: create or recommend `domain/entities/<entity>.md` for complex core entities; keep simple lookup/config tables and non-semantic join tables in `domain/data-model.md`.
+12. Async / Events / Jobs: if queues, subscriptions, callbacks, workers, schedulers, retries, DLQs, or compensation exist, draft docs and focused diagrams.
+13. Deployment / Operations: separate local setup, environment config, production deployment, rollback, health checks, logs/metrics/tracing, and deployment topology.
+14. Commands / Tests Verification: classify commands as high/medium/low confidence based on run evidence, CI usage, or script inference.
+15. Evidence Chain Extraction: for every core module, core flow, core entity, major state change, async/job path, and major verification claim, record file path, symbol/object, key parameters/fields, what it does, and what it proves.
+16. Onboarding DB Draft: draft human-readable docs according to Layout Mode.
+17. Batch Human Review: show files/facts/evidence/confidence before writing.
+18. Project Memory Backfill Proposal: propose only stable long-term summaries for `project.md` or `project/*.md`.
 
 When Standard or Expanded Layout Mode is selected, use `onboarding-db-templates.md` derivation tables to decide whether a file should be copied from a concrete template or derived from a Compact template section. Missing one-to-one templates are not a reason to skip required understanding dimensions.
 
+Core-module detail rule:
+
+- `module-map.md` is an index and navigation document, not a place to dump every module detail.
+- Create or recommend `modules/<module>.md` for core modules or bounded contexts with durable behavior, stable entrypoints, their own data/external dependencies, repeated maintenance needs, or repeated feature impact.
+- Support-only areas such as `utils/`, `scripts/`, generated code, shared types, or test helpers may stay in the module map with evidence explaining why they do not need a dedicated module doc.
+
+Flow-detail split rule:
+
+- `flows-and-data.md` or `core-flows.md` may hold compact flow summaries, but complex business/runtime flows need `flows/<flow>.md`.
+- Create or recommend `flows/<flow>.md` when a flow crosses multiple durable modules, has async/jobs/external callbacks, has important state transitions, has retry/compensation/failure paths, has multiple API/job entrypoints, affects multiple tests, or is repeatedly maintained.
+- `flows/<flow>.md` must remain human-readable: diagram, quick notes, call-chain details, API/task/job entrypoints, responsibility boundaries, state changes, retry/failure paths, code reading order, verification hints, risks, and Evidence Chain.
+- Do not create one flow doc per helper path. Split only business/runtime flows that give humans a useful reading path.
+
+Data-model detail rule:
+
+- Data model understanding is a first-class onboarding dimension, not an appendix hidden only inside flow docs.
+- If the project has database tables, ORM models, schema files, migrations, persistent models, object-storage metadata, queue persistence, or other durable business objects, create or recommend `domain/data-model.md` or a Compact-equivalent `Data Model` section.
+- `domain/data-model.md` is an index and relationship map. It should cover core entities, storage/model mapping, ownership, important relationships, key fields, state fields, readers/writers, flow/API/job usage, migrations/seeds, tests, evidence, and confidence.
+- Create or recommend `domain/entities/<entity>.md` when an entity has many fields, complex state, multiple writers/readers, multiple related flows/API/jobs, migrations/history, derived fields, or repeated human questions.
+- Do not create entity detail docs for simple lookup/config tables or join tables without business meaning; keep them in `domain/data-model.md` with evidence.
+- If a complex entity is not split, record why it remains index-only.
+
 ## Diagram Rules
 
-Generate small diagrams that answer one question. Do not create full function graphs, full file dependency graphs, or whole-repo knowledge graphs.
+Onboarding diagrams are flowchart-first. Generate small diagrams that answer one question. Do not create full function graphs, full file dependency graphs, or whole-repo knowledge graphs.
+
+Default diagram rules:
+
+- prefer Mermaid `flowchart TB` or `flowchart LR`
+- use `subgraph` to separate User, API, Domain, DB, Jobs/Workers, External Services, State, and Runtime layers
+- use color classes for layer identity when the diagram has 4+ node types
+- include key route, task, table/model, state, queue, external service, and object-storage names when evidenced
+- keep diagrams at business/process/module level, not function level
+- write a short "How To Read" note for each non-trivial diagram
+
+Use `sequenceDiagram` only when a module/process flowchart already exists and the human needs exact call order, protocol handshake, retry timing, callback order, or another narrow interaction detail. Do not use sequence diagrams as the first or only onboarding diagram for a module, flow, or system.
 
 Initial Deep Scan must propose:
 
@@ -114,9 +162,10 @@ Initial Deep Scan must propose:
 - one core module call-chain diagram for each core module, or an explicit `support-only`, `Unknown`, or `Not applicable` note with evidence
 - at least one core flow diagram
 - data entity map when persistent data exists
+- single-entity relationship diagram when a core entity is too complex to understand from the global data entity map
 - deployment map when multiple environments, containers, or remote services exist
 
-Core module call-chain diagrams are module-level diagrams, not function-level graphs. They should show:
+Core module call-chain diagrams are module-level flowcharts, not function-level graphs. They should show:
 
 ```text
 inbound trigger / caller
@@ -134,6 +183,7 @@ Discovery-triggered diagrams:
 | Discovery | Diagram |
 |---|---|
 | durable module with business/runtime behavior | core module call chain |
+| project-level business process | layered process flowchart |
 | queue / broker / consumer / subscriber | async flow |
 | cron / scheduler / worker / background job | job flow |
 | state field and transitions | state flow |
@@ -141,8 +191,19 @@ Discovery-triggered diagrams:
 | auth/token/role/permission flow | auth flow |
 | object storage/upload/download/callback | file flow |
 | retry/rollback/DLQ/manual compensation | failure recovery flow |
+| persistent business entities / ORM / schema / migrations | data entity map |
+| complex core entity with many relationships or writers | single-entity relationship map |
+| exact call order after a flowchart already exists | sequence detail diagram |
 
 When state/status fields are important to a core flow, also capture state-change trace evidence: trigger, writer, guard/condition, side effects, tests, and confidence. A legal state-flow diagram is not enough to answer "who changed this state?".
+
+Diagram quality rules:
+
+- every standalone or embedded diagram must answer one explicit question
+- prefer layered color-coded flowcharts for onboarding summaries
+- diagram nodes and edges should be traceable to an Evidence Chain entry in the same doc or target doc
+- when a human question reveals an unclear path, propose the smallest useful diagram update in the most relevant doc instead of generating a global graph
+- if evidence is insufficient, mark the missing part `Unknown` or `Not enough evidence`; do not guess
 
 ## Deployment Placement
 
@@ -221,6 +282,11 @@ skip this batch
 
 High-confidence facts can be drafted automatically, but cannot become `reviewed` without human confirmation.
 
+If the update adds or changes diagrams for a targeted question, include:
+
+| Question | Proposed Diagram | Target File | Key Evidence | Confidence | Human Decision |
+|---|---|---|---|---|---|
+
 ## Completion Criteria
 
 Deep Scan is complete only when:
@@ -231,6 +297,9 @@ Deep Scan is complete only when:
 - module relationship map and boundary map exist or are explicitly blocked
 - every core module has a core module call-chain diagram, or an explicit support-only/unknown/not-applicable note with evidence
 - at least one core flow exists or is explicitly unknown
+- module index and module detail coverage are clear: each core module has either a dedicated `modules/<module>.md` or an explicit reason it remains index-only
+- persistent data is documented in `domain/data-model.md` or Compact equivalent, with entity detail coverage for complex core entities
+- core docs include Evidence Chain entries for key module, flow, state, async/job, and verification claims
 - commands and tests have evidence/confidence
 - risks and unknowns are recorded
 - project memory backfill proposal was shown

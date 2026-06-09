@@ -17,6 +17,42 @@ Default memory root is `.agent-loop/` because it is workflow metadata, not produ
 
 Do not use `AGENTS.md` as a task log. Do not use `project.md` as the startup instruction file for every agent.
 
+## Root Agent Bootstrap Gate
+
+Root `AGENTS.md` is the bootstrap node that teaches future agents how to enter `agent-loop`. It is not optional project decoration.
+
+Every time `agent-loop` is used inside a target project, check root guidance before feature work:
+
+```text
+1. Read root AGENTS.md if present.
+2. Read root CLAUDE.md if present.
+3. Check whether CLAUDE.md loads, includes, symlinks to, or clearly points to AGENTS.md.
+4. Check whether AGENTS.md contains the required bootstrap sections.
+5. Record or update guidance status in project.md.
+6. If missing or stale, propose a repair through Human Review Summary.
+```
+
+`AGENTS.md` is stale when any of these are missing or contradicted:
+
+- project uses `agent-loop`
+- Bootstrap Protocol: inspect `.agent-loop/`, classify the stage, and recommend exactly one next action
+- Agent Ownership: agents steer the loop instead of waiting for the human to name every step
+- Gate Modes: Strict Mode, Feature Auto-Loop, Task Auto-Run, and their explicit human enablement rules
+- Required Stops: unclear scope, risky changes, Delivery Contract gates, subagent dispatch, submit, close, commit, PR, merge, release, publish
+- Completion Rules: fresh verification, review, drift check, project memory update, Feature Completion Check, Feature Close Review
+- root/directory guidance boundaries and requirement archive rules
+
+`CLAUDE.md` is stale when it duplicates independent long-lived rules, diverges from `AGENTS.md`, or does not clearly point Claude Code to `AGENTS.md`.
+
+Onboarding, re-adoption, or project initialization is not complete until:
+
+```text
+AGENTS.md status = present | created | human-deferred
+CLAUDE.md status = points-to-AGENTS | created-pointer | human-deferred
+```
+
+If the human defers guidance repair, record the defer decision and reason in `project.md`. Do not silently treat missing root guidance as healthy.
+
 ## Root Guidance Default
 
 For Init Project and Existing Project Onboarding, the default recommendation is to create or update:
@@ -28,6 +64,15 @@ CLAUDE.md -> AGENTS.md
 
 Only write after human confirmation.
 
+For any project that is initialized, onboarded, re-adopted, or otherwise managed by `agent-loop`, root guidance must be checked every time the agent enters the project:
+
+```text
+AGENTS.md status: present | created | stale | missing | human-deferred
+CLAUDE.md status: points-to-AGENTS | created-pointer | stale | missing | human-deferred
+```
+
+Onboarding is not complete if root `AGENTS.md` or `CLAUDE.md` is missing or stale unless the human explicitly defers it. Record the decision in `project.md`.
+
 Guidance language should follow the project language when it is clear from existing docs or human preference.
 
 If project language is unclear, default root `AGENTS.md` / `CLAUDE.md` guidance to English for cross-agent compatibility.
@@ -36,7 +81,7 @@ If the project uses Chinese or the human explicitly asks for Chinese guidance, w
 
 For a local directory that is only a remote-project entry point, create local root guidance only if it helps future agents re-enter the remote workflow. Full project guidance should live in the remote project when remote writes are allowed.
 
-If symlinks are unsafe or unsupported, create `CLAUDE.md` with a short pointer to `AGENTS.md` instead of duplicating all content.
+`AGENTS.md` is the primary maintained guidance file. `CLAUDE.md` must not duplicate the full rules. It should load, include, symlink to, or briefly point Claude Code to `AGENTS.md`. If symlinks are unsafe or unsupported, create `CLAUDE.md` with a short pointer to `AGENTS.md`.
 
 Never overwrite an existing ordinary `CLAUDE.md` or `AGENTS.md` without reading it, summarizing the proposed migration, and getting human confirmation.
 
@@ -45,6 +90,7 @@ Never overwrite an existing ordinary `CLAUDE.md` or `AGENTS.md` without reading 
 Keep it short and long-lived:
 
 - project uses `agent-loop`
+- Root Agent Bootstrap: read `AGENTS.md`, inspect `.agent-loop/`, classify the current stage, and recommend exactly one next action
 - guidance language follows project language; keep stable artifact/stage names in English
 - before development, inspect `.agent-loop/`
 - if missing, initialize it
@@ -63,6 +109,7 @@ Keep it short and long-lived:
 - run Feature Completion Check after likely completion, before starting a new feature, or when resuming with an active feature
 - perform Feature Close Review, drift check, and project memory update before close
 - stable project commands and hard constraints, only if every agent should know them immediately
+- stale detection: if future agents cannot learn Agent Ownership, Gate Modes, Required Stops, and Completion Rules from root guidance, propose a root `AGENTS.md` update
 
 ## Root `AGENTS.md` Should Not Contain
 
@@ -181,6 +228,7 @@ Use:
 
 ```text
 templates/root-AGENTS.md
+templates/root-CLAUDE.md
 templates/directory-AGENTS.md
 ```
 

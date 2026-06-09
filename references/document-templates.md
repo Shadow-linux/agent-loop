@@ -120,6 +120,18 @@ Purpose:
 
 Do not put task logs, feature progress, or raw requirements in `AGENTS.md`.
 
+## Root `CLAUDE.md`
+
+Use `templates/root-CLAUDE.md`.
+
+Purpose:
+
+- make Claude Code load the maintained `AGENTS.md`
+- avoid maintaining duplicated root guidance
+- preserve `AGENTS.md` as the single source of startup guidance for Codex and Claude
+
+`CLAUDE.md` should be a pointer, include, or symlink to `AGENTS.md`. If an existing `CLAUDE.md` contains independent rules, read it, summarize conflicts, and ask the human before replacing or converting it.
+
 ## Directory `AGENTS.md`
 
 Use `templates/directory-AGENTS.md` only for long-lived boundaries with distinct rules.
@@ -295,13 +307,14 @@ Sync Model:
   - Useful commands:
   - Evidence:
   - Confidence: high | medium | low
-  - Guidance: root only | has AGENTS.md | propose AGENTS.md | not needed
+  - Guidance: root only | has AGENTS.md | propose AGENTS.md | not needed | deferred
 
 ## Directory Guidance
 
 Root Guidance:
-- `AGENTS.md`:
-- `CLAUDE.md`:
+- `AGENTS.md`: present | created | stale | missing | human-deferred
+- `CLAUDE.md`: points-to-AGENTS | created-pointer | stale | missing | human-deferred
+- Sync Rule: `AGENTS.md` is maintained primary guidance; `CLAUDE.md` loads or points to `AGENTS.md`.
 
 Directory-Level Guidance:
 - `<path>/AGENTS.md`: present | proposed | not needed

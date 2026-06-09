@@ -29,7 +29,7 @@ External skill default paths are advisory only. If a preferred skill says to wri
 | Test Design | test matrix / TDD design | Use `templates/tests.md` |
 | E2E Discovery if Web | browser/E2E environment discovery | Use `e2e-discovery.md` |
 | Technical Design / Code Context | codebase scan / technical planning | Use `implementation-planning.md` |
-| Plan If Needed | Superpowers-style plan-writing | Use `implementation-planning.md` and `templates/plan.md` |
+| Plan Gate / Plan If Needed | Superpowers-style plan-writing | Use `implementation-planning.md` and `templates/plan.md`; record No-Plan Decision only for trivial tasks |
 | Execute Task / Story | test-driven-development | Use RED/GREEN flow in `stage-guides.md` |
 | Diagnose Failure | systematic debugging | Reproduce, isolate, hypothesize, verify |
 | Verify | verification-before-completion | Run fresh proof and record output |
@@ -46,7 +46,7 @@ If Superpowers is available, these map cleanly:
 - `using-superpowers`: reminder that relevant skills should be loaded before acting.
 - `brainstorming`: Brainstorm / Clarify if Needed; translate output to `product.md` or `spec.md`, not `docs/superpowers/specs/`.
 - PRD/product skills such as mattpocock `to-prd`: Product Brief If Needed, translated into local `product.md`.
-- `writing-plans`: Plan If Needed; translate into construction-grade `plan.md` or `plans/*`, not `docs/superpowers/plans/`.
+- `writing-plans`: Plan Gate / Plan If Needed; translate into construction-grade `plan.md` or `plans/*`, or record a justified No-Plan Decision for a trivial task, not `docs/superpowers/plans/`.
 - `test-driven-development`: Execute Task / Story; evidence still goes to `notes.md` and task status still follows Task Done Gate.
 - `systematic-debugging`: Diagnose Failure; root cause and fix evidence go to `notes.md`.
 - `verification-before-completion`: Verify and Close; completion still requires agent-loop evidence, review, drift, memory, and human gates.

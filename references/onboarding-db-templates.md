@@ -10,6 +10,8 @@ Every onboarding-db document must include these fields near the top:
 
 ```md
 Document Language:
+Created:
+Last Updated:
 Last Verified:
 Confidence:
 Source Evidence:
@@ -19,8 +21,6 @@ Human Review Status:
 Optional fields:
 
 ```md
-Created:
-Last Updated:
 Freshness Window:
 Verification Scope:
 Maintainer:
@@ -61,13 +61,15 @@ summary first -> tables -> diagrams -> evidence and unknowns
 
 Use tables for comparisons, command lists, directories, modules, APIs, jobs, risks, and batch review. Use diagrams for cross-module, cross-process, stateful, or time-sequenced behavior.
 
+Onboarding-db human-readable documents default to Chinese. Keep stable artifact names, file names, commands, API names, and code symbols in English/as-is. Use another language only when the human explicitly requests it or the target project has a strong documented language requirement.
+
 ## Layout Mapping
 
 | Layout | Template Strategy |
 |---|---|
 | Compact | combine related dimensions into 5-7 files |
-| Standard | make core topics independent and keep low-frequency topics combined |
-| Expanded | split only complex modules, flows, deployment, security, observability, or decision history |
+| Standard | default to categorized `maps/`, `modules/`, and `flows/`; keep low-frequency topics combined unless needed |
+| Expanded | categorized docs with focused splits for modules, flows, deployment, security, observability, or decision history |
 
 Anti-misuse rules:
 
@@ -76,6 +78,9 @@ Anti-misuse rules:
 - Expanded is not "one file per directory." Split only durable business/runtime modules, bounded contexts, complex flows, deployment/operations concerns, or repeated maintenance paths.
 - Human layout choice wins after risks are explained. If the agent recommends a different layout, ask before changing.
 - Layout upgrades or file reshaping require Batch Human Review.
+- Categorization is for reading, not for mirroring the repo tree. Keep onboarding-db at most two levels deep.
+- `module-map.md` is an index and navigation doc. Module detail belongs in `modules/<module>.md` when a dedicated module doc is warranted.
+- Complex flow details belong in `flows/<flow>.md` when a single merged flow section becomes hard to read. Keep merged Compact sections only when the flow remains small and clearly navigable from README.
 
 Compact suggested files:
 
@@ -92,32 +97,30 @@ Compact suggested files:
 Standard may split:
 
 ```text
-environment.md
-directory-map.md
-module-map.md
-architecture-boundaries.md
-core-flows.md
-entrypoints.md
-data-model.md
-api-surface.md
-async-and-events.md
-jobs-and-schedules.md
-change-impact-map.md
-testing-and-verification.md
-integrations.md
-risks-and-unknowns.md
-glossary.md
+maps/module-map.md
+maps/boundary-map.md
+maps/directory-map.md
+modules/<module>.md
+flows/<flow>.md or core-flows.md
+runtime/environment.md
+runtime/async-and-events.md
+runtime/jobs-and-schedules.md
+domain/data-model.md
+domain/entities/<entity>.md when a core entity needs its own reading path
+quality/testing-and-verification.md
+quality/risks-and-unknowns.md
 ```
 
 Expanded may add:
 
 ```text
-module-<name>.md (copy from templates/onboarding-db/module-template.md)
-flow-<name>.md (copy from templates/onboarding-db/flow-template.md)
-deployment-and-operations.md
-decisions-and-history.md
-security-and-permissions.md
-observability.md
+modules/<name>.md (copy from templates/onboarding-db/module-template.md)
+flows/<name>.md (copy from templates/onboarding-db/flow-template.md)
+runtime/deployment-and-operations.md
+domain/decisions-and-history.md
+domain/security-and-permissions.md
+quality/observability.md
+diagrams/<name>.md for standalone diagrams only when embedding is not enough
 ```
 
 ## Standard File Derivation
@@ -126,21 +129,18 @@ Standard layout does not require a direct template file for every topic. Use the
 
 | Standard File | Derive From | Required Content |
 |---|---|---|
-| `environment.md` | `setup-and-run.md` + `deployment-and-operations.md` | env files, variables, local/test/prod differences, containers, CI/runtime config, evidence and confidence |
-| `directory-map.md` | `code-map.md` | main directories, generated/vendor/ignored areas, test directories, configs/scripts, read-first hints |
-| `module-map.md` | `code-map.md` + `module-template.md` module fields | module summary/cards, boundaries, entrypoints, core call-chain references, key files, related diagrams |
-| `architecture-boundaries.md` | `architecture-and-integrations.md` | UI/API/domain/DB/jobs/external boundaries, dependency direction, cross-boundary contracts, boundary risks |
-| `core-flows.md` | `flows-and-data.md` + `flow-template.md` flow fields | flow index, core flow details, diagrams, state/data changes, verification hints |
-| `entrypoints.md` | `code-map.md` | runtime, UI, API, config, worker/job, integration, and test entrypoints |
-| `data-model.md` | `flows-and-data.md` | entities, tables/models, ownership, important state fields, migrations/seeds, evidence |
-| `api-surface.md` | `architecture-and-integrations.md` | API groups, consumers, auth, generated clients, request/response contracts, breaking-change risks |
-| `async-and-events.md` | `architecture-and-integrations.md` + `flow-template.md` async fields | producers, queues/topics, consumers, callbacks, retries, DLQ/compensation, diagrams |
-| `jobs-and-schedules.md` | `flows-and-data.md` + `flow-template.md` job fields | schedules, workers, triggers, operational notes, failure/retry behavior |
-| `change-impact-map.md` | `verification-and-risks.md` | change categories, affected modules/files/APIs/data/tests, risk level, verification path |
-| `testing-and-verification.md` | `verification-and-risks.md` | test systems, fast/full commands, E2E/browser path when present, baseline failures, confidence |
-| `integrations.md` | `architecture-and-integrations.md` | external services, SDKs, storage/queue/cache, webhooks, credentials/config references without secrets |
-| `risks-and-unknowns.md` | `verification-and-risks.md` | high-risk unknowns, doc/code conflicts, unverified commands, missing diagrams, follow-ups |
-| `glossary.md` | `verification-and-risks.md` glossary section | domain terms, Chinese meaning, English meaning, used-in context, synonyms/aliases including acronyms and naming conflicts, source evidence |
+| `maps/directory-map.md` | `code-map.md` or copy `templates/onboarding-db/directory-map.md` | main directories, generated/vendor/ignored areas, test directories, configs/scripts, read-first hints |
+| `maps/module-map.md` | `code-map.md` + `module-template.md` module fields | module summary/cards, module relationship map, coverage, dedicated module-doc links, related diagrams |
+| `maps/boundary-map.md` | `architecture-and-integrations.md` or copy `templates/onboarding-db/boundary-map.md` | UI/API/domain/DB/jobs/external boundaries, dependency direction, cross-boundary contracts, boundary risks |
+| `core-flows.md` or `flows/<flow>.md` | `flows-and-data.md` + `flow-template.md` flow fields | flow index, human-readable core flow details, diagrams, state/data changes, verification hints, evidence chains |
+| `runtime/environment.md` | `setup-and-run.md` + `deployment-and-operations.md` | env files, variables, local/test/prod differences, containers, CI/runtime config, evidence and confidence |
+| `domain/data-model.md` | `flows-and-data.md` + `data-model.md` template fields | core entities, storage/model mapping, relationships, ownership, key fields, state fields, readers/writers, flow/API/job usage, migrations/seeds, tests, evidence |
+| `runtime/async-and-events.md` | `architecture-and-integrations.md` + `flow-template.md` async fields | producers, queues/topics, consumers, callbacks, retries, DLQ/compensation, diagrams |
+| `runtime/jobs-and-schedules.md` | `flows-and-data.md` + `flow-template.md` job fields | schedules, workers, triggers, operational notes, failure/retry behavior |
+| `maps/change-impact-map.md` | `verification-and-risks.md` or copy `templates/onboarding-db/change-impact-map.md` | change categories, affected modules/files/APIs/data/tests, risk level, verification path |
+| `quality/testing-and-verification.md` | `verification-and-risks.md` | test systems, fast/full commands, E2E/browser path when present, baseline failures, confidence |
+| `quality/risks-and-unknowns.md` | `verification-and-risks.md` | high-risk unknowns, doc/code conflicts, unverified commands, missing diagrams, follow-ups |
+| `domain/glossary.md` | `verification-and-risks.md` glossary section | domain terms, Chinese meaning, English meaning, used-in context, synonyms/aliases including acronyms and naming conflicts, source evidence |
 
 When deriving a Standard file, keep the common metadata block, summary-first shape, evidence, confidence, unknowns, and project memory backfill section.
 
@@ -150,15 +150,16 @@ Expanded layout splits only areas that are complex enough to deserve their own r
 
 | Expanded File | Use / Derive From | Required Content |
 |---|---|---|
-| `module-<name>.md` | copy `templates/onboarding-db/module-template.md` | purpose, boundary, entrypoints, core call chain, core flows, key files, dependencies, tests, risks |
-| `flow-<name>.md` | copy `templates/onboarding-db/flow-template.md` | purpose, diagram, steps, data/state changes, async/job/external behavior, verification, risks |
-| `deployment-and-operations.md` | copy `templates/onboarding-db/deployment-and-operations.md` | environments, pipeline, runtime topology, release/rollback, migrations, health, observability |
-| `decisions-and-history.md` | copy `templates/onboarding-db/decisions-and-history.md` | evidenced architectural/product decisions and current status |
-| `security-and-permissions.md` | derive from `architecture-and-integrations.md` + module docs | auth boundaries, roles, policies, sensitive data, permission flows, evidence, unknowns |
-| `observability.md` | derive from `deployment-and-operations.md` | logs, metrics, tracing, alerts, health checks, error reporting, dashboards if evidenced |
-| `async-and-events.md` | derive from Standard table unless complex enough for a custom split | event topology, producers/consumers, retries, DLQ/compensation, flow diagrams |
-| `jobs-and-schedules.md` | derive from Standard table unless complex enough for a custom split | schedules, workers, triggers, operations, failure modes |
-| `environment.md` | derive from Standard table unless complex enough for a custom split | local/test/prod config, env files, containers, CI/runtime differences |
+| `modules/<name>.md` | copy `templates/onboarding-db/module-template.md` | purpose, boundary, entrypoints, core call chain, core flows, key files, dependencies, tests, risks, evidence chain |
+| `flows/<name>.md` | copy `templates/onboarding-db/flow-template.md` | purpose, diagram, quick notes, call-chain details, state changes, async/job/external behavior, verification, evidence chain, risks |
+| `domain/data-model.md` | copy `templates/onboarding-db/data-model.md` when persistent data is important enough to split from Compact docs | core entity index, relationship map, ownership, key fields, state field index, usage, migrations, tests, evidence |
+| `domain/entities/<entity>.md` | copy `templates/onboarding-db/entity-template.md` when one entity needs its own reading path | storage mapping, fields, relationships, state fields, writers, readers/consumers, related flows, migrations/history, tests, risks, evidence |
+| `domain/state-flow-<entity>.md` | copy `templates/onboarding-db/state-flow-template.md` when legal lifecycle states matter | legal states, transitions, guards, side effects, evidence, tests |
+| `domain/state-trace-<entity>.md` | copy `templates/onboarding-db/state-trace-template.md` when observed state writers matter | writers, triggers, guards, side effects, tests, evidence |
+| `runtime/deployment-and-operations.md` | copy `templates/onboarding-db/deployment-and-operations.md` | environments, pipeline, runtime topology, release/rollback, migrations, health, observability |
+| `domain/decisions-and-history.md` | copy `templates/onboarding-db/decisions-and-history.md` | evidenced architectural/product decisions and current status |
+| `domain/security-and-permissions.md` | derive from `architecture-and-integrations.md` + module docs | auth boundaries, roles, policies, sensitive data, permission flows, evidence, unknowns |
+| `quality/observability.md` | derive from `deployment-and-operations.md` | logs, metrics, tracing, alerts, health checks, error reporting, dashboards if evidenced |
 
 Do not create one Expanded file per directory. Split by durable module, bounded context, complex business flow, async system, deployment concern, or repeated maintenance need.
 
@@ -175,6 +176,8 @@ Do not create one Expanded file per directory. Split by durable module, bounded 
 - async/jobs reading path when async, queues, callbacks, workers, or schedulers exist
 - role-based reading paths when the project has distinct frontend, backend, operations, QA, or product readers
 - module reading paths
+- flow reading paths
+- data-model reading path when persistent data exists
 - document index
 - diagrams index
 - needs-review / stale / unknown items
@@ -186,7 +189,19 @@ Module reading path table:
 
 If the README lacks module reading paths, onboarding-db is not complete.
 
+Data model reading path table:
+
+| Entity | Meaning | Read First | Then Read | State Docs | Used By | Status |
+|---|---|---|---|---|---|---|
+
+If persistent data exists and the README lacks a data-model reading path, onboarding-db is usable but incomplete.
+
 If async/jobs exist and README lacks an async/jobs reading path, onboarding-db is usable but incomplete.
+
+Diagram index table:
+
+| Diagram | Question Answered | Target Doc | Evidence Chain | Last Verified | Confidence |
+|---|---|---|---|---|---|
 
 ## Module Card
 
@@ -202,6 +217,7 @@ Core Call Chain:
 Core Flows:
 Key Files:
 Related Diagram:
+Evidence Chain:
 Evidence:
 Confidence:
 ```
@@ -228,6 +244,94 @@ Related Decisions:
 ```
 
 Do not invent fields. Use `Not found`, `Not applicable`, or `Unknown` when needed.
+
+Core module rule:
+
+- `module-map.md` should link to dedicated module docs for core modules when they have durable behavior, stable entrypoints, their own data/external dependencies, repeated maintenance need, or repeated feature impact.
+- support-only areas may remain index-only with evidence.
+
+## Complex Flow Docs
+
+Use `flows/<flow>.md` when a business/runtime flow needs its own reading path. Do not keep complex flows as one row in `flows-and-data.md`.
+
+Create or recommend `flows/<flow>.md` when:
+
+- the flow crosses multiple durable modules or services
+- async jobs, callbacks, queues, schedulers, retries, or compensation are part of the flow
+- important state transitions or state writers are involved
+- there are multiple API, command, job, or UI entrypoints
+- the flow has meaningful failure paths or operational risks
+- multiple tests or verification paths are needed to trust the flow
+- humans repeatedly ask how the flow works
+
+Do not create one flow doc per helper function, endpoint variant, or trivial CRUD path. Keep those in a flow index or Compact-equivalent section.
+
+## Data Model And Entity Docs
+
+Use `domain/data-model.md` for persistent data understanding. It is an index and relationship map, not a dump of every field.
+
+Core fields for `domain/data-model.md`:
+
+```md
+## Core Entity Index
+## Entity Relationship Map
+## Relationships
+## Ownership
+## Key Fields
+## State Field Index
+## API / Flow / Job Usage
+## Migrations / Seeds / History
+## Tests
+## Evidence Chain
+## Risks / Unknowns
+```
+
+Create `domain/entities/<entity>.md` only when the entity needs its own reading path.
+
+Create or recommend entity docs when:
+
+- the entity has many fields or important derived fields
+- the entity has complex state or lifecycle transitions
+- multiple flows, APIs, jobs, or async consumers read or write it
+- migrations/history/compatibility matter for future changes
+- the human repeatedly asks about the entity
+
+Do not create entity docs for simple lookup/config tables or join tables without business meaning. Keep those in `domain/data-model.md` with evidence and confidence.
+
+Core fields for `domain/entities/<entity>.md`:
+
+```md
+## Purpose
+## Storage Mapping
+## Fields
+## Relationships
+## State Fields
+## Writers
+## Readers / Consumers
+## Related Flows
+## Migrations / History
+## Tests
+## Evidence Chain
+## Risks / Unknowns
+```
+
+## Evidence Chain
+
+Use Evidence Chain tables for key claims in module docs, flow docs, major state traces, async/job docs, and critical verification claims.
+
+```md
+## Evidence Chain
+
+| File Path | Symbol / Object | Parameters / Fields | Description | Proves | Confidence |
+|---|---|---|---|---|---|
+```
+
+Rules:
+
+- do not write `source code`, `README`, or `scan result` alone for critical claims
+- use real file paths and concrete symbols/objects when found
+- use `Unknown`, `Not found`, or `Not applicable` when evidence is missing
+- diagram nodes and edges should be traceable to an Evidence Chain entry in the same doc or target doc
 
 ## Deployment Template
 
@@ -295,28 +399,61 @@ Code can prove what exists now; it usually cannot prove why it was chosen. Ask t
 
 ## Diagram Template
 
-Use one generic template and set `Diagram Type`.
+Use one generic template and set `Diagram Type`. Onboarding diagrams are flowchart-first.
 
-```md
+````md
 # Diagram: <name>
 
-Document Language:
+Document Language: 中文
 Last Verified:
 Diagram Type:
 Question Answered:
 Scope:
 Source Evidence:
 Confidence:
-Human Review Status:
+Human Review Status: draft
 
 ## Diagram
+
+```mermaid
+flowchart TB
+  subgraph API["API 入口层"]
+    API_ENTRY["API / Route"]
+  end
+  subgraph Domain["Domain / Service 层"]
+    SERVICE["Service / Use Case"]
+  end
+  subgraph Data["Data 层"]
+    DB[(Database / Model)]
+  end
+  subgraph External["External / Runtime"]
+    EXT["External Service / Worker"]
+  end
+
+  API_ENTRY --> SERVICE
+  SERVICE --> DB
+  SERVICE --> EXT
+
+  classDef user fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#000
+  classDef api fill:#e1f5ff,stroke:#01579b,stroke-width:2px,color:#000
+  classDef domain fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#000
+  classDef task fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:#000
+  classDef db fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#000
+  classDef external fill:#ffebee,stroke:#c62828,stroke-width:2px,color:#000
+  classDef state fill:#fffde7,stroke:#f9a825,stroke-width:2px,color:#000
+
+  class API_ENTRY api
+  class SERVICE domain
+  class DB db
+  class EXT external
+```
 
 ## How To Read
 
 ## Notes
 
 ## Unknowns
-```
+````
 
 Allowed diagram types include:
 
@@ -336,9 +473,38 @@ failure-recovery
 data-entity-map
 deployment-map
 change-impact-map
+sequence-detail
 ```
 
 Each diagram answers one question. Do not draw a whole repository.
+
+Diagram priority:
+
+| Priority | Use | Diagram Shape |
+|---|---|---|
+| P0 | newcomer overview, module/flow/boundary understanding | layered `flowchart TB/LR` |
+| P1 | entity/state/async/deployment/change-impact understanding | focused flowchart / state diagram / ER-style graph |
+| P2 | exact interaction order after overview exists | `sequenceDiagram` as a detail diagram |
+
+Color convention:
+
+| Class | Meaning |
+|---|---|
+| `user` | human, browser, client |
+| `api` | API route, controller, UI action entry |
+| `domain` | service, use case, domain logic |
+| `task` | job, worker, scheduler, async consumer |
+| `db` | database table, ORM model, persistent store |
+| `external` | third-party service, object storage, remote runtime |
+| `state` | status transition, failure state, manual gate |
+
+Use `sequenceDiagram` only when:
+
+- a module/process flowchart already exists
+- exact call order or callback timing matters
+- the human asks for a narrow interaction detail
+
+Do not use a sequence diagram as the first or only onboarding diagram for a project, module, or core flow.
 
 ## Batch Review Template
 
