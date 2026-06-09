@@ -80,6 +80,8 @@ Default physical layout:
 
 Categorized layout is for reading, not for mirroring the code tree. Keep it at most two levels deep under `onboarding-db/`.
 
+Allowed depth exception: `domain/entities/<entity>.md` may be three levels under `onboarding-db/` for complex core entity detail. This exception exists only for data-model entity docs; do not create arbitrary three-level mirrors such as `modules/<area>/<subarea>.md` or `flows/<domain>/<flow>.md`.
+
 ## Required Understanding Dimensions
 
 Every layout must cover:
@@ -215,6 +217,7 @@ Diagram quality rules:
 - when a human question reveals an unclear path, propose a **complete diagram update** for the relevant scope, not a minimal patch
 - if evidence is insufficient, mark the missing part `Unknown` or `Not enough evidence`; do not guess
 - **所有图必须有 "How To Read" 说明**，缺少此说明的图视为不完整
+- **所有图还必须有 "Step-by-Step Walkthrough"**：按执行顺序逐行讲解数据/控制流怎么走。不能只放图和图例， newcomer 需要一段文字按 1, 2, 3... 的顺序告诉他"从哪开始、经过哪、到哪结束"。Walkthrough 必须具体到节点名称、同步/异步、关键参数或状态变化。缺少 Walkthrough 的图同样视为不完整
 
 ## Deployment Placement
 
@@ -223,9 +226,9 @@ Do not put all deployment facts in one document.
 | Fact | Location |
 |---|---|
 | local run, ports, local required services | `setup-and-run.md` |
-| env vars, dev/test/prod differences, containers, CI environment | `environment.md` or Compact equivalent |
+| env vars, dev/test/prod differences, containers, CI environment | `setup-and-run.md` environment section, or `deployment-and-operations.md` when deployment is complex |
 | production deploy, release, rollback, operations, health checks, logs/metrics/tracing | `deployment-and-operations.md` when triggered |
-| service/container/DB/queue/external topology | `diagrams/deployment-map.md` |
+| service/container/DB/queue/external topology | embedded diagram in `deployment-and-operations.md`; standalone `diagrams/deployment-map.md` only when reused by multiple docs or too large to embed |
 | stable environment summary for agent decisions | `project/environments.md` or `project.md` index |
 
 Never write real secrets, tokens, passwords, or production connection strings.
@@ -298,20 +301,61 @@ If the update adds or changes diagrams for a targeted question, include:
 | Question | Proposed Diagram | Target File | Key Evidence | Confidence | Human Decision |
 |---|---|---|---|---|---|
 
+## Expanded Minimum Required Set
+
+For new Deep Scan output using Expanded Onboarding DB Layout Mode, the following files are **mandatory** unless the project reality explicitly justifies absence (with evidence):
+
+| # | File | Must Contain |
+|---|---|---|
+| 1 | `README.md` | reading paths, module reading paths, data-model reading path, diagrams index, document index, freshness status |
+| 2 | `overview.md` | project purpose, users, tech stack, capabilities, current state |
+| 3 | `maps/directory-map.md` | major directories, entrypoints, key files, which are core vs generated/tool/test |
+| 4 | `maps/module-map.md` | core modules, module relationships, "what each module does" one-liner |
+| 5 | `maps/boundary-map.md` | UI/API/Domain/DB/Jobs/External boundaries, dependency direction, boundaries that must not be crossed |
+| 6 | `runtime/setup-and-run.md` | local run commands, prerequisites, ports, env vars, verification steps, common failures |
+| 7 | `domain/data-model.md` | core entities, storage mapping, complete entity relationship map, model usage flow map |
+| 8 | `quality/testing-and-verification.md` | test systems, test commands, fast/full verification strategy |
+| 9 | `quality/risks-and-unknowns.md` | risks, unknowns, doc/code conflicts, unverified commands, missing diagrams, evidence, confidence |
+| 10 | `modules/<module>.md` | one file per core module: purpose, boundary, entrypoints, core call chain diagram + Step-by-Step, key files, dependencies, tests, risks, evidence chain |
+
+If persistent data does not exist, `domain/data-model.md` still exists with `Status: Not applicable` and reason/evidence.
+
+If a project has no core modules (rare), every module must be explicitly marked support-only with evidence.
+
+### Expanded Conditional Files
+
+Create these **only when the trigger condition is met**:
+
+| File | Trigger Condition | Why Not Mandatory |
+|---|---|---|
+| `maps/change-impact-map.md` | Project has ≥ 3 core modules OR change impact is repeatedly asked about | Change impact can be covered by module/flow docs and risks |
+| `domain/glossary.md` | Domain terms ≥ 8 OR naming conflicts/abbreviation ambiguity exists | Small projects have few terms; can be inline in docs |
+| `runtime/environment.md` | Never as standalone in Expanded; env vars live in `setup-and-run.md` | Avoids a 2-table file that duplicates setup-and-run |
+| `diagrams/<name>.md` | Diagram is referenced by ≥ 2 docs OR diagram > 80 lines Mermaid OR human asks for standalone | Expanded default embeds diagrams in target docs |
+| `flows/<flow>.md` | Core business flow crosses ≥ 2 modules OR has async/external/state changes | Simple flows can stay in module docs |
+| `domain/entities/<entity>.md` | Entity has many fields, complex state, multiple writers/readers | Simple entities stay in `data-model.md` |
+| `runtime/async-and-events.md` | Queues, subscriptions, callbacks, workers, schedulers exist | No async = no file |
+| `runtime/deployment-and-operations.md` | Multiple environments, containers, CI/CD, or production ops exist | Single local run = no file |
+| `domain/security-and-permissions.md` | Auth boundaries, roles, sensitive data exist | No auth = no file |
+| `quality/observability.md` | Logs, metrics, traces, alerts exist beyond basic health | Simple projects use `setup-and-run.md` for basic checks |
+
+Never create a conditional file just because the template exists.
+
 ## Completion Criteria
 
 Deep Scan is complete only when:
 
 - Onboarding DB Layout Mode is recorded, defaulting to Expanded unless the human explicitly requested Compact/Standard or the agent is preserving an existing Compact/Standard onboarding-db
+- **Expanded Minimum Required Set files are present** (or explicitly justified as absent with evidence)
 - README has reading paths, module reading paths, **data-model reading path**, and **diagrams index**
 - overview/setup/code map are usable for a newcomer
 - module relationship map and boundary map exist or are explicitly blocked
-- **every core module has at least one complete diagram** (flowchart); modules with async/external/callback/WebSocket interactions also have a sequence diagram; support-only modules may be marked with evidence
+- **every core module has at least one complete diagram** (flowchart) with **"How To Read" notes** and **"Step-by-Step Walkthrough"**; modules with async/external/callback/WebSocket interactions also have a sequence diagram with Step-by-Step; support-only modules may be marked with evidence
 - at least one core flow exists or is explicitly unknown; **complex flows are split into multiple diagrams when one is insufficient**
 - module index and module detail coverage are clear: each core module has either a dedicated `modules/<module>.md` or an explicit reason it remains index-only
 - persistent data is documented in `domain/data-model.md` or Compact equivalent, with **complete entity relationship map** (not a minimal subset) and **model usage flow map**
 - core docs include Evidence Chain entries for key module, flow, state, async/job, and verification claims
-- **all diagrams have "How To Read" notes**
+- **all diagrams have "How To Read" notes and "Step-by-Step Walkthrough"**
 - commands and tests have evidence/confidence
 - risks and unknowns are recorded
 - project memory backfill proposal was shown

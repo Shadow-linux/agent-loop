@@ -122,6 +122,17 @@ Rules:
 - Do not put task status, feature progress, raw requirements, plans, or test output inside managed blocks.
 - `CLAUDE.md` should point to `AGENTS.md`; it should not duplicate managed blocks.
 
+Managed block detection checklist:
+
+1. Count every `agent-loop:managed-start` and `agent-loop:managed-end`; counts must match.
+2. Parse `section:<name>` from every start marker and end marker; each start section must have exactly one matching end section.
+3. Reject duplicate active sections in the same `AGENTS.md` unless the human explicitly asks to merge or repair them.
+4. Reject nested managed blocks.
+5. Reject orphan end markers and start markers without an end marker.
+6. Check that each start marker has `section`; check `source` when the block claims to mirror a stable artifact.
+7. Check whether each `source` path exists or is intentionally external/deferred before relying on it.
+8. If any check fails, classify root guidance as `stale-marker` and stop before editing `AGENTS.md`.
+
 Managed block update flow:
 
 1. Read the existing `AGENTS.md`.

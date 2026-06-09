@@ -3,6 +3,7 @@
 ## [Unreleased] — Onboarding Diagram Hardening
 
 ### Added
+- Added a concrete managed block detection checklist for root `AGENTS.md` marker validation, including source checks and stale-marker handling.
 - Added `agent-loop:managed-start` / `agent-loop:managed-end` block rules for root `AGENTS.md`, including bootstrap, ownership, gates, completion, artifacts, architecture, commands, and hard-constraints sections.
 - Added validation scenarios to prevent whole-file `AGENTS.md` overwrites and to stop on broken or duplicated managed block markers.
 - Added mandatory sequence diagram requirement for core modules with async jobs, external APIs, callbacks, WebSocket, retry/compensation, or multi-service interactions.
@@ -11,8 +12,17 @@
 - Added unified diagram style guide in `templates/onboarding-db/diagram.md` covering flowchart layers, color classes, node shapes, arrow types, naming conventions, and sequence diagram participant/message/branch standards.
 - Added diagram coverage check to Batch Review Template in `references/onboarding-db-templates.md`.
 - Added "How To Read" as a mandatory requirement for every diagram.
+- Added "Step-by-Step Walkthrough" as a mandatory requirement for every onboarding diagram alongside "How To Read", with examples in all diagram-bearing templates.
+- Added Expanded Minimum Required Set (10 mandatory files) and Expanded Conditional Files trigger table to `references/project-onboarding-scan.md`.
+- Added validation scenario `2h-19` requiring Step-by-Step Walkthrough for diagram completeness.
+- Added Step-by-Step Walkthrough sections to all diagram-bearing templates: module, flow, data-model, entity, state-flow, boundary, module-map, deployment, architecture, change-impact, flows-and-data, overview.
 
 ### Changed
+- Unified Expanded onboarding-db runtime/environment routing so env/config belongs in `setup-and-run.md`, while standalone `environment.md` is reserved for Compact/Standard or existing layouts.
+- Unified standalone diagram rules so deployment and other diagrams are embedded in target docs by default and moved to `diagrams/` only when reused or too large.
+- Completed `How To Read` examples for diagram-bearing onboarding templates that already had walkthroughs.
+- Clarified README and Usage expectations for Expanded onboarding-db minimum coverage, discovery-triggered docs, embedded diagrams, and diagram walkthrough text.
+- Clarified that `domain/entities/<entity>.md` is an allowed onboarding-db depth exception for complex data-model entity details.
 - Rewrote `Usage.md` as a Chinese human-facing guide focused on what humans can say to trigger agent-loop capabilities.
 - Clarified human-facing onboarding guidance in `Usage.md`, including Quick/Deep/Targeted choices, Expanded onboarding-db default, Batch Human Review, and root `AGENTS.md` managed blocks.
 - Changed Deep Project Onboarding Scan to default to Expanded Onboarding DB Layout Mode; Compact and Standard are now reserved for explicit human requests or existing onboarding-db preservation.
@@ -22,6 +32,9 @@
 - Tightened Completion Criteria so core modules must have diagrams (text-only fallback removed), sequence diagrams are mandatory for async/external modules, and all diagrams require "How To Read" notes.
 - Updated `templates/onboarding-db/module-template.md` with complete call-chain flowchart example and mandatory sequence diagram section with Mermaid template.
 - Updated Minimum Completion Standard in `references/onboarding-db-templates.md` to require model usage flow maps and sequence diagrams for async/external interactions.
+- Demoted `maps/change-impact-map.md`, `domain/glossary.md`, `runtime/environment.md`, and `diagrams/` directory from mandatory to conditional based on project triggers.
+- Restored `overview.md` as mandatory in Expanded minimum set.
+- Updated `Deployment Placement` to merge environment variables into `setup-and-run.md` instead of standalone `environment.md` in Expanded layout.
 
 ## 1.2.0 — 2026-06-07
 

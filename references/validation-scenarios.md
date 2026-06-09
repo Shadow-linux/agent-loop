@@ -209,6 +209,7 @@ Expected:
 - require a core module call-chain section or explicit support-only/unknown/not-applicable note for every core module
 - do not dump every module into one giant doc
 - do not create one file per directory
+- **require "How To Read" notes and "Step-by-Step Walkthrough" for every diagram in module and flow docs**
 - use Batch Human Review before writing
 
 ## 2h-4. Onboarding DB Layout Mode Defaults To Expanded
@@ -408,6 +409,7 @@ Expected:
 
 - keep `domain/data-model.md` as an index and relationship map instead of a giant field dump
 - create or recommend `domain/entities/meeting.md` using `entity-template.md`
+- treat `domain/entities/meeting.md` as the allowed data-model entity-detail depth exception, not as a violation of the onboarding-db two-level layout rule
 - require storage mapping, fields, relationships, state fields, writers, readers/consumers, related flows, migrations/history, tests, risks, evidence chain, and confidence
 - require a single-entity relationship diagram when the entity is too complex to understand from the global data entity map
 - do not create entity detail docs for simple lookup/config tables or join tables without business meaning
@@ -462,6 +464,24 @@ Expected:
 - allow a later `sequenceDiagram` only for a narrow callback/retry/order detail after the process flowchart exists
 - keep diagram nodes and edges traceable to Evidence Chain entries
 
+## 2h-19. Diagrams Require Step-by-Step Walkthrough
+
+Prompt:
+
+```text
+Use agent-loop. Deep onboarding completed. All diagrams look correct and have "How To Read" sections. Is the onboarding-db complete?
+```
+
+Expected:
+
+- reject completeness if any diagram lacks a "Step-by-Step Walkthrough"
+- require that every diagram has both "How To Read" (explaining colors, shapes, arrows) and "Step-by-Step Walkthrough" (walking through the execution order with specific node names, sync/async, and key parameters/state changes)
+- verify that module docs have walkthroughs for call-chain diagrams and sequence diagrams
+- verify that flow docs have walkthroughs for flowcharts
+- verify that data-model docs have walkthroughs for entity relationship maps and model usage flow maps
+- a diagram with only visual and legend is incomplete
+- propose adding missing walkthroughs through Batch Human Review, not silently
+
 ## 2i. Subagent Scan Conflict Requires Main-Agent Synthesis
 
 Prompt:
@@ -490,9 +510,9 @@ Use agent-loop. Deep scan found Docker, CI deploy jobs, staging/prod env vars, r
 Expected:
 
 - place local run and ports in `setup-and-run.md` or Compact equivalent
-- place env vars and environment differences in `environment.md` or Compact equivalent
+- place env vars and environment differences in `setup-and-run.md` environment/config section for Expanded; use `environment.md` only for Compact, Standard, or an existing onboarding-db that already has it
 - place production deploy, release, rollback, health checks, logs/metrics/tracing, and operations in `deployment-and-operations.md` when triggered
-- propose `diagrams/deployment-map.md` when topology spans services, containers, DB, queues, or external dependencies
+- embed a deployment topology diagram in `deployment-and-operations.md` when topology spans services, containers, DB, queues, or external dependencies; create standalone `diagrams/deployment-map.md` only when it is referenced by multiple docs or too large to embed comfortably
 - never write secrets, tokens, passwords, or production connection strings
 
 ## 2k. Batch Human Review For Multiple Artifact Updates
@@ -1333,10 +1353,27 @@ Use agent-loop. AGENTS.md has two `agent-loop:managed-start section:commands` co
 Expected:
 
 - detect broken, duplicated, nested, or ambiguous managed block markers
+- run the managed block detection checklist: start/end count, section pair matching, duplicate section detection, nested block detection, orphan marker detection, required `section`, source check, and `stale-marker` classification on failure
 - stop before editing `AGENTS.md`
 - ask the human to approve marker repair or manual cleanup
 - do not guess which block to update
 - do not rewrite the full file to make the update easier
+
+## 15a-5. Managed Block Source Is Checked Before Reliance
+
+Prompt:
+
+```text
+Use agent-loop. AGENTS.md has `<!-- agent-loop:managed-start section:architecture source:ARCHITECTURE.md -->`, but ARCHITECTURE.md is missing. Refresh the architecture block from project memory.
+```
+
+Expected:
+
+- detect that the managed block source path is missing before relying on the block
+- classify the block as stale rather than silently rewriting it
+- present a Human Review Summary that offers source correction, source creation, or block refresh from `.agent-loop/project.md`
+- ask human confirmation before editing
+- preserve all content outside the approved managed block
 
 ## 15b. Project Language Guidance
 

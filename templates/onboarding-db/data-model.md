@@ -103,6 +103,35 @@ flowchart TB
 - **实体（绿色）**：持久化数据实体
 - 对于详细的 CRUD 操作（创建/读取/更新/删除），见下面的 API/Flow/Job Usage 表格
 
+## Step-by-Step Walkthrough: Entity Relationships
+
+```text
+1. Meeting（会议实体）是中心实体，通过 1:N 关系关联多个子实体
+2. Meeting 拥有 MeetingAudio（会议录音）：一次会议可以有零或多个录音文件
+3. Meeting 拥有 MeetingSubtitle（字幕）：录音经 ASR 处理后生成字幕
+4. Meeting 拥有 MeetingMinutes（纪要）：字幕或录音经处理后生成会议纪要
+5. Meeting 拥有 MeetingDocument（文档）：会议可关联上传的文档
+6. Meeting 拥有 MeetingParticipant（参会人）：记录谁参加了会议
+7. User（用户）通过 N:M 关系加入 MeetingParticipant：一个用户可以参加多个会议
+8. Meeting 拥有 MeetingStatusTransition（状态流转）：追踪会议从创建到结束的完整状态历史
+```
+
+## Step-by-Step Walkthrough: Model Usage Flow
+
+```text
+1. 【会议上传音频流程】会创建/更新 Meeting 实体，并创建 MeetingAudio 实体
+2. 【ASR 生成字幕流程】读取 MeetingAudio，生成后创建 MeetingSubtitle 实体
+3. 【纪要生成流程】读取 Meeting 和 MeetingSubtitle，生成后创建 MeetingMinutes 实体
+4. 【文档解析流程】读取 Meeting，创建 MeetingDocument 实体
+5. 【POST /meetings API】同步创建 Meeting 实体
+6. 【POST /meetings/{id}/minutes/generate API】同步触发纪要生成，最终创建 MeetingMinutes
+7. 【POST /meetings/{id}/documents API】同步上传文档，创建 MeetingDocument
+8. 【audio_tasks 后台任务】异步处理音频，更新 MeetingAudio 状态
+9. 【subtitle_tasks 后台任务】异步处理 ASR 回调，创建/更新 MeetingSubtitle
+10. 【minutes_tasks 后台任务】异步生成纪要，创建/更新 MeetingMinutes
+11. 【document_tasks 后台任务】异步解析文档，创建/更新 MeetingDocument
+```
+
 ## Relationships
 
 | From | To | Relationship | Direction | Delete / Cascade Risk | Evidence | Confidence |
@@ -137,6 +166,20 @@ flowchart TB
 
 | Entity / Relationship | Test File / Command | What It Proves | Evidence | Confidence |
 |---|---|---|---|---|
+
+## Sensitive Data & Compliance
+
+**从全局视角标记敏感数据分布，防止 agent 在跨实体操作时意外暴露 PII。**
+
+| Entity | Sensitive Fields | Sensitive Type | Encryption | Masking | Retention | Compliance | Evidence | Confidence |
+|---|---|---|---|---|---|---|---|---|
+| | | PII / password / token / financial | at-rest / in-transit | full / partial / none | 天数 | GDPR / 等保 / PCI | | |
+
+**全局数据保护策略**：
+- 敏感字段默认是否加密存储：
+- 日志中是否脱敏敏感字段：
+- 数据导出/备份时的加密策略：
+- 数据保留期和自动清理策略：
 
 ## Evidence Chain
 

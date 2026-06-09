@@ -162,6 +162,53 @@ sequenceDiagram
 
 If a diagram lacks "How To Read", it is considered incomplete.
 
+## Step-by-Step Walkthrough
+
+**Every diagram must also include a "Step-by-Step Walkthrough" section.** A picture alone is not enough; newcomers need text that walks them through the diagram in execution order.
+
+### Format Rules
+
+- Use numbered list (1, 2, 3...)
+- Each step must mention the **specific node name** as it appears in the diagram
+- Each step must say **which layer** the node belongs to (API / Domain / Data / Runtime / External)
+- Each step must say whether the call is **synchronous** or **asynchronous**
+- Each step should mention **key parameters, state changes, or side effects** when evidenced
+- Walkthrough must cover the **happy path** first, then mention **failure/retry branches** if they exist in the diagram
+
+### Flowchart Walkthrough Example
+
+```text
+1. 用户 / Client（UserLayer）发起请求，调用 `POST /resource/action`（API 层，蓝色）
+2. API 路由接收请求，同步调用 `Service: action_resource(id, payload)`（Domain 层，黄色）
+3. Service 执行权限校验 / 业务规则（Domain 层，黄色，菱形判断节点）
+4. 校验通过后，Service 同步调用 `Repository: find_by_id(id)`（Data 层，绿色）
+5. Repository 从数据库返回 resource object 给 Service（Data 层 → Domain 层，同步返回）
+6. Service 异步触发 `TaskDispatcher: dispatch(ASYNC_TASK, resource_data)`（Runtime 层，橙色，虚线箭头）
+7. Service 立即返回 `{status: accepted}` 给 API 层（Domain 层 → API 层，同步返回）
+8. API 返回 202 Accepted 给用户 / Client（API 层 → UserLayer，同步返回）
+9. 后台：Worker 异步处理任务，调用 `ExternalService: call_api(resource_data)`（External 层，红色）
+10. 外部服务返回结果后，Worker 更新数据库状态为 COMPLETED 或 FAILED（Data 层，绿色）
+```
+
+### Sequence Diagram Walkthrough Example
+
+```text
+1. Client 发送 request {id, payload} 到 API: POST /resource/action（同步请求）
+2. API 同步调用 Service: action_resource(id, payload)，传入 id 和 payload
+3. Service 同步调用 Repository: find_by_id(id) 查询资源
+4. Repository 返回 resource object 给 Service（同步返回）
+5. Service 同步调用 TaskDispatcher: dispatch(ASYNC_TASK, resource_data) 提交异步任务
+6. Service 返回 {status: accepted} 给 API（同步返回）
+7. API 返回 202 Accepted 给 Client（同步返回，此时后台任务尚未完成）
+8. TaskDispatcher 异步触发 Worker: process_task(resource_data)（后台开始执行）
+9. Worker 同步调用 ExternalService: call_api(resource_data)（调用第三方）
+10. ExternalService 返回 callback / response 给 Worker（同步返回）
+11. 【成功分支】Worker 调用 Repository 更新状态为 COMPLETED
+12. 【失败分支】Worker 调用 Repository 更新状态为 FAILED，并将任务重新投递或送入死信队列
+```
+
+If a diagram lacks "Step-by-Step Walkthrough", it is considered incomplete.
+
 ## Notes
 
 ## Evidence Chain

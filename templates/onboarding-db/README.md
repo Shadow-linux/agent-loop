@@ -34,7 +34,7 @@ Freshness Window: 7 days
 |---|---|---|---|
 | frontend developer | `overview.md` | boundary docs, related flows, API docs, tests | understand UI/API boundaries, state, and verification |
 | backend developer | `maps/boundary-map.md` | modules, flows, data model, jobs, tests | understand domain boundaries, services, data, and side effects |
-| operations / DevOps | `runtime/setup-and-run.md` | `runtime/environment.md`, `runtime/deployment-and-operations.md`, diagrams | understand runtime, config, deployment, rollback, and health |
+| operations / DevOps | `runtime/setup-and-run.md` | environment/config section, `runtime/deployment-and-operations.md` when triggered, embedded or standalone diagrams | understand runtime, config, deployment, rollback, and health |
 | QA / tester | `quality/testing-and-verification.md` | flows, change impact map, known risks | understand test strategy, risk areas, and regression paths |
 | product / domain reviewer | `overview.md` | flows, glossary, decisions/history | understand capabilities, terminology, and design tradeoffs |
 

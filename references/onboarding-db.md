@@ -41,7 +41,7 @@ Do not read onboarding-db by default for tiny task execution when `project.md`, 
 |---|---|
 | What is the active feature or next action? | `project.md` |
 | What does this project do? | `onboarding-db/overview.md` |
-| How do I run it? | `runtime/setup-and-run.md`, `runtime/environment.md`, or Compact equivalent |
+| How do I run it? | `runtime/setup-and-run.md` including its environment/config section, or Compact/existing `runtime/environment.md` equivalent |
 | Where do I start reading code? | `README.md`, `maps/module-map.md`, `maps/directory-map.md`, or Compact equivalent |
 | What does this module do? | module reading path, `maps/module-map.md`, then `modules/<module>.md` or Compact equivalent |
 | What are the system boundaries? | `maps/boundary-map.md` or Compact equivalent, plus boundary diagram |
@@ -50,8 +50,8 @@ Do not read onboarding-db by default for tiny task execution when `project.md`, 
 | Who writes or reads this entity? | `domain/data-model.md`, `domain/entities/<entity>.md`, related flows/modules, then focused code reality if needed |
 | How do async/events/jobs work? | `runtime/async-and-events.md`, `runtime/jobs-and-schedules.md`, or Compact equivalent |
 | How do I understand async queues, consumers, callbacks, or background jobs? | README async reading path, `runtime/async-and-events.md`, `runtime/jobs-and-schedules.md`, async/job diagrams |
-| I followed setup docs and it does not work | `runtime/setup-and-run.md`, `runtime/environment.md`, `quality/testing-and-verification.md` or Compact equivalent, then `onboarding-diagnostics.md` Startup Failure Diagnosis |
-| How is it deployed? | `runtime/setup-and-run.md`, `runtime/environment.md`, `runtime/deployment-and-operations.md`, or Compact equivalent |
+| I followed setup docs and it does not work | `runtime/setup-and-run.md` including environment/config, `quality/testing-and-verification.md`, or Compact/existing `runtime/environment.md` equivalent, then `onboarding-diagnostics.md` Startup Failure Diagnosis |
+| How is it deployed? | `runtime/setup-and-run.md`, `runtime/deployment-and-operations.md` when triggered, or Compact/existing `runtime/environment.md` equivalent |
 | What changes if I modify this area? | `maps/change-impact-map.md` or Compact equivalent, then `onboarding-diagnostics.md` Change Impact Analysis |
 | Who or what changes this state/status? | `flows/<flow>.md`, `domain/data-model.md`, `domain/state-flow-<entity>.md`, or Compact equivalent, then `onboarding-diagnostics.md` State Change Trace |
 | Why was this designed this way? | `domain/decisions-and-history.md` or Compact equivalent, then `onboarding-diagnostics.md` Design Decision Routing |

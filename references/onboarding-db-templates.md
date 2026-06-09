@@ -82,8 +82,11 @@ Anti-misuse rules:
 - Human onboarding-db layout choice wins after risks are explained. If the human requests Compact or Standard, preserve all understanding dimensions and ask confirmation before writing.
 - Onboarding-db layout reshaping requires Batch Human Review.
 - Categorization is for reading, not for mirroring the repo tree. Keep onboarding-db at most two levels deep.
+- Allowed depth exception: `domain/entities/<entity>.md` may be three levels under `onboarding-db/` because entity detail is a stable data-model subcategory. Do not generalize this exception to arbitrary nested module, flow, or directory mirrors.
 - `module-map.md` is an index and navigation doc. Module detail belongs in `modules/<module>.md` when a dedicated module doc is warranted.
 - Complex flow details belong in `flows/<flow>.md` when a single merged flow section becomes hard to read. Keep merged Compact sections only when the flow remains small and clearly navigable from README.
+- Every diagram-bearing file must include both "How To Read" and "Step-by-Step Walkthrough". A diagram without walkthrough is incomplete even if the visual is correct.
+- `diagrams/` directory is optional in all layouts. Default is to embed diagrams in their target docs (module, flow, data-model, entity). Create standalone `diagrams/<name>.md` only when a diagram is referenced by ≥ 2 docs or is too large (> 80 lines Mermaid) to embed comfortably.
 
 Compact suggested files when human-requested or preserving existing Compact:
 
@@ -117,13 +120,15 @@ quality/risks-and-unknowns.md
 Expanded default split:
 
 ```text
-modules/<name>.md (copy from templates/onboarding-db/module-template.md)
-flows/<name>.md (copy from templates/onboarding-db/flow-template.md)
-runtime/deployment-and-operations.md
-domain/decisions-and-history.md
-domain/security-and-permissions.md
-quality/observability.md
-diagrams/<name>.md for standalone diagrams only when embedding is not enough
+modules/<name>.md (copy from templates/onboarding-db/module-template.md) — mandatory for each core module
+flows/<name>.md (copy from templates/onboarding-db/flow-template.md) — when flow crosses modules or has async/state changes
+domain/data-model.md — mandatory when persistent data exists
+domain/entities/<entity>.md — when entity is complex enough to need its own reading path
+runtime/deployment-and-operations.md — when deployment/ops complexity justifies split
+runtime/async-and-events.md — when queues, callbacks, workers exist
+domain/security-and-permissions.md — when auth/permissions exist
+quality/observability.md — when logs/metrics/traces exist
+diagrams/<name>.md — optional; only when embedding is not enough
 ```
 
 ## Standard File Derivation
@@ -136,14 +141,14 @@ Onboarding-db layout does not require a direct template file for every topic. Us
 | `maps/module-map.md` | `code-map.md` + `module-template.md` module fields | module summary/cards, module relationship map, coverage, dedicated module-doc links, related diagrams |
 | `maps/boundary-map.md` | `architecture-and-integrations.md` or copy `templates/onboarding-db/boundary-map.md` | UI/API/domain/DB/jobs/external boundaries, dependency direction, cross-boundary contracts, boundary risks |
 | `core-flows.md` or `flows/<flow>.md` | `flows-and-data.md` + `flow-template.md` flow fields | flow index, human-readable core flow details, diagrams, state/data changes, verification hints, evidence chains |
-| `runtime/environment.md` | `setup-and-run.md` + `deployment-and-operations.md` | env files, variables, local/test/prod differences, containers, CI/runtime config, evidence and confidence |
+| `runtime/environment.md` | `setup-and-run.md` + `deployment-and-operations.md` | env files, variables, local/test/prod differences, containers, CI/runtime config, evidence and confidence. **Not standalone in Expanded; merge into `setup-and-run.md`.** |
 | `domain/data-model.md` | `flows-and-data.md` + `data-model.md` template fields | core entities, storage/model mapping, relationships, ownership, key fields, state fields, readers/writers, flow/API/job usage, migrations/seeds, tests, evidence |
 | `runtime/async-and-events.md` | `architecture-and-integrations.md` + `flow-template.md` async fields | producers, queues/topics, consumers, callbacks, retries, DLQ/compensation, diagrams |
 | `runtime/jobs-and-schedules.md` | `flows-and-data.md` + `flow-template.md` job fields | schedules, workers, triggers, operational notes, failure/retry behavior |
-| `maps/change-impact-map.md` | `verification-and-risks.md` or copy `templates/onboarding-db/change-impact-map.md` | change categories, affected modules/files/APIs/data/tests, risk level, verification path |
+| `maps/change-impact-map.md` | `verification-and-risks.md` or copy `templates/onboarding-db/change-impact-map.md` | change categories, affected modules/files/APIs/data/tests, risk level, verification path. **Conditional in Expanded; create only when ≥ 3 core modules or change impact is repeatedly asked.** |
 | `quality/testing-and-verification.md` | `verification-and-risks.md` | test systems, fast/full commands, E2E/browser path when present, baseline failures, confidence |
 | `quality/risks-and-unknowns.md` | `verification-and-risks.md` | high-risk unknowns, doc/code conflicts, unverified commands, missing diagrams, follow-ups |
-| `domain/glossary.md` | `verification-and-risks.md` glossary section | domain terms, Chinese meaning, English meaning, used-in context, synonyms/aliases including acronyms and naming conflicts, source evidence |
+| `domain/glossary.md` | `verification-and-risks.md` glossary section | domain terms, Chinese meaning, English meaning, used-in context, synonyms/aliases including acronyms and naming conflicts, source evidence. **Conditional in Expanded; create only when ≥ 8 terms or naming conflicts exist.** |
 
 When deriving a Standard file, keep the common metadata block, summary-first shape, evidence, confidence, unknowns, and project memory backfill section.
 
@@ -165,6 +170,23 @@ Expanded onboarding-db layout is the default for new Deep Scan output, but it st
 | `quality/observability.md` | derive from `deployment-and-operations.md` | logs, metrics, tracing, alerts, health checks, error reporting, dashboards if evidenced |
 
 Do not create one Expanded file per directory. Split by durable module, bounded context, complex business flow, async system, deployment concern, or repeated maintenance need.
+
+**Conditional files in Expanded** (create only when triggered by project reality):
+
+| Conditional File | Trigger | Template |
+|---|---|---|
+| `flows/<name>.md` | flow crosses ≥ 2 modules or has async/external/state changes | `flow-template.md` |
+| `domain/entities/<entity>.md` | entity has many fields, complex state, multiple writers/readers | `entity-template.md` |
+| `domain/state-flow-<entity>.md` | legal lifecycle states matter | `state-flow-template.md` |
+| `domain/state-trace-<entity>.md` | need to trace who writes state | `state-trace-template.md` |
+| `runtime/async-and-events.md` | queues, subscriptions, callbacks, workers exist | derive from architecture + flow-template async fields |
+| `runtime/jobs-and-schedules.md` | cron, scheduler, background jobs exist | derive from flow-template job fields |
+| `maps/change-impact-map.md` | ≥ 3 core modules or change impact is frequently asked | `change-impact-map.md` |
+| `domain/glossary.md` | ≥ 8 domain terms or naming conflicts | `glossary.md` |
+| `quality/observability.md` | logs, metrics, traces, alerts beyond basic health | derive from deployment-and-operations |
+| `diagrams/<name>.md` | diagram referenced by ≥ 2 docs or > 80 lines Mermaid | `diagram.md` |
+
+Never create a conditional file just because the template exists.
 
 ## README Requirements
 
@@ -207,6 +229,8 @@ Diagram index table:
 |---|---|---|---|---|---|
 
 **Diagram coverage check**: The diagrams index must also list modules/flows/entities that **do not yet have diagrams**, with a reason and planned action. If a core module, core flow, or complex entity is missing a diagram, onboarding-db is **usable but incomplete**.
+
+**Diagram walkthrough check**: Every diagram indexed here must have a corresponding "Step-by-Step Walkthrough" in its target document. The walkthrough must be traceable from the diagram index (e.g., via target doc link). A diagram without walkthrough is incomplete even if the visual is present.
 
 ## Module Card
 
@@ -518,8 +542,8 @@ Use `sequenceDiagram` **when a core module has async jobs, external APIs, callba
 
 **Diagram coverage check** (add to every Architecture, Flows And Data, or targeted batch):
 
-| Module / Flow / Entity | Required Diagrams | Has Diagram? | Diagram Type | How To Read? | Action |
-|---|---|---|---|---|---|
+| Module / Flow / Entity | Required Diagrams | Has Diagram? | Diagram Type | How To Read? | Step-by-Step Walkthrough? | Action |
+|---|---|---|---|---|---|---|
 
 If any core module, core flow, or complex entity is missing a required diagram, flag it in the Batch Review and do not mark onboarding-db complete until resolved.
 
@@ -543,7 +567,7 @@ Onboarding-db is complete only when:
 - code map tells where to start reading
 - modules and boundaries are mapped
 - **diagrams include module map, boundary map, at least one complete diagram per core module, sequence diagrams for async/external interactions, at least one core flow, and model usage flow map when persistent data exists**
-- **all diagrams have "How To Read" notes**
+- **all diagrams have "How To Read" notes and "Step-by-Step Walkthrough"**
 - async/jobs/deployment/data are documented or marked not applicable/unknown
 - tests and verification commands have confidence labels
 - risks and unknowns are recorded

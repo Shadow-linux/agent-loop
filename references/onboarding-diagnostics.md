@@ -30,7 +30,7 @@ reported failure -> read setup docs -> compare command/env/services -> inspect e
 Steps:
 
 1. Ask for or read the exact command, working directory, error output, OS/runtime/container context, and whether dependencies were installed.
-2. Read `setup-and-run.md`, `environment.md` or Compact equivalent, `verification-and-risks.md`, and any `Common Startup Failures`.
+2. Read `setup-and-run.md` including environment/config sections, Compact or existing `environment.md` equivalent, `verification-and-risks.md`, and any `Common Startup Failures`.
 3. Compare documented prerequisites with reality: package manager, language version, env files, ports, required services, database/cache/queue, auth/seed data, containers, tunnels, and remote/local mode.
 4. Classify the failure:
    - stale setup docs
@@ -53,7 +53,7 @@ Output table:
 If updating docs, update:
 
 - `setup-and-run.md` for local run commands, prerequisites, ports, and Common Startup Failures
-- `environment.md` or Compact equivalent for env/config differences
+- `setup-and-run.md` environment/config section for env/config differences in Expanded onboarding-db; use `environment.md` only for Compact, Standard, or existing onboarding-db structures that already have it
 - `deployment-and-operations.md` only for production/release/ops concerns
 - `verification-and-risks.md` for baseline failures or known blockers
 
