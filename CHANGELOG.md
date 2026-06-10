@@ -1,8 +1,11 @@
 # Agent Loop Changelog
 
-## [Unreleased] — Onboarding Diagram Hardening
+## 1.2.1 — 2026-06-11
 
 ### Added
+- Added Feature Follow-up / Flow-back rules so bugs, regressions, post-close corrections, field/schema changes, algorithm changes, API mismatches, test failures, and QA/user feedback are matched against recent features before creating a new feature.
+- Added a default 15-day recent-feature lookback, Candidate Match Matrix, reopen-for-follow-up rules, Follow-up Intake notes record, and validation scenarios for post-close bug flow-back, linked new feature routing, and unclear ownership investigation.
+- Added Discovery Coverage Matrix rules so Expanded Deep Onboarding Scan cannot stop after only the minimum 10 files; every discovered core module, complex flow, data model, complex entity, async/job path, deployment concern, verification system, and high-risk unknown must be documented or explicitly deferred.
 - Added a concrete managed block detection checklist for root `AGENTS.md` marker validation, including source checks and stale-marker handling.
 - Added `agent-loop:managed-start` / `agent-loop:managed-end` block rules for root `AGENTS.md`, including bootstrap, ownership, gates, completion, artifacts, architecture, commands, and hard-constraints sections.
 - Added validation scenarios to prevent whole-file `AGENTS.md` overwrites and to stop on broken or duplicated managed block markers.
@@ -18,6 +21,8 @@
 - Added Step-by-Step Walkthrough sections to all diagram-bearing templates: module, flow, data-model, entity, state-flow, boundary, module-map, deployment, architecture, change-impact, flows-and-data, overview.
 
 ### Changed
+- Strengthened runtime Agent Ownership so every response must classify state, recommend exactly one next action, and avoid ending action reports with only "done".
+- Clarified that Expanded onboarding-db minimum files are a floor, not a cap, and added completion checks for discovery-driven module/flow/data/async/deployment coverage.
 - Unified Expanded onboarding-db runtime/environment routing so env/config belongs in `setup-and-run.md`, while standalone `environment.md` is reserved for Compact/Standard or existing layouts.
 - Unified standalone diagram rules so deployment and other diagrams are embedded in target docs by default and moved to `diagrams/` only when reused or too large.
 - Completed `How To Read` examples for diagram-bearing onboarding templates that already had walkthroughs.

@@ -12,6 +12,8 @@ Inspect -> Classify -> Recommend -> Confirm -> Act -> Record -> Recommend
 
 Do not jump from a human goal directly to code. Do not move to a later stage until the prior stage artifact is accepted or explicitly bypassed by the human.
 
+Agent ownership is mandatory. The agent must not wait for the human to name the next internal stage. For every human goal, bug report, onboarding question, vague product idea, or "what next" request, the agent classifies the current state and recommends exactly one next action with a reason. If required artifacts are missing, recommend creating or repairing them. If work appears ready, recommend the next stage. If work appears complete, run Feature Completion Check and recommend close, pause, or continue.
+
 Explicit bypass is allowed only for narrow one-off edits that do not create or change feature behavior, public interfaces, data/security boundaries, project memory, submit state, or close state. Record the bypass reason in the response or `notes.md` when a feature exists.
 
 These checks cannot be bypassed inside `agent-loop`: Project Entry classification, re-adoption minimum reconciliation, human source requirement preservation, Task Done Gate, Delivery Contract acceptance or breaking-change gate, fresh verification before completion claims, submit confirmation, and close confirmation.
@@ -29,6 +31,7 @@ Classify the project into exactly one state:
 | `re-adopt` | `.agent-loop/` or legacy `agent-loop/` exists, but recent work happened outside the loop or the human asks to re-adopt/re-take-over/re-sync the project | Re-Adopt Agent Loop Project / Recovery Backfill |
 | `stale-memory` | `.agent-loop/` or legacy `agent-loop/` exists but docs conflict with code reality, or long-term memory indexes point to missing/stale artifacts | Reconcile Project Context / Recovery Backfill |
 | `guided-onboarding` | `.agent-loop/onboarding-db/` exists and the human asks to be onboarded, guided through the project, or helped understand where to start | Guided Newcomer Onboarding |
+| `feature-follow-up` | human reports bug/regression/post-close correction/field or algorithm change/API mismatch/test failure that may relate to a recent feature | Feature Follow-up And Flow-back |
 | `active-feature` | active feature exists and next action is clear | Continue Current Stage |
 | `blocked` | blocker or missing decision prevents next stage | Ask Human / Diagnose |
 
@@ -54,6 +57,8 @@ If `.agent-loop/onboarding-db/` exists and the human asks to be guided through t
 If code reality and the memory root disagree, if long-term memory indexes point to missing artifacts, or if the human says the project used `agent-loop` before but recent work bypassed it, classify as `re-adopt` or `stale-memory`, treat code as the current fact base for agent-maintained docs, preserve human requirements as original intent, and load `references/recovery-and-backfill.md`.
 
 If `project.md` claims an onboarding layout, lists onboarding-db files, or root `AGENTS.md` / `CLAUDE.md` tells newcomers to start from `.agent-loop/onboarding-db/README.md`, but `.agent-loop/onboarding-db/` or its README is missing, classify as `stale-memory`. Do not run Guided Newcomer Onboarding from the missing path. Recommend the smallest onboarding memory reconcile: report the missing index target, use existing docs/code as evidence, and ask before updating `project.md`, root guidance, or creating onboarding-db.
+
+If the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, test failure, or QA/user feedback, classify as `feature-follow-up` before deciding to create a new feature. Load `references/feature-follow-up.md`, inspect recent feature candidates using the default 15-day lookback window, and recommend exactly one of: flow back to an owning feature, create a linked new feature, create a maintenance fix, or investigate first.
 
 Default memory root for new projects is `.agent-loop/`. If legacy `agent-loop/` exists, use it for the current run and ask before migrating.
 
@@ -90,6 +95,8 @@ Recommended next stage:
 Human gate:
 ```
 
+Do not end an action report with only "done". Always include the next recommended stage or a concrete stop reason.
+
 ## Stage Order
 
 Default order:
@@ -102,6 +109,7 @@ Project Onboarding Scan if Needed
 Requirement Archive
 Product Brief if Needed
 Brainstorm / Clarify if Needed
+Feature Follow-up And Flow-back if Needed
 Targeted Feature Scan if Needed
 Feature Spec
 Requirement Checklist

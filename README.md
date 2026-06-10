@@ -1,6 +1,6 @@
 # Agent Loop
 
-**Current version:** 1.2.0
+**Current version:** 1.2.1
 
 A reusable [Codex](https://github.com/openai/codex) / CLI-agent skill for single-person software development workflows—from goal intake to verified close.
 
@@ -31,6 +31,7 @@ Project Entry → Remote Project Discovery if needed
 → Re-Adopt Agent Loop Project if needed
 → Project Onboarding Scan if needed → Requirement Archive
 → Product Brief if needed → Brainstorm / Clarify if needed
+→ Feature Follow-up / Flow-back if needed
 → Targeted Feature Scan if needed → Feature Spec → Requirement Checklist
 → Work Breakdown → Delivery Contract if needed → Test Design
 → E2E Discovery if Web → Technical Design / Code Context
@@ -51,6 +52,7 @@ Project Entry → Remote Project Discovery if needed
 | **Plan** | Construction-grade execution plan for the active task/story |
 | **Evidence** | Fresh proof: test output, build output, API results, E2E checks, logs |
 | **Drift** | Mismatch between docs, code reality, or human decisions |
+| **Feature Follow-up / Flow-back** | Bug/change intake that checks recent features before creating a new feature. Default lookback is 15 days. |
 | **Delivery Contract** | Optional producer-consumer boundary handoff. Used only when API, event, public data, UI state/behavior, SDK/library, runtime, or explicit cross-agent/human handoff needs a stable contract. |
 
 ## Artifact Layout
@@ -153,6 +155,14 @@ Compact or Standard onboarding-db layouts are used only when the human explicitl
 > "Continue the login feature."
 
 The agent reads `.agent-loop/project.md`, finds the active feature, and resumes from the last checkpoint.
+
+### 6. Handle Bugs After Close
+
+> "测试发现上次做的上传功能有 bug."
+
+The agent does not immediately create a new feature. It first checks recent features, using a 15-day default lookback window, then presents candidate matches with evidence. After human confirmation it either flows the work back to the owning feature, creates a linked new feature, creates a maintenance fix, or investigates first.
+
+If a closed feature is reopened for follow-up, the original close record remains intact. The follow-up gets its own `notes.md` intake record, updated tasks/tests/plan as needed, fresh verification, review, drift check, and a new close confirmation.
 
 ## Execution Modes
 

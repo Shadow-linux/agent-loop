@@ -43,7 +43,7 @@ New human source material should be archived inside a requirement set directory.
 | `tasks.md` | work breakdown, status, and links to task details | full test evidence |
 | `tests.md` | test design, matrix, and links to test details | raw test output |
 | `plan.md` | active execution plan pointer or compact plan | historical execution record |
-| `notes.md` | decisions, evidence, drift, pause/close | original requirements |
+| `notes.md` | decisions, follow-up intake, evidence, drift, pause/close | original requirements |
 | `contracts.md` | optional confirmed delivery contract index, compact contracts, status, and verification links | temporary subagent assignments |
 | `tasks/*` | detailed task instructions when complex mode is triggered | feature-wide ledger |
 | `tests/*` | detailed test cases when complex mode is triggered | raw test output |

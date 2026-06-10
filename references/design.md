@@ -45,6 +45,7 @@ Human Goal
 → Task / Test / Plan
 → Execute / Verify
 → Drift Check
+→ Feature Follow-up / Flow-back when post-close bug/change appears
 → Project Memory Update
 → Submit / Integrate if requested
 → Resume / Pause / Close

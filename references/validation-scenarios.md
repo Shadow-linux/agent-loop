@@ -214,6 +214,30 @@ Expected:
 
 ## 2h-4. Onboarding DB Layout Mode Defaults To Expanded
 
+## 2h-3a. Expanded Minimum Set Is Not A Cap
+
+Prompt:
+
+```text
+Use agent-loop. Deep onboarding selected Expanded layout. The draft already has the 10 mandatory files, but the scan found 7 core modules, 4 complex flows, 3 complex entities, Celery jobs, external ASR/object storage integrations, and two test systems. Is onboarding-db complete?
+```
+
+Expected:
+
+- load `project-onboarding-scan.md` and `onboarding-db-templates.md`
+- state that the Expanded Minimum Required Set is only a floor, not a maximum file count
+- require a Discovery Coverage Matrix before claiming completion
+- verify every discovered core module has a `modules/<module>.md` or explicit evidence-based skip reason
+- verify every discovered complex flow has a `flows/<flow>.md` or explicit evidence-based skip reason
+- verify persistent data has `domain/data-model.md`, data/entity maps, and model usage flow map
+- verify complex entities have `domain/entities/<entity>.md` or explicit index-only reasoning
+- verify async/job/external integrations have runtime docs and required diagrams
+- verify multiple test systems are documented in `quality/testing-and-verification.md`
+- say `Onboarding DB draft is usable but incomplete` if any discovered durable item lacks matching output or an evidence-based skip reason
+- do not stop or mark complete merely because 10 mandatory files exist
+
+## 2h-4. Onboarding DB Layout Mode Defaults To Expanded
+
 Prompt:
 
 ```text
@@ -1769,3 +1793,59 @@ Expected:
 - inspect diff and untracked files before any submit decision
 - present Human Review Summary for submit/release and close decisions
 - ask explicit human confirmation before commit, PR text, merge, release, publish, or marking the feature `closed`
+
+## 35. Post-Close Bug Flows Back To Recent Feature
+
+Prompt:
+
+```text
+Use agent-loop. 测试发现 7 天前关闭的 public-upload-audio-formats feature 有 bug：AMR 文件上传成功但返回的 MIME 不对。
+```
+
+Expected:
+
+- classify as `feature-follow-up`, not immediate new feature creation
+- load `feature-follow-up.md`
+- inspect recent features in the default 15-day lookback window
+- present Candidate Match Matrix with feature status, close/update date, evidence, match strength, and recommended flow
+- recommend `reopen-for-follow-up` when the closed feature owns the behavior
+- ask human confirmation before reopening or changing docs
+- preserve the original Close Record
+- record Follow-up Intake in `notes.md`
+- update `spec.md`, `tasks.md`, `tests.md`, and `plan.md` only as needed
+- require fresh regression/API/E2E or substitute verification, review, drift check, project memory update if long-term facts changed, Feature Completion Check, and explicit close confirmation before closing again
+
+## 36. Post-Close Change May Become Linked New Feature
+
+Prompt:
+
+```text
+Use agent-loop. 上次上传功能做完了，现在我想把上传改成支持批量队列、失败重试、后台转码和进度推送。
+```
+
+Expected:
+
+- classify through `feature-follow-up`
+- compare against recent upload feature scope and evidence
+- identify that the request likely creates new capability and broader scope
+- recommend a linked new feature instead of silently reopening the old feature, unless the human says this was required acceptance all along
+- preserve old feature close state until human confirms otherwise
+- archive durable new requirements after confirmation
+- create or update new feature `product.md` / `spec.md` only after the human confirms the routing decision
+
+## 37. Feature Follow-up Investigates When Ownership Is Unclear
+
+Prompt:
+
+```text
+Use agent-loop. API 测试现在失败了，可能和最近几个 feature 有关，你判断下。
+```
+
+Expected:
+
+- classify as `feature-follow-up`
+- inspect recent feature candidates and test failure evidence
+- present Candidate Match Matrix with match strength
+- if multiple candidates are medium/high or evidence is weak, recommend `investigate-first`
+- do not reopen any feature or create a new feature before the human confirms the routing
+- route to Targeted Feature Scan or Diagnose Failure as the next stage

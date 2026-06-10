@@ -5,7 +5,7 @@ description: Use when starting, continuing, resuming, structuring, testing, impl
 
 # Agent Loop
 
-Version: 1.2.0
+Version: 1.2.1
 
 Run a single-human, CLI-agent development loop from goal intake to verified close. This skill is a controller: it decides the current stage, loads the right reference, produces or updates `agent-loop` artifacts, and stops at human gates.
 
@@ -71,6 +71,7 @@ references/project-onboarding-scan.md    deep/targeted project understanding sca
 references/onboarding-db.md              onboarding-db lifecycle, reading, writing, freshness, and problem routing
 references/onboarding-db-templates.md    onboarding-db layout mode, metadata, document, and diagram templates
 references/onboarding-diagnostics.md     startup failure, change impact, and state-change trace procedures
+references/feature-follow-up.md          bug/change flow-back to recent features
 references/complex-artifacts.md    triggered tasks/tests/plans directory mode
 references/implementation-planning.md construction-grade task/story planning rules
 references/recovery-and-backfill.md code-reality recovery and document backfill protocol
@@ -110,6 +111,7 @@ CHANGELOG.md                        skill maintenance history; append meaningful
 15. Load `references/onboarding-db.md` when reading, writing, refreshing, correcting, or relying on `.agent-loop/onboarding-db/`.
 16. Load `references/onboarding-db-templates.md` before creating or updating onboarding-db documents or diagrams.
 17. Load `references/onboarding-diagnostics.md` when a human says setup docs do not work, asks what a change might break, asks why a state/status changed, or asks who/what updates a state field.
+17a. Load `references/feature-follow-up.md` when the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, test failure, or QA/user feedback that may belong to a recent feature.
 18. Load `references/large-projects.md` when the repo is large, old, unfamiliar, multi-package, or likely above 100k LOC.
 19. Load `references/complex-artifacts.md` when story/task/test/plan complexity crosses its trigger conditions.
 20. Load `references/implementation-planning.md` before writing or approving `plan.md` for a task/story.
@@ -197,6 +199,7 @@ If the local directory is only a remote-project entry point, create only thin lo
 - Code layout suggestions are reference scaffolds, not mandates. Adapt them to project shape, language, framework conventions, and existing code reality. New projects may scaffold after confirmation; existing projects are recorded as-is unless the human explicitly approves refactoring.
 - During recovery/backfill, code reality is the current fact base for agent-maintained docs, but human original requirements are never overwritten.
 - During re-adoption, do not start new feature work first. Compare current code/tests/scripts against existing `agent-loop` memory, propose backfill, ask human confirmation, then resume or start feature work.
+- For bug reports, regressions, post-close corrections, field/schema changes, algorithm changes, and QA/test failures, do not default to a new feature. First run Feature Follow-up And Flow-back: inspect recent features in the default 15-day lookback window, present candidate feature matches, and ask whether to flow the work back to an owning feature, create a linked new feature, or investigate first.
 - During Project Entry and re-adoption, verify the existence of long-term memory index targets before trusting them. If `project.md` says onboarding-db exists, lists onboarding-db documents, or root guidance tells newcomers to read onboarding-db, but the directory or README is missing, report onboarding memory drift and route to reconcile/backfill before guided onboarding or feature work.
 - Root `AGENTS.md` and `CLAUDE.md` are default project guidance artifacts for new/onboarded projects, created only after human confirmation.
 - Every initialized, onboarded, re-adopted, or managed project must re-check root `AGENTS.md` and `CLAUDE.md`; onboarding is incomplete if either is missing or stale unless the human explicitly defers it.

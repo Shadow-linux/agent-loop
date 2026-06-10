@@ -123,6 +123,21 @@ If something is not found or not applicable, say `Not found`, `Not applicable`, 
 
 Use `onboarding-db-templates.md` derivation tables to decide whether a file should be copied from a concrete template or derived from another template section. Missing one-to-one templates are not a reason to skip required understanding dimensions.
 
+Deep Scan is discovery-closed, not file-count-closed. The Expanded minimum required set is the starting floor. It is never a cap, target count, or permission to stop early.
+
+Before claiming a Deep Scan draft is complete, produce a Discovery Coverage Matrix:
+
+| Discovery Item | Evidence | Required Output | Status | If Skipped, Why | Follow-up |
+|---|---|---|---|---|---|
+| core module | path/symbol evidence | `modules/<module>.md` + module diagram | done / skipped / unknown | evidence-based reason | next action |
+| complex flow | path/symbol evidence | `flows/<flow>.md` + flow diagram | done / skipped / unknown | evidence-based reason | next action |
+| persistent data model | model/schema/migration evidence | `domain/data-model.md` + data/entity maps | done / skipped / unknown | evidence-based reason | next action |
+| complex entity | model/schema/usage evidence | `domain/entities/<entity>.md` or index-only reason | done / skipped / unknown | evidence-based reason | next action |
+| async/job/event path | worker/queue/scheduler evidence | runtime doc + sequence/async/job diagram | done / skipped / unknown | evidence-based reason | next action |
+| deployment/ops concern | config/CI/deploy evidence | deployment/operations section or doc | done / skipped / unknown | evidence-based reason | next action |
+
+Completion requires the matrix to be closed for every discovered durable item. A row is closed only when the required output exists, or the skip reason is explicit, evidence-based, and human-reviewable. Do not stop because 10 files exist; stop only when discovered modules, flows, data, async, deployment, verification, and risk dimensions are explained or explicitly deferred.
+
 Core-module detail rule:
 
 - `module-map.md` is an index and navigation document, not a place to dump every module detail.
@@ -303,6 +318,8 @@ If the update adds or changes diagrams for a targeted question, include:
 
 ## Expanded Minimum Required Set
 
+This set is the minimum floor for new Expanded onboarding-db output, not the maximum output. If discovery finds additional core modules, flows, entities, async/job paths, deployment concerns, or repeated maintenance paths, create or propose additional docs and diagrams according to the Discovery Coverage Matrix.
+
 For new Deep Scan output using Expanded Onboarding DB Layout Mode, the following files are **mandatory** unless the project reality explicitly justifies absence (with evidence):
 
 | # | File | Must Contain |
@@ -347,6 +364,7 @@ Deep Scan is complete only when:
 
 - Onboarding DB Layout Mode is recorded, defaulting to Expanded unless the human explicitly requested Compact/Standard or the agent is preserving an existing Compact/Standard onboarding-db
 - **Expanded Minimum Required Set files are present** (or explicitly justified as absent with evidence)
+- Discovery Coverage Matrix is closed for all discovered durable modules, complex flows, persistent data, complex entities, async/job/event paths, deployment/ops concerns, verification systems, and high-risk unknowns
 - README has reading paths, module reading paths, **data-model reading path**, and **diagrams index**
 - overview/setup/code map are usable for a newcomer
 - module relationship map and boundary map exist or are explicitly blocked

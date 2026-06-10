@@ -336,6 +336,45 @@ Exit:
 
 - intent stable enough for Feature Spec
 
+## Feature Follow-up And Flow-back
+
+Entry: human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, test failure, QA/user feedback, or any change that may belong to recent feature work.
+
+Load:
+
+- `feature-follow-up.md`
+
+Inspect:
+
+- `project.md` Active Feature, Paused Features, and recent feature references
+- recent `.agent-loop/features/*/spec.md`, `tasks.md`, `tests.md`, and `notes.md`
+- close records, submit records, verification evidence, and drift notes
+- code paths, tests, APIs, data models, routes, jobs, UI pages, or contracts mentioned by the report
+
+Rules:
+
+- default lookback window is 15 calendar days
+- code reality is current fact base for defect evidence
+- original human requirements remain immutable
+- do not default to creating a new feature until candidate recent features are checked
+- present a Candidate Match Matrix before changing feature docs
+- if a closed feature is the likely owner, recommend `reopen-for-follow-up` and ask confirmation
+- if scope is new or ownership is weak, recommend a linked new feature or investigate-first path
+- if multiple candidates match, ask the human to choose
+
+Write after confirmation:
+
+- Follow-up Intake record in the owning feature `notes.md`, or in the new feature `notes.md` if a new feature is chosen
+- updated `spec.md`, `tasks.md`, `tests.md`, and `plan.md` only as needed
+- requirement archive entry when the human report is durable source material
+- `project.md` Current Work when a closed feature is reopened or a new feature is created
+- Delivery Contract updates only through the normal Delivery Contract gate
+
+Exit:
+
+- human confirms flow-back, new-feature, maintenance, or investigate-first decision
+- next stage: Requirement Archive, Feature Spec update, Work Breakdown, Test Design, Targeted Feature Scan, Plan Gate, or Diagnose Failure
+
 ## Feature Spec
 
 Entry: goal and source requirements are clear enough.

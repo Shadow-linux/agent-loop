@@ -79,6 +79,7 @@ Anti-misuse rules:
 - Standard is not "generate every template." Create only files justified by project reality, human goal, and the File Derivation tables.
 - Expanded is not "one file per directory." Split only durable business/runtime modules, bounded contexts, complex flows, deployment/operations concerns, or repeated maintenance paths.
 - Expanded is the default; do not downgrade to Compact or Standard just because the project appears small.
+- Expanded minimum files are a floor, not a cap. After the minimum files exist, continue creating or proposing docs for every discovered core module, complex flow, complex entity, async/job path, deployment concern, and repeated maintenance path until the Discovery Coverage Matrix is closed.
 - Human onboarding-db layout choice wins after risks are explained. If the human requests Compact or Standard, preserve all understanding dimensions and ask confirmation before writing.
 - Onboarding-db layout reshaping requires Batch Human Review.
 - Categorization is for reading, not for mirroring the repo tree. Keep onboarding-db at most two levels deep.
@@ -547,6 +548,13 @@ Use `sequenceDiagram` **when a core module has async jobs, external APIs, callba
 
 If any core module, core flow, or complex entity is missing a required diagram, flag it in the Batch Review and do not mark onboarding-db complete until resolved.
 
+**Discovery coverage check** (add to every Deep Scan batch):
+
+| Discovery Item | Required Doc / Diagram | Evidence | Status | If Skipped, Why | Action |
+|---|---|---|---|---|---|
+
+The Discovery Coverage Matrix prevents treating the minimum file set as a maximum. If a discovered durable module, complex flow, persistent data model, complex entity, async/job/event path, deployment/ops concern, verification system, or high-risk unknown has no matching document/diagram and no evidence-based skip reason, onboarding-db is usable but incomplete.
+
 For onboarding-db batches:
 
 | Batch | Typical Files |
@@ -562,6 +570,7 @@ For onboarding-db batches:
 Onboarding-db is complete only when:
 
 - README has reading paths, module reading paths, data-model reading path, document index, and **diagrams index with coverage check**
+- Discovery Coverage Matrix is closed for every discovered core module, complex flow, persistent data model, complex entity, async/job/event path, deployment/ops concern, verification system, and high-risk unknown
 - overview explains purpose, users, stack, and capabilities
 - setup/run path is usable or blocked with evidence
 - code map tells where to start reading

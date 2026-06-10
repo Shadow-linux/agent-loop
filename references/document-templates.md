@@ -779,6 +779,19 @@ Status: active
 
 ## Human Decisions
 
+## Follow-up Intake
+
+- Date:
+- Source: human report | test failure | E2E | API verification | production/QA feedback | other
+- Report:
+- Candidate Features:
+- Classification: same-feature-bug | same-feature-adjustment | regression-from-feature | new-feature | maintenance-fix | unclear
+- Lookback Window: 15 days | outside-default-window
+- Match Evidence:
+- Human Decision: flow-back | new-feature | maintenance | investigate-first | defer
+- Artifact Updates:
+- Next Stage:
+
 ## Plan History
 
 - YYYY-MM-DD `<Plan ID>`:

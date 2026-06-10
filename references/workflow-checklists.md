@@ -130,6 +130,20 @@ Before using an external skill or plugin inside a stage:
 - [ ] Questions must affect scope, UX, data, architecture, testing, or acceptance.
 - [ ] Write accepted answers back into `spec.md`.
 
+## Feature Follow-up And Flow-back
+
+- [ ] Load `feature-follow-up.md`.
+- [ ] Trigger before creating a new feature when the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, test failure, or QA/user feedback.
+- [ ] Inspect Active Feature, Paused Features, and recent feature docs in the default 15-day lookback window.
+- [ ] Inspect code/test/API/data/UI paths mentioned by the report.
+- [ ] Present a Candidate Match Matrix with match evidence and match strength.
+- [ ] Classify the report as same-feature-bug, same-feature-adjustment, regression-from-feature, new-feature, maintenance-fix, or unclear.
+- [ ] If a closed feature is the likely owner, recommend reopen-for-follow-up and ask human confirmation.
+- [ ] If the report is durable source material, ask before archiving it under `.agent-loop/requirements/`.
+- [ ] Ask before changing feature status, scope, acceptance, tasks, tests, Delivery Contracts, or project memory.
+- [ ] Record Follow-up Intake in `notes.md`.
+- [ ] Route to the next exact stage: Requirement Archive, Feature Spec update, Work Breakdown, Test Design, Targeted Feature Scan, Plan Gate, or Diagnose Failure.
+
 ## Feature Spec
 
 - [ ] Create or update feature workspace.

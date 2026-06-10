@@ -36,7 +36,9 @@ Before development work:
 - If required artifacts are missing, propose creating or updating them.
 - If work appears ready to continue, recommend the next stage.
 - If work appears complete, run Feature Completion Check and recommend close, pause, or continue.
+- When the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, test failure, or QA/user feedback, inspect recent features before creating a new feature and recommend flow-back, linked new feature, maintenance fix, or investigation.
 - After each stage, summarize changed artifacts, evidence, drift, and the next recommended stage.
+- Do not finish with only "done"; include the next recommended stage or a concrete stop reason.
 - For non-trivial confirmations, present a table-first Human Review Summary before asking approval.
 <!-- agent-loop:managed-end section:ownership -->
 

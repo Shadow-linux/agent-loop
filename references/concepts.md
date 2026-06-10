@@ -52,6 +52,8 @@ First version excludes:
 
 **Drift**: Mismatch between docs, code reality, or human decisions.
 
+**Feature Follow-up / Flow-back**: Bug/change intake path that checks whether a post-close bug, regression, field/schema change, algorithm change, API mismatch, test failure, or QA/user feedback belongs to a recent feature before creating a new feature. Default lookback is 15 calendar days.
+
 **Re-Adopt Agent Loop Project**: Recovery path for a project that already has `.agent-loop/` or legacy `agent-loop/`, but recent development happened outside the loop. The agent compares code reality to existing memory, proposes backfill, asks human confirmation, then resumes or starts feature work.
 
 **Submit / Integrate**: The explicit stage that packages verified work for commit, PR text, merge note, or release note. It requires human confirmation and records the result in `notes.md`.
