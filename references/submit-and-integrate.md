@@ -23,12 +23,14 @@ Enter this stage only after:
 - implementation for the selected task/story/feature is complete
 - fresh verification evidence exists in `notes.md`
 - required Review is complete: Spec Review always, Standards Review when triggered
-- drift check is complete or the human explicitly chooses to submit with known drift
+- drift check is complete
 - long-term project facts are updated in `project.md`, or no long-term project facts changed
 - `tasks.md` reflects current task status
 - `plan.md` is closed, superseded, or points to the next active unit
 
 If any item is missing, recommend the missing upstream stage first.
+
+If the human explicitly chooses to submit with known drift, still perform and record a minimum Drift Check before submit. The record must state the known drift, affected artifacts, risk, and the human decision to submit despite the unresolved drift. Human choice can accept known risk; it cannot skip drift inspection.
 
 ## Submit Options
 
@@ -73,10 +75,50 @@ When committing:
 
 - include only the intended files
 - avoid unrelated workspace changes
-- use a concise message tied to the feature/task
+- use the repository's commit message rules when present, such as `AGENTS.md`
+- if root guidance has no commit message style, use the fallback format below and recommend whether to add commit guidance to `AGENTS.md`
+- for `agent-loop` skill repository commits, prefer Chinese and use type + version scope with a multi-line body
 - record commit hash in `notes.md`
 
 If unrelated changes exist, stop and ask whether to exclude them, split commits, or pause.
+
+## Commit Message Format
+
+For meaningful commits, do not use one-line-only messages.
+
+Preferred format:
+
+```text
+<type>: <summary>
+
+- <concrete change>
+- <verification evidence>
+- <docs or project-memory update>
+```
+
+Allowed types:
+
+```text
+feat, fix, docs, refactor, test, chore
+```
+
+For the `agent-loop` skill repository:
+
+- prefer Chinese in the summary and body
+- include the current skill version scope, for example `docs(v1.2.0): 更新 onboarding scan 文档结构`
+- use 3-7 concrete bullet lines for behavior, gate, artifact, template, reference, validation scenario, or documentation changes
+- keep version numbers unchanged unless the human explicitly approves a version bump
+
+Example:
+
+```text
+docs(v1.2.0): 更新 onboarding scan 文档结构
+
+- 调整 onboarding-db 为分类目录结构
+- 增加 module-map 索引与 modules 详解分工
+- 补充 flow 文档的人类可读模板
+- 增加 Evidence Chain 与图索引要求
+```
 
 ## Pull Request Text
 

@@ -11,19 +11,17 @@ Supersedes: none
 
 Unit: task
 ID: T003
-Title: Implement login form states
+Title: Add failing test for invalid login error
 
 ## Goal
 
-Add the browser-visible form behavior for success, failure, loading, and session redirect.
+Add the failing browser-visible test for the invalid login error state.
 
 ## TDD Plan
 
 1. RED: add browser test for invalid login error.
-2. VERIFY RED: confirm test fails because no error appears.
-3. GREEN: implement error rendering.
-4. VERIFY GREEN: run browser test.
-5. REFACTOR: clean state handling without changing behavior.
+2. VERIFY RED: confirm the test fails because no stable error appears.
+3. STOP: implementation belongs to T004 after this task is accepted.
 
 ## Commands
 
@@ -34,7 +32,6 @@ npm run test:e2e -- login
 ## Expected Evidence
 
 - Failing browser test before implementation.
-- Passing browser test after implementation.
 - Notes entry with command output summary.
 
 ## Handoff

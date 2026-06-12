@@ -17,6 +17,45 @@ Default memory root is `.agent-loop/` because it is workflow metadata, not produ
 
 Do not use `AGENTS.md` as a task log. Do not use `project.md` as the startup instruction file for every agent.
 
+## Root Agent Bootstrap Gate
+
+Root `AGENTS.md` is the bootstrap node that teaches future agents how to enter `agent-loop`. It is not optional project decoration.
+
+Every time `agent-loop` is used inside a target project, check root guidance before feature work:
+
+```text
+1. Read root AGENTS.md if present.
+2. Read root CLAUDE.md if present.
+3. Check whether CLAUDE.md loads, includes, symlinks to, or clearly points to AGENTS.md.
+4. Check whether AGENTS.md contains the required bootstrap sections.
+5. Record or update guidance status in project.md.
+6. If missing or stale, propose a repair through Human Review Summary.
+```
+
+`AGENTS.md` is stale when any of these are missing or contradicted:
+
+- project uses `agent-loop`
+- Bootstrap Protocol: inspect `.agent-loop/`, classify the stage, and recommend exactly one next action
+- Agent Ownership: agents steer the loop instead of waiting for the human to name every step
+- Gate Modes: Strict Mode, Feature Auto-Loop, Task Auto-Run, and their explicit human enablement rules
+- Required Stops: unclear scope, risky changes, Delivery Contract gates, subagent dispatch, submit, close, commit, PR, merge, release, publish
+- Completion Rules: fresh verification, review, drift check, project memory update, Feature Completion Check, Feature Close Review
+- Feature Follow-up / Flow-back: bugs, regressions, screenshots, QA feedback, API mismatches, and small tweaks are checked against active/paused/closed recent features before new feature creation or code edits
+- Submit And Commit Rules: submit/commit/PR/merge/release/publish require explicit confirmation and only intended files are included
+- root/directory guidance boundaries and requirement archive rules
+- managed block markers are missing for `agent-loop` maintained sections, unless the file is intentionally fully human-owned and the human has deferred managed block adoption
+
+`CLAUDE.md` is stale when it duplicates independent long-lived rules, diverges from `AGENTS.md`, or does not clearly point Claude Code to `AGENTS.md`.
+
+Onboarding, re-adoption, or project initialization is not complete until:
+
+```text
+AGENTS.md status = present | created | human-deferred
+CLAUDE.md status = points-to-AGENTS | created-pointer | human-deferred
+```
+
+If the human defers guidance repair, record the defer decision and reason in `project.md`. Do not silently treat missing root guidance as healthy.
+
 ## Root Guidance Default
 
 For Init Project and Existing Project Onboarding, the default recommendation is to create or update:
@@ -28,6 +67,15 @@ CLAUDE.md -> AGENTS.md
 
 Only write after human confirmation.
 
+For any project that is initialized, onboarded, re-adopted, or otherwise managed by `agent-loop`, root guidance must be checked every time the agent enters the project:
+
+```text
+AGENTS.md status: present | created | stale | missing | human-deferred
+CLAUDE.md status: points-to-AGENTS | created-pointer | stale | missing | human-deferred
+```
+
+Onboarding is not complete if root `AGENTS.md` or `CLAUDE.md` is missing or stale unless the human explicitly defers it. Record the decision in `project.md`.
+
 Guidance language should follow the project language when it is clear from existing docs or human preference.
 
 If project language is unclear, default root `AGENTS.md` / `CLAUDE.md` guidance to English for cross-agent compatibility.
@@ -36,21 +84,82 @@ If the project uses Chinese or the human explicitly asks for Chinese guidance, w
 
 For a local directory that is only a remote-project entry point, create local root guidance only if it helps future agents re-enter the remote workflow. Full project guidance should live in the remote project when remote writes are allowed.
 
-If symlinks are unsafe or unsupported, create `CLAUDE.md` with a short pointer to `AGENTS.md` instead of duplicating all content.
+`AGENTS.md` is the primary maintained guidance file. `CLAUDE.md` must not duplicate the full rules. It should load, include, symlink to, or briefly point Claude Code to `AGENTS.md`. If symlinks are unsafe or unsupported, create `CLAUDE.md` with a short pointer to `AGENTS.md`.
 
 Never overwrite an existing ordinary `CLAUDE.md` or `AGENTS.md` without reading it, summarizing the proposed migration, and getting human confirmation.
+
+## Managed Blocks
+
+Use managed blocks to mark content maintained by `agent-loop` inside root `AGENTS.md`:
+
+```md
+<!-- agent-loop:managed-start section:<name> source:<path-or-artifact> -->
+...
+<!-- agent-loop:managed-end section:<name> -->
+```
+
+Recommended section names:
+
+```text
+bootstrap
+ownership
+gates
+required-stops
+completion
+artifacts
+submit
+directory-guidance
+architecture
+commands
+hard-constraints
+```
+
+Rules:
+
+- `agent-loop` may propose updates inside managed blocks when the source artifact changes.
+- Managed blocks must include `section`; they should include `source` when the content comes from a stable artifact such as `.agent-loop/project.md`, `.agent-loop/project/*.md`, `.agent-loop/onboarding-db/README.md`, or `ARCHITECTURE.md`.
+- Content outside managed blocks is human/project-owned. Do not rewrite it automatically.
+- If an existing `AGENTS.md` has no managed blocks, propose adding the minimal needed managed blocks instead of replacing the whole file.
+- If a managed block source is missing, stale, or contradictory, classify the block as stale and propose either source correction or block refresh through Human Review Summary.
+- If marker pairs are broken, duplicated, nested, or ambiguous, stop and ask before editing.
+- Do not put task status, feature progress, raw requirements, plans, or test output inside managed blocks.
+- `CLAUDE.md` should point to `AGENTS.md`; it should not duplicate managed blocks.
+
+Managed block detection checklist:
+
+1. Count every `agent-loop:managed-start` and `agent-loop:managed-end`; counts must match.
+2. Parse `section:<name>` from every start marker and end marker; each start section must have exactly one matching end section.
+3. Reject duplicate active sections in the same `AGENTS.md` unless the human explicitly asks to merge or repair them.
+4. Reject nested managed blocks.
+5. Reject orphan end markers and start markers without an end marker.
+6. Check that each start marker has `section`; check `source` when the block claims to mirror a stable artifact.
+7. Check whether each `source` path exists or is intentionally external/deferred before relying on it.
+8. If any check fails, classify root guidance as `stale-marker` and stop before editing `AGENTS.md`.
+
+Managed block update flow:
+
+1. Read the existing `AGENTS.md`.
+2. Identify managed blocks and their sources.
+3. Compare source facts with block content.
+4. Present a table with block, source, current summary, proposed change, and risk.
+5. Ask human confirmation.
+6. Update only approved managed blocks; preserve all other content byte-for-byte where practical.
+7. Record guidance status and source evidence in `project.md`.
 
 ## Root `AGENTS.md` Should Contain
 
 Keep it short and long-lived:
 
 - project uses `agent-loop`
+- Root Agent Bootstrap: read `AGENTS.md`, inspect `.agent-loop/`, classify the current stage, and recommend exactly one next action
 - guidance language follows project language; keep stable artifact/stage names in English
 - before development, inspect `.agent-loop/`
 - if missing, initialize it
 - if present, read `.agent-loop/project.md` and active feature docs
 - if `project.md` says `Status: remote-entry`, read `.agent-loop/remote.md` and verify the remote project before acting
 - if the project used `agent-loop` before but recent development bypassed it, route to Re-Adopt Agent Loop Project before new feature work
+- if the human reports a bug, regression, post-close correction, field/schema/algorithm/API change, test failure, screenshot issue, QA/user feedback, or "small tweak", route to Feature Follow-up / Flow-back before creating a new feature or editing code
+- Feature Follow-up / Flow-back should inspect Active / Paused / Closed features, use the 30-day default lookback as a default rather than a hard boundary, read candidate `spec.md`, `tasks.md`, `tests.md`, and `notes.md`, and present a Candidate Match Matrix before recommending flow-back, linked new feature, maintenance-fix, or investigate-first
 - when working in a subdirectory, check for the nearest directory-level `AGENTS.md`
 - when creating a new long-lived boundary directory, propose a directory-level `AGENTS.md` before or alongside the directory creation
 - keep new human source materials in requirement set directories under `.agent-loop/requirements/`, not flat files
@@ -58,11 +167,14 @@ Keep it short and long-lived:
 - ask human confirmation before each agent-loop stage
 - use table-first Human Review Summary for non-trivial confirmations
 - Autonomous Execution After Approval: after explicit Feature Auto-Loop or Task Auto-Run enablement, agents may continue inside the accepted scope through implementation, testing, fixing, review, drift, status update, and final report
-- autonomous stop conditions: scope change, ambiguity, unavailable infrastructure, security/data boundary changes, broad architecture changes, repeated verification failure, unrelated dirty work, Delivery Contract creation/acceptance/breaking-change approval, subagent dispatch without explicit approval, submit, close, commit, PR, merge, release, or publish
+- autonomous stop conditions: scope change, ambiguity, human original requirement change, unavailable infrastructure, drift needing approval, security/data boundary changes, broad architecture changes, directory guidance changes, first-version exclusions, repeated verification failure, unrelated dirty work, Delivery Contract creation/acceptance/breaking-change approval, subagent dispatch without explicit approval, submit, close, commit, PR, merge, release, or publish
+- submit and commit guidance: submit/commit/PR/merge/release/publish require explicit confirmation after diff, verification, review, drift, and unrelated-change checks; if no project-specific commit style exists, use `<type>: <summary>` plus a concrete bullet body
 - run fresh verification before completion claims
 - run Feature Completion Check after likely completion, before starting a new feature, or when resuming with an active feature
 - perform Feature Close Review, drift check, and project memory update before close
 - stable project commands and hard constraints, only if every agent should know them immediately
+- managed block markers for `agent-loop` maintained sections, so future updates do not overwrite human-owned content
+- stale detection: if future agents cannot learn Agent Ownership, Gate Modes, Required Stops, Completion Rules, and Submit And Commit Rules from root guidance, propose a root `AGENTS.md` update
 
 ## Root `AGENTS.md` Should Not Contain
 
@@ -181,6 +293,7 @@ Use:
 
 ```text
 templates/root-AGENTS.md
+templates/root-CLAUDE.md
 templates/directory-AGENTS.md
 ```
 

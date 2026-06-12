@@ -83,6 +83,10 @@ Next Suggested Action:
 Gate Mode: Strict Mode | Feature Auto-Loop | Task Auto-Run
 Gate Mode Scope:
 Gate Mode Stop Conditions:
+Feature Follow-up Lookback: 30 days
+Recent Feature Flow-back Policy:
+- When bugs, regressions, post-close corrections, field/schema changes, algorithm changes, API mismatches, test failures, or QA/user feedback appear, inspect recent features before creating a new feature.
+- Flow back to the owning feature when evidence shows the change repairs, adjusts, or completes that feature.
 
 ## Remote Entry
 
@@ -140,13 +144,14 @@ Sync Model:
   - Useful commands:
   - Evidence:
   - Confidence: high | medium | low
-  - Guidance: root only | has AGENTS.md | propose AGENTS.md | not needed
+  - Guidance: root only | has AGENTS.md | propose AGENTS.md | not needed | deferred
 
 ## Directory Guidance
 
 Root Guidance:
-- `AGENTS.md`:
-- `CLAUDE.md`:
+- `AGENTS.md`: present | created | stale | missing | human-deferred
+- `CLAUDE.md`: points-to-AGENTS | created-pointer | stale | missing | human-deferred
+- Sync Rule: `AGENTS.md` is maintained primary guidance; `CLAUDE.md` loads or points to `AGENTS.md`.
 
 Directory-Level Guidance:
 - `<path>/AGENTS.md`: present | proposed | not needed

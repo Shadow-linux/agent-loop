@@ -1,6 +1,6 @@
 # Agent Loop
 
-**Current version:** 1.1.1
+**Current version:** 1.2.1
 
 A reusable [Codex](https://github.com/openai/codex) / CLI-agent skill for single-person software development workflows—from goal intake to verified close.
 
@@ -28,12 +28,14 @@ Agent Loop fixes this with a repeatable, inspectable workflow:
 
 ```
 Project Entry → Remote Project Discovery if needed
-→ Re-Adopt Agent Loop Project if needed → Requirement Archive
+→ Re-Adopt Agent Loop Project if needed
+→ Project Onboarding Scan if needed → Requirement Archive
 → Product Brief if needed → Brainstorm / Clarify if needed
+→ Feature Follow-up / Flow-back if needed
 → Targeted Feature Scan if needed → Feature Spec → Requirement Checklist
 → Work Breakdown → Delivery Contract if needed → Test Design
 → E2E Discovery if Web → Technical Design / Code Context
-→ Plan if needed → Analyze Consistency
+→ Plan Gate / Plan if needed → Analyze Consistency
 → Subagent Execution if approved → Execute Task / Story
 → Verify → Review → Drift Check → Project Memory Update
 → Feature Completion Check → Submit / Integrate if requested
@@ -50,6 +52,7 @@ Project Entry → Remote Project Discovery if needed
 | **Plan** | Construction-grade execution plan for the active task/story |
 | **Evidence** | Fresh proof: test output, build output, API results, E2E checks, logs |
 | **Drift** | Mismatch between docs, code reality, or human decisions |
+| **Feature Follow-up / Flow-back** | Bug/change intake that checks recent features before creating a new feature. Default lookback is 30 days. |
 | **Delivery Contract** | Optional producer-consumer boundary handoff. Used only when API, event, public data, UI state/behavior, SDK/library, runtime, or explicit cross-agent/human handoff needs a stable contract. |
 
 ## Artifact Layout
@@ -59,6 +62,13 @@ Project Entry → Remote Project Discovery if needed
   remote.md                           # optional local-entry pointer for remote projects
   project.md                          # Long-term project memory
   project/                            # optional enterprise memory detail files
+  onboarding-db/                      # optional human-readable project onboarding docs
+    maps/                             # optional categorized navigation docs
+    modules/                          # optional core module detail docs
+    flows/                            # optional flow detail docs
+    runtime/                          # optional run / async / deploy docs
+    domain/                           # optional data / state / glossary docs
+    quality/                          # optional testing / risk docs
   requirements/
     YYYY-MM-DD-<topic>/
       README.md
@@ -108,24 +118,55 @@ The agent will:
 - Inspect the repo
 - Classify the entry scenario (new / existing / remote / resume)
 - Load the right references
-- Propose `.agent-loop/project.md` and root `AGENTS.md`
+- Propose `.agent-loop/project.md`, root `AGENTS.md`, and a `CLAUDE.md` pointer to `AGENTS.md`
+
+For existing projects, the agent offers onboarding modes:
+
+| Mode | Use When |
+|---|---|
+| **Quick Onboarding** | Build enough project memory to continue feature work soon |
+| **Deep Project Onboarding Scan** | Generate newcomer-readable `.agent-loop/onboarding-db/`, diagrams, walkthroughs, evidence chains, and backfill proposals |
+| **Targeted Onboarding Scan** | Understand one module, flow, async task, deployment path, or problem area |
 
 ### 3. Start a Feature
 
 > "I want to add login."
 
-The agent will:
+After project init/onboarding is accepted, the agent will:
+
 - Archive your requirement
 - Write `spec.md` with stories and acceptance criteria
 - Break down `tasks.md`
 - Design `tests.md`
 - Execute tasks with TDD
 
-### 4. Continue Later
+### 4. Get Guided Through An Existing Project
+
+> "带我熟悉这个项目，从哪里开始看？"
+
+If `.agent-loop/onboarding-db/` exists, the agent uses it first: it checks freshness, gives a short orientation, recommends one reading path, answers targeted questions, and proposes focused diagram/doc updates only after confirmation.
+
+Deep onboarding defaults to Expanded onboarding-db output. Expanded has a minimum required set for project overview, maps, setup, data model, testing, risks, and core module docs. It is also discovery-driven: when the scan finds complex flows, async/jobs, deployment, security, observability, or complex entities, the agent must create the matching docs or record why they were skipped. Diagram coverage grows with project complexity: large projects should get more focused module, flow, state, async/job, data, and deployment diagrams instead of one overloaded global view. Diagrams are embedded in the relevant docs by default and every diagram needs both `How To Read` and `Step-by-Step Walkthrough` text. Standalone `diagrams/` files are created only when a diagram is reused or too large to embed comfortably.
+
+After each onboarding explanation, the agent should recommend one next action: read a specific doc, inspect a module/flow, generate or update a focused diagram, run a setup/verification command, or return to feature development.
+
+Compact or Standard onboarding-db layouts are used only when the human explicitly requests fewer/simpler files, or when maintaining an existing onboarding-db already organized that way. Onboarding-db human-readable docs default to Chinese, while code symbols, file paths, commands, API names, and artifact names stay as-is.
+
+### 5. Continue Later
 
 > "Continue the login feature."
 
 The agent reads `.agent-loop/project.md`, finds the active feature, and resumes from the last checkpoint.
+
+### 6. Handle Bugs After Close
+
+> "测试发现上次做的上传功能有 bug."
+
+The agent does not immediately create a new feature. It first checks recent features, using a 30-day default lookback window, then presents candidate matches with evidence. After human confirmation it either flows the work back to the owning feature, creates a linked new feature, creates a `Feature Type: maintenance-fix` feature, or investigates first.
+
+If a closed feature is reopened for follow-up, the original close record remains intact. The follow-up gets its own `notes.md` intake record, updated tasks/tests/plan as needed, fresh verification, review, drift check, and a new close confirmation.
+
+If no recent feature owns the bugfix and the work is not a new product capability, the agent creates a narrow maintenance-fix feature under `.agent-loop/features/YYYY-MM-DD-fix-<slug>/`. Maintenance fixes still use spec/tasks/tests/plan/notes, fresh verification, review, drift check, project memory impact check, and close.
 
 ## Execution Modes
 
@@ -135,7 +176,7 @@ The agent reads `.agent-loop/project.md`, finds the active feature, and resumes 
 | **Feature Auto-Loop** | After Feature Spec acceptance, agent advances Agent-ready stages automatically |
 | **Task Auto-Run** | After plan acceptance, agent completes one task/story through TDD, verification, review, and drift check |
 
-Auto modes still stop for Human-gated decisions, risky changes, failed verification, Delivery Contract creation/acceptance/breaking changes, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, or publish.
+Auto modes still stop for Human-gated decisions, unclear decisions, risky changes, failed verification, drift needing approval, unrelated dirty work blocking progress, human original requirement changes, first-version exclusions, Delivery Contract creation/acceptance/breaking changes, directory guidance changes, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, or publish.
 
 ## External Skill Adapters
 

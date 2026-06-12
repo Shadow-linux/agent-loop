@@ -134,7 +134,7 @@ When a boundary has downstream consumers, load `delivery-contracts.md` and propo
 For old-project onboarding, also record each stable boundary in `project.md` with its guidance status:
 
 ```text
-Guidance: root only | has AGENTS.md | propose AGENTS.md | not needed
+Guidance: root only | has AGENTS.md | propose AGENTS.md | not needed | deferred
 ```
 
 When a feature creates a new stable boundary directory, propose a directory-level `AGENTS.md` and ask for human confirmation before writing it.

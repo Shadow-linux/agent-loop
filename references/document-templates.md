@@ -120,6 +120,18 @@ Purpose:
 
 Do not put task logs, feature progress, or raw requirements in `AGENTS.md`.
 
+## Root `CLAUDE.md`
+
+Use `templates/root-CLAUDE.md`.
+
+Purpose:
+
+- make Claude Code load the maintained `AGENTS.md`
+- avoid maintaining duplicated root guidance
+- preserve `AGENTS.md` as the single source of startup guidance for Codex and Claude
+
+`CLAUDE.md` should be a pointer, include, or symlink to `AGENTS.md`. If an existing `CLAUDE.md` contains independent rules, read it, summarize conflicts, and ask the human before replacing or converting it.
+
 ## Directory `AGENTS.md`
 
 Use `templates/directory-AGENTS.md` only for long-lived boundaries with distinct rules.
@@ -295,13 +307,14 @@ Sync Model:
   - Useful commands:
   - Evidence:
   - Confidence: high | medium | low
-  - Guidance: root only | has AGENTS.md | propose AGENTS.md | not needed
+  - Guidance: root only | has AGENTS.md | propose AGENTS.md | not needed | deferred
 
 ## Directory Guidance
 
 Root Guidance:
-- `AGENTS.md`:
-- `CLAUDE.md`:
+- `AGENTS.md`: present | created | stale | missing | human-deferred
+- `CLAUDE.md`: points-to-AGENTS | created-pointer | stale | missing | human-deferred
+- Sync Rule: `AGENTS.md` is maintained primary guidance; `CLAUDE.md` loads or points to `AGENTS.md`.
 
 Directory-Level Guidance:
 - `<path>/AGENTS.md`: present | proposed | not needed
@@ -395,17 +408,48 @@ Do not use `product.md` as the engineering execution plan.
 Created: YYYY-MM-DD
 Updated: YYYY-MM-DD
 Status: draft
+Feature Type: normal | maintenance-fix | follow-up
 
 Source Requirements:
 - Requirement:
 - Prototype:
 
 Product Brief: product.md | none
+Related Feature:
+Flow-back Decision: none | flow-back | linked-new-feature | maintenance-fix | investigate-first | declined-reopen | defer
 
 Summary:
 - 
 
 ## Problem / Goal
+
+## Maintenance Fix Scope
+
+Use this section only when `Feature Type: maintenance-fix`.
+
+Problem:
+
+Why this is not flow-back to a recent feature:
+
+Why this is not a new product feature:
+
+Regression / safety risk:
+
+Long-term project memory impact: none | possible | required
+
+## Follow-up / Continuity
+
+Use this section only when this feature is a follow-up, linked new feature, or maintenance fix related to earlier work.
+
+Related Feature:
+
+Original Feature Status:
+
+Why this is not direct reopen / flow-back:
+
+Acceptance / tests / evidence inherited or linked:
+
+Affected paths / APIs / models / jobs:
 
 ## Scope
 
@@ -766,6 +810,22 @@ Status: active
 
 ## Human Decisions
 
+## Follow-up Intake
+
+- Date:
+- Source: human report | test failure | E2E | API verification | production/QA feedback | other
+- Report:
+- Candidate Features:
+- Classification: same-feature-bug | same-feature-adjustment | regression-from-feature | new-feature | maintenance-fix | unclear
+- Lookback Window: 30 days | outside-default-window
+- Match Evidence:
+- Related Feature:
+- Flow-back Decision: flow-back | linked-new-feature | maintenance-fix | investigate-first | declined-reopen | defer
+- Declined Flow-back Reason:
+- Human Decision:
+- Artifact Updates:
+- Next Stage:
+
 ## Plan History
 
 - YYYY-MM-DD `<Plan ID>`:
@@ -773,6 +833,18 @@ Status: active
   - Result:
   - Evidence:
   - Next:
+
+## Analyze Consistency
+
+- Date:
+- Scope:
+- Requirement Coverage:
+- Task / Spec Mapping:
+- Test Coverage:
+- Plan Scope Check:
+- Code Reality Check:
+- Decision: proceed | revise-spec | revise-tasks | revise-tests | revise-plan | investigate-first | human-gated
+- Next Stage:
 
 ## TDD Cycles
 

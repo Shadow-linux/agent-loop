@@ -16,6 +16,28 @@ The result is a draft `.agent-loop/project.md` that is useful enough for the nex
 
 For remote projects, the draft `project.md` should live next to the remote source of truth when remote writes are allowed. If not, keep it in local-shadow mode and label code facts with remote location.
 
+## Onboarding Mode Gate
+
+This file is the entry and Quick Onboarding path. Do not turn it into a Deep Scan manual.
+
+When the human asks to take over, understand, or continue an existing project, explain the available modes:
+
+| Mode | Use When | Output |
+|---|---|---|
+| Quick Onboarding | the human wants to safely continue feature work soon | `.agent-loop/project.md`, base folders, guidance proposal, uncertainties |
+| Deep Project Onboarding Scan | the human wants newcomer-friendly project understanding or long-term onboarding docs | Quick outputs plus `.agent-loop/onboarding-db/`, diagrams, and backfill proposal |
+| Targeted Onboarding Scan | the human asks about one module, flow, async task, deployment path, or problem area | focused onboarding-db update proposal for that scope |
+
+If the human chooses Deep or Targeted, load:
+
+```text
+project-onboarding-scan.md
+onboarding-db.md
+onboarding-db-templates.md
+```
+
+If the human rejects Deep, do Quick only. Do not create onboarding-db or diagrams.
+
 ## Core Rules
 
 - Existing docs are clues.
@@ -24,8 +46,11 @@ For remote projects, the draft `project.md` should live next to the remote sourc
 - Low-confidence findings must be labeled, not silently treated as truth.
 - Do not start feature implementation during onboarding.
 - Ask human confirmation before writing `.agent-loop/`, `project.md`, `AGENTS.md`, `CLAUDE.md`, or directory-level guidance.
+- Ask human confirmation before creating `.agent-loop/onboarding-db/` or onboarding diagrams.
 - Subagents are optional accelerators for large-project onboarding, not a dependency.
 - Use DDD-inspired architecture mapping, but record existing code reality. Do not rename or move code during onboarding.
+- Root `AGENTS.md` and `CLAUDE.md` are startup guidance artifacts for every `agent-loop`-managed project. During onboarding, check both. `CLAUDE.md` must load or point to `AGENTS.md`; do not maintain duplicated root guidance in two files.
+- Do not finish onboarding after writing only `.agent-loop/project.md`. Root guidance must be present, created, or explicitly deferred by the human, and that status must be recorded in `project.md`.
 
 ## Large Project Trigger
 
@@ -244,6 +269,8 @@ Commands:
 Guidance files:
 Low-confidence findings:
 Recommended project.md updates:
+Recommended onboarding mode:
+Recommended onboarding-db updates:
 Recommended AGENTS.md / CLAUDE.md updates:
 Human gate:
 ```
@@ -254,11 +281,21 @@ After human confirmation, write or update:
 
 ```text
 .agent-loop/project.md
+.agent-loop/onboarding-db/ only when Deep or Targeted onboarding docs are confirmed
 .agent-loop/requirements/
 .agent-loop/features/
 AGENTS.md
 CLAUDE.md -> AGENTS.md or pointer
 directory AGENTS.md only when explicitly confirmed
+```
+
+Exit requirements:
+
+```text
+project.md accepted by human
+AGENTS.md status = present | created | human-deferred
+CLAUDE.md status = points-to-AGENTS | created-pointer | human-deferred
+next stage selected
 ```
 
 ## Feature Continuation

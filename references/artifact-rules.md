@@ -36,13 +36,14 @@ New human source material should be archived inside a requirement set directory.
 | `remote.md` | how to find, verify, and access a remote project from a local entry directory | feature logs or project capabilities |
 | `project.md` | long-term project facts in simple mode; memory index and current state in enterprise mode | task logs |
 | `project/*.md` | enterprise long-term project memory details | feature execution logs |
+| `onboarding-db/*` | human-readable project onboarding, reading paths, module/flow/boundary/deployment explanations, diagrams, evidence/confidence | current task status, feature execution logs, raw test output, human original requirements |
 | `requirements/<archive-date>-<topic>/*` | original human material package: requirements, prototypes, feedback, screenshots, recordings, links, and references | edited specs |
 | `product.md` | feature-level product intent, users, stories, product scope | engineering execution plan |
 | `spec.md` | intended feature behavior | execution logs |
 | `tasks.md` | work breakdown, status, and links to task details | full test evidence |
 | `tests.md` | test design, matrix, and links to test details | raw test output |
 | `plan.md` | active execution plan pointer or compact plan | historical execution record |
-| `notes.md` | decisions, evidence, drift, pause/close | original requirements |
+| `notes.md` | decisions, follow-up intake, evidence, drift, pause/close | original requirements |
 | `contracts.md` | optional confirmed delivery contract index, compact contracts, status, and verification links | temporary subagent assignments |
 | `tasks/*` | detailed task instructions when complex mode is triggered | feature-wide ledger |
 | `tests/*` | detailed test cases when complex mode is triggered | raw test output |
@@ -136,6 +137,14 @@ Feature directory:
 .agent-loop/features/YYYY-MM-DD-<feature-slug>/
 ```
 
+Maintenance fix feature directory:
+
+```text
+.agent-loop/features/YYYY-MM-DD-fix-<problem-slug>/
+```
+
+Do not create a separate `.agent-loop/maintenance/` root in v1. Maintenance fixes are narrow feature workspaces with `Feature Type: maintenance-fix`.
+
 Core feature files keep stable names:
 
 ```text
@@ -164,6 +173,28 @@ Requirement set directory:
 ```
 
 The date is the archive date only. It is not a deadline, feature duration, implementation start date, or implementation end date.
+
+Onboarding DB directory:
+
+```text
+.agent-loop/onboarding-db/
+```
+
+Use stable, human-readable names. Onboarding DB Layout Mode controls onboarding-db physical files only:
+
+```text
+Expanded: default for new Deep Scan; categorized docs plus focused splits for maps/modules/flows/runtime/domain/quality
+Standard: only when human-requested or preserving existing Standard; fewer categorized docs
+Compact: only when human-requested or preserving existing Compact; combined docs such as code-map.md, architecture-and-integrations.md
+```
+
+Standalone diagrams live under:
+
+```text
+.agent-loop/onboarding-db/diagrams/
+```
+
+Embedded diagrams inside module/flow/runtime docs are preferred when they answer the question locally. Do not create whole-repo function graphs or full file dependency graphs by default.
 
 ## Plan Lifecycle
 

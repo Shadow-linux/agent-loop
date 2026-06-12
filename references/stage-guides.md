@@ -4,6 +4,15 @@ Use this file to execute a specific stage. Pair it with `workflow-checklists.md`
 
 Before asking the human to approve a non-trivial stage output, load `human-review-summary.md` and present a table-first approval summary. Full artifacts remain the source of truth.
 
+## Stage Steering Rule
+
+For every stage, the agent owns the next-step recommendation. After producing, updating, verifying, or diagnosing any artifact, include a table:
+
+| Current Stage | Result | Recommended Next Stage | Why | Human Gate |
+|---|---|---|---|---|
+
+Use this especially for onboarding, Feature Spec, Work Breakdown, Test Design, Plan Gate, Execute, Verify, Review, Drift Check, Project Memory Update, Feature Completion Check, and Feature Follow-up. Do not ask the human "what next?" without first recommending one concrete next action.
+
 ## Project Entry
 
 Entry: any use of this skill.
@@ -49,7 +58,7 @@ Write after confirmation:
 - `.agent-loop/requirements/`
 - `.agent-loop/features/`
 - root `AGENTS.md`
-- root `CLAUDE.md -> AGENTS.md` when supported
+- root `CLAUDE.md -> AGENTS.md` pointer; if symlink/include is not supported, write a short pointer file
 
 Use `templates/project.md`.
 Use `templates/root-AGENTS.md` for project guidance.
@@ -57,6 +66,8 @@ Use `templates/root-AGENTS.md` for project guidance.
 Exit:
 
 - project memory drafted and accepted
+- root `AGENTS.md` status is `present`, `created`, or `human-deferred`
+- root `CLAUDE.md` status is `points-to-AGENTS`, `created-pointer`, or `human-deferred`
 - next stage: Requirement Archive when the human supplied requirements/prototypes in chat or files; otherwise Brainstorm / Clarify, Product Brief if Needed, or Feature Spec when intent is already stable
 
 ## Remote Project Discovery
@@ -111,10 +122,19 @@ If the existing code is remote, perform onboarding against the remote source of 
 Load:
 
 - `existing-project-onboarding.md`
+- `project-onboarding-scan.md` only when the human chooses Deep Project Onboarding Scan, asks for guided onboarding, or asks for a targeted module/flow/deployment/async scan
+- `onboarding-db.md` and `onboarding-db-templates.md` only when reading, writing, refreshing, or drafting `.agent-loop/onboarding-db/`
 - `large-projects.md` when old, unfamiliar, multi-package, multi-service, or likely 100k+ LOC
 - `project-guidance.md`
 - `project-memory-mode.md`
 - `project-architecture-init.md`
+
+First decision:
+
+- Explain Quick Onboarding and Deep Project Onboarding Scan when the human asks to take over or understand an existing project.
+- Default to Quick Onboarding when the human wants to continue feature work quickly.
+- Use Deep Project Onboarding Scan when the human wants newcomer-friendly project understanding or long-term onboarding docs.
+- Use Targeted Onboarding Scan when the human asks about one module, flow, async task, deployment path, or problem area.
 
 Inspect:
 
@@ -140,6 +160,21 @@ Do not read the whole repository. Do not start feature implementation during onb
 
 If subagents are used, the main agent keeps ownership of synthesis and all writes. Subagents only return findings, evidence, confidence, uncertainties, files read, and suggested `project.md` entries.
 
+If Deep Project Onboarding Scan is selected:
+
+- run P0 before P1 and P2
+- record Onboarding DB Layout Mode before proposing onboarding-db files; default to Expanded unless the human explicitly requests Compact/Standard or an existing onboarding-db already uses it
+- draft onboarding-db with `templates/onboarding-db/*`
+- create diagrams only when they answer a concrete onboarding question
+- use Batch Human Review before writing onboarding-db, project memory backfill, or guidance changes
+- keep code reality as current fact when docs conflict with code
+
+If Targeted Onboarding Scan is selected:
+
+- inspect only the minimal safe context plus the selected module, flow, async task, deployment path, or problem area
+- propose focused onboarding-db updates only for that target
+- do not create unrelated onboarding-db files
+
 Output before writing:
 
 - project summary
@@ -150,6 +185,8 @@ Output before writing:
 - boundary map with evidence and confidence
 - discovered commands with evidence and confidence
 - recommended Project Memory Mode: simple or enterprise, with trigger evidence
+- recommended onboarding mode: Quick | Deep | Targeted, with reason
+- recommended Onboarding DB Layout Mode when Deep is selected
 - existing/proposed guidance files
 - low-confidence findings and recommended follow-up
 - one recommended next action
@@ -157,6 +194,7 @@ Output before writing:
 Directory guidance:
 
 - identify existing root and directory-level `AGENTS.md` / `CLAUDE.md`
+- verify whether `CLAUDE.md` loads or points to `AGENTS.md`; do not maintain two independent root guidance bodies
 - record guidance status in `project.md`
 - propose directory-level `AGENTS.md` only for long-lived boundary directories
 - ask human confirmation before creating or changing guidance files
@@ -164,6 +202,7 @@ Directory guidance:
 Write after confirmation:
 
 - `.agent-loop/project.md`
+- `.agent-loop/onboarding-db/` only when Deep or Targeted onboarding docs are confirmed
 - enterprise `.agent-loop/project/*.md` files only when recommended and confirmed
 - `.agent-loop/requirements/`
 - `.agent-loop/features/`
@@ -173,6 +212,8 @@ Write after confirmation:
 Exit:
 
 - human accepts project memory
+- root guidance status is `present`, `created`, or `human-deferred` for `AGENTS.md`
+- `CLAUDE.md` status is `points-to-AGENTS`, `created-pointer`, or `human-deferred`
 - next stage: Start Feature or Targeted Feature Scan
 
 ## Reconcile Project Context / Re-Adopt Agent Loop Project
@@ -185,7 +226,7 @@ Inspect:
 - active feature docs
 - obvious code reality: scripts, directories, README, current tests
 
-Load `recovery-and-backfill.md` when code reality should repair project or feature docs.
+Load `recovery-and-backfill.md` and `project-guidance.md` for every explicit re-adoption request. Also load `recovery-and-backfill.md` whenever code reality should repair project or feature docs.
 
 For re-adoption, do not start new feature work first. Compare current code/tests/scripts with existing `agent-loop` docs, then propose backfill.
 
@@ -195,6 +236,7 @@ Output before writing:
 - what code reality shows
 - which recent outside-loop changes appear relevant
 - whether original human requirements conflict with code
+- root `AGENTS.md` and `CLAUDE.md` guidance status, including whether `CLAUDE.md` points to `AGENTS.md`
 - what should update
 - what should stay unchanged
 
@@ -202,6 +244,7 @@ Write after confirmation:
 
 - `project.md` and/or feature docs
 - reconciliation note in `notes.md` when feature-specific
+- root `AGENTS.md` / `CLAUDE.md` pointer only if startup guidance is missing, stale, duplicated, or human-confirmed for sync
 
 Exit:
 
@@ -302,6 +345,51 @@ Exit:
 
 - intent stable enough for Feature Spec
 
+## Feature Follow-up And Flow-back
+
+Entry: human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, test failure, QA/user feedback, or any change that may belong to recent feature work.
+
+Load:
+
+- `feature-follow-up.md`
+
+Inspect:
+
+- `project.md` Active Feature, Paused Features, and recent feature references
+- recent `.agent-loop/features/*/spec.md`, `tasks.md`, `tests.md`, and `notes.md`
+- close records, submit records, verification evidence, and drift notes
+- code paths, tests, APIs, data models, routes, jobs, UI pages, or contracts mentioned by the report
+
+Rules:
+
+- default lookback window is 30 calendar days
+- 30 days is not a hard boundary; if human wording, paths, APIs, tests, models, or UI evidence point to an older feature, run an extended scan and mark the candidate `outside-default-window`
+- code reality is current fact base for defect evidence
+- original human requirements remain immutable
+- do not default to creating a new feature until candidate recent features are checked
+- do not infer ownership from generic 500/blank-page/unknown-error reports alone; if evidence is too generic, classify as `unclear` and recommend `investigate-first`
+- present a Candidate Match Matrix before changing feature docs
+- classify "字段改一下", "规则微调", "小改动", and similar wording by checking whether acceptance, API/event/data shape, state flow, algorithm result, or visible UX changes
+- if a closed feature is the likely owner, recommend `flow-back` and explain that it will reopen or continue the owning feature for follow-up work after confirmation
+- if the human declines reopen or flow-back, preserve old close state and require the new linked feature or maintenance-fix to keep `Related Feature`, declined reason, inherited acceptance/tests/evidence, and affected paths
+- if scope is new or ownership is weak, recommend a linked new feature or investigate-first path
+- if no recent feature owns the report and the work is a narrow internal fix, recommend a new `Feature Type: maintenance-fix` workspace instead of a naked code edit
+- if multiple candidates match, ask the human to choose
+
+Write after confirmation:
+
+- Follow-up Intake record in the owning feature `notes.md`, or in the new feature `notes.md` if a new feature is chosen
+- new `.agent-loop/features/YYYY-MM-DD-fix-<slug>/` workspace with `Feature Type: maintenance-fix` when maintenance fix is confirmed
+- updated `spec.md`, `tasks.md`, `tests.md`, and `plan.md` only as needed
+- requirement archive entry when the human report is durable source material
+- `project.md` Current Work when a closed feature is reopened or a new feature is created
+- Delivery Contract updates only through the normal Delivery Contract gate
+
+Exit:
+
+- human confirms flow-back, linked-new-feature, maintenance-fix, or investigate-first decision
+- next stage: Requirement Archive, Feature Spec update, Work Breakdown, Test Design, Targeted Feature Scan, Plan Gate, or Diagnose Failure
+
 ## Feature Spec
 
 Entry: goal and source requirements are clear enough.
@@ -313,6 +401,7 @@ Write:
 
 Include:
 
+- feature type: normal, maintenance-fix, or follow-up
 - problem/goal
 - product brief reference when `product.md` exists
 - scope
@@ -522,21 +611,30 @@ Exit:
 
 - code context is concrete enough for a construction-grade plan, or the task becomes Human-gated
 
-## Plan If Needed
+## Plan Gate / Plan If Needed
 
-Entry: selected task/story is complex, multi-file, subagent-bound, or human requests plan.
+Entry: selected task/story has accepted tasks and tests, and Technical Design / Code Context has enough evidence to decide whether a construction plan is required.
+
+This is a mandatory gate before Execute Task / Story. Do not create tasks and then immediately implement.
 
 Load:
 
 - `implementation-planning.md`
 - `external-skill-adapters.md` when Superpowers or another plan-writing skill is available
 
-Write:
+Write one of:
 
 - `plan.md`
+- No-Plan Decision in `notes.md` and the selected task row/detail
 
 Rules:
 
+- decide whether a plan is required before any code implementation
+- create `plan.md` when the task/story is complex, multi-file, changes behavior, changes tests, touches interfaces, crosses module boundaries, involves data/API/async/security/deployment behavior, needs TDD design, needs subagents, or the human asks for a plan
+- a No-Plan Decision is allowed only for a trivial, low-risk, single-file or documentation-only task with clear acceptance, exact files, and exact verification command
+- in Strict Mode, ask human confirmation before executing from a No-Plan Decision
+- in Feature Auto-Loop, a No-Plan Decision may proceed only if the task is Agent-ready and no plan trigger applies
+- Task Auto-Run always requires an accepted task/story plan; No-Plan Decision cannot enable Task Auto-Run
 - plan scope is `task` or `story`
 - default scope is task
 - assume the executor has near-zero codebase context
@@ -552,19 +650,19 @@ Rules:
 
 Exit:
 
-- human accepts plan
+- human accepts plan, or human accepts/Feature Auto-Loop records the No-Plan Decision
 - after acceptance, explain that Strict Mode asks before each stage and offer Task Auto-Run for this task/story if the human wants fewer confirmations
 
 ## Analyze Consistency
 
-Entry: before implementation when spec/tasks/tests/plan exist.
+Entry: before implementation when spec/tasks/tests and either plan or a recorded No-Plan Decision exist.
 
 Check:
 
 - each accepted requirement has task coverage
 - each task maps to spec or explicit technical need
 - tests cover acceptance criteria
-- plan scope matches selected task/story
+- plan scope matches selected task/story, or No-Plan Decision is limited to a trivial task with exact files and verification
 
 Write:
 
@@ -616,13 +714,16 @@ Exit:
 
 ## Execute Task / Story
 
-Entry: selected execution unit accepted.
+Entry: selected execution unit accepted and Plan Gate has passed.
 
 Rules:
 
 - default unit is task
 - story execution requires explicit human choice
 - whole-feature execution requires explicit human confirmation and only for tiny features
+- do not execute a task directly after task creation; first confirm accepted plan or recorded No-Plan Decision
+- if neither accepted plan nor No-Plan Decision exists, route back to Plan Gate / Plan If Needed
+- Task Auto-Run requires an accepted plan for the selected task/story
 - in Feature Auto-Loop, execute only Agent-ready tasks and stop at Human-gated tasks
 - in Task Auto-Run, execute only the selected task/story and stop after evidence/review/drift updates and Task Done Gate status update
 - TDD by default
