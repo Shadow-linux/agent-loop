@@ -41,11 +41,21 @@ Independent test: Submit invalid credentials and see a stable error message.
 Acceptance scenarios:
 - Given invalid credentials, when the user submits the form, then no session is created and an error is shown.
 
+### US3: Authenticated session persists after refresh
+
+Why this matters: Users should not lose access immediately after a successful login.
+
+Independent test: Log in, refresh the authenticated page, and remain authenticated.
+
+Acceptance scenarios:
+- Given a successful login, when the user refreshes the authenticated page, then the session remains active.
+
 ## Acceptance Criteria
 
 - Valid credentials create a session.
 - Invalid credentials do not create a session.
 - Error state is visible and testable.
+- Session persists for the authenticated browser session.
 
 ## Behavior Changes
 

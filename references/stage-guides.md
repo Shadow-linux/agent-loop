@@ -4,6 +4,15 @@ Use this file to execute a specific stage. Pair it with `workflow-checklists.md`
 
 Before asking the human to approve a non-trivial stage output, load `human-review-summary.md` and present a table-first approval summary. Full artifacts remain the source of truth.
 
+## Stage Steering Rule
+
+For every stage, the agent owns the next-step recommendation. After producing, updating, verifying, or diagnosing any artifact, include a table:
+
+| Current Stage | Result | Recommended Next Stage | Why | Human Gate |
+|---|---|---|---|---|
+
+Use this especially for onboarding, Feature Spec, Work Breakdown, Test Design, Plan Gate, Execute, Verify, Review, Drift Check, Project Memory Update, Feature Completion Check, and Feature Follow-up. Do not ask the human "what next?" without first recommending one concrete next action.
+
 ## Project Entry
 
 Entry: any use of this skill.
@@ -217,7 +226,7 @@ Inspect:
 - active feature docs
 - obvious code reality: scripts, directories, README, current tests
 
-Load `recovery-and-backfill.md` for every explicit re-adoption request. Also load it whenever code reality should repair project or feature docs.
+Load `recovery-and-backfill.md` and `project-guidance.md` for every explicit re-adoption request. Also load `recovery-and-backfill.md` whenever code reality should repair project or feature docs.
 
 For re-adoption, do not start new feature work first. Compare current code/tests/scripts with existing `agent-loop` docs, then propose backfill.
 
@@ -353,18 +362,24 @@ Inspect:
 
 Rules:
 
-- default lookback window is 15 calendar days
+- default lookback window is 30 calendar days
+- 30 days is not a hard boundary; if human wording, paths, APIs, tests, models, or UI evidence point to an older feature, run an extended scan and mark the candidate `outside-default-window`
 - code reality is current fact base for defect evidence
 - original human requirements remain immutable
 - do not default to creating a new feature until candidate recent features are checked
+- do not infer ownership from generic 500/blank-page/unknown-error reports alone; if evidence is too generic, classify as `unclear` and recommend `investigate-first`
 - present a Candidate Match Matrix before changing feature docs
-- if a closed feature is the likely owner, recommend `reopen-for-follow-up` and ask confirmation
+- classify "字段改一下", "规则微调", "小改动", and similar wording by checking whether acceptance, API/event/data shape, state flow, algorithm result, or visible UX changes
+- if a closed feature is the likely owner, recommend `flow-back` and explain that it will reopen or continue the owning feature for follow-up work after confirmation
+- if the human declines reopen or flow-back, preserve old close state and require the new linked feature or maintenance-fix to keep `Related Feature`, declined reason, inherited acceptance/tests/evidence, and affected paths
 - if scope is new or ownership is weak, recommend a linked new feature or investigate-first path
+- if no recent feature owns the report and the work is a narrow internal fix, recommend a new `Feature Type: maintenance-fix` workspace instead of a naked code edit
 - if multiple candidates match, ask the human to choose
 
 Write after confirmation:
 
 - Follow-up Intake record in the owning feature `notes.md`, or in the new feature `notes.md` if a new feature is chosen
+- new `.agent-loop/features/YYYY-MM-DD-fix-<slug>/` workspace with `Feature Type: maintenance-fix` when maintenance fix is confirmed
 - updated `spec.md`, `tasks.md`, `tests.md`, and `plan.md` only as needed
 - requirement archive entry when the human report is durable source material
 - `project.md` Current Work when a closed feature is reopened or a new feature is created
@@ -372,7 +387,7 @@ Write after confirmation:
 
 Exit:
 
-- human confirms flow-back, new-feature, maintenance, or investigate-first decision
+- human confirms flow-back, linked-new-feature, maintenance-fix, or investigate-first decision
 - next stage: Requirement Archive, Feature Spec update, Work Breakdown, Test Design, Targeted Feature Scan, Plan Gate, or Diagnose Failure
 
 ## Feature Spec
@@ -386,6 +401,7 @@ Write:
 
 Include:
 
+- feature type: normal, maintenance-fix, or follow-up
 - problem/goal
 - product brief reference when `product.md` exists
 - scope

@@ -31,7 +31,7 @@ Classify the project into exactly one state:
 | `re-adopt` | `.agent-loop/` or legacy `agent-loop/` exists, but recent work happened outside the loop or the human asks to re-adopt/re-take-over/re-sync the project | Re-Adopt Agent Loop Project / Recovery Backfill |
 | `stale-memory` | `.agent-loop/` or legacy `agent-loop/` exists but docs conflict with code reality, or long-term memory indexes point to missing/stale artifacts | Reconcile Project Context / Recovery Backfill |
 | `guided-onboarding` | `.agent-loop/onboarding-db/` exists and the human asks to be onboarded, guided through the project, or helped understand where to start | Guided Newcomer Onboarding |
-| `feature-follow-up` | human reports bug/regression/post-close correction/field or algorithm change/API mismatch/test failure that may relate to a recent feature | Feature Follow-up And Flow-back |
+| `feature-follow-up` | human reports bug/regression/post-close correction/field or algorithm change/API mismatch/screenshot issue/small tweak/test failure that may relate to a recent feature | Feature Follow-up And Flow-back |
 | `active-feature` | active feature exists and next action is clear | Continue Current Stage |
 | `blocked` | blocker or missing decision prevents next stage | Ask Human / Diagnose |
 
@@ -58,7 +58,9 @@ If code reality and the memory root disagree, if long-term memory indexes point 
 
 If `project.md` claims an onboarding layout, lists onboarding-db files, or root `AGENTS.md` / `CLAUDE.md` tells newcomers to start from `.agent-loop/onboarding-db/README.md`, but `.agent-loop/onboarding-db/` or its README is missing, classify as `stale-memory`. Do not run Guided Newcomer Onboarding from the missing path. Recommend the smallest onboarding memory reconcile: report the missing index target, use existing docs/code as evidence, and ask before updating `project.md`, root guidance, or creating onboarding-db.
 
-If the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, test failure, or QA/user feedback, classify as `feature-follow-up` before deciding to create a new feature. Load `references/feature-follow-up.md`, inspect recent feature candidates using the default 15-day lookback window, and recommend exactly one of: flow back to an owning feature, create a linked new feature, create a maintenance fix, or investigate first.
+If the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, screenshot issue, behavior tweak, "small tweak", test failure, or QA/user feedback, classify as `feature-follow-up` before deciding to create a new feature. Load `references/feature-follow-up.md`, inspect recent feature candidates using the default 30-day lookback window, and recommend exactly one of: flow back to an owning feature, create a linked new feature, create a `Feature Type: maintenance-fix` feature, or investigate first.
+
+`maintenance-fix` is not a bypass. It uses the standard feature workspace under `.agent-loop/features/YYYY-MM-DD-fix-<slug>/` and must still pass spec, tasks, tests, plan, verification, review, drift, project memory update when needed, Feature Completion Check, and close.
 
 Default memory root for new projects is `.agent-loop/`. If legacy `agent-loop/` exists, use it for the current run and ask before migrating.
 
@@ -221,7 +223,7 @@ Offer auto modes proactively, without waiting for the human to know the terms:
 Recommended wording:
 
 ```text
-Strict Mode is safest and asks before each stage. If you want fewer confirmations, I can enable Feature Auto-Loop for this feature, or Task Auto-Run just for the selected task/story. Auto modes still stop for Human-gated decisions, risky changes, failed verification, drift, Delivery Contract creation/acceptance/breaking changes, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, and publish.
+Strict Mode is safest and asks before each stage. If you want fewer confirmations, I can enable Feature Auto-Loop for this feature, or Task Auto-Run just for the selected task/story. Auto modes still stop for Human-gated decisions, unclear decisions, risky changes, failed verification, drift needing approval, unrelated dirty work blocking progress, human original requirement changes, first-version exclusions, Delivery Contract creation/acceptance/breaking changes, directory guidance changes, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, and publish.
 ```
 
 Do not offer an auto mode as a substitute for missing clarification. If scope, acceptance, test approach, data rules, or affected boundaries are unclear, clarify first.
@@ -230,11 +232,14 @@ Auto modes do not remove stop conditions. Stop and ask when:
 
 - a task is `Human-gated`
 - product, design, architecture, security, data, approval, or public-interface decisions are needed
+- a stage would modify human original requirements
 - a Delivery Contract needs human acceptance or an accepted contract needs a breaking change
 - spec, product scope, or acceptance criteria would change
 - code reality conflicts with project memory or feature docs
+- unrelated dirty work blocks progress
 - a new dependency, migration, destructive operation, credential, external service, or long-lived boundary directory is needed
 - directory-level `AGENTS.md` creation/update is recommended
+- the work would require first-version exclusions
 - TDD cannot be followed or verification repeatedly fails
 - review finds behavior/scope/architecture changes
 - subagents are needed but not yet approved

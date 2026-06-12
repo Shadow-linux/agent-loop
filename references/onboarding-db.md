@@ -107,12 +107,20 @@ Steps:
 4. Ask the human what they want to understand next, with 2-4 concrete options such as module, flow, async/jobs, deployment, tests, state trace, design decisions, or change impact.
 5. When answering, read the matching onboarding-db path first, then inspect code reality only if the docs are missing, stale, contradictory, or too thin.
 6. If the answer reveals a stable missing fact, propose an onboarding-db update through Batch Human Review.
-7. If the human is trying to start development, route back to the normal agent-loop stage after the explanation.
+7. After every onboarding answer, recommend exactly one next action: read a specific doc, inspect a specific flow/module, generate/update a focused diagram, run a setup/verification command, or return to the normal feature-development loop.
+8. If the human is trying to start development, route back to the normal agent-loop stage after the explanation.
 
 Newcomer summary format:
 
 | Area | What To Know First | Where To Read | Confidence | Unknowns |
 |---|---|---|---|---|
+
+Onboarding next-action format:
+
+| Current Understanding | Recommended Next Step | Why | Artifact / Doc | Human Gate |
+|---|---|---|---|---|
+
+If the current docs are too text-heavy or the human is asking about relationships, state transitions, async behavior, or flow order, the recommended next step should usually be a focused diagram proposal.
 
 Do not mark onboarding complete just because the DB exists. The human takeover is complete only when the human has a next reading path or next development action.
 

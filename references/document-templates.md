@@ -408,17 +408,48 @@ Do not use `product.md` as the engineering execution plan.
 Created: YYYY-MM-DD
 Updated: YYYY-MM-DD
 Status: draft
+Feature Type: normal | maintenance-fix | follow-up
 
 Source Requirements:
 - Requirement:
 - Prototype:
 
 Product Brief: product.md | none
+Related Feature:
+Flow-back Decision: none | flow-back | linked-new-feature | maintenance-fix | investigate-first | declined-reopen | defer
 
 Summary:
 - 
 
 ## Problem / Goal
+
+## Maintenance Fix Scope
+
+Use this section only when `Feature Type: maintenance-fix`.
+
+Problem:
+
+Why this is not flow-back to a recent feature:
+
+Why this is not a new product feature:
+
+Regression / safety risk:
+
+Long-term project memory impact: none | possible | required
+
+## Follow-up / Continuity
+
+Use this section only when this feature is a follow-up, linked new feature, or maintenance fix related to earlier work.
+
+Related Feature:
+
+Original Feature Status:
+
+Why this is not direct reopen / flow-back:
+
+Acceptance / tests / evidence inherited or linked:
+
+Affected paths / APIs / models / jobs:
 
 ## Scope
 
@@ -786,9 +817,12 @@ Status: active
 - Report:
 - Candidate Features:
 - Classification: same-feature-bug | same-feature-adjustment | regression-from-feature | new-feature | maintenance-fix | unclear
-- Lookback Window: 15 days | outside-default-window
+- Lookback Window: 30 days | outside-default-window
 - Match Evidence:
-- Human Decision: flow-back | new-feature | maintenance | investigate-first | defer
+- Related Feature:
+- Flow-back Decision: flow-back | linked-new-feature | maintenance-fix | investigate-first | declined-reopen | defer
+- Declined Flow-back Reason:
+- Human Decision:
 - Artifact Updates:
 - Next Stage:
 
@@ -799,6 +833,18 @@ Status: active
   - Result:
   - Evidence:
   - Next:
+
+## Analyze Consistency
+
+- Date:
+- Scope:
+- Requirement Coverage:
+- Task / Spec Mapping:
+- Test Coverage:
+- Plan Scope Check:
+- Code Reality Check:
+- Decision: proceed | revise-spec | revise-tasks | revise-tests | revise-plan | investigate-first | human-gated
+- Next Stage:
 
 ## TDD Cycles
 

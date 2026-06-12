@@ -133,12 +133,17 @@ Before using an external skill or plugin inside a stage:
 ## Feature Follow-up And Flow-back
 
 - [ ] Load `feature-follow-up.md`.
-- [ ] Trigger before creating a new feature when the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, test failure, or QA/user feedback.
-- [ ] Inspect Active Feature, Paused Features, and recent feature docs in the default 15-day lookback window.
+- [ ] Trigger before creating a new feature when the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, screenshot issue, behavior tweak, "small tweak", test failure, or QA/user feedback.
+- [ ] Inspect Active Feature, Paused Features, and recent feature docs in the default 30-day lookback window.
+- [ ] Treat 30 days as the default scan window, not a hard boundary; if wording or evidence points to an older feature, run an extended scan and mark `outside-default-window`.
 - [ ] Inspect code/test/API/data/UI paths mentioned by the report.
+- [ ] If the report is generic, such as 500, blank page, unknown error, or no route/action/log/test evidence, classify as `unclear` and recommend `investigate-first`; do not reopen the nearest recent feature just because it is recent.
 - [ ] Present a Candidate Match Matrix with match evidence and match strength.
 - [ ] Classify the report as same-feature-bug, same-feature-adjustment, regression-from-feature, new-feature, maintenance-fix, or unclear.
-- [ ] If a closed feature is the likely owner, recommend reopen-for-follow-up and ask human confirmation.
+- [ ] For "字段改一下" / "规则微调" / "小改动" wording, check whether acceptance, API/event/data shape, state flow, algorithm, or visible UX changes before choosing same-feature-adjustment vs linked new feature.
+- [ ] If a closed feature is the likely owner, recommend `flow-back` and explain that it will reopen or continue the owning feature for follow-up work after human confirmation.
+- [ ] If the human declines reopen/flow-back, preserve the old feature close state and require the new linked feature or maintenance-fix to record `Related Feature`, declined reason, inherited acceptance/tests/evidence, and affected paths.
+- [ ] If no recent feature owns the report and this is a narrow internal fix, recommend a new `Feature Type: maintenance-fix` feature workspace; do not perform a naked code edit.
 - [ ] If the report is durable source material, ask before archiving it under `.agent-loop/requirements/`.
 - [ ] Ask before changing feature status, scope, acceptance, tasks, tests, Delivery Contracts, or project memory.
 - [ ] Record Follow-up Intake in `notes.md`.
@@ -147,6 +152,8 @@ Before using an external skill or plugin inside a stage:
 ## Feature Spec
 
 - [ ] Create or update feature workspace.
+- [ ] Set `Feature Type: normal | maintenance-fix | follow-up`.
+- [ ] For maintenance-fix, record why it is not flow-back, why it is not a new product feature, regression/safety risk, and long-term project memory impact.
 - [ ] Write problem, goal, scope, stories, acceptance criteria.
 - [ ] Record added, modified, and removed behavior.
 - [ ] Record out of scope and open questions.
@@ -282,6 +289,17 @@ Checklist:
 - [ ] Do not offer Task Auto-Run without an accepted plan.
 - [ ] If the human seems slowed by confirmations, explain Task Auto-Run as a safe task/story-level option.
 - [ ] Before Task Auto-Run, list assumptions, risk points, verification commands, and stop conditions.
+
+## Analyze Consistency
+
+- [ ] Run before Execute Task / Story, including after plan approval and before subagent dispatch.
+- [ ] Compare accepted `spec.md` / `product.md` against `tasks.md`, `tests.md`, and the active `plan.md`.
+- [ ] Confirm each planned implementation step maps to an accepted task/story and acceptance criterion.
+- [ ] Confirm each changed behavior has a test or explicit substitute verification path.
+- [ ] Confirm no plan step changes human original requirements, product scope, acceptance criteria, public interfaces, Delivery Contracts, or project memory without a human gate.
+- [ ] Confirm file paths, commands, function signatures, parameters, return shapes, data contracts, and side effects match code reality.
+- [ ] Record findings in `notes.md` under `Analyze Consistency`.
+- [ ] If gaps exist, stop and recommend exactly one next action: update spec, update tasks/tests, revise plan, ask clarification, or investigate first.
 
 ## Subagent Execution If Approved
 

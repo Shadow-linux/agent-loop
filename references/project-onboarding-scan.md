@@ -227,12 +227,27 @@ Diagram quality rules:
 
 - every standalone or embedded diagram must answer one explicit question
 - **Deep Scan 下，图要尽可能完整**，把能确认的路径都画出来，不能只画一个简略概览
+- diagram count grows with project complexity. A larger project is expected to produce more focused diagrams, not one overloaded global diagram
 - prefer layered color-coded flowcharts for onboarding summaries
 - diagram nodes and edges should be traceable to an Evidence Chain entry in the same doc or target doc
 - when a human question reveals an unclear path, propose a **complete diagram update** for the relevant scope, not a minimal patch
 - if evidence is insufficient, mark the missing part `Unknown` or `Not enough evidence`; do not guess
 - **所有图必须有 "How To Read" 说明**，缺少此说明的图视为不完整
 - **所有图还必须有 "Step-by-Step Walkthrough"**：按执行顺序逐行讲解数据/控制流怎么走。不能只放图和图例， newcomer 需要一段文字按 1, 2, 3... 的顺序告诉他"从哪开始、经过哪、到哪结束"。Walkthrough 必须具体到节点名称、同步/异步、关键参数或状态变化。缺少 Walkthrough 的图同样视为不完整
+
+Diagram Expansion Matrix:
+
+| Complexity Signal | Required Expansion |
+|---|---|
+| 3+ core modules | module relationship map plus one call-chain diagram per core module |
+| 2+ complex flows | separate `flows/<flow>.md` docs with one or more flowcharts per flow |
+| async/jobs/queues/callbacks/retries | async/job flowchart plus sequence diagram for each core async/external interaction |
+| important state/status fields | state-flow diagram plus state-change trace showing observed writers/triggers |
+| persistent data with 5+ core entities or complex relationships | split data entity map into multiple subgraphs plus model usage flow map |
+| multiple runtimes/environments/services | deployment/runtime topology diagram |
+| humans ask "where next", "what should I read", or "can you draw this path" | recommend the next reading path and propose a focused diagram update when existing docs are thin |
+
+If a complex project has only overview-level diagrams, onboarding-db is usable but incomplete. Record the missing diagram expansions in the Discovery Coverage Matrix and Batch Human Review.
 
 ## Deployment Placement
 

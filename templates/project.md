@@ -83,7 +83,7 @@ Next Suggested Action:
 Gate Mode: Strict Mode | Feature Auto-Loop | Task Auto-Run
 Gate Mode Scope:
 Gate Mode Stop Conditions:
-Feature Follow-up Lookback: 15 days
+Feature Follow-up Lookback: 30 days
 Recent Feature Flow-back Policy:
 - When bugs, regressions, post-close corrections, field/schema changes, algorithm changes, API mismatches, test failures, or QA/user feedback appear, inspect recent features before creating a new feature.
 - Flow back to the owning feature when evidence shows the change repairs, adjusts, or completes that feature.

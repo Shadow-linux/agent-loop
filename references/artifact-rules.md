@@ -137,6 +137,14 @@ Feature directory:
 .agent-loop/features/YYYY-MM-DD-<feature-slug>/
 ```
 
+Maintenance fix feature directory:
+
+```text
+.agent-loop/features/YYYY-MM-DD-fix-<problem-slug>/
+```
+
+Do not create a separate `.agent-loop/maintenance/` root in v1. Maintenance fixes are narrow feature workspaces with `Feature Type: maintenance-fix`.
+
 Core feature files keep stable names:
 
 ```text

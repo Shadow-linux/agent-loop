@@ -13,6 +13,7 @@ First version excludes:
 - complex ADR system
 - global installation
 - automatic directory-level AGENTS.md generation without human confirmation
+- automatic commit, PR, merge, release, or publish action without human confirmation
 
 ## Definitions
 
@@ -34,6 +35,10 @@ First version excludes:
 
 **Feature**: One behavior-changing work area under `.agent-loop/features/<feature-id>/`. A feature can contain many stories and many tasks.
 
+**Feature Type**: Feature work can be `normal`, `maintenance-fix`, or `follow-up`. The file layout stays the same for all types.
+
+**Maintenance Fix**: A narrow feature used when a bugfix or internal correction has no clear owning recent feature and does not create a new user capability. It is not a workflow bypass and not a separate directory system. It still uses `.agent-loop/features/YYYY-MM-DD-fix-<slug>/` with `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`, verification, review, drift check, project memory update when needed, and close.
+
 **Product Brief**: Optional feature-level product understanding in `product.md`: problem, users, user stories, product scope, product decisions, and open product questions.
 
 **Stories**: User-perspective slices inside a feature. They live in `spec.md` and are referenced by labels such as `US1`.
@@ -52,7 +57,7 @@ First version excludes:
 
 **Drift**: Mismatch between docs, code reality, or human decisions.
 
-**Feature Follow-up / Flow-back**: Bug/change intake path that checks whether a post-close bug, regression, field/schema change, algorithm change, API mismatch, test failure, or QA/user feedback belongs to a recent feature before creating a new feature. Default lookback is 15 calendar days.
+**Feature Follow-up / Flow-back**: Bug/change intake path that checks whether a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, screenshot issue, behavior tweak, "small tweak", test failure, or QA/user feedback belongs to a recent feature before creating a new feature. Default lookback is 30 calendar days.
 
 **Re-Adopt Agent Loop Project**: Recovery path for a project that already has `.agent-loop/` or legacy `agent-loop/`, but recent development happened outside the loop. The agent compares code reality to existing memory, proposes backfill, asks human confirmation, then resumes or starts feature work.
 

@@ -29,6 +29,8 @@ The core constraints inherited from the design sources are:
 - requirement-set dates mean archive date only, not deadlines or feature lifecycle dates
 - `product.md` is optional feature-level product understanding when needed
 - each feature has stable `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`; `contracts.md` is added only after human confirmation when producer-consumer boundaries need explicit handoff
+- feature type may be `normal`, `maintenance-fix`, or `follow-up`; all use the same feature workspace model
+- maintenance fixes are narrow feature workspaces under `.agent-loop/features/YYYY-MM-DD-fix-<slug>/`, not naked code edits and not a separate `.agent-loop/maintenance/` tree
 - stories live in `spec.md`; optional `tasks/USn/` or `tests/USn/` folders are detail grouping, not separate story workspaces
 - tasks live together in `tasks.md` by default; complex artifact mode may add linked detail files under `tasks/`
 - `plan.md` is for the active task/story, not the whole feature by default
@@ -180,16 +182,35 @@ Summarize current state, blockers, and next suggested action.
 Ask human to confirm next stage.
 ```
 
-### Reconcile Project Context
+### Re-Adopt Agent Loop Project
+
+Condition:
+
+```text
+.agent-loop/ exists
+Recent development happened outside agent-loop
+Human asks to re-adopt / re-sync / resume after outside-loop work
+```
+
+Action:
+
+```text
+Load recovery-and-backfill.md and project-guidance.md.
+Treat code reality as current fact base for agent-maintained docs.
+Compare code/tests/scripts/root guidance with agent-loop memory.
+Propose backfill before new feature work.
+Ask human confirmation before updating docs.
+```
+
+### Reconcile Project Context / Stale Memory
 
 Condition:
 
 ```text
 .agent-loop/ exists
 project.md or feature docs appear stale compared with code reality
+Long-term memory indexes point to missing/stale artifacts
 ```
-
-Also use this path when an old `agent-loop` project is being re-adopted after development happened outside the loop.
 
 Action:
 
@@ -202,15 +223,86 @@ Update project.md or feature docs after confirmation.
 Then continue feature work.
 ```
 
+### Guided Newcomer Onboarding
+
+Condition:
+
+```text
+.agent-loop/onboarding-db/ exists
+Human asks to be guided through the project or understand where to start
+```
+
+Action:
+
+```text
+Load onboarding-db.md.
+Use existing onboarding-db before rerunning Deep Project Onboarding Scan.
+Recommend one next reading path, targeted diagram update, setup/verification action, or return to feature work.
+Ask before writing onboarding-db updates.
+```
+
+### Feature Follow-up And Flow-back
+
+Condition:
+
+```text
+Human reports bug, regression, post-close correction, field/schema/algorithm/API change, test failure, screenshot issue, QA/user feedback, or small tweak
+```
+
+Action:
+
+```text
+Load feature-follow-up.md.
+Inspect Active / Paused / Closed features and recent feature docs.
+Use 30 days as the default lookback, not a hard boundary.
+Present Candidate Match Matrix.
+Recommend flow-back, linked new feature, maintenance-fix, or investigate-first.
+```
+
+### Active Feature Continuation
+
+Condition:
+
+```text
+.agent-loop/ exists
+Active Feature exists
+Next stage is clear
+```
+
+Action:
+
+```text
+Read active feature docs.
+Classify current stage.
+Recommend exactly one next action.
+```
+
+### Blocked
+
+Condition:
+
+```text
+Blocker or missing decision prevents next stage
+```
+
+Action:
+
+```text
+Ask one focused human question or route to Diagnose Failure / Targeted Feature Scan.
+Do not continue execution until the blocker is resolved.
+```
+
 ## Main Flow
 
 ```text
 Project Entry
 → Remote Project Discovery if Needed
 → Re-Adopt Agent Loop Project if Needed
+→ Project Onboarding Scan if Needed
 → Requirement Archive
 → Product Brief if Needed
 → Brainstorm / Clarify if Needed
+→ Feature Follow-up And Flow-back if Needed
 → Targeted Feature Scan if Needed
 → Feature Spec
 → Requirement Checklist

@@ -47,7 +47,9 @@ Use this skill when the user wants to:
 - execute a task/story with TDD and verification
 - submit, pause, resume, or close a feature
 
-Do not use for one-off edits when the user explicitly asks to bypass workflow and the edit does not affect feature behavior, public interfaces, data/security boundaries, project memory, submit, or close state. First version is single-person only: no multiplayer workflow, no roadmap graph, no roadmap adapter, no tdd-guard.
+Do not use for one-off edits when the user explicitly asks to bypass workflow and the edit does not affect feature behavior, public interfaces, data/security boundaries, project memory, submit, or close state.
+
+First version excludes: multiplayer workflow, roadmap graph, roadmap adapter, tdd-guard, complex ADR system, global skill installation, automatic directory-level `AGENTS.md` generation without human confirmation, and automatic commit/PR/merge/release/publish without human confirmation.
 
 ## Skill Package Map
 
@@ -111,7 +113,7 @@ CHANGELOG.md                        skill maintenance history; append meaningful
 15. Load `references/onboarding-db.md` when reading, writing, refreshing, correcting, or relying on `.agent-loop/onboarding-db/`.
 16. Load `references/onboarding-db-templates.md` before creating or updating onboarding-db documents or diagrams.
 17. Load `references/onboarding-diagnostics.md` when a human says setup docs do not work, asks what a change might break, asks why a state/status changed, or asks who/what updates a state field.
-17a. Load `references/feature-follow-up.md` when the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, test failure, or QA/user feedback that may belong to a recent feature.
+17a. Load `references/feature-follow-up.md` when the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, screenshot issue, behavior tweak, "small tweak", test failure, or QA/user feedback that may belong to a recent feature.
 18. Load `references/large-projects.md` when the repo is large, old, unfamiliar, multi-package, or likely above 100k LOC.
 19. Load `references/complex-artifacts.md` when story/task/test/plan complexity crosses its trigger conditions.
 20. Load `references/implementation-planning.md` before writing or approving `plan.md` for a task/story.
@@ -199,7 +201,8 @@ If the local directory is only a remote-project entry point, create only thin lo
 - Code layout suggestions are reference scaffolds, not mandates. Adapt them to project shape, language, framework conventions, and existing code reality. New projects may scaffold after confirmation; existing projects are recorded as-is unless the human explicitly approves refactoring.
 - During recovery/backfill, code reality is the current fact base for agent-maintained docs, but human original requirements are never overwritten.
 - During re-adoption, do not start new feature work first. Compare current code/tests/scripts against existing `agent-loop` memory, propose backfill, ask human confirmation, then resume or start feature work.
-- For bug reports, regressions, post-close corrections, field/schema changes, algorithm changes, and QA/test failures, do not default to a new feature. First run Feature Follow-up And Flow-back: inspect recent features in the default 15-day lookback window, present candidate feature matches, and ask whether to flow the work back to an owning feature, create a linked new feature, or investigate first.
+- For bug reports, regressions, post-close corrections, field/schema changes, algorithm changes, API mismatches, screenshot issues, behavior tweaks, "small tweaks", and QA/test failures, do not default to a new feature. First run Feature Follow-up And Flow-back: inspect recent features in the default 30-day lookback window, present candidate feature matches, and ask whether to flow the work back to an owning feature, create a linked new feature, create a maintenance-fix feature, or investigate first.
+- When no recent feature owns a narrow bugfix/internal correction, use `Feature Type: maintenance-fix` under `.agent-loop/features/YYYY-MM-DD-fix-<slug>/`. Maintenance fix is not a naked edit and still requires spec/tasks/tests/plan, verification, review, drift, project-memory impact check, Feature Completion Check, and close.
 - During Project Entry and re-adoption, verify the existence of long-term memory index targets before trusting them. If `project.md` says onboarding-db exists, lists onboarding-db documents, or root guidance tells newcomers to read onboarding-db, but the directory or README is missing, report onboarding memory drift and route to reconcile/backfill before guided onboarding or feature work.
 - Root `AGENTS.md` and `CLAUDE.md` are default project guidance artifacts for new/onboarded projects, created only after human confirmation.
 - Every initialized, onboarded, re-adopted, or managed project must re-check root `AGENTS.md` and `CLAUDE.md`; onboarding is incomplete if either is missing or stale unless the human explicitly defers it.
@@ -210,7 +213,7 @@ If the local directory is only a remote-project entry point, create only thin lo
 - Feature Auto-Loop may run Agent-ready feature work after Feature Spec acceptance and explicit human confirmation.
 - Task Auto-Run may run one task/story after its plan is accepted and explicit human confirmation.
 - If the human appears slowed down by repeated confirmations, or when starting a feature/task execution lane, proactively explain the available gate modes and recommend either Feature Auto-Loop or Task Auto-Run when safe.
-- Auto modes stop at Human-gated work, unclear decisions, risky changes, failed verification, drift needing approval, Delivery Contract creation/acceptance/breaking changes, directory guidance changes, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, or publish.
+- Auto modes stop at Human-gated work, unclear decisions, risky changes, failed verification, drift needing approval, unrelated dirty work blocking progress, Delivery Contract creation/acceptance/breaking changes, directory guidance changes, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, or publish.
 - Human confirmations should use table-first Human Review Summary by default; full artifacts remain the source of truth. When multiple documents, facts, or long-term memory entries will change, use Batch Human Review.
 - Root `AGENTS.md` / `CLAUDE.md` guidance must tell future agents to own the workflow: classify the stage, recommend one next action, propose missing artifacts, and keep responsibility for sequencing, diagnosis, verification, drift checks, and project-memory updates.
 - Root guidance must also explain autonomous execution after approval: Feature Auto-Loop may continue Agent-ready feature work after accepted Feature Spec and explicit enablement; Task Auto-Run may complete one accepted task/story plan through TDD, implementation, verification, bug fixing, review, drift, status update, and final report.
@@ -249,6 +252,7 @@ Stop when:
 - a Delivery Contract needs creation, human acceptance, or an accepted contract needs a breaking change
 - TDD cannot be followed or verification repeatedly fails
 - review finds behavior, scope, or architecture changes
+- unrelated dirty work blocks progress
 - subagents are needed but not yet approved
 - submit, commit, PR, merge, release, publish, pause, or close is requested
 - the work would require first-version exclusions

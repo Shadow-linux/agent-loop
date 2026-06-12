@@ -52,7 +52,7 @@ Project Entry → Remote Project Discovery if needed
 | **Plan** | Construction-grade execution plan for the active task/story |
 | **Evidence** | Fresh proof: test output, build output, API results, E2E checks, logs |
 | **Drift** | Mismatch between docs, code reality, or human decisions |
-| **Feature Follow-up / Flow-back** | Bug/change intake that checks recent features before creating a new feature. Default lookback is 15 days. |
+| **Feature Follow-up / Flow-back** | Bug/change intake that checks recent features before creating a new feature. Default lookback is 30 days. |
 | **Delivery Contract** | Optional producer-consumer boundary handoff. Used only when API, event, public data, UI state/behavior, SDK/library, runtime, or explicit cross-agent/human handoff needs a stable contract. |
 
 ## Artifact Layout
@@ -146,7 +146,9 @@ After project init/onboarding is accepted, the agent will:
 
 If `.agent-loop/onboarding-db/` exists, the agent uses it first: it checks freshness, gives a short orientation, recommends one reading path, answers targeted questions, and proposes focused diagram/doc updates only after confirmation.
 
-Deep onboarding defaults to Expanded onboarding-db output. Expanded has a minimum required set for project overview, maps, setup, data model, testing, risks, and core module docs. It is also discovery-driven: when the scan finds complex flows, async/jobs, deployment, security, observability, or complex entities, the agent must create the matching docs or record why they were skipped. Diagrams are embedded in the relevant docs by default and every diagram needs both `How To Read` and `Step-by-Step Walkthrough` text. Standalone `diagrams/` files are created only when a diagram is reused or too large to embed comfortably.
+Deep onboarding defaults to Expanded onboarding-db output. Expanded has a minimum required set for project overview, maps, setup, data model, testing, risks, and core module docs. It is also discovery-driven: when the scan finds complex flows, async/jobs, deployment, security, observability, or complex entities, the agent must create the matching docs or record why they were skipped. Diagram coverage grows with project complexity: large projects should get more focused module, flow, state, async/job, data, and deployment diagrams instead of one overloaded global view. Diagrams are embedded in the relevant docs by default and every diagram needs both `How To Read` and `Step-by-Step Walkthrough` text. Standalone `diagrams/` files are created only when a diagram is reused or too large to embed comfortably.
+
+After each onboarding explanation, the agent should recommend one next action: read a specific doc, inspect a module/flow, generate or update a focused diagram, run a setup/verification command, or return to feature development.
 
 Compact or Standard onboarding-db layouts are used only when the human explicitly requests fewer/simpler files, or when maintaining an existing onboarding-db already organized that way. Onboarding-db human-readable docs default to Chinese, while code symbols, file paths, commands, API names, and artifact names stay as-is.
 
@@ -160,9 +162,11 @@ The agent reads `.agent-loop/project.md`, finds the active feature, and resumes 
 
 > "测试发现上次做的上传功能有 bug."
 
-The agent does not immediately create a new feature. It first checks recent features, using a 15-day default lookback window, then presents candidate matches with evidence. After human confirmation it either flows the work back to the owning feature, creates a linked new feature, creates a maintenance fix, or investigates first.
+The agent does not immediately create a new feature. It first checks recent features, using a 30-day default lookback window, then presents candidate matches with evidence. After human confirmation it either flows the work back to the owning feature, creates a linked new feature, creates a `Feature Type: maintenance-fix` feature, or investigates first.
 
 If a closed feature is reopened for follow-up, the original close record remains intact. The follow-up gets its own `notes.md` intake record, updated tasks/tests/plan as needed, fresh verification, review, drift check, and a new close confirmation.
+
+If no recent feature owns the bugfix and the work is not a new product capability, the agent creates a narrow maintenance-fix feature under `.agent-loop/features/YYYY-MM-DD-fix-<slug>/`. Maintenance fixes still use spec/tasks/tests/plan/notes, fresh verification, review, drift check, project memory impact check, and close.
 
 ## Execution Modes
 
@@ -172,7 +176,7 @@ If a closed feature is reopened for follow-up, the original close record remains
 | **Feature Auto-Loop** | After Feature Spec acceptance, agent advances Agent-ready stages automatically |
 | **Task Auto-Run** | After plan acceptance, agent completes one task/story through TDD, verification, review, and drift check |
 
-Auto modes still stop for Human-gated decisions, risky changes, failed verification, Delivery Contract creation/acceptance/breaking changes, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, or publish.
+Auto modes still stop for Human-gated decisions, unclear decisions, risky changes, failed verification, drift needing approval, unrelated dirty work blocking progress, human original requirement changes, first-version exclusions, Delivery Contract creation/acceptance/breaking changes, directory guidance changes, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, or publish.
 
 ## External Skill Adapters
 

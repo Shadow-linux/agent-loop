@@ -13,9 +13,12 @@ Status: active
 - Report:
 - Candidate Features:
 - Classification: same-feature-bug | same-feature-adjustment | regression-from-feature | new-feature | maintenance-fix | unclear
-- Lookback Window: 15 days | outside-default-window
+- Lookback Window: 30 days | outside-default-window
 - Match Evidence:
-- Human Decision: flow-back | new-feature | maintenance | investigate-first | defer
+- Related Feature:
+- Flow-back Decision: flow-back | linked-new-feature | maintenance-fix | investigate-first | declined-reopen | defer
+- Declined Flow-back Reason:
+- Human Decision:
 - Artifact Updates:
 - Next Stage:
 
@@ -26,6 +29,18 @@ Status: active
   - Result:
   - Evidence:
   - Next:
+
+## Analyze Consistency
+
+- Date:
+- Scope:
+- Requirement Coverage:
+- Task / Spec Mapping:
+- Test Coverage:
+- Plan Scope Check:
+- Code Reality Check:
+- Decision: proceed | revise-spec | revise-tasks | revise-tests | revise-plan | investigate-first | human-gated
+- Next Stage:
 
 ## TDD Cycles
 

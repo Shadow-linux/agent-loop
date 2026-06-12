@@ -40,6 +40,8 @@ Every time `agent-loop` is used inside a target project, check root guidance bef
 - Gate Modes: Strict Mode, Feature Auto-Loop, Task Auto-Run, and their explicit human enablement rules
 - Required Stops: unclear scope, risky changes, Delivery Contract gates, subagent dispatch, submit, close, commit, PR, merge, release, publish
 - Completion Rules: fresh verification, review, drift check, project memory update, Feature Completion Check, Feature Close Review
+- Feature Follow-up / Flow-back: bugs, regressions, screenshots, QA feedback, API mismatches, and small tweaks are checked against active/paused/closed recent features before new feature creation or code edits
+- Submit And Commit Rules: submit/commit/PR/merge/release/publish require explicit confirmation and only intended files are included
 - root/directory guidance boundaries and requirement archive rules
 - managed block markers are missing for `agent-loop` maintained sections, unless the file is intentionally fully human-owned and the human has deferred managed block adoption
 
@@ -105,6 +107,7 @@ gates
 required-stops
 completion
 artifacts
+submit
 directory-guidance
 architecture
 commands
@@ -155,6 +158,8 @@ Keep it short and long-lived:
 - if present, read `.agent-loop/project.md` and active feature docs
 - if `project.md` says `Status: remote-entry`, read `.agent-loop/remote.md` and verify the remote project before acting
 - if the project used `agent-loop` before but recent development bypassed it, route to Re-Adopt Agent Loop Project before new feature work
+- if the human reports a bug, regression, post-close correction, field/schema/algorithm/API change, test failure, screenshot issue, QA/user feedback, or "small tweak", route to Feature Follow-up / Flow-back before creating a new feature or editing code
+- Feature Follow-up / Flow-back should inspect Active / Paused / Closed features, use the 30-day default lookback as a default rather than a hard boundary, read candidate `spec.md`, `tasks.md`, `tests.md`, and `notes.md`, and present a Candidate Match Matrix before recommending flow-back, linked new feature, maintenance-fix, or investigate-first
 - when working in a subdirectory, check for the nearest directory-level `AGENTS.md`
 - when creating a new long-lived boundary directory, propose a directory-level `AGENTS.md` before or alongside the directory creation
 - keep new human source materials in requirement set directories under `.agent-loop/requirements/`, not flat files
@@ -162,13 +167,14 @@ Keep it short and long-lived:
 - ask human confirmation before each agent-loop stage
 - use table-first Human Review Summary for non-trivial confirmations
 - Autonomous Execution After Approval: after explicit Feature Auto-Loop or Task Auto-Run enablement, agents may continue inside the accepted scope through implementation, testing, fixing, review, drift, status update, and final report
-- autonomous stop conditions: scope change, ambiguity, unavailable infrastructure, security/data boundary changes, broad architecture changes, repeated verification failure, unrelated dirty work, Delivery Contract creation/acceptance/breaking-change approval, subagent dispatch without explicit approval, submit, close, commit, PR, merge, release, or publish
+- autonomous stop conditions: scope change, ambiguity, human original requirement change, unavailable infrastructure, drift needing approval, security/data boundary changes, broad architecture changes, directory guidance changes, first-version exclusions, repeated verification failure, unrelated dirty work, Delivery Contract creation/acceptance/breaking-change approval, subagent dispatch without explicit approval, submit, close, commit, PR, merge, release, or publish
+- submit and commit guidance: submit/commit/PR/merge/release/publish require explicit confirmation after diff, verification, review, drift, and unrelated-change checks; if no project-specific commit style exists, use `<type>: <summary>` plus a concrete bullet body
 - run fresh verification before completion claims
 - run Feature Completion Check after likely completion, before starting a new feature, or when resuming with an active feature
 - perform Feature Close Review, drift check, and project memory update before close
 - stable project commands and hard constraints, only if every agent should know them immediately
 - managed block markers for `agent-loop` maintained sections, so future updates do not overwrite human-owned content
-- stale detection: if future agents cannot learn Agent Ownership, Gate Modes, Required Stops, and Completion Rules from root guidance, propose a root `AGENTS.md` update
+- stale detection: if future agents cannot learn Agent Ownership, Gate Modes, Required Stops, Completion Rules, and Submit And Commit Rules from root guidance, propose a root `AGENTS.md` update
 
 ## Root `AGENTS.md` Should Not Contain
 

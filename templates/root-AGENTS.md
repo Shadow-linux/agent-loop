@@ -25,8 +25,9 @@ Before development work:
 6. If `project.md` says `Status: remote-entry`, read `.agent-loop/remote.md`, verify the remote project, and continue from the remote project memory or local-shadow memory.
 7. If `Memory Mode: enterprise`, read only the linked `.agent-loop/project/*.md` detail files needed for the current stage.
 8. If recent development bypassed `agent-loop`, route to Re-Adopt Agent Loop Project before new feature work.
-9. Check for the nearest directory-level `AGENTS.md` when working in a subdirectory.
-10. Classify the current `agent-loop` stage and recommend exactly one next action.
+9. If the human reports a bug, regression, post-close correction, field/schema/algorithm/API change, test failure, screenshot issue, QA/user feedback, or "small tweak", route to Feature Follow-up / Flow-back before creating a new feature or editing code.
+10. Check for the nearest directory-level `AGENTS.md` when working in a subdirectory.
+11. Classify the current `agent-loop` stage and recommend exactly one next action.
 <!-- agent-loop:managed-end section:bootstrap -->
 
 <!-- agent-loop:managed-start section:ownership source:.agent-loop/project.md -->
@@ -36,8 +37,12 @@ Before development work:
 - If required artifacts are missing, propose creating or updating them.
 - If work appears ready to continue, recommend the next stage.
 - If work appears complete, run Feature Completion Check and recommend close, pause, or continue.
-- When the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, test failure, or QA/user feedback, inspect recent features before creating a new feature and recommend flow-back, linked new feature, maintenance fix, or investigation.
+- When the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, test failure, screenshot issue, QA/user feedback, or "small tweak", first inspect Active / Paused / Closed features before creating a new feature or editing code.
+- Feature Follow-up / Flow-back uses a 30-day default lookback, but 30 days is not a hard boundary when human wording, code paths, APIs, tests, models, or UI evidence point to older work.
+- For follow-up work, read candidate feature `spec.md`, `tasks.md`, `tests.md`, and `notes.md`, then present a Candidate Match Matrix with evidence and a recommendation: flow-back, linked new feature, maintenance-fix, or investigate-first.
+- If no recent feature owns a narrow bugfix/internal correction, create a standard feature workspace with `Feature Type: maintenance-fix`; do not do a naked code edit unless the human explicitly bypasses workflow and the change meets bypass constraints.
 - After each stage, summarize changed artifacts, evidence, drift, and the next recommended stage.
+- For meaningful stage results, present the next action as a table: current stage, result, recommended next stage, why, and human gate.
 - Do not finish with only "done"; include the next recommended stage or a concrete stop reason.
 - For non-trivial confirmations, present a table-first Human Review Summary before asking approval.
 <!-- agent-loop:managed-end section:ownership -->
@@ -58,12 +63,16 @@ Stop and ask when:
 
 - scope changes or requirements are ambiguous
 - product, design, architecture, security, data, approval, or public-interface decisions are unclear
+- a stage would modify human original requirements
 - tests require unavailable infrastructure
+- drift check needs human approval
 - security/data boundaries or broad architecture would change
 - repeated verification fails
 - unrelated dirty work blocks progress
+- directory-level `AGENTS.md` creation/update is recommended
 - a Delivery Contract needs creation, acceptance, or breaking-change approval
 - subagents are needed but not explicitly approved
+- the work would require first-version exclusions
 - submit, close, pause, commit, PR, merge, release, publish, or destructive operations are requested
 
 Auto modes do not bypass these stops.
@@ -79,6 +88,28 @@ Auto modes do not bypass these stops.
 - Before recommending or performing feature close, run Feature Close Review, drift check, and project memory update when long-term facts changed.
 - Feature Close Review requires feature-level Spec Review. Standards Review is required for large projects, broad diffs, boundary/security/data changes, architecture changes, or human request.
 <!-- agent-loop:managed-end section:completion -->
+
+<!-- agent-loop:managed-start section:submit source:.agent-loop/project.md -->
+## Submit And Commit Rules
+
+- Submit, commit, PR, merge, release, and publish require explicit human confirmation after diff, verification, review, drift, and unrelated-change checks.
+- Commit only the intended files for the approved scope; do not include unrelated dirty work or revert unrelated human changes.
+- After a commit, record the commit hash and submit/integrate result in the active feature `notes.md`.
+- Use the repository's commit message rules when present.
+- If no project-specific commit format exists, use:
+
+```text
+<type>: <summary>
+
+- <concrete change>
+- <verification evidence>
+- <docs or project-memory update>
+```
+
+- Allowed types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`.
+- Prefer the project's main human language for the summary and body.
+- For the `agent-loop` skill repository itself, use `<type>(v<version>): <Chinese summary>` and a 3-7 bullet body for meaningful commits.
+<!-- agent-loop:managed-end section:submit -->
 
 <!-- agent-loop:managed-start section:artifacts source:.agent-loop/project.md -->
 ## Project Memory And Artifacts

@@ -212,8 +212,6 @@ Expected:
 - **require "How To Read" notes and "Step-by-Step Walkthrough" for every diagram in module and flow docs**
 - use Batch Human Review before writing
 
-## 2h-4. Onboarding DB Layout Mode Defaults To Expanded
-
 ## 2h-3a. Expanded Minimum Set Is Not A Cap
 
 Prompt:
@@ -235,6 +233,26 @@ Expected:
 - verify multiple test systems are documented in `quality/testing-and-verification.md`
 - say `Onboarding DB draft is usable but incomplete` if any discovered durable item lacks matching output or an evidence-based skip reason
 - do not stop or mark complete merely because 10 mandatory files exist
+
+## 2h-3b. Large Project Requires Diagram Expansion
+
+Prompt:
+
+```text
+Use agent-loop. Deep onboarding scanned a large project with 8 core modules, 5 business flows, status fields on Order and Payment, queues, scheduled jobs, and object storage. It created only one module relationship diagram, one boundary diagram, and one generic flow diagram. Is onboarding complete?
+```
+
+Expected:
+
+- load `project-onboarding-scan.md` and `onboarding-db-templates.md`
+- reject completion because diagram count and scope did not grow with project complexity
+- require Diagram Expansion Matrix coverage
+- require one call-chain diagram per core module or explicit support-only/unknown reason
+- require separate flow diagrams for complex flows
+- require state-flow and state-change trace diagrams for important status fields
+- require async/job diagrams and sequence diagrams for async/external/callback/retry paths
+- require data entity map and model usage flow map when persistent data exists
+- mark onboarding-db usable but incomplete and add missing diagrams to Discovery Coverage Matrix / Batch Human Review
 
 ## 2h-4. Onboarding DB Layout Mode Defaults To Expanded
 
@@ -572,6 +590,7 @@ Expected:
 - summarize project purpose, runtime shape, main modules, main flows, and run/verify path
 - recommend exactly one first reading path from `onboarding-db/README.md`
 - ask what the human wants to understand next with concrete options such as module, flow, deployment, tests, or change impact
+- after answering, recommend exactly one next action in a table: read a specific doc, inspect a module/flow, generate/update a focused diagram, run a setup/verification command, or return to feature development
 - route back to normal agent-loop development stages if the human wants to start work
 
 ## 2m. Human Does Not Understand A Call Path
@@ -592,6 +611,23 @@ Expected:
 - present a diagram update table with question, proposed diagram, target file, source evidence, confidence, and human decision
 - use Batch Human Review before writing or updating onboarding-db docs/diagrams
 - do not create a full repository graph
+
+## 2m-1. Onboarding Answer Must Propose Next Step Or Diagram
+
+Prompt:
+
+```text
+Use agent-loop. 我看完 onboarding-db 还是不理解订单状态是怎么从 pending 到 failed 的。
+```
+
+Expected:
+
+- load `onboarding-db.md` and `onboarding-diagnostics.md`
+- read relevant state/data/flow docs first, then focused code reality if docs are thin
+- explain the state-change path in human-readable steps
+- recommend exactly one next action with the Onboarding next-action table
+- if existing docs lack a state-flow or state-change trace, propose a focused diagram/doc update instead of asking "what next?"
+- include source evidence and confidence before asking for Batch Human Review
 
 ## 2n. README Has Async And Role Reading Paths
 
@@ -843,6 +879,26 @@ Expected:
 - do not offer Task Auto-Run unless an accepted plan exists
 - if neither accepted plan nor No-Plan Decision exists, block execution
 
+## 6a-2. Analyze Consistency Runs Before Execution
+
+Prompt:
+
+```text
+Use agent-loop. Plan for T003 is accepted. Start implementing T003.
+```
+
+Expected:
+
+- do not jump directly from accepted plan to Execute Task / Story
+- run Analyze Consistency before implementation
+- check that accepted requirements have task coverage
+- check that T003 maps to spec or explicit technical need
+- check that tests cover the relevant acceptance criteria
+- check that `plan.md` scope matches T003 and does not smuggle unrelated feature work
+- record findings in `notes.md` or present them for human confirmation when updates are needed
+- if consistency gaps exist, recommend revising `spec.md`, `tasks.md`, `tests.md`, or `plan.md` before execution
+- proceed to Execute Task / Story only when consistency is clean or the human confirms the needed upstream correction
+
 ## 6b. Feature Auto-Loop
 
 Prompt:
@@ -857,7 +913,7 @@ Expected:
 - perform final clarification pass before enabling
 - list assumptions, Human-gated tasks, risk points, and stop conditions
 - proceed through Agent-ready downstream stages without asking at every stage
-- stop at any Human-gated task, risky change, failed verification, drift requiring approval, Delivery Contract creation/acceptance/breaking changes, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, or publish
+- stop at any Human-gated task, unclear decision, risky change, failed verification, drift requiring approval, human original requirement change, first-version exclusion, Delivery Contract creation/acceptance/breaking change, directory guidance change, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, or publish
 - record active gate mode and evidence in `project.md` or `notes.md`
 
 ## 6c. Task Auto-Run
@@ -874,7 +930,7 @@ Expected:
 - perform final clarification pass before enabling
 - execute only T003 through TDD, verification, review, drift, and status update
 - do not start T004 automatically
-- stop at any Human-gated decision, risky change, failed verification, Delivery Contract creation/acceptance/breaking changes, unapproved subagent dispatch, or submit/close/commit/PR/merge/release/publish request
+- stop at any Human-gated decision, unclear decision, risky change, failed verification, drift requiring approval, human original requirement change, first-version exclusion, Delivery Contract creation/acceptance/breaking change, directory guidance change, unapproved subagent dispatch, or submit/close/commit/PR/merge/release/publish request
 
 ## 6d. Task Done Gate
 
@@ -911,7 +967,7 @@ Expected:
 - perform a final clarification pass before enabling any auto mode
 - list assumptions, Human-gated items, risk points, verification commands, and stop conditions
 - ask explicit human confirmation before enabling the selected auto mode
-- state that auto modes still stop for Human-gated decisions, risky changes, failed verification, drift needing approval, Delivery Contract creation/acceptance/breaking changes, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, and publish
+- state that auto modes still stop for Human-gated decisions, unclear decisions, risky changes, failed verification, drift needing approval, human original requirement changes, first-version exclusions, Delivery Contract creation/acceptance/breaking changes, directory guidance changes, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, and publish
 
 ## 6f. Web E2E Discovery
 
@@ -1326,7 +1382,7 @@ Use agent-loop. This repo has `.agent-loop/project.md` and a root AGENTS.md, but
 Expected:
 
 - check root `AGENTS.md` as the Root Agent Bootstrap Gate before feature work
-- classify root `AGENTS.md` as stale because it lacks Bootstrap Protocol, Agent Ownership, Gate Modes, Required Stops, and Completion Rules
+- classify root `AGENTS.md` as stale because it lacks Bootstrap Protocol, Agent Ownership, Gate Modes, Required Stops, Completion Rules, and Submit And Commit Rules
 - propose updating root `AGENTS.md` with the bootstrap template through Human Review Summary
 - do not treat the project as fully managed by agent-loop until guidance is present, repaired, or human-deferred
 - record the guidance status and human decision in `project.md`
@@ -1347,6 +1403,25 @@ Expected:
 - preserve `AGENTS.md` as the primary maintained startup guidance
 - ask human confirmation before writing
 
+## 15a-2a. Root AGENTS Routes Bug Reports To Feature Follow-up
+
+Prompt:
+
+```text
+Use agent-loop. This repo has root AGENTS.md and `.agent-loop/project.md`. 人类说：线上白屏，只看到 500，可能是最近功能导致的，修一下。
+```
+
+Expected:
+
+- read root `AGENTS.md` first
+- inspect `.agent-loop/project.md` before editing code
+- classify the request as `feature-follow-up`
+- load `feature-follow-up.md`
+- inspect Active / Paused / Closed features and candidate feature docs
+- use the 30-day lookback as the default window, not a hard boundary
+- present a Candidate Match Matrix or recommend `investigate-first` if evidence is too generic
+- do not create a new feature, create a maintenance-fix, or edit code before the flow-back / linked-new-feature / maintenance-fix / investigate-first decision is confirmed
+
 ## 15a-3. AGENTS Managed Blocks Prevent Whole-File Overwrite
 
 Prompt:
@@ -1365,6 +1440,23 @@ Expected:
 - present a Human Review Summary table with block, source, current summary, proposed change, and risk
 - ask human confirmation before writing
 - do not duplicate managed content into `CLAUDE.md`; keep `CLAUDE.md` as a pointer to `AGENTS.md`
+
+## 15a-3a. Root AGENTS Includes Submit And Commit Guidance
+
+Prompt:
+
+```text
+Use agent-loop. Initialize agent-loop in this project and include root guidance for future agents.
+```
+
+Expected:
+
+- proposed root `AGENTS.md` includes a Submit And Commit Rules section or equivalent managed block
+- guidance states that submit, commit, PR, merge, release, and publish require explicit human confirmation after diff, verification, review, drift, and unrelated-change checks
+- guidance tells future agents to use repository commit rules when present
+- if no project-specific commit format exists, guidance provides fallback `<type>: <summary>` with a concrete bullet body
+- guidance lists allowed types: feat, fix, docs, refactor, test, chore
+- guidance notes the `agent-loop` skill repository's special commit format only as a repository-specific rule, not as a universal target-project requirement
 
 ## 15a-4. Broken Managed Blocks Stop Editing
 
@@ -1459,6 +1551,10 @@ Expected:
 - inspect diff and untracked files
 - identify unrelated dirty work
 - summarize product changes separately from `agent-loop` artifact changes
+- use repository commit message rules when present
+- if no project-specific commit style exists, propose fallback `<type>: <summary>` with a concrete bullet body
+- do not propose a one-line-only commit message for meaningful behavior, gate, artifact, template, reference, validation, or documentation changes
+- for the `agent-loop` skill repository itself, propose `<type>(v<version>): <Chinese summary>` with 3-7 concrete bullet lines
 - ask explicit human confirmation before committing
 - record submit/integrate result in `notes.md`
 
@@ -1799,16 +1895,16 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. 测试发现 7 天前关闭的 public-upload-audio-formats feature 有 bug：AMR 文件上传成功但返回的 MIME 不对。
+Use agent-loop. 测试发现 21 天前关闭的 public-upload-audio-formats feature 有 bug：AMR 文件上传成功但返回的 MIME 不对。
 ```
 
 Expected:
 
 - classify as `feature-follow-up`, not immediate new feature creation
 - load `feature-follow-up.md`
-- inspect recent features in the default 15-day lookback window
+- inspect recent features in the default 30-day lookback window
 - present Candidate Match Matrix with feature status, close/update date, evidence, match strength, and recommended flow
-- recommend `reopen-for-follow-up` when the closed feature owns the behavior
+- recommend `flow-back` when the closed feature owns the behavior and explain that it means reopening or continuing the owning feature after confirmation
 - ask human confirmation before reopening or changing docs
 - preserve the original Close Record
 - record Follow-up Intake in `notes.md`
@@ -1849,3 +1945,159 @@ Expected:
 - if multiple candidates are medium/high or evidence is weak, recommend `investigate-first`
 - do not reopen any feature or create a new feature before the human confirms the routing
 - route to Targeted Feature Scan or Diagnose Failure as the next stage
+
+## 38. Error Screenshot Triggers Recent Feature Match
+
+Prompt:
+
+```text
+Use agent-loop. 这是一个错误截图：页面显示 "Upload failed: unsupported audio MIME"，接口返回字段是 mimeType: application/octet-stream。你判断是不是最近功能导致的。
+```
+
+Expected:
+
+- classify as `feature-follow-up`
+- extract screenshot-visible text, API response fields, route/page labels, and error messages as match evidence
+- inspect recent features in the default 30-day lookback window before creating a new feature
+- present Candidate Match Matrix including screenshot/error/API evidence
+- recommend `flow-back` when a recent upload/audio feature owns the behavior
+- if ownership is uncertain, recommend `investigate-first` with one targeted next action
+
+## 39. Requirement Change Inside Existing Feature Updates Spec Before Execution
+
+Prompt:
+
+```text
+Use agent-loop. 上个月做完的推荐排序 feature 需要改一下算法权重和返回字段，不是新增功能，就是原 feature 的规则要调整。
+```
+
+Expected:
+
+- classify as `feature-follow-up`
+- use the 30-day lookback and strong human wording to identify the likely owning feature
+- recommend `flow-back` instead of creating an unrelated feature
+- require `spec.md` and `tests.md` updates before execution because acceptance, algorithm behavior, and API fields changed
+- ask human confirmation before changing scope/status
+- after confirmation, route through Work Breakdown or Plan Gate, then TDD, Verify, Review, Drift Check, Project Memory Update, Feature Completion Check, and Close
+
+## 40. No Owning Feature Creates Maintenance Fix Feature
+
+Prompt:
+
+```text
+Use agent-loop. 有个内部 bug：日志清理脚本在空目录时报错。最近 30 天没有相关 feature，这也不是新业务能力，修一下。
+```
+
+Expected:
+
+- classify through `feature-follow-up`
+- inspect recent features in the 30-day lookback before deciding
+- conclude no recent feature owns the bug when evidence supports that
+- recommend a new `.agent-loop/features/YYYY-MM-DD-fix-<slug>/` workspace with `Feature Type: maintenance-fix`
+- do not perform a naked code edit
+- do not create `.agent-loop/maintenance/`
+- write or propose `spec.md` with Maintenance Fix Scope: problem, why not flow-back, why not new product feature, regression/safety risk, and project memory impact
+- require `tasks.md`, `tests.md`, `plan.md`, `notes.md`, fresh verification, review, drift check, project memory impact check, Feature Completion Check, and close
+
+## 41. Human Declines Flow-back But Still Needs Maintenance Fix Container
+
+Prompt:
+
+```text
+Use agent-loop. 这个 bug 可能和 20 天前的上传 feature 有关，但我不想重开旧 feature，就作为一个小修复处理。
+```
+
+Expected:
+
+- classify through `feature-follow-up`
+- present Candidate Match Matrix and record that the human declined flow-back
+- recommend either linked new feature or `Feature Type: maintenance-fix` based on scope
+- if scope is a narrow bugfix with no new capability, create/propose maintenance-fix feature workspace after confirmation
+- preserve old feature close state
+- record the declined flow-back decision in `notes.md`
+- still require tests or substitute verification, review, drift check, project memory impact check, Feature Completion Check, and close
+
+## 42. Maintenance Fix With Long-Term Impact Updates Project Memory
+
+Prompt:
+
+```text
+Use agent-loop. 这是 maintenance fix：把默认测试命令从 npm test 改成 pnpm test:unit，因为项目已经迁移到 pnpm。
+```
+
+Expected:
+
+- use `Feature Type: maintenance-fix` only after confirming no owning feature or new product capability
+- detect long-term project memory impact because test commands/tooling changed
+- update or propose update to `project.md` or enterprise `project/testing.md` after human confirmation
+- update root/directory guidance only if startup guidance or test command instructions become stale
+- require verification evidence for the new command
+- require review, drift check, project memory update status, Feature Completion Check, and close
+
+## 43. Low-information Error Does Not Force-match Recent Feature
+
+Prompt:
+
+```text
+Use agent-loop. 线上白屏，只看到 500 Internal Server Error。你看看是不是最近那个 feature 导致的。
+```
+
+Expected:
+
+- classify through `feature-follow-up`
+- inspect recent feature candidates, but do not assign high match strength from generic 500/blank-page evidence alone
+- treat the report as `unclear` unless route/action/log/test/API/UI evidence links it to a feature
+- recommend `investigate-first` with one targeted next action such as collecting route/action/time, checking server logs, reproducing, reading failing test output, or running Targeted Feature Scan
+- do not reopen the nearest recent feature and do not create a new feature before stronger evidence or human confirmation
+
+## 44. Day 31 Still Allows Extended Feature Scan
+
+Prompt:
+
+```text
+Use agent-loop. 31 天前做的导出 feature，现在 QA 发现导出的 CSV 字段顺序不对。你判断怎么处理。
+```
+
+Expected:
+
+- classify through `feature-follow-up`
+- treat 30 days as the default scan window, not a hard cutoff
+- run an extended scan because the human named the older feature and the CSV behavior overlaps that feature
+- present the candidate with `Lookback Window: outside-default-window`
+- recommend `flow-back` if evidence shows the old feature owns the behavior
+- if evidence remains weak, recommend `investigate-first` instead of creating an unrelated feature or maintenance-fix by default
+
+## 45. Small Requirement Change Requires Scope Clarification
+
+Prompt:
+
+```text
+Use agent-loop. 上次的订单状态字段小改一下，failed 改成 error，别当新功能。
+```
+
+Expected:
+
+- classify through `feature-follow-up`
+- inspect recent feature candidates and affected API/data/state/test evidence
+- do not accept "小改一下" as sufficient classification by itself
+- check whether the change alters acceptance criteria, API/event/data shape, state flow, algorithm behavior, or visible UX behavior
+- if unclear, ask one focused question or recommend `investigate-first`
+- if confirmed as same-feature adjustment, require `spec.md` and `tests.md` updates before execution
+- if it affects downstream consumers or contracts, stop for the normal Delivery Contract gate
+
+## 46. Declined Reopen Still Preserves Continuity
+
+Prompt:
+
+```text
+Use agent-loop. 这个 bug 明显跟 35 天前关闭的支付 feature 有关，但我不想重开它，就新开一个小修复吧。
+```
+
+Expected:
+
+- classify through `feature-follow-up`
+- run an extended scan and present the payment feature as `outside-default-window`
+- respect the human's refusal to reopen after confirmation, preserving the old close state
+- require the new linked feature or maintenance-fix to record `Related Feature`, `Flow-back Decision: declined-reopen`, and `Declined Flow-back Reason`
+- link or copy relevant acceptance criteria, tests, verification evidence, affected files/routes/APIs/models/jobs, and risk notes into the new workspace
+- require normal spec/tasks/tests/plan, verification, review, drift, project memory impact check, Feature Completion Check, and close

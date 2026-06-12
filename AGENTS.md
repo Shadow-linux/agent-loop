@@ -69,7 +69,7 @@ Rules:
 
 - Do not make Delivery Contracts default artifacts.
 - Do not allow tasks to become `done` without verification, evidence, review, and drift rules in the skill.
-- Do not remove human gates for Delivery Contract file creation/acceptance/breaking changes, submit, pause, or close.
+- Do not remove human gates for Delivery Contract file creation/acceptance/breaking changes, submit, pause, close, commit, PR, merge, release, or publish.
 - Do not add unsupported `SKILL.md` frontmatter fields unless loader support is confirmed.
 
 ## Verification

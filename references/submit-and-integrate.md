@@ -76,6 +76,7 @@ When committing:
 - include only the intended files
 - avoid unrelated workspace changes
 - use the repository's commit message rules when present, such as `AGENTS.md`
+- if root guidance has no commit message style, use the fallback format below and recommend whether to add commit guidance to `AGENTS.md`
 - for `agent-loop` skill repository commits, prefer Chinese and use type + version scope with a multi-line body
 - record commit hash in `notes.md`
 
@@ -88,11 +89,11 @@ For meaningful commits, do not use one-line-only messages.
 Preferred format:
 
 ```text
-<type>(v<version>): <Chinese summary>
+<type>: <summary>
 
-- <concrete behavior/template/reference/scenario/doc change>
-- <concrete behavior/template/reference/scenario/doc change>
-- <concrete behavior/template/reference/scenario/doc change>
+- <concrete change>
+- <verification evidence>
+- <docs or project-memory update>
 ```
 
 Allowed types:

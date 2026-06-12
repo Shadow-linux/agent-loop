@@ -4,11 +4,17 @@
 
 ### Added
 - Added Feature Follow-up / Flow-back rules so bugs, regressions, post-close corrections, field/schema changes, algorithm changes, API mismatches, test failures, and QA/user feedback are matched against recent features before creating a new feature.
-- Added a default 15-day recent-feature lookback, Candidate Match Matrix, reopen-for-follow-up rules, Follow-up Intake notes record, and validation scenarios for post-close bug flow-back, linked new feature routing, and unclear ownership investigation.
+- Added a default 30-day recent-feature lookback, Candidate Match Matrix, flow-back rules for reopening or continuing owning features, Follow-up Intake notes record, and validation scenarios for post-close bug flow-back, linked new feature routing, unclear ownership investigation, error screenshot routing, and requirement-change flow-back.
+- Added `Feature Type: maintenance-fix` as the formal container for narrow bugfixes/internal corrections with no owning recent feature, including spec fields, feature workspace rules, project-memory impact checks, and validation scenarios.
 - Added Discovery Coverage Matrix rules so Expanded Deep Onboarding Scan cannot stop after only the minimum 10 files; every discovered core module, complex flow, data model, complex entity, async/job path, deployment concern, verification system, and high-risk unknown must be documented or explicitly deferred.
 - Added a concrete managed block detection checklist for root `AGENTS.md` marker validation, including source checks and stale-marker handling.
 - Added `agent-loop:managed-start` / `agent-loop:managed-end` block rules for root `AGENTS.md`, including bootstrap, ownership, gates, completion, artifacts, architecture, commands, and hard-constraints sections.
 - Added validation scenarios to prevent whole-file `AGENTS.md` overwrites and to stop on broken or duplicated managed block markers.
+- Added Feature Follow-up pressure scenarios for generic 500/blank-page reports, day-31 extended scans, ambiguous "small" requirement changes, and declined reopen continuity.
+- Added root guidance bootstrap rules and validation so bug reports, regressions, screenshots, and small changes route through Feature Follow-up / Flow-back before new feature creation or code edits.
+- Added root Submit And Commit Rules guidance plus validation so target projects inherit explicit submit gates and fallback commit message format.
+- Added an independent Analyze Consistency validation scenario so accepted plans cannot jump directly into implementation without spec/tasks/tests/plan mapping checks.
+- Added Analyze Consistency checklist and `notes.md` recording fields so plan/spec/tasks/tests/code-reality mapping has an explicit artifact before execution.
 - Added mandatory sequence diagram requirement for core modules with async jobs, external APIs, callbacks, WebSocket, retry/compensation, or multi-service interactions.
 - Added `Model Usage Flow Map` to `templates/onboarding-db/data-model.md` to show which flows/APIs/jobs interact with which entities.
 - Added `Entity Lifecycle Flow Map` to `templates/onboarding-db/entity-template.md` to visualize who creates/reads/updates/deletes an entity.
@@ -19,9 +25,18 @@
 - Added Expanded Minimum Required Set (10 mandatory files) and Expanded Conditional Files trigger table to `references/project-onboarding-scan.md`.
 - Added validation scenario `2h-19` requiring Step-by-Step Walkthrough for diagram completeness.
 - Added Step-by-Step Walkthrough sections to all diagram-bearing templates: module, flow, data-model, entity, state-flow, boundary, module-map, deployment, architecture, change-impact, flows-and-data, overview.
+- Added Diagram Expansion Matrix rules and validation so complex Deep Onboarding projects produce additional focused module, flow, state, async/job, data, and deployment diagrams as complexity increases.
+- Added onboarding next-action rules so guided onboarding answers recommend a concrete next reading path, focused diagram update, setup/verification action, or return to feature development.
 
 ### Changed
 - Strengthened runtime Agent Ownership so every response must classify state, recommend exactly one next action, and avoid ending action reports with only "done".
+- Strengthened feature follow-up matching to extract evidence from screenshots, UI labels, logs, stack traces, API fields, and failing test names before deciding whether to reopen a recent feature.
+- Strengthened feature follow-up routing so 30 days is a default scan window rather than a hard cutoff, low-information errors route to investigate-first, ambiguous requirement changes require scope classification, and declined reopen still preserves related-feature continuity.
+- Aligned flow-back decision terminology across templates, checklists, stage guides, and validation scenarios so `flow-back` is the recorded decision for reopening or continuing an owning feature.
+- Corrected Submit / Integrate commit-message guidance so generic target projects use `<type>: <summary>`, while `agent-loop` repository commits keep the version-scoped Chinese format.
+- Strengthened root guidance stale detection and submit rules for Feature Follow-up / Flow-back, Submit And Commit Rules, intended-file commits, and commit-hash recording.
+- Aligned `design.md` entry scenarios and main flow with runtime for Project Onboarding Scan, Feature Follow-up / Flow-back, active feature continuation, blocked state, and stale-memory/re-adopt routing.
+- Aligned first-version exclusions and auto-mode stop conditions across `SKILL.md`, runtime, concepts, root guidance, README, Usage, and validation scenarios.
 - Clarified that Expanded onboarding-db minimum files are a floor, not a cap, and added completion checks for discovery-driven module/flow/data/async/deployment coverage.
 - Unified Expanded onboarding-db runtime/environment routing so env/config belongs in `setup-and-run.md`, while standalone `environment.md` is reserved for Compact/Standard or existing layouts.
 - Unified standalone diagram rules so deployment and other diagrams are embedded in target docs by default and moved to `diagrams/` only when reused or too large.
