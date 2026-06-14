@@ -100,6 +100,7 @@ CHANGELOG.md                        skill maintenance history; append meaningful
 2. Check root `AGENTS.md` / `CLAUDE.md` as the Root Agent Bootstrap Gate; if either is missing or stale, load `references/project-guidance.md` and include the guidance repair in the recommended Project Entry action unless the human has explicitly deferred it.
 3. Classify the entry scenario.
 4. Load the stage guide for the current scenario.
+4a. Run Stage Helper Capability Scan for the current stage: inspect the skills/plugins/helpers exposed by the current runtime. If Superpowers or another matching helper is available for the stage, load `references/skill-routing.md` and `references/external-skill-adapters.md` before using fallback stage guidance.
 5. Load `references/project-guidance.md` during project init/onboarding/re-adoption, when root guidance is missing/stale, or when long-term agent instructions may need sync.
 6. Load `references/project-memory-mode.md` during init, onboarding, re-adoption, drift check, project memory update, or when `project.md` is large, hard to read, or likely insufficient for future continuation.
 7. Load `references/project-architecture-init.md` during init/onboarding, when proposing project structure, when recording architecture profile, or when a task creates durable code boundaries.
@@ -121,7 +122,7 @@ CHANGELOG.md                        skill maintenance history; append meaningful
 21a. Load `references/onboarding-db.md` and `references/recovery-and-backfill.md` when `project.md` or root guidance claims onboarding-db exists, is expanded/reviewed, or should be the newcomer entrypoint, but `.agent-loop/onboarding-db/README.md` or indexed onboarding-db files are missing, stale, or contradictory.
 22. Load `references/feature-completion-check.md` after verification/project-memory updates, before starting a new feature when another is active, and when resuming an active feature that may already be complete.
 23. Load `references/human-review-summary.md` before asking the human to approve or confirm a stage, unless the confirmation is trivial enough for a 3-line summary.
-24. Load `references/skill-routing.md` when a stage might benefit from an external or platform skill.
+24. Load `references/skill-routing.md` before fallback whenever Stage Helper Capability Scan finds a matching external or platform skill for the current stage.
 25. Load `references/external-skill-adapters.md` when Superpowers or another external skill is available for the current stage. Agent-loop paths, gates, task status, project memory, submit, pause, and close rules override external skill defaults.
 26. Load `references/submit-and-integrate.md` before creating commits, PR text, merge notes, or any submission claim.
 27. Summarize current state in the response.
@@ -228,6 +229,7 @@ If the local directory is only a remote-project entry point, create only thin lo
 
 The controller owns the loop. External skills are optional stage accelerators.
 
+- Before falling back to built-in stage guidance, run Stage Helper Capability Scan against the current runtime's available skills/plugins/helpers.
 - Clarify: use a brainstorming skill if available.
 - Product Brief: use PRD/product discovery or grill-with-docs style skills if available.
 - Planning: use a plan-writing skill if available.

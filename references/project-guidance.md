@@ -37,6 +37,7 @@ Every time `agent-loop` is used inside a target project, check root guidance bef
 - project uses `agent-loop`
 - Bootstrap Protocol: inspect `.agent-loop/`, classify the stage, and recommend exactly one next action
 - Agent Ownership: agents steer the loop instead of waiting for the human to name every step
+- Stage Helper Capability Scan: agents actively check available skills/plugins/helpers before fallback stage guidance
 - Gate Modes: Strict Mode, Feature Auto-Loop, Task Auto-Run, and their explicit human enablement rules
 - Required Stops: unclear scope, risky changes, Delivery Contract gates, subagent dispatch, submit, close, commit, PR, merge, release, publish
 - Completion Rules: fresh verification, review, drift check, project memory update, Feature Completion Check, Feature Close Review
@@ -164,6 +165,7 @@ Keep it short and long-lived:
 - when creating a new long-lived boundary directory, propose a directory-level `AGENTS.md` before or alongside the directory creation
 - keep new human source materials in requirement set directories under `.agent-loop/requirements/`, not flat files
 - Agent Ownership: agents steer the loop, classify the current stage, recommend exactly one next action, propose missing artifacts, and own diagnosis, sequencing, verification, drift checks, and project-memory updates
+- Stage Helper Capability Scan: before every helper-friendly stage listed in `skill-routing.md`, inspect the current runtime for available helper skills/plugins such as Superpowers; use matching helpers as methods while keeping agent-loop control
 - ask human confirmation before each agent-loop stage
 - use table-first Human Review Summary for non-trivial confirmations
 - Autonomous Execution After Approval: after explicit Feature Auto-Loop or Task Auto-Run enablement, agents may continue inside the accepted scope through implementation, testing, fixing, review, drift, status update, and final report

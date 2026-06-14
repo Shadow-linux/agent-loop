@@ -2,6 +2,13 @@
 
 Use the relevant checklist before entering a stage.
 
+Before fallback stage guidance:
+
+- [ ] Run Stage Helper Capability Scan against the current runtime's available skills/plugins/helpers.
+- [ ] If a matching helper exists for the current stage, load `skill-routing.md` and `external-skill-adapters.md`.
+- [ ] Prefer the matching helper as the method quality bar, while keeping agent-loop artifact paths, gates, task status, project memory, submit, and close control.
+- [ ] If no matching helper exists or it cannot be loaded, continue with the fallback stage guide.
+
 Before human approval for non-trivial stage output:
 
 - [ ] Load `human-review-summary.md`.
@@ -113,6 +120,8 @@ Before using an external skill or plugin inside a stage:
 ## Product Brief If Needed
 
 - [ ] Load `product-brief.md`.
+- [ ] Run Stage Helper Capability Scan before fallback product synthesis.
+- [ ] If a PRD/product synthesis or grill-with-docs style helper is available, use it through `external-skill-adapters.md` while writing accepted output to agent-loop `product.md` / `notes.md`.
 - [ ] Decide whether Product Brief trigger conditions apply.
 - [ ] Inspect `project.md` Product Context and Domain Language.
 - [ ] Inspect source requirements before asking product questions.
@@ -123,6 +132,8 @@ Before using an external skill or plugin inside a stage:
 
 ## Brainstorm / Clarify
 
+- [ ] Run Stage Helper Capability Scan before fallback clarification.
+- [ ] If Superpowers `brainstorming` or another product-discovery helper is available, use it through `external-skill-adapters.md` while writing accepted output to agent-loop `product.md`, `spec.md`, or `notes.md`.
 - [ ] Use only when goal is unstable, scope unclear, or meaningful approaches differ.
 - [ ] Check project docs, code, tests, source requirements, Product Context, and Domain Language before asking.
 - [ ] Ask 1-5 high-impact questions.
@@ -151,6 +162,8 @@ Before using an external skill or plugin inside a stage:
 
 ## Feature Spec
 
+- [ ] Run Stage Helper Capability Scan before fallback spec writing.
+- [ ] If a spec-writing, brainstorming, or product-discovery helper is available, use it through `external-skill-adapters.md` while writing accepted output to agent-loop `spec.md`.
 - [ ] Create or update feature workspace.
 - [ ] Set `Feature Type: normal | maintenance-fix | follow-up`.
 - [ ] For maintenance-fix, record why it is not flow-back, why it is not a new product feature, regression/safety risk, and long-term project memory impact.
@@ -271,6 +284,8 @@ No-Plan Decision is allowed only when:
 Checklist:
 
 - [ ] Load `implementation-planning.md`.
+- [ ] Run Stage Helper Capability Scan before fallback planning.
+- [ ] If Superpowers `writing-plans` or another plan-writing helper is available, use it through `external-skill-adapters.md` while writing to agent-loop `plan.md` / `plans/*`.
 - [ ] Plan scope is `task` or `story`.
 - [ ] Technical context and real source structure are recorded.
 - [ ] Files and commands are exact.
@@ -308,6 +323,8 @@ Checklist:
 - [ ] If using one approval for a bounded task group, list included task/story IDs or scan lanes, allowed boundaries, one brief per subagent, stop conditions, and main-agent review responsibility before asking.
 - [ ] Load `skill-routing.md`.
 - [ ] Load `external-skill-adapters.md`.
+- [ ] Run Stage Helper Capability Scan before fallback subagent planning.
+- [ ] If Superpowers `subagent-driven-development` or another subagent helper is available, use it through `external-skill-adapters.md` after human approval while keeping briefs and returned summaries under agent-loop `handoffs/*`.
 - [ ] Verify tasks or scan lanes are independent, bounded, and reviewable.
 - [ ] Create one `templates/subagent-brief.md`-style brief per subagent.
 - [ ] Store briefs and returned summaries under `handoffs/*`.
@@ -325,6 +342,8 @@ Checklist:
 - [ ] If Task Auto-Run is enabled, execute only the selected task/story and stop after evidence/review/drift updates and Task Done Gate status update.
 - [ ] Stop at Human-gated tasks or any stop condition.
 - [ ] Use TDD by default.
+- [ ] Run Stage Helper Capability Scan before fallback execution.
+- [ ] If Superpowers `test-driven-development` or another TDD helper is available, use it through `external-skill-adapters.md` while keeping evidence and task status under agent-loop.
 - [ ] Verify RED before implementation.
 - [ ] Write minimal GREEN implementation.
 - [ ] Verify GREEN with fresh command output.
@@ -336,6 +355,8 @@ Checklist:
 
 ## Diagnose Failure
 
+- [ ] Run Stage Helper Capability Scan before fallback diagnosis.
+- [ ] If Superpowers `systematic-debugging` or another debugging helper is available, use it through `external-skill-adapters.md` while recording root cause and fix evidence in agent-loop `notes.md`.
 - [ ] Reproduce consistently or gather more evidence.
 - [ ] Read error output fully.
 - [ ] Check recent changes.
@@ -347,6 +368,8 @@ Checklist:
 
 ## Verify
 
+- [ ] Run Stage Helper Capability Scan before fallback verification.
+- [ ] If Superpowers `verification-before-completion` or another verification helper is available, use it through `external-skill-adapters.md` while recording evidence in agent-loop `notes.md`.
 - [ ] Identify what command or action proves the claim.
 - [ ] Run it fresh.
 - [ ] Read full output and exit status.
@@ -355,6 +378,8 @@ Checklist:
 
 ## Review
 
+- [ ] Run Stage Helper Capability Scan before fallback review.
+- [ ] If Superpowers `requesting-code-review` or another review helper is available, use it through `external-skill-adapters.md` while recording findings in agent-loop `notes.md`.
 - [ ] Perform lightweight Spec Review for every task before marking it `done`.
 - [ ] Perform Spec Review before Submit / Integrate.
 - [ ] Compare implementation against `product.md` when present, `spec.md`, acceptance criteria, scope, and out-of-scope.
@@ -409,7 +434,8 @@ Checklist:
 ## Submit / Integrate
 
 - [ ] Load `submit-and-integrate.md`.
-- [ ] If Superpowers or another finishing/branch skill is available, load `external-skill-adapters.md`.
+- [ ] Run Stage Helper Capability Scan before fallback submit/integrate preparation.
+- [ ] If Superpowers `finishing-a-development-branch` or another finishing/branch helper is available, use it through `external-skill-adapters.md`.
 - [ ] Use external finishing skills only for completion options and branch hygiene.
 - [ ] Inspect diff and untracked files.
 - [ ] Separate product code from `agent-loop` artifact changes.
@@ -425,6 +451,8 @@ Checklist:
 ## Feature Completion Check
 
 - [ ] Load `feature-completion-check.md`.
+- [ ] Run Stage Helper Capability Scan before fallback completion analysis.
+- [ ] If verification, review, finishing, or close-decision helpers are available, use them through `external-skill-adapters.md` while keeping close under agent-loop control.
 - [ ] Run after likely completion, before starting a new feature with an Active Feature, or on resume with an Active Feature.
 - [ ] Confirm accepted spec exists.
 - [ ] Confirm all in-scope tasks are done, skipped with reason, or removed from scope.
@@ -444,6 +472,9 @@ Checklist:
 - [ ] Ask explicit human confirmation before close.
 
 ## Pause / Close
+
+- [ ] Run Stage Helper Capability Scan before fallback pause/close preparation.
+- [ ] If verification, finishing, or handoff helpers are available, use them through `external-skill-adapters.md` only for evidence discipline, close options, or handoff structure.
 
 Pause:
 

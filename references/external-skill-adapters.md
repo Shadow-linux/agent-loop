@@ -2,6 +2,26 @@
 
 Use this reference when another skill or plugin can improve the current `agent-loop` stage. External skills are stage accelerators only; `agent-loop` remains the controller.
 
+## Capability Scan Rule
+
+Before using fallback stage guidance, inspect the current runtime's available skills/plugins/helpers for a stage match.
+
+If Superpowers is available, prefer these helpers:
+
+| Stage | Preferred Superpowers helper |
+|---|---|
+| Brainstorm / Clarify | `superpowers:brainstorming` |
+| Product Brief / Feature Spec | `superpowers:brainstorming` plus product/PRD helpers when available |
+| Plan Gate / Plan If Needed | `superpowers:writing-plans` |
+| Execute Task / Story | `superpowers:test-driven-development` |
+| Diagnose Failure | `superpowers:systematic-debugging` |
+| Verify / Completion claim | `superpowers:verification-before-completion` |
+| Review / Feature Close Review | `superpowers:requesting-code-review` |
+| Submit / Integrate | `superpowers:finishing-a-development-branch` |
+| Approved Subagent execution | `superpowers:subagent-driven-development` |
+
+If a matching helper exists, use it as the method quality bar before falling back. If the helper cannot be loaded or does not apply after reading it, continue with agent-loop fallback guidance and record no failure.
+
 ## Controller Rule
 
 ```text

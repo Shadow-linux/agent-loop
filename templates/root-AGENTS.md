@@ -26,8 +26,9 @@ Before development work:
 7. If `Memory Mode: enterprise`, read only the linked `.agent-loop/project/*.md` detail files needed for the current stage.
 8. If recent development bypassed `agent-loop`, route to Re-Adopt Agent Loop Project before new feature work.
 9. If the human reports a bug, regression, post-close correction, field/schema/algorithm/API change, test failure, screenshot issue, QA/user feedback, or "small tweak", route to Feature Follow-up / Flow-back before creating a new feature or editing code.
-10. Check for the nearest directory-level `AGENTS.md` when working in a subdirectory.
-11. Classify the current `agent-loop` stage and recommend exactly one next action.
+10. Run Stage Helper Capability Scan for the current stage: inspect whether the current Agent CLI exposes Superpowers or other helper skills/plugins before using fallback stage guidance.
+11. Check for the nearest directory-level `AGENTS.md` when working in a subdirectory.
+12. Classify the current `agent-loop` stage and recommend exactly one next action.
 <!-- agent-loop:managed-end section:bootstrap -->
 
 <!-- agent-loop:managed-start section:ownership source:.agent-loop/project.md -->
@@ -37,6 +38,7 @@ Before development work:
 - If required artifacts are missing, propose creating or updating them.
 - If work appears ready to continue, recommend the next stage.
 - If work appears complete, run Feature Completion Check and recommend close, pause, or continue.
+- Before Plan Gate, Execute, Diagnose, Verify, Review, Submit, or other helper-friendly stages, actively check whether the current runtime exposes matching stage helper skills/plugins. If available, use them as helpers while keeping agent-loop in control.
 - When the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, test failure, screenshot issue, QA/user feedback, or "small tweak", first inspect Active / Paused / Closed features before creating a new feature or editing code.
 - Feature Follow-up / Flow-back uses a 30-day default lookback, but 30 days is not a hard boundary when human wording, code paths, APIs, tests, models, or UI evidence point to older work.
 - For follow-up work, read candidate feature `spec.md`, `tasks.md`, `tests.md`, and `notes.md`, then present a Candidate Match Matrix with evidence and a recommendation: flow-back, linked new feature, maintenance-fix, or investigate-first.
