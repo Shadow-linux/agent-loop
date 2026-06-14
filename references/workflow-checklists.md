@@ -467,9 +467,28 @@ Checklist:
 - [ ] Confirm long-term facts are reflected in `project.md`.
 - [ ] Confirm submit/integration status is recorded if requested.
 - [ ] Record the check in `notes.md`.
-- [ ] Recommend Close, Continue, Pause before new feature, or Scope Update.
+- [ ] Determine whether Human Acceptance Test Cases are required.
+- [ ] If required and not yet signed off, recommend Human Acceptance instead of Close.
+- [ ] If not required, record rationale.
+- [ ] Recommend Close, Continue, Pause before new feature, Scope Update, or Human Acceptance.
 - [ ] Present completion status with Human Review Summary table.
 - [ ] Ask explicit human confirmation before close.
+
+## Human Acceptance
+
+- [ ] Load `human-acceptance.md`.
+- [ ] Run Stage Helper Capability Scan before fallback human acceptance preparation.
+- [ ] If verification, finishing, or handoff helpers are available, use them only for case-structuring discipline or close-options support while keeping human execution/sign-off under agent-loop control.
+- [ ] Determine whether Human Acceptance Test Cases are required using `human-acceptance.md` triggers.
+- [ ] Generate or update `## Human Acceptance Test Cases` in `tests.md` (or `tests/human-acceptance.md` in complex artifact mode).
+- [ ] Each case includes ID, scenario, preconditions, steps, expected result, evidence to record, and human sign-off cell.
+- [ ] Present cases with Human Review Summary table before human execution.
+- [ ] Human executes cases and reports result; agent does not sign off on the human's behalf.
+- [ ] If cases pass and are signed off, recommend Pause / Close.
+- [ ] If cases fail, route to Diagnose Failure or Execute Task / Story.
+- [ ] If cases are blocked, mark feature `Human-gated` and recommend Pause or scope update.
+- [ ] If waived, record risk and explicit human approval before recommending Pause / Close.
+- [ ] Record human acceptance result in `notes.md`.
 
 ## Pause / Close
 
@@ -489,5 +508,6 @@ Close:
 - [ ] Feature Close Review completed.
 - [ ] Submit/integration status recorded if requested.
 - [ ] `project.md` updated for long-term changes.
+- [ ] Human Acceptance Test Cases signed off when triggered (waived only with recorded risk and explicit human approval).
 - [ ] `notes.md` has close record.
 - [ ] Human explicitly confirms close.

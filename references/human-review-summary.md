@@ -202,6 +202,21 @@ Recommendation: close | continue | pause before new feature | update scope
 Human Decision:
 ```
 
+### Human Acceptance Approval
+
+| ID | Scenario | Preconditions | Steps | Expected Result | Evidence | Sign-off |
+|---|---|---|---|---|---|---|
+| HAT001 |  |  |  |  |  | pass / fail / blocked / waived |
+
+Summary:
+
+```text
+Result: pass / fail / blocked / waived
+Executed by:
+Date:
+Blocker / Notes:
+```
+
 ### Submit / Integrate
 
 | Item | Status | Evidence |

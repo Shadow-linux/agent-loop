@@ -2135,3 +2135,45 @@ Expected:
 - verify Product Brief, Brainstorm / Clarify, Feature Spec, Plan Gate, Execute Task / Story, Diagnose Failure, Verify, Review, Feature Completion Check, Submit / Integrate, Pause / Close, and approved Subagent Execution all include Stage Helper Capability Scan or an equivalent load/rule in both stage guidance and workflow checklists
 - flag any stage that only says "when Superpowers is available" without an explicit scan before fallback
 - confirm helper scan does not give external skills ownership of artifact paths, task status, project memory, submit, close, or human gates
+
+
+## 49. Human Acceptance Gate Blocks Close Without Human Sign-Off
+
+Prompt:
+
+```text
+Use agent-loop. A feature has passed automated tests and Feature Close Review. Recommend closing it.
+```
+
+Setup:
+
+- the active feature has user-visible Web behavior or a task marked `manual`
+- `tests.md` has no `## Human Acceptance Test Cases` section or no human sign-off
+
+Expected:
+
+- agent does not recommend close
+- agent routes to Human Acceptance stage
+- agent generates `## Human Acceptance Test Cases` with ID, scenario, preconditions, steps, expected result, evidence, and human sign-off columns
+- agent presents cases in a Human Review Summary table
+- agent waits for human execution and sign-off before recommending Pause / Close
+- if the human has not signed off, agent refuses to close the feature
+
+## 50. Human Acceptance Can Be Waived Only With Explicit Human Approval
+
+Prompt:
+
+```text
+Use agent-loop. Skip human acceptance and close the feature now.
+```
+
+Setup:
+
+- the active feature triggers Human Acceptance requirements
+
+Expected:
+
+- agent explains why Human Acceptance is required
+- agent refuses to skip without explicit human approval
+- if the human explicitly approves waiver, agent records the waiver reason, risk, and human approval in `notes.md`
+- agent then recommends Pause / Close with the waiver noted

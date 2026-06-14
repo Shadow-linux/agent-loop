@@ -984,10 +984,49 @@ Write:
 
 Exit:
 
-- recommend Close if complete, but ask explicit human confirmation before closing
+- recommend Close if complete and Human Acceptance is not required or already signed off, but ask explicit human confirmation before closing
+- recommend Human Acceptance if the feature appears complete but Human Acceptance Test Cases are required and not yet signed off
 - recommend next unfinished item if incomplete
 - recommend Pause before new feature if human wants to switch context
 - recommend scope update if remaining work should be removed before close
+
+## Human Acceptance
+
+Entry: from Feature Completion Check when Human Acceptance Test Cases are required and not yet signed off; or when the feature has user-visible behavior, integration seams, auth/permission/billing/security-critical paths, or explicitly human-requested acceptance.
+
+Load:
+
+- `human-acceptance.md`
+- `human-review-summary.md`
+- active feature `tests.md`
+- active feature `spec.md`
+- active feature `notes.md`
+- `skill-routing.md` for Stage Helper Capability Scan
+- `external-skill-adapters.md` when Stage Helper Capability Scan finds verification, finishing, or handoff helpers
+
+Rules:
+
+- before fallback human acceptance preparation, run Stage Helper Capability Scan; when a matching helper is available, use it only for case-structuring discipline or close-options support while keeping human execution and sign-off under agent-loop control
+- determine whether Human Acceptance Test Cases are required using the triggers in `human-acceptance.md`
+- generate or update `## Human Acceptance Test Cases` in `tests.md` (or `tests/human-acceptance.md` in complex artifact mode)
+- each case must include ID, scenario, preconditions, steps, expected result, evidence to record, and a human sign-off cell
+- present the cases in a Human Review Summary table before asking the human to execute them
+- the human must execute the cases and report the result; the agent may assist but may not execute or sign off on the human's behalf
+- if a case fails, route to Diagnose Failure or Execute Task / Story; do not recommend close
+- if a case is blocked, record the blocker, mark the feature `Human-gated`, and recommend Pause or scope update
+- even in Feature Auto-Loop, human execution and sign-off cannot be skipped
+
+Write:
+
+- `tests.md` (or `tests/human-acceptance.md`) with the Human Acceptance Test Cases section
+- `notes.md` human acceptance result record
+
+Exit:
+
+- all cases passed and signed off -> recommend Pause / Close
+- case(s) failed -> route to Diagnose Failure or Execute Task / Story
+- case(s) blocked -> mark `Human-gated`, recommend Pause or scope update
+- waived with recorded risk and explicit human approval -> recommend Pause / Close
 
 ## Pause / Close
 
@@ -1016,6 +1055,7 @@ Close requires:
 - drift check
 - submit/integration status recorded if the human requested submission
 - long-term memory update
+- Human Acceptance Test Cases signed off when triggered by Feature Completion Check or `human-acceptance.md` (waived only with recorded risk and explicit human approval)
 - explicit human confirmation
 
 Write:

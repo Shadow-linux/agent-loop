@@ -43,4 +43,21 @@ Blocked / Manual:
 
 ## Manual Verification
 
+Design-time manual verification notes. For close-time human acceptance, use `## Human Acceptance Test Cases` below.
+
 ## Test Commands
+
+## Human Acceptance Test Cases
+
+Required before close when `human-acceptance.md` triggers apply.
+
+| ID | Scenario | Preconditions | Steps | Expected Result | Evidence | Human Sign-off |
+|---|---|---|---|---|---|---|
+| HAT001 | [title] | [preconditions] | 1. ... | [expected] | [link/screenshot] | pass / fail / blocked / waived |
+
+Sign-off:
+
+- Executed by:
+- Date:
+- Result: pass / fail / blocked / waived
+- Blocker / Notes:

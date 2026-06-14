@@ -30,6 +30,10 @@
 - Added Step-by-Step Walkthrough sections to all diagram-bearing templates: module, flow, data-model, entity, state-flow, boundary, module-map, deployment, architecture, change-impact, flows-and-data, overview.
 - Added Diagram Expansion Matrix rules and validation so complex Deep Onboarding projects produce additional focused module, flow, state, async/job, data, and deployment diagrams as complexity increases.
 - Added onboarding next-action rules so guided onboarding answers recommend a concrete next reading path, focused diagram update, setup/verification action, or return to feature development.
+- Added a new `Human Acceptance` stage between `Feature Completion Check` and `Pause / Close` so features with user-visible behavior, integration seams, auth/billing/security-critical paths, or explicitly human-requested acceptance cannot be closed without human-executed acceptance test cases and sign-off.
+- Added `references/human-acceptance.md` with entry triggers, rules, required case format, and exit routing.
+- Added Human Acceptance Approval table pattern to `references/human-review-summary.md` and a structured `## Human Acceptance Test Cases` template to `templates/tests.md`.
+- Added validation scenarios to confirm the Human Acceptance gate blocks close without human sign-off and that waivers require explicit human approval with recorded risk.
 
 ### Changed
 - Strengthened runtime Agent Ownership so every response must classify state, recommend exactly one next action, and avoid ending action reports with only "done".

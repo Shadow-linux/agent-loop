@@ -45,12 +45,15 @@ Check:
 - Are long-term facts reflected in `project.md` for simple mode, or the matching `project/*.md` detail files for enterprise mode?
 - Is submit/integration status recorded when the human requested submit/commit/PR?
 - Are there unresolved Human-gated decisions, blockers, or open questions?
+- Are Human Acceptance Test Cases required for this feature?
+- If required, are they generated, executed by a human, and signed off?
+- If not required, is the rationale recorded and human-approved?
 
 ## Outcomes
 
 ### Recommend Close
 
-Use when all completion questions pass.
+Use when all completion questions pass and Human Acceptance is not required or is already signed off.
 
 Say:
 
@@ -63,6 +66,20 @@ Then list evidence and ask for explicit close confirmation.
 Do not close automatically, even in Feature Auto-Loop.
 
 Do not recommend close if Feature Close Review is missing. Recommend Review as the next stage instead.
+
+Do not recommend close if Human Acceptance Test Cases are required but not yet signed off. Recommend Human Acceptance as the next stage instead.
+
+### Recommend Human Acceptance
+
+Use when the feature may be complete but Human Acceptance Test Cases are required and not yet generated or signed off.
+
+Say:
+
+```text
+This feature has passed automated verification and review, but it requires human-performed acceptance verification before close. I will generate Human Acceptance Test Cases for you to execute.
+```
+
+Then generate the cases, present them in a Human Review Summary, and route to the Human Acceptance stage.
 
 ### Recommend Next Unfinished Item
 
@@ -132,6 +149,9 @@ Record the check in `notes.md`:
 - Drift:
 - Project Memory:
 - Submit Status:
+- Human Acceptance Required: yes / no / waived
+- Human Acceptance Status: not-started / generated / signed-off / failed / blocked / waived
+- Human Acceptance Evidence:
 - Recommendation:
 - Human Decision:
 ```
