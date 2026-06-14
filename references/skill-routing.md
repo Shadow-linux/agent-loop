@@ -19,7 +19,7 @@ External skill default paths are advisory only. If a preferred skill says to wri
 
 ## Stage Helper Capability Scan
 
-Run this scan at Project Entry and before helper-friendly stages: Brainstorm / Clarify, Product Brief, Feature Spec, Plan Gate, Execute Task / Story, Diagnose Failure, Verify, Review, Feature Close Review, Submit / Integrate, and approved Subagent execution.
+Run this scan at Project Entry and before every helper-friendly stage listed in the Preferred Skills table below, including Pause / Close and approved Subagent execution.
 
 How to scan:
 

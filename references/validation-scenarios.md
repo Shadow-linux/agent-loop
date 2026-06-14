@@ -2120,3 +2120,18 @@ Expected:
 - keep task status, evidence, artifact paths, review, drift, submit, and close under agent-loop control
 - do not ask the human to learn or invoke Superpowers manually
 - if a matching helper cannot be loaded after detection, continue with fallback guidance and record no external-helper artifact
+
+## 48. Stage Guides Cover All Helper-Friendly Stages
+
+Prompt:
+
+```text
+Use agent-loop. Audit whether Stage Helper Capability Scan is present for every helper-friendly stage before fallback.
+```
+
+Expected:
+
+- compare `references/skill-routing.md` helper-friendly stages against `references/stage-guides.md` and `references/workflow-checklists.md`
+- verify Product Brief, Brainstorm / Clarify, Feature Spec, Plan Gate, Execute Task / Story, Diagnose Failure, Verify, Review, Feature Completion Check, Submit / Integrate, Pause / Close, and approved Subagent Execution all include Stage Helper Capability Scan or an equivalent load/rule in both stage guidance and workflow checklists
+- flag any stage that only says "when Superpowers is available" without an explicit scan before fallback
+- confirm helper scan does not give external skills ownership of artifact paths, task status, project memory, submit, close, or human gates

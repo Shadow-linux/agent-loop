@@ -290,6 +290,8 @@ Entry: source requirements or conversation need product/PRD-style synthesis befo
 Load:
 
 - `product-brief.md`
+- `skill-routing.md` for Stage Helper Capability Scan
+- `external-skill-adapters.md` when Stage Helper Capability Scan finds Superpowers, PRD/product synthesis, or grill-with-docs style helpers
 
 Trigger examples:
 
@@ -302,6 +304,7 @@ Trigger examples:
 
 Rules:
 
+- before fallback product synthesis, run Stage Helper Capability Scan; when a product/PRD helper is available, use it as the method quality bar while writing accepted output to `product.md` and `notes.md`
 - create `product.md` only when useful; skip for narrow bugfixes or clear technical tasks
 - inspect `project.md` Product Context and Domain Language before asking product questions
 - ask one blocking product question at a time
@@ -395,6 +398,11 @@ Exit:
 
 Entry: goal and source requirements are clear enough.
 
+Load:
+
+- `skill-routing.md` for Stage Helper Capability Scan
+- `external-skill-adapters.md` when Stage Helper Capability Scan finds Superpowers, brainstorming, or another spec-writing helper
+
 Write:
 
 - feature workspace
@@ -412,6 +420,10 @@ Include:
 - dependencies
 - out of scope
 - open questions
+
+Rules:
+
+- before fallback spec writing, run Stage Helper Capability Scan; when a spec/brainstorming helper is available, use it for ambiguity removal, scope checks, and acceptance thinking while writing to `spec.md`
 
 Exit:
 
@@ -685,12 +697,9 @@ Load:
 - `external-skill-adapters.md`
 - `templates/subagent-brief.md`
 
-Use:
-
-- Superpowers `subagent-driven-development` when available and appropriate
-
 Rules:
 
+- before fallback subagent planning, run Stage Helper Capability Scan; when Superpowers `subagent-driven-development` is available and appropriate, use it as the method quality bar after human approval
 - subagents are optional and never implied by task count alone
 - ask human confirmation before dispatching subagents
 - Feature Auto-Loop or Task Auto-Run approval is not subagent approval
@@ -909,10 +918,12 @@ Entry: after Verify, Review, Drift Check, and Project Memory Update when human a
 Load:
 
 - `submit-and-integrate.md`
-- `external-skill-adapters.md` when Superpowers or another finishing/branch skill is available
+- `skill-routing.md` for Stage Helper Capability Scan
+- `external-skill-adapters.md` when Stage Helper Capability Scan finds Superpowers or another finishing/branch skill
 
 Rules:
 
+- before fallback submit/integrate preparation, run Stage Helper Capability Scan; when Superpowers finishing or another branch helper is available, use it only for completion options and branch hygiene
 - inspect diff and untracked files
 - separate product code changes from `agent-loop` artifact changes
 - identify unrelated dirty work
@@ -939,6 +950,8 @@ Entry: after Verify/Review/Drift Check/Project Memory Update when a feature may 
 Load:
 
 - `feature-completion-check.md`
+- `skill-routing.md` for Stage Helper Capability Scan
+- `external-skill-adapters.md` when Stage Helper Capability Scan finds Superpowers verification, review, finishing, or close-decision helpers
 
 Read:
 
@@ -951,6 +964,7 @@ Read:
 
 Check:
 
+- before fallback completion analysis, run Stage Helper Capability Scan; when a matching verification/review/finishing helper is available, use it for evidence discipline and close decision support while keeping feature close under agent-loop control
 - accepted spec
 - all in-scope tasks done, skipped with reason, or removed from scope
 - required tests or substitute verification recorded
@@ -976,6 +990,16 @@ Exit:
 - recommend scope update if remaining work should be removed before close
 
 ## Pause / Close
+
+Load:
+
+- `skill-routing.md` for Stage Helper Capability Scan
+- `external-skill-adapters.md` when Stage Helper Capability Scan finds Superpowers verification, finishing, or handoff helpers
+
+Rules:
+
+- before fallback pause/close preparation, run Stage Helper Capability Scan; when a matching verification/finishing/handoff helper is available, use it only for evidence discipline, close options, or handoff structure
+- external helpers may support pause/close preparation, but agent-loop still owns the human confirmation gate and final state transition
 
 Pause writes:
 
