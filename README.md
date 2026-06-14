@@ -182,6 +182,8 @@ Auto modes still stop for Human-gated decisions, unclear decisions, risky change
 
 Agent Loop can use external skills such as Superpowers for brainstorming, construction-grade planning, TDD, debugging, verification, review, finishing, and bounded subagent execution.
 
+Before falling back to built-in stage guidance, the agent should scan the current runtime for available stage helpers and prefer matching helpers such as Superpowers when present.
+
 External skills are stage helpers only. Agent Loop still owns artifact paths, human gates, task status, project memory, drift, submit, pause, and close. Native external directories such as `docs/superpowers/*` are not created by default.
 
 ## Delivery Contracts Are Optional

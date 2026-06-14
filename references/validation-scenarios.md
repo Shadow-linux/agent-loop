@@ -2101,3 +2101,22 @@ Expected:
 - require the new linked feature or maintenance-fix to record `Related Feature`, `Flow-back Decision: declined-reopen`, and `Declined Flow-back Reason`
 - link or copy relevant acceptance criteria, tests, verification evidence, affected files/routes/APIs/models/jobs, and risk notes into the new workspace
 - require normal spec/tasks/tests/plan, verification, review, drift, project memory impact check, Feature Completion Check, and close
+
+## 47. Stage Helper Capability Scan Uses Superpowers Before Fallback
+
+Prompt:
+
+```text
+Use agent-loop. The runtime has Superpowers skills available. Plan and execute T003.
+```
+
+Expected:
+
+- before Plan Gate fallback, run Stage Helper Capability Scan against available skills/plugins/helpers
+- detect Superpowers `writing-plans` and load `skill-routing.md` plus `external-skill-adapters.md`
+- use the Writing-Plans Adapter as the plan quality bar, but write to agent-loop `plan.md` or `plans/*`, not `docs/superpowers/plans/*`
+- before Execute Task / Story fallback, run Stage Helper Capability Scan again
+- detect Superpowers `test-driven-development` and use the TDD Adapter for RED/GREEN/REFACTOR
+- keep task status, evidence, artifact paths, review, drift, submit, and close under agent-loop control
+- do not ask the human to learn or invoke Superpowers manually
+- if a matching helper cannot be loaded after detection, continue with fallback guidance and record no external-helper artifact

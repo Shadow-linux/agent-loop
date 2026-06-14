@@ -15,6 +15,7 @@
 - Added root Submit And Commit Rules guidance plus validation so target projects inherit explicit submit gates and fallback commit message format.
 - Added an independent Analyze Consistency validation scenario so accepted plans cannot jump directly into implementation without spec/tasks/tests/plan mapping checks.
 - Added Analyze Consistency checklist and `notes.md` recording fields so plan/spec/tasks/tests/code-reality mapping has an explicit artifact before execution.
+- Added Stage Helper Capability Scan so agents actively detect available helpers such as Superpowers before falling back during Plan Gate, Execute, Diagnose, Verify, Review, Submit, and related stages.
 - Added mandatory sequence diagram requirement for core modules with async jobs, external APIs, callbacks, WebSocket, retry/compensation, or multi-service interactions.
 - Added `Model Usage Flow Map` to `templates/onboarding-db/data-model.md` to show which flows/APIs/jobs interact with which entities.
 - Added `Entity Lifecycle Flow Map` to `templates/onboarding-db/entity-template.md` to visualize who creates/reads/updates/deletes an entity.
@@ -35,6 +36,7 @@
 - Aligned flow-back decision terminology across templates, checklists, stage guides, and validation scenarios so `flow-back` is the recorded decision for reopening or continuing an owning feature.
 - Corrected Submit / Integrate commit-message guidance so generic target projects use `<type>: <summary>`, while `agent-loop` repository commits keep the version-scoped Chinese format.
 - Strengthened root guidance stale detection and submit rules for Feature Follow-up / Flow-back, Submit And Commit Rules, intended-file commits, and commit-hash recording.
+- Strengthened Superpowers adapter routing so available helper skills are preferred as stage methods while agent-loop keeps artifact paths, gates, task status, project memory, submit, and close control.
 - Aligned `design.md` entry scenarios and main flow with runtime for Project Onboarding Scan, Feature Follow-up / Flow-back, active feature continuation, blocked state, and stale-memory/re-adopt routing.
 - Aligned first-version exclusions and auto-mode stop conditions across `SKILL.md`, runtime, concepts, root guidance, README, Usage, and validation scenarios.
 - Clarified that Expanded onboarding-db minimum files are a floor, not a cap, and added completion checks for discovery-driven module/flow/data/async/deployment coverage.

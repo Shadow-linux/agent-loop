@@ -344,6 +344,8 @@ plan 需要包含：
 - 风险和回滚方式
 - review 和验证方式
 
+如果当前 Agent CLI 携带 Superpowers 或其他阶段 helper，Agent 会先主动识别可用 helper。比如写 plan 时优先借用 `writing-plans` 的计划质量标准，执行任务时优先借用 TDD helper，但产物仍写回 agent-loop 的 `plan.md`、`notes.md`、`tasks.md`。
+
 ### 任务完成标准
 
 task 写完代码不等于 done。

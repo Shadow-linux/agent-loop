@@ -2,6 +2,13 @@
 
 Use the relevant checklist before entering a stage.
 
+Before fallback stage guidance:
+
+- [ ] Run Stage Helper Capability Scan against the current runtime's available skills/plugins/helpers.
+- [ ] If a matching helper exists for the current stage, load `skill-routing.md` and `external-skill-adapters.md`.
+- [ ] Prefer the matching helper as the method quality bar, while keeping agent-loop artifact paths, gates, task status, project memory, submit, and close control.
+- [ ] If no matching helper exists or it cannot be loaded, continue with the fallback stage guide.
+
 Before human approval for non-trivial stage output:
 
 - [ ] Load `human-review-summary.md`.
@@ -271,6 +278,8 @@ No-Plan Decision is allowed only when:
 Checklist:
 
 - [ ] Load `implementation-planning.md`.
+- [ ] Run Stage Helper Capability Scan before fallback planning.
+- [ ] If Superpowers `writing-plans` or another plan-writing helper is available, use it through `external-skill-adapters.md` while writing to agent-loop `plan.md` / `plans/*`.
 - [ ] Plan scope is `task` or `story`.
 - [ ] Technical context and real source structure are recorded.
 - [ ] Files and commands are exact.
@@ -325,6 +334,8 @@ Checklist:
 - [ ] If Task Auto-Run is enabled, execute only the selected task/story and stop after evidence/review/drift updates and Task Done Gate status update.
 - [ ] Stop at Human-gated tasks or any stop condition.
 - [ ] Use TDD by default.
+- [ ] Run Stage Helper Capability Scan before fallback execution.
+- [ ] If Superpowers `test-driven-development` or another TDD helper is available, use it through `external-skill-adapters.md` while keeping evidence and task status under agent-loop.
 - [ ] Verify RED before implementation.
 - [ ] Write minimal GREEN implementation.
 - [ ] Verify GREEN with fresh command output.

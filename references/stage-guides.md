@@ -323,11 +323,12 @@ Entry: goal is vague, scope unclear, or meaningful approaches differ.
 
 Load:
 
-- `external-skill-adapters.md` when Superpowers or another brainstorming/product-discovery skill is available
+- `skill-routing.md` for Stage Helper Capability Scan
+- `external-skill-adapters.md` when Stage Helper Capability Scan finds Superpowers or another brainstorming/product-discovery skill
 
 Rules:
 
-- when Superpowers is available, use the Brainstorming Adapter while keeping output in `product.md`, `spec.md`, and `notes.md`
+- before fallback clarification, run Stage Helper Capability Scan; when Superpowers is available, use the Brainstorming Adapter while keeping output in `product.md`, `spec.md`, and `notes.md`
 - Ask 1-5 high-impact questions.
 - Default to one question at a time.
 - Questions must affect scope, UX, data, architecture, testing, or acceptance.
@@ -620,7 +621,8 @@ This is a mandatory gate before Execute Task / Story. Do not create tasks and th
 Load:
 
 - `implementation-planning.md`
-- `external-skill-adapters.md` when Superpowers or another plan-writing skill is available
+- `skill-routing.md` for Stage Helper Capability Scan
+- `external-skill-adapters.md` when Stage Helper Capability Scan finds Superpowers or another plan-writing skill
 
 Write one of:
 
@@ -645,7 +647,7 @@ Rules:
 - implementation steps must be bite-sized and executable
 - no placeholders such as TBD, TODO, "add proper error handling", "write tests", or "similar to previous task"
 - run plan self-review: spec coverage, placeholder scan, and type/signature consistency
-- when Superpowers is available, use the Writing-Plans Adapter quality bar, but write to `plan.md` or `plans/*`, not external docs paths
+- before fallback planning, run Stage Helper Capability Scan; when Superpowers is available, use the Writing-Plans Adapter quality bar, but write to `plan.md` or `plans/*`, not external docs paths
 - if complex artifact mode is active, write the full dated plan to `plans/` and keep `plan.md` as the current pointer
 
 Exit:
@@ -727,7 +729,7 @@ Rules:
 - in Feature Auto-Loop, execute only Agent-ready tasks and stop at Human-gated tasks
 - in Task Auto-Run, execute only the selected task/story and stop after evidence/review/drift updates and Task Done Gate status update
 - TDD by default
-- when Superpowers is available, use the TDD Adapter, but task status and evidence remain controlled by agent-loop
+- before fallback execution, run Stage Helper Capability Scan; when Superpowers is available, use the TDD Adapter, but task status and evidence remain controlled by agent-loop
 - verify RED before implementation
 - verify GREEN after implementation
 - record evidence
@@ -752,11 +754,12 @@ Entry: test/build/E2E/behavior failure.
 
 Load:
 
-- `external-skill-adapters.md` when Superpowers or another systematic debugging skill is available
+- `skill-routing.md` for Stage Helper Capability Scan
+- `external-skill-adapters.md` when Stage Helper Capability Scan finds Superpowers or another systematic debugging skill
 
 Rules:
 
-- when Superpowers is available, use the Debugging Adapter and find root cause before proposing fixes
+- before fallback diagnosis, run Stage Helper Capability Scan; when Superpowers is available, use the Debugging Adapter and find root cause before proposing fixes
 - reproduce before fixing
 - find root cause
 - form one hypothesis at a time
@@ -776,11 +779,12 @@ Entry: before any completion claim.
 
 Load:
 
-- `external-skill-adapters.md` when Superpowers or another verification skill is available
+- `skill-routing.md` for Stage Helper Capability Scan
+- `external-skill-adapters.md` when Stage Helper Capability Scan finds Superpowers or another verification skill
 
 Rules:
 
-- when Superpowers is available, use the verification adapter, but completion is still controlled by agent-loop
+- before fallback verification, run Stage Helper Capability Scan; when Superpowers is available, use the verification adapter, but completion is still controlled by agent-loop
 - identify proof command/action
 - run fresh verification
 - read output
@@ -801,7 +805,8 @@ Entry: after implementation and verification, before any task is marked `done`, 
 
 Load:
 
-- `external-skill-adapters.md` when Superpowers or another code-review skill is available
+- `skill-routing.md` for Stage Helper Capability Scan
+- `external-skill-adapters.md` when Stage Helper Capability Scan finds Superpowers or another code-review skill
 
 Check:
 
@@ -814,7 +819,7 @@ Check:
 
 Rules:
 
-- when Superpowers is available, use the review adapter, but findings must be recorded in `notes.md` and cannot directly mark tasks `done`
+- before fallback review, run Stage Helper Capability Scan; when Superpowers is available, use the review adapter, but findings must be recorded in `notes.md` and cannot directly mark tasks `done`
 - perform lightweight Spec Review for every task before marking it `done`
 - perform Feature Close Review before recommending or performing close
 - Feature Close Review includes feature-level Spec Review against product/spec/tasks/tests/acceptance/out-of-scope

@@ -128,7 +128,7 @@ Purpose:
 
 - make Claude Code load the maintained `AGENTS.md`
 - avoid maintaining duplicated root guidance
-- preserve `AGENTS.md` as the single source of startup guidance for Codex and Claude
+- preserve `AGENTS.md` as the single source of startup guidance for all agent CLIs
 
 `CLAUDE.md` should be a pointer, include, or symlink to `AGENTS.md`. If an existing `CLAUDE.md` contains independent rules, read it, summarize conflicts, and ask the human before replacing or converting it.
 

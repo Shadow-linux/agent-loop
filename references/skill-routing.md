@@ -2,7 +2,7 @@
 
 Use this file when a stage can be improved by another skill or plugin. The `agent-loop` controller stays responsible for state, gates, artifacts, and drift. Other skills are helpers.
 
-When an external skill is available for the current stage, also load `external-skill-adapters.md`.
+Before falling back to built-in `agent-loop` stage guidance, run Stage Helper Capability Scan. When an external skill is available for the current stage, also load `external-skill-adapters.md`.
 
 ## Routing Principle
 
@@ -16,6 +16,20 @@ agent-loop records the result
 Do not force the human to learn external command systems. Translate every external method into the local `agent-loop` artifacts.
 
 External skill default paths are advisory only. If a preferred skill says to write under its own docs directory, write to the owning `agent-loop` artifact instead.
+
+## Stage Helper Capability Scan
+
+Run this scan at Project Entry and before helper-friendly stages: Brainstorm / Clarify, Product Brief, Feature Spec, Plan Gate, Execute Task / Story, Diagnose Failure, Verify, Review, Feature Close Review, Submit / Integrate, and approved Subagent execution.
+
+How to scan:
+
+1. Inspect the current runtime's available skills, plugins, or helper capabilities.
+2. Match available helpers to the current `agent-loop` stage using the Preferred Skills table below.
+3. If Superpowers or another matching helper is present, load `external-skill-adapters.md` before fallback guidance.
+4. Prefer the matching helper for method quality, but keep all outputs in agent-loop artifacts.
+5. If no matching helper is present or the helper cannot be loaded, record no special state and continue with the fallback guide.
+
+Do not ask the human whether to use a helper just because it exists. Use the helper silently as an implementation method unless it would create new files, external directories, subagents, commits, PRs, releases, or other human-gated actions.
 
 ## Preferred Skills
 
