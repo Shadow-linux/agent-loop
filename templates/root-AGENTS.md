@@ -12,10 +12,10 @@ Sections wrapped in `agent-loop:managed-start` / `agent-loop:managed-end` are ma
 
 Agents may propose updates to managed blocks when source facts change, but must ask for human confirmation before writing. Content outside managed blocks is human/project-owned and must not be rewritten automatically.
 
-<!-- agent-loop:managed-start section:meta source:agent-loop-skill version:1.2.1 -->
+<!-- agent-loop:managed-start section:meta source:agent-loop-skill version:1.2.2 -->
 ## Agent Loop Guidance Version
 
-- This root guidance was last synced from `agent-loop` skill version `1.2.1`.
+- This root guidance was last synced from `agent-loop` skill version `1.2.2`.
 - During Project Entry, Existing Project Onboarding, or Re-Adopt, compare this managed version with the current local `agent-loop` skill version using semantic version ordering (`major.minor.patch`), not plain string comparison.
 - If the current skill version is newer, classify root guidance as `stale` and propose refreshing managed blocks through Human Review Summary before relying on outdated startup rules.
 <!-- agent-loop:managed-end section:meta -->

@@ -1,5 +1,16 @@
 # Agent Loop Changelog
 
+## 1.2.2 — 2026-06-15
+
+### Added
+- Added root `AGENTS.md` managed guidance version metadata so future agents can detect when local `agent-loop` skill rules are newer than the synced startup guidance.
+- Added a validation scenario for root guidance files whose managed `agent-loop` version is older than the current local skill version even though all required sections are present.
+- Added a Version Sync Checklist to this skill repository's `AGENTS.md` so approved version bumps update every version-bearing file together.
+
+### Changed
+- Strengthened root guidance stale detection so managed `AGENTS.md` content is also stale when its synced `agent-loop` guidance version is older than the current local skill version.
+- Clarified that managed guidance version comparison uses semantic version ordering (`major.minor.patch`), not plain string comparison.
+
 ## 1.2.1 — 2026-06-11
 
 ### Added
@@ -9,7 +20,6 @@
 - Added Discovery Coverage Matrix rules so Expanded Deep Onboarding Scan cannot stop after only the minimum 10 files; every discovered core module, complex flow, data model, complex entity, async/job path, deployment concern, verification system, and high-risk unknown must be documented or explicitly deferred.
 - Added a concrete managed block detection checklist for root `AGENTS.md` marker validation, including source checks and stale-marker handling.
 - Added `agent-loop:managed-start` / `agent-loop:managed-end` block rules for root `AGENTS.md`, including bootstrap, ownership, gates, completion, artifacts, architecture, commands, and hard-constraints sections.
-- Added root `AGENTS.md` managed guidance version metadata so future agents can detect when local `agent-loop` skill rules are newer than the synced startup guidance.
 - Added validation scenarios to prevent whole-file `AGENTS.md` overwrites and to stop on broken or duplicated managed block markers.
 - Added Feature Follow-up pressure scenarios for generic 500/blank-page reports, day-31 extended scans, ambiguous "small" requirement changes, and declined reopen continuity.
 - Added root guidance bootstrap rules and validation so bug reports, regressions, screenshots, and small changes route through Feature Follow-up / Flow-back before new feature creation or code edits.
@@ -39,8 +49,6 @@
 - Aligned flow-back decision terminology across templates, checklists, stage guides, and validation scenarios so `flow-back` is the recorded decision for reopening or continuing an owning feature.
 - Corrected Submit / Integrate commit-message guidance so generic target projects use `<type>: <summary>`, while `agent-loop` repository commits keep the version-scoped Chinese format.
 - Strengthened root guidance stale detection and submit rules for Feature Follow-up / Flow-back, Submit And Commit Rules, intended-file commits, and commit-hash recording.
-- Strengthened root guidance stale detection so managed `AGENTS.md` content is also stale when its synced `agent-loop` guidance version is older than the current local skill version.
-- Clarified that managed guidance version comparison uses semantic version ordering (`major.minor.patch`), not plain string comparison.
 - Strengthened Superpowers adapter routing so available helper skills are preferred as stage methods while agent-loop keeps artifact paths, gates, task status, project memory, submit, and close control.
 - Completed Stage Helper Capability Scan coverage for Product Brief, Feature Spec, Feature Completion Check, Submit / Integrate, Pause / Close, and approved Subagent Execution.
 - Completed workflow checklist coverage for Product Brief, Brainstorm / Clarify, Feature Spec, Diagnose, Verify, Review, Feature Completion Check, Submit / Integrate, Pause / Close, and approved Subagent Execution.
