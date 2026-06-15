@@ -237,6 +237,7 @@ Output before writing:
 - which recent outside-loop changes appear relevant
 - whether original human requirements conflict with code
 - root `AGENTS.md` and `CLAUDE.md` guidance status, including whether `CLAUDE.md` points to `AGENTS.md`
+- whether root `AGENTS.md` managed guidance version is older than the current local `agent-loop` skill version
 - what should update
 - what should stay unchanged
 

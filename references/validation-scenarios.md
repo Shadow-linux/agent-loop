@@ -1491,6 +1491,24 @@ Expected:
 - ask human confirmation before editing
 - preserve all content outside the approved managed block
 
+## 15a-5a. Older Managed Guidance Version Is Stale
+
+Prompt:
+
+```text
+Use agent-loop. Root AGENTS.md has valid managed blocks and all required sections, but its `agent-loop:managed-start section:meta` block says `version:1.1.0` while the current local agent-loop skill is newer. Continue feature work.
+```
+
+Expected:
+
+- read root `AGENTS.md` before feature work
+- parse the managed `meta` block version
+- compare the managed guidance version with the current local `agent-loop` skill version using semantic version ordering, not plain string comparison
+- classify root guidance as `stale` because the managed guidance version is older, even if the file still contains all required sections
+- propose refreshing the managed blocks through Human Review Summary before relying on outdated startup guidance
+- preserve all human-owned content outside managed blocks
+- allow the human to defer the refresh, and record that defer decision in `project.md` if they do
+
 ## 15b. Project Language Guidance
 
 Prompt:

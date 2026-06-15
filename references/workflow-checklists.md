@@ -40,6 +40,8 @@ Before using an external skill or plugin inside a stage:
 - [ ] If human says remote project, SSH, devcontainer, container, tunnel, or remote workspace, route to Remote Project Discovery.
 - [ ] Check root `AGENTS.md` / `CLAUDE.md` and any obvious directory-level guidance.
 - [ ] Treat root `AGENTS.md` as stale if it lacks Bootstrap Protocol, Agent Ownership, Gate Modes, Required Stops, or Completion Rules.
+- [ ] If root `AGENTS.md` uses agent-loop managed blocks, compare its managed guidance version with the current local `agent-loop` skill version.
+- [ ] Treat root `AGENTS.md` as stale if the managed guidance version is older than the current local `agent-loop` skill version, unless the human explicitly defers refresh.
 - [ ] Treat root `CLAUDE.md` as stale if it duplicates independent long-lived rules or does not clearly point to `AGENTS.md`.
 - [ ] Determine guidance language from existing docs or human preference; default to English only if unclear.
 - [ ] For old or large projects, record directory guidance status in `project.md`.
@@ -87,6 +89,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Inventory root and directory-level guidance files.
 - [ ] Check whether root `AGENTS.md` exists, is stale, or must be created.
 - [ ] If root `AGENTS.md` exists, verify it contains Bootstrap Protocol, Agent Ownership, Gate Modes, Required Stops, and Completion Rules.
+- [ ] If root `AGENTS.md` uses agent-loop managed blocks, compare its managed guidance version with the current local `agent-loop` skill version.
 - [ ] Check whether root `CLAUDE.md` exists and loads or points to `AGENTS.md`; if it duplicates or diverges, propose converting it to a pointer.
 - [ ] Record guidance language and evidence in `project.md`.
 - [ ] Record root guidance status in `project.md`: `AGENTS.md` present/created/stale/missing/human-deferred and `CLAUDE.md` points-to-AGENTS/created-pointer/stale/missing/human-deferred.
