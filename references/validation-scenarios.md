@@ -766,25 +766,6 @@ Expected:
 - update `spec.md` `Source Requirements` after human confirmation
 - recommend `requirements/INDEX.md` only if index trigger conditions apply
 
-## 4c. Legacy Inputs Migration
-
-Prompt:
-
-```text
-Use agent-loop. This project still has .agent-loop/inputs/ or legacy agent-loop/inputs/.
-```
-
-Expected:
-
-- load `requirement-management.md`
-- treat `.agent-loop/inputs/` or `agent-loop/inputs/` as legacy read-only requirement source material
-- do not create new files inside inputs archives
-- find references to `.agent-loop/inputs/` or `agent-loop/inputs/` in feature and project memory docs
-- present a migration table from legacy inputs paths to `.agent-loop/requirements/...`
-- ask human confirmation before moving files or updating references
-- after confirmation, update `Source Inputs` headings to `Source Requirements`
-- record the migration in `notes.md` or `project.md`
-
 ## 5. Feature Has 8 Tasks
 
 Prompt:
@@ -1508,6 +1489,40 @@ Expected:
 - propose refreshing the managed blocks through Human Review Summary before relying on outdated startup guidance
 - preserve all human-owned content outside managed blocks
 - allow the human to defer the refresh, and record that defer decision in `project.md` if they do
+
+## 15a-6. AGENTS Conflict Cleanup Requires Human Decision
+
+Prompt:
+
+```text
+Use agent-loop. Refresh this project's AGENTS.md. Outside managed blocks it says "skip tests for small changes" and "commit whenever implementation is done".
+```
+
+Expected:
+
+- read existing root `AGENTS.md` and `CLAUDE.md`
+- classify the two rules as conflicting workflow rules because they contradict verification, review, and commit gates
+- present an AGENTS cleanup / migration Human Review Summary with content location, classification, conflict, proposed action, risk, and human decision
+- ask whether to remove/replace the conflicting rules, keep them as explicit project overrides, or migrate any useful context into project memory
+- do not delete or rewrite content outside managed blocks without human confirmation
+- if the human keeps an override, record it in project memory when it affects future agents
+
+## 15a-7. AGENTS Long-Term Memory Migrates To Project Memory
+
+Prompt:
+
+```text
+Use agent-loop. Sync AGENTS.md. The existing file contains tech stack, test commands, architecture boundaries, domain terms, deployment environments, and current capabilities in normal prose outside managed blocks.
+```
+
+Expected:
+
+- classify durable project facts as long-term project memory
+- propose migration targets: `.agent-loop/project.md` in simple mode or enterprise `.agent-loop/project/*.md` when enterprise triggers apply
+- preserve source evidence by referencing the original `AGENTS.md` location
+- keep root `AGENTS.md` focused on startup-critical summaries only
+- ask human confirmation before moving, deleting, or rewriting any existing content
+- update `project.md` or enterprise memory detail files only after confirmation
 
 ## 15b. Project Language Guidance
 

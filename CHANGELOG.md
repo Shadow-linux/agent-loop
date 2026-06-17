@@ -6,10 +6,13 @@
 - Added root `AGENTS.md` managed guidance version metadata so future agents can detect when local `agent-loop` skill rules are newer than the synced startup guidance.
 - Added a validation scenario for root guidance files whose managed `agent-loop` version is older than the current local skill version even though all required sections are present.
 - Added a Version Sync Checklist to this skill repository's `AGENTS.md` so approved version bumps update every version-bearing file together.
+- Added human-facing Usage guidance for triggering root `AGENTS.md` managed version checks and refresh proposals after `agent-loop` skill updates.
+- Added AGENTS cleanup / migration review so conflicting root guidance and long-term project memory in existing `AGENTS.md` / `CLAUDE.md` are surfaced for human decision instead of silently overwritten or left in startup files.
 
 ### Changed
 - Strengthened root guidance stale detection so managed `AGENTS.md` content is also stale when its synced `agent-loop` guidance version is older than the current local skill version.
 - Clarified that managed guidance version comparison uses semantic version ordering (`major.minor.patch`), not plain string comparison.
+- Removed legacy `inputs/` compatibility and migration guidance from current-version requirement archive rules; `.agent-loop/requirements/` is now the only canonical requirement archive path.
 
 ## 1.2.1 — 2026-06-11
 

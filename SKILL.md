@@ -194,7 +194,7 @@ If the local directory is only a remote-project entry point, create only thin lo
 - Historical execution evidence belongs in `notes.md`.
 - Web E2E capability is discovered from the real project environment. Stable E2E capability belongs in `project.md`; feature-specific E2E cases belong in `tests.md` or `tests/e2e/*`.
 - Human source requirements are archived as requirement set directories, not new flat files. Each requirement set groups the human's requirement, prototype, feedback, screenshots, recordings, links, and follow-up notes for one intake event or topic.
-- `.agent-loop/requirements/` is canonical. Legacy `.agent-loop/inputs/` and visible-root `agent-loop/inputs/` are read-only compatibility; if present, recommend migration before new feature work and ask human confirmation before moving files or updating references.
+- `.agent-loop/requirements/` is canonical. Do not create or maintain legacy `inputs/` archives in current-version projects.
 - Human source requirement archive dates mean archive date only; never infer deadlines, scope duration, or lifecycle from input paths.
 - Project Memory Mode is either `simple` or `enterprise`. Default to simple. Recommend enterprise when any hard trigger applies, including about 200k+ LOC, 5+ durable boundaries, 2+ test systems, 3+ execution environments, `project.md` above about 600 lines, repeated re-scans, or 5+ directory-level guidance files.
 - In enterprise mode, `project.md` is an index and current-state summary. Long-term project knowledge moves into optional `.agent-loop/project/*.md` files created only after human confirmation and only when useful.
@@ -208,6 +208,7 @@ If the local directory is only a remote-project entry point, create only thin lo
 - Root `AGENTS.md` and `CLAUDE.md` are default project guidance artifacts for new/onboarded projects, created only after human confirmation.
 - Every initialized, onboarded, re-adopted, or managed project must re-check root `AGENTS.md` and `CLAUDE.md`; onboarding is incomplete if either is missing or stale unless the human explicitly defers it.
 - `AGENTS.md` is the primary maintained startup guidance. `CLAUDE.md` must load, symlink to, include, or briefly point to `AGENTS.md`; do not maintain duplicated root guidance bodies.
+- When creating or updating root `AGENTS.md`, run AGENTS Cleanup / Migration Review: preserve human-owned content, surface workflow rules that conflict with current agent-loop, and migrate long-term project facts to `.agent-loop/project.md` or enterprise project memory only after human confirmation.
 - Root and directory guidance language follows the project language when clear; default to English only when project language is unclear. Preserve stable artifact names, stage names, and file paths in English.
 - Directory-level `AGENTS.md` is proposed for new or existing long-lived boundary directories, created only after human confirmation.
 - Strict Mode is default: ask before and after every stage.

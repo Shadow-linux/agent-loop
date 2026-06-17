@@ -14,7 +14,7 @@ human source requirement -> requirements archive/reference -> spec Source Requir
 
 Never silently modify, rewrite, summarize over, or replace original human requirements.
 
-`.agent-loop/requirements/` is canonical. Legacy `.agent-loop/inputs/` and visible-root `agent-loop/inputs/` are read-only compatibility. Do not create new inputs archives.
+`.agent-loop/requirements/` is canonical. Do not create or maintain legacy `inputs/` archives in current-version projects.
 
 ## Date Meaning
 
@@ -58,34 +58,6 @@ A requirement set is one human intake package: requirement documents, prototypes
     feedback.md
     design-link.md
 ```
-
-Flat files are legacy-compatible read-only shape for old projects. Do not use this shape for new requirement archives:
-
-```text
-.agent-loop/inputs/2026-05-26-login-requirement.md
-.agent-loop/inputs/2026-05-26-login-prototype.png
-```
-
-## Legacy Inputs Migration
-
-If `.agent-loop/inputs/` or visible-root `agent-loop/inputs/` exists:
-
-1. Read it as legacy requirement source material.
-2. Do not create new files inside it.
-3. Find references to `.agent-loop/inputs/` or `agent-loop/inputs/` in `product.md`, `spec.md`, `tests.md`, `notes.md`, `project.md`, and enterprise `project/*.md`.
-4. Present a migration table before changing anything:
-
-```text
-Old Path -> New Path
-References to update
-Risk
-Human Decision
-```
-
-5. After human confirmation, move legacy requirement sets to `.agent-loop/requirements/`.
-6. Update `Source Inputs` headings to `Source Requirements`.
-7. Update all paths from `.agent-loop/inputs/...` or `agent-loop/inputs/...` to `.agent-loop/requirements/...`.
-8. Record the migration in the affected feature `notes.md` or `project.md`.
 
 ## Requirement Set README
 
@@ -182,7 +154,6 @@ Ask before:
 - moving source files
 - renaming source files
 - creating a requirement set
-- migrating legacy `.agent-loop/inputs/` or visible-root `agent-loop/inputs/`
 - creating or updating `requirements/INDEX.md`
 
 After archiving, update `spec.md` `Source Requirements` with exact paths.

@@ -163,6 +163,33 @@ Managed block update flow:
 6. Update only approved managed blocks; preserve all other content byte-for-byte where practical.
 7. Record guidance status and source evidence in `project.md`.
 
+## AGENTS Cleanup / Migration Review
+
+Run this review when creating or updating root `AGENTS.md`, during Existing Project Onboarding, during Re-Adopt, during root guidance version refresh, or when root guidance is stale.
+
+Inspect existing root `AGENTS.md` and `CLAUDE.md`. Classify content outside managed blocks before writing:
+
+| Classification | Meaning | Default action |
+|---|---|---|
+| agent-loop startup guidance | bootstrap, ownership, gates, stops, submit, artifact routing | move into or refresh managed blocks |
+| conflicting workflow rule | rules that contradict current agent-loop gates, artifact paths, task status, review, submit, or memory rules | list the conflict and ask whether to remove, replace, or keep as a project override |
+| long-term project memory | tech stack, commands, architecture boundaries, domain terms, test strategy, environments, durable capabilities, constraints, current work | propose migration to `.agent-loop/project.md` or enterprise `.agent-loop/project/*.md` |
+| human/project-owned notes | team conventions, local background, policy that does not conflict with agent-loop | preserve outside managed blocks |
+| temporary/task material | task logs, feature progress, raw requirements, temporary plans, test output | propose moving to feature `notes.md`, feature docs, `.agent-loop/requirements/`, or project docs |
+
+Present an AGENTS cleanup / migration Human Review Summary before changing files:
+
+| Content / Location | Classification | Conflict or Memory Target | Proposed Action | Risk | Human Decision |
+|---|---|---|---|---|---|
+
+Rules:
+
+- Do not delete, move, or rewrite human-owned content automatically.
+- If a conflicting rule is intentional, keep it only after human confirmation and record the override in project memory when it affects future agents.
+- If long-term project memory is migrated, preserve the source location as evidence and update `project.md` or enterprise project-memory detail files only after human confirmation.
+- Root `AGENTS.md` should keep only startup-critical summaries. Rich long-term memory belongs in `.agent-loop/project.md`, enterprise `.agent-loop/project/*.md`, `.agent-loop/onboarding-db/`, or project docs.
+- `CLAUDE.md` should point to `AGENTS.md`; if it contains duplicated or conflicting rules, include it in the same cleanup / migration review.
+
 ## Root `AGENTS.md` Should Contain
 
 Keep it short and long-lived:

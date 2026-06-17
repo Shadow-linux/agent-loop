@@ -43,6 +43,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If root `AGENTS.md` uses agent-loop managed blocks, compare its managed guidance version with the current local `agent-loop` skill version.
 - [ ] Treat root `AGENTS.md` as stale if the managed guidance version is older than the current local `agent-loop` skill version, unless the human explicitly defers refresh.
 - [ ] Treat root `CLAUDE.md` as stale if it duplicates independent long-lived rules or does not clearly point to `AGENTS.md`.
+- [ ] If root guidance will be created, refreshed, or repaired, run AGENTS Cleanup / Migration Review for conflicting workflow rules and long-term project memory outside managed blocks.
 - [ ] Determine guidance language from existing docs or human preference; default to English only if unclear.
 - [ ] For old or large projects, record directory guidance status in `project.md`.
 - [ ] Summarize state and recommend one next action.
@@ -91,6 +92,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If root `AGENTS.md` exists, verify it contains Bootstrap Protocol, Agent Ownership, Gate Modes, Required Stops, and Completion Rules.
 - [ ] If root `AGENTS.md` uses agent-loop managed blocks, compare its managed guidance version with the current local `agent-loop` skill version.
 - [ ] Check whether root `CLAUDE.md` exists and loads or points to `AGENTS.md`; if it duplicates or diverges, propose converting it to a pointer.
+- [ ] Run AGENTS Cleanup / Migration Review when existing root guidance has conflicting workflow rules, duplicated agent-loop rules, or long-term project memory that belongs in `.agent-loop/project.md` or enterprise `.agent-loop/project/*.md`.
 - [ ] Record guidance language and evidence in `project.md`.
 - [ ] Record root guidance status in `project.md`: `AGENTS.md` present/created/stale/missing/human-deferred and `CLAUDE.md` points-to-AGENTS/created-pointer/stale/missing/human-deferred.
 - [ ] Attach evidence and confidence to commands, capabilities, and boundaries.
@@ -117,7 +119,6 @@ Before using an external skill or plugin inside a stage:
 - [ ] Normalize names only after confirmation.
 - [ ] Record source paths in `spec.md`.
 - [ ] Do not overwrite old requirement materials.
-- [ ] If legacy `.agent-loop/inputs/` or visible-root `agent-loop/inputs/` exists, propose migration to `.agent-loop/requirements/` before new feature work.
 - [ ] Recommend `requirements/INDEX.md` only if index triggers apply.
 
 ## Product Brief If Needed

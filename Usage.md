@@ -24,6 +24,7 @@ Agent 的职责是主导研发闭环。你主要负责提出目标、确认关�
 | “我只想先知道怎么启动和测试” | 快速接管（Quick Onboarding） | 只建立足够继续开发的项目记忆和启动信息 |
 | “解释一下这个模块/流程/异步任务” | 定向接管扫描（Targeted Onboarding Scan） | 聚焦扫描一个模块、流程、异步任务、部署路径或问题点 |
 | “这个项目以前用过 agent-loop，但最近没维护” | 重新托管 / 回补（Re-Adopt / Recovery Backfill） | 以代码现实为准，回补 `.agent-loop/` 文档 |
+| “agent-loop skill 更新了，检查一下这个项目的 AGENTS.md 要不要同步” | root guidance 版本检查 / 托管块刷新 | 比较 root `AGENTS.md` 的 managed version 和当前 skill 版本，过期时提议刷新托管块 |
 | “我要做一个登录功能” | 需求归档 -> 功能规范（Feature Spec） | 整理需求，生成功能规范 |
 | “这是需求文档和原型图” | 需求归档（Requirement Archive） | 归档人类原始材料到 `.agent-loop/requirements/` |
 | “先帮我梳理产品需求” | 产品说明（Product Brief） | 生成 feature 级 `product.md` |
@@ -69,6 +70,41 @@ root `AGENTS.md` 里会出现 agent-loop 托管块，例如：
 ```
 
 托管块内是 agent-loop 可以建议更新的内容。托管块外是人类或项目原生内容，Agent 不能自动覆盖。
+
+### skill 更新后同步 AGENTS.md
+
+当 `agent-loop` skill 升级后，你可以说：
+
+```text
+agent-loop skill 更新了，检查一下这个项目的 AGENTS.md 要不要同步。
+```
+
+或者：
+
+```text
+帮我按最新 agent-loop 刷新这个项目的 AGENTS.md 托管块。
+```
+
+Agent 会做这些事：
+
+- 读取 root `AGENTS.md` 和 `CLAUDE.md`
+- 找到 root `AGENTS.md` 里的 `agent-loop:managed-start section:meta` 托管块
+- 读取托管块中的 `version:<x.y.z>`
+- 读取当前本地 `agent-loop` skill 的版本
+- 按 semantic version（`major.minor.patch`）比较两个版本
+- 如果 root `AGENTS.md` 的 managed version 更旧，就把 root guidance 判定为 `stale`
+- 通过 Human Review Summary 列出要刷新的托管块、原因和风险，等你确认后再写
+- 如果托管块外存在和当前 agent-loop 冲突的长期规则，单独列出冲突，询问你是清除、替换，还是保留为项目 override
+- 如果托管块外存在技术栈、命令、架构边界、领域术语、测试策略等长期项目记忆，建议迁移到 `.agent-loop/project.md` 或 enterprise `.agent-loop/project/*.md`
+
+Agent 不会直接覆盖整份 `AGENTS.md`。托管块外的人类内容、项目原生说明、团队约定都必须保留。`CLAUDE.md` 默认继续只指向 `AGENTS.md`，不复制一整套规则。
+
+同步时你通常会看到一张清理/迁移确认表：
+
+| 内容位置 | 分类 | 建议动作 |
+|---|---|---|
+| `AGENTS.md` 某段旧规则 | 冲突规则 | 替换为 agent-loop 托管块规则，或确认保留为项目 override |
+| `AGENTS.md` 里的测试命令/架构边界 | 长期项目记忆 | 迁移到 `.agent-loop/project.md`，root `AGENTS.md` 只保留启动必读摘要 |
 
 ### 旧项目接管
 

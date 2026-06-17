@@ -12,6 +12,8 @@ Sections wrapped in `agent-loop:managed-start` / `agent-loop:managed-end` are ma
 
 Agents may propose updates to managed blocks when source facts change, but must ask for human confirmation before writing. Content outside managed blocks is human/project-owned and must not be rewritten automatically.
 
+When creating or refreshing this file, inspect content outside managed blocks. If it contains workflow rules that conflict with current `agent-loop`, or long-term project facts that belong in project memory, present an AGENTS cleanup / migration review and ask whether to keep, remove/replace, or migrate those entries. Do not silently delete or move them.
+
 <!-- agent-loop:managed-start section:meta source:agent-loop-skill version:1.2.2 -->
 ## Agent Loop Guidance Version
 
@@ -126,9 +128,9 @@ Auto modes do not bypass these stops.
 
 - Resolve project-memory and feature paths relative to the active memory root: `.agent-loop/` by default, or legacy `agent-loop/` for the current run.
 - Keep task status, execution evidence, feature notes, and project memory inside `.agent-loop/`.
+- Keep long-term project memory in `.agent-loop/project.md` or enterprise `.agent-loop/project/*.md`. Root `AGENTS.md` should only summarize startup-critical facts that every Agent CLI needs immediately.
 - Keep original human materials in requirement set directories under `.agent-loop/requirements/`, or reference original paths when the human declines copying.
 - Do not create new flat files directly under `.agent-loop/requirements/`; group requirements, prototypes, feedback, screenshots, recordings, links, and follow-up notes for the same intake/topic together.
-- If legacy `.agent-loop/inputs/` or visible-root `agent-loop/inputs/` exists, treat it as read-only compatibility and propose migration to `.agent-loop/requirements/` before new feature work.
 - Keep durable producer-consumer interface handoffs in feature `contracts.md` and optional `contracts/` details. Keep temporary subagent assignments in `handoffs/`.
 - Do not write task logs, feature progress, raw requirements, temporary plans, or test transcripts into `AGENTS.md`.
 <!-- agent-loop:managed-end section:artifacts -->

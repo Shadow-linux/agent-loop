@@ -181,6 +181,7 @@ Output before writing:
 - tech stack
 - architecture profile: project shape, language adapter, framework adapter, DDD intensity, and whether layout is existing reality or proposed scaffold
 - guidance language with evidence
+- AGENTS cleanup / migration review when existing root guidance contains conflicting workflow rules, duplicated agent-loop rules, or long-term project memory outside managed blocks
 - capability map with evidence and confidence
 - boundary map with evidence and confidence
 - discovered commands with evidence and confidence
@@ -277,7 +278,6 @@ Write:
 - optional feedback, screenshot, recording, design-link, meeting-note, and other source files inside the same requirement set
 - optional change-request files inside the same requirement set
 - optional `.agent-loop/requirements/INDEX.md` only when trigger conditions apply
-- legacy `.agent-loop/inputs/` or visible-root `agent-loop/inputs/` migration proposal when old projects still use it
 - source references in `spec.md`
 
 Exit:
