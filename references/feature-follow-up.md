@@ -13,7 +13,9 @@ The human does not need to know whether to say "reopen feature", "new feature", 
 Route here when the human says or implies:
 
 - "测试发现 bug", "有个 bug", "回归了", "之前做完的功能有问题"
-- "这个字段要改", "算法要改", "接口返回要调整"
+- "这个字段要改", "算法要改", "接口返回要调整", "规则微调", "不是新功能"
+- "行为要调一下", "需要改一下", "小改一下", "这个体验/文案/逻辑微调一下", "验收标准要改"
+- "behavior tweak", "small tweak", "quick tweak", "minor adjustment", "change the requirement", "update the acceptance criteria"
 - "上次那个功能", "最近做的功能", "关闭后发现"
 - "线上/联调/验收发现问题"
 - error screenshots, browser screenshots, logs, stack traces, failing tests, API mismatch, E2E failure, or user feedback tied to active, paused, closed, or recent feature work
@@ -147,7 +149,7 @@ Rules:
 
 - Do not make naked code changes just because no owning feature was found.
 - Do not create a separate `.agent-loop/maintenance/` tree in v1.
-- Keep `spec.md` small, but include the problem, why it is not flow-back, why it is not a new product feature, regression risk, and long-term memory impact.
+- Keep `spec.md` small, but include the problem, why it is not flow-back, why it is not a new product feature, regression/safety risk, and long-term memory impact.
 - `tasks.md` should contain a narrow repair task and a regression/safety verification task when applicable.
 - `tests.md` must include regression coverage or a recorded substitute verification with risk and human decision.
 - `notes.md` records diagnosis, evidence, review, drift decision, and close record.

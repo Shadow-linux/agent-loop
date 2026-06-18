@@ -10,6 +10,13 @@
 - Added AGENTS cleanup / migration review so conflicting root guidance and long-term project memory in existing `AGENTS.md` / `CLAUDE.md` are surfaced for human decision instead of silently overwritten or left in startup files.
 
 ### Changed
+- Clarified Quick Onboarding as a shallow evidence-labeled safe-continuation snapshot that does not create onboarding-db files or diagrams unless Deep or Targeted onboarding is explicitly selected.
+- Added runtime classification for Targeted Onboarding when an existing onboarding-db or onboarding refresh request narrows to one module, flow, async task, deployment path, state transition, or problem area.
+- Expanded Feature Follow-up trigger phrases for small behavior tweaks, minor adjustments, and requirement/acceptance changes in English and Chinese.
+- Strengthened breaking Delivery Contract validation so affected-consumer impact table, compatibility options, and migration risk are presented before post-impact human confirmation.
+- Clarified root guidance version sync instructions for both managed block `version:<x.y.z>` metadata and visible natural-language synced-version text.
+- Aligned Project Entry workflow checklist stale checks with root guidance requirements for Stage Helper Capability Scan, Feature Follow-up / Flow-back, Submit And Commit Rules, guidance boundaries, and requirement archive rules.
+- Clarified low-severity consistency edges for Project Entry root guidance status, Feature Follow-up requirement-change wording, maintenance-fix risk wording, Feature Auto-Loop Human-gated stops, Standards Review triggers, Review-to-Done gating, helper scan validation coverage, and existing-project Architecture Profile recording.
 - Strengthened root guidance stale detection so managed `AGENTS.md` content is also stale when its synced `agent-loop` guidance version is older than the current local skill version.
 - Clarified that managed guidance version comparison uses semantic version ordering (`major.minor.patch`), not plain string comparison.
 - Removed legacy `inputs/` compatibility and migration guidance from current-version requirement archive rules; `.agent-loop/requirements/` is now the only canonical requirement archive path.

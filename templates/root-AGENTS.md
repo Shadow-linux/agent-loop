@@ -45,16 +45,10 @@ Before development work:
 ## Agent Ownership
 
 - Own workflow diagnosis, sequencing, implementation, verification, review, drift checks, and project-memory updates.
-- If required artifacts are missing, propose creating or updating them.
-- If work appears ready to continue, recommend the next stage.
-- If work appears complete, run Feature Completion Check and recommend close, pause, or continue.
-- Before Plan Gate, Execute, Diagnose, Verify, Review, Submit, or other helper-friendly stages, actively check whether the current runtime exposes matching stage helper skills/plugins. If available, use them as helpers while keeping agent-loop in control.
-- When the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, test failure, screenshot issue, QA/user feedback, or "small tweak", first inspect Active / Paused / Closed features before creating a new feature or editing code.
-- Feature Follow-up / Flow-back uses a 30-day default lookback, but 30 days is not a hard boundary when human wording, code paths, APIs, tests, models, or UI evidence point to older work.
-- For follow-up work, read candidate feature `spec.md`, `tasks.md`, `tests.md`, and `notes.md`, then present a Candidate Match Matrix with evidence and a recommendation: flow-back, linked new feature, maintenance-fix, or investigate-first.
-- If no recent feature owns a narrow bugfix/internal correction, create a standard feature workspace with `Feature Type: maintenance-fix`; do not do a naked code edit unless the human explicitly bypasses workflow and the change meets bypass constraints.
-- After each stage, summarize changed artifacts, evidence, drift, and the next recommended stage.
-- For meaningful stage results, present the next action as a table: current stage, result, recommended next stage, why, and human gate.
+- If required artifacts are missing, propose creating or updating them; if work is ready, recommend the next stage; if work appears complete, run Feature Completion Check.
+- Use available helper skills/plugins as stage methods when useful, but keep `agent-loop` paths, gates, status, submit, pause, and close rules in control.
+- Follow-up details such as lookback windows, Candidate Match Matrix, linked features, and maintenance-fix routing belong to the `agent-loop` skill references, not root guidance.
+- After each meaningful stage, summarize artifacts, evidence, drift, and the next recommended stage in a table.
 - Do not finish with only "done"; include the next recommended stage or a concrete stop reason.
 - For non-trivial confirmations, present a table-first Human Review Summary before asking approval.
 <!-- agent-loop:managed-end section:ownership -->
@@ -107,19 +101,8 @@ Auto modes do not bypass these stops.
 - Submit, commit, PR, merge, release, and publish require explicit human confirmation after diff, verification, review, drift, and unrelated-change checks.
 - Commit only the intended files for the approved scope; do not include unrelated dirty work or revert unrelated human changes.
 - After a commit, record the commit hash and submit/integrate result in the active feature `notes.md`.
-- Use the repository's commit message rules when present.
-- If no project-specific commit format exists, use:
-
-```text
-<type>: <summary>
-
-- <concrete change>
-- <verification evidence>
-- <docs or project-memory update>
-```
-
-- Allowed types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`.
-- Prefer the project's main human language for the summary and body.
+- Use repository commit message rules when present; otherwise use `<type>: <summary>` plus a concrete bullet body.
+- Allowed types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`. Prefer the project's main human language.
 - For the `agent-loop` skill repository itself, use `<type>(v<version>): <Chinese summary>` and a 3-7 bullet body for meaningful commits.
 <!-- agent-loop:managed-end section:submit -->
 

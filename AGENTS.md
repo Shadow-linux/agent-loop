@@ -44,7 +44,7 @@ When the human explicitly approves a skill version bump, update these files toge
 - `README.md`: `Current version`
 - `Usage.md`: human-facing version label
 - `CHANGELOG.md`: new version heading and dated release section
-- `templates/root-AGENTS.md`: `section:meta` managed block `version:<x.y.z>` and the visible synced-version text
+- `templates/root-AGENTS.md`: both the `section:meta` managed block attribute `version:<x.y.z>` and the visible natural-language synced-version text, currently written as `agent-loop` skill version `<x.y.z>`
 
 Also verify whether these files need wording or example updates after a version bump:
 

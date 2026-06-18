@@ -1278,6 +1278,7 @@ Expected:
 - identify project shape, language adapter, framework adapter, and DDD intensity from existing files
 - map existing packages/directories to DDD-inspired roles with evidence and confidence
 - do not propose moving or renaming code unless the human explicitly asks for architecture migration
+- record accepted Architecture Profile in `project.md` or `project/architecture.md`
 - record reality, not an idealized template
 
 ## 13. Dated Plan Cycle Without Dated Plan File
@@ -1659,9 +1660,12 @@ Expected:
 
 - read the accepted or verified Delivery Contract
 - classify the rename as a potentially breaking change
-- list affected consumers
+- run the minimum affected-consumer scan from `delivery-contracts.md`
+- present an impact table with affected consumers, touched code/tests/docs, confidence, and unknowns
+- present compatibility options such as additive change, temporary dual-shape compatibility, versioned replacement, immediate breaking change with migration owner, or rejecting the change
+- present migration risk before asking for approval
 - stop even in Feature Auto-Loop or Task Auto-Run
-- ask human confirmation before accepting the breaking change
+- ask separate post-impact human confirmation before accepting the breaking change
 - update contract detail, compatibility notes, tests, downstream impact, and `notes.md` drift record after confirmation
 
 ## 20. Superpowers Brainstorming Path Override
@@ -2165,6 +2169,6 @@ Use agent-loop. Audit whether Stage Helper Capability Scan is present for every 
 Expected:
 
 - compare `references/skill-routing.md` helper-friendly stages against `references/stage-guides.md` and `references/workflow-checklists.md`
-- verify Product Brief, Brainstorm / Clarify, Feature Spec, Plan Gate, Execute Task / Story, Diagnose Failure, Verify, Review, Feature Completion Check, Submit / Integrate, Pause / Close, and approved Subagent Execution all include Stage Helper Capability Scan or an equivalent load/rule in both stage guidance and workflow checklists
+- verify Product Brief, Brainstorm / Clarify, Feature Spec, Work Breakdown, Test Design, E2E Discovery if Web, Technical Design / Code Context, Plan Gate, Execute Task / Story, Diagnose Failure, Verify, Review, Feature Completion Check, Submit / Integrate, Pause / Close, and approved Subagent Execution all include Stage Helper Capability Scan or an equivalent load/rule in both stage guidance and workflow checklists
 - flag any stage that only says "when Superpowers is available" without an explicit scan before fallback
 - confirm helper scan does not give external skills ownership of artifact paths, task status, project memory, submit, close, or human gates

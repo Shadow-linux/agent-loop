@@ -31,6 +31,7 @@ Write:
 Exit:
 
 - one recommended next stage
+- root `AGENTS.md` / `CLAUDE.md` status checked, or the recommended next stage explicitly includes the Root Agent Bootstrap Gate
 - if an Active Feature exists, run Feature Completion Check before recommending a new feature or broad new work
 
 ## Init Project
@@ -834,9 +835,10 @@ Rules:
 - perform Feature Close Review before recommending or performing close
 - Feature Close Review includes feature-level Spec Review against product/spec/tasks/tests/acceptance/out-of-scope
 - before Submit / Integrate, perform at least Spec Review
-- perform Standards Review for large projects, broad diffs, directory boundary changes, security/data changes, or human request
-- perform feature-level Standards Review before close when the feature is large, broad, boundary-changing, security/data-related, architecture-changing, or human-requested
+- perform Standards Review for large projects, broad diffs, directory or durable boundary changes, security/data changes, architecture changes, or human request
+- perform feature-level Standards Review before close when the feature is large, broad, directory-boundary-changing, durable-boundary-changing, security/data-related, architecture-changing, or human-requested
 - record the two axes separately so one does not hide the other
+- review approval alone is insufficient to mark a task `done`; Task Done Gate evidence, required review, and drift decision must also be recorded
 - if required review is missing, the task remains `review`; do not mark it `done`
 - compare producer code and tests with Delivery Contracts; identify affected consumers before accepting interface drift
 
@@ -972,7 +974,7 @@ Check:
 - fresh verification evidence exists
 - Feature Close Review completed
 - feature-level Spec Review confirms product/spec/tasks/tests/acceptance and out-of-scope boundaries
-- feature-level Standards Review completed when triggered by large project, broad diff, boundary/security/data change, architecture change, or human request
+- feature-level Standards Review completed when triggered by large project, broad diff, directory or durable boundary change, security/data change, architecture change, or human request
 - drift check completed
 - long-term memory updated
 - submit/integration status recorded when requested
