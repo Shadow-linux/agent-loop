@@ -136,7 +136,7 @@ Before using an external skill or plugin inside a stage:
 
 ## Brainstorm / Clarify
 
-- [ ] Run Stage Helper Capability Scan before fallback clarification.
+- [ ] Resolve and load `superpowers:brainstorming` or `brainstorming` before clarification actions; record Stage Helper Resolution, or record `unavailable` / `load-failed` before fallback.
 - [ ] If Superpowers `brainstorming` or another product-discovery helper is available, use it through `external-skill-adapters.md` while writing accepted output to agent-loop `product.md`, `spec.md`, or `notes.md`.
 - [ ] Use only when goal is unstable, scope unclear, or meaningful approaches differ.
 - [ ] Check project docs, code, tests, source requirements, Product Context, and Domain Language before asking.
@@ -288,7 +288,7 @@ No-Plan Decision is allowed only when:
 Checklist:
 
 - [ ] Load `implementation-planning.md`.
-- [ ] Run Stage Helper Capability Scan before fallback planning.
+- [ ] Resolve and load `superpowers:writing-plans` or `writing-plans` before planning actions; record Stage Helper Resolution, or record `unavailable` / `load-failed` before fallback.
 - [ ] If Superpowers `writing-plans` or another plan-writing helper is available, use it through `external-skill-adapters.md` while writing to agent-loop `plan.md` / `plans/*`.
 - [ ] Plan scope is `task` or `story`.
 - [ ] Technical context and real source structure are recorded.
@@ -327,7 +327,9 @@ Checklist:
 - [ ] If using one approval for a bounded task group, list included task/story IDs or scan lanes, allowed boundaries, one brief per subagent, stop conditions, and main-agent review responsibility before asking.
 - [ ] Load `skill-routing.md`.
 - [ ] Load `external-skill-adapters.md`.
-- [ ] Run Stage Helper Capability Scan before fallback subagent planning.
+- [ ] After explicit bounded dispatch approval, resolve and load `superpowers:subagent-driven-development` or `subagent-driven-development` before dispatch; record Stage Helper Resolution.
+- [ ] Record approval date, exact IDs/lanes, allowed boundaries, and stop conditions; require new confirmation for expanded scope.
+- [ ] Confirm authorization status is `active` immediately before dispatch; reject consumed/revoked/expired records and mark the record `consumed` after the approved dispatch group returns or stops.
 - [ ] If Superpowers `subagent-driven-development` or another subagent helper is available, use it through `external-skill-adapters.md` after human approval while keeping briefs and returned summaries under agent-loop `handoffs/*`.
 - [ ] Verify tasks or scan lanes are independent, bounded, and reviewable.
 - [ ] Create one `templates/subagent-brief.md`-style brief per subagent.
@@ -346,7 +348,7 @@ Checklist:
 - [ ] If Task Auto-Run is enabled, execute only the selected task/story and stop after evidence/review/drift updates and Task Done Gate status update.
 - [ ] Stop at Human-gated tasks or any stop condition.
 - [ ] Use TDD by default.
-- [ ] Run Stage Helper Capability Scan before fallback execution.
+- [ ] Resolve and load `superpowers:test-driven-development` or `test-driven-development` before behavior-changing execution; record Stage Helper Resolution, or record `unavailable` / `load-failed` before fallback.
 - [ ] If Superpowers `test-driven-development` or another TDD helper is available, use it through `external-skill-adapters.md` while keeping evidence and task status under agent-loop.
 - [ ] Verify RED before implementation.
 - [ ] Write minimal GREEN implementation.
@@ -359,7 +361,7 @@ Checklist:
 
 ## Diagnose Failure
 
-- [ ] Run Stage Helper Capability Scan before fallback diagnosis.
+- [ ] Resolve and load `superpowers:systematic-debugging` or `systematic-debugging` before proposing a fix; record Stage Helper Resolution, or record `unavailable` / `load-failed` before fallback.
 - [ ] If Superpowers `systematic-debugging` or another debugging helper is available, use it through `external-skill-adapters.md` while recording root cause and fix evidence in agent-loop `notes.md`.
 - [ ] Reproduce consistently or gather more evidence.
 - [ ] Read error output fully.
@@ -372,7 +374,7 @@ Checklist:
 
 ## Verify
 
-- [ ] Run Stage Helper Capability Scan before fallback verification.
+- [ ] Resolve and load `superpowers:verification-before-completion` or `verification-before-completion` before any completion claim; record Stage Helper Resolution, or record `unavailable` / `load-failed` before fallback.
 - [ ] If Superpowers `verification-before-completion` or another verification helper is available, use it through `external-skill-adapters.md` while recording evidence in agent-loop `notes.md`.
 - [ ] Identify what command or action proves the claim.
 - [ ] Run it fresh.
@@ -382,7 +384,7 @@ Checklist:
 
 ## Review
 
-- [ ] Run Stage Helper Capability Scan before fallback review.
+- [ ] Resolve and load `superpowers:requesting-code-review` or `requesting-code-review` before each task, submit, or feature-close review scope; record a fresh Stage Helper Resolution, or record `unavailable` / `load-failed` before fallback.
 - [ ] If Superpowers `requesting-code-review` or another review helper is available, use it through `external-skill-adapters.md` while recording findings in agent-loop `notes.md`.
 - [ ] Perform lightweight Spec Review for every task before marking it `done`.
 - [ ] Perform Spec Review before Submit / Integrate.

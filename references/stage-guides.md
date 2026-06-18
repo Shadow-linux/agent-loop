@@ -326,6 +326,8 @@ Exit:
 
 Entry: goal is vague, scope unclear, or meaningful approaches differ.
 
+Mandatory helper: Brainstorm / Clarify resolves and loads `superpowers:brainstorming` or `brainstorming` before clarification or design actions. Record Stage Helper Resolution; fallback requires `unavailable` or `load-failed`.
+
 Load:
 
 - `skill-routing.md` for Stage Helper Capability Scan
@@ -333,7 +335,7 @@ Load:
 
 Rules:
 
-- before fallback clarification, run Stage Helper Capability Scan; when Superpowers is available, use the Brainstorming Adapter while keeping output in `product.md`, `spec.md`, and `notes.md`
+- after mandatory helper resolution, use the loaded Brainstorming Adapter; use fallback only for recorded `unavailable` or `load-failed`, while keeping output in `product.md`, `spec.md`, and `notes.md`
 - Ask 1-5 high-impact questions.
 - Default to one question at a time.
 - Questions must affect scope, UX, data, architecture, testing, or acceptance.
@@ -630,6 +632,8 @@ Exit:
 
 Entry: selected task/story has accepted tasks and tests, and Technical Design / Code Context has enough evidence to decide whether a construction plan is required.
 
+Mandatory helper: Plan Gate / Plan If Needed resolves and loads `superpowers:writing-plans` or `writing-plans` before writing, approving, or recording a No-Plan Decision. Record Stage Helper Resolution; fallback requires `unavailable` or `load-failed`.
+
 This is a mandatory gate before Execute Task / Story. Do not create tasks and then immediately implement.
 
 Load:
@@ -661,7 +665,7 @@ Rules:
 - implementation steps must be bite-sized and executable
 - no placeholders such as TBD, TODO, "add proper error handling", "write tests", or "similar to previous task"
 - run plan self-review: spec coverage, placeholder scan, and type/signature consistency
-- before fallback planning, run Stage Helper Capability Scan; when Superpowers is available, use the Writing-Plans Adapter quality bar, but write to `plan.md` or `plans/*`, not external docs paths
+- after mandatory helper resolution, use the loaded Writing-Plans Adapter quality bar; use fallback only for recorded `unavailable` or `load-failed`, and always write to `plan.md` or `plans/*`, not external docs paths
 - if complex artifact mode is active, write the full dated plan to `plans/` and keep `plan.md` as the current pointer
 
 Exit:
@@ -693,6 +697,8 @@ Exit:
 
 Entry: human explicitly approves subagent use for an independent task/story group, onboarding scan lane, or bounded implementation lane.
 
+Mandatory helper: Subagent Execution If Approved resolves and loads `superpowers:subagent-driven-development` or `subagent-driven-development` after human approval and before dispatch. Record Stage Helper Resolution; helper availability never replaces subagent authorization.
+
 Load:
 
 - `skill-routing.md`
@@ -701,11 +707,13 @@ Load:
 
 Rules:
 
-- before fallback subagent planning, run Stage Helper Capability Scan; when Superpowers `subagent-driven-development` is available and appropriate, use it as the method quality bar after human approval
+- after explicit human approval and mandatory helper resolution, use the loaded `subagent-driven-development` helper; use fallback only for recorded `unavailable` or `load-failed`
 - subagents are optional and never implied by task count alone
 - ask human confirmation before dispatching subagents
 - Feature Auto-Loop or Task Auto-Run approval is not subagent approval
 - one confirmation may cover a bounded task group only after listing task/story IDs or scan lanes, allowed boundaries, one brief per subagent, stop conditions, and main-agent review responsibility
+- record the approval date, approved IDs/lanes, allowed boundaries, and stop conditions in `notes.md` and each brief; any new task, lane, file boundary, or expanded scope requires new human confirmation
+- verify authorization is `active` immediately before dispatch; reject `consumed`, `revoked`, or `expired` authorization even for the same scope, and mark it `consumed` when the approved dispatch group returns or stops
 - verify tasks or scan lanes are independent, bounded, and reviewable by the main agent
 - create one clear brief per subagent using `templates/subagent-brief.md`
 - write briefs and returned summaries under `handoffs/*`
@@ -729,6 +737,8 @@ Exit:
 
 Entry: selected execution unit accepted and Plan Gate has passed.
 
+Mandatory helper: Execute Task / Story resolves and loads `superpowers:test-driven-development` or `test-driven-development` before behavior-changing implementation. Record Stage Helper Resolution; fallback requires `unavailable` or `load-failed`.
+
 Rules:
 
 - default unit is task
@@ -740,7 +750,7 @@ Rules:
 - in Feature Auto-Loop, execute only Agent-ready tasks and stop at Human-gated tasks
 - in Task Auto-Run, execute only the selected task/story and stop after evidence/review/drift updates and Task Done Gate status update
 - TDD by default
-- before fallback execution, run Stage Helper Capability Scan; when Superpowers is available, use the TDD Adapter, but task status and evidence remain controlled by agent-loop
+- after mandatory helper resolution, use the loaded TDD Adapter; use fallback only for recorded `unavailable` or `load-failed`, while task status and evidence remain controlled by agent-loop
 - verify RED before implementation
 - verify GREEN after implementation
 - record evidence
@@ -763,6 +773,8 @@ Exit:
 
 Entry: test/build/E2E/behavior failure.
 
+Mandatory helper: Diagnose Failure resolves and loads `superpowers:systematic-debugging` or `systematic-debugging` before proposing or applying a fix. Record Stage Helper Resolution; fallback requires `unavailable` or `load-failed`.
+
 Load:
 
 - `skill-routing.md` for Stage Helper Capability Scan
@@ -770,7 +782,7 @@ Load:
 
 Rules:
 
-- before fallback diagnosis, run Stage Helper Capability Scan; when Superpowers is available, use the Debugging Adapter and find root cause before proposing fixes
+- after mandatory helper resolution, use the loaded Debugging Adapter; use fallback only for recorded `unavailable` or `load-failed`, and find root cause before proposing fixes
 - reproduce before fixing
 - find root cause
 - form one hypothesis at a time
@@ -788,6 +800,8 @@ Exit:
 
 Entry: before any completion claim.
 
+Mandatory helper: Verify resolves and loads `superpowers:verification-before-completion` or `verification-before-completion` before any passed, fixed, complete, or ready claim. Record Stage Helper Resolution; fallback requires `unavailable` or `load-failed`.
+
 Load:
 
 - `skill-routing.md` for Stage Helper Capability Scan
@@ -795,7 +809,7 @@ Load:
 
 Rules:
 
-- before fallback verification, run Stage Helper Capability Scan; when Superpowers is available, use the verification adapter, but completion is still controlled by agent-loop
+- after mandatory helper resolution, use the loaded verification adapter; use fallback only for recorded `unavailable` or `load-failed`, while completion remains controlled by agent-loop
 - identify proof command/action
 - run fresh verification
 - read output
@@ -814,6 +828,10 @@ Exit:
 
 Entry: after implementation and verification, before any task is marked `done`, before Submit / Integrate, and before recommending or performing feature close.
 
+Mandatory helper: Review resolves and loads `superpowers:requesting-code-review` or `requesting-code-review` before task review, Submit / Integrate review, or Feature Close Review. Record Stage Helper Resolution; helper approval cannot bypass Task Done Gate or Feature Close Review.
+
+Create a separate Stage Helper Resolution for each task review, submit review, and feature-close-review invocation scope. Do not reuse a previous review resolution. Feature Close Review requires a fresh resolution and current helper instructions.
+
 Load:
 
 - `skill-routing.md` for Stage Helper Capability Scan
@@ -830,7 +848,7 @@ Check:
 
 Rules:
 
-- before fallback review, run Stage Helper Capability Scan; when Superpowers is available, use the review adapter, but findings must be recorded in `notes.md` and cannot directly mark tasks `done`
+- after mandatory helper resolution, use the loaded review adapter; use fallback only for recorded `unavailable` or `load-failed`, and record findings in `notes.md` without directly marking tasks `done`
 - perform lightweight Spec Review for every task before marking it `done`
 - perform Feature Close Review before recommending or performing close
 - Feature Close Review includes feature-level Spec Review against product/spec/tasks/tests/acceptance/out-of-scope

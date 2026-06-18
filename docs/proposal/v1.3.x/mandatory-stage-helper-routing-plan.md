@@ -19,8 +19,8 @@
 - Read: `references/external-skill-adapters.md`
 - Read: `templates/notes.md`
 
-- [ ] **Step 1: Write a shell test asserting the seven canonical helpers, alias resolution, full skill loading, fallback restriction, resolution records, controller precedence, and path override.**
-- [ ] **Step 2: Run `bash tests/validate-mandatory-helper-routing.sh`.**
+- [x] **Step 1: Write a shell test asserting the seven canonical helpers, alias resolution, full skill loading, fallback restriction, resolution records, controller precedence, and path override.**
+- [x] **Step 2: Run `bash tests/validate-mandatory-helper-routing.sh`.**
 
 Expected: FAIL because the current routing contract treats helpers as preferred and records no special state when unavailable.
 
@@ -33,12 +33,12 @@ Expected: FAIL because the current routing contract treats helpers as preferred 
 - Modify: `references/stage-guides.md`
 - Modify: `templates/notes.md`
 
-- [ ] **Step 1: Add the controller-level mandatory stage-helper rule and completion assertion.**
-- [ ] **Step 2: Add canonical and unprefixed alias resolution for the seven helpers.**
-- [ ] **Step 3: Require complete helper loading before stage actions and allow fallback only for `unavailable` or `load-failed`.**
-- [ ] **Step 4: Add per-stage preconditions for brainstorming, planning, TDD, debugging, verification, review, and approved subagent execution.**
-- [ ] **Step 5: Add a reusable Stage Helper Resolution record to `notes.md`.**
-- [ ] **Step 6: Run `bash tests/validate-mandatory-helper-routing.sh`.**
+- [x] **Step 1: Add the controller-level mandatory stage-helper rule and completion assertion.**
+- [x] **Step 2: Add canonical and unprefixed alias resolution for the seven helpers.**
+- [x] **Step 3: Require complete helper loading before stage actions and allow fallback only for `unavailable` or `load-failed`.**
+- [x] **Step 4: Add per-stage preconditions for brainstorming, planning, TDD, debugging, verification, review, and approved subagent execution.**
+- [x] **Step 5: Add a reusable Stage Helper Resolution record to `notes.md`.**
+- [x] **Step 6: Run `bash tests/validate-mandatory-helper-routing.sh`.**
 
 Expected: PASS.
 
@@ -50,17 +50,17 @@ Expected: PASS.
 - Modify: `Usage.md`
 - Modify: `CHANGELOG.md`
 
-- [ ] **Step 1: Add pressure scenarios for installed helpers, aliases, unavailable helpers, forbidden silent fallback, path override, and subagent authorization.**
-- [ ] **Step 2: Explain the mandatory helper contract and controller/path ownership in human-facing docs.**
-- [ ] **Step 3: Record the behavior change under v1.2.2 without changing the version.**
+- [x] **Step 1: Add pressure scenarios for installed helpers, aliases, unavailable helpers, forbidden silent fallback, path override, and subagent authorization.**
+- [x] **Step 2: Explain the mandatory helper contract and controller/path ownership in human-facing docs.**
+- [x] **Step 3: Record the behavior change under v1.2.2 without changing the version.**
 
 ### Task 4: Verify the repository
 
 **Files:**
 - Verify all changed files.
 
-- [ ] **Step 1: Run `bash tests/validate-mandatory-helper-routing.sh`.**
-- [ ] **Step 2: Run `ruby -e 'require "yaml"; YAML.load_file("SKILL.md")'`.**
-- [ ] **Step 3: Run a Markdown fence-balance check across changed Markdown files.**
-- [ ] **Step 4: Run `git diff --check`.**
-- [ ] **Step 5: Review `git diff` and confirm unrelated untracked files remain untouched.**
+- [x] **Step 1: Run `bash tests/validate-mandatory-helper-routing.sh`.**
+- [x] **Step 2: Run `ruby -e 'require "yaml"; YAML.load_file("SKILL.md")'`.**
+- [x] **Step 3: Run a Markdown fence-balance check across changed Markdown files.**
+- [x] **Step 4: Run `git diff --check`.**
+- [x] **Step 5: Review `git diff` and confirm unrelated untracked files remain untouched.**

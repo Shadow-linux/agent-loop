@@ -1,6 +1,6 @@
 # External Skill Adapters
 
-Use this reference when another skill or plugin can improve the current `agent-loop` stage. External skills are stage accelerators only; `agent-loop` remains the controller.
+Use this reference when another skill or plugin can improve the current `agent-loop` stage. External skills are stage accelerators only; agent-loop remains the controller.
 
 ## Capability Scan Rule
 
@@ -20,7 +20,7 @@ If Superpowers is available, prefer these helpers:
 | Submit / Integrate | `superpowers:finishing-a-development-branch` |
 | Approved Subagent execution | `superpowers:subagent-driven-development` |
 
-If a matching helper exists, use it as the method quality bar before falling back. If the helper cannot be loaded or does not apply after reading it, continue with agent-loop fallback guidance and record no failure.
+For mandatory helper-backed stages, resolve canonical and alias names using `skill-routing.md`, then load the complete helper before stage actions. If it is absent, record `unavailable`; if it is discovered but cannot be loaded, record `load-failed`. Only those two statuses allow fallback.
 
 ## Controller Rule
 
@@ -32,25 +32,47 @@ agent-loop human gates override external skill transitions.
 agent-loop owns task status, feature close, project memory, and submit.
 ```
 
+This ownership is invariant even when a helper is mandatory. A helper may impose a stronger stage method, but it cannot choose the next stage, change an artifact destination, cross a human gate, or update lifecycle state on its own.
+
 Do not copy an external skill's full workflow into `agent-loop`. Borrow the method, then translate the result into the current `agent-loop` artifact.
 
 ## Path Override Rule
 
-If an external skill says to write an artifact under its own default directory, treat that path as advisory.
+If an external skill says to write an artifact under its own default directory, treat that path as advisory: agent-loop artifact paths always override external skill default paths.
 
 Write to the current `agent-loop` artifact instead.
 
 | External output | Agent-loop destination |
 |---|---|
-| brainstormed design/spec | `features/<feature>/product.md` and/or `features/<feature>/spec.md` |
-| implementation plan | `features/<feature>/plan.md` or `features/<feature>/plans/*` |
-| test strategy | `features/<feature>/tests.md` or `features/<feature>/tests/*` |
-| debugging notes | `features/<feature>/notes.md` |
-| verification evidence | `features/<feature>/notes.md` |
-| review findings | `features/<feature>/notes.md` |
-| subagent brief / return | `features/<feature>/handoffs/*` |
+| brainstormed design/spec | `.agent-loop/features/<feature>/product.md` and/or `.agent-loop/features/<feature>/spec.md` |
+| implementation plan | `.agent-loop/features/<feature>/plan.md` or `.agent-loop/features/<feature>/plans/*` |
+| test strategy | `.agent-loop/features/<feature>/tests.md` or `.agent-loop/features/<feature>/tests/*` |
+| debugging notes | `.agent-loop/features/<feature>/notes.md` |
+| verification evidence | `.agent-loop/features/<feature>/notes.md` |
+| review findings | `.agent-loop/features/<feature>/notes.md` |
+| subagent brief / return | `.agent-loop/features/<feature>/handoffs/*` |
+
+The table uses the default `.agent-loop/` memory root. When an existing project uses the accepted legacy `agent-loop/` root, keep that current memory root; never create repository-root `features/`.
 
 Do not create `docs/superpowers/` in a target project unless the human explicitly asks for native Superpowers output and then confirms the external directory after the agent explains the agent-loop path override. A request such as "use Superpowers" or "save it where Superpowers normally saves it" is not enough by itself.
+
+## Stage Helper Resolution Record
+
+Create the initial `templates/notes.md` Stage Helper Resolution record before the first stage action, then finish its method/fallback/evidence fields before stage exit. If no feature workspace has been confirmed, use the response-local pending-record rule from `skill-routing.md` instead of creating files without approval.
+
+The record includes:
+
+- stage and requested helper
+- canonical and alias candidates checked
+- resolved helper or `none`
+- `loaded`, `unavailable`, or `load-failed`
+- whether fallback was used and its source
+- artifact path, human gate, and state ownership overrides
+- evidence that the helper was loaded or why resolution failed
+
+Before the first action, `loaded` requires `Fallback Used: no`, a resolved helper, and complete load evidence. Before stage exit, it additionally requires method-used evidence. `Fallback Used: yes` requires `unavailable` or `load-failed`, a `none` resolved helper, and candidate-by-candidate failure evidence. Missing or inconsistent initial fields block stage action; missing or inconsistent exit fields block completion.
+
+Each invocation scope gets its own record. Task Review, Submit review, and Feature Close Review may use the same helper name, but Feature Close Review requires a new resolution record and may not reuse a prior task-review load record.
 
 ## Gate Override Rule
 
@@ -173,10 +195,14 @@ Use only when:
 Artifact destinations:
 
 ```text
-features/<feature>/handoffs/<date>-<task>-brief.md
-features/<feature>/handoffs/<date>-<task>-return.md
-notes.md summary
-tasks.md status updates only after main-agent review
+.agent-loop/features/<feature>/handoffs/<date>-<task>-brief.md
+.agent-loop/features/<feature>/handoffs/<date>-<task>-return.md
+.agent-loop/features/<feature>/notes.md summary
+.agent-loop/features/<feature>/tasks.md status updates only after main-agent review
 ```
 
-Subagents may not close a feature, submit code, update project memory directly, accept Delivery Contracts, make breaking contract changes, or mark tasks `done` without main-agent Task Done Gate review.
+Record the approval date, approved task/story IDs or scan lanes, allowed file/boundary scope, and stop conditions in `notes.md` and each brief. Expanding the approved scope requires new human confirmation; old approval cannot be reused for new tasks or boundaries.
+
+Authorization Status must be `active` immediately before dispatch. Reject `consumed`, `revoked`, or `expired` records even when IDs and boundaries are unchanged. Mark the authorization `consumed` after the approved dispatch group returns or is stopped; a retry or later dispatch requires fresh human confirmation and a new authorization record.
+
+Subagents must never close a feature, submit code, update project memory directly, accept Delivery Contracts, or approve breaking contract changes. They must never mark tasks `done`. Only the main agent may mark a task `done` after Task Done Gate passes.

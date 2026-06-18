@@ -380,7 +380,9 @@ plan 需要包含：
 - 风险和回滚方式
 - review 和验证方式
 
-如果当前 Agent CLI 携带 Superpowers 或其他阶段 helper，Agent 会先主动识别可用 helper。比如写 plan 时优先借用 `writing-plans` 的计划质量标准，执行任务时优先借用 TDD helper，但产物仍写回 agent-loop 的 `plan.md`、`notes.md`、`tasks.md`。
+如果当前 Agent CLI 携带 Superpowers 或其他阶段 helper，Brainstorm、Plan Gate、Execute、Diagnose、Verify、Review 和已批准的 Subagent Execution 会先强制解析对应 helper。Agent 按 `superpowers:<name>`、`<name>` 的顺序检查，找到后必须加载完整 skill；只有记录 `unavailable` 或 `load-failed` 后才能走 agent-loop fallback。
+
+helper 只增强阶段内部方法，不接管 agent-loop。产物仍写回 feature 的 `product.md`、`spec.md`、`plan.md`、`notes.md`、`handoffs/*`；不会因为 Superpowers 的默认规则创建 `docs/superpowers/*`。阶段选择、人类门禁、task done、project memory、submit、pause 和 close 仍由 agent-loop 控制。
 
 ### 任务完成标准
 

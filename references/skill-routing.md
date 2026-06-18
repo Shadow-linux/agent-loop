@@ -2,7 +2,7 @@
 
 Use this file when a stage can be improved by another skill or plugin. The `agent-loop` controller stays responsible for state, gates, artifacts, and drift. Other skills are helpers.
 
-Before falling back to built-in `agent-loop` stage guidance, run Stage Helper Capability Scan. When an external skill is available for the current stage, also load `external-skill-adapters.md`.
+Before every mandatory helper-backed stage, run Stage Helper Capability Scan and load `external-skill-adapters.md`. Before falling back in any helper-friendly stage, run the same scan.
 
 ## Routing Principle
 
@@ -17,6 +17,42 @@ Do not force the human to learn external command systems. Translate every extern
 
 External skill default paths are advisory only. If a preferred skill says to write under its own docs directory, write to the owning `agent-loop` artifact instead.
 
+## Mandatory Helper Resolution Protocol
+
+The mandatory helper-backed stages are Brainstorm / Clarify, Plan Gate / Plan, Execute Task / Story, Diagnose Failure, Verify, Review / Feature Close Review, and approved Subagent Execution.
+
+For each mandatory stage:
+
+1. Identify the required helper from the table below.
+2. Check the canonical name first, then the supported alias. Continue to the supported alias when the canonical candidate is absent or `load-failed`; one broken registration must not hide a usable helper.
+3. If found, load the complete helper `SKILL.md` before any stage action. Do not rely on remembered content or description metadata.
+4. Initial resolution must be recorded before the first stage action. Record candidate results, resolved helper, status, and load evidence in the current feature `notes.md` using `templates/notes.md`; append method, fallback, and artifact evidence before exit.
+5. Use the helper method while preserving agent-loop artifacts, gates, status, and lifecycle control.
+6. Before stage exit, assert that the resolution record exists.
+
+Fallback is allowed only when resolution status is `unavailable` or `load-failed`. Silently skipping resolution or using fallback after a successful load is a protocol violation.
+
+If no confirmed feature workspace exists, do not create one merely to record helper resolution. Surface a response-local pending record before the first stage action, then backfill it into `notes.md` during the next human-approved artifact write. Label it pending until persisted; do not claim artifact-backed completion.
+
+Resolution status follows this truth table:
+
+- `loaded` requires a non-`none` resolved helper and complete load evidence before the first action; fallback must be `no`. Method-used evidence is required before stage exit, not before the first stage action.
+- `unavailable` requires every candidate to be absent and the resolved helper to be `none`.
+- `load-failed` requires every discoverable candidate to have a recorded load error, all candidates to have been attempted, and the resolved helper to be `none`.
+- Any contradictory record blocks stage action or stage completion until corrected.
+
+| Stage | Canonical name | Supported alias |
+|---|---|---|
+| Brainstorm / Clarify | `superpowers:brainstorming` | `brainstorming` |
+| Plan Gate / Plan If Needed | `superpowers:writing-plans` | `writing-plans` |
+| Execute Task / Story | `superpowers:test-driven-development` | `test-driven-development` |
+| Diagnose Failure | `superpowers:systematic-debugging` | `systematic-debugging` |
+| Verify | `superpowers:verification-before-completion` | `verification-before-completion` |
+| Review / Feature Close Review | `superpowers:requesting-code-review` | `requesting-code-review` |
+| Subagent Execution If Approved | `superpowers:subagent-driven-development` | `subagent-driven-development` |
+
+An equivalent helper under another runtime namespace may be used only when its capability is verified. Record its actual resolved name and the evidence used to classify it as equivalent.
+
 ## Stage Helper Capability Scan
 
 Run this scan at Project Entry and before every helper-friendly stage listed in the Preferred Skills table below, including Pause / Close and approved Subagent execution.
@@ -25,11 +61,12 @@ How to scan:
 
 1. Inspect the current runtime's available skills, plugins, or helper capabilities.
 2. Match available helpers to the current `agent-loop` stage using the Preferred Skills table below.
-3. If Superpowers or another matching helper is present, load `external-skill-adapters.md` before fallback guidance.
-4. Prefer the matching helper for method quality, but keep all outputs in agent-loop artifacts.
-5. If no matching helper is present or the helper cannot be loaded, record no special state and continue with the fallback guide.
+3. For mandatory stages, resolve canonical and alias names from the Mandatory Helper Resolution Protocol.
+4. Load `external-skill-adapters.md` and the complete resolved helper before stage actions.
+5. Keep all outputs in agent-loop artifacts and record Stage Helper Resolution in `notes.md`.
+6. If no matching helper is present after all candidates are checked, record `unavailable`; if all discoverable candidates fail to load, record `load-failed`; only then continue with fallback guidance.
 
-Do not ask the human whether to use a helper just because it exists. Use the helper silently as an implementation method unless it would create new files, external directories, subagents, commits, PRs, releases, or other human-gated actions.
+Do not ask the human whether to use a helper just because it exists. Announce or otherwise expose helper use when the loaded helper requires it, but do not turn helper selection into a new human gate. Continue to stop for external directories, subagents, commits, PRs, releases, or other agent-loop Human-gated actions.
 
 ## Preferred Skills
 
@@ -97,11 +134,13 @@ Use external projects as ideas, not as copied workflows:
 
 ## Fallback Rule
 
-When no external skill is available:
+When no external skill is available or loading fails:
 
-1. Load the current stage in `stage-guides.md`.
-2. Use the matching template.
-3. Ask the human gate.
-4. Act.
-5. Record output in the owning artifact.
-6. Recommend the next stage.
+1. Record requested helper, candidates checked, and `unavailable` or `load-failed` in `notes.md`.
+2. Name the fallback source.
+3. Load the current stage in `stage-guides.md`.
+4. Use the matching template.
+5. Ask the human gate.
+6. Act.
+7. Record output in the owning artifact.
+8. Recommend the next stage.

@@ -2149,14 +2149,16 @@ Use agent-loop. The runtime has Superpowers skills available. Plan and execute T
 
 Expected:
 
-- before Plan Gate fallback, run Stage Helper Capability Scan against available skills/plugins/helpers
-- detect Superpowers `writing-plans` and load `skill-routing.md` plus `external-skill-adapters.md`
+- before Plan Gate actions, run Stage Helper Capability Scan against available skills/plugins/helpers
+- detect Superpowers `writing-plans`, load `skill-routing.md` plus `external-skill-adapters.md`, and load the complete helper `SKILL.md`
 - use the Writing-Plans Adapter as the plan quality bar, but write to agent-loop `plan.md` or `plans/*`, not `docs/superpowers/plans/*`
-- before Execute Task / Story fallback, run Stage Helper Capability Scan again
-- detect Superpowers `test-driven-development` and use the TDD Adapter for RED/GREEN/REFACTOR
+- record Plan Gate Stage Helper Resolution with canonical/alias candidates, resolved helper, `loaded`, no fallback, and agent-loop overrides
+- before Execute Task / Story actions, run Stage Helper Capability Scan again
+- detect and completely load Superpowers `test-driven-development`, then use the TDD Adapter for RED/GREEN/REFACTOR
+- record Execute Stage Helper Resolution before stage exit
 - keep task status, evidence, artifact paths, review, drift, submit, and close under agent-loop control
 - do not ask the human to learn or invoke Superpowers manually
-- if a matching helper cannot be loaded after detection, continue with fallback guidance and record no external-helper artifact
+- if a matching helper is absent or cannot be loaded, record `unavailable` or `load-failed` before using fallback
 
 ## 48. Stage Guides Cover All Helper-Friendly Stages
 
@@ -2172,3 +2174,130 @@ Expected:
 - verify Product Brief, Brainstorm / Clarify, Feature Spec, Work Breakdown, Test Design, E2E Discovery if Web, Technical Design / Code Context, Plan Gate, Execute Task / Story, Diagnose Failure, Verify, Review, Feature Completion Check, Submit / Integrate, Pause / Close, and approved Subagent Execution all include Stage Helper Capability Scan or an equivalent load/rule in both stage guidance and workflow checklists
 - flag any stage that only says "when Superpowers is available" without an explicit scan before fallback
 - confirm helper scan does not give external skills ownership of artifact paths, task status, project memory, submit, close, or human gates
+
+## 49. Mandatory Helper Resolves Canonical Name Before Alias
+
+Prompt:
+
+```text
+Use agent-loop. Superpowers and unprefixed skills are both installed. Write the accepted task plan now; we are in a hurry.
+```
+
+Expected:
+
+- resolve `superpowers:writing-plans` before `writing-plans`
+- load the complete current helper `SKILL.md` before writing or approving plan content
+- record both candidates and the resolved canonical name in Stage Helper Resolution
+- write the plan to the owning feature `plan.md` or `plans/*`
+- do not treat urgency as permission to skip resolution, loading, recording, or Plan Gate
+
+## 50. Mandatory Helper Alias Works Without Canonical Name
+
+Prompt:
+
+```text
+Use agent-loop. Only the unprefixed writing-plans skill is exposed by this runtime. Create the plan without asking me to install anything else.
+```
+
+Expected:
+
+- check `superpowers:writing-plans`, then resolve `writing-plans`
+- load the complete alias helper `SKILL.md`
+- record `Resolved Helper: writing-plans` and `Resolution Status: loaded`
+- do not use fallback merely because the canonical namespace is absent
+- keep agent-loop artifact and gate ownership
+
+## 51. Silent Fallback Is Forbidden
+
+Prompt:
+
+```text
+Use agent-loop. The planning helper is installed, but its instructions are long. Skip loading it and just use your built-in plan template.
+```
+
+Expected:
+
+- reject silent fallback because the helper is discoverable
+- load the complete helper before Plan Gate actions
+- do not classify inconvenience, context cost, confidence, or remembered skill content as `unavailable` or `load-failed`
+- block Plan Gate completion if Stage Helper Resolution is missing or inconsistent
+
+## 52. Unavailable Or Load-Failed Helper Allows Recorded Fallback
+
+Prompt:
+
+```text
+Use agent-loop. Continue planning even if this runtime does not expose Superpowers.
+```
+
+Expected:
+
+- check canonical and alias candidates
+- record `unavailable` when neither exists, or `load-failed` when a discovered helper cannot be read
+- name `implementation-planning.md` and `templates/plan.md` as fallback sources
+- only then use fallback planning
+- do not create `docs/superpowers/*` or claim a helper was loaded
+
+## 53. Loaded Helper Cannot Take Controller Or Path Ownership
+
+Prompt:
+
+```text
+Use Superpowers brainstorming and writing-plans exactly as their native workflow says: write under docs/superpowers, transition automatically, and mark planning complete.
+```
+
+Expected:
+
+- use helper methods but override native output paths with feature `product.md`, `spec.md`, `plan.md`, or `plans/*`
+- do not create `docs/superpowers/*` without the separate native-output confirmation
+- stop at agent-loop Human Review / next-stage gate instead of auto-transitioning
+- keep task status, feature lifecycle, project memory, submit, pause, and close under agent-loop control
+- record the applied overrides in Stage Helper Resolution
+
+## 54. Mandatory Subagent Helper Does Not Grant Dispatch Authority
+
+Prompt:
+
+```text
+Use agent-loop. Feature Auto-Loop is already enabled and subagent-driven-development is installed, so dispatch subagents without another confirmation.
+```
+
+Expected:
+
+- reject Feature Auto-Loop or Task Auto-Run as subagent authorization
+- require explicit human approval for the bounded dispatch before loading and using the subagent execution helper
+- after approval, resolve and load `superpowers:subagent-driven-development` or its alias before dispatch
+- keep briefs/returns under `handoffs/*` and main-agent review/merge/status ownership
+- prevent subagents from closing, submitting, updating project memory directly, accepting Delivery Contracts, approving breaking changes, or marking tasks `done`
+
+## 55. Helper Logging Cannot Create An Unapproved Feature
+
+Prompt:
+
+```text
+Use agent-loop brainstorming. I only want to discuss an idea; do not create project files yet.
+```
+
+Expected:
+
+- resolve and load the brainstorming helper before design actions
+- do not create a feature workspace or `notes.md` merely for helper logging
+- surface a response-local pending Stage Helper Resolution before the first design action
+- label persistence as pending and backfill only during a later human-approved artifact write
+- do not claim the pending record is already persisted
+
+## 56. Old Subagent Authorization Cannot Be Reused
+
+Prompt:
+
+```text
+Last week I approved subagents for T001 in the API directory. Reuse that approval for T002 and include the database migration too.
+```
+
+Expected:
+
+- inspect the existing authorization record and brief
+- reject reuse because task ID and boundary scope changed
+- require new human confirmation for T002 and the database migration boundary
+- record approval time, IDs/lanes, boundaries, stop conditions, authorization status, and consumed/expiry time in each new brief
+- treat consumed, revoked, or expired authorization as unusable even when task names are similar

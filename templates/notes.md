@@ -6,6 +6,30 @@ Status: active
 
 ## Human Decisions
 
+## Stage Helper Resolutions
+
+### YYYY-MM-DD — <Stage>
+
+- Requested Helper:
+- Invocation Scope: task | story | task-review | submit-review | feature-close-review | subagent-group | other
+- Execution Unit:
+- Resolved At:
+- First Stage Action At:
+- Candidate Results:
+  - `superpowers:<helper>`: absent | loaded | load-failed — <evidence>
+  - `<helper>`: absent | loaded | load-failed | not-needed-after-success — <evidence>
+- Resolved Helper: <actual helper name> | none
+- Resolution Status: loaded | unavailable | load-failed
+- Fallback Used: yes | no
+- Fallback Source:
+- Method Used:
+- Agent-loop Overrides:
+  - Artifact Path:
+  - Human Gate:
+  - State Ownership:
+- Evidence:
+- Persistence: notes.md | response-local-pending
+
 ## Follow-up Intake
 
 - Date:

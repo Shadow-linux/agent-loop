@@ -9,6 +9,24 @@ Story:
 Task:
 Brief ID: YYYY-MM-DD-<task-or-story>-<slug>
 
+## Dispatch Authorization
+
+Approved At:
+
+Approved IDs / Lanes:
+
+Approved Boundaries:
+
+Stop Conditions:
+
+Authorization Status: active | consumed | revoked | expired
+
+Expires / Consumed At:
+
+Any new task, lane, file boundary, or expanded scope requires new human confirmation and a refreshed authorization record.
+
+Dispatch only while status is `active`. Set status to `consumed` when this approved dispatch group returns or stops; never reuse a consumed, revoked, or expired record.
+
 ## Assignment
 
 Scope:

@@ -3,6 +3,10 @@
 ## 1.2.2 — 2026-06-15
 
 ### Added
+- Added a mandatory Stage Helper Resolution protocol for brainstorming, planning, TDD execution, systematic debugging, verification, review, and human-approved subagent execution, including canonical and unprefixed alias resolution.
+- Added auditable helper resolution fields to `notes.md` and pressure scenarios for aliases, silent fallback, unavailable/load-failed fallback, controller/path ownership, and subagent authorization.
+- Added response-local pending resolution for pre-feature brainstorming and bounded subagent authorization lifecycle fields so helper logging and old approvals cannot create or expand work without confirmation.
+- Added a static routing contract test covering complete helper loading, restricted fallback, stage preconditions, resolution records, controller ownership, and external path overrides.
 - Added root `AGENTS.md` managed guidance version metadata so future agents can detect when local `agent-loop` skill rules are newer than the synced startup guidance.
 - Added a validation scenario for root guidance files whose managed `agent-loop` version is older than the current local skill version even though all required sections are present.
 - Added a Version Sync Checklist to this skill repository's `AGENTS.md` so approved version bumps update every version-bearing file together.
@@ -10,6 +14,8 @@
 - Added AGENTS cleanup / migration review so conflicting root guidance and long-term project memory in existing `AGENTS.md` / `CLAUDE.md` are surfaced for human decision instead of silently overwritten or left in startup files.
 
 ### Changed
+- Strengthened Stage Helper Capability Scan from a preference into a mandatory pre-stage protocol for seven high-risk stages; fallback now requires a recorded `unavailable` or `load-failed` result.
+- Clarified that helper methods cannot override agent-loop artifact destinations, human gates, task/feature status, project memory, drift, submit, pause, or close ownership.
 - Clarified Quick Onboarding as a shallow evidence-labeled safe-continuation snapshot that does not create onboarding-db files or diagrams unless Deep or Targeted onboarding is explicitly selected.
 - Added runtime classification for Targeted Onboarding when an existing onboarding-db or onboarding refresh request narrows to one module, flow, async task, deployment path, state transition, or problem area.
 - Expanded Feature Follow-up trigger phrases for small behavior tweaks, minor adjustments, and requirement/acceptance changes in English and Chinese.
