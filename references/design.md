@@ -25,8 +25,9 @@ The core constraints inherited from the design sources are:
 - Project Memory Mode is `simple` by default; in `enterprise`, `project.md` becomes an index and long-term details move to optional `.agent-loop/project/*.md`
 - `project.md` owns cross-feature Product Context and Domain Language
 - stable Web E2E capability belongs in `project.md`; feature-specific E2E cases belong in feature `tests.md` or `tests/e2e/*`
-- `requirements/` stores human source material packages as requirement set directories: requirements, prototypes, feedback, screenshots, recordings, links, and follow-up notes
+- `requirements/` stores human source material packages and requirement lifecycle/backlog records as requirement set directories: requirements, prototypes, feedback, screenshots, recordings, links, follow-up notes, status, and optional `requirements/INDEX.md`
 - requirement-set dates mean archive date only, not deadlines or feature lifecycle dates
+- future/deferred work belongs in requirement sets and optional `requirements/INDEX.md`, not in `project.md`
 - `product.md` is optional feature-level product understanding when needed
 - each feature has stable `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`; `contracts.md` is added only after human confirmation when producer-consumer boundaries need explicit handoff
 - feature type may be `normal`, `maintenance-fix`, or `follow-up`; all use the same feature workspace model
@@ -244,10 +245,13 @@ Ask before writing onboarding-db updates.
 
 ### Feature Follow-up And Flow-back
 
+Project Entry and memory bootstrap have priority over Feature Follow-up.
+
 Condition:
 
 ```text
 Human reports bug, regression, post-close correction, field/schema/algorithm/API change, test failure, screenshot issue, QA/user feedback, or small tweak
+.agent-loop/ or legacy agent-loop/ memory exists
 ```
 
 Action:

@@ -1,6 +1,6 @@
 # Agent Loop
 
-**Current version:** 1.2.2
+**Current version:** 1.2.3
 
 A reusable [Codex](https://github.com/openai/codex) / CLI-agent skill for single-person software development workflows—from goal intake to verified close.
 
@@ -55,6 +55,7 @@ Project Entry → Remote Project Discovery if needed
 | **Drift** | Mismatch between docs, code reality, or human decisions |
 | **Feature Follow-up / Flow-back** | Bug/change intake that checks recent features before creating a new feature. Default lookback is 30 days. |
 | **Operational Support** | Read-only code-guided help for testing, running, deploying, switching accounts/config/models/providers, quota checks, rollout, and production diagnosis before deciding whether feature work is needed. |
+| **Requirement Lifecycle / Backlog** | Requirement memory for proposed, accepted, deferred, in-progress, implemented, superseded, rejected, or reference-only requirements without using project memory as a backlog. |
 | **Delivery Contract** | Optional producer-consumer boundary handoff. Used only when API, event, public data, UI state/behavior, SDK/library, runtime, or explicit cross-agent/human handoff needs a stable contract. |
 
 ## Artifact Layout
@@ -72,12 +73,13 @@ Project Entry → Remote Project Discovery if needed
     domain/                           # optional data / state / glossary docs
     quality/                          # optional testing / risk docs
   requirements/
+    INDEX.md                           # optional inventory and backlog/deferred view
     YYYY-MM-DD-<topic>/
-      README.md
-      requirement.*
-      prototype.*
-      feedback.*
-      notes.*
+      README.md                        # requirement set lifecycle and source index
+      requirement.*                     # optional source file when provided
+      prototype.*                       # optional source file when provided
+      feedback.*                        # optional source file when provided
+      notes.*                           # optional source file when provided
   features/
     YYYY-MM-DD-<feature-slug>/
       product.md    (optional)

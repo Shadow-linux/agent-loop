@@ -106,6 +106,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Summarize proposed `project.md` before writing.
 - [ ] If Deep is selected, record Onboarding DB Layout Mode before proposing onboarding-db files; default to Expanded unless the human explicitly requests Compact/Standard or an existing onboarding-db already uses it.
 - [ ] If Deep is selected, run P0 before P1 and P2.
+- [ ] For Targeted Onboarding Scan, treat P0 as safety context, not as permission to produce a full project.md proposal.
 - [ ] If Targeted is selected, limit scan and onboarding-db updates to the selected module, flow, async task, deployment path, or problem area.
 - [ ] Use Batch Human Review before writing `.agent-loop/onboarding-db/`, multiple project memory facts, root guidance, or directory guidance.
 - [ ] Ask human confirmation before writing `.agent-loop/`, root guidance, directory guidance, onboarding-db, or diagrams.
@@ -120,6 +121,11 @@ Before using an external skill or plugin inside a stage:
 - [ ] Use `.agent-loop/requirements/YYYY-MM-DD-<topic>/` requirement set directory for new archives.
 - [ ] Group all same-topic intake materials in the requirement set: requirements, prototypes, screenshots, feedback, recordings, links, and notes.
 - [ ] Create or update requirement-set `README.md`.
+- [ ] Old requirement set README files remain valid; do not force migration only because lifecycle fields are missing.
+- [ ] Do not edit `requirement.md` or other source files for lifecycle/status updates.
+- [ ] Future / Deferred Requirement Intake: when the human says "先记一下", "后面做", "之后补", "下一轮做", "暂时不做", "以后加", "backlog", "defer this", "follow-up later", or "not in this feature", recommend a requirement set instead of project memory.
+- [ ] Do not write future TODO, backlog, deferred requirements, or unimplemented planned capability details into `project.md`.
+- [ ] Large follow-up conflicts get a Requirement Conflict Review before appending, rebuilding, or superseding requirements.
 - [ ] Normalize names only after confirmation.
 - [ ] Record source paths in `spec.md`.
 - [ ] Do not overwrite old requirement materials.
@@ -429,6 +435,7 @@ Checklist:
 - [ ] Confirm current Project Memory Mode: simple | enterprise.
 - [ ] If hard or soft enterprise triggers apply, recommend a mode switch before adding lots of detail to `project.md`.
 - [ ] Confirm the change affects future work, not only current task history.
+- [ ] Do not write future TODO, backlog, deferred requirements, or unimplemented planned capability details into `project.md`.
 - [ ] Update Current Work and Next Suggested Action.
 - [ ] In simple mode, update the matching `project.md` section.
 - [ ] In enterprise mode, keep `project.md` as index/current state and update the matching `project/*.md` detail file.
@@ -438,6 +445,9 @@ Checklist:
 - [ ] Update Test Commands or Testing if commands or test systems changed.
 - [ ] Update Domain Language, Product Context, Known Constraints, or Long-Term Decisions if future agents need them.
 - [ ] Resolve or add Onboarding Uncertainties when confidence changes.
+- [ ] Run Requirement Reconciliation when the feature references or creates requirement sets.
+- [ ] Do not edit `requirement.md` or other source files for lifecycle/status updates.
+- [ ] Update requirement set README / optional requirements INDEX for lifecycle status only after human confirmation.
 - [ ] Ask before changing root or directory-level `AGENTS.md`.
 - [ ] Present proposed memory updates with Human Review Summary table.
 
@@ -477,6 +487,7 @@ Checklist:
 - [ ] Confirm long-term facts are reflected in `project.md`.
 - [ ] Confirm submit/integration status is recorded if requested.
 - [ ] Record the check in `notes.md`.
+- [ ] If blockers prevent completion, record Result: blocked and recommend exactly one unblock stage.
 - [ ] Recommend Close, Continue, Pause before new feature, or Scope Update.
 - [ ] Present completion status with Human Review Summary table.
 - [ ] Ask explicit human confirmation before close.
@@ -499,5 +510,6 @@ Close:
 - [ ] Feature Close Review completed.
 - [ ] Submit/integration status recorded if requested.
 - [ ] `project.md` updated for long-term changes.
+- [ ] Requirement Reconciliation completed when the feature references or creates requirement sets.
 - [ ] `notes.md` has close record.
 - [ ] Human explicitly confirms close.

@@ -34,10 +34,10 @@ New human source material should be archived inside a requirement set directory.
 | File | Owns | Does Not Own |
 |---|---|---|
 | `remote.md` | how to find, verify, and access a remote project from a local entry directory | feature logs or project capabilities |
-| `project.md` | long-term project facts in simple mode; memory index and current state in enterprise mode | task logs |
+| `project.md` | long-term project facts in simple mode; memory index and current state in enterprise mode | task logs, backlog lists, deferred requirements |
 | `project/*.md` | enterprise long-term project memory details | feature execution logs |
 | `onboarding-db/*` | human-readable project onboarding, reading paths, module/flow/boundary/deployment explanations, diagrams, evidence/confidence | current task status, feature execution logs, raw test output, human original requirements |
-| `requirements/<archive-date>-<topic>/*` | original human material package: requirements, prototypes, feedback, screenshots, recordings, links, and references | edited specs |
+| `requirements/<archive-date>-<topic>/*` | original human material package and lifecycle record: requirements, prototypes, feedback, screenshots, recordings, links, references, status, backlog/deferred state | edited specs, task plans |
 | `product.md` | feature-level product intent, users, stories, product scope | engineering execution plan |
 | `spec.md` | intended feature behavior | execution logs |
 | `tasks.md` | work breakdown, status, and links to task details | full test evidence |

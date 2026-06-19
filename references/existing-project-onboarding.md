@@ -28,6 +28,8 @@ When the human asks to take over, understand, or continue an existing project, e
 | Deep Project Onboarding Scan | the human wants newcomer-friendly project understanding or long-term onboarding docs | Quick outputs plus `.agent-loop/onboarding-db/`, diagrams, and backfill proposal |
 | Targeted Onboarding Scan | the human asks about one module, flow, async task, deployment path, or problem area | focused onboarding-db update proposal for that scope |
 
+Targeted Onboarding Scan may inspect the minimum P0 safety context, but it does not produce a full Quick Onboarding or full project.md proposal by default. It may propose narrow project memory backfill only when the targeted scope exposes stale or missing facts required for safe continuation.
+
 If the human chooses Deep or Targeted, load:
 
 ```text

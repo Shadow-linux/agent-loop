@@ -87,7 +87,7 @@ First version excludes:
 remote.md  = local entry pointer for remote projects
 project.md = long-term project facts in simple mode; memory index and current state in enterprise mode
 project/   = optional enterprise long-term project memory details
-requirements/ = original human material packages or references, grouped by archive-date requirement set directory
+requirements/ = original human material packages, references, and requirement lifecycle/backlog records, grouped by archive-date requirement set directory
 product.md = optional feature product intent and product scope
 spec.md    = intended feature behavior
 tasks.md   = work breakdown and order
@@ -104,6 +104,8 @@ contracts/ = optional durable producer-consumer contract details
 Requirement-set dates are archive dates only. They do not define deadlines, requirement duration, or feature lifecycle.
 
 Requirement sets group the human's original materials for one intake event or topic: requirement docs, prototypes, feedback, screenshots, recordings, links, and follow-up notes.
+
+Requirement lifecycle/backlog records future, deferred, accepted, in-progress, implemented, superseded, rejected, and reference-only demand in requirement set `README.md` and optional `requirements/INDEX.md`. It is not project memory, and it does not rewrite source files such as `requirement.md`.
 
 ## Feature Workspace Model
 

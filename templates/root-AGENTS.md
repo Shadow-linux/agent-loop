@@ -14,10 +14,10 @@ Agents may propose updates to managed blocks when source facts change, but must 
 
 When creating or refreshing this file, inspect content outside managed blocks. If it contains workflow rules that conflict with current `agent-loop`, or long-term project facts that belong in project memory, present an AGENTS cleanup / migration review and ask whether to keep, remove/replace, or migrate those entries. Do not silently delete or move them.
 
-<!-- agent-loop:managed-start section:meta source:agent-loop-skill version:1.2.2 -->
+<!-- agent-loop:managed-start section:meta source:agent-loop-skill version:1.2.3 -->
 ## Agent Loop Guidance Version
 
-- This root guidance was last synced from `agent-loop` skill version `1.2.2`.
+- This root guidance was last synced from `agent-loop` skill version `1.2.3`.
 - During Project Entry, Existing Project Onboarding, or Re-Adopt, compare this managed version with the current local `agent-loop` skill version using semantic version ordering (`major.minor.patch`), not plain string comparison.
 - If the current skill version is newer, classify root guidance as `stale` and propose refreshing managed blocks through Human Review Summary before relying on outdated startup rules.
 <!-- agent-loop:managed-end section:meta -->
@@ -36,7 +36,7 @@ Before development work:
 7. If `Memory Mode: enterprise`, read only the linked `.agent-loop/project/*.md` detail files needed for the current stage.
 8. If recent development bypassed `agent-loop`, route to Re-Adopt Agent Loop Project before new feature work.
 9. Operational Support Guard: if the human asks to test, run, deploy, switch account/config/model/provider, check quota/rate limits, diagnose production, arrange rollout, or use existing code to solve an operational problem, default to read-only code/process analysis. Do not create a feature, edit code, change config, deploy, or run destructive commands unless the human confirms feature implementation or an operational change. If unclear, ask whether they want feature implementation or help using current project functionality.
-10. If the human reports a bug, regression, post-close correction, field/schema/algorithm/API change, test failure, screenshot issue, QA/user feedback, or "small tweak", route to Feature Follow-up / Flow-back before creating a new feature or editing code.
+10. If the human reports a bug, regression, post-close correction, field/schema/algorithm/API change, test failure, screenshot issue, QA/user feedback, or "small tweak", route to Feature Follow-up / Flow-back before creating a new feature or editing code, but only after project memory exists or Project Entry has routed through Init Project / Existing Project Onboarding.
 11. Run Stage Helper Capability Scan for the current stage: inspect whether the current Agent CLI exposes Superpowers or other helper skills/plugins before using fallback stage guidance.
 12. Check for the nearest directory-level `AGENTS.md` when working in a subdirectory.
 13. Classify the current `agent-loop` stage and recommend exactly one next action.
@@ -117,6 +117,7 @@ Auto modes do not bypass these stops.
 - Keep long-term project memory in `.agent-loop/project.md` or enterprise `.agent-loop/project/*.md`. Root `AGENTS.md` should only summarize startup-critical facts that every Agent CLI needs immediately.
 - Keep original human materials in requirement set directories under `.agent-loop/requirements/`, or reference original paths when the human declines copying.
 - Do not create new flat files directly under `.agent-loop/requirements/`; group requirements, prototypes, feedback, screenshots, recordings, links, and follow-up notes for the same intake/topic together.
+- Future/deferred work and backlog items belong in requirement sets and optional `requirements/INDEX.md`, not in `project.md`. Do not edit `requirement.md` or other source files for lifecycle/status updates.
 - Keep durable producer-consumer interface handoffs in feature `contracts.md` and optional `contracts/` details. Keep temporary subagent assignments in `handoffs/`.
 - Do not write task logs, feature progress, raw requirements, temporary plans, or test transcripts into `AGENTS.md`.
 <!-- agent-loop:managed-end section:artifacts -->

@@ -100,9 +100,13 @@ New requirements should be grouped by requirement set directory. Do not create f
 
 Never silently modify original human requirements. If the human declines normalization, reference the original path in feature docs.
 
+Requirement source files such as `requirement.md` are immutable by default. Lifecycle/status updates belong in requirement set `README.md` and optional `requirements/INDEX.md`.
+
 When requirements change, add a new file to the requirement set or create a new requirement set. Do not overwrite the old source requirement material.
 
-Recommend `templates/requirements-index.md` only when there are more than 10 requirement sets, many external paths, shared source requirements, frequent supersession, or the human asks for an inventory.
+Future/deferred work and backlog items belong in requirement sets and optional `requirements/INDEX.md`, not in `project.md`.
+
+Recommend `templates/requirements-index.md` only when there are more than 10 requirement sets, many external paths, shared source requirements, frequent supersession, or the human asks for an inventory/backlog view.
 
 ## Root `AGENTS.md`
 

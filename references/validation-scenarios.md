@@ -140,9 +140,27 @@ Expected:
 
 - route to Targeted Onboarding Scan
 - inspect only minimal safe project context plus the requested module/flow
+- treat minimum P0 as safety context, not as permission to produce a full Quick Onboarding or full `project.md` proposal
 - do not create unrelated onboarding-db files
 - propose focused updates for the relevant module, async/job flow, diagram, risks, and project memory backfill if needed
+- propose project memory backfill only when the targeted scan finds stale or missing facts required for safe continuation
 - use Batch Human Review before writing
+
+## 2g-2. Targeted Onboarding Does Not Produce Full Project Memory By Default
+
+Prompt:
+
+```text
+Use agent-loop. 只解释一下 billing worker 的 retry 机制，必要时补一张图。
+```
+
+Expected:
+
+- route to Targeted Onboarding Scan
+- inspect minimum P0 context only for safety
+- do not produce a full Quick Onboarding or full `project.md` proposal by default
+- produce a focused onboarding-db update proposal for the selected billing worker scope
+- propose narrow project memory backfill only if stale or missing project facts block safe continuation
 
 ## 2h. Onboarding DB Requires Module Reading Paths
 
@@ -766,6 +784,77 @@ Expected:
 - update `spec.md` `Source Requirements` after human confirmation
 - recommend `requirements/INDEX.md` only if index trigger conditions apply
 
+## 4c. Requirement Backlog Does Not Pollute Project Memory
+
+Prompt:
+
+```text
+Use agent-loop. 这个先记一下，下轮做 provider 配置化。
+```
+
+Expected:
+
+- classify as Requirement Archive with Future / Deferred Requirement Intake
+- recommend creating or updating a requirement set after human confirmation
+- use `Status: proposed | accepted | deferred` based on the human decision
+- do not write future TODO, backlog, deferred requirements, or unimplemented planned capability details into `project.md`
+- update `requirements/INDEX.md` only if it already exists, index triggers apply, or the human asks for a backlog/requirements inventory
+
+## 4d. Old Requirement Set README Remains Valid
+
+Setup:
+
+```text
+.agent-loop/requirements/2026-05-26-login/README.md has only old fields:
+Archived, Topic, Status: active, Date Meaning, Source Files, Used By, Notes.
+```
+
+Prompt:
+
+```text
+Use agent-loop. Start from the login requirement.
+```
+
+Expected:
+
+- read the old README as valid
+- do not classify requirement memory as stale
+- do not require migration before using source references
+- do not infer `Status: active` means unimplemented
+- only add lifecycle fields if a confirmed lifecycle/status update is being written
+
+## 4e. Requirement Source File Is Not Rewritten
+
+Prompt:
+
+```text
+Use agent-loop. 这个需求现在做完了，更新一下记录。
+```
+
+Expected:
+
+- do not edit `requirement.md` or other source files
+- update requirement set `README.md` status/lifecycle after confirmation
+- update `requirements/INDEX.md` if present
+- record feature evidence in feature `notes.md`
+- update `project.md` only for durable implemented capability
+
+## 4f. Large Follow-up Conflict Requires Requirement Rebuild Review
+
+Prompt:
+
+```text
+Use agent-loop. 原来是邮箱密码登录，现在改成只支持企业 SSO，不再支持密码登录。
+```
+
+Expected:
+
+- do not modify old `requirement.md`
+- do not silently append the follow-up as a small change
+- present Requirement Conflict Review comparing original vs follow-up
+- recommend create a new requirement set and mark the old one superseded unless evidence suggests linked coexistence
+- ask human confirmation before creating the new set or changing old lifecycle status
+
 ## 5. Feature Has 8 Tasks
 
 Prompt:
@@ -1004,6 +1093,23 @@ Expected:
 - if complete, proactively recommend close without requiring the human to know the `close` term
 - ask explicit human confirmation before marking the feature closed
 - if incomplete, recommend the next unfinished item
+
+## 7b-2. Feature Completion Check Can Recommend Blocked
+
+Prompt:
+
+```text
+Use agent-loop. Verification cannot run because staging access is missing. Check whether the feature can close.
+```
+
+Expected:
+
+- load `feature-completion-check.md`
+- inspect feature docs and evidence
+- determine completion cannot be decided because a blocker is missing
+- record Feature Completion Check in `notes.md` with `Result: blocked`
+- recommend exactly one unblock stage such as Ask Human, Diagnose Failure, Verify, or Pause
+- do not recommend close while the blocker remains
 
 ## 7c. Start New Feature With Active Feature Present
 
@@ -1403,6 +1509,23 @@ Expected:
 - use the 30-day lookback as the default window, not a hard boundary
 - present a Candidate Match Matrix or recommend `investigate-first` if evidence is too generic
 - do not create a new feature, create a maintenance-fix, or edit code before the flow-back / linked-new-feature / maintenance-fix / investigate-first decision is confirmed
+
+## 15a-2b. Bug Report Without Agent-Loop Memory Onboards First
+
+Prompt:
+
+```text
+Use agent-loop. This repo has meaningful existing code but no `.agent-loop/`. 人类说：线上白屏，只看到 500，可能是最近功能导致的，修一下。
+```
+
+Expected:
+
+- do not classify directly as `feature-follow-up`
+- classify project entry as `existing-project`
+- run Existing Project Onboarding / Root Agent Bootstrap Gate before Feature Follow-up
+- preserve the bug/change report as intake context
+- after project memory exists, decide whether to run Feature Follow-up, maintenance-fix, new feature, or investigate-first
+- do not inspect `.agent-loop/features/*` paths that do not exist
 
 ## 15a-3. AGENTS Managed Blocks Prevent Whole-File Overwrite
 

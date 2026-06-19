@@ -43,6 +43,8 @@ Rules:
 - Targeted Scan runs the minimum P0 context needed for safety, then the selected target area.
 - Large or unclear projects should not jump directly to P2.
 
+For Targeted Scan, P0 is safety context, not the default deliverable. Targeted Scan output is the focused onboarding-db update proposal for the selected scope. It should not produce a full Quick Onboarding or full `project.md` proposal by default; propose narrow project memory backfill only when the targeted scan reveals stale or missing project facts needed for safe continuation.
+
 ## Onboarding DB Layout Mode
 
 Deep Scan must record an Onboarding DB Layout Mode before proposing files.

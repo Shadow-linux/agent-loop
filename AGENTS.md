@@ -32,6 +32,7 @@ This repository contains the `agent-loop` skill source.
 - Do not bump the skill version unless the human explicitly approves the version upgrade.
 - If a meaningful skill change is committed without a human-approved version bump, record it under the current unreleased or in-progress changelog section instead of changing version numbers.
 - If the human explicitly approves a version bump, update every version-bearing file in the same change so the repository never carries mixed skill versions.
+- For this repository, when working on an `alpha-v<x.y.z>` branch, treat `<x.y.z>` as the intended skill version; ignore the `alpha` prefix for version records and changelog headings after the human approves implementation for that version.
 - Commit messages for this skill repository should use type + version scope, prefer Chinese, and include a concrete multi-line body for meaningful changes.
 - Stable release branches use the exact version name, for example `v1.0.1`, not `release/1.0.1`.
 
@@ -103,3 +104,89 @@ After edits, run at least:
 - `ruby -e 'require "yaml"; YAML.load_file("SKILL.md")'`
 - a Markdown fence balance check
 - `git diff --check`
+
+## Full Skill Validation
+
+When the human asks for a full validation of the `agent-loop` skill, use the following dimensions and methods. This is a logic-level validation, not a "are there enough details" review.
+
+### Validation Dimensions
+
+Validate these six domains. Each domain checks logic correctness, not operational detail completeness.
+
+1. **Logic Correctness**
+   - Rule conflicts: file A says "must X", file B says "must not X" or "do not X"
+   - Stage dependency deadlocks: stage A requires B, but B requires A
+   - Auto Mode vs Stop And Ask consistency: Auto Mode must respect all Stop And Ask conditions; no bypass paths
+   - Entry Classification completeness: all realistic project states have a matching classification; overlapping states with different next stages need explicit priority
+   - Status state machine consistency: all status transitions are legal; no unreachable or非法 transitions
+
+2. **Autonomy**
+   - Agent Ownership is mandatory and executable: every loop must output "Recommended next stage" and "Why"
+   - Response Frame sufficiency: current state, recommended next stage, why, artifacts to read/write, human gate
+   - Three execution modes (Strict / Feature Auto-Loop / Task Auto-Run) have clear自主 boundaries
+   - Stage Helper Capability Scan is agent-initiated; fallback is automatic; external skills are accelerators only
+   - No "I don't know what to do next" legal exit — `blocked` still recommends "Ask Human / Diagnose"
+
+3. **Onboarding Logic**
+   - Quick / Deep / Targeted three modes have mutually exclusive entry conditions and non-overlapping outputs
+   - Expanded / Standard / Compact layout logic is self-consistent; no information loss across layouts
+   - onboarding-db freshness check is trigger-only, not auto-rewrite; stale-memory routing is consistent across files
+   - onboarding diagnostics has a clear logical position (onboarding-only, not replacing TDD debugging)
+   - Cross-file consistency: Quick rules, README requirements, Entry Classification routing are aligned
+
+4. **Dev/Test Workflow Logic**
+   - Plan Gate blocks "create tasks then immediately implement"; two exits (accepted plan / No-Plan Decision) cover all scenarios
+   - TDD chain (RED → verify RED → GREEN → verify GREEN → refactor) is enforced; no skip-RED path
+   - Task Done Gate conditions are all necessary and non-redundant; "drift decision recorded even if no drift" is executable
+   - Review → Drift → Memory Update forms a closed loop, not isolated stages
+   - Feature Completion Check trigger timing covers all scenarios; no bypass path
+   - Feature Follow-up / Flow-back logic covers all bug/change intake patterns
+
+5. **Memory Logic**
+   - Simple vs Enterprise switch has clear triggers; human confirmation required; index-detail split is self-consistent
+   - Stale Memory detection → Recovery Backfill path is complete; "code reality wins" holds in all scenarios
+   - Managed Block version sync logic is sound; semver comparison; human content preserved
+   - Cross-feature memory consistency: project memory update is triggered after feature changes; no multi-active-feature memory conflict漏洞
+   - Memory and Guidance dependency: onboarding incomplete if guidance missing/stale; no bootstrap gap
+
+6. **Recommendation Logic**
+   - All stage completions have明确 exits (Submit / Pause / Close)
+   - Vague goals route to onboarding / resume / clarify
+   - Uncompletable tasks route to "Ask Human"
+   - Recommendation has uniqueness: agent recommends exactly one next stage
+
+### Validation Method
+
+- Launch parallel sub-agents (using the Task tool with `code-explorer` subagent) to cover all six domains simultaneously.
+- Each sub-agent reads the relevant `references/` files, `SKILL.md`, `templates/`, and `references/validation-scenarios.md`.
+- Each sub-agent outputs structured results per dimension: result (PASS / CONFLICT / DEADLOCK / GAP / WEAK), findings with file paths and line numbers, severity (Critical / High / Medium / Low), and concrete issues.
+- Only report real logic problems: rule conflicts, stage deadlocks, safety bypass paths, state machine inconsistencies, memory loss risks.
+- Do not report "I wish it were more detailed" or "I wish it had more hardcoded boundaries" — agent-loop trusts agent intelligence and provides principles, not SOPs.
+
+### Severity Levels
+
+- **Critical**: rule conflict causing unpredictable agent behavior, or safety bypass allowing human gate skip
+- **High**: logic gap causing agent to make inconsistent next-stage choices, or memory conflict risk
+- **Medium**: missing transition rule or cross-file inconsistency that agent can work around but may cause confusion
+- **Low**: minor wording mismatch or edge case not covered, no practical impact
+
+### Output
+
+Summarize all sub-agent results into a single report with:
+- Overview table (domain × result × severity)
+- High-severity issues first, with file paths and line numbers
+- PASS dimensions listed briefly
+- Final conclusion: can the skill run? What needs fixing first?
+
+### Commit Pressure Testing
+
+When the human asks to pressure-test specific commits:
+
+- Read each commit's diff (`git show --stat <hash>` and `git show <hash> -- <files>`)
+- Launch one sub-agent per commit to design and run pressure test scenarios
+- Run any contract test scripts (`tests/*.sh`) if they exist
+- Evaluate stability (STABLE / FRAGILE / BROKEN) and effectiveness (EFFECTIVE / WEAK / INEFFECTIVE)
+- STABLE = logic is self-consistent, edge cases have clear rules
+- FRAGILE = main path works but specific conditions may fail; depends on agent compliance or has uncovered edge cases
+- BROKEN = main path has logic conflict or broken chain
+- Only report real issues, not "wish it were more detailed"

@@ -205,7 +205,9 @@ If Deep Project Onboarding Scan is selected:
 If Targeted Onboarding Scan is selected:
 
 - inspect only the minimal safe context plus the selected module, flow, async task, deployment path, or problem area
+- Targeted Onboarding Scan may inspect minimum P0 context for safety, but it does not produce a full project.md proposal by default
 - propose focused onboarding-db updates only for that target
+- propose narrow project memory backfill only when the targeted scope exposes stale or missing facts required for safe continuation
 - do not create unrelated onboarding-db files
 
 Output before writing:
@@ -287,7 +289,7 @@ Exit:
 
 ## Requirement Archive
 
-Entry: human provides requirement/prototype or points to existing material.
+Entry: human provides requirement/prototype, points to existing material, or asks to remember future/deferred work.
 
 Load:
 
@@ -297,17 +299,39 @@ Rules:
 
 - Ask before copying, moving, or renaming human files.
 - Never silently modify original requirements.
+- Do not edit `requirement.md` or other source files for lifecycle/status updates.
 - Normalize names only after confirmation.
 - Requirement archive dates are archive dates only, not deadlines or feature lifecycle dates.
 - Use a requirement set directory with `README.md`; do not create new flat files directly under `.agent-loop/requirements/`.
 - Group all materials from the same intake/topic together: requirement documents, prototypes, screenshots, feedback, recordings, links, and follow-up notes.
 - Do not overwrite old requirement materials when requirements change.
+- Old requirement set README files remain valid; do not require migration only because `Lifecycle`, `Summary`, or `Status History` is missing.
+
+### Future / Deferred Requirement Intake
+
+Use this sub-mode when the human says or implies "先记一下", "后面做", "之后补", "下一轮做", "暂时不做", "以后加", "backlog", "defer this", "follow-up later", or "not in this feature".
+
+Rules:
+
+- Do not write future TODO, backlog, deferred requirements, or unimplemented planned capability details into `project.md`.
+- Recommend creating or updating a requirement set after human confirmation.
+- Use `Status: proposed | accepted | deferred` based on the human decision; do not infer priority.
+- Update `requirements/INDEX.md` only when it already exists, index triggers apply, or the human asks for a backlog/requirements inventory.
+- If discovered during a feature, link the requirement set from `notes.md` and keep the current feature scope unchanged unless the human confirms scope change.
+
+### Requirement Conflict Review
+
+When follow-up material materially conflicts with an existing requirement, do not silently append it and do not edit source files.
+
+Present original requirement summary, follow-up request summary, conflict table covering user goal, business rule, acceptance, out-of-scope, and existing feature impact, then recommend one action: append to existing set, create linked new set, or create a new requirement set and mark the old one superseded.
+
+Ask human confirmation before creating the new set or changing lifecycle status.
 
 Write:
 
 - `.agent-loop/requirements/<archive-date>-<topic>/README.md`
-- `.agent-loop/requirements/<archive-date>-<topic>/requirement.*`
-- `.agent-loop/requirements/<archive-date>-<topic>/prototype.*`
+- `.agent-loop/requirements/<archive-date>-<topic>/requirement.*` only when source material is provided or the human confirms creating a source record
+- `.agent-loop/requirements/<archive-date>-<topic>/prototype.*` only when source material is provided or copied after confirmation
 - optional feedback, screenshot, recording, design-link, meeting-note, and other source files inside the same requirement set
 - optional change-request files inside the same requirement set
 - optional `.agent-loop/requirements/INDEX.md` only when trigger conditions apply
@@ -388,6 +412,8 @@ Exit:
 ## Feature Follow-up And Flow-back
 
 Entry: human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, test failure, QA/user feedback, or any change that may belong to recent feature work.
+
+Do not enter Feature Follow-up before Project Entry has established or verified agent-loop memory. If `.agent-loop/` or legacy `agent-loop/` is missing, preserve the report as intake context and route to Existing Project Onboarding or Init Project first.
 
 Load:
 
@@ -953,6 +979,15 @@ Do not write:
 - raw test output
 - temporary implementation notes
 - original human requirements or prototypes
+- future TODO, backlog, deferred requirements, or unimplemented planned capability details
+
+Requirement Reconciliation:
+
+- If a feature references requirement sets, check whether their lifecycle status should become `in-progress`, `implemented`, `superseded`, `rejected`, or remain unchanged.
+- Do not edit `requirement.md` or other source files for lifecycle/status updates.
+- Write requirement lifecycle/status changes to requirement set `README.md` and optional `requirements/INDEX.md` after human confirmation.
+- Write implemented capabilities to `project.md` only when they are durable project facts.
+- Write deferred or future work to requirements, not project memory.
 
 Write after confirmation:
 
@@ -1041,6 +1076,7 @@ Exit:
 - recommend next unfinished item if incomplete
 - recommend Pause before new feature if human wants to switch context
 - recommend scope update if remaining work should be removed before close
+- recommend blocked with one unblock recommendation when completion cannot be decided because a human decision, environment, access, verification dependency, or external blocker is missing
 
 ## Pause / Close
 
@@ -1069,6 +1105,7 @@ Close requires:
 - drift check
 - submit/integration status recorded if the human requested submission
 - long-term memory update
+- Requirement Reconciliation when the feature references or creates requirement sets
 - explicit human confirmation
 
 Write:

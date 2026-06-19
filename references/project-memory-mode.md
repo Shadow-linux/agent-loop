@@ -19,6 +19,8 @@ Mode changes require human confirmation.
 
 If a hard trigger applies and the human declines or defers enterprise mode, record the recommendation, trigger evidence, and risk in `project.md` or feature `notes.md`, then continue with the smallest safe project-memory update needed for the current work. Do not block a clear feature solely because enterprise memory was deferred.
 
+Project memory must not be used as a backlog. Do not write future feature ideas, temporary TODOs, deferred requirements, unimplemented planned capability details, or backlog lists into `project.md` or enterprise project memory. Put future/deferred requirement memory in `.agent-loop/requirements/` and optional `requirements/INDEX.md`; `project.md` may only point to a requirement set when needed for the current resume action.
+
 ## Simple Mode
 
 `project.md` is the main long-term project memory body.

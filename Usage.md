@@ -1,6 +1,6 @@
 # Agent Loop 使用指南
 
-**版本：** 1.2.2
+**版本：** 1.2.3
 
 这份文档是给人类看的。你不需要记住 agent-loop 的内部阶段名，只要用自然语言告诉 Agent 你的目标，Agent 会判断当前项目处在哪个阶段，并推荐一个下一步动作。
 
@@ -260,6 +260,28 @@ Agent 会把人类原始材料归档到：
 ```
 
 日期是归档日期，不是截止日期，也不是开发周期。
+
+### 需求待办 / 暂缓需求
+
+你可以说：
+
+```text
+这个先记一下，后面做。
+```
+
+Agent 不应该把这类未来需求写进 `project.md` 当 planned capability。它会建议写入：
+
+```text
+.agent-loop/requirements/YYYY-MM-DD-<topic>/README.md
+```
+
+并在需要时更新可选的：
+
+```text
+.agent-loop/requirements/INDEX.md
+```
+
+旧格式 requirement set `README.md` 仍然有效；缺少 lifecycle 字段不算 stale。`requirement.md` 等原始 source files 默认不可变，需求状态变化写入 README / INDEX。
 
 ### 产品需求
 
@@ -563,9 +585,9 @@ Agent 会先检查：
 
 | 文件 | 用途 | 不应该放什么 |
 |---|---|---|
-| `.agent-loop/project.md` | 长期项目记忆、当前工作、下一步 | 任务日志、原始测试输出 |
+| `.agent-loop/project.md` | 长期项目记忆、当前工作、当前恢复动作 | 任务日志、原始测试输出、需求待办 |
 | `.agent-loop/onboarding-db/` | 给人类读的项目理解文档、图、证据链 | 当前 task 状态 |
-| `requirements/` | 人类原始需求材料归档 | Agent 改写后的执行计划 |
+| `requirements/` | 人类原始需求材料归档、需求生命周期、需求待办 | Agent 改写后的执行计划 |
 | `product.md` | feature 级产品意图 | 工程执行细节 |
 | `spec.md` | feature 行为规范 | 执行日志 |
 | `tasks.md` | 任务拆分和状态 | 原始测试输出 |

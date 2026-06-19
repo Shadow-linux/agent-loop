@@ -1,5 +1,14 @@
 # Agent Loop Changelog
 
+## 1.2.3 — 2026-06-19
+
+### Requirement Lifecycle / Backlog
+- Added requirement lifecycle/backlog rules so future or deferred work is captured in requirement sets and optional `requirements/INDEX.md`, not in `project.md`.
+- Extended requirement set README and requirements index templates with lifecycle, backlog/deferred, in-progress, implemented, superseded, and rejected views while keeping source files free-form.
+- Added backward compatibility rules for old requirement set README files and immutable-source rules so `requirement.md` is not rewritten for lifecycle/status updates.
+- Added Requirement Conflict Review for large follow-up conflicts that should create a new requirement set or supersede the old one after human confirmation.
+- Clarified Targeted Onboarding output, Feature Completion blocked handling, and Feature Follow-up priority behind Project Entry when agent-loop memory is missing.
+
 ## 1.2.2 — 2026-06-15
 
 ### Operational Support Guard

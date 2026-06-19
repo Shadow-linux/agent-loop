@@ -100,6 +100,20 @@ If this remaining work is no longer part of the feature, I should update scope/t
 
 Route to Drift Check or Feature Spec update before close.
 
+### Recommend Blocked
+
+Use when completion cannot be decided or continued because a human decision, environment, access, verification dependency, or external blocker is missing.
+
+Say:
+
+```text
+This feature is blocked from completion. The blocker is <blocker>.
+```
+
+Recommend exactly one next stage: Ask Human, Diagnose Failure, Verify, or Pause.
+
+Record the blocker, evidence, owner if known, and the next unblock action in `notes.md`. Do not recommend close while the blocker remains.
+
 ## Start-New-Feature Guard
 
 Before creating a new feature, if `project.md` has an Active Feature:
