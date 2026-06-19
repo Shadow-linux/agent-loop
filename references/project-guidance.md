@@ -202,6 +202,7 @@ Keep it short and long-lived:
 - if present, read `.agent-loop/project.md` and active feature docs
 - if `project.md` says `Status: remote-entry`, read `.agent-loop/remote.md` and verify the remote project before acting
 - if the project used `agent-loop` before but recent development bypassed it, route to Re-Adopt Agent Loop Project before new feature work
+- Operational Support Guard: if the human asks to test, run, deploy, switch account/config/model/provider, check quota/rate limits, diagnose production, arrange rollout, or use existing code to solve an operational problem, default to read-only operational support; do not create a feature, edit code, change config, deploy, or run destructive commands unless the human confirms feature implementation or an operational change
 - if the human reports a bug, regression, post-close correction, field/schema/algorithm/API change, test failure, screenshot issue, QA/user feedback, or "small tweak", route to Feature Follow-up / Flow-back before creating a new feature or editing code
 - Feature Follow-up / Flow-back should inspect Active / Paused / Closed features, use the 30-day default lookback as a default rather than a hard boundary, read candidate `spec.md`, `tasks.md`, `tests.md`, and `notes.md`, and present a Candidate Match Matrix before recommending flow-back, linked new feature, maintenance-fix, or investigate-first
 - when working in a subdirectory, check for the nearest directory-level `AGENTS.md`

@@ -38,8 +38,12 @@ Before using an external skill or plugin inside a stage:
 - [ ] If the human says re-adopt, re-sync, 重新接管, resume after outside-loop work, or says recent work bypassed `agent-loop`, route to Reconcile Project Context / Re-Adopt Agent Loop Project before new feature work.
 - [ ] Check whether local directory is empty/ambiguous or appears to be a remote entry point.
 - [ ] If human says remote project, SSH, devcontainer, container, tunnel, or remote workspace, route to Remote Project Discovery.
+- [ ] Operational Support Guard: if the human asks to test, run, deploy, switch account/config/model/provider, check quota/rate limits, diagnose production, arrange rollout, or solve an operational problem using existing code, route to Code-Guided Operational Support.
+- [ ] Classify operational support before Feature Spec, Plan Gate, or Execute.
+- [ ] Default to read-only code/process analysis and checklist/runbook output.
+- [ ] Confirm before code/config/deploy/destructive operations, paid-quota external calls, credential rotation, or feature/fix escalation.
 - [ ] Check root `AGENTS.md` / `CLAUDE.md` and any obvious directory-level guidance.
-- [ ] Treat root `AGENTS.md` as stale if it lacks Bootstrap Protocol, Agent Ownership, Stage Helper Capability Scan, Gate Modes, Required Stops, Completion Rules, Feature Follow-up / Flow-back, Submit And Commit Rules, root/directory guidance boundaries, or requirement archive rules.
+- [ ] Treat root `AGENTS.md` as stale if it lacks Bootstrap Protocol, Agent Ownership, Operational Support Guard, Stage Helper Capability Scan, Gate Modes, Required Stops, Completion Rules, Feature Follow-up / Flow-back, Submit And Commit Rules, root/directory guidance boundaries, or requirement archive rules.
 - [ ] If root `AGENTS.md` uses agent-loop managed blocks, compare its managed guidance version with the current local `agent-loop` skill version.
 - [ ] Treat root `AGENTS.md` as stale if the managed guidance version is older than the current local `agent-loop` skill version, unless the human explicitly defers refresh.
 - [ ] Treat root `CLAUDE.md` as stale if it duplicates independent long-lived rules or does not clearly point to `AGENTS.md`.

@@ -52,6 +52,7 @@ Use this skill when the user wants to:
 - initialize agent-managed development in a new or existing project
 - re-adopt an old `agent-loop` project after code changed without updating `agent-loop` docs
 - turn requirements or prototypes into feature specs, tasks, tests, plans, and implementation
+- use existing project code, configuration, scripts, or deployment docs to support operational testing, rollout, account/config/model switching, production diagnosis, or runbook/checklist creation without defaulting to code changes
 - continue a paused feature or recover project context
 - reconcile `agent-loop` documents with code reality
 - execute a task/story with TDD and verification

@@ -2,156 +2,98 @@
 
 ## 1.2.2 — 2026-06-15
 
-### Added
-- Added a mandatory Stage Helper Resolution protocol for brainstorming, planning, TDD execution, systematic debugging, verification, review, and human-approved subagent execution, including canonical and unprefixed alias resolution.
-- Added auditable helper resolution fields to `notes.md` and pressure scenarios for aliases, silent fallback, unavailable/load-failed fallback, controller/path ownership, and subagent authorization.
-- Added response-local pending resolution for pre-feature brainstorming and bounded subagent authorization lifecycle fields so helper logging and old approvals cannot create or expand work without confirmation.
-- Added a static routing contract test covering complete helper loading, restricted fallback, stage preconditions, resolution records, controller ownership, and external path overrides.
-- Added root `AGENTS.md` managed guidance version metadata so future agents can detect when local `agent-loop` skill rules are newer than the synced startup guidance.
-- Added a validation scenario for root guidance files whose managed `agent-loop` version is older than the current local skill version even though all required sections are present.
-- Added a Version Sync Checklist to this skill repository's `AGENTS.md` so approved version bumps update every version-bearing file together.
-- Added human-facing Usage guidance for triggering root `AGENTS.md` managed version checks and refresh proposals after `agent-loop` skill updates.
-- Added AGENTS cleanup / migration review so conflicting root guidance and long-term project memory in existing `AGENTS.md` / `CLAUDE.md` are surfaced for human decision instead of silently overwritten or left in startup files.
+### Operational Support Guard
+- Added Code-Guided Operational Support for requests to test, run, deploy, switch account/config/model/provider, check quota/rate limits, arrange rollout, diagnose production, or use existing code to solve an operational problem.
+- Operational-support requests now default to read-only code/process analysis, checklist/runbook output, and explicit confirmation before code edits, config changes, deploys, destructive commands, secret handling, paid-quota calls, or production/staging external-service calls.
+- Added validation scenarios for new resource account rollout, ambiguous account onboarding, and production model-switch diagnosis without defaulting to feature creation.
 
-### Changed
-- Strengthened Stage Helper Capability Scan from a preference into a mandatory pre-stage protocol for seven high-risk stages; fallback now requires a recorded `unavailable` or `load-failed` result.
+### Stage Helper / Superpowers Routing
+- Made Stage Helper Capability Scan mandatory before high-risk stages including brainstorming, planning, TDD execution, systematic debugging, verification, review, submit, and approved subagent execution.
+- Added mandatory Stage Helper Resolution with auditable records, canonical/unprefixed alias handling, unavailable/load-failed fallback records, and controller/path ownership protections.
 - Clarified that helper methods cannot override agent-loop artifact destinations, human gates, task/feature status, project memory, drift, submit, pause, or close ownership.
+- Added response-local pending resolution for pre-feature brainstorming and bounded subagent authorization so old approvals cannot silently expand scope.
+
+### Root Guidance And Version Sync
+- Added managed root `AGENTS.md` version metadata and stale-version detection so target projects can detect when local agent-loop guidance is newer than synced startup guidance.
+- Added AGENTS cleanup / migration review so conflicting root guidance and long-term project memory in existing `AGENTS.md` / `CLAUDE.md` are surfaced for human decision.
+- Added a Version Sync Checklist for this skill repository so approved version bumps update every version-bearing file together.
+- Clarified root guidance sync using semantic version ordering for managed block metadata and visible synced-version text.
+
+### Onboarding And Existing-Project Flow
 - Clarified Quick Onboarding as a shallow evidence-labeled safe-continuation snapshot that does not create onboarding-db files or diagrams unless Deep or Targeted onboarding is explicitly selected.
-- Added runtime classification for Targeted Onboarding when an existing onboarding-db or onboarding refresh request narrows to one module, flow, async task, deployment path, state transition, or problem area.
-- Expanded Feature Follow-up trigger phrases for small behavior tweaks, minor adjustments, and requirement/acceptance changes in English and Chinese.
-- Strengthened breaking Delivery Contract validation so affected-consumer impact table, compatibility options, and migration risk are presented before post-impact human confirmation.
-- Clarified root guidance version sync instructions for both managed block `version:<x.y.z>` metadata and visible natural-language synced-version text.
-- Aligned Project Entry workflow checklist stale checks with root guidance requirements for Stage Helper Capability Scan, Feature Follow-up / Flow-back, Submit And Commit Rules, guidance boundaries, and requirement archive rules.
-- Clarified low-severity consistency edges for Project Entry root guidance status, Feature Follow-up requirement-change wording, maintenance-fix risk wording, Feature Auto-Loop Human-gated stops, Standards Review triggers, Review-to-Done gating, helper scan validation coverage, and existing-project Architecture Profile recording.
-- Strengthened root guidance stale detection so managed `AGENTS.md` content is also stale when its synced `agent-loop` guidance version is older than the current local skill version.
-- Clarified that managed guidance version comparison uses semantic version ordering (`major.minor.patch`), not plain string comparison.
-- Removed legacy `inputs/` compatibility and migration guidance from current-version requirement archive rules; `.agent-loop/requirements/` is now the only canonical requirement archive path.
+- Added Targeted Onboarding routing when existing onboarding-db refresh requests narrow to one module, flow, async task, deployment path, state transition, or problem area.
+- Tightened Project Entry workflow checks for stale root guidance, operational support, feature follow-up, submit rules, guidance boundaries, and requirement archive rules.
+
+### Requirement Archive And Validation
+- Removed legacy `inputs/` compatibility from current-version requirement archive rules; `.agent-loop/requirements/` is now the only canonical requirement archive path.
+- Added/updated static routing contract tests for helper loading, restricted fallback, stage preconditions, resolution records, controller ownership, external path overrides, and Operational Support Guard.
+- Updated README and human-facing Usage guidance for root guidance refresh, helper routing, and operational support entry points.
 
 ## 1.2.1 — 2026-06-11
 
-### Added
-- Added Feature Follow-up / Flow-back rules so bugs, regressions, post-close corrections, field/schema changes, algorithm changes, API mismatches, test failures, and QA/user feedback are matched against recent features before creating a new feature.
-- Added a default 30-day recent-feature lookback, Candidate Match Matrix, flow-back rules for reopening or continuing owning features, Follow-up Intake notes record, and validation scenarios for post-close bug flow-back, linked new feature routing, unclear ownership investigation, error screenshot routing, and requirement-change flow-back.
-- Added `Feature Type: maintenance-fix` as the formal container for narrow bugfixes/internal corrections with no owning recent feature, including spec fields, feature workspace rules, project-memory impact checks, and validation scenarios.
-- Added Discovery Coverage Matrix rules so Expanded Deep Onboarding Scan cannot stop after only the minimum 10 files; every discovered core module, complex flow, data model, complex entity, async/job path, deployment concern, verification system, and high-risk unknown must be documented or explicitly deferred.
-- Added a concrete managed block detection checklist for root `AGENTS.md` marker validation, including source checks and stale-marker handling.
-- Added `agent-loop:managed-start` / `agent-loop:managed-end` block rules for root `AGENTS.md`, including bootstrap, ownership, gates, completion, artifacts, architecture, commands, and hard-constraints sections.
-- Added validation scenarios to prevent whole-file `AGENTS.md` overwrites and to stop on broken or duplicated managed block markers.
-- Added Feature Follow-up pressure scenarios for generic 500/blank-page reports, day-31 extended scans, ambiguous "small" requirement changes, and declined reopen continuity.
-- Added root guidance bootstrap rules and validation so bug reports, regressions, screenshots, and small changes route through Feature Follow-up / Flow-back before new feature creation or code edits.
-- Added root Submit And Commit Rules guidance plus validation so target projects inherit explicit submit gates and fallback commit message format.
-- Added an independent Analyze Consistency validation scenario so accepted plans cannot jump directly into implementation without spec/tasks/tests/plan mapping checks.
-- Added Analyze Consistency checklist and `notes.md` recording fields so plan/spec/tasks/tests/code-reality mapping has an explicit artifact before execution.
-- Added Stage Helper Capability Scan so agents actively detect available helpers such as Superpowers before falling back during Plan Gate, Execute, Diagnose, Verify, Review, Submit, and related stages.
-- Added validation coverage to ensure every helper-friendly stage in `stage-guides.md` includes Stage Helper Capability Scan before fallback.
-- Added checklist-level validation coverage for Stage Helper Capability Scan so stage guides and workflow checklists stay aligned.
-- Added mandatory sequence diagram requirement for core modules with async jobs, external APIs, callbacks, WebSocket, retry/compensation, or multi-service interactions.
-- Added `Model Usage Flow Map` to `templates/onboarding-db/data-model.md` to show which flows/APIs/jobs interact with which entities.
-- Added `Entity Lifecycle Flow Map` to `templates/onboarding-db/entity-template.md` to visualize who creates/reads/updates/deletes an entity.
-- Added unified diagram style guide in `templates/onboarding-db/diagram.md` covering flowchart layers, color classes, node shapes, arrow types, naming conventions, and sequence diagram participant/message/branch standards.
-- Added diagram coverage check to Batch Review Template in `references/onboarding-db-templates.md`.
-- Added "How To Read" as a mandatory requirement for every diagram.
-- Added "Step-by-Step Walkthrough" as a mandatory requirement for every onboarding diagram alongside "How To Read", with examples in all diagram-bearing templates.
-- Added Expanded Minimum Required Set (10 mandatory files) and Expanded Conditional Files trigger table to `references/project-onboarding-scan.md`.
-- Added validation scenario `2h-19` requiring Step-by-Step Walkthrough for diagram completeness.
-- Added Step-by-Step Walkthrough sections to all diagram-bearing templates: module, flow, data-model, entity, state-flow, boundary, module-map, deployment, architecture, change-impact, flows-and-data, overview.
-- Added Diagram Expansion Matrix rules and validation so complex Deep Onboarding projects produce additional focused module, flow, state, async/job, data, and deployment diagrams as complexity increases.
-- Added onboarding next-action rules so guided onboarding answers recommend a concrete next reading path, focused diagram update, setup/verification action, or return to feature development.
+### Feature Follow-up / Flow-back
+- Added Feature Follow-up / Flow-back rules so bugs, regressions, post-close corrections, screenshots, QA feedback, small behavior tweaks, schema/API mismatches, and test failures are matched against recent features before creating a new feature.
+- Added default 30-day recent-feature lookback, Candidate Match Matrix, Follow-up Intake records, and `flow-back` decisions for reopening or continuing the owning feature.
+- Added pressure scenarios for post-close bug flow-back, linked new feature routing, unclear ownership investigation, generic errors, old-but-related issues, and declined reopen continuity.
 
-### Changed
-- Strengthened runtime Agent Ownership so every response must classify state, recommend exactly one next action, and avoid ending action reports with only "done".
-- Strengthened feature follow-up matching to extract evidence from screenshots, UI labels, logs, stack traces, API fields, and failing test names before deciding whether to reopen a recent feature.
-- Strengthened feature follow-up routing so 30 days is a default scan window rather than a hard cutoff, low-information errors route to investigate-first, ambiguous requirement changes require scope classification, and declined reopen still preserves related-feature continuity.
-- Aligned flow-back decision terminology across templates, checklists, stage guides, and validation scenarios so `flow-back` is the recorded decision for reopening or continuing an owning feature.
-- Corrected Submit / Integrate commit-message guidance so generic target projects use `<type>: <summary>`, while `agent-loop` repository commits keep the version-scoped Chinese format.
-- Strengthened root guidance stale detection and submit rules for Feature Follow-up / Flow-back, Submit And Commit Rules, intended-file commits, and commit-hash recording.
+### Maintenance Fixes
+- Added `Feature Type: maintenance-fix` for narrow bugfixes or internal corrections with no owning recent feature.
+- Added spec fields, workspace rules, project-memory impact checks, maintenance-fix risk wording, and validation coverage.
+
+### Onboarding DB Expansion
+- Made Deep Project Onboarding default to Expanded Onboarding DB Layout Mode, with Compact/Standard reserved for explicit human request or existing-layout preservation.
+- Added Discovery Coverage Matrix, Expanded Minimum Required Set, Expanded Conditional Files, and completion checks so Deep onboarding covers discovered modules, flows, entities, async/job paths, deployment concerns, verification systems, and high-risk unknowns.
+- Added categorized onboarding-db layout, module-map, data-model docs, entity lifecycle docs, model usage flow maps, boundary/directory/change-impact/state templates, and Chinese-default human-readable onboarding docs.
+- Strengthened diagram rules with flowchart-first guidance, complete ERDs when persistent data exists, mandatory async/external sequence diagrams, “How To Read”, and step-by-step walkthroughs.
+- Added guided newcomer onboarding, on-demand explanations, targeted diagram updates, startup diagnosis, state-change trace, design-decision routing, and change-impact analysis rules.
+
+### Root Guidance And Submit Rules
+- Added managed block marker rules for root `AGENTS.md`, including bootstrap, ownership, gates, completion, artifacts, architecture, commands, hard constraints, stale-marker handling, and no whole-file overwrite.
+- Added root Submit And Commit Rules so target projects inherit submit gates and fallback commit message format.
+- Corrected commit-message guidance: generic target projects use `<type>: <summary>`, while this agent-loop repository keeps version-scoped Chinese summaries.
+
+### Helper Adapter Coverage
 - Strengthened Superpowers adapter routing so available helper skills are preferred as stage methods while agent-loop keeps artifact paths, gates, task status, project memory, submit, and close control.
-- Completed Stage Helper Capability Scan coverage for Product Brief, Feature Spec, Feature Completion Check, Submit / Integrate, Pause / Close, and approved Subagent Execution.
-- Completed workflow checklist coverage for Product Brief, Brainstorm / Clarify, Feature Spec, Diagnose, Verify, Review, Feature Completion Check, Submit / Integrate, Pause / Close, and approved Subagent Execution.
-- Aligned `design.md` entry scenarios and main flow with runtime for Project Onboarding Scan, Feature Follow-up / Flow-back, active feature continuation, blocked state, and stale-memory/re-adopt routing.
-- Aligned first-version exclusions and auto-mode stop conditions across `SKILL.md`, runtime, concepts, root guidance, README, Usage, and validation scenarios.
-- Clarified that Expanded onboarding-db minimum files are a floor, not a cap, and added completion checks for discovery-driven module/flow/data/async/deployment coverage.
-- Unified Expanded onboarding-db runtime/environment routing so env/config belongs in `setup-and-run.md`, while standalone `environment.md` is reserved for Compact/Standard or existing layouts.
-- Unified standalone diagram rules so deployment and other diagrams are embedded in target docs by default and moved to `diagrams/` only when reused or too large.
-- Completed `How To Read` examples for diagram-bearing onboarding templates that already had walkthroughs.
-- Clarified README and Usage expectations for Expanded onboarding-db minimum coverage, discovery-triggered docs, embedded diagrams, and diagram walkthrough text.
-- Clarified that `domain/entities/<entity>.md` is an allowed onboarding-db depth exception for complex data-model entity details.
+- Completed Stage Helper Capability Scan coverage for Product Brief, Brainstorm / Clarify, Feature Spec, Diagnose, Verify, Review, Feature Completion Check, Submit / Integrate, Pause / Close, and approved Subagent Execution.
+- Added checklist-level validation so stage guides and workflow checklists stay aligned.
+
+### Runtime And Documentation Alignment
+- Strengthened runtime Agent Ownership so every response classifies state, recommends one next action, and avoids ending action reports with only “done”.
+- Aligned design/runtime entry scenarios and main flow for Project Onboarding Scan, Feature Follow-up / Flow-back, active feature continuation, blocked state, and stale-memory re-adoption.
 - Rewrote `Usage.md` as a Chinese human-facing guide focused on what humans can say to trigger agent-loop capabilities.
-- Clarified human-facing onboarding guidance in `Usage.md`, including Quick/Deep/Targeted choices, Expanded onboarding-db default, Batch Human Review, and root `AGENTS.md` managed blocks.
-- Changed Deep Project Onboarding Scan to default to Expanded Onboarding DB Layout Mode; Compact and Standard are now reserved for explicit human requests or existing onboarding-db preservation.
-- Hardened `references/project-onboarding-scan.md` Diagram Rules: Deep Scan diagrams must be complete, not "small diagrams that answer one question".
-- Removed "Do not draw every function call" restriction from module call-chain diagrams; Deep Scan requires Service/UseCase/Domain/Repository/External-level detail.
-- Removed "Do not draw a full database ERD unless very small" restriction from data-model diagrams; Deep Scan requires complete ERD with all core entities, key fields, and relationships.
-- Tightened Completion Criteria so core modules must have diagrams (text-only fallback removed), sequence diagrams are mandatory for async/external modules, and all diagrams require "How To Read" notes.
-- Updated `templates/onboarding-db/module-template.md` with complete call-chain flowchart example and mandatory sequence diagram section with Mermaid template.
-- Updated Minimum Completion Standard in `references/onboarding-db-templates.md` to require model usage flow maps and sequence diagrams for async/external interactions.
-- Demoted `maps/change-impact-map.md`, `domain/glossary.md`, `runtime/environment.md`, and `diagrams/` directory from mandatory to conditional based on project triggers.
-- Restored `overview.md` as mandatory in Expanded minimum set.
-- Updated `Deployment Placement` to merge environment variables into `setup-and-run.md` instead of standalone `environment.md` in Expanded layout.
 
 ## 1.2.0 — 2026-06-07
 
-### Added
-- Added Project Onboarding Scan as a formal existing-project onboarding capability with Quick, Deep, and Targeted modes.
-- Added a v1.3.0 self-test harness proposal extension for real-project sampling where source code remains read-only and candidate onboarding outputs are written under `examples/<project-name>/`.
-- Added `examples/ai-meeting-minutes-backend/` as the designated output container for validating onboarding behavior against the real ai-meeting-minutes-backend project without copying source code.
-- Added onboarding memory integrity rules so `project.md` / root guidance claims about onboarding-db must be checked before reliance.
-- Added a validation scenario for projects whose memory points newcomers to a missing `.agent-loop/onboarding-db/README.md`.
-- Added `references/project-onboarding-scan.md` for Deep/Targeted scan rules, P0/P1/P2 scan priority, Layout Mode, diagrams, deployment placement, subagent scan synthesis, and completion criteria.
-- Added `references/onboarding-db.md` for onboarding-db reading, writing, freshness, problem routing, learning, and project memory backfill rules.
-- Added `references/onboarding-db-templates.md` for onboarding-db metadata, Compact/Standard/Expanded layout mapping, module cards, deployment, decision history, diagram, and batch review templates.
-- Added core `templates/onboarding-db/*` templates for newcomer-readable project onboarding documents.
-- Added validation scenarios for Quick/Deep/Targeted onboarding, P0/P1/P2 ordering, module reading paths, subagent conflict synthesis, deployment fact placement, and Batch Human Review.
-- Added a core-module call-chain requirement so Deep Project Onboarding Scan must document a module-level call chain for each core module or explicitly mark it support-only, unknown, or not applicable with evidence.
-- Added copy-ready `module-template.md` and `flow-template.md` for Expanded onboarding layouts.
-- Added Standard and Expanded onboarding-db derivation rules so split documents stay executable without reintroducing dozens of templates.
-- Added validation scenarios for Standard split-file derivation and Expanded module/flow template usage.
-- Added onboarding layout pressure scenarios for mode selection, Compact merged-doc quality, Standard template restraint, human layout override, Compact-to-Standard upgrade, and Expanded durable-boundary / complex-flow / deployment-concern splitting.
-- Added Guided Newcomer Onboarding rules for using an existing onboarding-db to lead a human through project takeover instead of dumping documents.
-- Added On-Demand Explanation and Diagram Update rules for targeted call-path, async/job, flow, deployment, state, and boundary questions.
-- Added validation scenarios for newcomer guided takeover and targeted diagram updates after onboarding-db exists.
-- Added `references/onboarding-diagnostics.md` for startup failure diagnosis, change impact analysis, state-change trace, and design decision routing.
-- Added onboarding validation scenarios for async/job reading paths, startup failure diagnosis, design decision routing, state-change trace, and centralized change impact analysis.
-- Added role-based README reading paths and bilingual glossary fields to onboarding-db templates.
-- Tightened Change Impact Analysis output fields and aligned glossary derivation with the bilingual glossary template.
-- Added a standalone onboarding-db `glossary.md` template and aligned proposal glossary fields with bilingual terminology rules.
-- Added root `CLAUDE.md` pointer template and validation coverage so onboarded projects keep `AGENTS.md` as the primary maintained startup guidance.
-- Added Plan Gate rules so agents cannot create tasks and immediately execute without either an accepted plan or a recorded No-Plan Decision for a trivial task.
-- Added categorized onboarding-db support with `maps/`, `modules/`, `flows/`, `runtime/`, `domain/`, and `quality/` layout rules for Standard/Expanded onboarding.
-- Added `templates/onboarding-db/module-map.md` and upgraded onboarding templates to capture module-detail docs, human-readable flow docs, and concrete Evidence Chain tables.
-- Added onboarding validation scenarios for module-map-as-index, human-readable flow quality, concrete evidence chains, and targeted diagram updates.
-- Added `agent-loop` repository commit message rules requiring type + version scope, Chinese-first summaries, and multi-line bodies for meaningful changes.
-- Added first-class onboarding data-model rules so persistent entities, storage mapping, relationships, ownership, fields, writers/readers, migrations, tests, and evidence cannot be hidden only inside flow docs.
-- Added `templates/onboarding-db/data-model.md` and `templates/onboarding-db/entity-template.md` for data-model indexes and complex entity detail docs.
-- Added onboarding validation scenarios for missing data-model docs and complex entity split behavior.
-- Added focused onboarding templates for boundary maps, directory maps, change-impact maps, state-flow docs, and state-trace docs.
-- Added onboarding validation scenarios for complex flow splitting and Chinese-default onboarding-db output.
-- Added Root Agent Bootstrap Gate rules so `AGENTS.md` is treated as the startup node for agent-loop ownership, gate modes, stops, and completion rules.
-- Added validation scenarios for stale root `AGENTS.md` bootstrap guidance and duplicated/divergent `CLAUDE.md` guidance.
-- Added flowchart-first onboarding diagram rules and validation so sequence diagrams are reserved for narrow detail views after process/module flowcharts exist.
+### Existing-Project Onboarding
+- Added Project Onboarding Scan as a formal capability with Quick, Deep, and Targeted modes.
+- Added onboarding memory integrity checks so `project.md`, root guidance, and onboarding-db claims are verified before reliance.
+- Added `references/project-onboarding-scan.md`, `references/onboarding-db.md`, `references/onboarding-db-templates.md`, and core `templates/onboarding-db/*` templates.
+- Added Compact/Standard/Expanded layout rules, module/flow/data-model templates, deployment placement, subagent scan synthesis, Batch Human Review, and completion criteria.
+- Added role-based README reading paths, bilingual glossary fields, guided newcomer onboarding, and targeted explanation/diagram update flows.
 
-### Changed
-- Wired existing project onboarding to explain Quick / Deep / Targeted onboarding modes before writing onboarding-db artifacts.
-- Expanded Human Review Summary with Batch Human Review for multi-document, multi-fact, and long-term-memory changes.
-- Updated runtime and stage routing so onboarding-db is loaded only when Deep/Targeted onboarding or onboarding-db read/write/refresh is needed.
-- Aligned version metadata across `SKILL.md`, `README.md`, `Usage.md`, `plugin.json`, and the changelog.
-- Hardened Submit / Integrate so known drift still requires a minimum recorded Drift Check before submit.
-- Clarified Existing Project Onboarding write targets, explicit re-adoption routing, and Guided Newcomer Onboarding entry from an existing onboarding-db.
-- Clarified Layout Mode decision rules and anti-misuse rules for Compact, Standard, Expanded, human overrides, and layout upgrades.
-- Hardened Existing Project Onboarding so root `AGENTS.md` / `CLAUDE.md` status must be present, created, or explicitly deferred before onboarding can be considered complete.
+### Onboarding Diagrams And Domain Docs
+- Added module call-chain requirements, flowchart-first diagrams, module-level call chains, sequence diagrams for async/external flows, data-model documentation, entity details, boundary maps, directory maps, state-flow docs, and state-trace docs.
+- Changed onboarding-db documents to default to Chinese while preserving code symbols, file paths, commands, API names, and artifact names.
+- Changed complex flows to split into `flows/<flow>.md` when cross-module, async, stateful, failure-prone, or repeatedly maintained.
+
+### Root Bootstrap And Gates
+- Added Root Agent Bootstrap Gate rules so root `AGENTS.md` is treated as the startup node for ownership, gate modes, stops, completion rules, artifact boundaries, and directory guidance.
+- Changed `templates/root-AGENTS.md` into an Agent Loop Bootstrap protocol.
+- Added Plan Gate rules so agents cannot create tasks and immediately execute without an accepted plan or recorded No-Plan Decision for trivial work.
 - Hardened Task Auto-Run so it always requires an accepted task/story plan.
-- Changed onboarding routing and templates so categorized onboarding-db docs are first-class, while Compact mode may still use merged docs when README maps the content clearly.
-- Changed module and flow documentation quality bars to require stronger human-readable structure and concrete evidence paths for key claims.
+
+### Submit, Contracts, And Repository Rules
+- Hardened Submit / Integrate so known drift still requires a minimum recorded Drift Check before submit.
 - Changed Submit / Integrate commit guidance so meaningful commits are not described as one-line concise messages by default.
-- Changed onboarding README requirements and template to include a data-model reading path when persistent data exists.
-- Changed onboarding-db human-readable documents to default to Chinese while keeping code symbols, file paths, commands, API names, and artifact names as-is.
-- Changed complex flow handling so cross-module, async, stateful, failure-prone, or repeatedly maintained flows are split into `flows/<flow>.md` instead of remaining only as merged summary rows.
-- Changed `templates/root-AGENTS.md` into an Agent Loop Bootstrap protocol with explicit Agent Ownership, Gate Modes, Required Stops, Completion Rules, artifact boundaries, and directory guidance rules.
-- Changed onboarding diagram templates to prefer colored layered Mermaid flowcharts for project, module, flow, and boundary understanding.
+- Added this repository’s commit message rules requiring type + version scope, Chinese-first summaries, and multi-line bodies for meaningful changes.
+
+### Validation And Examples
+- Added validation scenarios for Quick/Deep/Targeted onboarding, missing onboarding memory, P0/P1/P2 scan ordering, module reading paths, layout decisions, subagent conflict synthesis, deployment fact placement, root guidance staleness, duplicated/divergent `CLAUDE.md`, and Batch Human Review.
+- Added a v1.3.0 self-test harness proposal extension for real-project sampling and the `examples/ai-meeting-minutes-backend/` validation output container.
 
 ## 1.1.1 — 2026-06-04
 
-### Changed
+### Memory Path Migration
 - Changed the default target-project memory root from visible `agent-loop/` to hidden `.agent-loop/`.
 - Kept visible `agent-loop/` as legacy-compatible memory that agents must read for the current run and migrate only after human confirmation.
 - Updated generated root guidance, runtime rules, usage docs, templates, examples, and validation scenarios to prefer `.agent-loop/`.
@@ -159,76 +101,78 @@
 
 ## 1.1.0 — 2026-06-03
 
-### Added
+### External Skill Adapters
 - Added `references/external-skill-adapters.md` to define Superpowers and external skill adapter rules.
 - Added path override rules so external skill outputs are written to agent-loop artifacts instead of external default directories.
 - Added gate override rules so external skills cannot bypass human gates, task status rules, feature close, submit, project memory, or Delivery Contract controls.
-- Connected Superpowers adapters to Brainstorm / Clarify, Plan If Needed, Execute Task / Story, Diagnose Failure, Verify, Review, Submit / Integrate, and subagent execution.
-- Added validation scenarios for Superpowers brainstorming path override, writing-plans path override, TDD with Task Done Gate, and subagent approval.
-- Added Subagent Execution If Approved as a formal stage with workflow checklist and validation coverage.
+- Connected Superpowers adapters to Brainstorm / Clarify, Plan If Needed, Execute Task / Story, Diagnose Failure, Verify, Review, Submit / Integrate, and approved subagent execution.
 - Added explicit Submit / Integrate adapter rules so external finishing skills cannot bypass diff inspection, verification, review, drift check, project memory status, or final human confirmation.
-- Added external skill checklist coverage and path-pressure validation for native Superpowers output requests.
-- Added second-confirmation requirements before creating native external skill directories such as `docs/superpowers/*`.
-- Added Superpowers pressure scenarios for feature close, project memory update, Delivery Contract acceptance, and release/publish actions.
-- Aligned Usage, README, stage guides, and workflow checklists with legacy `agent-loop/`, Product Brief ordering, Project Memory before Submit, and requirement-date semantics.
-- Hardened `templates/subagent-brief.md` so dispatched subagents cannot submit, update project memory or guidance directly, accept Delivery Contracts, approve breaking changes, or mark tasks `done`.
-- Clarified that an empty local directory alone is not a remote-project signal; Remote Project Discovery now requires a remote-entry hint.
-- Added legacy `agent-loop/` lookup and active-memory-root guidance to generated root `AGENTS.md`.
-- Clarified that existing codebases with no agent-loop memory route through Existing Project Onboarding before recovery/backfill.
-- Resolved the Superpowers adapter proposal open questions to match the implemented v1.1.0 adapter behavior.
-- Clarified subagent dispatch confirmation: Feature Auto-Loop and Task Auto-Run do not imply subagent approval, and bounded task-group approval requires explicit scope, boundaries, briefs, stop conditions, and main-agent review responsibility.
-- Added pressure scenarios for review-vs-done, subagent-return merge review, Feature Auto-Loop Human-gated stop, Delivery Contract stop, and submit/close/release stop.
-- Marked the Superpowers adapter proposal as implemented and documented external skill adapter behavior in README and Usage.
+
+### Subagents And Human Gates
+- Added Subagent Execution If Approved as a formal stage with workflow checklist and validation coverage.
+- Hardened `templates/subagent-brief.md` so dispatched subagents cannot submit, update project memory/guidance directly, accept Delivery Contracts, approve breaking changes, or mark tasks `done`.
+- Clarified that Feature Auto-Loop and Task Auto-Run do not imply subagent approval; bounded task-group approval requires explicit scope, boundaries, briefs, stop conditions, and main-agent review responsibility.
 - Aligned autonomous execution stop conditions across README, Usage, project guidance, generated root guidance, and validation scenarios.
-- Aligned top-level `SKILL.md` Stop And Ask gates with runtime hard stop conditions.
+
+### Root Guidance And Legacy Memory
+- Added legacy `agent-loop/` lookup and active-memory-root guidance to generated root `AGENTS.md`.
+- Aligned Usage, README, stage guides, and workflow checklists with legacy `agent-loop/`, Product Brief ordering, Project Memory before Submit, and requirement-date semantics.
+- Clarified that an empty local directory alone is not a remote-project signal; Remote Project Discovery now requires a remote-entry hint.
+- Clarified that existing codebases with no agent-loop memory route through Existing Project Onboarding before recovery/backfill.
+
+### Validation
+- Added validation scenarios for Superpowers brainstorming and writing-plans path override, TDD with Task Done Gate, subagent approval, feature close, project memory update, Delivery Contract acceptance, release/publish actions, review-vs-done, subagent-return merge review, Feature Auto-Loop stops, Delivery Contract stops, and submit/close/release stops.
+- Marked the Superpowers adapter proposal as implemented and documented external skill adapter behavior in README and Usage.
 
 ## 1.0.2 — 2026-06-03
 
-### Added
+### Release Branches
 - Added the stable release branch naming rule: stable release branches use exact version names such as `v1.0.2`, not `release/1.0.2`.
 
 ## 1.0.1 — 2026-06-03
 
-### Fixed
+### Design Source Alignment
 - Corrected the misspelled design source filename to `draft_agent_loop_struct.md`.
 - Aligned `runtime.md` Stage Order and `design.md` Main Flow.
-- Added `Re-Adopt Agent Loop Project if Needed` to the design main flow.
-- Added `Targeted Feature Scan if Needed` to the design/runtime stage order before Feature Spec.
-- Unified `Brainstorm` and `Clarify` into `Brainstorm / Clarify if Needed` in the main flow.
+- Added `Re-Adopt Agent Loop Project if Needed` and `Targeted Feature Scan if Needed` to the design/runtime flow.
+- Unified `Brainstorm` and `Clarify` into `Brainstorm / Clarify if Needed`.
 
-### Added
+### Repository Maintenance
 - Added `AGENTS.md` and `CLAUDE.md` for skill repository maintenance guidance.
-- Added a draft proposal for using Superpowers as `agent-loop` stage plugins without changing agent-loop artifact paths, gates, or task/feature ownership.
+- Added a draft proposal for using Superpowers as agent-loop stage plugins without changing agent-loop artifact paths, gates, or task/feature ownership.
 
 ## 1.0.0 — 2026-06-02
 
-### Added
-- **Delivery Contracts**: Durable producer-consumer contracts (`contracts.md` + optional `contracts/`) for API, Service, Event, Async Workflow, Data, UI Behavior, Library, and Runtime boundaries.
-- **Contract Optionality**: Human confirmation required before creating/updating contract files. Simple single-person tasks and pure internal logic skip contracts by default.
-- **v0.2 Gate Hardening**:
-  - Narrowed workflow bypass to one-off edits that don't affect feature behavior, interfaces, security boundaries, project memory, or submit/close state.
-  - Made minimum re-adoption reconciliation non-bypassable.
-  - Added two-stage submit confirmation (request → diff/review/drift summary → final approval).
-  - Tasks missing applicable verification stay `in-progress` or `blocked`; cannot advance to `review` or `done`.
-- **Remote Project Routing**: Empty local directory alone no longer proves remote project; requires human statement or remote-entry hint.
-- **Verification Rules**: Defined when API/integration and E2E/browser verification are applicable; required recorded reason, substitute proof, and risk for substitute verification.
-- **Re-Adoption & Enterprise Memory**: Minimum safe reconciliation (commands, tests, baseline failures, active feature state, boundaries, conflicts) before continuing stale projects. Optional bounded subagent scanning for large/stale re-adoption.
-- **Validation**: Added agent pressure tests for new-project init, stale re-adoption, contract breaking changes, and Feature Auto-Loop. Fixed duplicate scenario numbering.
-- **Templates & Examples**: `templates/contracts.md`, `templates/delivery-contract.md`, `references/delivery-contracts.md`, and complex SaaS example (`examples/complex-saas-project/...`).
+### Delivery Contracts
+- Added durable Delivery Contracts (`contracts.md` plus optional `contracts/`) for API, Service, Event, Async Workflow, Data, UI Behavior, Library, and Runtime boundaries.
+- Added Contract Optionality: human confirmation is required before creating/updating contract files; simple single-person tasks and pure internal logic skip contracts by default.
 
-### Changed
+### Gate Hardening
+- Narrowed workflow bypass to one-off edits that do not affect feature behavior, interfaces, security boundaries, project memory, or submit/close state.
+- Made minimum re-adoption reconciliation non-bypassable.
+- Added two-stage submit confirmation: request, then diff/review/drift summary, then final approval.
+- Required tasks missing applicable verification to remain `in-progress` or `blocked`; they cannot advance to `review` or `done`.
+
+### Remote Project Routing And Verification
+- Changed Remote Project Routing so an empty local directory alone no longer proves a remote project; human statement or remote-entry hint is required.
+- Defined when API/integration and E2E/browser verification are applicable, including recorded reason, substitute proof, and risk for substitute verification.
+
+### Re-Adoption And Enterprise Memory
+- Added minimum safe reconciliation for stale projects: commands, tests, baseline failures, active feature state, boundaries, and conflicts.
+- Added optional bounded subagent scanning for large/stale re-adoption.
+- Added Enterprise Project Memory Mode with `project.md` as entry index and optional details under `.agent-loop/project/`.
+
+### Templates, Examples, And Validation
+- Added `templates/contracts.md`, `templates/delivery-contract.md`, `references/delivery-contracts.md`, and the complex SaaS example.
+- Added validation scenarios for new-project init, stale re-adoption, contract breaking changes, Feature Auto-Loop, duplicate scenario numbering, and contract file skipping rules.
 - Replaced `inputs/` with canonical `requirements/` in design sources.
 - Aligned lifecycle around `Execute → Verify → Review → Drift Check`.
-- Updated README/Usage guidance for contract file skipping rules.
-
-### Design Source Alignment
-- Added Enterprise Project Memory Mode (`project.md` as entry index, optional details under `.agent-loop/project/`).
-- Added `Delivery Contract if Needed` to design source and operational `design.md`.
 
 ---
 
 ## Maintenance Rule
 
-1. Add dated entries at the top.
-2. Summarize behavior changes, not just edited files.
-3. List new human gates, artifact changes, templates, examples, and validation scenarios.
+1. Add entries under the target version, not as a loose dated log.
+2. Group entries by behavior area, gate, artifact, template, validation, or documentation theme.
+3. Summarize behavior changes first; mention edited files only when the file itself is the user-visible artifact.
+4. Record new human gates, artifact path changes, templates, examples, and validation scenarios.

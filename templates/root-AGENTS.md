@@ -35,10 +35,11 @@ Before development work:
 6. If `project.md` says `Status: remote-entry`, read `.agent-loop/remote.md`, verify the remote project, and continue from the remote project memory or local-shadow memory.
 7. If `Memory Mode: enterprise`, read only the linked `.agent-loop/project/*.md` detail files needed for the current stage.
 8. If recent development bypassed `agent-loop`, route to Re-Adopt Agent Loop Project before new feature work.
-9. If the human reports a bug, regression, post-close correction, field/schema/algorithm/API change, test failure, screenshot issue, QA/user feedback, or "small tweak", route to Feature Follow-up / Flow-back before creating a new feature or editing code.
-10. Run Stage Helper Capability Scan for the current stage: inspect whether the current Agent CLI exposes Superpowers or other helper skills/plugins before using fallback stage guidance.
-11. Check for the nearest directory-level `AGENTS.md` when working in a subdirectory.
-12. Classify the current `agent-loop` stage and recommend exactly one next action.
+9. Operational Support Guard: if the human asks to test, run, deploy, switch account/config/model/provider, check quota/rate limits, diagnose production, arrange rollout, or use existing code to solve an operational problem, default to read-only code/process analysis. Do not create a feature, edit code, change config, deploy, or run destructive commands unless the human confirms feature implementation or an operational change. If unclear, ask whether they want feature implementation or help using current project functionality.
+10. If the human reports a bug, regression, post-close correction, field/schema/algorithm/API change, test failure, screenshot issue, QA/user feedback, or "small tweak", route to Feature Follow-up / Flow-back before creating a new feature or editing code.
+11. Run Stage Helper Capability Scan for the current stage: inspect whether the current Agent CLI exposes Superpowers or other helper skills/plugins before using fallback stage guidance.
+12. Check for the nearest directory-level `AGENTS.md` when working in a subdirectory.
+13. Classify the current `agent-loop` stage and recommend exactly one next action.
 <!-- agent-loop:managed-end section:bootstrap -->
 
 <!-- agent-loop:managed-start section:ownership source:.agent-loop/project.md -->
@@ -47,6 +48,7 @@ Before development work:
 - Own workflow diagnosis, sequencing, implementation, verification, review, drift checks, and project-memory updates.
 - If required artifacts are missing, propose creating or updating them; if work is ready, recommend the next stage; if work appears complete, run Feature Completion Check.
 - Use available helper skills/plugins as stage methods when useful, but keep `agent-loop` paths, gates, status, submit, pause, and close rules in control.
+- For operational support, first help the human use current project functionality through read-only analysis and a checklist/runbook; do not default to feature implementation.
 - Follow-up details such as lookback windows, Candidate Match Matrix, linked features, and maintenance-fix routing belong to the `agent-loop` skill references, not root guidance.
 - After each meaningful stage, summarize artifacts, evidence, drift, and the next recommended stage in a table.
 - Do not finish with only "done"; include the next recommended stage or a concrete stop reason.
@@ -79,6 +81,7 @@ Stop and ask when:
 - a Delivery Contract needs creation, acceptance, or breaking-change approval
 - subagents are needed but not explicitly approved
 - the work would require first-version exclusions
+- secrets, paid quota, production/staging external-service calls, config changes, credential rotation, deploy, release, publish, or destructive operations are requested
 - submit, close, pause, commit, PR, merge, release, publish, or destructive operations are requested
 
 Auto modes do not bypass these stops.

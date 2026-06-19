@@ -36,6 +36,8 @@ Agent 的职责是主导研发闭环。你主要负责提出目标、确认关�
 | “测试发现上次那个功能有 bug” | 功能回流（Feature Follow-up / Flow-back） | 先查最近 feature，判断回流旧 feature、开 linked 新 feature，还是先定位 |
 | “这个字段/算法/API 要调整” | 功能回流或新 feature 判定 | 根据最近 30 天 feature 和代码证据，推荐一个处理流 |
 | “检查现在做到哪了” | 继续 / 完成检查（Resume / Feature Completion Check） | 读取项目记忆和 feature 状态，推荐下一步 |
+| “新资源账号，先安排测试，跑通上线” | 操作支持（Code-Guided Operational Support） | 默认只读查现有代码、配置、测试和部署流程，输出 checklist/runbook；确认前不写代码、不改配置、不部署 |
+| “根据现有代码看看这个线上问题怎么处理” | 操作支持或功能回流判定 | 先按当前项目功能排查和给操作方案；如果必须改代码，再询问是否进入 feature/fix 流程 |
 | “提交一下” | 提交集成（Submit / Integrate） | 检查 diff、验证证据、生成规范 commit，提交前再次确认 |
 | “关闭这个 feature” | 关闭功能（Close Feature） | 做 close review、drift check、memory update，最后让你确认 close |
 

@@ -43,6 +43,7 @@ The core constraints inherited from the design sources are:
 
 ```text
 Human Goal
+→ Operational Support when the goal is to use/run/test/deploy current project behavior without confirmed implementation
 → Feature Workspace
 → Task / Test / Plan
 → Execute / Verify
@@ -299,6 +300,7 @@ Project Entry
 → Remote Project Discovery if Needed
 → Re-Adopt Agent Loop Project if Needed
 → Project Onboarding Scan if Needed
+→ Code-Guided Operational Support if Needed
 → Requirement Archive
 → Product Brief if Needed
 → Brainstorm / Clarify if Needed

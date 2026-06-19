@@ -29,7 +29,8 @@ Agent Loop fixes this with a repeatable, inspectable workflow:
 ```
 Project Entry → Remote Project Discovery if needed
 → Re-Adopt Agent Loop Project if needed
-→ Project Onboarding Scan if needed → Requirement Archive
+→ Project Onboarding Scan if needed
+→ Operational Support if needed → Requirement Archive
 → Product Brief if needed → Brainstorm / Clarify if needed
 → Feature Follow-up / Flow-back if needed
 → Targeted Feature Scan if needed → Feature Spec → Requirement Checklist
@@ -53,6 +54,7 @@ Project Entry → Remote Project Discovery if needed
 | **Evidence** | Fresh proof: test output, build output, API results, E2E checks, logs |
 | **Drift** | Mismatch between docs, code reality, or human decisions |
 | **Feature Follow-up / Flow-back** | Bug/change intake that checks recent features before creating a new feature. Default lookback is 30 days. |
+| **Operational Support** | Read-only code-guided help for testing, running, deploying, switching accounts/config/models/providers, quota checks, rollout, and production diagnosis before deciding whether feature work is needed. |
 | **Delivery Contract** | Optional producer-consumer boundary handoff. Used only when API, event, public data, UI state/behavior, SDK/library, runtime, or explicit cross-agent/human handoff needs a stable contract. |
 
 ## Artifact Layout

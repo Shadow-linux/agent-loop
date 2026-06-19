@@ -59,6 +59,8 @@ First version excludes:
 
 **Feature Follow-up / Flow-back**: Bug/change intake path that checks whether a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, screenshot issue, behavior tweak, "small tweak", test failure, or QA/user feedback belongs to a recent feature before creating a new feature. Default lookback is 30 calendar days.
 
+**Code-Guided Operational Support**: Read-only support lane for using current project functionality to test, run, deploy, switch account/config/model/provider, check quota/rate limits, arrange rollout, diagnose production, or produce a runbook/checklist. It does not create a feature workspace or edit code/config by default; feature/fix escalation requires human confirmation.
+
 **Re-Adopt Agent Loop Project**: Recovery path for a project that already has `.agent-loop/` or legacy `agent-loop/`, but recent development happened outside the loop. The agent compares code reality to existing memory, proposes backfill, asks human confirmation, then resumes or starts feature work.
 
 **Submit / Integrate**: The explicit stage that packages verified work for commit, PR text, merge note, or release note. It requires human confirmation and records the result in `notes.md`.

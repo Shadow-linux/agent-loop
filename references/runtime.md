@@ -31,6 +31,7 @@ Classify the project into exactly one state:
 | `re-adopt` | `.agent-loop/` or legacy `agent-loop/` exists, but recent work happened outside the loop or the human asks to re-adopt/re-take-over/re-sync the project | Re-Adopt Agent Loop Project / Recovery Backfill |
 | `stale-memory` | `.agent-loop/` or legacy `agent-loop/` exists but docs conflict with code reality, or long-term memory indexes point to missing/stale artifacts | Reconcile Project Context / Recovery Backfill |
 | `guided-onboarding` | `.agent-loop/onboarding-db/` exists and the human asks to be onboarded, guided through the project, or helped understand where to start | Guided Newcomer Onboarding |
+| `operational-support` | human asks to test, run, deploy, switch account/config/model/provider, check quota/rate limits, diagnose production, arrange rollout, or use existing code to solve an operational problem without clearly requesting implementation | Code-Guided Operational Support |
 | `feature-follow-up` | human reports bug/regression/post-close correction/field or algorithm change/API mismatch/screenshot issue/small tweak/test failure that may relate to a recent feature | Feature Follow-up And Flow-back |
 | `active-feature` | active feature exists and next action is clear | Continue Current Stage |
 | `blocked` | blocker or missing decision prevents next stage | Ask Human / Diagnose |
@@ -53,6 +54,8 @@ Use this order:
 12. Choose the next stage.
 
 If `.agent-loop/onboarding-db/` exists and the human asks to be guided through the project, understand where to start, or explain project structure before coding, classify as `guided-onboarding`, load `references/onboarding-db.md`, and use Guided Newcomer Onboarding before normal resume. Do not rerun Deep Project Onboarding Scan by default.
+
+If the human asks to test, run, deploy, switch account/config/model/provider, check quota/rate limits, arrange rollout, diagnose production, or use existing code to solve an operational problem, default to read-only operational support. Route to Code-Guided Operational Support before Feature Spec, Plan Gate, Execute Task / Story, or code edits. If the request could mean either existing operational use or new implementation, ask whether the human wants help using current project functionality or feature implementation.
 
 If code reality and the memory root disagree, if long-term memory indexes point to missing artifacts, or if the human says the project used `agent-loop` before but recent work bypassed it, classify as `re-adopt` or `stale-memory`, treat code as the current fact base for agent-maintained docs, preserve human requirements as original intent, and load `references/recovery-and-backfill.md`.
 
@@ -108,6 +111,7 @@ Project Entry
 Remote Project Discovery if Needed
 Re-Adopt Agent Loop Project if Needed
 Project Onboarding Scan if Needed
+Code-Guided Operational Support if Needed
 Requirement Archive
 Product Brief if Needed
 Brainstorm / Clarify if Needed

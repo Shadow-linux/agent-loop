@@ -34,6 +34,38 @@ Exit:
 - root `AGENTS.md` / `CLAUDE.md` status checked, or the recommended next stage explicitly includes the Root Agent Bootstrap Gate
 - if an Active Feature exists, run Feature Completion Check before recommending a new feature or broad new work
 
+## Code-Guided Operational Support
+
+Entry: the human asks to test, run, deploy, switch account/config/model/provider, check quota or rate limits, arrange rollout, diagnose production, create a runbook/checklist, or use existing code to solve an operational problem without clearly requesting implementation.
+
+Default action is read-only code/process analysis. This stage helps the human use current project functionality safely; it is not a default feature implementation lane.
+
+Read as needed:
+
+- `AGENTS.md`, `CLAUDE.md`, `.agent-loop/project.md`, and active run/deploy/testing notes
+- README, docs, runbooks, deployment scripts, CI config, env/config examples
+- relevant model/provider/account/config code paths, feature flags, rate-limit/quota logic, test scripts, smoke tests, health checks, rollback docs, logs/observability docs
+
+Rules:
+
+- Do not create a feature workspace by default.
+- Do not edit code, change configuration, deploy, rotate credentials, or run destructive commands unless the human explicitly confirms either feature implementation or an operational change scope.
+- Do not read or expose secrets. Ask the human to confirm secret names, masked values, or environment availability when needed.
+- Prefer safe read-only commands and source inspection. For commands that contact external services, mutate state, consume paid quota, or touch production/staging, ask before running.
+- Produce a concise runbook/checklist: current understanding, files inspected, required inputs, test steps, rollout steps, verification, rollback, risks, and open questions.
+- If the request is ambiguous, ask whether the human wants feature implementation or help using current project functionality.
+- If code changes are required, stop and recommend Feature Follow-up, maintenance-fix, or Feature Spec as the next stage after human confirmation.
+- If durable runbook or project memory would help future agents, propose where to save it and ask before writing.
+
+Write:
+
+- no artifact by default
+- optional `notes.md`, `.agent-loop/project.md`, onboarding-db, or project docs only after human confirmation
+
+Exit:
+
+- operational checklist delivered, blocker/question identified, or human confirms escalation into feature/fix workflow
+
 ## Init Project
 
 Entry: no `.agent-loop/` or legacy `agent-loop/`, little or no code.

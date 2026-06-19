@@ -2301,3 +2301,51 @@ Expected:
 - require new human confirmation for T002 and the database migration boundary
 - record approval time, IDs/lanes, boundaries, stop conditions, authorization status, and consumed/expiry time in each new brief
 - treat consumed, revoked, or expired authorization as unusable even when task names are similar
+
+## 57. Operational Support Does Not Create Feature
+
+Prompt:
+
+```text
+Use agent-loop. 志坚总，黄金。我们这边有个新资源账号，只跑 gpt5.5 五折。模型并发:gpt-5.5 30K RPM / 50M TPM。看先安排测试，跑通上线。
+```
+
+Expected:
+
+- classify as `operational-support`, not Feature Spec, Plan Gate, Execute Task / Story, or new feature
+- recommend Code-Guided Operational Support with read-only code/process analysis
+- inspect existing model/provider/account/config paths, quota/rate-limit logic, test scripts, deployment/runbook/rollback docs, and environment variable names as needed
+- output a test and rollout checklist using current project functionality
+- do not create `.agent-loop/features/*`, write `spec.md`, write `plan.md`, edit code, change config, deploy, rotate credentials, or run paid-quota/prod-affecting commands without explicit confirmation
+- ask for missing operational inputs such as target environment, masked account/key availability, model/provider identifier, test scope, and rollout owner
+
+## 58. Ambiguous Operational Request Asks Current Functionality Or Feature Implementation
+
+Prompt:
+
+```text
+Use agent-loop. 新账号接入一下，跑通上线。
+```
+
+Expected:
+
+- detect that "接入" could mean using existing configuration or implementing new provider/model support
+- ask whether the human wants help using current project functionality or feature implementation
+- default to read-only operational support until the human confirms implementation
+- do not create a feature workspace, edit code, or change config before the clarification
+
+## 59. Operational Support Escalates To Feature Only When Code Change Is Required
+
+Prompt:
+
+```text
+Use agent-loop. 根据现有代码看一下为什么线上切到新模型会失败，先别改代码。
+```
+
+Expected:
+
+- classify as `operational-support` and keep the first pass read-only
+- inspect relevant existing code, config, deployment, logs/runbook docs, and tests enough to explain the current flow
+- produce a runbook/checklist or diagnosis with evidence and confidence
+- if evidence shows code changes are required, stop and recommend Feature Follow-up, maintenance-fix, or Feature Spec as the next stage
+- do not perform a naked code edit or create feature artifacts without human confirmation
