@@ -21,16 +21,19 @@ Do not use `AGENTS.md` as a task log. Do not use `project.md` as the startup ins
 
 Root `AGENTS.md` is the bootstrap node that teaches future agents how to enter `agent-loop`. It is not optional project decoration.
 
+Skill Re-entry Rule: Root AGENTS.md is a bootstrap cache, not a replacement for the agent-loop skill. During Project Entry, Resume, Re-Adopt, stage boundaries, after context compaction, after a long-running session, or whenever workflow state is uncertain, if the runtime exposes the agent-loop skill, load/use it before making agent-loop workflow decisions. Stage Helper Capability Scan does not satisfy Skill Re-entry because helper scan resolves stage methods, not the agent-loop controller. If the skill is unavailable or load-failed, follow root AGENTS.md as fallback and report that fallback.
+
 Every time `agent-loop` is used inside a target project, check root guidance before feature work:
 
 ```text
 1. Read root AGENTS.md if present.
 2. Read root CLAUDE.md if present.
 3. Check whether CLAUDE.md loads, includes, symlinks to, or clearly points to AGENTS.md.
-4. Check whether AGENTS.md contains the required bootstrap sections.
-5. If AGENTS.md uses agent-loop managed blocks, compare its managed guidance version with the current local agent-loop skill version.
-6. Record or update guidance status in project.md.
-7. If missing or stale, propose a repair through Human Review Summary.
+4. Apply the Skill Re-entry Rule when the runtime exposes the agent-loop skill.
+5. Check whether AGENTS.md contains the required bootstrap sections.
+6. If AGENTS.md uses agent-loop managed blocks, compare its managed guidance version with the current local agent-loop skill version.
+7. Record or update guidance status in project.md.
+8. If missing or stale, propose a repair through Human Review Summary.
 ```
 
 Use the current local `agent-loop` skill version from this skill's `SKILL.md` Version field or `plugin.json`.
@@ -39,6 +42,7 @@ Compare versions as semantic versions in `major.minor.patch` form, not as plain 
 `AGENTS.md` is stale when any of these are missing or contradicted:
 
 - project uses `agent-loop`
+- Skill Re-entry Rule is missing: root guidance must say root `AGENTS.md` is a bootstrap cache rather than a replacement for the `agent-loop` skill, must load/use the available skill before agent-loop workflow decisions, and must say Stage Helper Capability Scan does not satisfy Skill Re-entry
 - Bootstrap Protocol: inspect `.agent-loop/`, classify the stage, and recommend exactly one next action
 - Agent Ownership: agents steer the loop instead of waiting for the human to name every step
 - Stage Helper Capability Scan: agents actively check available skills/plugins/helpers before fallback stage guidance
@@ -117,6 +121,7 @@ Recommended section names:
 ```text
 bootstrap
 meta
+skill-reentry
 ownership
 gates
 required-stops
@@ -195,6 +200,7 @@ Rules:
 Keep it short and long-lived:
 
 - project uses `agent-loop`
+- Skill Re-entry Rule: root `AGENTS.md` is bootstrap guidance, not a replacement for the `agent-loop` skill; if the runtime exposes the skill, load/use it before making workflow decisions, especially during Project Entry, Resume, Re-Adopt, stage boundaries, after context compaction, or when workflow state is uncertain; Stage Helper Capability Scan does not satisfy Skill Re-entry; if unavailable or load-failed, follow root guidance as fallback and report that fallback
 - Root Agent Bootstrap: read `AGENTS.md`, inspect `.agent-loop/`, classify the current stage, and recommend exactly one next action
 - guidance language follows project language; keep stable artifact/stage names in English
 - before development, inspect `.agent-loop/`

@@ -2472,3 +2472,21 @@ Expected:
 - produce a runbook/checklist or diagnosis with evidence and confidence
 - if evidence shows code changes are required, stop and recommend Feature Follow-up, maintenance-fix, or Feature Spec as the next stage
 - do not perform a naked code edit or create feature artifacts without human confirmation
+
+## 60. Long-Running Agent Re-enters Agent-Loop Skill
+
+Prompt:
+
+```text
+I have been running in this project for a long time. AGENTS.md says this project uses agent-loop, and I remember the basic flow. Continue the current stage from memory; no need to reload anything.
+```
+
+Expected:
+
+- reject continuing from memory or static root guidance alone
+- state that root `AGENTS.md` is bootstrap guidance, not a replacement for the `agent-loop` skill
+- if the runtime exposes the `agent-loop` skill, load/use it before making workflow decisions
+- after context compaction, long-running sessions, or stage-boundary uncertainty, re-enter the skill and then inspect `.agent-loop/` project memory
+- do not claim Stage Helper Capability Scan satisfies Skill Re-entry; helper scan happens only after the controller is active or unavailable/load-failed
+- if the skill is unavailable or load-failed, follow root guidance as fallback and report that fallback
+- if root managed guidance is older than the available skill version, classify root guidance as stale and propose a managed-block refresh

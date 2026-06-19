@@ -22,24 +22,37 @@ When creating or refreshing this file, inspect content outside managed blocks. I
 - If the current skill version is newer, classify root guidance as `stale` and propose refreshing managed blocks through Human Review Summary before relying on outdated startup rules.
 <!-- agent-loop:managed-end section:meta -->
 
+<!-- agent-loop:managed-start section:skill-reentry source:agent-loop-skill -->
+## Skill Re-entry Rule
+
+Root AGENTS.md is a bootstrap cache, not a replacement for the agent-loop skill.
+
+During Project Entry, Resume, Re-Adopt, stage boundaries, after context compaction, after a long-running session, or whenever workflow state is uncertain, if the runtime exposes the agent-loop skill, load/use it before making agent-loop workflow decisions.
+
+Stage Helper Capability Scan does not satisfy Skill Re-entry. Skill Re-entry loads the `agent-loop` controller; Stage Helper Capability Scan only resolves helper methods for the current stage after the controller is active or unavailable/load-failed.
+
+If the skill is unavailable or load-failed, follow this AGENTS.md as fallback and report that fallback in the response. If the managed guidance version is older than the available skill version, classify root guidance as stale and propose a managed-block refresh before relying on outdated startup rules.
+<!-- agent-loop:managed-end section:skill-reentry -->
+
 <!-- agent-loop:managed-start section:bootstrap source:.agent-loop/project.md -->
 ## Bootstrap Protocol
 
 Before development work:
 
 1. Read this file first.
-2. Inspect `.agent-loop/`.
-3. If `.agent-loop/` is missing, also inspect legacy `agent-loop/`.
-4. If neither exists, propose Init Project or Existing Project Onboarding and ask for confirmation.
-5. If memory exists, read `.agent-loop/project.md` or the active legacy `agent-loop/project.md`.
-6. If `project.md` says `Status: remote-entry`, read `.agent-loop/remote.md`, verify the remote project, and continue from the remote project memory or local-shadow memory.
-7. If `Memory Mode: enterprise`, read only the linked `.agent-loop/project/*.md` detail files needed for the current stage.
-8. If recent development bypassed `agent-loop`, route to Re-Adopt Agent Loop Project before new feature work.
-9. Operational Support Guard: if the human asks to test, run, deploy, switch account/config/model/provider, check quota/rate limits, diagnose production, arrange rollout, or use existing code to solve an operational problem, default to read-only code/process analysis. Do not create a feature, edit code, change config, deploy, or run destructive commands unless the human confirms feature implementation or an operational change. If unclear, ask whether they want feature implementation or help using current project functionality.
-10. If the human reports a bug, regression, post-close correction, field/schema/algorithm/API change, test failure, screenshot issue, QA/user feedback, or "small tweak", route to Feature Follow-up / Flow-back before creating a new feature or editing code, but only after project memory exists or Project Entry has routed through Init Project / Existing Project Onboarding.
-11. Run Stage Helper Capability Scan for the current stage: inspect whether the current Agent CLI exposes Superpowers or other helper skills/plugins before using fallback stage guidance.
-12. Check for the nearest directory-level `AGENTS.md` when working in a subdirectory.
-13. Classify the current `agent-loop` stage and recommend exactly one next action.
+2. Apply the Skill Re-entry Rule: if the runtime exposes the agent-loop skill, load/use it before relying on this bootstrap cache.
+3. Inspect `.agent-loop/`.
+4. If `.agent-loop/` is missing, also inspect legacy `agent-loop/`.
+5. If neither exists, propose Init Project or Existing Project Onboarding and ask for confirmation.
+6. If memory exists, read `.agent-loop/project.md` or the active legacy `agent-loop/project.md`.
+7. If `project.md` says `Status: remote-entry`, read `.agent-loop/remote.md`, verify the remote project, and continue from the remote project memory or local-shadow memory.
+8. If `Memory Mode: enterprise`, read only the linked `.agent-loop/project/*.md` detail files needed for the current stage.
+9. If recent development bypassed `agent-loop`, route to Re-Adopt Agent Loop Project before new feature work.
+10. Operational Support Guard: if the human asks to test, run, deploy, switch account/config/model/provider, check quota/rate limits, diagnose production, arrange rollout, or use existing code to solve an operational problem, default to read-only code/process analysis. Do not create a feature, edit code, change config, deploy, or run destructive commands unless the human confirms feature implementation or an operational change. If unclear, ask whether they want feature implementation or help using current project functionality.
+11. If the human reports a bug, regression, post-close correction, field/schema/algorithm/API change, test failure, screenshot issue, QA/user feedback, or "small tweak", route to Feature Follow-up / Flow-back before creating a new feature or editing code, but only after project memory exists or Project Entry has routed through Init Project / Existing Project Onboarding.
+12. Run Stage Helper Capability Scan for the current stage: inspect whether the current Agent CLI exposes Superpowers or other helper skills/plugins before using fallback stage guidance.
+13. Check for the nearest directory-level `AGENTS.md` when working in a subdirectory.
+14. Classify the current `agent-loop` stage and recommend exactly one next action.
 <!-- agent-loop:managed-end section:bootstrap -->
 
 <!-- agent-loop:managed-start section:ownership source:.agent-loop/project.md -->

@@ -12,6 +12,8 @@ Inspect -> Classify -> Recommend -> Confirm -> Act -> Record -> Recommend
 
 Do not jump from a human goal directly to code. Do not move to a later stage until the prior stage artifact is accepted or explicitly bypassed by the human.
 
+Skill Re-entry: AGENTS.md is bootstrap guidance, not a replacement for the agent-loop skill. If the current runtime exposes the agent-loop skill, load/use it before making workflow decisions during Project Entry, Resume, Re-Adopt, stage boundaries, after context compaction, after long-running sessions, or whenever workflow state is uncertain. Stage Helper Capability Scan does not satisfy Skill Re-entry because helper scan resolves stage methods, not the agent-loop controller. If the skill is unavailable or load-failed, follow root guidance as fallback and report that fallback.
+
 Agent ownership is mandatory. The agent must not wait for the human to name the next internal stage. For every human goal, bug report, onboarding question, vague product idea, or "what next" request, the agent classifies the current state and recommends exactly one next action with a reason. If required artifacts are missing, recommend creating or repairing them. If work appears ready, recommend the next stage. If work appears complete, run Feature Completion Check and recommend close, pause, or continue.
 
 Explicit bypass is allowed only for narrow one-off edits that do not create or change feature behavior, public interfaces, data/security boundaries, project memory, submit state, or close state. Record the bypass reason in the response or `notes.md` when a feature exists.
@@ -40,18 +42,19 @@ Classify the project into exactly one state:
 
 Use this order:
 
-1. Check `.agent-loop/`; if missing, check legacy `agent-loop/`.
-2. If present, read `<memory-root>/project.md`.
-3. If `project.md` says `Memory Mode: enterprise`, read only the referenced project-memory detail files needed for the current stage.
-4. If `project.md` says `Status: remote-entry`, read `<memory-root>/remote.md` and route through Remote Project Discovery before local onboarding.
-5. Locate `Active Feature` and `Paused Features`.
-6. Read current feature `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`, and `contracts.md` if present.
-7. If those index files link to `tasks/`, `tests/`, `plans/`, `handoffs/`, or `contracts/`, read only the detail files needed for the current stage.
-8. Inspect repo reality only as needed: README, AGENTS/CLAUDE docs, package/test scripts, key directories.
-9. If local repo reality points to remote execution, or the human says this is a remote project, load `references/remote-project-discovery.md`. An empty local directory alone is not enough; if there are no remote hints, classify as `new-project`.
-10. Verify long-term memory index targets before trusting them. If `project.md`, root guidance, or current artifacts point to onboarding-db, enterprise `project/*.md`, feature docs, contracts, or guidance files, check that the referenced path exists before relying on it.
-11. Compare project memory with obvious repo reality.
-12. Choose the next stage.
+1. Apply Skill Re-entry. After context compaction, long-running sessions, or stage-boundary uncertainty, do not continue from memory alone.
+2. Check `.agent-loop/`; if missing, check legacy `agent-loop/`.
+3. If present, read `<memory-root>/project.md`.
+4. If `project.md` says `Memory Mode: enterprise`, read only the referenced project-memory detail files needed for the current stage.
+5. If `project.md` says `Status: remote-entry`, read `<memory-root>/remote.md` and route through Remote Project Discovery before local onboarding.
+6. Locate `Active Feature` and `Paused Features`.
+7. Read current feature `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`, and `contracts.md` if present.
+8. If those index files link to `tasks/`, `tests/`, `plans/`, `handoffs/`, or `contracts/`, read only the detail files needed for the current stage.
+9. Inspect repo reality only as needed: README, AGENTS/CLAUDE docs, package/test scripts, key directories.
+10. If local repo reality points to remote execution, or the human says this is a remote project, load `references/remote-project-discovery.md`. An empty local directory alone is not enough; if there are no remote hints, classify as `new-project`.
+11. Verify long-term memory index targets before trusting them. If `project.md`, root guidance, or current artifacts point to onboarding-db, enterprise `project/*.md`, feature docs, contracts, or guidance files, check that the referenced path exists before relying on it.
+12. Compare project memory with obvious repo reality.
+13. Choose the next stage.
 
 If `.agent-loop/onboarding-db/` exists and the human asks to be guided through the project, understand where to start, or explain project structure before coding, classify as `guided-onboarding`, load `references/onboarding-db.md`, and use Guided Newcomer Onboarding before normal resume. Do not rerun Deep Project Onboarding Scan by default.
 

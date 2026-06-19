@@ -9,6 +9,12 @@
 - Added Requirement Conflict Review for large follow-up conflicts that should create a new requirement set or supersede the old one after human confirmation.
 - Clarified Targeted Onboarding output, Feature Completion blocked handling, and Feature Follow-up priority behind Project Entry when agent-loop memory is missing.
 
+### Root Guidance Skill Re-entry
+- Added Skill Re-entry Rule so root `AGENTS.md` is treated as a bootstrap cache, not a replacement for the `agent-loop` skill.
+- Required agents to load/use the available `agent-loop` skill during Project Entry, Resume, Re-Adopt, stage boundaries, after context compaction, long-running sessions, or workflow uncertainty.
+- Added fallback reporting for unavailable/load-failed skill resolution and validation coverage for long-running agents that try to continue from memory or static root guidance alone.
+- Clarified that Stage Helper Capability Scan does not satisfy Skill Re-entry because helper scan resolves stage methods, not the `agent-loop` controller.
+
 ## 1.2.2 — 2026-06-15
 
 ### Operational Support Guard
