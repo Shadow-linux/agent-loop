@@ -40,6 +40,7 @@ Rules:
 
 - Quick Onboarding runs P0 only and records P1/P2 follow-ups.
 - Deep Scan runs P0, then P1, then the P2 areas justified by project reality.
+- Deep Scan must record Onboarding Mode: Deep in the onboarding-db batch review and any project memory backfill proposal.
 - Targeted Scan runs the minimum P0 context needed for safety, then the selected target area.
 - Large or unclear projects should not jump directly to P2.
 

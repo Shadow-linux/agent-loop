@@ -16,7 +16,7 @@ notes.md
 
 `product.md` remains optional and should exist when Product Brief is triggered.
 
-When complex artifact mode is triggered, `tasks.md`, `tests.md`, and `plan.md` become indexes and current-state summaries. `product.md`, `spec.md`, and `notes.md` remain stable source/record files. Detailed artifacts live in:
+When complex artifact mode is confirmed, `tasks.md`, `tests.md`, and `plan.md` become indexes and current-state summaries for the areas that need detail. `product.md`, `spec.md`, and `notes.md` remain stable source/record files. Detailed artifacts may live in:
 
 ```text
 tasks/
@@ -29,18 +29,33 @@ Do not delete or replace the stable entry files. Future agents must still start 
 
 ## Trigger Conditions
 
-Recommend complex artifact mode when any of these are true:
+Complexity should reflect whether the feature is no longer locally understandable or executable inside one cohesive area. Think in terms of "牵一发而动全身": a change whose planning, implementation, verification, release, or operational support spans multiple collaborating parts.
 
-- stories >= 3
-- tasks >= 8
-- test cases >= 10
-- feature crosses 3 or more major boundaries such as UI, API, domain, DB, jobs, auth, E2E
-- feature needs subagents or parallel task ownership
-- feature spans more than one development day
-- more than 2 plan cycles exist
-- `tasks.md`, `tests.md`, or `plan.md` becomes hard to scan
+### Complexity Assessment Trigger
 
-Before creating directories, explain why the trigger applies and ask human confirmation.
+When stories > 3, pause and assess whether Complex Artifact Mode is needed.
+
+Story count does not independently recommend Complex Artifact Mode. It only forces an explicit complexity assessment.
+
+Quantity signals such as many tasks or many test cases are prompts for assessment, not sufficient recommendation triggers. Use them to ask why the feature is large: local detail inside one cohesive area, or real cross-boundary coordination.
+
+### Recommendation Semantics
+
+Agent may decide whether to recommend Complex Artifact Mode, but the recommendation must explain why the feature cannot be safely understood, planned, or verified as one cohesive change.
+
+Recommend Complex Artifact Mode when the work spans multiple collaborating modules, services, workflows, ownership lanes, or release/operation concerns, especially when:
+
+- different parts require separately managed tasks, verification, plans, or Delivery Contracts
+- implementation changes can affect multiple downstream behavior paths
+- sequencing, barriers, rollback, deployment, config, data, monitoring, or operational support need explicit coordination
+- parallel ownership is required by the work structure, not merely because the agent prefers to dispatch subagents
+- `tasks.md`, `tests.md`, or `plan.md` becomes hard to scan as a single active artifact
+
+Do not recommend Complex Artifact Mode from story count, task count, test count, or ordinary file/module count alone. A feature with many local details may remain in stable files when it is still understandable and verifiable inside one cohesive module or workflow.
+
+Ordinary files within one cohesive module do not justify Complex Artifact Mode. A simple UI -> API -> DB path may remain in stable files when its tasks, tests, and plan are still readable.
+
+Before creating directories, explain the complex semantics that justify the recommendation, name which files need detail, and ask human confirmation. Create only the detail directories that are actually needed.
 
 ## Directory Layout
 

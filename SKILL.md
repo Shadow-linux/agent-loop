@@ -237,7 +237,7 @@ If the local directory is only a remote-project entry point, create only thin lo
 - No completion claim without fresh verification evidence.
 - Submit requires fresh verification, drift check, diff review, human confirmation, and a recorded submit note.
 - The agent must proactively run Feature Completion Check after likely completion, before starting a new feature with an active feature present, and on resume when an active feature may already be done.
-- Feature Close Review is required before recommending or performing close: feature-level Spec Review must confirm product/spec/tasks/tests/acceptance are satisfied; feature-level Standards Review is required for large projects, broad diffs, boundary/security/data changes, architecture changes, or human request.
+- Feature Close Review is required before recommending or performing close: feature-level Spec Review must confirm product/spec/tasks/tests/acceptance are satisfied; feature-level Standards Review is required for large projects, broad diffs, directory or durable boundary changes, security/data changes, architecture changes, or human request.
 - Close requires verification, Feature Close Review, drift check, project memory update, optional submit status, and explicit human confirmation.
 
 ## Stage Skill Routing

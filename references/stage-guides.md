@@ -544,6 +544,8 @@ Exit:
 
 Entry: accepted spec.
 
+Helper-friendly stage: Work Breakdown runs Stage Helper Capability Scan before fallback. Use matching issue/task splitting helpers as method support only; keep `tasks.md`, task status, gates, and next-stage routing under agent-loop control.
+
 Write:
 
 - `tasks.md`
@@ -562,7 +564,10 @@ Rules:
 - use `Human-gated` when product, design, architecture, security, data, or approval decisions are still needed
 - use `Agent-ready` only when acceptance, boundaries, and verification are clear enough for autonomous execution
 - for large projects, group tasks by stage and barrier in a single `tasks.md`
-- if complex artifact trigger conditions are met, load `complex-artifacts.md` and propose `tasks/` detail files
+- if stories > 3, pause and assess whether Complex Artifact Mode is needed
+- if complex artifact semantics may apply, load `complex-artifacts.md` and propose `tasks/`, `tests/`, and/or `plans/` detail files only for the parts that need detail
+- Do not use story count, task count, test count, or ordinary file count as a hard recommendation trigger
+- for Complex Artifact Mode, recommend only when the feature is no longer locally understandable or executable inside one cohesive area because it spans multiple collaborating modules, services, workflows, ownership lanes, or release/operation concerns
 - detect likely durable producer-consumer boundaries such as API, event, public data, UI state/behavior, SDK/library, or runtime interfaces
 - when a durable producer-consumer boundary likely exists, recommend Delivery Contract If Needed with a reason before downstream implementation relies on assumptions
 
@@ -616,6 +621,8 @@ Exit:
 
 Entry: accepted tasks.
 
+Helper-friendly stage: Test Design runs Stage Helper Capability Scan before fallback. Use matching test-design helpers as method support only; keep `tests.md`, required verification applicability, substitute-verification gates, and next-stage routing under agent-loop control.
+
 Write:
 
 - `tests.md`
@@ -630,7 +637,7 @@ Include:
 - regression tests
 - manual verification
 - commands
-- detail test-case files under `tests/` when complex artifact mode is triggered
+- detail test-case files under `tests/` only when test details need splitting after Complex Artifact confirmation
 
 Rules:
 
@@ -648,9 +655,26 @@ Exit:
 - human accepts how correctness will be proven
 - in Feature Auto-Loop, continue automatically only if the test strategy has no unresolved human decisions
 
+## E2E Discovery if Web
+
+Entry: web-visible behavior exists, executable E2E/browser verification may be applicable, or Test Design cannot safely define Web E2E cases from current project memory.
+
+Helper-friendly stage: E2E Discovery if Web runs Stage Helper Capability Scan before fallback. Use matching browser/E2E environment helpers as method support only; keep discovered project-level capability in `project.md` and feature-specific cases in `tests.md` or `tests/e2e/*`.
+
+Load:
+
+- `e2e-discovery.md`
+
+Exit:
+
+- E2E path is classified as existing-framework, browser, chrome, computer-use, manual, or blocked
+- next stage: Test Design when E2E cases still need recording, or Technical Design / Code Context when test strategy is accepted
+
 ## Technical Design / Code Context
 
 Entry: accepted tasks and tests, before writing `plan.md` or executing a non-trivial task/story.
+
+Helper-friendly stage: Technical Design / Code Context runs Stage Helper Capability Scan before fallback. Use matching codebase-scan or technical-planning helpers as method support only; keep code context, interface decisions, plan readiness, and human gates under agent-loop control.
 
 Load:
 
@@ -670,7 +694,7 @@ Inspect:
 
 Write:
 
-- update `task-detail.md` when complex artifact mode is active
+- update task detail under `tasks/US<n>/T<nnn>-<slug>.md` only when task context needs splitting after Complex Artifact confirmation
 - otherwise record compact code context in `plan.md`
 - unresolved technical questions in `notes.md`
 
@@ -724,7 +748,7 @@ Rules:
 - no placeholders such as TBD, TODO, "add proper error handling", "write tests", or "similar to previous task"
 - run plan self-review: spec coverage, placeholder scan, and type/signature consistency
 - after mandatory helper resolution, use the loaded Writing-Plans Adapter quality bar; use fallback only for recorded `unavailable` or `load-failed`, and always write to `plan.md` or `plans/*`, not external docs paths
-- if complex artifact mode is active, write the full dated plan to `plans/` and keep `plan.md` as the current pointer
+- if plan detail needs splitting after Complex Artifact confirmation, write the full dated plan to `plans/` and keep `plan.md` as the current pointer
 
 Exit:
 
@@ -951,7 +975,9 @@ Write after confirmation:
 
 Exit:
 
-- docs and code reality aligned enough to continue/close
+- docs and code reality aligned enough for the next lifecycle gate
+- Drift Check does not route directly to Close
+- next stage: Project Memory Update when long-term facts changed; otherwise Feature Completion Check
 
 ## Project Memory Update
 

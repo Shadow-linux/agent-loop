@@ -243,6 +243,8 @@ Recommend one next reading path, targeted diagram update, setup/verification act
 Ask before writing onboarding-db updates.
 ```
 
+If onboarding-db is missing, route to Existing Project Onboarding or Deep Project Onboarding Scan after explaining Quick / Deep / Targeted options. If project memory or root guidance claims onboarding-db should exist, route to stale-memory recovery before guided onboarding.
+
 ### Feature Follow-up And Flow-back
 
 Project Entry and memory bootstrap have priority over Feature Follow-up.
@@ -293,7 +295,8 @@ Blocker or missing decision prevents next stage
 Action:
 
 ```text
-Ask one focused human question or route to Diagnose Failure / Targeted Feature Scan.
+Choose exactly one unblock stage.
+Ask one focused human question, or route to Diagnose Failure / Targeted Feature Scan.
 Do not continue execution until the blocker is resolved.
 ```
 

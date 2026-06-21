@@ -206,6 +206,7 @@ Before using an external skill or plugin inside a stage:
 
 ## Work Breakdown
 
+- [ ] Run Stage Helper Capability Scan before fallback Work Breakdown.
 - [ ] Default to vertical slices / tracer bullets.
 - [ ] Each normal task forms a narrow verifiable loop through necessary layers.
 - [ ] Use horizontal foundation tasks only when a product slice is not yet possible.
@@ -215,6 +216,12 @@ Before using an external skill or plugin inside a stage:
 - [ ] Use only linear, parallel, and barrier structure.
 - [ ] Record dependencies and verification hints.
 - [ ] If a task creates a long-lived boundary directory, mark whether directory-level `AGENTS.md` should be proposed.
+- [ ] Load `complex-artifacts.md` when stories > 3 or the work appears cross-boundary / hard to scan.
+- [ ] If stories > 3, pause for a Complex Artifact assessment.
+- [ ] Do not recommend Complex Artifact Mode from story count, task count, test count, or ordinary file count alone.
+- [ ] Recommend Complex Artifact Mode only when the feature spans multiple collaborating modules, services, workflows, ownership lanes, or release/operation concerns.
+- [ ] Treat ordinary cross-module work as a soft signal unless the feature is no longer locally understandable or executable inside one cohesive area.
+- [ ] Create only the `tasks/`, `tests/`, or `plans/` detail directories that are actually needed; do not create the full complex layout by default.
 - [ ] Detect likely durable producer-consumer boundaries: API, service, event, async workflow, public data, UI state/behavior, SDK/library, or runtime.
 - [ ] Recommend Delivery Contract If Needed before downstream implementation relies on assumptions.
 - [ ] Do not use roadmap graph in v1.
@@ -238,6 +245,7 @@ Before using an external skill or plugin inside a stage:
 
 ## Test Design
 
+- [ ] Run Stage Helper Capability Scan before fallback Test Design.
 - [ ] Separate requirement checklist from real test execution.
 - [ ] Define functional test cases.
 - [ ] Define module/core tests.
@@ -256,8 +264,17 @@ Before using an external skill or plugin inside a stage:
 - [ ] Record test commands and manual verification needs.
 - [ ] Present Test Design approval with Human Review Summary table.
 
+## E2E Discovery if Web
+
+- [ ] Run Stage Helper Capability Scan before fallback E2E Discovery if Web.
+- [ ] Load `e2e-discovery.md`.
+- [ ] Discover real scripts, configs, docs, seed/fixture files, env docs, CI, existing E2E directories, browser URLs, auth/session requirements, and safe execution constraints.
+- [ ] Classify the E2E path as `existing-framework`, `browser`, `chrome`, `computer-use`, `manual`, or `blocked`.
+- [ ] Record durable E2E capability in `project.md` and feature-specific cases in `tests.md` or `tests/e2e/*`.
+
 ## Technical Design / Code Context
 
+- [ ] Run Stage Helper Capability Scan before fallback Technical Design / Code Context.
 - [ ] Load `implementation-planning.md`.
 - [ ] Inspect exact files likely to change.
 - [ ] Inspect nearby tests and fixtures.
@@ -399,7 +416,7 @@ Checklist:
 - [ ] Perform lightweight Spec Review for every task before marking it `done`.
 - [ ] Perform Spec Review before Submit / Integrate.
 - [ ] Compare implementation against `product.md` when present, `spec.md`, acceptance criteria, scope, and out-of-scope.
-- [ ] Perform Standards Review for large projects, broad diffs, boundary changes, security/data changes, or human request.
+- [ ] Perform Standards Review for large projects, broad diffs, directory or durable boundary changes, security/data changes, architecture changes, or human request.
 - [ ] Compare implementation against root/directory `AGENTS.md`, `project.md`, testing rules, directory boundaries, and local conventions.
 - [ ] Record findings, accepted fixes, and rejected fixes in `notes.md`.
 - [ ] Compare producer code and tests against relevant Delivery Contracts.
@@ -480,7 +497,7 @@ Checklist:
 - [ ] Confirm fresh verification evidence exists.
 - [ ] Confirm Feature Close Review completed.
 - [ ] Confirm feature-level Spec Review covers `product.md` when present, `spec.md`, `tasks.md`, `tests.md`, acceptance criteria, and out-of-scope boundaries.
-- [ ] Confirm feature-level Standards Review completed when large project, broad diff, boundary/security/data change, architecture change, or human request applies.
+- [ ] Confirm feature-level Standards Review completed when large project, broad diff, directory or durable boundary change, security/data change, architecture change, or human request applies.
 - [ ] Confirm Drift Check completed.
 - [ ] Confirm Delivery Contracts are implemented and verified when downstream consumers rely on them.
 - [ ] Confirm accepted Delivery Contracts match producer code/tests and have no unapproved breaking changes.

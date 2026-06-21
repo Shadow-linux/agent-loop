@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+root=$(cd "$(dirname "$0")/.." && pwd)
+
+assert_contains() {
+  local file=$1
+  local text=$2
+  if ! grep -Fq -- "$text" "$root/$file"; then
+    printf 'FAIL: %s missing required text: %s\n' "$file" "$text" >&2
+    exit 1
+  fi
+}
+
+# M1: Auto Mode stop conditions must include Delivery Contract creation everywhere.
+assert_contains "references/runtime.md" "a Delivery Contract needs creation, human acceptance, or an accepted contract needs a breaking change"
+
+# M2: Drift Check must not route directly to close.
+assert_contains "references/stage-guides.md" "Drift Check does not route directly to Close"
+assert_contains "references/stage-guides.md" "next stage: Project Memory Update when long-term facts changed; otherwise Feature Completion Check"
+
+# M3: remote-entry must outrank existing-project when both could match.
+assert_contains "references/runtime.md" "Entry priority: remote-entry is evaluated before existing-project"
+assert_contains "references/runtime.md" "If remote-entry and existing-project both appear to match, classify as remote-entry"
+
+# M4: helper-friendly middle stages must explicitly scan helpers in stage guides and checklists.
+for stage in "Work Breakdown" "Test Design" "E2E Discovery if Web" "Technical Design / Code Context"; do
+  assert_contains "references/stage-guides.md" "Helper-friendly stage: $stage runs Stage Helper Capability Scan before fallback"
+  assert_contains "references/workflow-checklists.md" "Run Stage Helper Capability Scan before fallback $stage"
+done
+
+# M5: onboarding outputs must record mode so Deep can be distinguished from Quick.
+assert_contains "references/existing-project-onboarding.md" "Record Onboarding Mode: Quick | Deep | Targeted"
+assert_contains "references/project-onboarding-scan.md" "Deep Scan must record Onboarding Mode: Deep"
+
+# M6: guided onboarding request without onboarding-db must route to onboarding, not dead-end.
+assert_contains "references/runtime.md" "If the human asks for guided onboarding but onboarding-db is missing"
+assert_contains "references/design.md" "If onboarding-db is missing, route to Existing Project Onboarding or Deep Project Onboarding Scan"
+
+# M7: Standards Review triggers must be consistent.
+assert_contains "references/runtime.md" "Standards Review is recorded when triggered by large project, broad diff, directory or durable boundary change, security/data change, architecture change, or human request"
+assert_contains "SKILL.md" "feature-level Standards Review is required for large projects, broad diffs, directory or durable boundary changes, security/data changes, architecture changes, or human request"
+assert_contains "references/workflow-checklists.md" "Perform Standards Review for large projects, broad diffs, directory or durable boundary changes, security/data changes, architecture changes, or human request"
+assert_contains "references/workflow-checklists.md" "Confirm feature-level Standards Review completed when large project, broad diff, directory or durable boundary change, security/data change, architecture change, or human request applies"
+assert_contains "references/feature-completion-check.md" "Did feature-level Standards Review complete when triggered by large project, broad diff, directory or durable boundary change, security/data change, architecture change, or human request?"
+
+# M8: blocked state must recommend one next stage, not a slash-separated pair.
+assert_contains "references/runtime.md" "Blocked must resolve to exactly one recommended next stage"
+assert_contains "references/runtime.md" "Ask Human when the blocker is a missing decision, access, approval, environment, or external input; Diagnose Failure when the blocker is caused by observed system behavior, failing verification, or unclear technical cause"
+assert_contains "references/design.md" "Choose exactly one unblock stage"
+
+assert_contains "references/validation-scenarios.md" "Medium Consistency Routing"
+
+printf 'PASS: v1.2.3 medium consistency contract is complete\n'

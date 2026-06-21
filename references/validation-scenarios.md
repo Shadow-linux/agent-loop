@@ -2490,3 +2490,42 @@ Expected:
 - do not claim Stage Helper Capability Scan satisfies Skill Re-entry; helper scan happens only after the controller is active or unavailable/load-failed
 - if the skill is unavailable or load-failed, follow root guidance as fallback and report that fallback
 - if root managed guidance is older than the available skill version, classify root guidance as stale and propose a managed-block refresh
+
+## 61. Medium Consistency Routing
+
+Prompt:
+
+```text
+Use agent-loop. Continue quickly: local files exist but this is actually a remote-entry, we are in Feature Auto-Loop, a new API contract might be needed, tests include Web E2E, and the current task is blocked.
+```
+
+Expected:
+
+- classify remote-entry before existing-project when both appear to match
+- stop Auto Mode before Delivery Contract creation, human acceptance, or breaking changes
+- run Stage Helper Capability Scan before fallback Work Breakdown, Test Design, E2E Discovery if Web, and Technical Design / Code Context
+- record Onboarding Mode when Quick, Deep, or Targeted onboarding is selected so Deep can be distinguished from Quick even though Deep includes Quick outputs
+- if the human asks for guided onboarding but onboarding-db is missing, route to Existing Project Onboarding, Deep Project Onboarding Scan, or stale-memory recovery instead of Guided Newcomer Onboarding
+- use consistent Standards Review triggers: large project, broad diff, directory or durable boundary change, security/data change, architecture change, or human request
+- for blocked state, recommend exactly one unblock stage: Ask Human, Diagnose Failure, or Targeted Feature Scan
+- after Drift Check, route to Project Memory Update when long-term facts changed; otherwise Feature Completion Check, not directly to Close
+
+## 62. Complex Artifact Threshold Boundaries
+
+Prompt:
+
+```text
+Use agent-loop. Compare four features: A has four stories inside one cohesive module; B has four stories that are 牵一发而动全身 across API, worker, event consumers, rollout, and operational support; C has five simple stories in one cohesive page; D has two stories but requires separately managed API, async job, data migration, rollback, and monitoring work. Decide whether to recommend Complex Artifact Mode.
+```
+
+Expected:
+
+- pause for Complex Artifact assessment for features A, B, and C because stories > 3
+- do not recommend Complex Artifact Mode for feature A because four stories inside one cohesive module remain locally understandable
+- recommend Complex Artifact Mode for feature B because four stories that are 牵一发而动全身 require cross-boundary coordination
+- five simple stories still do not automatically recommend Complex Artifact Mode when they remain one cohesive change
+- recommend Complex Artifact Mode for feature D even with only two stories because the work spans release/operation concerns and separately managed boundaries
+- do not treat an ordinary UI -> API -> DB path as an independent trigger when stable files remain readable
+- explain the complex semantics and which detail directories are needed
+- ask human confirmation before creating `tasks/`, `tests/`, or `plans/`
+- create only the detail directories that are actually needed; stable `tasks.md`, `tests.md`, and `plan.md` remain mandatory indexes/current-state summaries

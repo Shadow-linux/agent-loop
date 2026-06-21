@@ -162,7 +162,7 @@ Allowed ordering:
 
 Do not introduce a roadmap graph in v1. Use Markdown headings and barriers inside `tasks.md`.
 
-If task count, test count, boundaries, subagent needs, or plan history exceed the trigger conditions, recommend complex artifact mode and load `complex-artifacts.md`.
+If stories > 3, quantity signals, boundary spread, subagent needs, or plan history suggest the feature may no longer be locally understandable, load `complex-artifacts.md` and perform a Complex Artifact assessment. Recommend Complex Artifact Mode only when the work spans collaborating modules, services, workflows, ownership lanes, or release/operation concerns such that stable single-file artifacts are no longer enough.
 
 ## Active Plan Rules
 

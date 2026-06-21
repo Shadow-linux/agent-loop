@@ -36,7 +36,11 @@ Classify the project into exactly one state:
 | `operational-support` | human asks to test, run, deploy, switch account/config/model/provider, check quota/rate limits, diagnose production, arrange rollout, or use existing code to solve an operational problem without clearly requesting implementation | Code-Guided Operational Support |
 | `feature-follow-up` | human reports bug/regression/post-close correction/field or algorithm change/API mismatch/screenshot issue/small tweak/test failure that may relate to a recent feature | Feature Follow-up And Flow-back |
 | `active-feature` | active feature exists and next action is clear | Continue Current Stage |
-| `blocked` | blocker or missing decision prevents next stage | Ask Human / Diagnose |
+| `blocked` | blocker or missing decision prevents next stage | Choose One Unblock Stage |
+
+Entry priority: remote-entry is evaluated before existing-project. If remote-entry and existing-project both appear to match, classify as remote-entry and run Remote Project Discovery before Existing Project Onboarding so the agent does not treat a local entrypoint or mirror as the source of truth.
+
+Blocked must resolve to exactly one recommended next stage. Ask Human when the blocker is a missing decision, access, approval, environment, or external input; Diagnose Failure when the blocker is caused by observed system behavior, failing verification, or unclear technical cause. If the blocker is a narrow unknown about code ownership or impact, recommend Targeted Feature Scan instead.
 
 ## Inspection Order
 
@@ -57,6 +61,8 @@ Use this order:
 13. Choose the next stage.
 
 If `.agent-loop/onboarding-db/` exists and the human asks to be guided through the project, understand where to start, or explain project structure before coding, classify as `guided-onboarding`, load `references/onboarding-db.md`, and use Guided Newcomer Onboarding before normal resume. Do not rerun Deep Project Onboarding Scan by default.
+
+If the human asks for guided onboarding but onboarding-db is missing, do not classify as `guided-onboarding`. Route through Existing Project Onboarding or Deep Project Onboarding Scan after explaining Quick / Deep / Targeted options. If root guidance or `project.md` claims onboarding-db should exist, classify as `stale-memory` and reconcile the missing onboarding memory first.
 
 If the human asks to test, run, deploy, switch account/config/model/provider, check quota/rate limits, arrange rollout, diagnose production, or use existing code to solve an operational problem, default to read-only operational support. Route to Code-Guided Operational Support before Feature Spec, Plan Gate, Execute Task / Story, or code edits. If the request could mean either existing operational use or new implementation, ask whether the human wants help using current project functionality or feature implementation.
 
@@ -208,7 +214,7 @@ The task may enter `review` after implementation and all applicable fresh verifi
 - required tests or substitute verification ran fresh
 - verification evidence is recorded in `notes.md`
 - lightweight Spec Review is recorded for the task
-- Standards Review is recorded when triggered by large project, broad diff, boundary/security/data change, or human request
+- Standards Review is recorded when triggered by large project, broad diff, directory or durable boundary change, security/data change, architecture change, or human request
 - drift decision is recorded, even if the decision is "no drift"
 - `tasks.md` or task detail names the evidence location
 
@@ -234,7 +240,7 @@ Offer auto modes proactively, without waiting for the human to know the terms:
 Recommended wording:
 
 ```text
-Strict Mode is safest and asks before each stage. If you want fewer confirmations, I can enable Feature Auto-Loop for this feature, or Task Auto-Run just for the selected task/story. Auto modes still stop for Human-gated decisions, unclear decisions, risky changes, failed verification, drift needing approval, unrelated dirty work blocking progress, human original requirement changes, first-version exclusions, Delivery Contract creation/acceptance/breaking changes, directory guidance changes, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, and publish.
+Strict Mode is safest and asks before each stage. If you want fewer confirmations, I can enable Feature Auto-Loop for this feature, or Task Auto-Run just for the selected task/story. Auto modes still stop for Human-gated decisions, unclear decisions, risky changes, failed verification, drift needing approval, unrelated dirty work blocking progress, human original requirement changes, first-version exclusions, Delivery Contract creation/acceptance/breaking changes, Complex Artifact Mode detail directory creation, directory guidance changes, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, and publish.
 ```
 
 Do not offer an auto mode as a substitute for missing clarification. If scope, acceptance, test approach, data rules, or affected boundaries are unclear, clarify first.
@@ -244,12 +250,13 @@ Auto modes do not remove stop conditions. Stop and ask when:
 - a task is `Human-gated`
 - product, design, architecture, security, data, approval, or public-interface decisions are needed
 - a stage would modify human original requirements
-- a Delivery Contract needs human acceptance or an accepted contract needs a breaking change
+- a Delivery Contract needs creation, human acceptance, or an accepted contract needs a breaking change
 - spec, product scope, or acceptance criteria would change
 - code reality conflicts with project memory or feature docs
 - unrelated dirty work blocks progress
 - a new dependency, migration, destructive operation, credential, external service, or long-lived boundary directory is needed
 - directory-level `AGENTS.md` creation/update is recommended
+- Complex Artifact Mode detail directories (`tasks/`, `tests/`, `plans/`) would be created or the feature would switch from simple to complex artifact mode
 - the work would require first-version exclusions
 - TDD cannot be followed or verification repeatedly fails
 - review finds behavior/scope/architecture changes

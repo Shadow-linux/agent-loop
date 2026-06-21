@@ -15,6 +15,21 @@
 - Added fallback reporting for unavailable/load-failed skill resolution and validation coverage for long-running agents that try to continue from memory or static root guidance alone.
 - Clarified that Stage Helper Capability Scan does not satisfy Skill Re-entry because helper scan resolves stage methods, not the `agent-loop` controller.
 
+### Medium Consistency Fixes
+- Clarified Auto Mode stop conditions for Delivery Contract creation, acceptance, and breaking changes across runtime guidance.
+- Added routing priority for `remote-entry` before `existing-project`, single-next-stage blocked routing, and no-direct-close Drift Check exits.
+- Added explicit helper scan coverage for Work Breakdown, Test Design, E2E Discovery, and Technical Design / Code Context.
+- Added onboarding mode recording and guided-onboarding fallback routing when onboarding-db is missing.
+- Aligned Standards Review triggers across Task Done Gate, Review, Feature Completion Check, and workflow checklists.
+
+### Complex Artifact Thresholds
+- Replaced hard Complex Artifact recommendation thresholds with a simpler assessment model: stories > 3 pauses for assessment, but does not itself recommend Complex Artifact Mode.
+- Defined Complex Artifact Mode by "牵一发而动全身" semantics: recommend only when a feature cannot be safely understood, planned, or verified as one cohesive change because it spans collaborating modules, services, workflows, ownership lanes, or release/operation concerns.
+- Clarified that story count, task count, test count, and ordinary file/module count are assessment signals only, not sufficient recommendation triggers.
+- Aligned large-project guidance and stage write rules so Complex Mode assessment does not auto-materialize detail directories; `tasks/`, `tests/`, and `plans/` details are created only where needed after confirmation.
+- Preserved human confirmation before creating complex detail directories and updated threshold-boundary validation coverage around semantic complexity.
+- Added explicit Feature Auto-Loop stop condition for Complex Artifact Mode detail directory creation so `tasks/`, `tests/`, and `plans/` directories cannot be auto-created without human confirmation.
+
 ## 1.2.2 — 2026-06-15
 
 ### Operational Support Guard

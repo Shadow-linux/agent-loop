@@ -37,7 +37,7 @@ Check:
 - Is there fresh verification evidence in `notes.md`?
 - Did Feature Close Review complete?
 - Did feature-level Spec Review confirm `product.md` when present, `spec.md`, `tasks.md`, `tests.md`, acceptance criteria, and out-of-scope boundaries are satisfied?
-- Did feature-level Standards Review complete when triggered by large project, broad diff, boundary/security/data change, architecture change, or human request?
+- Did feature-level Standards Review complete when triggered by large project, broad diff, directory or durable boundary change, security/data change, architecture change, or human request?
 - Did Drift Check complete?
 - Are feature docs aligned with implementation reality?
 - Are Delivery Contracts implemented and verified when downstream consumers rely on them?
