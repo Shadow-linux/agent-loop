@@ -20,6 +20,35 @@ Explicit bypass is allowed only for narrow one-off edits that do not create or c
 
 These checks cannot be bypassed inside `agent-loop`: Project Entry classification, re-adoption minimum reconciliation, human source requirement preservation, Task Done Gate, Delivery Contract acceptance or breaking-change gate, fresh verification before completion claims, submit confirmation, and close confirmation.
 
+## Message Intent Classification
+
+Message intent is evaluated before project state classification. It decides what the latest human message is asking the agent to do; Entry Classification still decides the project state.
+
+| Intent | Condition | Default Action |
+|---|---|---|
+| `chat` | chat means ordinary discussion, rules questions, status questions, or design talk with no request to create requirements or start implementation | answer or discuss only |
+| `requirements-discussion` | requirements-discussion means the human is exploring product needs, business goals, capability ideas, constraints, tradeoffs, or user scenarios without authorizing implementation | Requirements Discussion |
+| `feature-request` | human explicitly asks to implement, build, change behavior, or start work from accepted requirements | Project Entry, then Feature Spec / Feature Follow-up routing |
+| `proposal-doc` | human asks to write a proposal, design note, or discussion document without implementing | write the requested proposal/doc only |
+| `deferred-requirement` | human asks to remember, defer, backlog, or do something later | Requirement Archive with Future / Deferred Requirement Intake |
+| `operational-support` | human asks to use current project code/processes to test, run, deploy, switch config/account/model/provider, diagnose, roll out, or create a runbook | Code-Guided Operational Support |
+| `feature-follow-up` | human reports bug, QA feedback, screenshot issue, regression, small tweak, or post-close correction that may relate to recent feature work | Feature Follow-up / Flow-back after project memory is available |
+| `unknown` | message could reasonably mean chat, requirements discussion, feature work, follow-up, or operational support | ask a clarifying question |
+
+If message intent is `chat`, do not create requirement sets, feature workspaces, tasks, tests, or plans. Answer, explain, or discuss. If the chat turns into demand shaping, reclassify as `requirements-discussion`.
+
+If message intent is `requirements-discussion`, do not create a feature workspace or enter Work Breakdown, Plan Gate, or Execute. Route to Requirements Discussion: brainstorm/clarify, draft a human-reviewed requirement document, then archive the document under `.agent-loop/requirements/<archive-date>-<topic>/` after the human confirms the document should be recorded. For `requirements-discussion`, reviewed/recorded does not mean accepted for implementation.
+
+Message intent is not permanent; reclassify when the conversation changes intent.
+
+Chat defaults to answer-only, but it may convert to `requirements-discussion`, `proposal-doc`, `feature-request`, `operational-support`, `feature-follow-up`, or `deferred-requirement` when the human intent changes. Do not keep using `chat` merely because the conversation started as chat.
+
+If the human explicitly says they only want to discuss and do not want documentation yet, keep the intent as `chat` until they ask to shape, record, or archive the requirement.
+
+If unclear whether the human wants ordinary chat or requirements discussion, ask whether to keep discussing or shape the topic into a requirements document.
+
+If unclear whether the human wants requirements discussion or feature implementation, ask whether to form a requirements document first or start feature construction.
+
 ## Entry Classification
 
 Classify the project into exactly one state:
@@ -117,9 +146,13 @@ Do not end an action report with only "done". Always include the next recommende
 
 ## Stage Order
 
+Default order applies after Message Intent Classification. For `requirements-discussion`, use Requirements Discussion before Project Entry-driven feature stages.
+
 Default order:
 
 ```text
+Message Intent Classification
+Chat Entry / Requirements Discussion if Needed
 Project Entry
 Remote Project Discovery if Needed
 Re-Adopt Agent Loop Project if Needed

@@ -34,6 +34,20 @@ Stage Helper Capability Scan does not satisfy Skill Re-entry. Skill Re-entry loa
 If the skill is unavailable or load-failed, follow this AGENTS.md as fallback and report that fallback in the response. If the managed guidance version is older than the available skill version, classify root guidance as stale and propose a managed-block refresh before relying on outdated startup rules.
 <!-- agent-loop:managed-end section:skill-reentry -->
 
+<!-- agent-loop:managed-start section:message-intent source:agent-loop-skill -->
+## Message Intent Guard
+
+Before project-state routing, classify the latest human message intent.
+
+- `chat`: ordinary discussion, rule questions, status questions, or design talk. Answer or discuss only; do not create requirement sets, feature workspaces, tasks, tests, or plans.
+- `requirements-discussion`: the human is exploring product needs, business goals, capability ideas, constraints, tradeoffs, or user scenarios without authorizing implementation. Requirements discussion must shape demand through Brainstorm / Clarify into a human-reviewed requirement document under `.agent-loop/requirements/` before feature construction.
+- `feature-request`: the human explicitly asks to implement, build, change behavior, or start work from accepted requirements. Route through normal agent-loop feature workflow.
+
+Message intent is not permanent. If chat turns into product demand, reclassify as requirements-discussion. If chat turns into a proposal/design-note request, reclassify as `proposal-doc`. If chat turns into implementation, operational support, follow-up, or deferred work, reclassify and route accordingly. If the human explicitly wants discussion without documentation, keep `chat`.
+
+If unclear whether the human wants chat or requirements discussion, ask whether to keep discussing or shape the topic into a requirements document. If unclear whether the human wants requirements discussion or implementation, ask whether to form a requirements document first or start feature construction.
+<!-- agent-loop:managed-end section:message-intent -->
+
 <!-- agent-loop:managed-start section:bootstrap source:.agent-loop/project.md -->
 ## Bootstrap Protocol
 

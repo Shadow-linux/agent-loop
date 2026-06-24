@@ -8,6 +8,8 @@
 - Added backward compatibility rules for old requirement set README files and immutable-source rules so `requirement.md` is not rewritten for lifecycle/status updates.
 - Added Requirement Conflict Review for large follow-up conflicts that should create a new requirement set or supersede the old one after human confirmation.
 - Clarified Targeted Onboarding output, Feature Completion blocked handling, and Feature Follow-up priority behind Project Entry when agent-loop memory is missing.
+- Added Message Intent classification for `chat` and `requirements-discussion` so ordinary discussion stays answer-only, while requirements discussion goes through Brainstorm / Clarify into human-reviewed requirement documents under `.agent-loop/requirements/` before feature construction.
+- Clarified that features derive `product.md` / `spec.md` from requirement sets but never own requirement source or lifecycle.
 
 ### Root Guidance Skill Re-entry
 - Added Skill Re-entry Rule so root `AGENTS.md` is treated as a bootstrap cache, not a replacement for the `agent-loop` skill.

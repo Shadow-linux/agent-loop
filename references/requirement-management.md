@@ -49,6 +49,26 @@ Default behavior:
 4. If discovered during a feature, link the requirement set from feature `notes.md`.
 5. Do not write future TODO, backlog, deferred requirements, or unimplemented planned capability details into `project.md`.
 
+## Requirements Discussion Intake
+
+Use requirements discussion intake when the human is exploring product needs, business goals, capability ideas, constraints, tradeoffs, or user scenarios without authorizing implementation.
+
+Default behavior:
+
+1. Use Brainstorm / Clarify before writing a requirement document.
+2. Draft a human-reviewed requirement document only after the demand is clear enough to review.
+3. Archive the human-reviewed requirement document after the human confirms the document should be recorded.
+4. Set status to `proposed`, `accepted`, `deferred`, `rejected`, or `reference-only` based on the human decision.
+5. Do not create a feature workspace unless the human explicitly says to start implementation.
+
+A requirement document produced from brainstorming is requirement source material after human review.
+
+Reviewed/recorded does not mean accepted for implementation.
+
+Do not move the requirement source into a feature workspace when implementation starts. features reference requirement sets; requirements own source and lifecycle.
+
+Feature `product.md` and `spec.md` may be derived from accepted requirements, but they are implementation views. They do not replace the requirement set and do not own requirement lifecycle.
+
 ## Source File Immutability
 
 Requirement source files are immutable by default.
@@ -57,7 +77,7 @@ Do not overwrite, rewrite, summarize over, or edit `requirement.md` or other sou
 
 Write lifecycle and status updates to requirement set `README.md` and optional `requirements/INDEX.md`. Append new follow-up, feedback, or change material as a new free-form source file in the same requirement set, or create a new requirement set when the follow-up materially conflicts with the original requirement.
 
-If an agent created `requirement.md` from chat, still treat it as source material after creation. Editing it requires explicit human confirmation.
+If an agent created `requirement.md` from requirements discussion, still treat it as source material after human review. Editing it requires explicit human confirmation.
 
 ## Date Meaning
 

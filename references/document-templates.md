@@ -108,6 +108,40 @@ Future/deferred work and backlog items belong in requirement sets and optional `
 
 Recommend `templates/requirements-index.md` only when there are more than 10 requirement sets, many external paths, shared source requirements, frequent supersession, or the human asks for an inventory/backlog view.
 
+## Requirement Document
+
+Use this shape when requirements discussion and Brainstorm / Clarify produce a human-reviewed requirement document:
+
+```md
+# Requirement: <topic>
+
+Status: proposed | accepted | deferred | rejected | reference-only
+Created: YYYY-MM-DD
+Source: conversation | file | link | prototype | mixed
+
+## Background
+
+## Problem
+
+## Users / Operators
+
+## Goals
+
+## Requirements
+
+## Non-goals
+
+## Constraints / Assumptions
+
+## Acceptance Direction
+
+## Open Questions
+
+## Source Conversation Summary
+```
+
+Write the human-reviewed document as `.agent-loop/requirements/<archive-date>-<topic>/requirement.md` after the human confirms the document should be recorded. Do not write it directly into a feature workspace. Feature `product.md` and `spec.md` derive from this source and link back to the requirement set.
+
 ## Root `AGENTS.md`
 
 Use `templates/root-AGENTS.md`.

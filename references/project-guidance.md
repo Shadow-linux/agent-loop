@@ -43,6 +43,7 @@ Compare versions as semantic versions in `major.minor.patch` form, not as plain 
 
 - project uses `agent-loop`
 - Skill Re-entry Rule is missing: root guidance must say root `AGENTS.md` is a bootstrap cache rather than a replacement for the `agent-loop` skill, must load/use the available skill before agent-loop workflow decisions, and must say Stage Helper Capability Scan does not satisfy Skill Re-entry
+- Message Intent Guard: distinguish `chat`, `requirements-discussion`, and `feature-request` before project-state routing; chat answers only, while requirements discussion uses Brainstorm / Clarify to produce requirement documents under `.agent-loop/requirements/`
 - Bootstrap Protocol: inspect `.agent-loop/`, classify the stage, and recommend exactly one next action
 - Agent Ownership: agents steer the loop instead of waiting for the human to name every step
 - Stage Helper Capability Scan: agents actively check available skills/plugins/helpers before fallback stage guidance
@@ -201,6 +202,7 @@ Keep it short and long-lived:
 
 - project uses `agent-loop`
 - Skill Re-entry Rule: root `AGENTS.md` is bootstrap guidance, not a replacement for the `agent-loop` skill; if the runtime exposes the skill, load/use it before making workflow decisions, especially during Project Entry, Resume, Re-Adopt, stage boundaries, after context compaction, or when workflow state is uncertain; Stage Helper Capability Scan does not satisfy Skill Re-entry; if unavailable or load-failed, follow root guidance as fallback and report that fallback
+- Message Intent Guard: before project-state routing, distinguish `chat`, `requirements-discussion`, and `feature-request`; chat answers/discusses only, requirements discussion shapes demand through Brainstorm / Clarify into human-reviewed requirement documents under `.agent-loop/requirements/`, and feature requests enter normal feature workflow
 - Root Agent Bootstrap: read `AGENTS.md`, inspect `.agent-loop/`, classify the current stage, and recommend exactly one next action
 - guidance language follows project language; keep stable artifact/stage names in English
 - before development, inspect `.agent-loop/`
@@ -227,7 +229,7 @@ Keep it short and long-lived:
 - perform Feature Close Review, drift check, and project memory update before close
 - stable project commands and hard constraints, only if every agent should know them immediately
 - managed block markers for `agent-loop` maintained sections, so future updates do not overwrite human-owned content
-- stale detection: if future agents cannot learn Agent Ownership, Gate Modes, Required Stops, Completion Rules, and Submit And Commit Rules from root guidance, propose a root `AGENTS.md` update
+- stale detection: if future agents cannot learn Message Intent Guard, Agent Ownership, Gate Modes, Required Stops, Completion Rules, and Submit And Commit Rules from root guidance, propose a root `AGENTS.md` update
 
 ## Root `AGENTS.md` Should Not Contain
 

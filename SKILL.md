@@ -35,6 +35,10 @@ Also treat root project guidance as the agent bootstrap layer. When working insi
 
 Also treat long-term memory indexes as claims that must be verified before reliance. If `project.md`, root guidance, or a current artifact points to `.agent-loop/onboarding-db/`, enterprise `project/*.md`, feature docs, contracts, or guidance files that are missing, stale, contradictory, or not human-reviewed as claimed, classify the entry as `stale-memory`, load `references/recovery-and-backfill.md`, and recommend the smallest reconcile/backfill before relying on those docs or starting feature work.
 
+## Message Intent Guard
+
+Before project-state classification, classify the latest human message intent. `chat` means ordinary discussion, rules questions, status questions, or design talk; answer or discuss only and do not create requirement sets or feature workspaces by default. Message intent is not permanent: if chat turns into demand shaping, `proposal-doc`, implementation, operational support, follow-up, or deferred work, reclassify and route accordingly. If the human explicitly wants discussion without documentation, keep `chat`. `requirements-discussion` means the human is shaping product needs, business goals, capability ideas, constraints, tradeoffs, or user scenarios without authorizing implementation; use Brainstorm / Clarify to produce a human-reviewed requirement document under `.agent-loop/requirements/` before feature construction. If unclear, ask whether the human wants ordinary discussion, requirements documentation, or feature implementation.
+
 ## Mandatory Stage Helper Protocol
 
 Seven stages are mandatory helper-backed stages when a matching helper is exposed by the runtime: Brainstorm / Clarify, Plan Gate / Plan, Execute Task / Story, Diagnose Failure, Verify, Review / Feature Close Review, and approved Subagent Execution.
@@ -51,6 +55,8 @@ Use this skill when the user wants to:
 
 - initialize agent-managed development in a new or existing project
 - re-adopt an old `agent-loop` project after code changed without updating `agent-loop` docs
+- answer workflow/project questions without turning chat into feature work
+- shape product needs through requirements-discussion into requirement documents under `.agent-loop/requirements/`
 - turn requirements or prototypes into feature specs, tasks, tests, plans, and implementation
 - use existing project code, configuration, scripts, or deployment docs to support operational testing, rollout, account/config/model switching, production diagnosis, or runbook/checklist creation without defaulting to code changes
 - continue a paused feature or recover project context
@@ -109,7 +115,10 @@ CHANGELOG.md                        skill maintenance history; append meaningful
 
 1. Inspect `.agent-loop/`; if missing, also check legacy `agent-loop/`.
 2. Check root `AGENTS.md` / `CLAUDE.md` as the Root Agent Bootstrap Gate; if either is missing or stale, load `references/project-guidance.md` and include the guidance repair in the recommended Project Entry action unless the human has explicitly deferred it.
-3. Classify the entry scenario.
+3. Classify the latest message intent: `chat`, `requirements-discussion`, `feature-request`, `operational-support`, `feature-follow-up`, `deferred-requirement`, or `unknown`.
+3a. For `chat`, answer or discuss only; do not create requirement sets, feature workspaces, tasks, tests, or plans.
+3b. For `requirements-discussion`, load `references/requirement-management.md`, use Brainstorm / Clarify, produce a human-reviewed requirement document, and archive it under `.agent-loop/requirements/<archive-date>-<topic>/` after confirmation before any feature construction.
+3c. Classify the entry scenario.
 4. Load the stage guide for the current scenario.
 4a. Run Stage Helper Capability Scan for the current stage. For a mandatory helper-backed stage, load `references/skill-routing.md` and `references/external-skill-adapters.md`, resolve canonical and alias names, load the complete helper before stage actions when found, and record the resolution. Use fallback only after recording `unavailable` or `load-failed`.
 5. Load `references/project-guidance.md` during project init/onboarding/re-adoption, when root guidance is missing/stale, or when long-term agent instructions may need sync.
@@ -209,6 +218,7 @@ If the local directory is only a remote-project entry point, create only thin lo
 - Human source requirements are archived as requirement set directories, not new flat files. Each requirement set groups the human's requirement, prototype, feedback, screenshots, recordings, links, and follow-up notes for one intake event or topic.
 - `.agent-loop/requirements/` is canonical. Do not create or maintain legacy `inputs/` archives in current-version projects.
 - Human source requirement archive dates mean archive date only; never infer deadlines, scope duration, or lifecycle from input paths.
+- Requirements created from requirements-discussion live under `.agent-loop/requirements/`; feature `product.md` and `spec.md` only derive from and link to requirement sets, and do not own requirement lifecycle.
 - Future/deferred work, backlog items, and unimplemented planned capabilities belong in requirement set lifecycle/status records and optional `requirements/INDEX.md`, not in `project.md`. Do not edit `requirement.md` or other source files for lifecycle/status updates.
 - Project Memory Mode is either `simple` or `enterprise`. Default to simple. Recommend enterprise when any hard trigger applies, including about 200k+ LOC, 5+ durable boundaries, 2+ test systems, 3+ execution environments, `project.md` above about 600 lines, repeated re-scans, or 5+ directory-level guidance files.
 - In enterprise mode, `project.md` is an index and current-state summary. Long-term project knowledge moves into optional `.agent-loop/project/*.md` files created only after human confirmation and only when useful.

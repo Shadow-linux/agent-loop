@@ -2529,3 +2529,100 @@ Expected:
 - explain the complex semantics and which detail directories are needed
 - ask human confirmation before creating `tasks/`, `tests/`, or `plans/`
 - create only the detail directories that are actually needed; stable `tasks.md`, `tests.md`, and `plan.md` remain mandatory indexes/current-state summaries
+
+## 63. Chat And Requirements Discussion Entry
+
+Prompt A:
+
+```text
+Use agent-loop. 现在 agent-loop 的 Complex Mode 是什么规则？
+```
+
+Expected A:
+
+- classify message intent as `chat`
+- answer only
+- do not create requirement set
+- do not create feature workspace
+- do not enter Work Breakdown / Plan / Execute
+
+Prompt B:
+
+```text
+Use agent-loop. 我们聊一下需求：Agent 进来的时候应该区分普通聊天和聊需求。聊需求时要经过头脑风暴产生需求文档，先不要实现。
+```
+
+Expected B:
+
+- classify message intent as `requirements-discussion`
+- use Brainstorm / Clarify behavior
+- ask only requirement-shaping questions
+- produce a requirement document draft
+- recommend archiving the human-reviewed document under `.agent-loop/requirements/<date-topic>/` after the human confirms it should be recorded
+- do not create feature workspace
+- do not enter Work Breakdown / Plan / Execute
+
+Prompt C:
+
+```text
+Use agent-loop. 先把这个需求整理成需求文档，不要开始开发。
+```
+
+Expected C:
+
+- classify as `requirements-discussion`
+- write the human-reviewed requirement document under a requirement set after the human confirms it should be recorded
+- set status to `proposed`, `accepted`, `deferred`, `rejected`, or `reference-only` based on the human decision
+- feature `product.md` and `spec.md` are not created unless the human later says to start implementation
+
+Prompt D:
+
+```text
+Use agent-loop. 开始实现刚刚那个 chat entry 需求。
+```
+
+Expected D:
+
+- find or ask for the relevant requirement set
+- create feature workspace only after human confirms implementation
+- feature `spec.md` references Source Requirements
+- requirement set remains the demand source and lifecycle owner
+
+Prompt E:
+
+```text
+Use agent-loop. 先问个问题：入口判断能不能简单点？……说着说着我觉得这里其实是一个需求，应该把 chat 转成 requirements-discussion 并产出需求文档。
+```
+
+Expected E:
+
+- start as `chat` when it is only a question
+- reclassify from `chat` to `requirements-discussion` when the human starts shaping demand
+- ask whether to shape the topic into a requirements document if confirmation is unclear
+- do not keep the permanent `chat` label after the intent changes
+- do not create feature workspace or enter implementation
+
+Prompt F:
+
+```text
+Use agent-loop. 刚才只是聊天，但你先写个 proposal 记录下，不要实现。
+```
+
+Expected F:
+
+- reclassify from `chat` to `proposal-doc`
+- write only the requested proposal/design note
+- do not create a requirement set unless the human asks to shape/record requirements
+- do not create feature workspace
+
+Prompt G:
+
+```text
+Use agent-loop. 我只是想聊聊这个产品方向，不要先写需求文档。
+```
+
+Expected G:
+
+- keep the intent as `chat` because the human explicitly does not want documentation yet
+- discuss or ask clarifying questions only
+- do not route to Requirements Discussion until the human asks to shape, record, or archive the requirement

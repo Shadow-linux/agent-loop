@@ -103,6 +103,75 @@ Exit:
 - root `CLAUDE.md` status is `points-to-AGENTS`, `created-pointer`, or `human-deferred`
 - next stage: Requirement Archive when the human supplied requirements/prototypes in chat or files; otherwise Brainstorm / Clarify, Product Brief if Needed, or Feature Spec when intent is already stable
 
+## Chat Entry
+
+Entry: message intent is `chat`: ordinary discussion, rules questions, status questions, or design talk with no request to create requirements or start implementation.
+
+Chat Entry is a default entry behavior, not a permanent label.
+
+Do:
+
+- answer, explain, or discuss
+- inspect relevant agent-loop docs, project docs, or code only when useful for the answer
+- if the discussion starts shaping demand, reclassify as `requirements-discussion`
+- If chat evolves into product demand, reclassify as `requirements-discussion` and ask whether to shape it into a requirements document
+- If chat turns into a proposal or design-note request, reclassify as `proposal-doc` and write only the requested proposal/doc
+- If the human explicitly says they only want to discuss and do not want documentation yet, keep the intent as `chat`
+- if the human asks to implement, reclassify as `feature-request`
+
+Do not:
+
+- create requirement sets
+- create feature workspaces
+- enter Work Breakdown, Plan Gate, Execute, Submit, or Close
+- treat chat as approval to mutate files
+
+Exit:
+
+- answer is provided, or
+- next recommended intent is `requirements-discussion`, `proposal-doc`, `feature-request`, `operational-support`, `feature-follow-up`, `deferred-requirement`, or Ask Human
+
+## Requirements Discussion
+
+Entry: message intent is `requirements-discussion`: the human is exploring product needs, business goals, capability ideas, constraints, tradeoffs, or user scenarios without authorizing implementation.
+
+Default path:
+
+```text
+requirements-discussion -> Brainstorm / Clarify -> Requirement Document Draft -> Human Review -> Requirement Archive
+```
+
+Use:
+
+- `requirement-management.md`
+- `document-templates.md`
+- `human-review-summary.md` before approval
+- `skill-routing.md` and `external-skill-adapters.md` when a brainstorming or product-discovery helper is available
+
+Rules:
+
+- use Brainstorm / Clarify to shape the demand before writing the requirement document
+- ask only questions that affect requirement clarity, scope, users/operators, constraints, non-goals, or acceptance direction
+- write a requirement document draft only after the intent is clear enough for human review
+- The human-reviewed requirement document is stored under `.agent-loop/requirements/<archive-date>-<topic>/` after the human confirms the document should be recorded
+- Reviewed/recorded does not mean accepted for implementation
+- do not create a feature workspace during requirements discussion unless the human explicitly says to start implementation
+- do not enter Work Breakdown, Plan Gate, or Execute
+- Feature `product.md` and `spec.md` are derived implementation views; they do not own requirement lifecycle
+- if the human wants to implement after requirement acceptance, create a feature that references the requirement set in Source Requirements
+
+Write after confirmation:
+
+- `.agent-loop/requirements/<archive-date>-<topic>/README.md`
+- `.agent-loop/requirements/<archive-date>-<topic>/requirement.md`
+- optional `.agent-loop/requirements/INDEX.md` only when it already exists, index triggers apply, or the human asks for an inventory/backlog view
+
+Exit:
+
+- requirement document accepted and archived
+- requirement discussion remains open with next clarification question
+- human chooses to start feature implementation from the accepted requirement set
+
 ## Remote Project Discovery
 
 Entry: the human says this is a remote project, local files contain remote-entry hints, or local/remote/container execution is unclear. An empty local directory with no remote hint should route to Init Project, not Remote Project Discovery.

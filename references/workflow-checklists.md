@@ -25,6 +25,20 @@ Before using an external skill or plugin inside a stage:
 - [ ] Do not create external default directories such as `docs/superpowers/*` unless the human explicitly requests native external output and then confirms after the agent explains the agent-loop path override.
 - [ ] Do not let the external skill mark tasks `done`, close a feature, submit code, update project memory, accept Delivery Contracts, approve breaking changes, or skip human gates.
 
+## Message Intent
+
+- [ ] Classify the latest human message intent before project state classification.
+- [ ] If message intent is `chat`, answer or discuss only; do not create a requirement set or feature workspace.
+- [ ] Reclassify chat when the conversation turns into requirements discussion, feature implementation, operational support, follow-up, or deferred requirement intake.
+- [ ] Reclassify chat as `proposal-doc` when the human asks for a proposal/design note without implementation.
+- [ ] Keep intent as `chat` when the human explicitly wants discussion without documentation.
+- [ ] If message intent is `requirements-discussion`, route to Requirements Discussion before Feature Spec.
+- [ ] During requirements discussion, use Brainstorm / Clarify and produce a human-reviewed requirement document before archiving.
+- [ ] Archive human-reviewed requirement documents under `.agent-loop/requirements/<archive-date>-<topic>/` after the human confirms the document should be recorded.
+- [ ] Do not move requirement source into feature docs; feature `product.md` and `spec.md` only derive from and link to requirement sets.
+- [ ] If unclear whether this is chat or requirements discussion, ask whether to keep discussing or shape the topic into a requirements document.
+- [ ] If unclear whether this is requirements discussion or feature implementation, ask whether to form a requirements document first or start feature construction.
+
 ## Project Entry
 
 - [ ] Inspect whether `.agent-loop/` exists.
@@ -43,7 +57,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Default to read-only code/process analysis and checklist/runbook output.
 - [ ] Confirm before code/config/deploy/destructive operations, paid-quota external calls, credential rotation, or feature/fix escalation.
 - [ ] Check root `AGENTS.md` / `CLAUDE.md` and any obvious directory-level guidance.
-- [ ] Treat root `AGENTS.md` as stale if it lacks Bootstrap Protocol, Agent Ownership, Operational Support Guard, Stage Helper Capability Scan, Gate Modes, Required Stops, Completion Rules, Feature Follow-up / Flow-back, Submit And Commit Rules, root/directory guidance boundaries, or requirement archive rules.
+- [ ] Treat root `AGENTS.md` as stale if it lacks Message Intent Guard or lacks Bootstrap Protocol, Agent Ownership, Operational Support Guard, Stage Helper Capability Scan, Gate Modes, Required Stops, Completion Rules, Feature Follow-up / Flow-back, Submit And Commit Rules, root/directory guidance boundaries, or requirement archive rules.
 - [ ] If root `AGENTS.md` uses agent-loop managed blocks, compare its managed guidance version with the current local `agent-loop` skill version.
 - [ ] Treat root `AGENTS.md` as stale if the managed guidance version is older than the current local `agent-loop` skill version, unless the human explicitly defers refresh.
 - [ ] Treat root `CLAUDE.md` as stale if it duplicates independent long-lived rules or does not clearly point to `AGENTS.md`.
@@ -93,7 +107,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Build boundary map from durable directories.
 - [ ] Inventory root and directory-level guidance files.
 - [ ] Check whether root `AGENTS.md` exists, is stale, or must be created.
-- [ ] If root `AGENTS.md` exists, verify it contains Bootstrap Protocol, Agent Ownership, Gate Modes, Required Stops, and Completion Rules.
+- [ ] If root `AGENTS.md` exists, verify it contains Message Intent Guard, Bootstrap Protocol, Agent Ownership, Gate Modes, Required Stops, and Completion Rules.
 - [ ] If root `AGENTS.md` uses agent-loop managed blocks, compare its managed guidance version with the current local `agent-loop` skill version.
 - [ ] Check whether root `CLAUDE.md` exists and loads or points to `AGENTS.md`; if it duplicates or diverges, propose converting it to a pointer.
 - [ ] Run AGENTS Cleanup / Migration Review when existing root guidance has conflicting workflow rules, duplicated agent-loop rules, or long-term project memory that belongs in `.agent-loop/project.md` or enterprise `.agent-loop/project/*.md`.
