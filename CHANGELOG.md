@@ -16,6 +16,9 @@
 - Required agents to load/use the available `agent-loop` skill during Project Entry, Resume, Re-Adopt, stage boundaries, after context compaction, long-running sessions, or workflow uncertainty.
 - Added fallback reporting for unavailable/load-failed skill resolution and validation coverage for long-running agents that try to continue from memory or static root guidance alone.
 - Clarified that Stage Helper Capability Scan does not satisfy Skill Re-entry because helper scan resolves stage methods, not the `agent-loop` controller.
+- Added per-managed-block `block-version` metadata and root AGENTS refresh protocol so same-version templates can still detect missing or stale managed blocks.
+- Shortened the Managed Block Rule in root AGENTS guidance while preserving confirmation, outside-content protection, and cleanup / migration review requirements.
+- Clarified that target-project AGENTS refreshes must copy the full template block revision, such as `block-version:1.2.3-20260625`; bare skill-version-only values like `block-version:1.2.3` are stale.
 
 ### Medium Consistency Fixes
 - Clarified Auto Mode stop conditions for Delivery Contract creation, acceptance, and breaking changes across runtime guidance.

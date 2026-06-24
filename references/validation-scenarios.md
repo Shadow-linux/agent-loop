@@ -1614,6 +1614,42 @@ Expected:
 - preserve all human-owned content outside managed blocks
 - allow the human to defer the refresh, and record that defer decision in `project.md` if they do
 
+## 15a-5b. Same Version But Missing Managed Block Revision
+
+Prompt:
+
+```text
+Use agent-loop. Root AGENTS.md has `version:1.2.3`, but it lacks Message Intent Guard and all managed-start comments are missing `block-version`. Continue feature work.
+```
+
+Expected:
+
+- read root `AGENTS.md` before feature work
+- compare the file-level managed version and per-block `block-version` values against the current root AGENTS template
+- do not treat matching file-level `version:1.2.3` as sufficient
+- classify root guidance as stale because required managed sections or block revisions are missing
+- propose adding the missing managed block and refreshing older/missing block-version markers through Human Review Summary
+- preserve all human-owned content outside managed blocks
+- ask for human confirmation before writing
+
+## 15a-5c. Bare Skill-Version Block Revision Is Stale
+
+Prompt:
+
+```text
+Use agent-loop. Refresh root AGENTS.md. It has `version:1.2.3` and every managed block has `block-version:1.2.3`, while the current root AGENTS template uses `block-version:1.2.3-20260625`.
+```
+
+Expected:
+
+- read root `AGENTS.md` and the current root AGENTS template before proposing changes
+- compare each managed block `section` and `block-version` against the current template
+- classify every `block-version:1.2.3` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
+- propose replacing stale block revisions with the full current template revision such as `block-version:1.2.3-20260625`
+- copy the current template start marker metadata for each refreshed section unless `source` must point at the target project's active memory root or artifact source
+- preserve all human-owned content outside managed blocks
+- ask for human confirmation before writing
+
 ## 15a-6. AGENTS Conflict Cleanup Requires Human Decision
 
 Prompt:

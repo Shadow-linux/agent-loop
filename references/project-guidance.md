@@ -31,7 +31,7 @@ Every time `agent-loop` is used inside a target project, check root guidance bef
 3. Check whether CLAUDE.md loads, includes, symlinks to, or clearly points to AGENTS.md.
 4. Apply the Skill Re-entry Rule when the runtime exposes the agent-loop skill.
 5. Check whether AGENTS.md contains the required bootstrap sections.
-6. If AGENTS.md uses agent-loop managed blocks, compare its managed guidance version with the current local agent-loop skill version.
+6. If AGENTS.md uses agent-loop managed blocks, compare its file-level managed guidance version and per-block `block-version` values with the current root AGENTS template.
 7. Record or update guidance status in project.md.
 8. If missing or stale, propose a repair through Human Review Summary.
 ```
@@ -55,6 +55,7 @@ Compare versions as semantic versions in `major.minor.patch` form, not as plain 
 - root/directory guidance boundaries and requirement archive rules
 - managed block markers are missing for `agent-loop` maintained sections, unless the file is intentionally fully human-owned and the human has deferred managed block adoption
 - managed guidance version is older than the current local `agent-loop` skill version, unless the human explicitly defers the refresh
+- a managed block from the current root AGENTS template is missing, has no `block-version`, or has an older `block-version` than the current template, even when the file-level managed guidance version matches
 
 `CLAUDE.md` is stale when it duplicates independent long-lived rules, diverges from `AGENTS.md`, or does not clearly point Claude Code to `AGENTS.md`.
 
@@ -104,7 +105,7 @@ Never overwrite an existing ordinary `CLAUDE.md` or `AGENTS.md` without reading 
 Use managed blocks to mark content maintained by `agent-loop` inside root `AGENTS.md`:
 
 ```md
-<!-- agent-loop:managed-start section:<name> source:<path-or-artifact> -->
+<!-- agent-loop:managed-start section:<name> source:<path-or-artifact> block-version:<agent-loop-version>-<YYYYMMDD> -->
 ...
 <!-- agent-loop:managed-end section:<name> -->
 ```
@@ -112,7 +113,7 @@ Use managed blocks to mark content maintained by `agent-loop` inside root `AGENT
 Recommended metadata block:
 
 ```md
-<!-- agent-loop:managed-start section:meta source:agent-loop-skill version:<agent-loop-version> -->
+<!-- agent-loop:managed-start section:meta source:agent-loop-skill version:<agent-loop-version> block-version:<agent-loop-version>-<YYYYMMDD> -->
 ...
 <!-- agent-loop:managed-end section:meta -->
 ```
@@ -123,6 +124,7 @@ Recommended section names:
 bootstrap
 meta
 skill-reentry
+message-intent
 ownership
 gates
 required-stops
@@ -140,8 +142,12 @@ Rules:
 - `agent-loop` may propose updates inside managed blocks when the source artifact changes.
 - Managed blocks must include `section`; they should include `source` when the content comes from a stable artifact such as `.agent-loop/project.md`, `.agent-loop/project/*.md`, `.agent-loop/onboarding-db/README.md`, or `ARCHITECTURE.md`.
 - The root `meta` managed block should include `version:<agent-loop-version>` so future agents can compare the synced guidance version against the current local skill version.
+- Every managed block should include `block-version:<agent-loop-version>-<YYYYMMDD>` so future agents can refresh specific blocks when the file-level version is unchanged. Use `block-version:<agent-loop-version>-<YYYYMMDD>`; do not shorten it to the skill version alone.
 - Content outside managed blocks is human/project-owned. Do not rewrite it automatically.
 - If an existing `AGENTS.md` has no managed blocks, propose adding the minimal needed managed blocks instead of replacing the whole file.
+- If the file-level managed version is equal but a block-version is missing or older than the current template, treat that block as stale.
+- Treat bare skill-version-only block revisions such as `block-version:1.2.3` as stale because they cannot distinguish same-version template revisions.
+- If a managed block exists in the current template but is missing from root AGENTS.md, treat it as a missing managed block and propose adding it.
 - If a managed block source is missing, stale, or contradictory, classify the block as stale and propose either source correction or block refresh through Human Review Summary.
 - If marker pairs are broken, duplicated, nested, or ambiguous, stop and ask before editing.
 - Do not put task status, feature progress, raw requirements, plans, or test output inside managed blocks.
@@ -156,18 +162,36 @@ Managed block detection checklist:
 5. Reject orphan end markers and start markers without an end marker.
 6. Check that each start marker has `section`; check `source` when the block claims to mirror a stable artifact.
 7. If a `meta` block is present, parse `version:<agent-loop-version>` and compare it with the current local `agent-loop` skill version using semantic version ordering, not plain string comparison.
-8. Check whether each `source` path exists or is intentionally external/deferred before relying on it.
-9. If any check fails, classify root guidance as `stale-marker` and stop before editing `AGENTS.md`.
+8. Parse `block-version` from each managed block when present and compare it with the matching section in the current root AGENTS template.
+9. Check whether each `source` path exists or is intentionally external/deferred before relying on it.
+10. If any check fails, classify root guidance as `stale-marker` and stop before editing `AGENTS.md`.
 
 Managed block update flow:
 
 1. Read the existing `AGENTS.md`.
 2. Identify managed blocks and their sources.
-3. Compare source facts with block content.
+3. Compare source facts, required sections, file-level version, and per-block `block-version` with the current root AGENTS template.
 4. Present a table with block, source, current summary, proposed change, and risk.
 5. Ask human confirmation.
 6. Update only approved managed blocks; preserve all other content byte-for-byte where practical.
 7. Record guidance status and source evidence in `project.md`.
+
+## Root AGENTS Refresh Protocol
+
+Use this protocol when root `AGENTS.md` exists and the project already uses `agent-loop`.
+
+1. Read the existing root `AGENTS.md` before proposing updates.
+2. Validate managed block markers with the managed block detection checklist.
+3. Compare the file-level managed version with the current local `agent-loop` skill version.
+4. Compare each managed block `section` and `block-version` against the current root AGENTS template.
+5. If the file-level managed version is equal but a block-version is missing or older than the current template, treat that block as stale.
+6. Treat bare skill-version-only block revisions such as `block-version:1.2.3` as stale because they cannot distinguish same-version template revisions.
+7. If a managed block exists in the current template but is missing from root AGENTS.md, treat it as a missing managed block and propose adding it.
+8. Copy the exact start marker metadata for each refreshed section from the current root AGENTS template unless the section source must point at a target-project artifact. If the target project uses legacy `agent-loop/` instead of `.agent-loop/`, adjust only the `source`; keep the template `block-version` unchanged.
+9. Run AGENTS Cleanup / Migration Review for content outside managed blocks before writing.
+10. Present a Human Review Summary with block, current version, template version, proposed change, risk, and human decision.
+11. Preserve all content outside managed blocks unless the human explicitly approves cleanup, replacement, or migration.
+12. Update only approved managed blocks and record the guidance status in `project.md`.
 
 ## AGENTS Cleanup / Migration Review
 
@@ -229,7 +253,7 @@ Keep it short and long-lived:
 - perform Feature Close Review, drift check, and project memory update before close
 - stable project commands and hard constraints, only if every agent should know them immediately
 - managed block markers for `agent-loop` maintained sections, so future updates do not overwrite human-owned content
-- stale detection: if future agents cannot learn Message Intent Guard, Agent Ownership, Gate Modes, Required Stops, Completion Rules, and Submit And Commit Rules from root guidance, propose a root `AGENTS.md` update
+- stale detection: if future agents cannot learn Message Intent Guard, Agent Ownership, Gate Modes, Required Stops, Completion Rules, and Submit And Commit Rules from root guidance, or if managed block `block-version` values are missing/older than the current template, propose a root `AGENTS.md` update
 
 ## Root `AGENTS.md` Should Not Contain
 

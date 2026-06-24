@@ -8,13 +8,13 @@ Guidance language should follow this project's language preference. Keep stable 
 
 ## Managed Block Rule
 
-Sections wrapped in `agent-loop:managed-start` / `agent-loop:managed-end` are maintained by `agent-loop`.
+Managed blocks are maintained by `agent-loop`; content outside them is human/project-owned.
 
-Agents may propose updates to managed blocks when source facts change, but must ask for human confirmation before writing. Content outside managed blocks is human/project-owned and must not be rewritten automatically.
+When refreshing, compare each block against the current template by `section` and full `block-version`, e.g. `1.2.3-20260625`. Bare versions like `1.2.3` are stale.
 
-When creating or refreshing this file, inspect content outside managed blocks. If it contains workflow rules that conflict with current `agent-loop`, or long-term project facts that belong in project memory, present an AGENTS cleanup / migration review and ask whether to keep, remove/replace, or migrate those entries. Do not silently delete or move them.
+Copy template marker metadata for refreshed sections; adjust only `source` when the target project uses a different memory root. Ask before writing and never rewrite outside-managed content silently.
 
-<!-- agent-loop:managed-start section:meta source:agent-loop-skill version:1.2.3 -->
+<!-- agent-loop:managed-start section:meta source:agent-loop-skill version:1.2.3 block-version:1.2.3-20260625 -->
 ## Agent Loop Guidance Version
 
 - This root guidance was last synced from `agent-loop` skill version `1.2.3`.
@@ -22,7 +22,7 @@ When creating or refreshing this file, inspect content outside managed blocks. I
 - If the current skill version is newer, classify root guidance as `stale` and propose refreshing managed blocks through Human Review Summary before relying on outdated startup rules.
 <!-- agent-loop:managed-end section:meta -->
 
-<!-- agent-loop:managed-start section:skill-reentry source:agent-loop-skill -->
+<!-- agent-loop:managed-start section:skill-reentry source:agent-loop-skill block-version:1.2.3-20260625 -->
 ## Skill Re-entry Rule
 
 Root AGENTS.md is a bootstrap cache, not a replacement for the agent-loop skill.
@@ -34,7 +34,7 @@ Stage Helper Capability Scan does not satisfy Skill Re-entry. Skill Re-entry loa
 If the skill is unavailable or load-failed, follow this AGENTS.md as fallback and report that fallback in the response. If the managed guidance version is older than the available skill version, classify root guidance as stale and propose a managed-block refresh before relying on outdated startup rules.
 <!-- agent-loop:managed-end section:skill-reentry -->
 
-<!-- agent-loop:managed-start section:message-intent source:agent-loop-skill -->
+<!-- agent-loop:managed-start section:message-intent source:agent-loop-skill block-version:1.2.3-20260625 -->
 ## Message Intent Guard
 
 Before project-state routing, classify the latest human message intent.
@@ -48,7 +48,7 @@ Message intent is not permanent. If chat turns into product demand, reclassify a
 If unclear whether the human wants chat or requirements discussion, ask whether to keep discussing or shape the topic into a requirements document. If unclear whether the human wants requirements discussion or implementation, ask whether to form a requirements document first or start feature construction.
 <!-- agent-loop:managed-end section:message-intent -->
 
-<!-- agent-loop:managed-start section:bootstrap source:.agent-loop/project.md -->
+<!-- agent-loop:managed-start section:bootstrap source:.agent-loop/project.md block-version:1.2.3-20260625 -->
 ## Bootstrap Protocol
 
 Before development work:
@@ -69,7 +69,7 @@ Before development work:
 14. Classify the current `agent-loop` stage and recommend exactly one next action.
 <!-- agent-loop:managed-end section:bootstrap -->
 
-<!-- agent-loop:managed-start section:ownership source:.agent-loop/project.md -->
+<!-- agent-loop:managed-start section:ownership source:.agent-loop/project.md block-version:1.2.3-20260625 -->
 ## Agent Ownership
 
 - Own workflow diagnosis, sequencing, implementation, verification, review, drift checks, and project-memory updates.
@@ -82,7 +82,7 @@ Before development work:
 - For non-trivial confirmations, present a table-first Human Review Summary before asking approval.
 <!-- agent-loop:managed-end section:ownership -->
 
-<!-- agent-loop:managed-start section:gates source:.agent-loop/project.md -->
+<!-- agent-loop:managed-start section:gates source:.agent-loop/project.md block-version:1.2.3-20260625 -->
 ## Gate Modes
 
 - Strict Mode is the default: ask before and after every stage.
@@ -91,7 +91,7 @@ Before development work:
 - If repeated confirmations slow the human down, proactively explain Feature Auto-Loop and Task Auto-Run, then ask before enabling either mode.
 <!-- agent-loop:managed-end section:gates -->
 
-<!-- agent-loop:managed-start section:required-stops source:.agent-loop/project.md -->
+<!-- agent-loop:managed-start section:required-stops source:.agent-loop/project.md block-version:1.2.3-20260625 -->
 ## Required Stops
 
 Stop and ask when:
@@ -114,7 +114,7 @@ Stop and ask when:
 Auto modes do not bypass these stops.
 <!-- agent-loop:managed-end section:required-stops -->
 
-<!-- agent-loop:managed-start section:completion source:.agent-loop/project.md -->
+<!-- agent-loop:managed-start section:completion source:.agent-loop/project.md block-version:1.2.3-20260625 -->
 ## Completion Rules
 
 - Before completion claims, run fresh verification and record evidence.
@@ -125,7 +125,7 @@ Auto modes do not bypass these stops.
 - Feature Close Review requires feature-level Spec Review. Standards Review is required for large projects, broad diffs, boundary/security/data changes, architecture changes, or human request.
 <!-- agent-loop:managed-end section:completion -->
 
-<!-- agent-loop:managed-start section:submit source:.agent-loop/project.md -->
+<!-- agent-loop:managed-start section:submit source:.agent-loop/project.md block-version:1.2.3-20260625 -->
 ## Submit And Commit Rules
 
 - Submit, commit, PR, merge, release, and publish require explicit human confirmation after diff, verification, review, drift, and unrelated-change checks.
@@ -136,7 +136,7 @@ Auto modes do not bypass these stops.
 - For the `agent-loop` skill repository itself, use `<type>(v<version>): <Chinese summary>` and a 3-7 bullet body for meaningful commits.
 <!-- agent-loop:managed-end section:submit -->
 
-<!-- agent-loop:managed-start section:artifacts source:.agent-loop/project.md -->
+<!-- agent-loop:managed-start section:artifacts source:.agent-loop/project.md block-version:1.2.3-20260625 -->
 ## Project Memory And Artifacts
 
 - Resolve project-memory and feature paths relative to the active memory root: `.agent-loop/` by default, or legacy `agent-loop/` for the current run.
@@ -149,13 +149,13 @@ Auto modes do not bypass these stops.
 - Do not write task logs, feature progress, raw requirements, temporary plans, or test transcripts into `AGENTS.md`.
 <!-- agent-loop:managed-end section:artifacts -->
 
-<!-- agent-loop:managed-start section:architecture source:.agent-loop/project.md -->
+<!-- agent-loop:managed-start section:architecture source:.agent-loop/project.md block-version:1.2.3-20260625 -->
 ## Architecture Snapshot
 
 Add only startup-critical architecture boundaries that every future agent must know immediately. If the project has `ARCHITECTURE.md`, this block may use `source:ARCHITECTURE.md` instead. Keep details in `ARCHITECTURE.md`, `.agent-loop/project.md`, or `.agent-loop/onboarding-db/`.
 <!-- agent-loop:managed-end section:architecture -->
 
-<!-- agent-loop:managed-start section:directory-guidance source:.agent-loop/project.md -->
+<!-- agent-loop:managed-start section:directory-guidance source:.agent-loop/project.md block-version:1.2.3-20260625 -->
 ## Directory Guidance
 
 - Directory-level `AGENTS.md` files are for long-lived boundary rules only.
@@ -163,7 +163,7 @@ Add only startup-critical architecture boundaries that every future agent must k
 - Do not create directory-level `AGENTS.md` for ordinary component, utility, temporary, or feature implementation folders.
 <!-- agent-loop:managed-end section:directory-guidance -->
 
-<!-- agent-loop:managed-start section:commands source:.agent-loop/project.md -->
+<!-- agent-loop:managed-start section:commands source:.agent-loop/project.md block-version:1.2.3-20260625 -->
 ## Project Commands
 
 ```bash
@@ -173,7 +173,7 @@ Add only startup-critical architecture boundaries that every future agent must k
 ```
 <!-- agent-loop:managed-end section:commands -->
 
-<!-- agent-loop:managed-start section:hard-constraints source:.agent-loop/project.md -->
+<!-- agent-loop:managed-start section:hard-constraints source:.agent-loop/project.md block-version:1.2.3-20260625 -->
 ## Project-Specific Hard Constraints
 
 Add only stable constraints that every future agent must know at startup.

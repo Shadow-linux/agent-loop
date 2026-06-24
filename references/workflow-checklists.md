@@ -59,7 +59,11 @@ Before using an external skill or plugin inside a stage:
 - [ ] Check root `AGENTS.md` / `CLAUDE.md` and any obvious directory-level guidance.
 - [ ] Treat root `AGENTS.md` as stale if it lacks Message Intent Guard or lacks Bootstrap Protocol, Agent Ownership, Operational Support Guard, Stage Helper Capability Scan, Gate Modes, Required Stops, Completion Rules, Feature Follow-up / Flow-back, Submit And Commit Rules, root/directory guidance boundaries, or requirement archive rules.
 - [ ] If root `AGENTS.md` uses agent-loop managed blocks, compare its managed guidance version with the current local `agent-loop` skill version.
+- [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat root `AGENTS.md` as stale if the managed guidance version is older than the current local `agent-loop` skill version, unless the human explicitly defers refresh.
+- [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when the file-level skill version matches.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.2.3-20260625`.
+- [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
 - [ ] Treat root `CLAUDE.md` as stale if it duplicates independent long-lived rules or does not clearly point to `AGENTS.md`.
 - [ ] If root guidance will be created, refreshed, or repaired, run AGENTS Cleanup / Migration Review for conflicting workflow rules and long-term project memory outside managed blocks.
 - [ ] Determine guidance language from existing docs or human preference; default to English only if unclear.
@@ -109,6 +113,10 @@ Before using an external skill or plugin inside a stage:
 - [ ] Check whether root `AGENTS.md` exists, is stale, or must be created.
 - [ ] If root `AGENTS.md` exists, verify it contains Message Intent Guard, Bootstrap Protocol, Agent Ownership, Gate Modes, Required Stops, and Completion Rules.
 - [ ] If root `AGENTS.md` uses agent-loop managed blocks, compare its managed guidance version with the current local `agent-loop` skill version.
+- [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
+- [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when the file-level skill version matches.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.2.3-20260625`.
+- [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
 - [ ] Check whether root `CLAUDE.md` exists and loads or points to `AGENTS.md`; if it duplicates or diverges, propose converting it to a pointer.
 - [ ] Run AGENTS Cleanup / Migration Review when existing root guidance has conflicting workflow rules, duplicated agent-loop rules, or long-term project memory that belongs in `.agent-loop/project.md` or enterprise `.agent-loop/project/*.md`.
 - [ ] Record guidance language and evidence in `project.md`.
