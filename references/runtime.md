@@ -97,9 +97,9 @@ Use this order:
 12. Compare project memory with obvious repo reality.
 13. Choose the next stage.
 
-If `.agent-loop/onboarding-db/` exists and the human asks to be guided through the project, understand where to start, or explain project structure before coding, classify as `guided-onboarding`, load `references/onboarding-db.md`, and use Guided Newcomer Onboarding before normal resume. Do not rerun Deep Project Onboarding Scan by default.
+If `.agent-loop/onboarding-db/` exists and the human asks to be guided through the project, understand where to start, or explain project structure before coding, classify as `guided-onboarding`, load `references/onboarding-db.md`, and use Guided Newcomer Onboarding before normal resume. Do not rerun Deep Onboarding by default.
 
-If the human asks for guided onboarding but onboarding-db is missing, do not classify as `guided-onboarding`. Route through Existing Project Onboarding or Deep Project Onboarding Scan after explaining Quick / Deep / Targeted options. If root guidance or `project.md` claims onboarding-db should exist, classify as `stale-memory` and reconcile the missing onboarding memory first.
+If the human asks for guided onboarding but onboarding-db is missing, do not classify as `guided-onboarding`. Route through Existing Project Onboarding and explain that durable onboarding uses the single Deep Onboarding flow; do not offer Quick / Deep / Targeted onboarding modes. If root guidance or `project.md` claims onboarding-db should exist, classify as `stale-memory` and reconcile the missing onboarding memory first.
 
 If the human asks to test, run, deploy, switch account/config/model/provider, check quota/rate limits, arrange rollout, diagnose production, or use existing code to solve an operational problem, default to read-only operational support. Route to Code-Guided Operational Support before Feature Spec, Plan Gate, Execute Task / Story, or code edits. If the request could mean either existing operational use or new implementation, ask whether the human wants help using current project functionality or feature implementation.
 
@@ -119,7 +119,7 @@ Default memory root for new projects is `.agent-loop/`. If legacy `agent-loop/` 
 
 For existing projects without reliable memory, load `references/existing-project-onboarding.md`. Build a shallow, evidence-backed project map before feature work. Do not do a whole-repo deep read unless a targeted feature scan requires it.
 
-When the human wants newcomer-friendly project understanding, a guided takeover, or durable onboarding documents, route Existing Project Onboarding through Deep Project Onboarding Scan after explaining Quick / Deep / Targeted options. Load `references/project-onboarding-scan.md`, `references/onboarding-db.md`, and `references/onboarding-db-templates.md` only when Deep or Targeted onboarding is selected or onboarding-db is being read/written/refreshed.
+When the human wants newcomer-friendly project understanding, a guided takeover, durable onboarding documents, or a focused preserved explanation of one project area, route Existing Project Onboarding through the single Deep Onboarding flow. Load `references/project-onboarding-scan.md`, `references/onboarding-db.md`, and `references/onboarding-db-templates.md` only when Deep Onboarding is requested or onboarding-db is being read/written/refreshed.
 
 For local entry directories that point to a remote project, load `references/remote-project-discovery.md` before Init Project or Existing Project Onboarding. Do not treat the local empty directory as the code reality.
 

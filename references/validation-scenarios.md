@@ -78,7 +78,7 @@ Expected:
 - if remote memory is unavailable and local-shadow mode is active, continue locally but label all command/code evidence with remote location
 - update `remote.md` after confirmation if remote facts changed
 
-## 2d. Existing Project Offers Quick Or Deep Onboarding
+## 2d. Single Deep Onboarding Mode
 
 Prompt:
 
@@ -90,12 +90,13 @@ Expected:
 
 - classify `existing-project`
 - load `existing-project-onboarding.md`
-- explain Quick Onboarding and Deep Project Onboarding Scan before writing files
-- recommend Quick when the human wants to continue feature work soon
-- recommend Deep when the human wants newcomer-friendly project understanding or durable onboarding docs
-- explain that Quick creates only the lightweight Graph-first Evidence Graph package, not full Deep onboarding-db docs or diagrams
+- explain that there is only one durable project-understanding onboarding mode: Deep Onboarding
+- do not offer Quick / Deep / Targeted onboarding modes
+- if the human only wants to continue feature work soon, recommend safe-entry project memory/root guidance updates only
+- if the human wants newcomer-friendly or durable onboarding docs, route to Deep Onboarding with `onboarding-spec.md` and `onboarding-plan.md`
+- if the human asks about one module/flow/async/deployment/problem area, use the same Deep Onboarding mode with a narrow scope
 
-## 2e. Human Rejects Deep Project Onboarding Scan
+## 2e. Human Declines Durable Onboarding Docs
 
 Prompt:
 
@@ -105,32 +106,28 @@ Use agent-loop. Do the fast path only; I don't want onboarding-db right now.
 
 Expected:
 
-- run Quick Onboarding only
-- execute P0-level scan: project shape, startup docs, shallow repo, runtime/tooling, entrypoints, high-risk unknowns
-- draft `.agent-loop/project.md`, guidance proposal, Evidence Graph, Core Domain Inventory, Core Flow Inventory, Coverage Matrix, and Service Startup Matrix after confirmation
-- record P1/P2 follow-ups as deferred
-- do not generate full module/flow deep-dive docs or diagrams
-- state `Quick onboarding complete; Deep onboarding not complete.`
+- run safe-entry project onboarding only
+- inspect startup docs, shallow repo shape, runtime/tooling, entrypoints, and high-risk unknowns
+- draft `.agent-loop/project.md`, guidance proposal, and uncertainty list after confirmation
+- do not create onboarding-db files, star docs, module docs, flow docs, or diagrams
+- say onboarding-db docs were not requested, and recommend Deep Onboarding later only if durable newcomer docs are useful
 
-## 2e-1. Graph-First Quick Onboarding Creates Evidence Graph
+## 2e-1. Spec-First Onboarding Blocks Directory-First File Spray
 
 Prompt:
 
 ```text
-Use agent-loop. 快速接手这个现有项目，先不要做完整 Deep onboarding。
+Use agent-loop. 深度接管这个项目，让新人能靠 onboarding-db 接手。不要问太多，直接生成文档吧。
 ```
 
 Expected:
 
-- run Quick Onboarding only
-- create or propose `.agent-loop/onboarding-db/maps/evidence-graph.md`
-- create or propose `.agent-loop/onboarding-db/maps/core-domain-inventory.md`
-- create or propose `.agent-loop/onboarding-db/maps/core-flow-inventory.md`
-- create or propose `.agent-loop/onboarding-db/maps/coverage-matrix.md`
-- create or propose `.agent-loop/onboarding-db/runtime/service-startup-matrix.md`
-- mark required-core flows as `graph-only`, `needs-deep-trace`, or `blocked-by-unknown` when details are not traced
-- do not create many thin `modules/<module>.md` or `flows/<flow>.md` files
-- state `Quick onboarding complete; Deep onboarding not complete.`
+- load `project-onboarding-scan.md`, `onboarding-db.md`, and `onboarding-db-templates.md`
+- refuse to generate directory-first module/flow/detail files before accepted `onboarding-spec.md` and accepted `onboarding-plan.md`
+- propose `onboarding-spec.md` first with target readers, required-core topic budget, non-goals, and quality bar
+- propose `onboarding-plan.md` second with file budget, split gate, star doc queue, batches, review checkpoints, and stop conditions
+- keep default Deep file budget to 5 star docs or fewer before human expansion
+- use Batch Human Review before writing onboarding-db files
 
 ## 2e-2. Core Flow Deep Trace Rejects Thin Flow
 
@@ -143,7 +140,7 @@ Use agent-loop. Deep onboarding generated 40+ files, but core flows only have 20
 Expected:
 
 - reject Deep completion
-- explain that required-core flows need `core-flow-deep-trace.md` or equivalent structure
+- explain that required-core flows need accepted `stars/<topic>.md` deep-dive detail or equivalent structure
 - require Code Evidence Trace Table with file/symbol evidence
 - require Data Flow And Fact Source, Branch And Failure Matrix, Concrete Example Linked To Trace Steps, Verification And Observability, and Coverage Matrix updates
 - say `Onboarding DB draft is usable but incomplete.`
@@ -159,11 +156,11 @@ Use agent-loop. We made a nice HTML architecture graph for onboarding. Can we sk
 Expected:
 
 - reject the shortcut
-- explain that HTML/SVG auxiliary visual artifacts cannot replace markdown evidence tables, Mermaid source, or deep trace docs
-- require the source Evidence Graph or graph slice, core flow deep trace, Evidence Chain, and Coverage Matrix rows
+- explain that HTML/SVG auxiliary visual artifacts cannot replace markdown evidence tables, Mermaid source, or accepted star docs
+- require the accepted star doc, Evidence Chain, and Coverage Matrix rows
 - allow HTML/SVG only as a reading aid under `onboarding-db/visuals/`
 
-## 2f. Deep Project Onboarding Scan Uses P0 P1 P2
+## 2f. Deep Onboarding Uses Spec Plan Star Batches
 
 Prompt:
 
@@ -174,13 +171,13 @@ Use agent-loop. Run a deep onboarding scan for this project.
 Expected:
 
 - load `project-onboarding-scan.md`, `onboarding-db.md`, and `onboarding-db-templates.md`
-- run P0 before P1 and P2
-- record Onboarding DB Layout Mode before proposing onboarding-db files, defaulting new Deep Scan output to Expanded unless the human explicitly requests Compact/Standard or an existing onboarding-db already uses one
-- produce onboarding-db draft and necessary diagrams only after scope and layout are confirmed
-- do not jump directly into full P2 scanning on a large or unclear project
+- write or refresh `onboarding-spec.md` before detail docs
+- write or refresh `onboarding-plan.md` with file budget, split gate, and batches before detail docs
+- write star docs in small reviewed batches after spec/plan acceptance
+- do not jump directly into many module/flow/detail files on a large or unclear project
 - use Batch Human Review before writing onboarding-db or project memory backfill
 
-## 2g. Targeted Onboarding Scan Does Not Run Full Deep Scan
+## 2g. Focused Deep Onboarding Does Not Run Full Global Deep Scope
 
 Prompt:
 
@@ -190,31 +187,33 @@ Use agent-loop. I only need to understand the billing worker and its retry flow.
 
 Expected:
 
-- route to Targeted Onboarding Scan
+- route to focused Deep Onboarding scope
 - inspect only minimal safe project context plus the requested module/flow
-- treat minimum P0 as safety context, not as permission to produce a full Quick Onboarding or full `project.md` proposal
+- do not produce a full `project.md` proposal by default
 - do not create unrelated onboarding-db files
-- propose focused updates for the relevant module, async/job flow, diagram, risks, and project memory backfill if needed
-- propose project memory backfill only when the targeted scan finds stale or missing facts required for safe continuation
+- propose one focused star doc or accepted star doc update for the relevant module, async/job flow, diagram, and risks
+- propose project memory backfill only when the focused scan finds stale or missing stable facts required for safe continuation
 - use Batch Human Review before writing
 
-## 2g-2. Targeted Onboarding Does Not Produce Full Project Memory By Default
+## 2g-2. Onboarding Backfills Missing Project Memory
 
 Prompt:
 
 ```text
-Use agent-loop. 只解释一下 billing worker 的 retry 机制，必要时补一张图。
+Use agent-loop. 只解释一下 billing worker 的 retry 机制，必要时补一张图。过程中发现项目记忆没记录这个 worker。
 ```
 
 Expected:
 
-- route to Targeted Onboarding Scan
-- inspect minimum P0 context only for safety
-- do not produce a full Quick Onboarding or full `project.md` proposal by default
-- produce a focused onboarding-db update proposal for the selected billing worker scope
-- propose narrow project memory backfill only if stale or missing project facts block safe continuation
+- route to focused Deep Onboarding scope
+- inspect minimum safe context only for safety
+- produce a focused star doc or diagram update proposal for the selected billing worker scope
+- when onboarding discovers stable project facts missing from project memory, propose or perform project memory backfill after human confirmation
+- do not silently write multiple project memory facts without Batch Human Review
 
 ## 2h. Onboarding DB Requires Module Reading Paths
+
+Current v1.2.3 onboarding generation is spec-first and single-mode. Any legacy project that already contains Compact / Standard / Expanded files may be read as evidence, but new onboarding generation must not offer layout modes, one-template-per-module, one-template-per-flow, Graph-first Quick onboarding, or Targeted Onboarding Scan. Route every durable or focused onboarding request through Deep Onboarding with `onboarding-spec.md`, `onboarding-plan.md`, a file budget, star docs, coverage updates, and Batch Human Review.
 
 Prompt:
 
@@ -227,7 +226,7 @@ Expected:
 - inspect onboarding-db README
 - reject completeness if module reading paths are missing
 - require paths such as module -> module doc/section -> flow -> diagram
-- allow Compact onboarding-db layout paths to point to merged sections such as `code-map.md#module` and `flows-and-data.md#flow`
+- allow legacy merged docs to act as evidence, but do not recommend Compact/Standard/Expanded as new generation modes
 
 ## 2h-1. Core Modules Require Module-Level Call Chains
 
@@ -245,63 +244,58 @@ Expected:
 - do not require function-level full call graphs
 - allow support modules such as shared types, generated clients, test utilities, or storage adapters to be marked support-only with evidence
 
-## 2h-2. Standard onboarding-db layout Derives Split Files From Core Templates
+## 2h-2. Legacy Standard Layout Does Not Recreate Split Templates
 
 Prompt:
 
 ```text
-Use agent-loop. The human explicitly selected Standard onboarding-db layout during Deep onboarding. Generate module-map.md, core-flows.md, and testing-and-verification.md.
+Use agent-loop. The project has an old Standard-style onboarding-db. The human asks you to generate module-map.md, core-flows.md, and testing-and-verification.md from the old template set.
 ```
 
 Expected:
 
 - load `onboarding-db-templates.md`
-- use Standard File Derivation instead of failing because there is no direct one-to-one template file
-- derive `module-map.md` from `code-map.md` module fields and `module-template.md`
-- derive `core-flows.md` from `flows-and-data.md` plus `core-flow-deep-trace.md` fields for required-core flows; use `flow-template.md` only for supporting flows
-- derive `testing-and-verification.md` from `verification-and-risks.md`
-- preserve metadata, summary-first format, evidence, confidence, unknowns, and project memory backfill
-- use Batch Human Review before writing the split files
+- explain that Standard layout and old split templates are legacy evidence, not current generation targets
+- convert the request into a Deep Onboarding spec/plan update with an explicit file budget
+- propose only star docs or index updates justified by required-core learning outcomes
+- preserve useful legacy facts as evidence with confidence and unknowns
+- use Batch Human Review before writing any refreshed onboarding-db files
 
-## 2h-3. Expanded onboarding-db layout Uses Required-Core Templates
+## 2h-3. Large Deep Onboarding Uses Required-Core Star Docs
 
 Prompt:
 
 ```text
-Use agent-loop. Deep onboarding selected Expanded onboarding-db layout for a large repo with six core modules and two complex async flows.
+Use agent-loop. Deep onboarding is requested for a large repo with six core modules and two complex async flows.
 ```
 
 Expected:
 
-- load `core-module-deep-dive.md` and `core-flow-deep-trace.md` for required-core modules and flows
-- keep `module-template.md` and `flow-template.md` only for supporting/ordinary modules and flows
-- create separate `module-<name>.md` drafts only for durable modules or bounded contexts that need their own reading path
-- create separate `flow-<name>.md` drafts only for complex flows, async systems, jobs, or repeated maintenance paths
+- load `project-onboarding-scan.md` and `onboarding-db-templates.md`
+- require accepted `onboarding-spec.md` and `onboarding-plan.md` before detail docs
+- create star docs only for accepted required-core topics that need their own reading path
+- keep support/ordinary modules summarized in coverage, README/maps, or an existing star doc
 - require a core module call-chain section or explicit support-only/unknown/not-applicable note for every core module
 - do not dump every module into one giant doc
 - do not create one file per directory
 - **require "How To Read" notes and "Step-by-Step Walkthrough" for every diagram in module and flow docs**
 - use Batch Human Review before writing
 
-## 2h-3a. Expanded Minimum Set Is Not A Cap
+## 2h-3a. File Count Is Not Completion
 
 Prompt:
 
 ```text
-Use agent-loop. Deep onboarding selected Expanded layout. The draft already has the 10 mandatory files, but the scan found 7 core modules, 4 complex flows, 3 complex entities, Celery jobs, external ASR/object storage integrations, and two test systems. Is onboarding-db complete?
+Use agent-loop. The Deep onboarding draft already has many files, but the scan found 7 core modules, 4 complex flows, 3 complex entities, Celery jobs, external ASR/object storage integrations, and two test systems. Is onboarding-db complete?
 ```
 
 Expected:
 
 - load `project-onboarding-scan.md` and `onboarding-db-templates.md`
-- state that the Expanded Minimum Required Set is only a floor, not a maximum file count
-- require a Discovery Coverage Matrix before claiming completion
-- verify every discovered core module has a `modules/<module>.md` or explicit evidence-based skip reason
-- verify every discovered complex flow has a `flows/<flow>.md` or explicit evidence-based skip reason
-- verify persistent data has `domain/data-model.md`, data/entity maps, and model usage flow map
-- verify complex entities have `domain/entities/<entity>.md` or explicit index-only reasoning
-- verify async/job/external integrations have runtime docs and required diagrams
-- verify multiple test systems are documented in `quality/testing-and-verification.md`
+- state that file count and old minimum sets are not completion criteria
+- require `coverage-matrix.md` before claiming completion
+- verify every required-core topic has an accepted star doc or explicit evidence-based skip reason
+- verify persistent data, complex entities, async/job/external integrations, and multiple test systems are covered by accepted star docs, indexes, or explicit non-goals
 - say `Onboarding DB draft is usable but incomplete` if any discovered durable item lacks matching output or an evidence-based skip reason
 - do not stop or mark complete merely because 10 mandatory files exist
 
@@ -342,98 +336,98 @@ Expected:
 - state that onboarding-db is usable but incomplete when core module, flow, data, startup, or verification docs lack evidence-backed detail
 - record missing packs in Discovery Coverage Matrix and Batch Human Review
 
-## 2h-4. Onboarding DB Layout Mode Defaults To Expanded
+## 2h-4. Onboarding Has No Layout Mode Default
 
 Prompt:
 
 ```text
-Use agent-loop. Run Deep Project Onboarding Scan. This is a small single-app repo with one runtime, one test command, no async jobs, and I mainly want a fast handoff.
+Use agent-loop. Run onboarding for a small single-app repo with one runtime, one test command, no async jobs, and I mainly want a fast handoff.
 ```
 
 Expected:
 
 - load `project-onboarding-scan.md` and `onboarding-db-templates.md`
-- inspect project shape evidence before choosing Onboarding DB Layout Mode
-- recommend Expanded onboarding-db layout by default, even when the repo appears small
-- explain that Compact or Standard is available only if the human explicitly chooses fewer/simpler onboarding-db files
+- explain that there is no Compact/Standard/Expanded default
+- if the human wants only safe continuation, update/propose project memory and commands without onboarding-db detail docs
+- if the human wants durable newcomer docs, route to single Deep Onboarding with spec, plan, and file budget
 - ask human confirmation before drafting onboarding-db files
-- do not downgrade to Compact or Standard just because the repo appears small or the human asks for a fast handoff
+- do not invent a layout mode because the repo appears small or large
 
-## 2h-5. Compact Merged Docs Preserve Quality
+## 2h-5. Legacy Merged Docs Preserve Quality Only As Evidence
 
 Prompt:
 
 ```text
-Use agent-loop. I explicitly chose Compact onboarding-db. It has only README, overview, setup, code-map, architecture, flows, and risks. Is that enough?
+Use agent-loop. The project already has old merged onboarding docs: README, overview, setup, code-map, architecture, flows, and risks. Is that enough?
 ```
 
 Expected:
 
-- accept Compact file count only if all Required Understanding Dimensions are visible as sections or tables
+- treat old merged docs as evidence only
+- accept completion only if required-core learning outcomes are newcomer-ready
 - require README document index, diagrams index, and module reading paths
 - require combined docs to preserve evidence, confidence, unknowns, and project memory backfill notes
 - require core diagrams or explicit blockers: module relationship map, boundary map, core module call chains, and at least one core flow
 - reject completion if Compact simply omits dimensions such as change impact, testing, async/jobs, or deployment facts that exist in code reality
-- state that Compact means merged documents, not reduced understanding
+- state that merged evidence can support star docs, but new generation still follows spec-first Deep Onboarding
 
-## 2h-6. Standard onboarding-db layout Does Not Generate Every Template
+## 2h-6. Deep Onboarding Does Not Generate Every Template
 
 Prompt:
 
 ```text
-Use agent-loop. I explicitly chose Standard onboarding-db layout. Generate every onboarding template and every optional Standard file so we don't miss anything.
+Use agent-loop. Generate every onboarding template and every optional file so we don't miss anything.
 ```
 
 Expected:
 
 - refuse to generate every template by default
 - load `onboarding-db-templates.md`
-- derive only Standard files justified by project reality, human goal, and evidence
-- keep low-frequency topics combined when the project does not need separate files
-- mark skipped optional files as `Not needed now` or `Deferred` with reason
+- explain that the current template directory intentionally contains only spec, plan, star-doc, coverage, and batch-review templates
+- propose only star docs justified by project reality, human goal, evidence, and accepted file budget
+- keep low-frequency topics combined when the project does not need separate star docs
+- mark skipped topics as `Not needed now`, `Non-goal`, or `Deferred` with reason
 - use Batch Human Review before writing selected files
 
-## 2h-7. Human Layout Override Is Respected
+## 2h-7. Human Can Request Lower File Budget
 
 Prompt:
 
 ```text
-Use agent-loop. You recommend Expanded, but I want Compact first because I only need a 20-minute onboarding path.
+Use agent-loop. I only need a 20-minute onboarding path; keep the first pass small.
 ```
 
 Expected:
 
-- respect the human's Compact choice after explaining tradeoffs
-- apply the same respect rule when the human explicitly chooses Standard or Expanded
-- if project evidence strongly conflicts with the chosen layout, explain the conflict, recommend Expanded, and ask before changing layout
-- produce a Compact plan that preserves all required understanding dimensions
-- record deferred Expanded split suggestions as follow-ups, not as immediate writes
-- ask confirmation for the Compact write batch
-- do not silently upgrade to Expanded
+- respect the human's smaller file-budget request after explaining tradeoffs
+- produce a Deep Onboarding plan with 5 star docs or fewer before human expansion
+- record deferred required-core topics in `coverage-matrix.md` and the plan, not as immediate writes
+- ask confirmation for the small write batch
+- do not silently expand the file budget
 
-## 2h-8. Compact To Expanded Reshape Requires Review
+## 2h-8. Legacy Merged Docs To Star Docs Requires Review
 
 Prompt:
 
 ```text
-Use agent-loop. Our Compact onboarding-db is getting hard to read after adding async workers, two test systems, and several stable modules. Improve it.
+Use agent-loop. Our old merged onboarding-db is getting hard to read after adding async workers, two test systems, and several stable modules. Improve it.
 ```
 
 Expected:
 
-- recommend a Compact -> Expanded reshape when evidence shows Compact is no longer readable
-- present a Batch Human Review table with proposed file splits, source sections, evidence, and risks
-- preserve original facts and links while moving sections into Expanded categorized files
+- recommend a spec/plan refresh and star-doc batch when evidence shows merged docs are no longer readable
+- present a Batch Human Review table with proposed star docs or index updates, source sections, evidence, and risks
+- preserve original facts and links while moving sections into accepted star docs
 - update README reading paths and document index
 - do not silently rewrite onboarding-db structure
 - do not change project memory unless a separate project-memory backfill is confirmed
 
-## 2h-9. Expanded Splits Only Durable Boundaries
+## 2h-9. Star Docs Split Only Durable Required-Core Topics
 
 Prompt:
 
 ```text
-Use agent-loop. Expanded onboarding-db layout is selected. The repo has directories src, components, utils, tests, scripts, billing, auth, and notifications. Create one module doc per directory.
+Use agent-loop. The repo has directories src, components, utils, tests, scripts, billing, auth, and notifications. Create one onboarding doc per directory.
 ```
 
 Expected:
@@ -441,11 +435,9 @@ Expected:
 - refuse one-module-doc-per-directory as the default split strategy
 - identify durable business/runtime modules or bounded contexts such as billing, auth, and notifications
 - treat utility, generated, test, script, and shared folders as support areas unless they have durable business/runtime behavior
-- create `module-<name>.md` drafts only for modules with stable boundaries, entrypoints, flows, tests, data/external dependencies, or repeated maintenance needs
-- create `flow-<name>.md` drafts only for complex business/runtime flows that need their own reading path, not for every directory or helper layer
-- create deployment/operations split docs only for evidenced deployment concerns such as multiple environments, CI/runtime topology, release/rollback, migrations, health checks, or repeated operational maintenance
-- record support-only areas with evidence in `module-map.md` or Compact/Standard equivalent
-- use Batch Human Review before writing Expanded module docs
+- create star docs only for accepted required-core topics with stable boundaries, entrypoints, flows, tests, data/external dependencies, or repeated maintenance needs
+- merge ordinary/support topics into README/maps, coverage, or an existing star doc
+- use Batch Human Review before writing star docs
 
 ## 2h-10. Module Map Stays An Index
 
@@ -495,7 +487,7 @@ Expected:
 - do not invent functions, parameters, or paths to fill the table
 - ensure key diagrams, call chains, and verification claims can be traced to evidence entries
 
-## 2h-13. Targeted Question Can Propose A Small Diagram Update
+## 2h-13. Focused Deep Question Can Propose A Small Diagram Update
 
 Prompt:
 
@@ -505,7 +497,7 @@ Use agent-loop. I still do not understand how the invoice retry job picks up fai
 
 Expected:
 
-- route to Targeted Onboarding Scan for the smallest relevant module/flow/runtime scope
+- route to a focused Deep Onboarding scope for the smallest relevant module/flow/runtime area
 - answer the question first using existing docs plus focused code reality
 - propose the smallest useful diagram update in the most relevant target doc, not a global repository graph
 - include question, proposed diagram, target file, and key evidence table in Batch Human Review
@@ -538,8 +530,8 @@ Use agent-loop. The Meeting entity has many fields, status transitions, migratio
 Expected:
 
 - keep `domain/data-model.md` as an index and relationship map instead of a giant field dump
-- create or recommend `domain/entities/meeting.md` using `entity-template.md`
-- treat `domain/entities/meeting.md` as the allowed data-model entity-detail depth exception, not as a violation of the onboarding-db two-level layout rule
+- create or recommend a required-core star doc such as `stars/meeting-entity.md` when the entity needs its own reading path
+- treat the entity star doc as a focused Deep Onboarding artifact governed by the accepted spec/plan and file budget
 - require storage mapping, fields, relationships, state fields, writers, readers/consumers, related flows, migrations/history, tests, risks, evidence chain, and confidence
 - require a single-entity relationship diagram when the entity is too complex to understand from the global data entity map
 - do not create entity detail docs for simple lookup/config tables or join tables without business meaning
@@ -556,7 +548,7 @@ Use agent-loop. The payment settlement flow crosses API, billing domain, async w
 Expected:
 
 - refuse to keep a complex business/runtime flow as only one row in `flows-and-data.md`
-- create or recommend `flows/payment-settlement.md` using `core-flow-deep-trace.md` because payment settlement is required-core
+- create or recommend a required-core star doc such as `stars/payment-settlement.md` because payment settlement is required-core
 - require colored flowchart, sequence diagram or not-applicable reason, Code Evidence Trace Table, Data Flow And Fact Source, Branch And Failure Matrix, Concrete Example Linked To Trace Steps, Verification And Observability, risks, and Evidence Chain
 - do not create one flow doc per helper function, endpoint variant, or trivial CRUD path
 - use Batch Human Review before writing the flow doc
@@ -691,7 +683,7 @@ Use agent-loop. I still don't understand how the meeting summary request reaches
 
 Expected:
 
-- route to Targeted Onboarding Scan for the smallest relevant flow/module scope
+- route to a focused Deep Onboarding scope for the smallest relevant flow/module area
 - read the matching onboarding-db path first
 - inspect code reality only for the selected path when docs are missing, stale, contradictory, or too thin
 - explain the path in human-readable steps
@@ -800,7 +792,7 @@ Expected:
 - inspect code reality only for the focused file/module if docs are missing, stale, or ambiguous
 - output affected modules, affected files, APIs/contracts, data/state, jobs/async/external, tests/verification, risks, evidence, and follow-up in a single impact table
 - recommend verification commands and manual checks
-- recommend Targeted Onboarding Scan or Delivery Contract only if evidence shows a boundary or unknown impact
+- recommend focused Deep Onboarding or Delivery Contract only if evidence shows a boundary or unknown impact
 - propose onboarding-db update if the impact path is missing or stale
 
 ## 3. Existing `.agent-loop/` Or Legacy `agent-loop/` With Active Feature
@@ -1293,7 +1285,7 @@ Use agent-loop. 接管这个项目，我想快速知道怎么启动、怎么测�
 Fixture:
 
 - `.agent-loop/project.md` exists
-- `project.md` says `Onboarding DB Layout Mode: Expanded`
+- `project.md` contains a stale legacy onboarding layout claim
 - `project.md` lists `.agent-loop/onboarding-db/README.md` or onboarding-db docs
 - root `AGENTS.md` or `CLAUDE.md` tells newcomers to start from `.agent-loop/onboarding-db/README.md`
 - `.agent-loop/onboarding-db/` or `.agent-loop/onboarding-db/README.md` is missing
@@ -1305,7 +1297,7 @@ Expected:
 - load `runtime.md`, `design.md`, `onboarding-db.md`, and `recovery-and-backfill.md`
 - report that project memory claims onboarding-db exists but the path is missing
 - do not guide the human to the missing onboarding-db path
-- provide a Quick handoff from available evidence when requested: run command, test command, project shape, current feature state, and safest next action
+- provide a safe handoff from available evidence when requested: run command, test command, project shape, current feature state, and safest next action
 - recommend the smallest reconcile/backfill action: create onboarding-db, correct `project.md`, or mark onboarding-db as planned/deferred
 - ask human confirmation before updating `project.md`, root guidance, or creating onboarding-db
 - preserve original human requirements and do not start feature work until the minimum reconcile decision is made

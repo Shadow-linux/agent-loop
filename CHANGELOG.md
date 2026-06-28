@@ -39,6 +39,9 @@
 - Added a shared blocked routing matrix covering Ask Human, Diagnose Failure, Verify, Pause, and Targeted Feature Scan.
 
 ### Deep Onboarding Quality
+- Replaced Quick / Deep / Targeted onboarding modes with one durable project-understanding mode: Deep Onboarding. Safe continuation now updates project memory/root guidance only, while focused questions use a narrow Deep Onboarding scope.
+- Rebuilt onboarding-db generation as spec-first: accepted `onboarding-spec.md`, accepted `onboarding-plan.md`, then small reviewed batches of `stars/<topic>.md` with a default budget of 5 star docs or fewer before human expansion.
+- Removed legacy onboarding-db form templates and Compact / Standard / Expanded generation modes; legacy categorized docs may still be read as evidence or maintained for compatibility in existing onboarding-db directories.
 - Added a Deep Onboarding Quality Gate so Deep scans are judged as newcomer handoff packages, not by file count alone.
 - Required Core Domain Handoff Pack and Service Startup / Config Matrix coverage for Deep onboarding completion.
 - Added validation coverage for thin expanded onboarding-db outputs with many small files but insufficient core flow, data, startup, verification, or change-risk detail.

@@ -1,4 +1,4 @@
-# Coverage Matrix
+# Onboarding Coverage Matrix
 
 Document Language: 中文
 Created:
@@ -10,42 +10,41 @@ Human Review Status: draft
 
 ## Purpose
 
-Coverage Matrix 分离 `Confidence` 和 `Completion Status`。`high / medium / low` 只说明证据强度；完成度必须使用 completion status。
+Coverage tracks learning outcomes, not file existence. `newcomer-ready requires an accepted star doc` for required-core topics.
 
-Completion status path:
+## Status Values
 
-```text
-discovered -> graph-only -> needs-deep-trace -> newcomer-ready
-discovered -> supporting-summary
-discovered -> not-applicable
-needs-deep-trace -> blocked-by-unknown
-blocked-by-unknown -> needs-deep-trace -> newcomer-ready
-```
-
-Quick completion status options include: graph-only | needs-deep-trace | newcomer-ready.
+| Status | Meaning |
+|---|---|
+| discovered | found but not planned |
+| planned | included in onboarding spec / plan |
+| needs-deep-trace | required-core but not deeply documented |
+| draft-star | star doc exists but has not passed human review |
+| newcomer-ready | accepted star doc teaches the topic with evidence |
+| supporting-summary | summarized in README/maps; no standalone star needed |
+| blocked-by-unknown | missing code evidence or business confirmation blocks completion |
+| not-applicable | explicitly not relevant |
 
 ## Coverage Table
 
-| Item | Type | Graph Node / Edge | Core Role | Required For Deep Complete? | Required Doc / Diagram | Current Evidence | Confidence | Completion Status | Human Review Status | Blocker / Unknown | Next Action |
-|---|---|---|---|---|---|---|---|---|---|---|---|
+| Topic | Core Role | Canonical Location | Planned Batch | Evidence | Confidence | Status | Missing For Newcomer-Ready | Human Review |
+|---|---|---|---|---|---|---|---|---|
 
-## Deep Completion Decision
-
-| Gate | Pass? | Evidence | Missing / Blocker | Completion Impact |
-|---|---|---|---|---|
-| Evidence Graph covers required-core services, entrypoints, domains, data, runtime, and risks | | | | |
-| Core Domain Inventory has fact sources and owning modules | | | | |
-| Core Flow Inventory lists required-core flows and trace priority | | | | |
-| Required-core flows are newcomer-ready | | | | |
-| Required-core modules are newcomer-ready | | | | |
-| Service Startup Matrix covers runnable services/processes | | | | |
-| Verification and observability are linked to core flows | | | | |
+## Completion Decision
 
 Allowed decisions:
 
 ```text
-Quick onboarding complete; Deep onboarding not complete.
+Safe-entry project memory updated; onboarding-db docs not requested.
+Onboarding spec accepted; implementation not started.
+Onboarding batch <n> accepted; remaining topics incomplete.
 Onboarding DB draft is usable but incomplete.
 Deep onboarding complete.
-Targeted onboarding complete for <scope>. Full Deep onboarding remains incomplete unless global gates pass.
 ```
+
+Deep onboarding cannot complete while any required-core topic is `discovered`, `planned`, `needs-deep-trace`, `draft-star`, or `blocked-by-unknown`.
+
+## File Budget Audit
+
+| File | Type | Counts Against Budget? | Why It Exists | Merge Candidate? |
+|---|---|---|---|---|

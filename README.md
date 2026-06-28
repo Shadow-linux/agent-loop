@@ -126,13 +126,13 @@ The agent will:
 - Load the right references
 - Propose `.agent-loop/project.md`, root `AGENTS.md`, and a `CLAUDE.md` pointer to `AGENTS.md`
 
-For existing projects, the agent offers onboarding modes:
+For existing projects, the agent separates safe-entry memory from durable onboarding docs:
 
-| Mode | Use When |
+| Path | Use When |
 |---|---|
-| **Quick Onboarding** | Build enough project memory plus a lightweight Evidence Graph package to continue feature work soon |
-| **Deep Project Onboarding Scan** | Generate graph-driven newcomer-readable `.agent-loop/onboarding-db/`, required-core deep traces, diagrams, walkthroughs, evidence chains, and backfill proposals |
-| **Targeted Onboarding Scan** | Understand one module, flow, async task, deployment path, or problem area through a graph slice |
+| **Safe-entry project memory** | Build enough project memory, root guidance status, commands, boundaries, and uncertainties to continue work soon |
+| **Deep Onboarding** | Create durable `.agent-loop/onboarding-db/` docs through accepted `onboarding-spec.md`, accepted `onboarding-plan.md`, and small reviewed batches of `stars/<topic>.md` |
+| **Focused Deep Onboarding** | Preserve understanding for one module, flow, async task, deployment path, state transition, or problem area using the same Deep Onboarding gates with a narrow scope |
 
 ### 3. Start a Feature
 
@@ -152,13 +152,13 @@ After project init/onboarding is accepted, the agent will:
 
 If `.agent-loop/onboarding-db/` exists, the agent uses it first: it checks freshness, gives a short orientation, recommends one reading path, answers targeted questions, and proposes focused diagram/doc updates only after confirmation.
 
-Quick onboarding now creates a lightweight Graph-first package: `maps/evidence-graph.md`, `maps/core-domain-inventory.md`, `maps/core-flow-inventory.md`, `maps/coverage-matrix.md`, and `runtime/service-startup-matrix.md`. It should say `Quick onboarding complete; Deep onboarding not complete.` and must not create many thin module/flow docs to impersonate Deep.
+There is only one durable project-understanding onboarding mode: Deep Onboarding. If onboarding-db is missing and the human only wants to continue work, the agent should update project memory/root guidance and not create onboarding-db detail docs.
 
-Deep onboarding defaults to Expanded onboarding-db output, but it is Graph-first rather than directory-first. The agent starts from Evidence Graph → Core Domain Inventory → Core Flow Inventory → Main Traffic Flow → required-core flow deep traces → required-core module deep dives → data/runtime/verification/risk coverage. Expanded has a minimum required set for project overview, maps, setup, data model, testing, risks, and core module docs. It is also discovery-driven: when the scan finds complex flows, async/jobs, deployment, security, observability, or complex entities, the agent must create the matching docs or record why they were skipped. Diagram coverage grows with project complexity: large projects should get more focused module, flow, state, async/job, data, and deployment diagrams instead of one overloaded global view. Diagrams are embedded in the relevant docs by default and every diagram needs both `How To Read` and `Step-by-Step Walkthrough` text. Standalone `diagrams/` files are created only when a diagram is reused or too large to embed comfortably.
+Deep Onboarding is spec-first: `onboarding-spec.md` defines readers, goals, required-core topic budget, non-goals, and quality bar; `onboarding-plan.md` defines file budget, split gate, batches, and review checkpoints; then the agent writes a small number of evidence-backed `stars/<topic>.md` deep dives. The default budget before human expansion is 5 star docs or fewer. Focused questions use the same flow with a narrow spec/plan and usually one focused star doc or update.
 
 After each onboarding explanation, the agent should recommend one next action: read a specific doc, inspect a module/flow, generate or update a focused diagram, run a setup/verification command, or return to feature development.
 
-Compact or Standard onboarding-db layouts are used only when the human explicitly requests fewer/simpler files, or when maintaining an existing onboarding-db already organized that way. Onboarding-db human-readable docs default to Chinese, while code symbols, file paths, commands, API names, and artifact names stay as-is.
+Onboarding-db human-readable docs default to Chinese, while code symbols, file paths, commands, API names, and artifact names stay as-is. Legacy `modules/`, `flows/`, `runtime/`, `domain/`, and similar directories may be read as evidence in old projects, but new onboarding generation should not recreate directory-first template files.
 
 ### 5. Continue Later
 

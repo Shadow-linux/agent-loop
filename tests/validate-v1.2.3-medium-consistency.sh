@@ -31,13 +31,14 @@ for stage in "Work Breakdown" "Test Design" "E2E Discovery if Web" "Technical De
   assert_contains "references/workflow-checklists.md" "Run Stage Helper Capability Scan before fallback $stage"
 done
 
-# M5: onboarding outputs must record mode so Deep can be distinguished from Quick.
-assert_contains "references/existing-project-onboarding.md" "Record Onboarding Mode: Quick | Deep | Targeted"
-assert_contains "references/project-onboarding-scan.md" "Deep Scan must record Onboarding Mode: Deep"
+# M5: onboarding outputs must use the single Deep Onboarding path instead of mode disambiguation.
+assert_contains "references/existing-project-onboarding.md" "There is only one onboarding mode for durable project understanding: Deep Onboarding."
+assert_contains "references/project-onboarding-scan.md" "There is only one durable project-understanding onboarding mode: Deep Onboarding."
+assert_contains "references/project-onboarding-scan.md" "Focused requests use a narrow Deep Onboarding scope, not a separate Targeted mode."
 
 # M6: guided onboarding request without onboarding-db must route to onboarding, not dead-end.
 assert_contains "references/runtime.md" "If the human asks for guided onboarding but onboarding-db is missing"
-assert_contains "references/design.md" "If onboarding-db is missing, route to Existing Project Onboarding or Deep Project Onboarding Scan"
+assert_contains "references/design.md" "If onboarding-db is missing, route to Existing Project Onboarding and explain that durable onboarding uses the single Deep Onboarding flow."
 
 # M7: Standards Review triggers must be consistent.
 assert_contains "references/runtime.md" "Standards Review is recorded when triggered by large project, broad diff, directory or durable boundary change, security/data change, architecture change, or human request"

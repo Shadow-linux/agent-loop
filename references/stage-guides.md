@@ -227,7 +227,7 @@ If the existing code is remote, perform onboarding against the remote source of 
 Load:
 
 - `existing-project-onboarding.md`
-- `project-onboarding-scan.md` only when the human chooses Deep Project Onboarding Scan, asks for guided onboarding, or asks for a targeted module/flow/deployment/async scan
+- `project-onboarding-scan.md` only when the human asks for durable onboarding docs, guided newcomer handoff, or a focused preserved explanation of one module/flow/deployment/async scope
 - `onboarding-db.md` and `onboarding-db-templates.md` only when reading, writing, refreshing, or drafting `.agent-loop/onboarding-db/`
 - `large-projects.md` when old, unfamiliar, multi-package, multi-service, or likely 100k+ LOC
 - `project-guidance.md`
@@ -236,11 +236,11 @@ Load:
 
 First decision:
 
-- Explain Quick Onboarding and Deep Project Onboarding Scan when the human asks to take over or understand an existing project.
-- Default to Quick Onboarding when the human wants to continue feature work quickly.
-- Use Deep Project Onboarding Scan when the human wants newcomer-friendly project understanding or long-term onboarding docs.
-- Use Targeted Onboarding Scan when the human asks about one module, flow, async task, deployment path, or problem area.
-- Explain that Quick Onboarding creates a lightweight Graph-first skeleton, while Deep creates newcomer-ready core docs.
+- Explain that there is only one durable project-understanding onboarding mode: Deep Onboarding.
+- Do not offer Quick / Deep / Targeted onboarding modes.
+- If the human wants to continue feature work quickly, do a safe-entry scan and update or propose project memory, root guidance status, commands, boundaries, and uncertainties only.
+- Use Deep Onboarding when the human wants newcomer-friendly project understanding, long-term onboarding docs, or a focused preserved explanation of one module, flow, async task, deployment path, or problem area.
+- Explain that Deep Onboarding starts with accepted `onboarding-spec.md` and accepted `onboarding-plan.md` before any detail docs.
 
 Inspect:
 
@@ -259,7 +259,7 @@ Use layered scan order:
 6. architecture profile and actual code layout
 7. capability map
 8. boundary map
-9. lightweight Evidence Graph package
+9. onboarding spec seed when useful
 10. guidance inventory
 11. uncertainty list
 
@@ -267,31 +267,28 @@ Do not read the whole repository. Do not start feature implementation during onb
 
 If subagents are used, the main agent keeps ownership of synthesis and all writes. Subagents only return findings, evidence, confidence, uncertainties, files read, and suggested `project.md` entries.
 
-If Quick Onboarding is selected:
+If the human only wants safe continuation:
 
 - draft `.agent-loop/project.md`, guidance status/proposal, and uncertainties
-- create or refresh only the lightweight Graph-first package: `maps/evidence-graph.md`, `maps/core-domain-inventory.md`, `maps/core-flow-inventory.md`, `maps/coverage-matrix.md`, and `runtime/service-startup-matrix.md`
-- use `onboarding-db-templates.md` for those templates
-- record `Quick onboarding complete; Deep onboarding not complete.`
-- do not create full module/flow deep-dive docs or onboarding diagrams
+- do not write onboarding-db detail docs, star docs, or onboarding diagrams
+- recommend Deep Onboarding later only when durable newcomer-facing docs would help
 
-If Deep Project Onboarding Scan is selected:
+If Deep Onboarding is selected:
 
-- run P0 before P1 and P2
-- start from Evidence Graph, Core Domain Inventory, Core Flow Inventory, Coverage Matrix, and Service Startup Matrix before detail docs
-- record Onboarding DB Layout Mode before proposing onboarding-db files; default to Expanded unless the human explicitly requests Compact/Standard or an existing onboarding-db already uses it
-- draft onboarding-db with `templates/onboarding-db/*`
-- create diagrams only when they answer a concrete onboarding question
+- write or refresh `onboarding-spec.md` before detail docs
+- write or refresh `onboarding-plan.md` with file budget, split gate, and batches before detail docs
+- write star docs in small reviewed batches; default Deep file budget before human expansion is 5 star docs or fewer
+- create diagrams only inside star docs when they answer a concrete onboarding question and have walkthrough text
 - use Batch Human Review before writing onboarding-db, project memory backfill, or guidance changes
+- when onboarding discovers stable project facts missing from project memory, propose or perform project memory backfill after human confirmation
 - keep code reality as current fact when docs conflict with code
 
-If Targeted Onboarding Scan is selected:
+If the human asks a focused onboarding question:
 
-- inspect only the minimal safe context plus the selected module, flow, async task, deployment path, or problem area
-- Targeted Onboarding Scan may inspect minimum P0 context for safety, but it does not produce a full project.md proposal by default
-- create or refresh a graph slice for the selected target
-- propose focused onboarding-db updates only for that target
-- propose narrow project memory backfill only when the targeted scope exposes stale or missing facts required for safe continuation
+- use the same Deep Onboarding mode with a narrow spec/plan
+- inspect only the selected module, flow, async task, deployment path, state transition, or problem area plus minimal safe context
+- propose one focused star doc or star doc update for that target
+- propose narrow project memory backfill only when the focused scope exposes stale or missing facts required for safe continuation
 - do not create unrelated onboarding-db files
 
 Output before writing:
@@ -305,8 +302,8 @@ Output before writing:
 - boundary map with evidence and confidence
 - discovered commands with evidence and confidence
 - recommended Project Memory Mode: simple or enterprise, with trigger evidence
-- recommended onboarding mode: Quick | Deep | Targeted, with reason
-- recommended Onboarding DB Layout Mode when Deep is selected
+- recommended onboarding path: safe-entry project memory only, or Deep Onboarding with scope and reason
+- Deep Onboarding spec/plan/file budget summary when onboarding-db docs are requested
 - existing/proposed guidance files
 - low-confidence findings and recommended follow-up
 - one recommended next action
@@ -322,7 +319,7 @@ Directory guidance:
 Write after confirmation:
 
 - `.agent-loop/project.md`
-- `.agent-loop/onboarding-db/` only when Deep or Targeted onboarding docs are confirmed
+- `.agent-loop/onboarding-db/` only when Deep Onboarding docs are confirmed
 - enterprise `.agent-loop/project/*.md` files only when recommended and confirmed
 - `.agent-loop/requirements/`
 - `.agent-loop/features/`

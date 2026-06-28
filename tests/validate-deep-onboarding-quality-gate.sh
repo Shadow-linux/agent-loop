@@ -24,13 +24,13 @@ assert_contains "references/project-onboarding-scan.md" "entities, key fields, s
 assert_contains "references/onboarding-db-templates.md" "## Newcomer Handoff Quality Gate"
 assert_contains "references/onboarding-db-templates.md" "Service Startup / Config Matrix"
 assert_contains "references/onboarding-db-templates.md" "Core Domain Handoff Pack"
-assert_contains "references/onboarding-db-templates.md" "Do not mark Deep onboarding complete only because the Expanded minimum files exist."
+assert_contains "references/onboarding-db-templates.md" "Do not mark Deep onboarding complete only because index files, many files, or attractive diagrams exist."
 
 assert_contains "references/workflow-checklists.md" "Confirm Deep onboarding passes the Newcomer Handoff Quality Gate, not only file-count coverage."
 assert_contains "references/workflow-checklists.md" "Confirm service startup/config, core domain flows, core data flow, data model, verification strategy, and change-risk map are evidence-backed."
 assert_contains "references/onboarding-db.md" "Integrity Check proves the onboarding-db is safe to read for the current goal; it does not prove Deep onboarding is complete."
 
-assert_contains "references/validation-scenarios.md" "Thin Expanded Onboarding DB Is Not Complete"
+assert_contains "references/validation-scenarios.md" "Spec-First Onboarding Blocks Directory-First File Spray"
 assert_contains "references/validation-scenarios.md" "many small files but no newcomer handoff quality"
 
 printf 'PASS: deep onboarding quality gate contract is complete\n'

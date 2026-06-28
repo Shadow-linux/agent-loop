@@ -30,7 +30,7 @@ reported failure -> read setup docs -> compare command/env/services -> inspect e
 Steps:
 
 1. Ask for or read the exact command, working directory, error output, OS/runtime/container context, and whether dependencies were installed.
-2. Read `setup-and-run.md` including environment/config sections, Compact or existing `environment.md` equivalent, `verification-and-risks.md`, and any `Common Startup Failures`.
+2. Read the accepted startup/runtime star doc when present; otherwise read legacy `setup-and-run.md`, existing `environment.md`, `verification-and-risks.md`, and any `Common Startup Failures` as evidence.
 3. Compare documented prerequisites with reality: package manager, language version, env files, ports, required services, database/cache/queue, auth/seed data, containers, tunnels, and remote/local mode.
 4. Classify the failure:
    - stale setup docs
@@ -53,7 +53,7 @@ Output table:
 If updating docs, update:
 
 - `setup-and-run.md` for local run commands, prerequisites, ports, and Common Startup Failures
-- `setup-and-run.md` environment/config section for env/config differences in Expanded onboarding-db; use `environment.md` only for Compact, Standard, or existing onboarding-db structures that already have it
+- the accepted startup/runtime star doc for env/config differences; update legacy `setup-and-run.md` or `environment.md` only when maintaining an existing legacy onboarding-db structure
 - `deployment-and-operations.md` only for production/release/ops concerns
 - `verification-and-risks.md` for baseline failures or known blockers
 
@@ -81,7 +81,7 @@ Analyze:
 - affected jobs/async flows/external services
 - tests and manual verification to run
 - likely risk level and unknowns
-- whether a Delivery Contract, Targeted Onboarding Scan, or Project Memory Backfill is needed
+- whether a Delivery Contract, focused Deep Onboarding update, or Project Memory Backfill is needed
 
 Output table:
 
@@ -109,7 +109,7 @@ This is different from a state-flow diagram. A state-flow diagram shows legal tr
 
 Read order:
 
-1. `flows-and-data.md`, `data-model.md`, or Compact equivalent
+1. accepted flow/data/state star doc, or legacy `flows-and-data.md` / `data-model.md` as evidence
 2. relevant `state-flow-<entity>.md` diagram if present
 3. relevant module/flow docs
 4. job/async/integration docs when state changes happen in workers or callbacks
@@ -139,7 +139,7 @@ Rules:
 
 - If no writer is found, say `Unknown`, list searched evidence, and recommend a targeted scan.
 - Do not infer business reason from code alone. Use decisions/history docs or ask the human.
-- If a stable trace is discovered, propose updates to `domain/data-model.md`, `flows/<flow>.md`, `domain/state-flow-<entity>.md`, `domain/state-trace-<entity>.md`, or Compact-equivalent docs.
+- If a stable trace is discovered, propose updates to the relevant accepted star doc, or to legacy flow/domain docs only when maintaining an existing legacy onboarding-db structure.
 
 ## Design Decision Routing
 
@@ -147,7 +147,7 @@ Use when the human asks why something was designed a certain way.
 
 Read:
 
-- `decisions-and-history.md`, or Compact equivalent in `architecture-and-integrations.md`
+- accepted decision/history star doc, or legacy `decisions-and-history.md` / `architecture-and-integrations.md` as evidence
 - relevant architecture/module/flow docs
 - evidence such as README, ADR-like docs, issues, PRs, commits, comments, or human-confirmed history
 

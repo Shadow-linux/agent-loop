@@ -10,12 +10,11 @@ assert_contains() {
   fi
 }
 
-# H1: Targeted Onboarding must distinguish minimum P0 safety context from deliverables.
-assert_contains "references/existing-project-onboarding.md" "Targeted Onboarding Scan may inspect the minimum P0 safety context, but it does not produce a full Quick Onboarding or full project.md proposal by default"
-assert_contains "references/project-onboarding-scan.md" "For Targeted Scan, P0 is safety context, not the default deliverable"
-assert_contains "references/project-onboarding-scan.md" "Targeted Scan output is the focused onboarding-db update proposal for the selected scope"
-assert_contains "references/stage-guides.md" "Targeted Onboarding Scan may inspect minimum P0 context for safety, but it does not produce a full project.md proposal by default"
-assert_contains "references/workflow-checklists.md" "For Targeted Onboarding Scan, treat P0 as safety context, not as permission to produce a full project.md proposal"
+# H1: Focused onboarding must use the single Deep Onboarding flow, not a separate Targeted mode.
+assert_contains "references/existing-project-onboarding.md" "There is only one onboarding mode for durable project understanding: Deep Onboarding."
+assert_contains "references/project-onboarding-scan.md" "Focused requests use a narrow Deep Onboarding scope, not a separate Targeted mode."
+assert_contains "references/stage-guides.md" "If the human asks a focused onboarding question:"
+assert_contains "references/workflow-checklists.md" "For focused questions, use a narrow Deep Onboarding spec/plan and one focused star doc or existing star doc update."
 
 # H2: Feature Completion Check must define the blocked result and next step.
 assert_contains "references/feature-completion-check.md" "### Recommend Blocked"

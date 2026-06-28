@@ -86,9 +86,9 @@ references/delivery-contracts.md   durable producer-consumer interface handoff r
 references/e2e-discovery.md        Web E2E environment discovery and recording rules
 references/large-projects.md       rules for complex or 100k+ LOC projects
 references/existing-project-onboarding.md layered scan for taking over old projects
-references/project-onboarding-scan.md    deep/targeted project understanding scan and onboarding-db drafting
+references/project-onboarding-scan.md    single Deep Onboarding flow, focused scope, and onboarding-db drafting
 references/onboarding-db.md              onboarding-db lifecycle, reading, writing, freshness, and problem routing
-references/onboarding-db-templates.md    onboarding-db layout mode, metadata, document, and diagram templates
+references/onboarding-db-templates.md    spec-first onboarding-db template and star-doc quality contracts
 references/onboarding-diagnostics.md     startup failure, change impact, and state-change trace procedures
 references/feature-follow-up.md          bug/change flow-back to recent features
 references/complex-artifacts.md    triggered tasks/tests/plans directory mode
@@ -130,8 +130,8 @@ CHANGELOG.md                        skill maintenance history; append meaningful
 11. Load `references/e2e-discovery.md` before designing or executing Web E2E/browser verification.
 12. Load `references/delivery-contracts.md` when the human requests cross-boundary handoff/API/interface documentation, or when the agent detects a likely downstream consumer boundary such as frontend/backend, service, event, public data, SDK/library, UI state, or runtime behavior. Delivery Contracts are not created by default.
 13. Load `references/existing-project-onboarding.md` when taking over an existing project without reliable `agent-loop` memory.
-13a. During Quick Onboarding, produce a shallow, evidence-labeled safe-continuation snapshot plus a lightweight Graph-first onboarding skeleton. Quick Onboarding creates a lightweight Graph-first onboarding skeleton: `project.md`, base folders, root guidance proposal/status, uncertainties, `.agent-loop/onboarding-db/maps/evidence-graph.md`, `.agent-loop/onboarding-db/maps/core-domain-inventory.md`, `.agent-loop/onboarding-db/maps/core-flow-inventory.md`, `.agent-loop/onboarding-db/maps/coverage-matrix.md`, and `.agent-loop/onboarding-db/runtime/service-startup-matrix.md`. Quick must not create full module/flow deep-dive docs or onboarding diagrams to impersonate Deep. Record `Quick onboarding complete; Deep onboarding not complete.` Refresh or upgrade Quick output when it is stale, incomplete, or insufficient for the requested work.
-14. Load `references/project-onboarding-scan.md` when the human chooses Deep Project Onboarding Scan, asks to be guided through project onboarding, or asks for Targeted Onboarding Scan of a module, flow, async task, deployment path, or problem area.
+13a. There is only one project-understanding onboarding mode: Deep Onboarding. Deep Onboarding starts with accepted `onboarding-spec.md` and accepted `onboarding-plan.md`, then writes small reviewed batches of star docs. Do not offer Quick / Deep / Targeted onboarding modes.
+14. Load `references/project-onboarding-scan.md` when the human asks to understand/onboard/take over an existing project, asks for durable onboarding docs, or asks for focused understanding of one module, flow, async task, deployment path, state transition, or problem area.
 15. Load `references/onboarding-db.md` when reading, writing, refreshing, correcting, or relying on `.agent-loop/onboarding-db/`.
 16. Load `references/onboarding-db-templates.md` before creating or updating onboarding-db documents or diagrams.
 17. Load `references/onboarding-diagnostics.md` when a human says setup docs do not work, asks what a change might break, asks why a state/status changed, or asks who/what updates a state field.
@@ -209,9 +209,9 @@ If the local directory is only a remote-project entry point, create only thin lo
 - A task cannot be marked `done` from implementation alone. After code changes, move the task to `review` until fresh test/verification evidence, required review, and drift decision are recorded.
 - Task Done Gate: mark a task `done` only after implementation is complete, required tests or substitute verification have run fresh, evidence is recorded in `notes.md`, lightweight Spec Review is recorded, Standards Review is recorded when triggered, drift decision is recorded, and `tasks.md` links or names the evidence.
 - During large-project onboarding, recommend bounded subagent scanning when available and human-confirmed; otherwise use single-agent layered scan.
-- During existing-project onboarding, offer Quick Onboarding as the safe-continuation path and explain Deep Project Onboarding Scan when human onboarding or long-term project understanding would benefit from `.agent-loop/onboarding-db/`. Quick Onboarding is a shallow, evidence-labeled snapshot plus the lightweight Graph-first skeleton; it must not create full module docs, full flow docs, or diagrams that imply Deep onboarding is complete.
-- Deep Project Onboarding Scan writes onboarding-db only after human confirmation, defaults to Expanded Onboarding DB Layout Mode, and applies Batch Human Review for document writes. Use Compact or Standard only when the human explicitly requests that lower-granularity onboarding-db output, or when maintaining an existing onboarding-db that already uses it.
-- Targeted Onboarding Scan is preferred when the human asks about one module, flow, async task, deployment path, or problem area.
+- During existing-project onboarding, route durable project understanding through the single Deep Onboarding mode. Deep Onboarding writes onboarding-db only after human confirmation, starts with accepted `onboarding-spec.md` and accepted `onboarding-plan.md`, then writes small batches of star docs with Batch Human Review. Do not use Compact/Standard/Expanded layout modes as generation targets; file count is controlled by spec, plan, and file budget.
+- When onboarding discovers stable project facts missing from project memory, propose or perform project memory backfill after human confirmation. Do not duplicate long-term project facts across onboarding-db and `project.md`; onboarding-db teaches, project memory indexes current facts.
+- For focused questions about one module, flow, async task, deployment path, or problem area, use the same Deep Onboarding mode with a narrow spec/plan and one focused star doc or update.
 - When local and remote project reality are split, discover the remote environment before onboarding or initializing project memory.
 - Historical execution evidence belongs in `notes.md`.
 - Web E2E capability is discovered from the real project environment. Stable E2E capability belongs in `project.md`; feature-specific E2E cases belong in `tests.md` or `tests/e2e/*`.

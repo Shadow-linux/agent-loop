@@ -2,637 +2,95 @@
 
 Use this before creating or updating `.agent-loop/onboarding-db/` documents.
 
-Templates define understanding dimensions, not mandatory one-to-one physical files. Onboarding DB Layout Mode decides how many files carry those dimensions.
-
-For new Deep Project Onboarding Scan output, default to `Expanded`. Use `Compact` or `Standard` only when the human explicitly requests fewer/simpler onboarding-db files, or when maintaining an existing onboarding-db already organized that way.
-
-## Common Metadata
-
-Every onboarding-db document must include these fields near the top:
-
-```md
-Document Language:
-Created:
-Last Updated:
-Last Verified:
-Confidence:
-Source Evidence:
-Human Review Status:
-```
-
-Optional fields:
-
-```md
-Freshness Window:
-Verification Scope:
-Maintainer:
-Related Project Memory:
-Related Diagrams:
-```
-
-Core review states:
+The onboarding-db template directory intentionally contains only five templates:
 
 ```text
-draft | reviewed | needs-human-review | rejected
+templates/onboarding-db/onboarding-spec.md
+templates/onboarding-db/onboarding-plan.md
+templates/onboarding-db/star-deep-dive.md
+templates/onboarding-db/coverage-matrix.md
+templates/onboarding-db/batch-review.md
 ```
 
-## Graph-First Template Set
+Deleted legacy form templates: module, flow, entity, diagram, evidence-graph, directory-map, boundary-map, setup, deployment, data-model, and similar one-file-per-topic templates. Those templates caused directory-first file spray and thin 20-line docs. Do not recreate them under new names.
 
-Graph-first onboarding uses a small required template set before writing module or flow detail docs:
+## Core Principle
 
-| Artifact | Template | Mode | Purpose |
-|---|---|---|---|
-| `maps/evidence-graph.md` | `templates/onboarding-db/evidence-graph.md` | Quick / Deep / Targeted | node/edge evidence skeleton |
-| `maps/core-domain-inventory.md` | `templates/onboarding-db/core-domain-inventory.md` | Quick / Deep / Targeted | core domain and fact-source inventory |
-| `maps/core-flow-inventory.md` | `templates/onboarding-db/core-flow-inventory.md` | Quick / Deep / Targeted | required-core flow inventory and trace priority |
-| `maps/coverage-matrix.md` | `templates/onboarding-db/coverage-matrix.md` | Quick / Deep / Targeted | completion status, confidence, and blockers |
-| `runtime/service-startup-matrix.md` | `templates/onboarding-db/service-startup-matrix.md` | Quick / Deep | service/process startup and config matrix |
-| `flows/main-traffic-flow.md` | `templates/onboarding-db/main-traffic-flow.md` | Deep | project-level main traffic path |
-| `flows/<core-flow>.md` | `templates/onboarding-db/core-flow-deep-trace.md` | Deep / Targeted | required-core flow deep trace |
-| `modules/<core-module>.md` | `templates/onboarding-db/core-module-deep-dive.md` | Deep / Targeted | required-core module deep dive |
-| `maps/graph-slice-<scope>.md` | `templates/onboarding-db/graph-slice.md` | Targeted | focused graph slice and local completion decision |
+Onboarding DB is delivered like a feature: spec first, plan second, batch implementation third, review before completion.
 
-Status model:
+The templates are writing contracts, not fill-in-the-blank forms. They should make agents write fewer, deeper, human-readable docs like `stars/recharge-flow.md`, not many shallow module/flow files.
 
-| Status Category | Values |
-|---|---|
-| Confidence | `high` / `medium` / `low` |
-| Completion Status | `discovered` / `graph-only` / `needs-deep-trace` / `newcomer-ready` / `supporting-summary` / `blocked-by-unknown` / `not-applicable` |
-| Human Review Status | `draft` / `reviewed` / `needs-human-review` / `rejected` |
-| Core Role | `required-core` / `supporting` / `unknown-core` / `not-core` |
+## Template Roles
 
-Required core flows must use `core-flow-deep-trace.md` or an equivalent structure. Required-core modules must use `core-module-deep-dive.md` or an equivalent structure. `flow-template.md` remains an ordinary/supporting flow template and `module-template.md` remains an ordinary/supporting module template.
-
-Do not mark Deep onboarding complete if any `required-core` domain, flow, module, required edge, or service startup row remains `graph-only`, `needs-deep-trace`, or `blocked-by-unknown`.
-
-HTML/SVG auxiliary visual artifacts cannot replace markdown evidence tables, Mermaid source, deep trace docs, Evidence Chain, or Coverage Matrix rows.
-
-## Common Sections
-
-Use this structure when it helps readability:
-
-```md
-## Purpose
-## How To Read
-## Key Facts
-## Details
-## Evidence
-## Unknowns
-## Update Rules
-## Project Memory Backfill
-```
-
-Compact docs may combine `Evidence`, `Unknowns`, and `Project Memory Backfill` into short tables under each section only when Compact was human-requested or inherited from an existing onboarding-db.
-
-## Human-Readable Format
-
-Default shape:
-
-```text
-summary first -> tables -> diagrams -> evidence and unknowns
-```
-
-Use tables for comparisons, command lists, directories, modules, APIs, jobs, risks, and batch review. Use diagrams for cross-module, cross-process, stateful, or time-sequenced behavior.
-
-Onboarding-db human-readable documents default to Chinese. Keep stable artifact names, file names, commands, API names, and code symbols in English/as-is. Use another language only when the human explicitly requests it or the target project has a strong documented language requirement.
-
-## Onboarding DB Layout Mapping
-
-| Layout | Template Strategy |
-|---|---|
-| Expanded | default for new Deep Scan; categorized docs with focused splits for modules, flows, runtime, domain, quality, deployment, security, observability, or decision history |
-| Standard | human-requested or existing Standard; categorized docs with fewer focused splits; keep low-frequency topics combined |
-| Compact | human-requested or existing Compact; combine related dimensions into fewer files |
-
-Anti-misuse rules:
-
-- Compact means fewer physical files, not less understanding. Keep all required dimensions as visible sections, tables, diagrams, evidence, confidence, unknowns, and reading paths.
-- Standard is not "generate every template." Create only files justified by project reality, human goal, and the File Derivation tables.
-- Expanded is not "one file per directory." Split only durable business/runtime modules, bounded contexts, complex flows, deployment/operations concerns, or repeated maintenance paths.
-- Expanded is the default; do not downgrade to Compact or Standard just because the project appears small.
-- Expanded minimum files are a floor, not a cap. After the minimum files exist, continue creating or proposing docs for every discovered core module, complex flow, complex entity, async/job path, deployment concern, and repeated maintenance path until the Discovery Coverage Matrix is closed.
-- Human onboarding-db layout choice wins after risks are explained. If the human requests Compact or Standard, preserve all understanding dimensions and ask confirmation before writing.
-- Onboarding-db layout reshaping requires Batch Human Review.
-- Categorization is for reading, not for mirroring the repo tree. Keep onboarding-db at most two levels deep.
-- Allowed depth exception: `domain/entities/<entity>.md` may be three levels under `onboarding-db/` because entity detail is a stable data-model subcategory. Do not generalize this exception to arbitrary nested module, flow, or directory mirrors.
-- `module-map.md` is an index and navigation doc. Module detail belongs in `modules/<module>.md` when a dedicated module doc is warranted.
-- Complex flow details belong in `flows/<flow>.md` when a single merged flow section becomes hard to read. Keep merged Compact sections only when the flow remains small and clearly navigable from README.
-- Every diagram-bearing file must include both "How To Read" and "Step-by-Step Walkthrough". A diagram without walkthrough is incomplete even if the visual is correct.
-- `diagrams/` directory is optional in all layouts. Default is to embed diagrams in their target docs (module, flow, data-model, entity). Create standalone `diagrams/<name>.md` only when a diagram is referenced by ≥ 2 docs or is too large (> 80 lines Mermaid) to embed comfortably.
-
-Compact suggested files when human-requested or preserving existing Compact:
-
-| File | Carries |
-|---|---|
-| `README.md` | reading guide, document index, module reading paths |
-| `overview.md` | project purpose, users, stack, capabilities |
-| `setup-and-run.md` | local setup, run, ports, quick verification |
-| `code-map.md` | directories, entrypoints, module summary |
-| `architecture-and-integrations.md` | boundaries, APIs, integrations, async/events |
-| `flows-and-data.md` | core flows, jobs, data model, states |
-| `verification-and-risks.md` | tests, change impact, risks, unknowns, glossary summary |
-
-Standard may split when human-requested or preserving existing Standard:
-
-```text
-maps/module-map.md
-maps/boundary-map.md
-maps/directory-map.md
-modules/<module>.md
-flows/<flow>.md or core-flows.md
-runtime/environment.md
-runtime/async-and-events.md
-runtime/jobs-and-schedules.md
-domain/data-model.md
-domain/entities/<entity>.md when a core entity needs its own reading path
-quality/testing-and-verification.md
-quality/risks-and-unknowns.md
-```
-
-Expanded default split:
-
-```text
-maps/evidence-graph.md (copy from templates/onboarding-db/evidence-graph.md) — mandatory Graph-first skeleton
-maps/core-domain-inventory.md (copy from templates/onboarding-db/core-domain-inventory.md) — mandatory Graph-first skeleton
-maps/core-flow-inventory.md (copy from templates/onboarding-db/core-flow-inventory.md) — mandatory Graph-first skeleton
-maps/coverage-matrix.md (copy from templates/onboarding-db/coverage-matrix.md) — mandatory completion/confidence matrix
-runtime/service-startup-matrix.md (copy from templates/onboarding-db/service-startup-matrix.md) — mandatory startup/config matrix
-modules/<name>.md (copy from templates/onboarding-db/core-module-deep-dive.md for required-core modules; module-template.md for supporting modules) — mandatory for each required-core module
-flows/<name>.md (copy from templates/onboarding-db/core-flow-deep-trace.md for required-core flows; flow-template.md for supporting flows) — when flow crosses modules or has async/state changes
-domain/data-model.md — mandatory when persistent data exists
-domain/entities/<entity>.md — when entity is complex enough to need its own reading path
-runtime/deployment-and-operations.md — when deployment/ops complexity justifies split
-runtime/async-and-events.md — when queues, callbacks, workers exist
-domain/security-and-permissions.md — when auth/permissions exist
-quality/observability.md — when logs/metrics/traces exist
-diagrams/<name>.md — optional; only when embedding is not enough
-```
-
-## Standard File Derivation
-
-Onboarding-db layout does not require a direct template file for every topic. Use existing templates as source shapes, then split by this table. For new Deep Scan output, prefer Expanded-style standalone files when they create useful reading paths.
-
-| Standard File | Derive From | Required Content |
+| Template | Required When | Purpose |
 |---|---|---|
-| `maps/directory-map.md` | `code-map.md` or copy `templates/onboarding-db/directory-map.md` | main directories, generated/vendor/ignored areas, test directories, configs/scripts, read-first hints |
-| `maps/module-map.md` | `code-map.md` + `module-template.md` module fields | module summary/cards, module relationship map, coverage, dedicated module-doc links, related diagrams |
-| `maps/boundary-map.md` | `architecture-and-integrations.md` or copy `templates/onboarding-db/boundary-map.md` | UI/API/domain/DB/jobs/external boundaries, dependency direction, cross-boundary contracts, boundary risks |
-| `core-flows.md` or `flows/<flow>.md` | `flows-and-data.md` + `core-flow-deep-trace.md` fields for required-core flows; `flow-template.md` fields for supporting flows | flow index, human-readable core flow details, code evidence trace for required-core flows, diagrams, state/data changes, branch/failure matrix, verification hints, evidence chains |
-| `runtime/environment.md` | `setup-and-run.md` + `deployment-and-operations.md` | env files, variables, local/test/prod differences, containers, CI/runtime config, evidence and confidence. **Not standalone in Expanded; merge into `setup-and-run.md`.** |
-| `domain/data-model.md` | `flows-and-data.md` + `data-model.md` template fields | core entities, storage/model mapping, relationships, ownership, key fields, state fields, readers/writers, flow/API/job usage, migrations/seeds, tests, evidence |
-| `runtime/async-and-events.md` | `architecture-and-integrations.md` + `flow-template.md` async fields | producers, queues/topics, consumers, callbacks, retries, DLQ/compensation, diagrams |
-| `runtime/jobs-and-schedules.md` | `flows-and-data.md` + `flow-template.md` job fields | schedules, workers, triggers, operational notes, failure/retry behavior |
-| `maps/change-impact-map.md` | `verification-and-risks.md` or copy `templates/onboarding-db/change-impact-map.md` | change categories, affected modules/files/APIs/data/tests, risk level, verification path. **Conditional in Expanded; create only when ≥ 3 core modules or change impact is repeatedly asked.** |
-| `quality/testing-and-verification.md` | `verification-and-risks.md` | test systems, fast/full commands, E2E/browser path when present, baseline failures, confidence |
-| `quality/risks-and-unknowns.md` | `verification-and-risks.md` | high-risk unknowns, doc/code conflicts, unverified commands, missing diagrams, follow-ups |
-| `domain/glossary.md` | `verification-and-risks.md` glossary section | domain terms, Chinese meaning, English meaning, used-in context, synonyms/aliases including acronyms and naming conflicts, source evidence. **Conditional in Expanded; create only when ≥ 8 terms or naming conflicts exist.** |
+| `onboarding-spec.md` | before Deep detail docs | define target readers, required-core topics, non-goals, quality bar |
+| `onboarding-plan.md` | before writing star docs | batch plan, file budget, split gate, review checkpoints |
+| `star-deep-dive.md` | for required-core topics | write one canonical deep article for a core flow/domain/module |
+| `coverage-matrix.md` | after spec and every batch | track learning outcomes and status; not file existence |
+| `batch-review.md` | before accepting each batch | human review of quality, evidence, coverage, and requested revisions |
 
-When deriving a Standard file, keep the common metadata block, summary-first shape, evidence, confidence, unknowns, and project memory backfill section.
+## File Budget
 
-When Standard merges required-core flows into `core-flows.md` or a runtime doc, the merged section must still preserve the required `core-flow-deep-trace.md` fields. Smaller file count is allowed; thinner required-core evidence is not.
+Default Deep file budget before human expansion is 5 star docs or fewer, plus README/maps/coverage updates. Exceeding that budget requires human confirmation.
 
-## Expanded File Derivation
+Each proposed new file must pass the Split Gate:
 
-Expanded onboarding-db layout is the default for new Deep Scan output, but it still splits only areas that are complex enough to deserve their own reading path.
-
-| Expanded File | Use / Derive From | Required Content |
-|---|---|---|
-| `modules/<name>.md` | copy `templates/onboarding-db/core-module-deep-dive.md` for required-core modules; use `module-template.md` for supporting modules | purpose, boundary, entrypoints, module role vocabulary, core call chain, core flows, key files, dependencies, tests, risks, evidence chain |
-| `flows/<name>.md` | copy `templates/onboarding-db/core-flow-deep-trace.md` for required-core flows; use `flow-template.md` for supporting flows | purpose, colored flowchart, sequence diagram or not-applicable reason, code evidence trace, state/data changes, async/job/external behavior, verification, evidence chain, risks |
-| `domain/data-model.md` | copy `templates/onboarding-db/data-model.md` when persistent data is important enough to split from Compact docs | core entity index, relationship map, ownership, key fields, state field index, usage, migrations, tests, evidence |
-| `domain/entities/<entity>.md` | copy `templates/onboarding-db/entity-template.md` when one entity needs its own reading path | storage mapping, fields, relationships, state fields, writers, readers/consumers, related flows, migrations/history, tests, risks, evidence |
-| `domain/state-flow-<entity>.md` | copy `templates/onboarding-db/state-flow-template.md` when legal lifecycle states matter | legal states, transitions, guards, side effects, evidence, tests |
-| `domain/state-trace-<entity>.md` | copy `templates/onboarding-db/state-trace-template.md` when observed state writers matter | writers, triggers, guards, side effects, tests, evidence |
-| `runtime/deployment-and-operations.md` | copy `templates/onboarding-db/deployment-and-operations.md` | environments, pipeline, runtime topology, release/rollback, migrations, health, observability |
-| `domain/decisions-and-history.md` | copy `templates/onboarding-db/decisions-and-history.md` | evidenced architectural/product decisions and current status |
-| `domain/security-and-permissions.md` | derive from `architecture-and-integrations.md` + module docs | auth boundaries, roles, policies, sensitive data, permission flows, evidence, unknowns |
-| `quality/observability.md` | derive from `deployment-and-operations.md` | logs, metrics, tracing, alerts, health checks, error reporting, dashboards if evidenced |
-
-Do not create one Expanded file per directory. Split by durable module, bounded context, complex business flow, async system, deployment concern, or repeated maintenance need.
-
-**Conditional files in Expanded** (create only when triggered by project reality):
-
-| Conditional File | Trigger | Template |
-|---|---|---|
-| `flows/<name>.md` | flow crosses ≥ 2 modules or has async/external/state changes | `core-flow-deep-trace.md` for required-core flows; `flow-template.md` for supporting flows |
-| `domain/entities/<entity>.md` | entity has many fields, complex state, multiple writers/readers | `entity-template.md` |
-| `domain/state-flow-<entity>.md` | legal lifecycle states matter | `state-flow-template.md` |
-| `domain/state-trace-<entity>.md` | need to trace who writes state | `state-trace-template.md` |
-| `runtime/async-and-events.md` | queues, subscriptions, callbacks, workers exist | derive from architecture + flow-template async fields |
-| `runtime/jobs-and-schedules.md` | cron, scheduler, background jobs exist | derive from flow-template job fields |
-| `maps/change-impact-map.md` | ≥ 3 core modules or change impact is frequently asked | `change-impact-map.md` |
-| `domain/glossary.md` | ≥ 8 domain terms or naming conflicts | `glossary.md` |
-| `quality/observability.md` | logs, metrics, traces, alerts beyond basic health | derive from deployment-and-operations |
-| `diagrams/<name>.md` | diagram referenced by ≥ 2 docs or > 80 lines Mermaid | `diagram.md` |
-
-Never create a conditional file just because the template exists.
-
-## README Requirements
-
-`README.md` must include:
-
-- document language and evidence
-- project scope
-- freshness status
-- 10-minute reading path
-- development reading path
-- troubleshooting reading path
-- async/jobs reading path when async, queues, callbacks, workers, or schedulers exist
-- role-based reading paths when the project has distinct frontend, backend, operations, QA, or product readers
-- module reading paths
-- flow reading paths
-- data-model reading path when persistent data exists
-- document index
-- diagrams index
-- needs-review / stale / unknown items
-
-Module reading path table:
-
-| Module | Read First | Then Read | Core Call Chain | Useful For |
+| Proposed File | Why New File? | Why Not Merge? | Required-Core? | Human Value |
 |---|---|---|---|---|
 
-If the README lacks module reading paths, onboarding-db is not complete.
-
-Data model reading path table:
-
-| Entity | Meaning | Read First | Then Read | State Docs | Used By | Status |
-|---|---|---|---|---|---|---|
-
-If persistent data exists and the README lacks a data-model reading path, onboarding-db is usable but incomplete.
-
-If async/jobs exist and README lacks an async/jobs reading path, onboarding-db is usable but incomplete.
-
-Diagram index table:
-
-| Diagram | Question Answered | Target Doc | Evidence Chain | Last Verified | Confidence |
-|---|---|---|---|---|---|
-
-**Diagram coverage check**: The diagrams index must also list modules/flows/entities that **do not yet have diagrams**, with a reason and planned action. If a core module, core flow, or complex entity is missing a diagram, onboarding-db is **usable but incomplete**.
-
-**Diagram walkthrough check**: Every diagram indexed here must have a corresponding "Step-by-Step Walkthrough" in its target document. The walkthrough must be traceable from the diagram index (e.g., via target doc link). A diagram without walkthrough is incomplete even if the visual is present.
-
-## Module Card
-
-Core fields:
-
-```md
-## Module: <name>
-
-Purpose:
-Boundary:
-Entrypoints:
-Core Call Chain:
-Core Flows:
-Key Files:
-Related Diagrams:
-Evidence Chain:
-Evidence:
-Confidence:
-```
-
-**Diagram requirement**: `Related Diagrams` must list **all diagrams** for this module: at minimum one call-chain flowchart, plus sequence diagrams for async/external/callback interactions. A module card without diagrams is incomplete.
-
-Optional fields:
-
-```md
-Depends On:
-Called By:
-Key Data:
-Configuration:
-Tests:
-Risks:
-```
-
-Expanded-only fields:
-
-```md
-Operational Notes:
-Runtime Ownership:
-Deployment Unit:
-Observed Failure Modes:
-Related Decisions:
-```
-
-Do not invent fields. Use `Not found`, `Not applicable`, or `Unknown` when needed.
-
-Core module rule:
-
-- `module-map.md` should link to dedicated module docs for core modules when they have durable behavior, stable entrypoints, their own data/external dependencies, repeated maintenance need, or repeated feature impact.
-- support-only areas may remain index-only with evidence.
-
-## Complex Flow Docs
-
-Use `flows/<flow>.md` when a business/runtime flow needs its own reading path. Do not keep complex flows as one row in `flows-and-data.md`.
-
-Create or recommend `flows/<flow>.md` when:
-
-- the flow crosses multiple durable modules or services
-- async jobs, callbacks, queues, schedulers, retries, or compensation are part of the flow
-- important state transitions or state writers are involved
-- there are multiple API, command, job, or UI entrypoints
-- the flow has meaningful failure paths or operational risks
-- multiple tests or verification paths are needed to trust the flow
-- humans repeatedly ask how the flow works
-
-Do not create one flow doc per helper function, endpoint variant, or trivial CRUD path. Keep those in a flow index or Compact-equivalent section.
-
-## Data Model And Entity Docs
-
-Use `domain/data-model.md` for persistent data understanding. It is an index and relationship map, not a dump of every field.
-
-Core fields for `domain/data-model.md`:
-
-```md
-## Core Entity Index
-## Entity Relationship Map
-## Relationships
-## Ownership
-## Key Fields
-## State Field Index
-## API / Flow / Job Usage
-## Migrations / Seeds / History
-## Tests
-## Evidence Chain
-## Risks / Unknowns
-```
-
-Create `domain/entities/<entity>.md` only when the entity needs its own reading path.
-
-Create or recommend entity docs when:
-
-- the entity has many fields or important derived fields
-- the entity has complex state or lifecycle transitions
-- multiple flows, APIs, jobs, or async consumers read or write it
-- migrations/history/compatibility matter for future changes
-- the human repeatedly asks about the entity
-
-Do not create entity docs for simple lookup/config tables or join tables without business meaning. Keep those in `domain/data-model.md` with evidence and confidence.
-
-Core fields for `domain/entities/<entity>.md`:
-
-```md
-## Purpose
-## Storage Mapping
-## Fields
-## Relationships
-## State Fields
-## Writers
-## Readers / Consumers
-## Related Flows
-## Migrations / History
-## Tests
-## Evidence Chain
-## Risks / Unknowns
-```
-
-## Evidence Chain
-
-Use Evidence Chain tables for key claims in module docs, flow docs, major state traces, async/job docs, and critical verification claims.
-
-```md
-## Evidence Chain
-
-| File Path | Symbol / Object | Parameters / Fields | Description | Proves | Confidence |
-|---|---|---|---|---|---|
-```
-
-Rules:
-
-- do not write `source code`, `README`, or `scan result` alone for critical claims
-- use real file paths and concrete symbols/objects when found
-- use `Unknown`, `Not found`, or `Not applicable` when evidence is missing
-- diagram nodes and edges should be traceable to an Evidence Chain entry in the same doc or target doc
-
-## Deployment Template
-
-Use `deployment-and-operations.md` when deployment is complex enough to stand alone.
-
-Required sections:
-
-```md
-# Deployment And Operations
-
-Document Language:
-Last Verified:
-Confidence:
-Source Evidence:
-Human Review Status:
-
-## Deployment Overview
-## Environments
-## Deployment Pipeline
-## Runtime Topology
-## Release / Rollback
-## Migrations / Seeds
-## Health Checks
-## Logs / Metrics / Tracing
-## Operational Access
-## Related Diagrams
-## Evidence
-## Unknowns
-```
-
-Tables:
-
-| Environment | Runtime | Deploy Trigger | Config Source | URL / Entry | Owner | Evidence | Confidence |
-|---|---|---|---|---|---|---|---|
-
-| Step | Command / System | Working Directory | Preconditions | Rollback | Evidence | Confidence |
-|---|---|---|---|---|---|---|
-
-Never write real secrets or production connection strings.
-
-## Decisions And History
-
-Use this for why the project is shaped this way.
-
-| Layout | Placement |
-|---|---|
-| Compact | section in `architecture-and-integrations.md` |
-| Standard | `decisions-and-history.md` |
-| Expanded | optional split into `design-decisions.md`, `architecture-history.md`, `technical-debt.md` |
-
-Decision fields:
-
-| Field | Meaning |
-|---|---|
-| Decision | what was decided |
-| Context | constraints and situation |
-| Alternatives | known alternatives |
-| Why This Choice | reason, only if evidenced |
-| Consequences | benefits and costs |
-| Current Status | active / superseded / unknown |
-| Evidence | docs, commit, issue, PR, code, or human confirmation |
-| Confidence | high / medium / low |
-
-Code can prove what exists now; it usually cannot prove why it was chosen. Ask the human when reason is unclear.
-
-## Diagram Template
-
-Use one generic template and set `Diagram Type`. Onboarding diagrams are flowchart-first.
-
-````md
-# Diagram: <name>
-
-Document Language: 中文
-Last Verified:
-Diagram Type:
-Question Answered:
-Scope:
-Source Evidence:
-Confidence:
-Human Review Status: draft
-
-## Diagram
-
-```mermaid
-flowchart TB
-  subgraph API["API 入口层"]
-    API_ENTRY["API / Route"]
-  end
-  subgraph Domain["Domain / Service 层"]
-    SERVICE["Service / Use Case"]
-  end
-  subgraph Data["Data 层"]
-    DB[(Database / Model)]
-  end
-  subgraph External["External / Runtime"]
-    EXT["External Service / Worker"]
-  end
-
-  API_ENTRY --> SERVICE
-  SERVICE --> DB
-  SERVICE --> EXT
-
-  classDef user fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,color:#000
-  classDef api fill:#e1f5ff,stroke:#01579b,stroke-width:2px,color:#000
-  classDef domain fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#000
-  classDef task fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:#000
-  classDef db fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#000
-  classDef external fill:#ffebee,stroke:#c62828,stroke-width:2px,color:#000
-  classDef state fill:#fffde7,stroke:#f9a825,stroke-width:2px,color:#000
-
-  class API_ENTRY api
-  class SERVICE domain
-  class DB db
-  class EXT external
-```
-
-## How To Read
-
-## Notes
-
-## Unknowns
-````
-
-Allowed diagram types include:
-
-```text
-module-relationship
-core-module-call-chain
-boundary
-core-flow
-async-flow
-job-flow
-state-flow
-api-call-flow
-integration-flow
-auth-flow
-file-flow
-failure-recovery
-data-entity-map
-deployment-map
-change-impact-map
-sequence-detail
-```
-
-Each diagram answers one question. Do not draw a whole repository.
-
-Diagram priority:
-
-| Priority | Use | Diagram Shape |
-|---|---|---|
-| P0 | newcomer overview, module/flow/boundary understanding | layered `flowchart TB/LR` |
-| P1 | entity/state/async/deployment/change-impact understanding | focused flowchart / state diagram / ER-style graph |
-| P2 | exact interaction order after overview exists | `sequenceDiagram` as a detail diagram |
-
-Color convention:
-
-| Class | Meaning |
-|---|---|
-| `user` | human, browser, client |
-| `api` | API route, controller, UI action entry |
-| `domain` | service, use case, domain logic |
-| `task` | job, worker, scheduler, async consumer |
-| `db` | database table, ORM model, persistent store |
-| `external` | third-party service, object storage, remote runtime |
-| `state` | status transition, failure state, manual gate |
-
-Use `sequenceDiagram` **when a core module has async jobs, external APIs, callbacks, WebSocket, retry/compensation, or multi-service interactions**. Sequence diagrams are **mandatory** for these scenarios, not optional. For simple modules without async/external behavior, a flowchart is sufficient.
-
-## Batch Review Template
-
-```md
-# Batch Human Review: <stage-or-topic>
-
-| File / Item | Action | Change Summary | Source Evidence | Confidence | Affects Long-Term Memory | Suggested Action |
-|---|---|---|---|---|---|---|
-```
-
-**Diagram coverage check** (add to every Architecture, Flows And Data, or targeted batch):
-
-| Module / Flow / Entity | Required Diagrams | Has Diagram? | Diagram Type | How To Read? | Step-by-Step Walkthrough? | Action |
-|---|---|---|---|---|---|---|
-
-If any core module, core flow, or complex entity is missing a required diagram, flag it in the Batch Review and do not mark onboarding-db complete until resolved.
-
-**Discovery coverage check** (add to every Deep Scan batch):
-
-| Discovery Item | Required Doc / Diagram | Evidence | Status | If Skipped, Why | Action |
-|---|---|---|---|---|---|
-
-The Discovery Coverage Matrix prevents treating the minimum file set as a maximum. If a discovered durable module, complex flow, persistent data model, complex entity, async/job/event path, deployment/ops concern, verification system, or high-risk unknown has no matching document/diagram and no evidence-based skip reason, onboarding-db is usable but incomplete.
-
-For onboarding-db batches:
-
-| Batch | Typical Files |
-|---|---|
-| Project Basics | README, overview, setup/environment, code map |
-| Architecture | modules, boundaries, APIs, integrations, async/jobs |
-| Flows And Data | core flows, data model, state diagrams, flow diagrams |
-| Verification And Risks | testing, change impact, risks, unknowns, glossary |
-| Memory Backfill | `project.md` and `project/*.md` proposals |
-
-## Minimum Completion Standard
+If the answer is weak, merge the content into README, maps, coverage, or an existing star doc.
+
+## Star Doc Quality Bar
+
+A required-core topic is not `newcomer-ready` until an accepted star doc explains:
+
+- business meaning and actors
+- phase-by-phase flow
+- API / command / callback / job entrypoints
+- code evidence and symbols
+- data models, tables, Redis keys, Kafka topics, configs, or external systems
+- state changes and fact sources
+- success paths, branches, failure paths
+- retry, idempotency, compensation, fallback, and operational risks
+- verification, logs, metrics, runbook checks
+- concrete examples
+- key file index and reading order
 
 ## Newcomer Handoff Quality Gate
 
-Do not mark Deep onboarding complete only because the Expanded minimum files exist. Deep onboarding is a newcomer handoff package; it must teach a new maintainer how the project works, how to start it, how data moves, how to verify behavior, and where change risk lives.
+Do not mark Deep onboarding complete only because index files, many files, or attractive diagrams exist.
 
 Required Deep onboarding packs:
 
-- Core Domain Handoff Pack: business purpose, users/actors, core capabilities, core constraints, core modules, primary flows, data ownership, and Evidence Chain.
-- Service Startup / Config Matrix: service/process, command, config path, required dependencies, port/protocol, health/failure signal, evidence, and confidence.
-- Core module docs: purpose, boundary, entrypoints, config/dependencies, core call chain, data touched, APIs/protos, tests, risks, and Evidence Chain.
-- Core flow docs: trigger, entrypoint, step-by-step call chain with file/symbol evidence, data writes, async/failure/retry behavior, verification, risks, and Evidence Chain.
-- Core data docs: entities, key fields, storage mapping, owners, writers/readers, lifecycle/state, related flows, tests, evidence, and confidence.
+- Onboarding Spec accepted.
+- Onboarding Plan accepted.
+- Required-core star docs accepted.
+- Coverage Matrix shows no required-core topic stuck at `discovered`, `planned`, `needs-deep-trace`, `draft-star`, or `blocked-by-unknown`.
+- README/maps point to canonical star docs without duplicating thin summaries.
+- Service Startup / Config Matrix information exists in a star doc, README/runtime section, or coverage row when it matters.
+- Core Domain Handoff Pack is represented by accepted star docs and coverage rows, not by shallow module files.
 
-If many small files exist but these packs are thin or missing, the onboarding-db is usable but incomplete. Record gaps in the Discovery Coverage Matrix and Batch Human Review instead of declaring completion.
+If many small files exist but these packs are thin or missing, the onboarding-db is usable but incomplete.
 
-Onboarding-db is complete only when:
+## Anti-Patterns
 
-- README has reading paths, module reading paths, data-model reading path, document index, and **diagrams index with coverage check**
-- Discovery Coverage Matrix is closed for every discovered core module, complex flow, persistent data model, complex entity, async/job/event path, deployment/ops concern, verification system, and high-risk unknown
-- overview explains purpose, users, stack, and capabilities
-- setup/run path is usable or blocked with evidence
-- code map tells where to start reading
-- modules and boundaries are mapped
-- **diagrams include module map, boundary map, at least one complete diagram per core module, sequence diagrams for async/external interactions, at least one core flow, and model usage flow map when persistent data exists**
-- **all diagrams have "How To Read" notes and "Step-by-Step Walkthrough"**
-- async/jobs/deployment/data are documented or marked not applicable/unknown
-- tests and verification commands have confidence labels
-- risks and unknowns are recorded
-- important facts include evidence and confidence
-- human review status is recorded
+Do not:
 
-If not, call it usable but incomplete.
+- create one file per directory
+- create module/flow files because a template exists
+- create alias files that duplicate a canonical star doc
+- mark coverage `done` because a file exists
+- use diagrams as a substitute for phase-by-phase explanation
+- split before writing and accepting `onboarding-spec.md` and `onboarding-plan.md`
+
+## Migration From Legacy Onboarding DB
+
+When an existing onboarding-db has many thin files:
+
+1. Do not delete target-project files silently.
+2. Audit coverage status and lower overclaimed `done/newcomer-ready` rows to `needs-deep-trace`.
+3. Write `onboarding-spec.md` describing the required-core topics.
+4. Write `onboarding-plan.md` with a small file budget.
+5. Convert the best existing detailed docs into `stars/<topic>.md`.
+6. Treat old `modules/*`, `flows/*`, and `diagrams/*` as draft evidence or indexes until a human approves consolidation.

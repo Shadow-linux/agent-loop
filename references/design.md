@@ -238,12 +238,12 @@ Action:
 
 ```text
 Load onboarding-db.md.
-Use existing onboarding-db before rerunning Deep Project Onboarding Scan.
+Use existing onboarding-db before rerunning Deep Onboarding.
 Recommend one next reading path, targeted diagram update, setup/verification action, or return to feature work.
 Ask before writing onboarding-db updates.
 ```
 
-If onboarding-db is missing, route to Existing Project Onboarding or Deep Project Onboarding Scan after explaining Quick / Deep / Targeted options. If project memory or root guidance claims onboarding-db should exist, route to stale-memory recovery before guided onboarding.
+If onboarding-db is missing, route to Existing Project Onboarding and explain that durable onboarding uses the single Deep Onboarding flow. Do not offer Quick / Deep / Targeted onboarding modes. If project memory or root guidance claims onboarding-db should exist, route to stale-memory recovery before guided onboarding.
 
 ### Feature Follow-up And Flow-back
 
