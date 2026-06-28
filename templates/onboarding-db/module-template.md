@@ -8,6 +8,10 @@ Confidence:
 Source Evidence:
 Human Review Status: draft
 
+Template Role: ordinary/supporting module template
+
+Required-core modules must use `core-module-deep-dive.md` or an equivalent deep-dive structure. This template can document supporting modules, simple modules, or Compact/Standard module sections, but it is not enough to mark a `required-core` module `newcomer-ready`.
+
 ## Purpose
 
 ## Boundary

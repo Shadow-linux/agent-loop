@@ -21,7 +21,7 @@ Agent 的职责是主导研发闭环。你主要负责提出目标、确认关�
 | “帮我在这个项目里启用 agent-loop” | 初始化项目（Init Project） | 创建 `.agent-loop/project.md`、root `AGENTS.md`、`CLAUDE.md` 指针 |
 | “接管这个旧项目” | 旧项目接管（Existing Project Onboarding） | 扫描现有代码和文档，建立项目记忆 |
 | “深度接管这个项目，让新人能看懂” | 深度项目接管（Deep Project Onboarding Scan） | 生成 `.agent-loop/onboarding-db/` 项目理解文档、图、证据链 |
-| “我只想先知道怎么启动和测试” | 快速接管（Quick Onboarding） | 只建立足够继续开发的项目记忆和启动信息 |
+| “我只想先知道怎么启动和测试” | 快速接管（Quick Onboarding） | 建立项目记忆、启动信息和轻量 Evidence Graph 骨架 |
 | “解释一下这个模块/流程/异步任务” | 定向接管扫描（Targeted Onboarding Scan） | 聚焦扫描一个模块、流程、异步任务、部署路径或问题点 |
 | “这个项目以前用过 agent-loop，但最近没维护” | 重新托管 / 回补（Re-Adopt / Recovery Backfill） | 以代码现实为准，回补 `.agent-loop/` 文档 |
 | “agent-loop skill 更新了，检查一下这个项目的 AGENTS.md 要不要同步” | root guidance 版本检查 / 托管块刷新 | 比较 root `AGENTS.md` 的 managed version 和当前 skill 版本，过期时提议刷新托管块 |
@@ -131,9 +131,9 @@ Agent 会先做浅层扫描：
 
 | 模式 | 适合什么时候 | 会生成什么 |
 |---|---|---|
-| 快速接管（Quick Onboarding） | 你想尽快开始开发 | `.agent-loop/project.md`、root 启动说明、关键命令和目录概览 |
-| 深度项目接管（Deep Project Onboarding Scan） | 你想让新人系统看懂项目 | `.agent-loop/onboarding-db/`、模块/流程/数据模型文档、图、证据链 |
-| 定向接管扫描（Targeted Onboarding Scan） | 你只关心一个问题 | 某个模块、流程、异步任务、部署路径、状态变化的解释和图 |
+| 快速接管（Quick Onboarding） | 你想尽快开始开发 | `.agent-loop/project.md`、root 启动说明、关键命令、轻量 Evidence Graph / core domain / core flow / coverage / startup matrix |
+| 深度项目接管（Deep Project Onboarding Scan） | 你想让新人系统看懂项目 | Graph-first onboarding-db、核心流程 deep trace、核心模块 deep dive、数据模型、图、证据链 |
+| 定向接管扫描（Targeted Onboarding Scan） | 你只关心一个问题 | 某个模块、流程、异步任务、部署路径、状态变化的 graph slice、解释和图 |
 
 旧项目 onboarding 不算完成，除非：
 
@@ -151,7 +151,21 @@ Agent 会先做浅层扫描：
 做一次 Deep Project Onboarding Scan，让新人能靠文档接手项目。
 ```
 
-Deep onboarding 默认使用 Expanded onboarding-db。也就是说，它优先生成分类清晰、可长期维护的文档，而不是为了少文件把所有内容挤在一起。
+Deep onboarding 默认使用 Expanded onboarding-db，但现在是 Graph-first，不是按目录平均铺文件。Quick 会先建立 Evidence Graph、Core Domain Inventory、Core Flow Inventory、Coverage Matrix、Service Startup Matrix，并明确写 `Quick onboarding complete; Deep onboarding not complete.`。
+
+Deep 的展开顺序是：
+
+```text
+Evidence Graph
+→ Core Domain Inventory
+→ Core Flow Inventory
+→ Main Traffic Flow
+→ Core Flow Deep Trace
+→ Core Module Deep Dive
+→ Data Model / State / Runtime / Verification / Risks
+→ README Reading Paths
+→ Coverage Matrix
+```
 
 Expanded 不是“只生成最少文件”。它有最小覆盖集，也有“发现即创建”的规则：扫描发现核心模块、复杂流程、异步任务、部署、安全、观测、复杂实体时，Agent 必须创建对应文档，或者明确写出为什么跳过。
 

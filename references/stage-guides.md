@@ -240,6 +240,7 @@ First decision:
 - Default to Quick Onboarding when the human wants to continue feature work quickly.
 - Use Deep Project Onboarding Scan when the human wants newcomer-friendly project understanding or long-term onboarding docs.
 - Use Targeted Onboarding Scan when the human asks about one module, flow, async task, deployment path, or problem area.
+- Explain that Quick Onboarding creates a lightweight Graph-first skeleton, while Deep creates newcomer-ready core docs.
 
 Inspect:
 
@@ -258,16 +259,26 @@ Use layered scan order:
 6. architecture profile and actual code layout
 7. capability map
 8. boundary map
-9. guidance inventory
-10. uncertainty list
+9. lightweight Evidence Graph package
+10. guidance inventory
+11. uncertainty list
 
 Do not read the whole repository. Do not start feature implementation during onboarding.
 
 If subagents are used, the main agent keeps ownership of synthesis and all writes. Subagents only return findings, evidence, confidence, uncertainties, files read, and suggested `project.md` entries.
 
+If Quick Onboarding is selected:
+
+- draft `.agent-loop/project.md`, guidance status/proposal, and uncertainties
+- create or refresh only the lightweight Graph-first package: `maps/evidence-graph.md`, `maps/core-domain-inventory.md`, `maps/core-flow-inventory.md`, `maps/coverage-matrix.md`, and `runtime/service-startup-matrix.md`
+- use `onboarding-db-templates.md` for those templates
+- record `Quick onboarding complete; Deep onboarding not complete.`
+- do not create full module/flow deep-dive docs or onboarding diagrams
+
 If Deep Project Onboarding Scan is selected:
 
 - run P0 before P1 and P2
+- start from Evidence Graph, Core Domain Inventory, Core Flow Inventory, Coverage Matrix, and Service Startup Matrix before detail docs
 - record Onboarding DB Layout Mode before proposing onboarding-db files; default to Expanded unless the human explicitly requests Compact/Standard or an existing onboarding-db already uses it
 - draft onboarding-db with `templates/onboarding-db/*`
 - create diagrams only when they answer a concrete onboarding question
@@ -278,6 +289,7 @@ If Targeted Onboarding Scan is selected:
 
 - inspect only the minimal safe context plus the selected module, flow, async task, deployment path, or problem area
 - Targeted Onboarding Scan may inspect minimum P0 context for safety, but it does not produce a full project.md proposal by default
+- create or refresh a graph slice for the selected target
 - propose focused onboarding-db updates only for that target
 - propose narrow project memory backfill only when the targeted scope exposes stale or missing facts required for safe continuation
 - do not create unrelated onboarding-db files

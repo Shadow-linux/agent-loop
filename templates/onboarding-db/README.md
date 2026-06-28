@@ -18,6 +18,15 @@ Freshness Window: 7 days
 
 ## How To Start Reading
 
+## Evidence Graph First Reading Path
+
+| Goal | Read First | Then Read | Completion Signal |
+|---|---|---|---|
+| understand project skeleton | `maps/evidence-graph.md` | `maps/core-domain-inventory.md`, `maps/core-flow-inventory.md` | graph package exists; Quick may still be incomplete for Deep |
+| find required core flows | `maps/core-flow-inventory.md` | `flows/main-traffic-flow.md`, `flows/<core-flow>.md` | required-core flows are `newcomer-ready` |
+| find required core modules | `maps/core-domain-inventory.md` | `modules/<core-module>.md`, related core flow docs | required-core modules are `newcomer-ready` |
+| check completion | `maps/coverage-matrix.md` | relevant module/flow/runtime docs | no required-core row remains `graph-only`, `needs-deep-trace`, or `blocked-by-unknown` |
+
 | Goal | Read First | Then Read | Why |
 |---|---|---|---|
 | 10-minute onboarding | `overview.md` | `maps/module-map.md`, `runtime/setup-and-run.md` | understand purpose, main modules, and run path |

@@ -42,6 +42,10 @@
 - Added a Deep Onboarding Quality Gate so Deep scans are judged as newcomer handoff packages, not by file count alone.
 - Required Core Domain Handoff Pack and Service Startup / Config Matrix coverage for Deep onboarding completion.
 - Added validation coverage for thin expanded onboarding-db outputs with many small files but insufficient core flow, data, startup, verification, or change-risk detail.
+- Implemented Graph-first onboarding: Quick now creates the lightweight Evidence Graph package and records `Quick onboarding complete; Deep onboarding not complete.`
+- Added required-core status model, Evidence Graph node/edge schemas, graph slices, Coverage Matrix completion rules, and colored diagram policy.
+- Added templates for Evidence Graph, Core Domain Inventory, Core Flow Inventory, Coverage Matrix, Service Startup Matrix, Main Traffic Flow, Core Flow Deep Trace, Core Module Deep Dive, and Targeted Graph Slice.
+- Demoted old flow/module templates to ordinary/supporting use; required-core flow and module completion now requires deep-trace/deep-dive structures with code evidence, branch/failure matrices, concrete examples, and verification/observability.
 
 ### Complex Artifact Thresholds
 - Replaced hard Complex Artifact recommendation thresholds with a simpler assessment model: stories > 3 pauses for assessment, but does not itself recommend Complex Artifact Mode.

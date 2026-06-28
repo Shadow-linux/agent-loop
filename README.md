@@ -130,9 +130,9 @@ For existing projects, the agent offers onboarding modes:
 
 | Mode | Use When |
 |---|---|
-| **Quick Onboarding** | Build enough project memory to continue feature work soon |
-| **Deep Project Onboarding Scan** | Generate newcomer-readable `.agent-loop/onboarding-db/`, diagrams, walkthroughs, evidence chains, and backfill proposals |
-| **Targeted Onboarding Scan** | Understand one module, flow, async task, deployment path, or problem area |
+| **Quick Onboarding** | Build enough project memory plus a lightweight Evidence Graph package to continue feature work soon |
+| **Deep Project Onboarding Scan** | Generate graph-driven newcomer-readable `.agent-loop/onboarding-db/`, required-core deep traces, diagrams, walkthroughs, evidence chains, and backfill proposals |
+| **Targeted Onboarding Scan** | Understand one module, flow, async task, deployment path, or problem area through a graph slice |
 
 ### 3. Start a Feature
 
@@ -152,7 +152,9 @@ After project init/onboarding is accepted, the agent will:
 
 If `.agent-loop/onboarding-db/` exists, the agent uses it first: it checks freshness, gives a short orientation, recommends one reading path, answers targeted questions, and proposes focused diagram/doc updates only after confirmation.
 
-Deep onboarding defaults to Expanded onboarding-db output. Expanded has a minimum required set for project overview, maps, setup, data model, testing, risks, and core module docs. It is also discovery-driven: when the scan finds complex flows, async/jobs, deployment, security, observability, or complex entities, the agent must create the matching docs or record why they were skipped. Diagram coverage grows with project complexity: large projects should get more focused module, flow, state, async/job, data, and deployment diagrams instead of one overloaded global view. Diagrams are embedded in the relevant docs by default and every diagram needs both `How To Read` and `Step-by-Step Walkthrough` text. Standalone `diagrams/` files are created only when a diagram is reused or too large to embed comfortably.
+Quick onboarding now creates a lightweight Graph-first package: `maps/evidence-graph.md`, `maps/core-domain-inventory.md`, `maps/core-flow-inventory.md`, `maps/coverage-matrix.md`, and `runtime/service-startup-matrix.md`. It should say `Quick onboarding complete; Deep onboarding not complete.` and must not create many thin module/flow docs to impersonate Deep.
+
+Deep onboarding defaults to Expanded onboarding-db output, but it is Graph-first rather than directory-first. The agent starts from Evidence Graph → Core Domain Inventory → Core Flow Inventory → Main Traffic Flow → required-core flow deep traces → required-core module deep dives → data/runtime/verification/risk coverage. Expanded has a minimum required set for project overview, maps, setup, data model, testing, risks, and core module docs. It is also discovery-driven: when the scan finds complex flows, async/jobs, deployment, security, observability, or complex entities, the agent must create the matching docs or record why they were skipped. Diagram coverage grows with project complexity: large projects should get more focused module, flow, state, async/job, data, and deployment diagrams instead of one overloaded global view. Diagrams are embedded in the relevant docs by default and every diagram needs both `How To Read` and `Step-by-Step Walkthrough` text. Standalone `diagrams/` files are created only when a diagram is reused or too large to embed comfortably.
 
 After each onboarding explanation, the agent should recommend one next action: read a specific doc, inspect a module/flow, generate or update a focused diagram, run a setup/verification command, or return to feature development.
 

@@ -9,10 +9,10 @@ If the existing codebase is remote and the local directory is only an entry poin
 Do not read the whole repository. Build a trustworthy project map quickly:
 
 ```text
-startup docs -> shallow structure -> commands -> architecture profile -> capabilities -> boundaries -> guidance -> uncertainties -> human confirmation
+startup docs -> shallow structure -> commands -> architecture profile -> capabilities -> boundaries -> lightweight evidence graph -> guidance -> uncertainties -> human confirmation
 ```
 
-The result is a draft `.agent-loop/project.md` that is useful enough for the next feature, with evidence and confidence labels.
+The result is a draft `.agent-loop/project.md` plus a lightweight Graph-first onboarding skeleton that is useful enough for the next feature, with evidence and confidence labels.
 
 For remote projects, the draft `project.md` should live next to the remote source of truth when remote writes are allowed. If not, keep it in local-shadow mode and label code facts with remote location.
 
@@ -24,13 +24,33 @@ When the human asks to take over, understand, or continue an existing project, e
 
 | Mode | Use When | Output |
 |---|---|---|
-| Quick Onboarding | the human wants to safely continue feature work soon | `.agent-loop/project.md`, base folders, guidance proposal, uncertainties |
+| Quick Onboarding | the human wants to safely continue feature work soon | `.agent-loop/project.md`, base folders, guidance proposal, uncertainties, lightweight Graph-first onboarding skeleton |
 | Deep Project Onboarding Scan | the human wants newcomer-friendly project understanding or long-term onboarding docs | Quick outputs plus `.agent-loop/onboarding-db/`, diagrams, and backfill proposal |
 | Targeted Onboarding Scan | the human asks about one module, flow, async task, deployment path, or problem area | focused onboarding-db update proposal for that scope |
 
 Record Onboarding Mode: Quick | Deep | Targeted in the onboarding proposal, `project.md` draft, or onboarding-db batch review so future agents can distinguish a Quick safe-continuation snapshot from a Deep onboarding-db scan even when Deep includes Quick outputs.
 
 Targeted Onboarding Scan may inspect the minimum P0 safety context, but it does not produce a full Quick Onboarding or full project.md proposal by default. It may propose narrow project memory backfill only when the targeted scope exposes stale or missing facts required for safe continuation.
+
+Quick Onboarding creates a lightweight Graph-first onboarding skeleton:
+
+```text
+.agent-loop/onboarding-db/maps/evidence-graph.md
+.agent-loop/onboarding-db/maps/core-domain-inventory.md
+.agent-loop/onboarding-db/maps/core-flow-inventory.md
+.agent-loop/onboarding-db/maps/coverage-matrix.md
+.agent-loop/onboarding-db/runtime/service-startup-matrix.md
+```
+
+Quick must explicitly record:
+
+```text
+Quick onboarding complete; Deep onboarding not complete.
+```
+
+Quick must not create full `modules/<module>.md`, `flows/<flow>.md`, deep-trace docs, standalone diagrams, or many thin onboarding files to look like Deep.
+
+If Quick creates or refreshes the lightweight graph package, load `onboarding-db-templates.md` for the map/runtime templates.
 
 If the human chooses Deep or Targeted, load:
 
@@ -40,7 +60,7 @@ onboarding-db.md
 onboarding-db-templates.md
 ```
 
-If the human rejects Deep, do Quick only. Do not create onboarding-db or diagrams.
+If the human rejects Deep, do Quick only. Do not create Deep onboarding-db detail docs or diagrams.
 
 ## Core Rules
 

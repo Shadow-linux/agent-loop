@@ -9,7 +9,7 @@ This reference does not replace `existing-project-onboarding.md`. That file is t
 Create a human-readable project understanding map without producing a full repository graph:
 
 ```text
-project shape -> docs -> shallow repo -> runtime/tooling -> entrypoints -> boundaries -> modules -> flows -> verification -> onboarding-db draft -> batch human review -> project memory backfill proposal
+project shape -> docs -> shallow repo -> runtime/tooling -> entrypoints -> evidence graph -> core domains -> core flows -> main traffic flow -> deep traces -> verification -> onboarding-db draft -> batch human review -> project memory backfill proposal
 ```
 
 Code reality is the current fact base. Existing docs are clues. Do not deep-read every file.
@@ -18,11 +18,11 @@ Code reality is the current fact base. Existing docs are clues. Do not deep-read
 
 | Mode | Use When | Output |
 |---|---|---|
-| Quick Onboarding | human wants fast safe continuation | project memory and guidance proposal only |
-| Deep Project Onboarding Scan | human wants newcomer-friendly project understanding | Quick outputs plus `.agent-loop/onboarding-db/`, necessary diagrams, and backfill proposal |
-| Targeted Onboarding Scan | human asks about one module, flow, async job, deployment path, or problem area | focused onboarding-db update proposal for that scope only |
+| Quick Onboarding | human wants fast safe continuation | project memory, guidance proposal, uncertainties, and lightweight Evidence Graph package only |
+| Deep Project Onboarding Scan | human wants newcomer-friendly project understanding | Quick outputs plus graph-driven onboarding-db docs, necessary diagrams, and backfill proposal |
+| Targeted Onboarding Scan | human asks about one module, flow, async job, deployment path, or problem area | graph slice plus focused onboarding-db update proposal for that scope only |
 
-Ask the human to choose Quick or Deep before creating onboarding-db files. If the human only asks a targeted question, do not run full Deep Scan.
+Ask the human to choose Quick or Deep before creating Deep onboarding-db detail files. Quick may create the lightweight Evidence Graph package below. If the human only asks a targeted question, do not run full Deep Scan.
 
 After Deep Scan creates onboarding-db, future "onboard me" requests should use `onboarding-db.md` Guided Newcomer Onboarding instead of rerunning Deep Scan by default. Rerun or refresh Deep Scan only when freshness, coverage, or code reality makes the existing onboarding-db unreliable.
 
@@ -38,13 +38,107 @@ The scan is prioritized, not a mechanical linear checklist.
 
 Rules:
 
-- Quick Onboarding runs P0 only and records P1/P2 follow-ups.
+- Quick Onboarding runs P0 only, creates the lightweight Evidence Graph package, and records P1/P2 follow-ups.
 - Deep Scan runs P0, then P1, then the P2 areas justified by project reality.
 - Deep Scan must record Onboarding Mode: Deep in the onboarding-db batch review and any project memory backfill proposal.
 - Targeted Scan runs the minimum P0 context needed for safety, then the selected target area.
 - Large or unclear projects should not jump directly to P2.
 
 For Targeted Scan, P0 is safety context, not the default deliverable. Targeted Scan output is the focused onboarding-db update proposal for the selected scope. It should not produce a full Quick Onboarding or full `project.md` proposal by default; propose narrow project memory backfill only when the targeted scan reveals stale or missing project facts needed for safe continuation.
+
+## Graph-first scan order
+
+Graph-first scan order:
+
+```text
+Evidence Graph -> Core Domain Inventory -> Core Flow Inventory -> Main Traffic Flow -> Core Flow Deep Trace Docs -> Core Module Deep Dives -> Domain Data Model / State / Ownership -> Runtime Startup / Config / Dependency Matrix -> Verification / Risks / Change Impact -> README Reading Paths -> Coverage Matrix
+```
+
+Quick Onboarding creates the lightweight Evidence Graph package:
+
+```text
+.agent-loop/project.md
+.agent-loop/onboarding-db/maps/evidence-graph.md
+.agent-loop/onboarding-db/maps/core-domain-inventory.md
+.agent-loop/onboarding-db/maps/core-flow-inventory.md
+.agent-loop/onboarding-db/maps/coverage-matrix.md
+.agent-loop/onboarding-db/runtime/service-startup-matrix.md
+root guidance proposal/status
+uncertainties / follow-up scan list
+```
+
+Quick may leave nodes, edges, startup facts, domains, and flows at `discovered`, `graph-only`, `needs-deep-trace`, or `blocked-by-unknown`. It must not create many thin module or flow docs to impersonate Deep. Its completion decision is exactly:
+
+```text
+Quick onboarding complete; Deep onboarding not complete.
+```
+
+Deep starts from the Evidence Graph and deepens required-core domains, flows, modules, data, runtime, verification, and risks until newcomer gates pass. Targeted Onboarding Scan produces a graph slice for the selected scope, updates only the relevant docs or coverage rows, and records:
+
+```text
+Targeted onboarding complete for <scope>.
+Full Deep onboarding remains incomplete unless global gates pass.
+```
+
+## Status Model
+
+Do not mix confidence with completion.
+
+| Status Category | Values | Meaning |
+|---|---|---|
+| Confidence | `high` / `medium` / `low` | how strong the evidence is; not a completion marker |
+| Completion Status | `discovered` / `graph-only` / `needs-deep-trace` / `newcomer-ready` / `supporting-summary` / `blocked-by-unknown` / `not-applicable` | how complete this onboarding object is |
+| Human Review Status | `draft` / `reviewed` / `needs-human-review` / `rejected` | whether a human has accepted the doc/fact |
+| Core Role | `required-core` / `supporting` / `unknown-core` / `not-core` | whether this object can block Deep completion |
+
+Rules:
+
+- `required-core` flow/domain/module rows cannot remain `graph-only`, `needs-deep-trace`, or `blocked-by-unknown` when Deep onboarding is marked complete.
+- `supporting-summary` is only for non-core supporting modules or low-risk helper flows.
+- `high` confidence does not mean complete when `Completion Status` is still `graph-only` or `needs-deep-trace`.
+- `blocked-by-unknown` must name the missing fact, owner or evidence path, and whether human confirmation or more code trace is needed.
+
+## Evidence Graph Schema
+
+`maps/evidence-graph.md` contains both node and edge tables. It is a markdown graph, not an external graph database.
+
+Node table:
+
+| Node ID | Type | Name | Scope | Owner / Fact Source | Core Role | Evidence | Confidence | Completion Status | Notes |
+|---|---|---|---|---|---|---|---|---|---|
+
+Edge table:
+
+| Edge ID | Source Node ID | Edge Type | Target Node ID | Direction | Sync / Async | Trigger / Condition | Data / State | Evidence Path | Symbol / Config | Risk | Required For Complete | Confidence |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+
+Node types include Service, Entrypoint, Module / Package, Domain, Flow, Data Entity, State Field, Storage, Message / Event, External System, Config / Runtime, and Risk.
+
+Edge types include calls, publishes, consumes, reads, writes, owns, derives, configures, verifies, and risks.
+
+When a fact source, state writer, table/field, Redis key, Kafka topic, callback route, idempotency rule, retry/compensation rule, verification path, or observability signal is unknown for a required-core object, record the unknown in the graph and coverage matrix instead of smoothing it over.
+
+## Visual Diagram Policy
+
+Onboarding diagrams default to colored Mermaid with `classDef` so humans can distinguish entry, domain, data, async, external, and risk nodes quickly.
+
+HTML/SVG auxiliary visual artifacts cannot replace markdown evidence tables, Mermaid source, or deep trace docs.
+
+HTML/SVG files may live under `onboarding-db/visuals/<scope>.html` or `onboarding-db/visuals/<scope>.svg` only as enhanced reading aids. They must name the source markdown graph or graph slice and cannot replace `flowchart`, `sequenceDiagram`, Code Evidence Trace Table, Evidence Chain, or Coverage Matrix rows.
+
+## Required Core Flow Rule
+
+Treat a flow as `required-core` by default when it involves:
+
+- money, balance, recharge, refund, bill, charge, fee, or pricing;
+- permission, identity, API key, tenant, group, discount, or authorization;
+- main request path, model routing, provider selection, provider call, usage generation, or quota/rate limit;
+- external callback, async consumer, final consistency, retry, idempotency, compensation, or state writeback;
+- production release/config switch, risk control, billing, operational stability, or a flow humans often ask about.
+
+Required core flow cannot be marked newcomer-ready while fact source, state writer, Redis key, Kafka topic, callback route, idempotency, retry, compensation, verification, or observability evidence is unknown.
+
+Required core flow docs must use `templates/onboarding-db/core-flow-deep-trace.md` or an equivalent structure. Ordinary `flow-template.md` can support non-core or supporting flows, but it is not enough for a required-core flow.
 
 ## Onboarding DB Layout Mode
 
@@ -342,6 +436,11 @@ For new Deep Scan output using Expanded Onboarding DB Layout Mode, the following
 
 | # | File | Must Contain |
 |---|---|---|
+| G1 | `maps/evidence-graph.md` | Evidence Graph node table, edge table, required-core roles, completion status, evidence, confidence |
+| G2 | `maps/core-domain-inventory.md` | core domains, owning modules/services, fact sources, risks, evidence, completion status |
+| G3 | `maps/core-flow-inventory.md` | required-core flow list, trigger, entrypoints, data read/write, async/external, required doc, completion status |
+| G4 | `maps/coverage-matrix.md` | confidence vs completion status, blockers, Deep completion decision |
+| G5 | `runtime/service-startup-matrix.md` | runnable service/process startup commands, config paths, dependencies, health/failure signals, completion status |
 | 1 | `README.md` | reading paths, module reading paths, data-model reading path, diagrams index, document index, freshness status |
 | 2 | `overview.md` | project purpose, users, tech stack, capabilities, current state |
 | 3 | `maps/directory-map.md` | major directories, entrypoints, key files, which are core vs generated/tool/test |
@@ -399,8 +498,8 @@ Before marking Deep onboarding complete, confirm these quality packs:
 
 Deep Scan must document how each runnable service starts and what it depends on:
 
-| Service / Process | Command | Config Path | Required Dependencies | Port / Protocol | Health / Failure Signal | Evidence | Confidence |
-|---|---|---|---|---|---|---|---|
+| Service / Process | Command | Config Path | Required Dependencies | Port / Protocol | Health / Failure Signal | Local Runnable? | Evidence | Confidence | Completion Status |
+|---|---|---|---|---|---|---|---|---|---|
 
 If startup cannot be verified, mark it `unknown` with evidence and a follow-up in Batch Human Review; do not silently omit it.
 
@@ -420,6 +519,8 @@ If any answer is no, say `Onboarding DB draft is usable but incomplete.` and rec
 Deep Scan is complete only when:
 
 - Onboarding DB Layout Mode is recorded, defaulting to Expanded unless the human explicitly requested Compact/Standard or the agent is preserving an existing Compact/Standard onboarding-db
+- Evidence Graph, Core Domain Inventory, Core Flow Inventory, Coverage Matrix, and Service Startup Matrix exist or are explicitly blocked with evidence
+- no required-core domain, flow, module, required edge, or service startup row remains `graph-only`, `needs-deep-trace`, or `blocked-by-unknown`
 - **Expanded Minimum Required Set files are present** (or explicitly justified as absent with evidence)
 - Discovery Coverage Matrix is closed for all discovered durable modules, complex flows, persistent data, complex entities, async/job/event paths, deployment/ops concerns, verification systems, and high-risk unknowns
 - README has reading paths, module reading paths, **data-model reading path**, and **diagrams index**

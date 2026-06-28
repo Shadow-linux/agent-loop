@@ -126,16 +126,23 @@ Before using an external skill or plugin inside a stage:
 - [ ] Record guidance language and evidence in `project.md`.
 - [ ] Record root guidance status in `project.md`: `AGENTS.md` present/created/stale/missing/human-deferred and `CLAUDE.md` points-to-AGENTS/created-pointer/stale/missing/human-deferred.
 - [ ] Attach evidence and confidence to commands, capabilities, and boundaries.
+- [ ] For Quick Onboarding, create or refresh the Graph-first Quick package: Evidence Graph, Core Domain Inventory, Core Flow Inventory, Coverage Matrix, and Service Startup Matrix.
+- [ ] For Quick Onboarding, record `Quick onboarding complete; Deep onboarding not complete.` and do not create full module/flow deep-dive docs or diagrams.
 - [ ] Decide whether Project Memory Mode should be `simple` or `enterprise`.
 - [ ] Recommend enterprise when any hard trigger applies, including about 200k+ LOC, 5+ durable boundaries, 2+ test systems, 3+ execution environments, `project.md` above about 600 lines, repeated re-scans, or 5+ directory-level guidance files.
 - [ ] List onboarding uncertainties and follow-up scans.
 - [ ] Summarize proposed `project.md` before writing.
 - [ ] If Deep is selected, record Onboarding DB Layout Mode before proposing onboarding-db files; default to Expanded unless the human explicitly requests Compact/Standard or an existing onboarding-db already uses it.
+- [ ] Run Deep in Graph-first order before writing module/flow detail docs.
+- [ ] Confirm Evidence Graph, Core Domain Inventory, Core Flow Inventory, Coverage Matrix, and Service Startup Matrix exist or are explicitly blocked before Deep detail docs.
 - [ ] If Deep is selected, run P0 before P1 and P2.
 - [ ] Confirm Deep onboarding passes the Newcomer Handoff Quality Gate, not only file-count coverage.
 - [ ] Confirm service startup/config, core domain flows, core data flow, data model, verification strategy, and change-risk map are evidence-backed.
+- [ ] Required-core flows cannot remain graph-only, needs-deep-trace, or blocked-by-unknown when Deep onboarding is marked complete.
+- [ ] Required-core modules cannot remain graph-only, needs-deep-trace, or blocked-by-unknown when Deep onboarding is marked complete.
 - [ ] For Targeted Onboarding Scan, treat P0 as safety context, not as permission to produce a full project.md proposal.
 - [ ] If Targeted is selected, limit scan and onboarding-db updates to the selected module, flow, async task, deployment path, or problem area.
+- [ ] If Targeted is selected, create or refresh a graph slice and update global coverage only for the target scope.
 - [ ] Use Batch Human Review before writing `.agent-loop/onboarding-db/`, multiple project memory facts, root guidance, or directory guidance.
 - [ ] Ask human confirmation before writing `.agent-loop/`, root guidance, directory guidance, onboarding-db, or diagrams.
 - [ ] Do not mark onboarding complete until root `AGENTS.md` is present/created/human-deferred and root `CLAUDE.md` is points-to-AGENTS/created-pointer/human-deferred.

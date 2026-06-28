@@ -93,7 +93,7 @@ Expected:
 - explain Quick Onboarding and Deep Project Onboarding Scan before writing files
 - recommend Quick when the human wants to continue feature work soon
 - recommend Deep when the human wants newcomer-friendly project understanding or durable onboarding docs
-- do not create `.agent-loop/onboarding-db/` or diagrams until Deep or Targeted is explicitly confirmed
+- explain that Quick creates only the lightweight Graph-first Evidence Graph package, not full Deep onboarding-db docs or diagrams
 
 ## 2e. Human Rejects Deep Project Onboarding Scan
 
@@ -107,9 +107,61 @@ Expected:
 
 - run Quick Onboarding only
 - execute P0-level scan: project shape, startup docs, shallow repo, runtime/tooling, entrypoints, high-risk unknowns
-- draft `.agent-loop/project.md` and guidance proposal after confirmation
+- draft `.agent-loop/project.md`, guidance proposal, Evidence Graph, Core Domain Inventory, Core Flow Inventory, Coverage Matrix, and Service Startup Matrix after confirmation
 - record P1/P2 follow-ups as deferred
-- do not generate onboarding-db files or diagrams
+- do not generate full module/flow deep-dive docs or diagrams
+- state `Quick onboarding complete; Deep onboarding not complete.`
+
+## 2e-1. Graph-First Quick Onboarding Creates Evidence Graph
+
+Prompt:
+
+```text
+Use agent-loop. 快速接手这个现有项目，先不要做完整 Deep onboarding。
+```
+
+Expected:
+
+- run Quick Onboarding only
+- create or propose `.agent-loop/onboarding-db/maps/evidence-graph.md`
+- create or propose `.agent-loop/onboarding-db/maps/core-domain-inventory.md`
+- create or propose `.agent-loop/onboarding-db/maps/core-flow-inventory.md`
+- create or propose `.agent-loop/onboarding-db/maps/coverage-matrix.md`
+- create or propose `.agent-loop/onboarding-db/runtime/service-startup-matrix.md`
+- mark required-core flows as `graph-only`, `needs-deep-trace`, or `blocked-by-unknown` when details are not traced
+- do not create many thin `modules/<module>.md` or `flows/<flow>.md` files
+- state `Quick onboarding complete; Deep onboarding not complete.`
+
+## 2e-2. Core Flow Deep Trace Rejects Thin Flow
+
+Prompt:
+
+```text
+Use agent-loop. Deep onboarding generated 40+ files, but core flows only have 20 lines each and no code evidence trace. Is onboarding complete?
+```
+
+Expected:
+
+- reject Deep completion
+- explain that required-core flows need `core-flow-deep-trace.md` or equivalent structure
+- require Code Evidence Trace Table with file/symbol evidence
+- require Data Flow And Fact Source, Branch And Failure Matrix, Concrete Example Linked To Trace Steps, Verification And Observability, and Coverage Matrix updates
+- say `Onboarding DB draft is usable but incomplete.`
+
+## 2e-3. HTML Diagram Cannot Replace Evidence
+
+Prompt:
+
+```text
+Use agent-loop. We made a nice HTML architecture graph for onboarding. Can we skip the markdown flow docs and evidence tables?
+```
+
+Expected:
+
+- reject the shortcut
+- explain that HTML/SVG auxiliary visual artifacts cannot replace markdown evidence tables, Mermaid source, or deep trace docs
+- require the source Evidence Graph or graph slice, core flow deep trace, Evidence Chain, and Coverage Matrix rows
+- allow HTML/SVG only as a reading aid under `onboarding-db/visuals/`
 
 ## 2f. Deep Project Onboarding Scan Uses P0 P1 P2
 
@@ -206,12 +258,12 @@ Expected:
 - load `onboarding-db-templates.md`
 - use Standard File Derivation instead of failing because there is no direct one-to-one template file
 - derive `module-map.md` from `code-map.md` module fields and `module-template.md`
-- derive `core-flows.md` from `flows-and-data.md` and `flow-template.md`
+- derive `core-flows.md` from `flows-and-data.md` plus `core-flow-deep-trace.md` fields for required-core flows; use `flow-template.md` only for supporting flows
 - derive `testing-and-verification.md` from `verification-and-risks.md`
 - preserve metadata, summary-first format, evidence, confidence, unknowns, and project memory backfill
 - use Batch Human Review before writing the split files
 
-## 2h-3. Expanded onboarding-db layout Uses Module And Flow Templates
+## 2h-3. Expanded onboarding-db layout Uses Required-Core Templates
 
 Prompt:
 
@@ -221,7 +273,8 @@ Use agent-loop. Deep onboarding selected Expanded onboarding-db layout for a lar
 
 Expected:
 
-- load `module-template.md` and `flow-template.md`
+- load `core-module-deep-dive.md` and `core-flow-deep-trace.md` for required-core modules and flows
+- keep `module-template.md` and `flow-template.md` only for supporting/ordinary modules and flows
 - create separate `module-<name>.md` drafts only for durable modules or bounded contexts that need their own reading path
 - create separate `flow-<name>.md` drafts only for complex flows, async systems, jobs, or repeated maintenance paths
 - require a core module call-chain section or explicit support-only/unknown/not-applicable note for every core module
@@ -503,8 +556,8 @@ Use agent-loop. The payment settlement flow crosses API, billing domain, async w
 Expected:
 
 - refuse to keep a complex business/runtime flow as only one row in `flows-and-data.md`
-- create or recommend `flows/payment-settlement.md` using `flow-template.md`
-- require diagram, quick notes, call-chain details, API/task/job entrypoints, responsibility boundaries, state changes, retry/failure paths, code reading order, verification hints, risks, and Evidence Chain
+- create or recommend `flows/payment-settlement.md` using `core-flow-deep-trace.md` because payment settlement is required-core
+- require colored flowchart, sequence diagram or not-applicable reason, Code Evidence Trace Table, Data Flow And Fact Source, Branch And Failure Matrix, Concrete Example Linked To Trace Steps, Verification And Observability, risks, and Evidence Chain
 - do not create one flow doc per helper function, endpoint variant, or trivial CRUD path
 - use Batch Human Review before writing the flow doc
 

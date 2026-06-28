@@ -40,12 +40,14 @@ Do not read onboarding-db by default for tiny task execution when `project.md`, 
 | Question | Read First |
 |---|---|
 | What is the active feature or next action? | `project.md` |
+| What is the project understanding skeleton? | `maps/evidence-graph.md`, then `maps/core-domain-inventory.md`, `maps/core-flow-inventory.md`, and `maps/coverage-matrix.md` |
 | What does this project do? | `onboarding-db/overview.md` |
 | How do I run it? | `runtime/setup-and-run.md` including its environment/config section, or Compact/existing `runtime/environment.md` equivalent |
+| Which areas are required-core or still incomplete? | `maps/coverage-matrix.md`, then the linked required-core module/flow/runtime docs |
 | Where do I start reading code? | `README.md`, `maps/module-map.md`, `maps/directory-map.md`, or Compact equivalent |
 | What does this module do? | module reading path, `maps/module-map.md`, then `modules/<module>.md` or Compact equivalent |
 | What are the system boundaries? | `maps/boundary-map.md` or Compact equivalent, plus boundary diagram |
-| How does this business flow work? | `flows/<flow>.md`, `core-flows.md`, or Compact equivalent |
+| How does this business flow work? | `maps/core-flow-inventory.md`, then `flows/<flow>.md`, `core-flows.md`, or Compact equivalent; required-core flows need deep trace evidence |
 | What entities, fields, and relationships does this project use? | `domain/data-model.md` or Compact equivalent, then `domain/entities/<entity>.md` when the entity is complex |
 | Who writes or reads this entity? | `domain/data-model.md`, `domain/entities/<entity>.md`, related flows/modules, then focused code reality if needed |
 | How do async/events/jobs work? | `runtime/async-and-events.md`, `runtime/jobs-and-schedules.md`, or Compact equivalent |
@@ -98,19 +100,20 @@ The agent owns the reading sequence. Do not dump the full document list and wait
 Recommended flow:
 
 ```text
-integrity check -> freshness check -> 10-minute orientation -> reading path -> human question -> targeted explanation -> optional targeted scan/update proposal
+integrity check -> freshness check -> Evidence Graph status -> 10-minute orientation -> reading path -> human question -> targeted explanation -> optional targeted scan/update proposal
 ```
 
 Steps:
 
 1. Check onboarding-db existence, README, indexed paths, freshness, and review status. If it is missing, stale, unreviewed, or contradictory, say so before relying on it.
-2. Give a short orientation: project purpose, runtime shape, main modules, main flows, and how to run/verify.
-3. Recommend exactly one first reading path from `onboarding-db/README.md`.
-4. Ask the human what they want to understand next, with 2-4 concrete options such as module, flow, async/jobs, deployment, tests, state trace, design decisions, or change impact.
-5. When answering, read the matching onboarding-db path first, then inspect code reality only if the docs are missing, stale, contradictory, or too thin.
-6. If the answer reveals a stable missing fact, propose an onboarding-db update through Batch Human Review.
-7. After every onboarding answer, recommend exactly one next action: read a specific doc, inspect a specific flow/module, generate/update a focused diagram, run a setup/verification command, or return to the normal feature-development loop.
-8. If the human is trying to start development, route back to the normal agent-loop stage after the explanation.
+2. Check whether `maps/evidence-graph.md`, `maps/core-domain-inventory.md`, `maps/core-flow-inventory.md`, `maps/coverage-matrix.md`, and `runtime/service-startup-matrix.md` exist; if not, say the onboarding-db predates Graph-first onboarding and propose a targeted refresh.
+3. Give a short orientation: project purpose, runtime shape, main modules, main flows, required-core areas, current completion status, and how to run/verify.
+4. Recommend exactly one first reading path from `onboarding-db/README.md`.
+5. Ask the human what they want to understand next, with 2-4 concrete options such as required-core flow, module, async/jobs, deployment, tests, state trace, design decisions, or change impact.
+6. When answering, read the matching onboarding-db path first, then inspect code reality only if the docs are missing, stale, contradictory, or too thin.
+7. If the answer reveals a stable missing fact, propose an onboarding-db update through Batch Human Review.
+8. After every onboarding answer, recommend exactly one next action: read a specific doc, inspect a specific flow/module, generate/update a focused diagram, run a setup/verification command, or return to the normal feature-development loop.
+9. If the human is trying to start development, route back to the normal agent-loop stage after the explanation.
 
 Newcomer summary format:
 

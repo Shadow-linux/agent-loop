@@ -13,6 +13,8 @@ Human Review Status: draft
 
 All onboarding diagrams must follow this unified style. Deep Scan diagrams should be as complete as possible.
 
+HTML/SVG auxiliary visual artifacts cannot replace markdown evidence tables, Mermaid source, or deep trace docs. If an HTML/SVG visual is created under `onboarding-db/visuals/`, it must name the source markdown graph or graph slice and remain a reading aid only.
+
 ### Flowchart Style
 
 - **Layer separation**: Use `subgraph` to separate layers:

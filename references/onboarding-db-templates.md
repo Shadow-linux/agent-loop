@@ -33,8 +33,39 @@ Related Diagrams:
 Core review states:
 
 ```text
-draft | reviewed | needs-review | stale
+draft | reviewed | needs-human-review | rejected
 ```
+
+## Graph-First Template Set
+
+Graph-first onboarding uses a small required template set before writing module or flow detail docs:
+
+| Artifact | Template | Mode | Purpose |
+|---|---|---|---|
+| `maps/evidence-graph.md` | `templates/onboarding-db/evidence-graph.md` | Quick / Deep / Targeted | node/edge evidence skeleton |
+| `maps/core-domain-inventory.md` | `templates/onboarding-db/core-domain-inventory.md` | Quick / Deep / Targeted | core domain and fact-source inventory |
+| `maps/core-flow-inventory.md` | `templates/onboarding-db/core-flow-inventory.md` | Quick / Deep / Targeted | required-core flow inventory and trace priority |
+| `maps/coverage-matrix.md` | `templates/onboarding-db/coverage-matrix.md` | Quick / Deep / Targeted | completion status, confidence, and blockers |
+| `runtime/service-startup-matrix.md` | `templates/onboarding-db/service-startup-matrix.md` | Quick / Deep | service/process startup and config matrix |
+| `flows/main-traffic-flow.md` | `templates/onboarding-db/main-traffic-flow.md` | Deep | project-level main traffic path |
+| `flows/<core-flow>.md` | `templates/onboarding-db/core-flow-deep-trace.md` | Deep / Targeted | required-core flow deep trace |
+| `modules/<core-module>.md` | `templates/onboarding-db/core-module-deep-dive.md` | Deep / Targeted | required-core module deep dive |
+| `maps/graph-slice-<scope>.md` | `templates/onboarding-db/graph-slice.md` | Targeted | focused graph slice and local completion decision |
+
+Status model:
+
+| Status Category | Values |
+|---|---|
+| Confidence | `high` / `medium` / `low` |
+| Completion Status | `discovered` / `graph-only` / `needs-deep-trace` / `newcomer-ready` / `supporting-summary` / `blocked-by-unknown` / `not-applicable` |
+| Human Review Status | `draft` / `reviewed` / `needs-human-review` / `rejected` |
+| Core Role | `required-core` / `supporting` / `unknown-core` / `not-core` |
+
+Required core flows must use `core-flow-deep-trace.md` or an equivalent structure. Required-core modules must use `core-module-deep-dive.md` or an equivalent structure. `flow-template.md` remains an ordinary/supporting flow template and `module-template.md` remains an ordinary/supporting module template.
+
+Do not mark Deep onboarding complete if any `required-core` domain, flow, module, required edge, or service startup row remains `graph-only`, `needs-deep-trace`, or `blocked-by-unknown`.
+
+HTML/SVG auxiliary visual artifacts cannot replace markdown evidence tables, Mermaid source, deep trace docs, Evidence Chain, or Coverage Matrix rows.
 
 ## Common Sections
 
@@ -121,8 +152,13 @@ quality/risks-and-unknowns.md
 Expanded default split:
 
 ```text
-modules/<name>.md (copy from templates/onboarding-db/module-template.md) — mandatory for each core module
-flows/<name>.md (copy from templates/onboarding-db/flow-template.md) — when flow crosses modules or has async/state changes
+maps/evidence-graph.md (copy from templates/onboarding-db/evidence-graph.md) — mandatory Graph-first skeleton
+maps/core-domain-inventory.md (copy from templates/onboarding-db/core-domain-inventory.md) — mandatory Graph-first skeleton
+maps/core-flow-inventory.md (copy from templates/onboarding-db/core-flow-inventory.md) — mandatory Graph-first skeleton
+maps/coverage-matrix.md (copy from templates/onboarding-db/coverage-matrix.md) — mandatory completion/confidence matrix
+runtime/service-startup-matrix.md (copy from templates/onboarding-db/service-startup-matrix.md) — mandatory startup/config matrix
+modules/<name>.md (copy from templates/onboarding-db/core-module-deep-dive.md for required-core modules; module-template.md for supporting modules) — mandatory for each required-core module
+flows/<name>.md (copy from templates/onboarding-db/core-flow-deep-trace.md for required-core flows; flow-template.md for supporting flows) — when flow crosses modules or has async/state changes
 domain/data-model.md — mandatory when persistent data exists
 domain/entities/<entity>.md — when entity is complex enough to need its own reading path
 runtime/deployment-and-operations.md — when deployment/ops complexity justifies split
@@ -141,7 +177,7 @@ Onboarding-db layout does not require a direct template file for every topic. Us
 | `maps/directory-map.md` | `code-map.md` or copy `templates/onboarding-db/directory-map.md` | main directories, generated/vendor/ignored areas, test directories, configs/scripts, read-first hints |
 | `maps/module-map.md` | `code-map.md` + `module-template.md` module fields | module summary/cards, module relationship map, coverage, dedicated module-doc links, related diagrams |
 | `maps/boundary-map.md` | `architecture-and-integrations.md` or copy `templates/onboarding-db/boundary-map.md` | UI/API/domain/DB/jobs/external boundaries, dependency direction, cross-boundary contracts, boundary risks |
-| `core-flows.md` or `flows/<flow>.md` | `flows-and-data.md` + `flow-template.md` flow fields | flow index, human-readable core flow details, diagrams, state/data changes, verification hints, evidence chains |
+| `core-flows.md` or `flows/<flow>.md` | `flows-and-data.md` + `core-flow-deep-trace.md` fields for required-core flows; `flow-template.md` fields for supporting flows | flow index, human-readable core flow details, code evidence trace for required-core flows, diagrams, state/data changes, branch/failure matrix, verification hints, evidence chains |
 | `runtime/environment.md` | `setup-and-run.md` + `deployment-and-operations.md` | env files, variables, local/test/prod differences, containers, CI/runtime config, evidence and confidence. **Not standalone in Expanded; merge into `setup-and-run.md`.** |
 | `domain/data-model.md` | `flows-and-data.md` + `data-model.md` template fields | core entities, storage/model mapping, relationships, ownership, key fields, state fields, readers/writers, flow/API/job usage, migrations/seeds, tests, evidence |
 | `runtime/async-and-events.md` | `architecture-and-integrations.md` + `flow-template.md` async fields | producers, queues/topics, consumers, callbacks, retries, DLQ/compensation, diagrams |
@@ -153,14 +189,16 @@ Onboarding-db layout does not require a direct template file for every topic. Us
 
 When deriving a Standard file, keep the common metadata block, summary-first shape, evidence, confidence, unknowns, and project memory backfill section.
 
+When Standard merges required-core flows into `core-flows.md` or a runtime doc, the merged section must still preserve the required `core-flow-deep-trace.md` fields. Smaller file count is allowed; thinner required-core evidence is not.
+
 ## Expanded File Derivation
 
 Expanded onboarding-db layout is the default for new Deep Scan output, but it still splits only areas that are complex enough to deserve their own reading path.
 
 | Expanded File | Use / Derive From | Required Content |
 |---|---|---|
-| `modules/<name>.md` | copy `templates/onboarding-db/module-template.md` | purpose, boundary, entrypoints, core call chain, core flows, key files, dependencies, tests, risks, evidence chain |
-| `flows/<name>.md` | copy `templates/onboarding-db/flow-template.md` | purpose, diagram, quick notes, call-chain details, state changes, async/job/external behavior, verification, evidence chain, risks |
+| `modules/<name>.md` | copy `templates/onboarding-db/core-module-deep-dive.md` for required-core modules; use `module-template.md` for supporting modules | purpose, boundary, entrypoints, module role vocabulary, core call chain, core flows, key files, dependencies, tests, risks, evidence chain |
+| `flows/<name>.md` | copy `templates/onboarding-db/core-flow-deep-trace.md` for required-core flows; use `flow-template.md` for supporting flows | purpose, colored flowchart, sequence diagram or not-applicable reason, code evidence trace, state/data changes, async/job/external behavior, verification, evidence chain, risks |
 | `domain/data-model.md` | copy `templates/onboarding-db/data-model.md` when persistent data is important enough to split from Compact docs | core entity index, relationship map, ownership, key fields, state field index, usage, migrations, tests, evidence |
 | `domain/entities/<entity>.md` | copy `templates/onboarding-db/entity-template.md` when one entity needs its own reading path | storage mapping, fields, relationships, state fields, writers, readers/consumers, related flows, migrations/history, tests, risks, evidence |
 | `domain/state-flow-<entity>.md` | copy `templates/onboarding-db/state-flow-template.md` when legal lifecycle states matter | legal states, transitions, guards, side effects, evidence, tests |
@@ -176,7 +214,7 @@ Do not create one Expanded file per directory. Split by durable module, bounded 
 
 | Conditional File | Trigger | Template |
 |---|---|---|
-| `flows/<name>.md` | flow crosses ≥ 2 modules or has async/external/state changes | `flow-template.md` |
+| `flows/<name>.md` | flow crosses ≥ 2 modules or has async/external/state changes | `core-flow-deep-trace.md` for required-core flows; `flow-template.md` for supporting flows |
 | `domain/entities/<entity>.md` | entity has many fields, complex state, multiple writers/readers | `entity-template.md` |
 | `domain/state-flow-<entity>.md` | legal lifecycle states matter | `state-flow-template.md` |
 | `domain/state-trace-<entity>.md` | need to trace who writes state | `state-trace-template.md` |

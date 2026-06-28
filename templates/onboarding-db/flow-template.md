@@ -8,6 +8,10 @@ Confidence:
 Source Evidence:
 Human Review Status: draft
 
+Template Role: ordinary/supporting flow template
+
+Required core flows must use `core-flow-deep-trace.md` or an equivalent deep-trace structure. This template can summarize supporting flows, simple flows, or Compact/Standard flow sections, but it is not enough to mark a `required-core` flow `newcomer-ready`.
+
 ## Purpose
 
 ## One Diagram To Understand The Flow
