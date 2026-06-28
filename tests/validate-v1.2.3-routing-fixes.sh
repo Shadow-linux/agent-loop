@@ -14,7 +14,7 @@ assert_contains() {
 assert_contains "references/existing-project-onboarding.md" "There is only one onboarding mode for durable project understanding: Deep Onboarding."
 assert_contains "references/project-onboarding-scan.md" "Focused requests use a narrow Deep Onboarding scope, not a separate Targeted mode."
 assert_contains "references/stage-guides.md" "If the human asks a focused onboarding question:"
-assert_contains "references/workflow-checklists.md" "For focused questions, use a narrow Deep Onboarding spec/plan and one focused star doc or existing star doc update."
+assert_contains "references/workflow-checklists.md" "For focused questions, use a narrow Deep Onboarding spec/plan and one focused deep-dive doc or existing deep-dive doc update."
 
 # H2: Feature Completion Check must define the blocked result and next step.
 assert_contains "references/feature-completion-check.md" "### Recommend Blocked"

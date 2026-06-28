@@ -20,9 +20,9 @@ Agent 的职责是主导研发闭环。你主要负责提出目标、确认关�
 |---|---|---|
 | “帮我在这个项目里启用 agent-loop” | 初始化项目（Init Project） | 创建 `.agent-loop/project.md`、root `AGENTS.md`、`CLAUDE.md` 指针 |
 | “接管这个旧项目” | 旧项目接管（Existing Project Onboarding） | 扫描现有代码和文档，建立项目记忆 |
-| “深度接管这个项目，让新人能看懂” | Deep Onboarding | 先写 `onboarding-spec.md` 和 `onboarding-plan.md`，再批量写少量高质量 `stars/<topic>.md` |
+| “深度接管这个项目，让新人能看懂” | Deep Onboarding | 先写 `onboarding-spec.md` 和 `onboarding-plan.md`，再分批写高质量 `deep-dives/<topic>.md` |
 | “我只想先知道怎么启动和测试” | 安全接管 / 项目记忆 | 建立项目记忆、root guidance 状态、关键命令、边界和未知项；不生成 onboarding-db 细节文档 |
-| “解释一下这个模块/流程/异步任务” | 聚焦 Deep Onboarding | 用窄范围 spec/plan 解释一个模块、流程、异步任务、部署路径或问题点，必要时沉淀一个 star doc |
+| “解释一下这个模块/流程/异步任务” | 聚焦 Deep Onboarding | 用窄范围 spec/plan 解释一个模块、流程、异步任务、部署路径或问题点，必要时沉淀一个 deep-dive doc |
 | “这个项目以前用过 agent-loop，但最近没维护” | 重新托管 / 回补（Re-Adopt / Recovery Backfill） | 以代码现实为准，回补 `.agent-loop/` 文档 |
 | “agent-loop skill 更新了，检查一下这个项目的 AGENTS.md 要不要同步” | root guidance 版本检查 / 托管块刷新 | 比较 root `AGENTS.md` 的 managed version 和当前 skill 版本，过期时提议刷新托管块 |
 | “我要做一个登录功能” | 需求归档 -> 功能规范（Feature Spec） | 整理需求，生成功能规范 |
@@ -39,7 +39,7 @@ Agent 的职责是主导研发闭环。你主要负责提出目标、确认关�
 | “检查现在做到哪了” | 继续 / 完成检查（Resume / Feature Completion Check） | 读取项目记忆和 feature 状态，推荐下一步 |
 | “新资源账号，先安排测试，跑通上线” | 操作支持（Code-Guided Operational Support） | 默认只读查现有代码、配置、测试和部署流程，输出 checklist/runbook；确认前不写代码、不改配置、不部署 |
 | “根据现有代码看看这个线上问题怎么处理” | 操作支持或功能回流判定 | 先按当前项目功能排查和给操作方案；如果必须改代码，再询问是否进入 feature/fix 流程 |
-| “提交一下” | 提交集成（Submit / Integrate） | 检查 diff、验证证据、生成规范 commit，提交前再次确认 |
+| “提交一下” | 提交集成（Submit / Integrate） | 检查 diff、feature/requirement 文档、memory、验证证据，生成规范 commit，提交前再次确认 |
 | “关闭这个 feature” | 关闭功能（Close Feature） | 做 close review、drift check、memory update，最后让你确认 close |
 
 ---
@@ -91,16 +91,18 @@ agent-loop skill 更新了，检查一下这个项目的 AGENTS.md 要不要同�
 Agent 会做这些事：
 
 - 读取 root `AGENTS.md` 和 `CLAUDE.md`
+- 如果当前 agent-loop skill 提供 `scripts/check-root-agents-blocks.sh`，先运行只读 managed-block drift check
 - 找到 root `AGENTS.md` 里的 `agent-loop:managed-start section:meta` 托管块
 - 读取托管块中的 `version:<x.y.z>`
 - 读取当前本地 `agent-loop` skill 的版本
 - 按 semantic version（`major.minor.patch`）比较两个版本
-- 如果 root `AGENTS.md` 的 managed version 更旧，就把 root guidance 判定为 `stale`
+- 比较模板里的 managed sections、每个区块的 `block-version`、marker 是否成对、是否缺区块，以及本地 `source` 是否存在
+- 如果 root `AGENTS.md` 的 managed version 更旧，或 checker 报告 missing / stale / broken managed block，就把 root guidance 判定为 `stale`
 - 通过 Human Review Summary 列出要刷新的托管块、原因和风险，等你确认后再写
 - 如果托管块外存在和当前 agent-loop 冲突的长期规则，单独列出冲突，询问你是清除、替换，还是保留为项目 override
 - 如果托管块外存在技术栈、命令、架构边界、领域术语、测试策略等长期项目记忆，建议迁移到 `.agent-loop/project.md` 或 enterprise `.agent-loop/project/*.md`
 
-Agent 不会直接覆盖整份 `AGENTS.md`。托管块外的人类内容、项目原生说明、团队约定都必须保留。`CLAUDE.md` 默认继续只指向 `AGENTS.md`，不复制一整套规则。
+Agent 不会直接覆盖整份 `AGENTS.md`。checker 也只报告，不写文件。托管块外的人类内容、项目原生说明、团队约定都必须保留。`CLAUDE.md` 默认继续只指向 `AGENTS.md`，不复制一整套规则。
 
 同步时你通常会看到一张清理/迁移确认表：
 
@@ -132,8 +134,8 @@ Agent 会先做浅层扫描：
 | 路径 | 适合什么时候 | 会生成什么 |
 |---|---|---|
 | 安全接管 / 项目记忆 | 你想尽快开始开发 | `.agent-loop/project.md`、root guidance 状态、关键命令、边界、未知项 |
-| Deep Onboarding | 你想让新人系统看懂项目 | `onboarding-spec.md`、`onboarding-plan.md`、`coverage-matrix.md`、少量高质量 `stars/<topic>.md` |
-| 聚焦 Deep Onboarding | 你只关心一个问题 | 窄范围 spec/plan、一个聚焦 star doc 或现有 star doc 更新、必要的图和证据链 |
+| Deep Onboarding | 你想让新人系统看懂项目 | `onboarding-spec.md`、`onboarding-plan.md`、`coverage-matrix.md`、高质量 `deep-dives/<topic>.md` |
+| 聚焦 Deep Onboarding | 你只关心一个问题 | 窄范围 spec/plan、一个聚焦 deep-dive doc 或现有 deep-dive doc 更新、必要的图和证据链 |
 
 旧项目 onboarding 不算完成，除非：
 
@@ -158,14 +160,16 @@ Deep 的展开顺序是：
 ```text
 onboarding-spec.md
 → onboarding-plan.md
-→ stars/<topic>.md batch 1
+→ deep-dives/<topic>.md batch 1
 → batch-review.md
 → Coverage Matrix
 → README / maps indexes
 → project memory backfill proposal
 ```
 
-默认在人类扩展前，Deep file budget 是 5 个 star docs 或更少。每个新文件都要说明为什么必须独立成文、为什么不能合并、是不是 required-core、对新人有什么价值。
+Deep Onboarding 不设总文档数量上限；有多少核心领域、主流程、数据流、启动运行、验证策略和变更风险需要新人接手，就写多少。默认每批 1-3 篇 deep-dive docs 只是方便人类 review 的节奏，不是总量限制。每个新文件都要说明为什么必须独立成文、为什么不能合并、是不是 required-core、对新人有什么价值。
+
+人类给的示例只代表“详细程度和解释质量”，不代表固定 topic 名称、topic 数量、领域词汇或项目结构；除非当前项目证据支持，否则 Agent 不能照抄示例。
 
 复杂项目不会只画几张总览图就结束。核心领域、主流程、数据流、数据模型、服务启动配置、验证策略、变更风险都要能被新人读懂。图可以有颜色和 Mermaid / HTML 辅助视觉，但不能替代证据表、代码路径、符号、数据流、失败路径和验证说明。
 
@@ -181,7 +185,7 @@ onboarding-spec.md
 onboarding-spec.md
 onboarding-plan.md
 coverage-matrix.md
-stars/<topic>.md
+deep-dives/<topic>.md
 batch-review.md
 ```
 
@@ -572,6 +576,8 @@ Agent 会：
 
 - 检查 diff 和 untracked files
 - 区分业务代码和 `.agent-loop/` 文档变更
+- 提交前 Agent 应同时复核 feature 文档、requirement 记录、代码 diff、验证证据、drift、project memory、root/directory guidance 影响和 unrelated changes。
+- 如果 feature 文档、requirement 文档或 memory 不需要更新，Agent 需要说明原因；如果需要延后，必须由你确认。
 - 只纳入本次确认范围内的目标文件，排除无关 dirty work
 - 运行必要验证
 - 做 review 和 drift check

@@ -1,4 +1,4 @@
-# Star Deep Dive: <topic>
+# Deep Dive: <topic>
 
 Document Language: 中文
 Created:
@@ -9,7 +9,7 @@ Source Evidence:
 Human Review Status: draft
 Completion Status: needs-deep-trace
 
-## Why This Star Exists
+## Why This Deep Dive Exists
 
 Explain why this topic deserves a standalone deep dive and why it was not merged into README or maps.
 
@@ -24,7 +24,7 @@ Who uses this flow/module/state, what outcome it creates, and why mistakes are r
 
 ## Phase-By-Phase Deep Dive
 
-Use phases like the recharge example: create order, callback, wallet add, async sync, reconciliation, failure recovery.
+Use phases from current project evidence. Human-provided examples define expected detail depth and explanation quality only; do not copy their topic names, topic count, domain vocabulary, or project-specific structure unless current project evidence supports them.
 
 | Phase | Trigger | What Happens | Data / State | Code Evidence | Completion Notes |
 |---|---|---|---|---|---|
@@ -88,4 +88,3 @@ Give one realistic example and carry it through the phases.
 
 | Coverage Topic | Previous Status | New Status | Evidence | Human Review |
 |---|---|---|---|---|
-

@@ -25,9 +25,11 @@
 - Added fallback reporting for unavailable/load-failed skill resolution and validation coverage for long-running agents that try to continue from memory or static root guidance alone.
 - Clarified that Stage Helper Capability Scan does not satisfy Skill Re-entry because helper scan resolves stage methods, not the `agent-loop` controller.
 - Added per-managed-block `block-version` metadata and root AGENTS refresh protocol so same-version templates can still detect missing or stale managed blocks.
+- Added `scripts/check-root-agents-blocks.sh`, a read-only checker that compares target root `AGENTS.md` managed sections against `templates/root-AGENTS.md` and reports missing, stale, broken, unexpected, or source-missing managed blocks before human-approved refresh.
 - Shortened the Managed Block Rule in root AGENTS guidance while preserving confirmation, outside-content protection, and cleanup / migration review requirements.
-- Clarified that target-project AGENTS refreshes must copy the full template block revision, such as `block-version:1.2.3-20260625`; bare skill-version-only values like `block-version:1.2.3` are stale.
+- Clarified that target-project AGENTS refreshes must copy the full template block revision, such as `block-version:1.2.3-20260628`; bare skill-version-only values like `block-version:1.2.3` are stale.
 - Extended root AGENTS refresh checks so date-only or malformed block versions and missing Managed Block Rule are treated as stale startup guidance.
+- Added an explicit pre-commit artifact review reminder to root AGENTS Submit And Commit Rules so agents review feature docs, requirement records, code diff, verification evidence, drift, project memory, root/directory guidance impact, and unrelated changes before commit.
 
 ### Medium Consistency Fixes
 - Clarified Auto Mode stop conditions for Delivery Contract creation, acceptance, and breaking changes across runtime guidance.
@@ -40,7 +42,7 @@
 
 ### Deep Onboarding Quality
 - Replaced Quick / Deep / Targeted onboarding modes with one durable project-understanding mode: Deep Onboarding. Safe continuation now updates project memory/root guidance only, while focused questions use a narrow Deep Onboarding scope.
-- Rebuilt onboarding-db generation as spec-first: accepted `onboarding-spec.md`, accepted `onboarding-plan.md`, then small reviewed batches of `stars/<topic>.md` with a default budget of 5 star docs or fewer before human expansion.
+- Rebuilt onboarding-db generation as spec-first: accepted `onboarding-spec.md`, accepted `onboarding-plan.md`, then reviewed batches of `deep-dives/<topic>.md` with no total document count cap; batch size is review pacing, not a total limit.
 - Removed legacy onboarding-db form templates and Compact / Standard / Expanded generation modes; legacy categorized docs may still be read as evidence or maintained for compatibility in existing onboarding-db directories.
 - Added a Deep Onboarding Quality Gate so Deep scans are judged as newcomer handoff packages, not by file count alone.
 - Required Core Domain Handoff Pack and Service Startup / Config Matrix coverage for Deep onboarding completion.

@@ -10,7 +10,7 @@ Human Review Status: draft
 
 ## Purpose
 
-Coverage tracks learning outcomes, not file existence. `newcomer-ready requires an accepted star doc` for required-core topics.
+Coverage tracks learning outcomes, not file existence. `newcomer-ready requires an accepted deep-dive doc` for required-core topics.
 
 ## Status Values
 
@@ -19,9 +19,9 @@ Coverage tracks learning outcomes, not file existence. `newcomer-ready requires 
 | discovered | found but not planned |
 | planned | included in onboarding spec / plan |
 | needs-deep-trace | required-core but not deeply documented |
-| draft-star | star doc exists but has not passed human review |
-| newcomer-ready | accepted star doc teaches the topic with evidence |
-| supporting-summary | summarized in README/maps; no standalone star needed |
+| draft-deep-dive | deep-dive doc exists but has not passed human review |
+| newcomer-ready | accepted deep-dive doc teaches the topic with evidence |
+| supporting-summary | summarized in README/maps; no standalone deep-dive needed |
 | blocked-by-unknown | missing code evidence or business confirmation blocks completion |
 | not-applicable | explicitly not relevant |
 
@@ -42,9 +42,9 @@ Onboarding DB draft is usable but incomplete.
 Deep onboarding complete.
 ```
 
-Deep onboarding cannot complete while any required-core topic is `discovered`, `planned`, `needs-deep-trace`, `draft-star`, or `blocked-by-unknown`.
+Deep onboarding cannot complete while any required-core topic is `discovered`, `planned`, `needs-deep-trace`, `draft-deep-dive`, or `blocked-by-unknown`.
 
-## File Budget Audit
+## Split Rationale Audit
 
-| File | Type | Counts Against Budget? | Why It Exists | Merge Candidate? |
-|---|---|---|---|---|
+| File | Type | Why It Exists | Merge Candidate? |
+|---|---|---|---|

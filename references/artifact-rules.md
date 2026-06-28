@@ -180,13 +180,13 @@ Onboarding DB directory:
 .agent-loop/onboarding-db/
 ```
 
-Use stable, human-readable names. Onboarding DB no longer has Compact / Standard / Expanded generation modes. File shape is controlled by the accepted `onboarding-spec.md`, accepted `onboarding-plan.md`, file budget, and Batch Human Review:
+Use stable, human-readable names. Onboarding DB no longer has Compact / Standard / Expanded generation modes. File shape is controlled by the accepted `onboarding-spec.md`, accepted `onboarding-plan.md`, project evidence, required-core onboarding topics, and Batch Human Review:
 
 ```text
 onboarding-spec.md
 onboarding-plan.md
 coverage-matrix.md
-stars/<topic>.md
+deep-dives/<topic>.md
 batch-review.md
 ```
 

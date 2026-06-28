@@ -170,7 +170,7 @@ For breaking changes, list every affected consumer, scan evidence, compatibility
 |---|---|---|---|---|
 | Path | safe-entry project memory only / Deep Onboarding |  |  | approve / revise |
 | Deep Scope | global newcomer handoff / focused topic |  |  | approve / revise |
-| File Budget | default 5 star docs or fewer before expansion |  |  | approve / revise |
+| Batch Cadence | default 1-3 deep-dive docs per review batch; no total document cap |  |  | approve / revise |
 | Scope |  |  |  | approve / revise |
 | Subagents | none / proposed lanes |  |  | approve / skip |
 | Write Plan | project memory / onboarding-db / guidance |  |  | approve / revise |

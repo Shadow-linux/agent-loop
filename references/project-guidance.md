@@ -32,8 +32,9 @@ Every time `agent-loop` is used inside a target project, check root guidance bef
 4. Apply the Skill Re-entry Rule when the runtime exposes the agent-loop skill.
 5. Check whether AGENTS.md contains the required bootstrap sections.
 6. If AGENTS.md uses agent-loop managed blocks, compare its file-level managed guidance version and per-block `block-version` values with the current root AGENTS template.
-7. Record or update guidance status in project.md.
-8. If missing or stale, propose a repair through Human Review Summary.
+7. If `scripts/check-root-agents-blocks.sh` is available in the local `agent-loop` skill package, run it against the current `templates/root-AGENTS.md` and target root `AGENTS.md`; use its report as the managed-block drift evidence.
+8. Record or update guidance status in project.md.
+9. If missing or stale, propose a repair through Human Review Summary.
 ```
 
 Use the current local `agent-loop` skill version from this skill's `SKILL.md` Version field or `plugin.json`.
@@ -168,6 +169,8 @@ Managed block detection checklist:
 9. Check whether each `source` path exists or is intentionally external/deferred before relying on it.
 10. If any check fails, classify root guidance as `stale-marker` and stop before editing `AGENTS.md`.
 
+If `scripts/check-root-agents-blocks.sh` is available, use it as the first read-only managed-block drift check. The script validates section presence, marker integrity, file-level managed version, per-section `block-version`, unexpected managed sections, and local `source` paths. Its output is evidence for the Human Review Summary; it must not be treated as approval to write.
+
 Managed block update flow:
 
 1. Read the existing `AGENTS.md`.
@@ -183,20 +186,21 @@ Managed block update flow:
 Use this protocol when root `AGENTS.md` exists and the project already uses `agent-loop`.
 
 1. Read the existing root `AGENTS.md` before proposing updates.
-2. Validate managed block markers with the managed block detection checklist.
-3. Compare the file-level managed version with the current local `agent-loop` skill version.
-4. Compare each managed block `section` and `block-version` against the current root AGENTS template.
-5. If the file-level managed version is equal but a block-version is missing or older than the current template, treat that block as stale.
-6. Treat bare skill-version-only block revisions such as `block-version:1.2.3` as stale because they cannot distinguish same-version template revisions.
-7. Treat date-only block revisions such as `block-version:2026-06-27` as stale because they are not tied to the agent-loop template version.
-8. Treat malformed or different block-version values as stale; exact full template block-version match is required.
-9. If a managed block exists in the current template but is missing from root AGENTS.md, treat it as a missing managed block and propose adding it.
-10. Missing Managed Block Rule means root guidance refresh is required because future agents cannot know the update boundary.
-11. Copy the exact start marker metadata for each refreshed section from the current root AGENTS template unless the section source must point at a target-project artifact. If the target project uses legacy `agent-loop/` instead of `.agent-loop/`, adjust only the `source`; keep the template `block-version` unchanged.
-12. Run AGENTS Cleanup / Migration Review for content outside managed blocks before writing.
-13. Present a Human Review Summary with block, current version, template version, proposed change, risk, and human decision.
-14. Preserve all content outside managed blocks unless the human explicitly approves cleanup, replacement, or migration.
-15. Update only approved managed blocks and record the guidance status in `project.md`.
+2. If available, run `scripts/check-root-agents-blocks.sh --template <agent-loop-skill>/templates/root-AGENTS.md --target <project>/AGENTS.md` and use the report as read-only drift evidence.
+3. Validate managed block markers with the managed block detection checklist.
+4. Compare the file-level managed version with the current local `agent-loop` skill version.
+5. Compare each managed block `section` and `block-version` against the current root AGENTS template.
+6. If the file-level managed version is equal but a block-version is missing or older than the current template, treat that block as stale.
+7. Treat bare skill-version-only block revisions such as `block-version:1.2.3` as stale because they cannot distinguish same-version template revisions.
+8. Treat date-only block revisions such as `block-version:2026-06-27` as stale because they are not tied to the agent-loop template version.
+9. Treat malformed or different block-version values as stale; exact full template block-version match is required.
+10. If a managed block exists in the current template but is missing from root AGENTS.md, treat it as a missing managed block and propose adding it.
+11. Missing Managed Block Rule means root guidance refresh is required because future agents cannot know the update boundary.
+12. Copy the exact start marker metadata for each refreshed section from the current root AGENTS template unless the section source must point at a target-project artifact. If the target project uses legacy `agent-loop/` instead of `.agent-loop/`, adjust only the `source`; keep the template `block-version` unchanged.
+13. Run AGENTS Cleanup / Migration Review for content outside managed blocks before writing.
+14. Present a Human Review Summary with block, current version, template version, checker status, proposed change, risk, and human decision.
+15. Preserve all content outside managed blocks unless each cleanup, replacement, or migration item is listed in Human Review Summary and separately approved. Do not treat "refresh AGENTS.md quickly" or similar wording as blanket approval to replace the whole file with `templates/root-AGENTS.md`.
+16. Update only approved managed blocks and record the guidance status in `project.md`.
 
 ## AGENTS Cleanup / Migration Review
 
@@ -253,7 +257,7 @@ Keep it short and long-lived:
 - use table-first Human Review Summary for non-trivial confirmations
 - Autonomous Execution After Approval: after explicit Feature Auto-Loop or Task Auto-Run enablement, agents may continue inside the accepted scope through implementation, testing, fixing, review, drift, status update, and final report
 - autonomous stop conditions: scope change, ambiguity, human original requirement change, unavailable infrastructure, drift needing approval, security/data boundary changes, broad architecture changes, directory guidance changes, first-version exclusions, repeated verification failure, unrelated dirty work, Delivery Contract creation/acceptance/breaking-change approval, subagent dispatch without explicit approval, submit, close, commit, PR, merge, release, or publish
-- submit and commit guidance: submit/commit/PR/merge/release/publish require explicit confirmation after diff, verification, review, drift, and unrelated-change checks; if no project-specific commit style exists, use `<type>: <summary>` plus a concrete bullet body
+- submit and commit guidance: submit/commit/PR/merge/release/publish require explicit confirmation after diff, feature artifact review, requirement record review, verification, review, drift, project-memory/guidance impact, and unrelated-change checks; if no project-specific commit style exists, use `<type>: <summary>` plus a concrete bullet body
 - run fresh verification before completion claims
 - run Feature Completion Check after likely completion, before starting a new feature, or when resuming with an active feature
 - perform Feature Close Review, drift check, and project memory update before close

@@ -55,17 +55,19 @@ Before submit:
 1. Inspect current diff and untracked files.
 2. Separate agent-loop documentation changes from product code changes in the summary.
 3. Identify unrelated dirty work and do not include or revert it without human instruction.
-4. Confirm verification evidence is fresh enough for the submit claim.
-5. Confirm required Review is complete and recorded.
-6. Confirm drift check result and remaining known drift.
-7. Confirm project memory update status.
-8. Ask human confirmation for the submit action.
+4. Review feature artifacts (`product.md` when present, `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`) against the submitted code.
+5. Review linked requirement records for lifecycle, Delivery Phase status, Feature Mapping, and approved deferrals when the feature references requirement sets.
+6. Confirm project memory and root/directory guidance impact is completed, explicitly not needed, or human-approved to defer.
+7. Confirm verification evidence is fresh enough for the submit claim.
+8. Confirm required Review is complete and recorded.
+9. Confirm drift check result and remaining known drift.
+10. Ask human confirmation for the submit action.
 
 ## Two-Stage Submit Confirmation
 
 A human request such as `commit this` or `prepare PR` authorizes entry into Submit / Integrate only. It is not final approval to commit, publish PR text, merge, release, or mark submission ready.
 
-After diff inspection, verification check, review check, drift check, and unrelated-change check, present a Human Review Summary and ask again for the exact submit action.
+After diff inspection, feature/requirement artifact review, verification check, review check, drift check, project-memory/guidance impact check, and unrelated-change check, present a Human Review Summary and ask again for the exact submit action.
 
 ## Commit Behavior
 

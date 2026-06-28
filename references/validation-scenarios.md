@@ -109,7 +109,7 @@ Expected:
 - run safe-entry project onboarding only
 - inspect startup docs, shallow repo shape, runtime/tooling, entrypoints, and high-risk unknowns
 - draft `.agent-loop/project.md`, guidance proposal, and uncertainty list after confirmation
-- do not create onboarding-db files, star docs, module docs, flow docs, or diagrams
+- do not create onboarding-db files, deep-dive docs, module docs, flow docs, or diagrams
 - say onboarding-db docs were not requested, and recommend Deep Onboarding later only if durable newcomer docs are useful
 
 ## 2e-1. Spec-First Onboarding Blocks Directory-First File Spray
@@ -124,9 +124,10 @@ Expected:
 
 - load `project-onboarding-scan.md`, `onboarding-db.md`, and `onboarding-db-templates.md`
 - refuse to generate directory-first module/flow/detail files before accepted `onboarding-spec.md` and accepted `onboarding-plan.md`
-- propose `onboarding-spec.md` first with target readers, required-core topic budget, non-goals, and quality bar
-- propose `onboarding-plan.md` second with file budget, split gate, star doc queue, batches, review checkpoints, and stop conditions
-- keep default Deep file budget to 5 star docs or fewer before human expansion
+- propose `onboarding-spec.md` first with target readers, required-core onboarding topic inventory, non-goals, and quality bar
+- propose `onboarding-plan.md` second with batch review cadence, split gate, deep-dive queue, batches, review checkpoints, and stop conditions
+- state that Deep Onboarding has no total document count cap, and batch size is review pacing, not a total limit
+- state that human examples define detail depth and explanation quality only, not topic names or topic count
 - use Batch Human Review before writing onboarding-db files
 
 ## 2e-2. Core Flow Deep Trace Rejects Thin Flow
@@ -140,7 +141,7 @@ Use agent-loop. Deep onboarding generated 40+ files, but core flows only have 20
 Expected:
 
 - reject Deep completion
-- explain that required-core flows need accepted `stars/<topic>.md` deep-dive detail or equivalent structure
+- explain that required-core flows need accepted `deep-dives/<topic>.md` detail or equivalent structure
 - require Code Evidence Trace Table with file/symbol evidence
 - require Data Flow And Fact Source, Branch And Failure Matrix, Concrete Example Linked To Trace Steps, Verification And Observability, and Coverage Matrix updates
 - say `Onboarding DB draft is usable but incomplete.`
@@ -156,11 +157,11 @@ Use agent-loop. We made a nice HTML architecture graph for onboarding. Can we sk
 Expected:
 
 - reject the shortcut
-- explain that HTML/SVG auxiliary visual artifacts cannot replace markdown evidence tables, Mermaid source, or accepted star docs
-- require the accepted star doc, Evidence Chain, and Coverage Matrix rows
+- explain that HTML/SVG auxiliary visual artifacts cannot replace markdown evidence tables, Mermaid source, or accepted deep-dive docs
+- require the accepted deep-dive doc, Evidence Chain, and Coverage Matrix rows
 - allow HTML/SVG only as a reading aid under `onboarding-db/visuals/`
 
-## 2f. Deep Onboarding Uses Spec Plan Star Batches
+## 2f. Deep Onboarding Uses Spec Plan Deep-Dive Batches
 
 Prompt:
 
@@ -172,8 +173,8 @@ Expected:
 
 - load `project-onboarding-scan.md`, `onboarding-db.md`, and `onboarding-db-templates.md`
 - write or refresh `onboarding-spec.md` before detail docs
-- write or refresh `onboarding-plan.md` with file budget, split gate, and batches before detail docs
-- write star docs in small reviewed batches after spec/plan acceptance
+- write or refresh `onboarding-plan.md` with batch review cadence, split gate, and batches before detail docs
+- write deep-dive docs in reviewed batches after spec/plan acceptance
 - do not jump directly into many module/flow/detail files on a large or unclear project
 - use Batch Human Review before writing onboarding-db or project memory backfill
 
@@ -191,7 +192,7 @@ Expected:
 - inspect only minimal safe project context plus the requested module/flow
 - do not produce a full `project.md` proposal by default
 - do not create unrelated onboarding-db files
-- propose one focused star doc or accepted star doc update for the relevant module, async/job flow, diagram, and risks
+- propose one focused deep-dive doc or accepted deep-dive doc update for the relevant module, async/job flow, diagram, and risks
 - propose project memory backfill only when the focused scan finds stale or missing stable facts required for safe continuation
 - use Batch Human Review before writing
 
@@ -207,13 +208,13 @@ Expected:
 
 - route to focused Deep Onboarding scope
 - inspect minimum safe context only for safety
-- produce a focused star doc or diagram update proposal for the selected billing worker scope
+- produce a focused deep-dive doc or diagram update proposal for the selected billing worker scope
 - when onboarding discovers stable project facts missing from project memory, propose or perform project memory backfill after human confirmation
 - do not silently write multiple project memory facts without Batch Human Review
 
 ## 2h. Onboarding DB Requires Module Reading Paths
 
-Current v1.2.3 onboarding generation is spec-first and single-mode. Any legacy project that already contains Compact / Standard / Expanded files may be read as evidence, but new onboarding generation must not offer layout modes, one-template-per-module, one-template-per-flow, Graph-first Quick onboarding, or Targeted Onboarding Scan. Route every durable or focused onboarding request through Deep Onboarding with `onboarding-spec.md`, `onboarding-plan.md`, a file budget, star docs, coverage updates, and Batch Human Review.
+Current v1.2.3 onboarding generation is spec-first and single-mode. Any legacy project that already contains Compact / Standard / Expanded files may be read as evidence, but new onboarding generation must not offer layout modes, one-template-per-module, one-template-per-flow, Graph-first Quick onboarding, or Targeted Onboarding Scan. Route every durable or focused onboarding request through Deep Onboarding with `onboarding-spec.md`, `onboarding-plan.md`, deep-dive docs, coverage updates, and Batch Human Review.
 
 Prompt:
 
@@ -256,12 +257,12 @@ Expected:
 
 - load `onboarding-db-templates.md`
 - explain that Standard layout and old split templates are legacy evidence, not current generation targets
-- convert the request into a Deep Onboarding spec/plan update with an explicit file budget
-- propose only star docs or index updates justified by required-core learning outcomes
+- convert the request into a Deep Onboarding spec/plan update with explicit batch cadence and split rationale
+- propose only deep-dive docs or index updates justified by required-core learning outcomes
 - preserve useful legacy facts as evidence with confidence and unknowns
 - use Batch Human Review before writing any refreshed onboarding-db files
 
-## 2h-3. Large Deep Onboarding Uses Required-Core Star Docs
+## 2h-3. Large Deep Onboarding Uses Required-Core Deep-Dive Docs
 
 Prompt:
 
@@ -273,8 +274,8 @@ Expected:
 
 - load `project-onboarding-scan.md` and `onboarding-db-templates.md`
 - require accepted `onboarding-spec.md` and `onboarding-plan.md` before detail docs
-- create star docs only for accepted required-core topics that need their own reading path
-- keep support/ordinary modules summarized in coverage, README/maps, or an existing star doc
+- create deep-dive docs for accepted required-core topics that need their own reading path
+- keep support/ordinary modules summarized in coverage, README/maps, or an existing deep-dive doc
 - require a core module call-chain section or explicit support-only/unknown/not-applicable note for every core module
 - do not dump every module into one giant doc
 - do not create one file per directory
@@ -294,8 +295,8 @@ Expected:
 - load `project-onboarding-scan.md` and `onboarding-db-templates.md`
 - state that file count and old minimum sets are not completion criteria
 - require `coverage-matrix.md` before claiming completion
-- verify every required-core topic has an accepted star doc or explicit evidence-based skip reason
-- verify persistent data, complex entities, async/job/external integrations, and multiple test systems are covered by accepted star docs, indexes, or explicit non-goals
+- verify every required-core topic has an accepted deep-dive doc or explicit evidence-based skip reason
+- verify persistent data, complex entities, async/job/external integrations, and multiple test systems are covered by accepted deep-dive docs, indexes, or explicit non-goals
 - say `Onboarding DB draft is usable but incomplete` if any discovered durable item lacks matching output or an evidence-based skip reason
 - do not stop or mark complete merely because 10 mandatory files exist
 
@@ -349,7 +350,7 @@ Expected:
 - load `project-onboarding-scan.md` and `onboarding-db-templates.md`
 - explain that there is no Compact/Standard/Expanded default
 - if the human wants only safe continuation, update/propose project memory and commands without onboarding-db detail docs
-- if the human wants durable newcomer docs, route to single Deep Onboarding with spec, plan, and file budget
+- if the human wants durable newcomer docs, route to single Deep Onboarding with spec, plan, batch cadence, and split rationale
 - ask human confirmation before drafting onboarding-db files
 - do not invent a layout mode because the repo appears small or large
 
@@ -369,7 +370,7 @@ Expected:
 - require combined docs to preserve evidence, confidence, unknowns, and project memory backfill notes
 - require core diagrams or explicit blockers: module relationship map, boundary map, core module call chains, and at least one core flow
 - reject completion if Compact simply omits dimensions such as change impact, testing, async/jobs, or deployment facts that exist in code reality
-- state that merged evidence can support star docs, but new generation still follows spec-first Deep Onboarding
+- state that merged evidence can support deep-dive docs, but new generation still follows spec-first Deep Onboarding
 
 ## 2h-6. Deep Onboarding Does Not Generate Every Template
 
@@ -383,13 +384,13 @@ Expected:
 
 - refuse to generate every template by default
 - load `onboarding-db-templates.md`
-- explain that the current template directory intentionally contains only spec, plan, star-doc, coverage, and batch-review templates
-- propose only star docs justified by project reality, human goal, evidence, and accepted file budget
-- keep low-frequency topics combined when the project does not need separate star docs
+- explain that the current template directory intentionally contains only spec, plan, deep-dive, coverage, and batch-review templates
+- propose only deep-dive docs justified by project reality, human goal, evidence, and accepted split rationale
+- keep low-frequency topics combined when the project does not need separate deep-dive docs
 - mark skipped topics as `Not needed now`, `Non-goal`, or `Deferred` with reason
 - use Batch Human Review before writing selected files
 
-## 2h-7. Human Can Request Lower File Budget
+## 2h-7. Human Can Request Smaller Review Batches
 
 Prompt:
 
@@ -399,13 +400,13 @@ Use agent-loop. I only need a 20-minute onboarding path; keep the first pass sma
 
 Expected:
 
-- respect the human's smaller file-budget request after explaining tradeoffs
-- produce a Deep Onboarding plan with 5 star docs or fewer before human expansion
+- respect the human's smaller first-batch request after explaining tradeoffs
+- produce a Deep Onboarding plan with a smaller first review batch
 - record deferred required-core topics in `coverage-matrix.md` and the plan, not as immediate writes
 - ask confirmation for the small write batch
-- do not silently expand the file budget
+- do not treat the small first batch as a total document cap
 
-## 2h-8. Legacy Merged Docs To Star Docs Requires Review
+## 2h-8. Legacy Merged Docs To Deep-Dive Docs Requires Review
 
 Prompt:
 
@@ -415,14 +416,14 @@ Use agent-loop. Our old merged onboarding-db is getting hard to read after addin
 
 Expected:
 
-- recommend a spec/plan refresh and star-doc batch when evidence shows merged docs are no longer readable
-- present a Batch Human Review table with proposed star docs or index updates, source sections, evidence, and risks
-- preserve original facts and links while moving sections into accepted star docs
+- recommend a spec/plan refresh and deep-dive batch when evidence shows merged docs are no longer readable
+- present a Batch Human Review table with proposed deep-dive docs or index updates, source sections, evidence, and risks
+- preserve original facts and links while moving sections into accepted deep-dive docs
 - update README reading paths and document index
 - do not silently rewrite onboarding-db structure
 - do not change project memory unless a separate project-memory backfill is confirmed
 
-## 2h-9. Star Docs Split Only Durable Required-Core Topics
+## 2h-9. Deep-Dive Docs Split Only Durable Required-Core Topics
 
 Prompt:
 
@@ -435,9 +436,9 @@ Expected:
 - refuse one-module-doc-per-directory as the default split strategy
 - identify durable business/runtime modules or bounded contexts such as billing, auth, and notifications
 - treat utility, generated, test, script, and shared folders as support areas unless they have durable business/runtime behavior
-- create star docs only for accepted required-core topics with stable boundaries, entrypoints, flows, tests, data/external dependencies, or repeated maintenance needs
-- merge ordinary/support topics into README/maps, coverage, or an existing star doc
-- use Batch Human Review before writing star docs
+- create deep-dive docs only for accepted required-core topics with stable boundaries, entrypoints, flows, tests, data/external dependencies, or repeated maintenance needs
+- merge ordinary/support topics into README/maps, coverage, or an existing deep-dive doc
+- use Batch Human Review before writing deep-dive docs
 
 ## 2h-10. Module Map Stays An Index
 
@@ -530,8 +531,8 @@ Use agent-loop. The Meeting entity has many fields, status transitions, migratio
 Expected:
 
 - keep `domain/data-model.md` as an index and relationship map instead of a giant field dump
-- create or recommend a required-core star doc such as `stars/meeting-entity.md` when the entity needs its own reading path
-- treat the entity star doc as a focused Deep Onboarding artifact governed by the accepted spec/plan and file budget
+- create or recommend a required-core deep-dive doc such as `deep-dives/meeting-entity.md` when the entity needs its own reading path
+- treat the entity deep-dive doc as a focused Deep Onboarding artifact governed by the accepted spec/plan and batch cadence
 - require storage mapping, fields, relationships, state fields, writers, readers/consumers, related flows, migrations/history, tests, risks, evidence chain, and confidence
 - require a single-entity relationship diagram when the entity is too complex to understand from the global data entity map
 - do not create entity detail docs for simple lookup/config tables or join tables without business meaning
@@ -548,7 +549,7 @@ Use agent-loop. The payment settlement flow crosses API, billing domain, async w
 Expected:
 
 - refuse to keep a complex business/runtime flow as only one row in `flows-and-data.md`
-- create or recommend a required-core star doc such as `stars/payment-settlement.md` because payment settlement is required-core
+- create or recommend a required-core deep-dive doc such as `deep-dives/payment-settlement.md` because payment settlement is required-core
 - require colored flowchart, sequence diagram or not-applicable reason, Code Evidence Trace Table, Data Flow And Fact Source, Branch And Failure Matrix, Concrete Example Linked To Trace Steps, Verification And Observability, risks, and Evidence Chain
 - do not create one flow doc per helper function, endpoint variant, or trivial CRUD path
 - use Batch Human Review before writing the flow doc
@@ -1699,7 +1700,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. It has `version:1.2.3` and every managed block has `block-version:1.2.3`, while the current root AGENTS template uses `block-version:1.2.3-20260625`.
+Use agent-loop. Refresh root AGENTS.md. It has `version:1.2.3` and every managed block has `block-version:1.2.3`, while the current root AGENTS template uses `block-version:1.2.3-20260628`.
 ```
 
 Expected:
@@ -1707,7 +1708,7 @@ Expected:
 - read root `AGENTS.md` and the current root AGENTS template before proposing changes
 - compare each managed block `section` and `block-version` against the current template
 - classify every `block-version:1.2.3` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
-- propose replacing stale block revisions with the full current template revision such as `block-version:1.2.3-20260625`
+- propose replacing stale block revisions with the full current template revision such as `block-version:1.2.3-20260628`
 - copy the current template start marker metadata for each refreshed section unless `source` must point at the target project's active memory root or artifact source
 - preserve all human-owned content outside managed blocks
 - ask for human confirmation before writing
@@ -1717,7 +1718,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. It has `version:1.2.3` and managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.2.3-20260625`.
+Use agent-loop. Refresh root AGENTS.md. It has `version:1.2.3` and managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.2.3-20260628`.
 ```
 
 Expected:

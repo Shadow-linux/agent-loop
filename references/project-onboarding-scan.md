@@ -8,13 +8,13 @@ This reference does not replace `existing-project-onboarding.md`. That file is t
 
 Onboarding DB is delivered like a feature: spec first, plan second, batch implementation third, review before completion.
 
-The agent must not treat onboarding as "generate a directory of docs." A useful onboarding-db is a small set of accepted, evidence-backed learning artifacts.
+The agent must not treat onboarding as "generate a directory of docs." A useful onboarding-db is a coherent set of accepted, evidence-backed learning artifacts.
 
 ```text
 code reality
 -> onboarding-spec.md
 -> onboarding-plan.md
--> batch star docs
+-> batch deep-dive docs
 -> batch review
 -> coverage update
 -> README/maps index
@@ -24,6 +24,10 @@ code reality
 Do not create directory-first module/flow/detail files during Deep onboarding before `onboarding-spec.md` and `onboarding-plan.md` are accepted.
 
 When onboarding discovers stable project facts missing from project memory, propose or perform project memory backfill after human confirmation.
+
+Deep Onboarding has no total document count cap. Write as many deep-dive docs as current project evidence and newcomer handoff needs require.
+
+Human-provided examples define expected detail depth and explanation quality only. Do not copy example topic names, topic count, domain vocabulary, or project-specific structure unless current project evidence supports them.
 
 ## Single Mode
 
@@ -49,7 +53,7 @@ The spec must define:
 
 - target readers
 - onboarding goal
-- required-core topic budget
+- required-core onboarding topic inventory
 - supporting-summary topics
 - non-goals
 - quality bar
@@ -59,40 +63,42 @@ Required-core signals include money, balance, billing, auth/API key, quota, main
 
 ### Gate 2: Onboarding Plan
 
-Create or refresh `onboarding-plan.md` before writing star docs.
+Create or refresh `onboarding-plan.md` before writing deep-dive docs.
 
 The plan must define:
 
-- file budget
+- batch review cadence
 - split gate
 - batch plan
-- star doc queue
+- deep-dive doc queue
 - index/map updates
 - stop conditions
 - review checkpoints
 
-Default Deep file budget before human expansion is 5 star docs or fewer.
+Default batch size is 1-3 deep-dive docs, unless the human chooses another review cadence.
+
+Batch size is review pacing, not a total limit.
 
 Every proposed new file must pass:
 
 | Proposed File | Why New File? | Why Not Merge? | Required-Core? | Human Value |
 |---|---|---|---|---|
 
-If the agent cannot justify the split, merge into README, maps, coverage, or an existing star doc.
+If the agent cannot justify the split, merge into README, maps, coverage, or an existing deep-dive doc.
 
-### Gate 3: Star Doc Batch Implementation
+### Gate 3: Deep-Dive Batch Implementation
 
-Write star docs only for accepted required-core topics.
+Write deep-dive docs for all required-core onboarding topics justified by project evidence and newcomer handoff needs.
 
 Default canonical path:
 
 ```text
-.agent-loop/onboarding-db/stars/<topic>.md
+.agent-loop/onboarding-db/deep-dives/<topic>.md
 ```
 
-A star doc should read like a deep technical article, not a form. Use `templates/onboarding-db/star-deep-dive.md` as a quality contract.
+A deep-dive doc should read like a deep technical article, not a form. Use `templates/onboarding-db/deep-dive.md` as a quality contract.
 
-Required star doc content:
+Required deep-dive doc content:
 
 - business meaning and actors
 - for module/domain topics: purpose, boundary, entrypoints, config/dependencies, core call chain, data touched, APIs/protos, tests, risks, and Evidence Chain
@@ -118,7 +124,7 @@ After each batch:
 3. Update README/maps as indexes only.
 4. Ask for human review before marking a topic `newcomer-ready`.
 
-Coverage tracks learning outcomes, not file existence. A required-core topic is not `newcomer-ready` until its star doc is accepted.
+Coverage tracks learning outcomes, not file existence. A required-core topic is not `newcomer-ready` until its deep-dive doc is accepted.
 
 ## Focused Scope
 
@@ -127,7 +133,7 @@ Focused onboarding writes or updates the smallest useful artifact for a specific
 For a focused question, `onboarding-spec.md` and `onboarding-plan.md` may be narrow:
 
 - one target scope
-- one accepted star doc or existing star doc update
+- one accepted deep-dive doc or existing deep-dive doc update
 - one coverage update
 - optional README/maps link update
 - optional project memory backfill proposal when stable facts changed
@@ -149,13 +155,13 @@ Allowed index content:
 
 - reading paths
 - topic lists
-- canonical star doc links
+- canonical deep-dive links
 - status and confidence
 - short one-line summaries
 
 Not allowed:
 
-- duplicate thin versions of star docs
+- duplicate thin versions of deep-dive docs
 - one file per module just to look complete
 - alias files that count as coverage
 - diagram-only docs with no explanation
@@ -172,11 +178,11 @@ Treat Deep Scan as a newcomer handoff package, not a directory tree. File count,
 
 ### Core Domain Handoff Pack
 
-Required core understanding may live in one or more accepted star docs. The pack must teach business purpose, users/actors, core capabilities, core constraints, core modules, primary flows, data ownership, and Evidence Chain.
+Required core understanding may live in one or more accepted deep-dive docs. The pack must teach business purpose, users/actors, core capabilities, core constraints, core modules, primary flows, data ownership, and Evidence Chain.
 
 ### Service Startup / Config Matrix
 
-Startup/config information can live in a star doc, README/runtime section, or coverage row when it matters. It must identify service/process, command, config path, required dependencies, port/protocol, health/failure signal, evidence, confidence, and unknowns.
+Startup/config information can live in a deep-dive doc, README/runtime section, or coverage row when it matters. It must identify service/process, command, config path, required dependencies, port/protocol, health/failure signal, evidence, confidence, and unknowns.
 
 ### Newcomer Readiness Check
 
@@ -199,22 +205,22 @@ Deep onboarding is complete only when:
 
 - onboarding spec is accepted
 - onboarding plan is accepted
-- required-core star docs are accepted
-- coverage has no required-core topic in `discovered`, `planned`, `needs-deep-trace`, `draft-star`, or `blocked-by-unknown`
-- README/maps point to canonical star docs without duplicating thin docs
+- required-core deep-dive docs are accepted
+- coverage has no required-core topic in `discovered`, `planned`, `needs-deep-trace`, `draft-deep-dive`, or `blocked-by-unknown`
+- README/maps point to canonical deep-dive docs without duplicating thin docs
 - project memory backfill proposal was shown when stable long-term facts changed
 - human confirmed the final review
 
 ## Thin File Failure Rule
 
-If the onboarding-db contains many 20-70 line module/flow/diagram files and no star docs with phase-by-phase code/data/failure/verification detail, call it incomplete.
+If the onboarding-db contains many 20-70 line module/flow/diagram files and no deep-dive docs with phase-by-phase code/data/failure/verification detail, call it incomplete.
 
 Do not fix this by creating more files. Fix it by:
 
 1. lowering overclaimed coverage statuses
 2. writing or refreshing `onboarding-spec.md`
 3. writing or refreshing `onboarding-plan.md`
-4. converting the top required-core topics into `stars/<topic>.md`
+4. converting required-core onboarding topics into `deep-dives/<topic>.md`
 5. reviewing each batch
 
 ## Batch Human Review

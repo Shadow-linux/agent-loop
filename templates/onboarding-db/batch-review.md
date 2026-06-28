@@ -20,9 +20,9 @@ No file-count completion. A batch passes only when the planned learning outcome 
 | File | Action | Why This File Exists | Quality Gate | Coverage Impact |
 |---|---|---|---|---|
 
-## Star Doc Quality Check
+## Deep-Dive Quality Check
 
-| Star Doc | Phase Detail | Code Evidence | Data / State | Failure Paths | Verification | Concrete Example | Decision |
+| Deep-Dive Doc | Phase Detail | Code Evidence | Data / State | Failure Paths | Verification | Concrete Example | Decision |
 |---|---|---|---|---|---|---|---|
 
 ## Coverage Updates
@@ -41,4 +41,3 @@ revise selected
 defer selected
 reject batch
 ```
-

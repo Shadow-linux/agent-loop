@@ -59,15 +59,18 @@ Before using an external skill or plugin inside a stage:
 - [ ] Check root `AGENTS.md` / `CLAUDE.md` and any obvious directory-level guidance.
 - [ ] Treat root `AGENTS.md` as stale if it lacks Message Intent Guard or lacks Bootstrap Protocol, Agent Ownership, Operational Support Guard, Stage Helper Capability Scan, Gate Modes, Required Stops, Completion Rules, Feature Follow-up / Flow-back, Submit And Commit Rules, root/directory guidance boundaries, or requirement archive rules.
 - [ ] If root `AGENTS.md` uses agent-loop managed blocks, compare its managed guidance version with the current local `agent-loop` skill version.
+- [ ] If `scripts/check-root-agents-blocks.sh` is available, run it as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat root `AGENTS.md` as stale if the managed guidance version is older than the current local `agent-loop` skill version, unless the human explicitly defers refresh.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when the file-level skill version matches.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.2.3-20260625`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.2.3-20260628`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] If Managed Block Rule is absent, propose root guidance refresh before relying on managed blocks.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
 - [ ] Treat root `CLAUDE.md` as stale if it duplicates independent long-lived rules or does not clearly point to `AGENTS.md`.
 - [ ] If root guidance will be created, refreshed, or repaired, run AGENTS Cleanup / Migration Review for conflicting workflow rules and long-term project memory outside managed blocks.
+- [ ] Root guidance refresh may update only human-approved managed blocks. Preserve content outside managed blocks unless each cleanup, replacement, or migration item is listed in Human Review Summary and separately approved.
+- [ ] Never treat "refresh AGENTS.md quickly" or similar wording as blanket approval to replace the whole file with `templates/root-AGENTS.md`.
 - [ ] Determine guidance language from existing docs or human preference; default to English only if unclear.
 - [ ] For old or large projects, record directory guidance status in `project.md`.
 - [ ] Summarize state and recommend one next action.
@@ -116,14 +119,17 @@ Before using an external skill or plugin inside a stage:
 - [ ] Check whether root `AGENTS.md` exists, is stale, or must be created.
 - [ ] If root `AGENTS.md` exists, verify it contains Message Intent Guard, Bootstrap Protocol, Agent Ownership, Gate Modes, Required Stops, and Completion Rules.
 - [ ] If root `AGENTS.md` uses agent-loop managed blocks, compare its managed guidance version with the current local `agent-loop` skill version.
+- [ ] If `scripts/check-root-agents-blocks.sh` is available, run it as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when the file-level skill version matches.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.2.3-20260625`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.2.3-20260628`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] If Managed Block Rule is absent, propose root guidance refresh before relying on managed blocks.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
 - [ ] Check whether root `CLAUDE.md` exists and loads or points to `AGENTS.md`; if it duplicates or diverges, propose converting it to a pointer.
 - [ ] Run AGENTS Cleanup / Migration Review when existing root guidance has conflicting workflow rules, duplicated agent-loop rules, or long-term project memory that belongs in `.agent-loop/project.md` or enterprise `.agent-loop/project/*.md`.
+- [ ] Root guidance refresh may update only human-approved managed blocks. Preserve content outside managed blocks unless each cleanup, replacement, or migration item is listed in Human Review Summary and separately approved.
+- [ ] Never treat "refresh AGENTS.md quickly" or similar wording as blanket approval to replace the whole file with `templates/root-AGENTS.md`.
 - [ ] Record guidance language and evidence in `project.md`.
 - [ ] Record root guidance status in `project.md`: `AGENTS.md` present/created/stale/missing/human-deferred and `CLAUDE.md` points-to-AGENTS/created-pointer/stale/missing/human-deferred.
 - [ ] Attach evidence and confidence to commands, capabilities, and boundaries.
@@ -133,14 +139,15 @@ Before using an external skill or plugin inside a stage:
 - [ ] List onboarding uncertainties and follow-up scans.
 - [ ] Summarize proposed `project.md` before writing.
 - [ ] Write or refresh `onboarding-spec.md` before Deep onboarding detail docs.
-- [ ] Write or refresh `onboarding-plan.md` with batches and file budget before writing star docs.
+- [ ] Write or refresh `onboarding-plan.md` with batches, batch review cadence, and split rationale before writing deep-dive docs.
 - [ ] Do not create directory-first module/flow/detail files before the spec and plan are accepted.
-- [ ] Default Deep file budget before human expansion is 5 star docs or fewer.
-- [ ] For focused questions, use a narrow Deep Onboarding spec/plan and one focused star doc or existing star doc update.
+- [ ] Deep Onboarding has no total document count cap; batch size is review pacing, not a total limit.
+- [ ] Write deep-dives for all required-core onboarding topics justified by project evidence and newcomer handoff needs.
+- [ ] For focused questions, use a narrow Deep Onboarding spec/plan and one focused deep-dive doc or existing deep-dive doc update.
 - [ ] When onboarding discovers stable project facts missing from project memory, propose or perform project memory backfill after human confirmation.
 - [ ] Confirm Deep onboarding passes the Newcomer Handoff Quality Gate, not only file-count coverage.
 - [ ] Confirm service startup/config, core domain flows, core data flow, data model, verification strategy, and change-risk map are evidence-backed.
-- [ ] Required-core topics cannot remain discovered, planned, needs-deep-trace, draft-star, or blocked-by-unknown when Deep onboarding is marked complete.
+- [ ] Required-core topics cannot remain discovered, planned, needs-deep-trace, draft-deep-dive, or blocked-by-unknown when Deep onboarding is marked complete.
 - [ ] Use Batch Human Review before writing `.agent-loop/onboarding-db/`, multiple project memory facts, root guidance, or directory guidance.
 - [ ] Ask human confirmation before writing `.agent-loop/`, root guidance, directory guidance, onboarding-db, or diagrams.
 - [ ] Do not mark onboarding complete until root `AGENTS.md` is present/created/human-deferred and root `CLAUDE.md` is points-to-AGENTS/created-pointer/human-deferred.
@@ -518,6 +525,9 @@ Checklist:
 - [ ] Inspect diff and untracked files.
 - [ ] Separate product code from `agent-loop` artifact changes.
 - [ ] Identify unrelated dirty work.
+- [ ] Review feature artifacts (`product.md` when present, `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`) against the submitted code.
+- [ ] Review linked requirement records for lifecycle, Delivery Phase status, Feature Mapping, and approved deferrals when the feature references requirement sets.
+- [ ] Confirm project memory and root/directory guidance impact is completed, explicitly not needed, or human-approved to defer.
 - [ ] Confirm fresh verification evidence exists.
 - [ ] Confirm drift check result and known drift.
 - [ ] Confirm required review has passed or record why submit must stop.

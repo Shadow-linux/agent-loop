@@ -131,7 +131,7 @@ For existing projects, the agent separates safe-entry memory from durable onboar
 | Path | Use When |
 |---|---|
 | **Safe-entry project memory** | Build enough project memory, root guidance status, commands, boundaries, and uncertainties to continue work soon |
-| **Deep Onboarding** | Create durable `.agent-loop/onboarding-db/` docs through accepted `onboarding-spec.md`, accepted `onboarding-plan.md`, and small reviewed batches of `stars/<topic>.md` |
+| **Deep Onboarding** | Create durable `.agent-loop/onboarding-db/` docs through accepted `onboarding-spec.md`, accepted `onboarding-plan.md`, and reviewed batches of `deep-dives/<topic>.md` |
 | **Focused Deep Onboarding** | Preserve understanding for one module, flow, async task, deployment path, state transition, or problem area using the same Deep Onboarding gates with a narrow scope |
 
 ### 3. Start a Feature
@@ -154,7 +154,7 @@ If `.agent-loop/onboarding-db/` exists, the agent uses it first: it checks fresh
 
 There is only one durable project-understanding onboarding mode: Deep Onboarding. If onboarding-db is missing and the human only wants to continue work, the agent should update project memory/root guidance and not create onboarding-db detail docs.
 
-Deep Onboarding is spec-first: `onboarding-spec.md` defines readers, goals, required-core topic budget, non-goals, and quality bar; `onboarding-plan.md` defines file budget, split gate, batches, and review checkpoints; then the agent writes a small number of evidence-backed `stars/<topic>.md` deep dives. The default budget before human expansion is 5 star docs or fewer. Focused questions use the same flow with a narrow spec/plan and usually one focused star doc or update.
+Deep Onboarding is spec-first: `onboarding-spec.md` defines readers, goals, required-core onboarding topic inventory, non-goals, and quality bar; `onboarding-plan.md` defines batch review cadence, split gate, batches, and review checkpoints; then the agent writes evidence-backed `deep-dives/<topic>.md` docs. Deep Onboarding has no total document count cap. Batch size is review pacing, not a total limit. Focused questions use the same flow with a narrow spec/plan and usually one focused deep-dive doc or update.
 
 After each onboarding explanation, the agent should recommend one next action: read a specific doc, inspect a module/flow, generate or update a focused diagram, run a setup/verification command, or return to feature development.
 

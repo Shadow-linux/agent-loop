@@ -270,15 +270,16 @@ If subagents are used, the main agent keeps ownership of synthesis and all write
 If the human only wants safe continuation:
 
 - draft `.agent-loop/project.md`, guidance status/proposal, and uncertainties
-- do not write onboarding-db detail docs, star docs, or onboarding diagrams
+- do not write onboarding-db detail docs, deep-dive docs, or onboarding diagrams
 - recommend Deep Onboarding later only when durable newcomer-facing docs would help
 
 If Deep Onboarding is selected:
 
 - write or refresh `onboarding-spec.md` before detail docs
-- write or refresh `onboarding-plan.md` with file budget, split gate, and batches before detail docs
-- write star docs in small reviewed batches; default Deep file budget before human expansion is 5 star docs or fewer
-- create diagrams only inside star docs when they answer a concrete onboarding question and have walkthrough text
+- write or refresh `onboarding-plan.md` with batch cadence, split gate, and batches before detail docs
+- write deep-dive docs in reviewed batches; default batch size is 1-3 deep-dive docs unless the human chooses another review cadence
+- treat batch size as review pacing, not a total limit
+- create diagrams only inside deep-dive docs when they answer a concrete onboarding question and have walkthrough text
 - use Batch Human Review before writing onboarding-db, project memory backfill, or guidance changes
 - when onboarding discovers stable project facts missing from project memory, propose or perform project memory backfill after human confirmation
 - keep code reality as current fact when docs conflict with code
@@ -287,7 +288,7 @@ If the human asks a focused onboarding question:
 
 - use the same Deep Onboarding mode with a narrow spec/plan
 - inspect only the selected module, flow, async task, deployment path, state transition, or problem area plus minimal safe context
-- propose one focused star doc or star doc update for that target
+- propose one focused deep-dive doc or deep-dive doc update for that target
 - propose narrow project memory backfill only when the focused scope exposes stale or missing facts required for safe continuation
 - do not create unrelated onboarding-db files
 
@@ -303,7 +304,7 @@ Output before writing:
 - discovered commands with evidence and confidence
 - recommended Project Memory Mode: simple or enterprise, with trigger evidence
 - recommended onboarding path: safe-entry project memory only, or Deep Onboarding with scope and reason
-- Deep Onboarding spec/plan/file budget summary when onboarding-db docs are requested
+- Deep Onboarding spec/plan/batch cadence summary when onboarding-db docs are requested
 - existing/proposed guidance files
 - low-confidence findings and recommended follow-up
 - one recommended next action

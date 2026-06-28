@@ -29,13 +29,15 @@ Write the concrete outcome in human terms:
 After this onboarding, a newcomer should be able to explain / run / debug / safely change ...
 ```
 
-## Required-Core Topic Budget
+## Required-Core Topic Inventory
 
-Default Deep onboarding may select at most 5 required-core star topics before human expansion.
+Deep Onboarding has no total document count cap. Identify every required-core onboarding topic needed for a newcomer handoff, based on current project evidence and the human goal.
 
-| Priority | Star Topic | Why Required-Core | Human Value | Evidence Seed | Planned Canonical Doc | Status |
+Human-provided examples define expected detail depth and explanation quality only. Do not copy example topic names, topic count, domain vocabulary, or project-specific structure unless current project evidence supports them.
+
+| Priority | Topic | Why Required-Core | Human Value | Evidence Seed | Planned Canonical Doc | Status |
 |---|---|---|---|---|---|---|
-| P0 | | | | | `stars/<topic>.md` | proposed |
+| P0 | | | | | `deep-dives/<topic>.md` | proposed |
 
 Required-core signals include money, balance, billing, auth/API key, quota, main request flow, provider call, state writeback, async finality, external callbacks, retries, idempotency, production config, and repeated human questions.
 
@@ -55,7 +57,7 @@ Supporting topics stay in README, maps, or short index rows unless the human app
 
 ## Quality Bar
 
-A required-core topic is not `newcomer-ready` until it has an accepted star doc that explains:
+A required-core topic is not `newcomer-ready` until it has an accepted deep-dive doc that explains:
 
 - business meaning and actors
 - phase-by-phase flow
@@ -73,4 +75,3 @@ A required-core topic is not `newcomer-ready` until it has an accepted star doc 
 
 | Decision | Recommended Default | Why It Matters |
 |---|---|---|
-

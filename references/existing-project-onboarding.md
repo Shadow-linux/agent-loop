@@ -27,7 +27,7 @@ When the human asks to take over, understand, or continue an existing project:
 - first do the shallow entry scan needed for safe continuation
 - update/propose `project.md` facts that are stable and missing
 - if the human wants durable onboarding docs, route to Deep Onboarding
-- if the human asks a focused question, run Deep Onboarding with a narrow spec/plan and one focused star doc/update
+- if the human asks a focused question, run Deep Onboarding with a narrow spec/plan and one focused deep-dive doc/update
 
 Deep Onboarding begins with:
 
@@ -37,7 +37,7 @@ Deep Onboarding begins with:
 .agent-loop/onboarding-db/onboarding-plan.md
 ```
 
-Do not create `modules/<module>.md`, `flows/<flow>.md`, `diagrams/*`, or many thin onboarding files. Required-core teaching belongs in reviewed `stars/<topic>.md` docs.
+Do not create `modules/<module>.md`, `flows/<flow>.md`, `diagrams/*`, or many thin onboarding files. Required-core teaching belongs in reviewed `deep-dives/<topic>.md` docs.
 
 For Deep Onboarding or focused onboarding questions, load:
 

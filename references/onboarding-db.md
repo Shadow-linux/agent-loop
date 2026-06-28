@@ -41,22 +41,22 @@ Do not read onboarding-db by default for tiny task execution when `project.md`, 
 |---|---|
 | What is the active feature or next action? | `project.md` |
 | What is the onboarding scope and plan? | `onboarding-spec.md`, then `onboarding-plan.md` and `coverage-matrix.md` |
-| What does this project do? | `README.md`, `onboarding-spec.md`, accepted overview star doc, or legacy `overview.md` as evidence |
-| How do I run it? | accepted startup/runtime star doc, README runtime section, or legacy `runtime/setup-and-run.md` as evidence |
-| Which areas are required-core or still incomplete? | `coverage-matrix.md`, then the linked canonical star docs |
-| Where do I start reading code? | README reading path, `coverage-matrix.md`, accepted star docs, or legacy maps as evidence |
-| What does this module do? | accepted `stars/<topic>.md` for the module/domain, or legacy module/map docs as evidence |
-| What are the system boundaries? | accepted boundary/integration star doc, README/maps index, or legacy boundary map as evidence |
-| How does this business flow work? | `stars/<topic>.md` for required-core flows; older `flows/<flow>.md` is draft evidence unless accepted |
-| What entities, fields, and relationships does this project use? | accepted data-model/domain star doc, or legacy domain docs as evidence |
+| What does this project do? | `README.md`, `onboarding-spec.md`, accepted overview deep-dive doc, or legacy `overview.md` as evidence |
+| How do I run it? | accepted startup/runtime deep-dive doc, README runtime section, or legacy `runtime/setup-and-run.md` as evidence |
+| Which areas are required-core or still incomplete? | `coverage-matrix.md`, then the linked canonical deep-dive docs |
+| Where do I start reading code? | README reading path, `coverage-matrix.md`, accepted deep-dive docs, or legacy maps as evidence |
+| What does this module do? | accepted `deep-dives/<topic>.md` for the module/domain, or legacy module/map docs as evidence |
+| What are the system boundaries? | accepted boundary/integration deep-dive doc, README/maps index, or legacy boundary map as evidence |
+| How does this business flow work? | `deep-dives/<topic>.md` for required-core flows; older `flows/<flow>.md` is draft evidence unless accepted |
+| What entities, fields, and relationships does this project use? | accepted data-model/domain deep-dive doc, or legacy domain docs as evidence |
 | Who writes or reads this entity? | `domain/data-model.md`, `domain/entities/<entity>.md`, related flows/modules, then focused code reality if needed |
-| How do async/events/jobs work? | accepted async/job star doc, or legacy runtime docs as evidence |
+| How do async/events/jobs work? | accepted async/job deep-dive doc, or legacy runtime docs as evidence |
 | How do I understand async queues, consumers, callbacks, or background jobs? | README async reading path, `runtime/async-and-events.md`, `runtime/jobs-and-schedules.md`, async/job diagrams |
-| I followed setup docs and it does not work | accepted startup/runtime star doc or legacy runtime docs, then `onboarding-diagnostics.md` Startup Failure Diagnosis |
-| How is it deployed? | accepted deployment/operations star doc, README runtime section, or legacy deployment docs as evidence |
-| What changes if I modify this area? | accepted change-risk star doc or legacy impact docs, then `onboarding-diagnostics.md` Change Impact Analysis |
-| Who or what changes this state/status? | accepted flow/data/state star doc or legacy flow/domain docs, then `onboarding-diagnostics.md` State Change Trace |
-| Why was this designed this way? | accepted decision/history star doc or legacy decision docs, then `onboarding-diagnostics.md` Design Decision Routing |
+| I followed setup docs and it does not work | accepted startup/runtime deep-dive doc or legacy runtime docs, then `onboarding-diagnostics.md` Startup Failure Diagnosis |
+| How is it deployed? | accepted deployment/operations deep-dive doc, README runtime section, or legacy deployment docs as evidence |
+| What changes if I modify this area? | accepted change-risk deep-dive doc or legacy impact docs, then `onboarding-diagnostics.md` Change Impact Analysis |
+| Who or what changes this state/status? | accepted flow/data/state deep-dive doc or legacy flow/domain docs, then `onboarding-diagnostics.md` State Change Trace |
+| Why was this designed this way? | accepted decision/history deep-dive doc or legacy decision docs, then `onboarding-diagnostics.md` Design Decision Routing |
 | Docs conflict with code | `coverage-matrix.md`, `batch-review.md`, legacy risks docs, then code reality |
 
 If `project.md` is insufficient, read onboarding-db. If onboarding-db is insufficient or stale, inspect code reality and propose an onboarding-db update.
@@ -107,7 +107,7 @@ Steps:
 
 1. Check onboarding-db existence, README, indexed paths, freshness, and review status. If it is missing, stale, unreviewed, or contradictory, say so before relying on it.
 2. Check whether `onboarding-spec.md`, `onboarding-plan.md`, and `coverage-matrix.md` exist; if not, say the onboarding-db predates spec-first onboarding and propose a spec/plan refresh before trusting completion claims.
-3. Give a short orientation: project purpose, runtime shape, main modules, main flows, required-core star docs, current completion status, and how to run/verify.
+3. Give a short orientation: project purpose, runtime shape, main modules, main flows, required-core deep-dive docs, current completion status, and how to run/verify.
 4. Recommend exactly one first reading path from `onboarding-db/README.md`.
 5. Ask the human what they want to understand next, with 2-4 concrete options such as required-core flow, module, async/jobs, deployment, tests, state trace, design decisions, or change impact.
 6. When answering, read the matching onboarding-db path first, then inspect code reality only if the docs are missing, stale, contradictory, or too thin.
@@ -177,12 +177,12 @@ Suggested next read
 Project memory backfill status
 ```
 
-Critical onboarding-db writes should prefer the spec-first star-doc shape:
+Critical onboarding-db writes should prefer the spec-first deep-dive shape:
 
 - `onboarding-spec.md`
 - `onboarding-plan.md`
 - `coverage-matrix.md`
-- `stars/<topic>.md`
+- `deep-dives/<topic>.md`
 - `batch-review.md`
 
 Legacy categorized docs such as `modules/`, `flows/`, `runtime/`, `domain/`, and `quality/` may remain as evidence or be read when an existing onboarding-db already contains them. Do not generate new directory-first docs unless a human explicitly asks for compatibility with an existing legacy layout.
