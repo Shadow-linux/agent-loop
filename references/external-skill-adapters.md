@@ -17,7 +17,9 @@ If Superpowers is available, prefer these helpers:
 | Diagnose Failure | `superpowers:systematic-debugging` |
 | Verify / Completion claim | `superpowers:verification-before-completion` |
 | Review / Feature Close Review | `superpowers:requesting-code-review` |
+| Feature Completion Check | verification / finishing helpers when available |
 | Submit / Integrate | `superpowers:finishing-a-development-branch` |
+| Pause / Close | finishing / handoff helpers when available |
 | Approved Subagent execution | `superpowers:subagent-driven-development` |
 
 For mandatory helper-backed stages, resolve canonical and alias names using `skill-routing.md`, then load the complete helper before stage actions. If it is absent, record `unavailable`; if it is discovered but cannot be loaded, record `load-failed`. Only those two statuses allow fallback.
@@ -112,7 +114,9 @@ Use Superpowers when available for these stages, while applying the path and gat
 | Diagnose Failure | `superpowers:systematic-debugging` | reproduce, isolate, trace root cause before fixing | findings to `notes.md`; return to Execute / Verify / Review |
 | Verify | `superpowers:verification-before-completion` | evidence before completion claim | evidence to `notes.md`; completion still controlled by agent-loop |
 | Review | `superpowers:requesting-code-review` | rigorous review pass | findings to `notes.md`; task moves to `done` only after Task Done Gate |
+| Feature Completion Check | verification / finishing helpers when available | evidence discipline and close-decision support | agent-loop owns completion result, blocker routing, and close confirmation |
 | Submit / Integrate | `superpowers:finishing-a-development-branch` | completion options and branch hygiene | submit still requires agent-loop diff review, verification, drift check, and human confirmation |
+| Pause / Close | finishing / handoff helpers when available | close options, handoff structure, and completion hygiene | close still requires Feature Completion Check, Feature Close Review, drift, memory status, and explicit human confirmation |
 | Subagent execution | `superpowers:subagent-driven-development` | bounded independent execution with review | only after human confirms; briefs/returns in `handoffs/*`; main agent owns merge and status |
 
 ## Brainstorming Adapter

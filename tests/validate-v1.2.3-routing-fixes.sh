@@ -20,7 +20,7 @@ assert_contains "references/workflow-checklists.md" "For Targeted Onboarding Sca
 # H2: Feature Completion Check must define the blocked result and next step.
 assert_contains "references/feature-completion-check.md" "### Recommend Blocked"
 assert_contains "references/feature-completion-check.md" "Use when completion cannot be decided or continued because a human decision, environment, access, verification dependency, or external blocker is missing"
-assert_contains "references/feature-completion-check.md" "Recommend exactly one next stage: Ask Human, Diagnose Failure, Verify, or Pause"
+assert_contains "references/feature-completion-check.md" "Recommend exactly one next stage: Ask Human, Diagnose Failure, Verify, Pause, or Targeted Feature Scan"
 assert_contains "references/workflow-checklists.md" "If blockers prevent completion, record Result: blocked and recommend exactly one unblock stage"
 assert_contains "references/stage-guides.md" "blocked with one unblock recommendation"
 

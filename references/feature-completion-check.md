@@ -110,9 +110,17 @@ Say:
 This feature is blocked from completion. The blocker is <blocker>.
 ```
 
-Recommend exactly one next stage: Ask Human, Diagnose Failure, Verify, or Pause.
+Recommend exactly one next stage: Ask Human, Diagnose Failure, Verify, Pause, or Targeted Feature Scan.
 
 Record the blocker, evidence, owner if known, and the next unblock action in `notes.md`. Do not recommend close while the blocker remains.
+
+## Blocked Routing Matrix
+
+- missing human decision/access/approval -> Ask Human
+- observed failure or unclear technical cause -> Diagnose Failure
+- verification not run but runnable -> Verify
+- external blocker with no immediate unblock path -> Pause
+- unclear ownership/impact -> Targeted Feature Scan
 
 ## Start-New-Feature Guard
 

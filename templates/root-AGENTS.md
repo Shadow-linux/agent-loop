@@ -144,6 +144,7 @@ Auto modes do not bypass these stops.
 - Keep long-term project memory in `.agent-loop/project.md` or enterprise `.agent-loop/project/*.md`. Root `AGENTS.md` should only summarize startup-critical facts that every Agent CLI needs immediately.
 - Keep original human materials in requirement set directories under `.agent-loop/requirements/`, or reference original paths when the human declines copying.
 - Do not create new flat files directly under `.agent-loop/requirements/`; group requirements, prototypes, feedback, screenshots, recordings, links, and follow-up notes for the same intake/topic together.
+- For complex requirements, suggest `Delivery Phases` in the requirement set `README.md` before feature construction when the human needs to confirm staged delivery. A phase is a human-readable delivery slice, not a feature workspace, task, or plan.
 - Future/deferred work and backlog items belong in requirement sets and optional `requirements/INDEX.md`, not in `project.md`. Do not edit `requirement.md` or other source files for lifecycle/status updates.
 - Keep durable producer-consumer interface handoffs in feature `contracts.md` and optional `contracts/` details. Keep temporary subagent assignments in `handoffs/`.
 - Do not write task logs, feature progress, raw requirements, temporary plans, or test transcripts into `AGENTS.md`.

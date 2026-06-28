@@ -24,6 +24,14 @@ Exit Condition:
 
 One-line summary:
 
+## Delivery Phases
+
+Use this table when the requirement is too large for one feature or has MVP / later-phase scope.
+
+| Phase | Goal | Scope | Out Of Scope | Acceptance Direction | Status | Feature Mapping | Source Notes |
+|---|---|---|---|---|---|---|---|
+| Phase 1: <name> |  |  |  |  | proposed | none | none |
+
 ## Source Files
 
 - Requirement:

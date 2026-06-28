@@ -71,6 +71,14 @@ Entry priority: remote-entry is evaluated before existing-project. If remote-ent
 
 Blocked must resolve to exactly one recommended next stage. Ask Human when the blocker is a missing decision, access, approval, environment, or external input; Diagnose Failure when the blocker is caused by observed system behavior, failing verification, or unclear technical cause. If the blocker is a narrow unknown about code ownership or impact, recommend Targeted Feature Scan instead.
 
+Blocked routing matrix:
+
+- missing human decision/access/approval -> Ask Human
+- observed failure or unclear technical cause -> Diagnose Failure
+- verification not run but runnable -> Verify
+- external blocker with no immediate unblock path -> Pause
+- unclear ownership/impact -> Targeted Feature Scan
+
 ## Inspection Order
 
 Use this order:

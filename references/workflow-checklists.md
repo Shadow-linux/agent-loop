@@ -63,6 +63,8 @@ Before using an external skill or plugin inside a stage:
 - [ ] Treat root `AGENTS.md` as stale if the managed guidance version is older than the current local `agent-loop` skill version, unless the human explicitly defers refresh.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when the file-level skill version matches.
 - [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.2.3-20260625`.
+- [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
+- [ ] If Managed Block Rule is absent, propose root guidance refresh before relying on managed blocks.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
 - [ ] Treat root `CLAUDE.md` as stale if it duplicates independent long-lived rules or does not clearly point to `AGENTS.md`.
 - [ ] If root guidance will be created, refreshed, or repaired, run AGENTS Cleanup / Migration Review for conflicting workflow rules and long-term project memory outside managed blocks.
@@ -116,6 +118,8 @@ Before using an external skill or plugin inside a stage:
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when the file-level skill version matches.
 - [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.2.3-20260625`.
+- [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
+- [ ] If Managed Block Rule is absent, propose root guidance refresh before relying on managed blocks.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
 - [ ] Check whether root `CLAUDE.md` exists and loads or points to `AGENTS.md`; if it duplicates or diverges, propose converting it to a pointer.
 - [ ] Run AGENTS Cleanup / Migration Review when existing root guidance has conflicting workflow rules, duplicated agent-loop rules, or long-term project memory that belongs in `.agent-loop/project.md` or enterprise `.agent-loop/project/*.md`.
@@ -128,6 +132,8 @@ Before using an external skill or plugin inside a stage:
 - [ ] Summarize proposed `project.md` before writing.
 - [ ] If Deep is selected, record Onboarding DB Layout Mode before proposing onboarding-db files; default to Expanded unless the human explicitly requests Compact/Standard or an existing onboarding-db already uses it.
 - [ ] If Deep is selected, run P0 before P1 and P2.
+- [ ] Confirm Deep onboarding passes the Newcomer Handoff Quality Gate, not only file-count coverage.
+- [ ] Confirm service startup/config, core domain flows, core data flow, data model, verification strategy, and change-risk map are evidence-backed.
 - [ ] For Targeted Onboarding Scan, treat P0 as safety context, not as permission to produce a full project.md proposal.
 - [ ] If Targeted is selected, limit scan and onboarding-db updates to the selected module, flow, async task, deployment path, or problem area.
 - [ ] Use Batch Human Review before writing `.agent-loop/onboarding-db/`, multiple project memory facts, root guidance, or directory guidance.
@@ -143,6 +149,8 @@ Before using an external skill or plugin inside a stage:
 - [ ] Use `.agent-loop/requirements/YYYY-MM-DD-<topic>/` requirement set directory for new archives.
 - [ ] Group all same-topic intake materials in the requirement set: requirements, prototypes, screenshots, feedback, recordings, links, and notes.
 - [ ] Create or update requirement-set `README.md`.
+- [ ] Run Phase Scan: recommend `Delivery Phases` when the requirement is too large for one feature, has MVP/later scope, crosses multiple boundaries, or uses staged-delivery language.
+- [ ] If Delivery Phases are used, write or update the README phase table only after human confirmation.
 - [ ] Old requirement set README files remain valid; do not force migration only because lifecycle fields are missing.
 - [ ] Do not edit `requirement.md` or other source files for lifecycle/status updates.
 - [ ] Future / Deferred Requirement Intake: when the human says "先记一下", "后面做", "之后补", "下一轮做", "暂时不做", "以后加", "backlog", "defer this", "follow-up later", or "not in this feature", recommend a requirement set instead of project memory.
@@ -159,6 +167,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Run Stage Helper Capability Scan before fallback product synthesis.
 - [ ] If a PRD/product synthesis or grill-with-docs style helper is available, use it through `external-skill-adapters.md` while writing accepted output to agent-loop `product.md` / `notes.md`.
 - [ ] Decide whether Product Brief trigger conditions apply.
+- [ ] If source requirements are too broad for one feature, recommend requirement `Delivery Phases` before writing `product.md`.
 - [ ] Inspect `project.md` Product Context and Domain Language.
 - [ ] Inspect source requirements before asking product questions.
 - [ ] Ask one blocking product question at a time when needed.
@@ -169,13 +178,13 @@ Before using an external skill or plugin inside a stage:
 ## Brainstorm / Clarify
 
 - [ ] Resolve and load `superpowers:brainstorming` or `brainstorming` before clarification actions; record Stage Helper Resolution, or record `unavailable` / `load-failed` before fallback.
-- [ ] If Superpowers `brainstorming` or another product-discovery helper is available, use it through `external-skill-adapters.md` while writing accepted output to agent-loop `product.md`, `spec.md`, or `notes.md`.
+- [ ] If Superpowers `brainstorming` or another product-discovery helper is available, use it through `external-skill-adapters.md` while writing accepted output to the current stage artifact.
 - [ ] Use only when goal is unstable, scope unclear, or meaningful approaches differ.
 - [ ] Check project docs, code, tests, source requirements, Product Context, and Domain Language before asking.
 - [ ] Ask 1-5 high-impact questions.
 - [ ] Prefer one question at a time unless a short batch is clearer.
 - [ ] Questions must affect scope, UX, data, architecture, testing, or acceptance.
-- [ ] Write accepted answers back into `spec.md`.
+- [ ] Write accepted answers back into the current stage artifact: requirement `README.md` / `requirement.md` during requirements discussion, or `product.md` / `spec.md` / `notes.md` during feature work.
 
 ## Feature Follow-up And Flow-back
 
@@ -202,6 +211,8 @@ Before using an external skill or plugin inside a stage:
 - [ ] If a spec-writing, brainstorming, or product-discovery helper is available, use it through `external-skill-adapters.md` while writing accepted output to agent-loop `spec.md`.
 - [ ] Create or update feature workspace.
 - [ ] Set `Feature Type: normal | maintenance-fix | follow-up`.
+- [ ] If the source requirement uses `Delivery Phases`, record the specific phase or single-phase slice in `Source Requirements`.
+- [ ] If the feature scope is broader than one accepted phase or one slice inside a single phase, stop and recommend phase/scope split.
 - [ ] For maintenance-fix, record why it is not flow-back, why it is not a new product feature, regression/safety risk, and long-term project memory impact.
 - [ ] Write problem, goal, scope, stories, acceptance criteria.
 - [ ] Record added, modified, and removed behavior.
@@ -465,7 +476,10 @@ Checklist:
 - [ ] If behavior changed, update feature docs.
 - [ ] If long-term project facts changed, load `project-memory-mode.md` and route updates to `project.md` or enterprise `project/*.md`.
 - [ ] Do not rewrite original human requirements.
+- [ ] If the feature references a Delivery Phase, propose phase status / Feature Mapping updates for human confirmation.
 - [ ] Record drift decisions in `notes.md`.
+- [ ] Do not route directly to Close from Drift Check.
+- [ ] Next stage is Project Memory Update / Requirement Reconciliation when long-term project facts, requirement lifecycle, Delivery Phase status, or Feature Mapping changed; otherwise Feature Completion Check.
 - [ ] Present drift decisions with Human Review Summary table.
 
 ## Project Memory Update
@@ -486,7 +500,7 @@ Checklist:
 - [ ] Resolve or add Onboarding Uncertainties when confidence changes.
 - [ ] Run Requirement Reconciliation when the feature references or creates requirement sets.
 - [ ] Do not edit `requirement.md` or other source files for lifecycle/status updates.
-- [ ] Update requirement set README / optional requirements INDEX for lifecycle status only after human confirmation.
+- [ ] Update requirement set README / optional requirements INDEX for lifecycle status, Delivery Phase status, and Feature Mapping only after human confirmation.
 - [ ] Ask before changing root or directory-level `AGENTS.md`.
 - [ ] Present proposed memory updates with Human Review Summary table.
 
@@ -506,6 +520,7 @@ Checklist:
 - [ ] Ask human which action to take: prepare only, commit, PR text, merge note, release note, publish/release note, or skip.
 - [ ] Only commit, publish, release, merge, or create final PR text after explicit human confirmation.
 - [ ] Record submit/integrate result in `notes.md`.
+- [ ] If submit succeeded and the feature appears done, recommend Feature Completion Check, not Close.
 
 ## Feature Completion Check
 

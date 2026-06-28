@@ -567,6 +567,20 @@ For onboarding-db batches:
 
 ## Minimum Completion Standard
 
+## Newcomer Handoff Quality Gate
+
+Do not mark Deep onboarding complete only because the Expanded minimum files exist. Deep onboarding is a newcomer handoff package; it must teach a new maintainer how the project works, how to start it, how data moves, how to verify behavior, and where change risk lives.
+
+Required Deep onboarding packs:
+
+- Core Domain Handoff Pack: business purpose, users/actors, core capabilities, core constraints, core modules, primary flows, data ownership, and Evidence Chain.
+- Service Startup / Config Matrix: service/process, command, config path, required dependencies, port/protocol, health/failure signal, evidence, and confidence.
+- Core module docs: purpose, boundary, entrypoints, config/dependencies, core call chain, data touched, APIs/protos, tests, risks, and Evidence Chain.
+- Core flow docs: trigger, entrypoint, step-by-step call chain with file/symbol evidence, data writes, async/failure/retry behavior, verification, risks, and Evidence Chain.
+- Core data docs: entities, key fields, storage mapping, owners, writers/readers, lifecycle/state, related flows, tests, evidence, and confidence.
+
+If many small files exist but these packs are thin or missing, the onboarding-db is usable but incomplete. Record gaps in the Discovery Coverage Matrix and Batch Human Review instead of declaring completion.
+
 Onboarding-db is complete only when:
 
 - README has reading paths, module reading paths, data-model reading path, document index, and **diagrams index with coverage check**

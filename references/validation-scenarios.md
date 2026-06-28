@@ -272,6 +272,23 @@ Expected:
 - require data entity map and model usage flow map when persistent data exists
 - mark onboarding-db usable but incomplete and add missing diagrams to Discovery Coverage Matrix / Batch Human Review
 
+## 2h-3c. Thin Expanded Onboarding DB Is Not Complete
+
+Prompt:
+
+```text
+Use agent-loop. Deep onboarding created 47 onboarding-db files, but many flow docs are 20-30 lines and mostly say "service -> repository -> database". A newcomer still cannot tell the primary business flow, core domain data flow, service startup/config, or how to verify changes. Is onboarding complete?
+```
+
+Expected:
+
+- load `project-onboarding-scan.md` and `onboarding-db-templates.md`
+- identify that this has many small files but no newcomer handoff quality
+- reject completion even if the Expanded minimum files and indexes exist
+- require Core Domain Handoff Pack, Service Startup / Config Matrix, core flow/data detail, verification strategy, and change-risk map
+- state that onboarding-db is usable but incomplete when core module, flow, data, startup, or verification docs lack evidence-backed detail
+- record missing packs in Discovery Coverage Matrix and Batch Human Review
+
 ## 2h-4. Onboarding DB Layout Mode Defaults To Expanded
 
 Prompt:
@@ -1108,7 +1125,7 @@ Expected:
 - inspect feature docs and evidence
 - determine completion cannot be decided because a blocker is missing
 - record Feature Completion Check in `notes.md` with `Result: blocked`
-- recommend exactly one unblock stage such as Ask Human, Diagnose Failure, Verify, or Pause
+- recommend exactly one unblock stage such as Ask Human, Diagnose Failure, Verify, Pause, or Targeted Feature Scan
 - do not recommend close while the blocker remains
 
 ## 7c. Start New Feature With Active Feature Present
@@ -1648,6 +1665,37 @@ Expected:
 - propose replacing stale block revisions with the full current template revision such as `block-version:1.2.3-20260625`
 - copy the current template start marker metadata for each refreshed section unless `source` must point at the target project's active memory root or artifact source
 - preserve all human-owned content outside managed blocks
+- ask for human confirmation before writing
+
+## 15a-5d. Date-Only Block Revision Is Stale
+
+Prompt:
+
+```text
+Use agent-loop. Refresh root AGENTS.md. It has `version:1.2.3` and managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.2.3-20260625`.
+```
+
+Expected:
+
+- read root `AGENTS.md` and the current root AGENTS template before proposing changes
+- treat `block-version:2026-06-27` as stale because date-only revisions are not tied to the agent-loop template version
+- require exact full template `block-version` match for each managed `section`
+- propose copying the template marker metadata for refreshed sections
+- ask for human confirmation before writing
+
+## 15a-5e. Missing Managed Block Rule Needs Refresh
+
+Prompt:
+
+```text
+Use agent-loop. Root AGENTS.md has managed-start markers and current-looking blocks, but the Managed Block Rule section is missing.
+```
+
+Expected:
+
+- classify root guidance as stale because future agents cannot know the update boundary
+- propose adding the Managed Block Rule from the current root AGENTS template
+- preserve content outside managed blocks
 - ask for human confirmation before writing
 
 ## 15a-6. AGENTS Conflict Cleanup Requires Human Decision
@@ -2543,8 +2591,8 @@ Expected:
 - record Onboarding Mode when Quick, Deep, or Targeted onboarding is selected so Deep can be distinguished from Quick even though Deep includes Quick outputs
 - if the human asks for guided onboarding but onboarding-db is missing, route to Existing Project Onboarding, Deep Project Onboarding Scan, or stale-memory recovery instead of Guided Newcomer Onboarding
 - use consistent Standards Review triggers: large project, broad diff, directory or durable boundary change, security/data change, architecture change, or human request
-- for blocked state, recommend exactly one unblock stage: Ask Human, Diagnose Failure, or Targeted Feature Scan
-- after Drift Check, route to Project Memory Update when long-term facts changed; otherwise Feature Completion Check, not directly to Close
+- for blocked state, recommend exactly one unblock stage: Ask Human, Diagnose Failure, Verify, Pause, or Targeted Feature Scan
+- after Drift Check, route to Project Memory Update / Requirement Reconciliation when long-term project facts, requirement lifecycle, Delivery Phase status, or Feature Mapping changed; otherwise Feature Completion Check, not directly to Close
 
 ## 62. Complex Artifact Threshold Boundaries
 

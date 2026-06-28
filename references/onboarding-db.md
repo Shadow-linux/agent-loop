@@ -65,6 +65,8 @@ Run this before relying on onboarding-db when `project.md`, root guidance, or a 
 
 Minimum checks:
 
+Integrity Check proves the onboarding-db is safe to read for the current goal; it does not prove Deep onboarding is complete. Deep completion must pass the Newcomer Handoff Quality Gate in `project-onboarding-scan.md` and `onboarding-db-templates.md`.
+
 | Check | Failure Means |
 |---|---|
 | `.agent-loop/onboarding-db/` exists | onboarding-db is missing |

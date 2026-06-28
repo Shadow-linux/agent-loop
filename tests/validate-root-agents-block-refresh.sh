@@ -46,16 +46,22 @@ assert_contains "references/project-guidance.md" "If the file-level managed vers
 assert_contains "references/project-guidance.md" 'Use `block-version:<agent-loop-version>-<YYYYMMDD>`; do not shorten it to the skill version alone.'
 assert_contains "references/project-guidance.md" "Copy the exact start marker metadata for each refreshed section from the current root AGENTS template unless the section source must point at a target-project artifact."
 assert_contains "references/project-guidance.md" 'Treat bare skill-version-only block revisions such as `block-version:1.2.3` as stale because they cannot distinguish same-version template revisions.'
+assert_contains "references/project-guidance.md" 'Treat date-only block revisions such as `block-version:2026-06-27` as stale because they are not tied to the agent-loop template version.'
 assert_contains "references/project-guidance.md" "If a managed block exists in the current template but is missing from root AGENTS.md, treat it as a missing managed block and propose adding it."
+assert_contains "references/project-guidance.md" "Missing Managed Block Rule means root guidance refresh is required because future agents cannot know the update boundary."
 assert_contains "references/project-guidance.md" "Preserve all content outside managed blocks unless the human explicitly approves cleanup, replacement, or migration."
 assert_contains "references/project-guidance.md" "message-intent"
 
 assert_contains "references/workflow-checklists.md" 'Compare each managed block `section` and `block-version` against the current root AGENTS template.'
 assert_contains "references/workflow-checklists.md" "Treat missing block-version, older block-version, or missing managed sections as stale even when the file-level skill version matches."
 assert_contains "references/workflow-checklists.md" 'Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.2.3-20260625`.'
+assert_contains "references/workflow-checklists.md" "Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required."
+assert_contains "references/workflow-checklists.md" "If Managed Block Rule is absent, propose root guidance refresh before relying on managed blocks."
 
 assert_contains "references/validation-scenarios.md" "Same Version But Missing Managed Block Revision"
 assert_contains "references/validation-scenarios.md" "Bare Skill-Version Block Revision Is Stale"
+assert_contains "references/validation-scenarios.md" "Date-Only Block Revision Is Stale"
+assert_contains "references/validation-scenarios.md" "Missing Managed Block Rule Needs Refresh"
 assert_contains "references/validation-scenarios.md" "block-version"
 
 printf 'PASS: root AGENTS block refresh contract is complete\n'

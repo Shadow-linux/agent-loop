@@ -60,6 +60,8 @@ assert_contains "references/external-skill-adapters.md" "Expanding the approved 
 assert_contains "references/external-skill-adapters.md" "Authorization Status must be \`active\` immediately before dispatch"
 assert_contains "references/external-skill-adapters.md" "Mark the authorization \`consumed\` after the approved dispatch group returns"
 assert_contains "references/external-skill-adapters.md" "Feature Close Review requires a new resolution record"
+assert_contains "references/external-skill-adapters.md" "| Feature Completion Check |"
+assert_contains "references/external-skill-adapters.md" "| Pause / Close |"
 assert_contains "references/stage-guides.md" "Do not reuse a previous review resolution"
 
 assert_contains "templates/subagent-brief.md" "## Dispatch Authorization"

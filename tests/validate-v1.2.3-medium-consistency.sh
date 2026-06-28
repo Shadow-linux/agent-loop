@@ -17,7 +17,9 @@ assert_contains "references/runtime.md" "a Delivery Contract needs creation, hum
 
 # M2: Drift Check must not route directly to close.
 assert_contains "references/stage-guides.md" "Drift Check does not route directly to Close"
-assert_contains "references/stage-guides.md" "next stage: Project Memory Update when long-term facts changed; otherwise Feature Completion Check"
+assert_contains "references/stage-guides.md" "next stage: Project Memory Update / Requirement Reconciliation when long-term project facts, requirement lifecycle, Delivery Phase status, or Feature Mapping changed; otherwise Feature Completion Check"
+assert_contains "references/workflow-checklists.md" "Do not route directly to Close from Drift Check."
+assert_contains "references/workflow-checklists.md" "Next stage is Project Memory Update / Requirement Reconciliation when long-term project facts, requirement lifecycle, Delivery Phase status, or Feature Mapping changed; otherwise Feature Completion Check."
 
 # M3: remote-entry must outrank existing-project when both could match.
 assert_contains "references/runtime.md" "Entry priority: remote-entry is evaluated before existing-project"
@@ -47,7 +49,20 @@ assert_contains "references/feature-completion-check.md" "Did feature-level Stan
 # M8: blocked state must recommend one next stage, not a slash-separated pair.
 assert_contains "references/runtime.md" "Blocked must resolve to exactly one recommended next stage"
 assert_contains "references/runtime.md" "Ask Human when the blocker is a missing decision, access, approval, environment, or external input; Diagnose Failure when the blocker is caused by observed system behavior, failing verification, or unclear technical cause"
+assert_contains "references/runtime.md" "verification not run but runnable -> Verify"
+assert_contains "references/runtime.md" "external blocker with no immediate unblock path -> Pause"
+assert_contains "references/feature-completion-check.md" "## Blocked Routing Matrix"
+assert_contains "references/feature-completion-check.md" "missing human decision/access/approval -> Ask Human"
+assert_contains "references/feature-completion-check.md" "verification not run but runnable -> Verify"
 assert_contains "references/design.md" "Choose exactly one unblock stage"
+
+assert_contains "references/stage-guides.md" "If submit succeeded and the feature appears done, recommend Feature Completion Check, not Close."
+assert_contains "references/submit-and-integrate.md" "Submit / Integrate does not route directly to Close."
+assert_contains "references/submit-and-integrate.md" 'recommend `Feature Completion Check` if the feature appears done'
+assert_contains "references/workflow-checklists.md" "If submit succeeded and the feature appears done, recommend Feature Completion Check, not Close."
+assert_contains "references/project-guidance.md" 'a managed block has a date-only, malformed, or different `block-version`; exact full template block-version match is required'
+assert_contains "references/project-guidance.md" "Managed Block Rule is missing, because future agents cannot know the update boundary"
+assert_contains "references/validation-scenarios.md" "for blocked state, recommend exactly one unblock stage: Ask Human, Diagnose Failure, Verify, Pause, or Targeted Feature Scan"
 
 assert_contains "references/validation-scenarios.md" "Medium Consistency Routing"
 

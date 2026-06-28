@@ -378,6 +378,45 @@ Never create a conditional file just because the template exists.
 
 ## Completion Criteria
 
+## Deep Onboarding Quality Gate
+
+Deep onboarding is complete only when a newcomer can answer the primary business flow, core domain, core domain data flow, data model, service startup/config, verification strategy, and change-risk map.
+
+A large onboarding-db with many thin files is usable but incomplete when core modules, flows, data, startup, or verification docs lack evidence-backed detail.
+
+Treat Deep Scan as a newcomer handoff package, not a directory tree. File count, Expanded minimum files, and closed-looking indexes are not enough if the docs cannot guide a new maintainer through the system.
+
+Before marking Deep onboarding complete, confirm these quality packs:
+
+### Core Domain Handoff Pack
+
+- Core domain summary: business purpose, users/actors, core capabilities, core constraints, and where the domain logic lives.
+- Core module docs: each core module explains purpose, boundary, entrypoints, config/dependencies, core call chain, data touched, APIs/protos, tests, risks, and Evidence Chain.
+- Core flow docs: each primary flow explains trigger, entrypoint, step-by-step call chain with file/symbol evidence, data writes, async/failure/retry behavior, verification, risks, and Evidence Chain.
+- Core data docs: data model explains entities, key fields, storage mapping, owners, writers/readers, lifecycle/state, related flows, tests, evidence, and confidence.
+
+### Service Startup / Config Matrix
+
+Deep Scan must document how each runnable service starts and what it depends on:
+
+| Service / Process | Command | Config Path | Required Dependencies | Port / Protocol | Health / Failure Signal | Evidence | Confidence |
+|---|---|---|---|---|---|---|---|
+
+If startup cannot be verified, mark it `unknown` with evidence and a follow-up in Batch Human Review; do not silently omit it.
+
+### Newcomer Readiness Check
+
+Before completion, ask whether the onboarding-db lets a newcomer:
+
+- run or reason about each service/process
+- trace the primary business flow from external entrypoint to domain logic to storage/external systems
+- identify the owning module for a change
+- understand core entities and state transitions
+- find tests or substitute verification for core behavior
+- see operational risks, retry/failure paths, and change-impact risks
+
+If any answer is no, say `Onboarding DB draft is usable but incomplete.` and record the missing pack in Discovery Coverage Matrix and Batch Human Review.
+
 Deep Scan is complete only when:
 
 - Onboarding DB Layout Mode is recorded, defaulting to Expanded unless the human explicitly requested Compact/Standard or the agent is preserving an existing Compact/Standard onboarding-db
@@ -390,6 +429,7 @@ Deep Scan is complete only when:
 - at least one core flow exists or is explicitly unknown; **complex flows are split into multiple diagrams when one is insufficient**
 - module index and module detail coverage are clear: each core module has either a dedicated `modules/<module>.md` or an explicit reason it remains index-only
 - persistent data is documented in `domain/data-model.md` or Compact equivalent, with **complete entity relationship map** (not a minimal subset) and **model usage flow map**
+- Core Domain Handoff Pack and Service Startup / Config Matrix are evidence-backed, or each missing item is explicitly marked incomplete with owner/follow-up
 - core docs include Evidence Chain entries for key module, flow, state, async/job, and verification claims
 - **all diagrams have "How To Read" notes and "Step-by-Step Walkthrough"**
 - commands and tests have evidence/confidence

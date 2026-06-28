@@ -152,6 +152,8 @@ Rules:
 
 - use Brainstorm / Clarify to shape the demand before writing the requirement document
 - ask only questions that affect requirement clarity, scope, users/operators, constraints, non-goals, or acceptance direction
+- run a lightweight Phase Scan when the demand looks larger than one feature, has MVP/later scope, contains multiple journeys or roles, crosses multiple technical boundaries, or the human uses staged-delivery language such as "先做核心闭环" or "后面再补"
+- when Phase Scan triggers, propose a `Delivery Phases` table for human review before feature construction
 - write a requirement document draft only after the intent is clear enough for human review
 - The human-reviewed requirement document is stored under `.agent-loop/requirements/<archive-date>-<topic>/` after the human confirms the document should be recorded
 - Reviewed/recorded does not mean accepted for implementation
@@ -164,6 +166,7 @@ Write after confirmation:
 
 - `.agent-loop/requirements/<archive-date>-<topic>/README.md`
 - `.agent-loop/requirements/<archive-date>-<topic>/requirement.md`
+- optional `notes.phase-<n>-<slug>.md` when a phase has detailed human decisions or reference direction
 - optional `.agent-loop/requirements/INDEX.md` only when it already exists, index triggers apply, or the human asks for an inventory/backlog view
 
 Exit:
@@ -375,6 +378,8 @@ Rules:
 - Group all materials from the same intake/topic together: requirement documents, prototypes, screenshots, feedback, recordings, links, and follow-up notes.
 - Do not overwrite old requirement materials when requirements change.
 - Old requirement set README files remain valid; do not require migration only because `Lifecycle`, `Summary`, or `Status History` is missing.
+- Run Phase Scan for complex requirement archives. Recommend `Delivery Phases` in the requirement set `README.md` when the requirement will likely become multiple features, has MVP/later scope, crosses multiple boundaries, or needs staged human delivery confirmation.
+- Do not create a feature merely because a phase exists. A phase becomes feature work only after the human chooses to start that accepted phase or phase slice.
 
 ### Future / Deferred Requirement Intake
 
@@ -400,6 +405,7 @@ Write:
 
 - `.agent-loop/requirements/<archive-date>-<topic>/README.md`
 - `.agent-loop/requirements/<archive-date>-<topic>/requirement.*` only when source material is provided or the human confirms creating a source record
+- optional `.agent-loop/requirements/<archive-date>-<topic>/notes.phase-<n>-<slug>.md` when a phase needs a separate accepted note
 - `.agent-loop/requirements/<archive-date>-<topic>/prototype.*` only when source material is provided or copied after confirmation
 - optional feedback, screenshot, recording, design-link, meeting-note, and other source files inside the same requirement set
 - optional change-request files inside the same requirement set
@@ -433,6 +439,7 @@ Rules:
 
 - before fallback product synthesis, run Stage Helper Capability Scan; when a product/PRD helper is available, use it as the method quality bar while writing accepted output to `product.md` and `notes.md`
 - create `product.md` only when useful; skip for narrow bugfixes or clear technical tasks
+- if source requirements are still too broad for one feature, recommend returning to requirement `Delivery Phases` before writing `product.md`
 - inspect `project.md` Product Context and Domain Language before asking product questions
 - ask one blocking product question at a time
 - include the agent's recommended answer when asking
@@ -460,7 +467,7 @@ Load:
 
 Rules:
 
-- after mandatory helper resolution, use the loaded Brainstorming Adapter; use fallback only for recorded `unavailable` or `load-failed`, while keeping output in `product.md`, `spec.md`, and `notes.md`
+- after mandatory helper resolution, use the loaded Brainstorming Adapter; use fallback only for recorded `unavailable` or `load-failed`, while writing accepted output to the current stage artifact. Requirements Discussion writes `requirements/<set>/requirement.md` and `README.md`; Product Brief / Feature Spec writes `product.md`, `spec.md`, and `notes.md`.
 - Ask 1-5 high-impact questions.
 - Default to one question at a time.
 - Questions must affect scope, UX, data, architecture, testing, or acceptance.
@@ -544,6 +551,7 @@ Include:
 - feature type: normal, maintenance-fix, or follow-up
 - problem/goal
 - product brief reference when `product.md` exists
+- requirement Delivery Phase reference when the feature implements a phase or phase slice
 - scope
 - stories
 - acceptance criteria
@@ -1046,11 +1054,11 @@ Exit:
 
 - docs and code reality aligned enough for the next lifecycle gate
 - Drift Check does not route directly to Close
-- next stage: Project Memory Update when long-term facts changed; otherwise Feature Completion Check
+- next stage: Project Memory Update / Requirement Reconciliation when long-term project facts, requirement lifecycle, Delivery Phase status, or Feature Mapping changed; otherwise Feature Completion Check
 
 ## Project Memory Update
 
-Entry: after Drift Check, before Submit / Integrate, Pause, or Close when long-term project facts changed.
+Entry: after Drift Check, before Submit / Integrate, Pause, or Close when long-term project facts, requirement lifecycle, Delivery Phase status, or Feature Mapping changed.
 
 Load:
 
@@ -1079,8 +1087,10 @@ Do not write:
 Requirement Reconciliation:
 
 - If a feature references requirement sets, check whether their lifecycle status should become `in-progress`, `implemented`, `superseded`, `rejected`, or remain unchanged.
+- If the requirement set uses `Delivery Phases`, check whether the referenced phase status and `Feature Mapping` should become `in-progress`, `implemented`, `superseded`, `rejected`, `deferred`, or remain unchanged.
+- If the feature implements a Delivery Phase but `Feature Mapping` is still `none`, propose a requirement README backfill even when no `project.md` facts changed.
 - Do not edit `requirement.md` or other source files for lifecycle/status updates.
-- Write requirement lifecycle/status changes to requirement set `README.md` and optional `requirements/INDEX.md` after human confirmation.
+- Write requirement lifecycle/status, Delivery Phase status, and Feature Mapping changes to requirement set `README.md` and optional `requirements/INDEX.md` after human confirmation.
 - Write implemented capabilities to `project.md` only when they are durable project facts.
 - Write deferred or future work to requirements, not project memory.
 
@@ -1122,7 +1132,7 @@ Write after confirmation:
 
 Exit:
 
-- recommend Close if feature is done
+- If submit succeeded and the feature appears done, recommend Feature Completion Check, not Close.
 - recommend next task/story if work remains
 - recommend Pause if submit is prepared but not performed
 

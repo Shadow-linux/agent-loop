@@ -56,6 +56,8 @@ Compare versions as semantic versions in `major.minor.patch` form, not as plain 
 - managed block markers are missing for `agent-loop` maintained sections, unless the file is intentionally fully human-owned and the human has deferred managed block adoption
 - managed guidance version is older than the current local `agent-loop` skill version, unless the human explicitly defers the refresh
 - a managed block from the current root AGENTS template is missing, has no `block-version`, or has an older `block-version` than the current template, even when the file-level managed guidance version matches
+- a managed block has a date-only, malformed, or different `block-version`; exact full template block-version match is required
+- Managed Block Rule is missing, because future agents cannot know the update boundary
 
 `CLAUDE.md` is stale when it duplicates independent long-lived rules, diverges from `AGENTS.md`, or does not clearly point Claude Code to `AGENTS.md`.
 
@@ -186,12 +188,15 @@ Use this protocol when root `AGENTS.md` exists and the project already uses `age
 4. Compare each managed block `section` and `block-version` against the current root AGENTS template.
 5. If the file-level managed version is equal but a block-version is missing or older than the current template, treat that block as stale.
 6. Treat bare skill-version-only block revisions such as `block-version:1.2.3` as stale because they cannot distinguish same-version template revisions.
-7. If a managed block exists in the current template but is missing from root AGENTS.md, treat it as a missing managed block and propose adding it.
-8. Copy the exact start marker metadata for each refreshed section from the current root AGENTS template unless the section source must point at a target-project artifact. If the target project uses legacy `agent-loop/` instead of `.agent-loop/`, adjust only the `source`; keep the template `block-version` unchanged.
-9. Run AGENTS Cleanup / Migration Review for content outside managed blocks before writing.
-10. Present a Human Review Summary with block, current version, template version, proposed change, risk, and human decision.
-11. Preserve all content outside managed blocks unless the human explicitly approves cleanup, replacement, or migration.
-12. Update only approved managed blocks and record the guidance status in `project.md`.
+7. Treat date-only block revisions such as `block-version:2026-06-27` as stale because they are not tied to the agent-loop template version.
+8. Treat malformed or different block-version values as stale; exact full template block-version match is required.
+9. If a managed block exists in the current template but is missing from root AGENTS.md, treat it as a missing managed block and propose adding it.
+10. Missing Managed Block Rule means root guidance refresh is required because future agents cannot know the update boundary.
+11. Copy the exact start marker metadata for each refreshed section from the current root AGENTS template unless the section source must point at a target-project artifact. If the target project uses legacy `agent-loop/` instead of `.agent-loop/`, adjust only the `source`; keep the template `block-version` unchanged.
+12. Run AGENTS Cleanup / Migration Review for content outside managed blocks before writing.
+13. Present a Human Review Summary with block, current version, template version, proposed change, risk, and human decision.
+14. Preserve all content outside managed blocks unless the human explicitly approves cleanup, replacement, or migration.
+15. Update only approved managed blocks and record the guidance status in `project.md`.
 
 ## AGENTS Cleanup / Migration Review
 
@@ -240,6 +245,7 @@ Keep it short and long-lived:
 - when working in a subdirectory, check for the nearest directory-level `AGENTS.md`
 - when creating a new long-lived boundary directory, propose a directory-level `AGENTS.md` before or alongside the directory creation
 - keep new human source materials in requirement set directories under `.agent-loop/requirements/`, not flat files
+- suggest requirement `Delivery Phases` in requirement set `README.md` when a complex requirement needs staged human delivery confirmation before feature construction
 - keep future/deferred work and backlog items in requirement sets and optional `requirements/INDEX.md`, not in `project.md`; do not edit `requirement.md` or other source files for lifecycle/status updates
 - Agent Ownership: agents steer the loop, classify the current stage, recommend exactly one next action, propose missing artifacts, and own diagnosis, sequencing, verification, drift checks, and project-memory updates
 - Stage Helper Capability Scan: before every helper-friendly stage listed in `skill-routing.md`, inspect the current runtime for available helper skills/plugins such as Superpowers; use matching helpers as methods while keeping agent-loop control

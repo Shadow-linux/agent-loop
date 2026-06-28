@@ -106,6 +106,22 @@ When requirements change, add a new file to the requirement set or create a new 
 
 Future/deferred work and backlog items belong in requirement sets and optional `requirements/INDEX.md`, not in `project.md`.
 
+Use `Delivery Phases` in requirement set `README.md` when the requirement is too large for one feature, has MVP/later scope, crosses multiple boundaries, or needs staged human delivery confirmation:
+
+```md
+## Delivery Phases
+
+| Phase | Goal | Scope | Out Of Scope | Acceptance Direction | Status | Feature Mapping | Source Notes |
+|---|---|---|---|---|---|---|---|
+| Phase 1: <name> |  |  |  |  | proposed | none | none |
+```
+
+Phase notes are optional source files when one phase needs detailed accepted direction:
+
+```text
+notes.phase-<n>-<slug>.md
+```
+
 Recommend `templates/requirements-index.md` only when there are more than 10 requirement sets, many external paths, shared source requirements, frequent supersession, or the human asks for an inventory/backlog view.
 
 ## Requirement Document
@@ -135,12 +151,45 @@ Source: conversation | file | link | prototype | mixed
 
 ## Acceptance Direction
 
+## Delivery Phases
+
+Use only when staged delivery has been discussed and human-reviewed. If used, mirror or summarize the accepted phase table in the requirement set `README.md`, because README owns lifecycle and mapping updates.
+
+| Phase | Goal | Scope | Out Of Scope | Acceptance Direction | Status |
+|---|---|---|---|---|---|
+| Phase 1: <name> |  |  |  |  | proposed |
+
 ## Open Questions
 
 ## Source Conversation Summary
 ```
 
 Write the human-reviewed document as `.agent-loop/requirements/<archive-date>-<topic>/requirement.md` after the human confirms the document should be recorded. Do not write it directly into a feature workspace. Feature `product.md` and `spec.md` derive from this source and link back to the requirement set.
+
+## Phase Note
+
+Use this shape for requirement set phase notes:
+
+```md
+# Phase <N> Note: <Title>
+
+Recorded: YYYY-MM-DD
+Status: proposed | accepted | deferred | superseded
+Feature: not created | .agent-loop/features/<feature>/
+Activation Gate:
+
+## Goal
+
+## Human Decisions
+
+## Scope Direction
+
+## Out Of Scope
+
+## Acceptance Direction
+
+## Conversion Rule
+```
 
 ## Root `AGENTS.md`
 
@@ -451,6 +500,8 @@ Feature Type: normal | maintenance-fix | follow-up
 Source Requirements:
 - Requirement:
 - Prototype:
+- Delivery Phase / Phase Slice:
+- Phase Note:
 
 Product Brief: product.md | none
 Related Feature:

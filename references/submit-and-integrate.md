@@ -156,6 +156,8 @@ Append to `notes.md`:
 
 After submit:
 
-- recommend `Close` if the feature is done
+Submit / Integrate does not route directly to Close.
+
+- recommend `Feature Completion Check` if the feature appears done
 - recommend the next task/story if work remains
 - recommend `Pause` if submission is prepared but not performed

@@ -69,6 +69,72 @@ Do not move the requirement source into a feature workspace when implementation 
 
 Feature `product.md` and `spec.md` may be derived from accepted requirements, but they are implementation views. They do not replace the requirement set and do not own requirement lifecycle.
 
+## Requirement Delivery Phases
+
+Use Delivery Phases when a requirement is too large to turn directly into one clear feature, or when humans need to confirm delivery order before implementation.
+
+Recommend Delivery Phases when any are true:
+
+- one requirement will likely become multiple features
+- the requirement has MVP / later enhancement / Post-MVP scope
+- multiple user journeys, roles, permissions, tenants, or business objects are involved
+- multiple technical boundaries are involved, such as frontend, backend, payment, permissions, jobs, operations, or reporting
+- the human says or implies "先做核心闭环", "后面再补", "下一轮做", "暂时不做", "以后加", or similar staged delivery language
+- feature scope is growing too broad before Feature Spec or Work Breakdown
+- the requirement README is becoming a long roadmap instead of a readable status view
+
+Do not force Delivery Phases for small bugfixes, clear single-feature technical tasks, source-material archiving, or one user story that can be delivered in a single feature.
+
+Delivery Phases belong in requirement set `README.md`, not in `project.md`:
+
+```md
+## Delivery Phases
+
+| Phase | Goal | Scope | Out Of Scope | Acceptance Direction | Status | Feature Mapping | Source Notes |
+|---|---|---|---|---|---|---|---|
+| Phase 1: MVP |  |  |  |  | accepted | none | none |
+```
+
+Field meanings:
+
+| Field | Meaning |
+|---|---|
+| `Phase` | human-readable phase number and name |
+| `Goal` | business/product outcome for this phase |
+| `Scope` | capabilities included in this phase |
+| `Out Of Scope` | explicitly excluded from this phase |
+| `Acceptance Direction` | human-readable completion direction, not a full test plan |
+| `Status` | `proposed | accepted | deferred | in-progress | implemented | superseded | rejected` |
+| `Feature Mapping` | feature spec path when converted, otherwise `none` |
+| `Source Notes` | phase note, prototype, feedback, or change request that shapes the phase |
+
+Phase status uses the same vocabulary as requirement lifecycle where possible.
+
+Phase slice means a smaller scope inside one accepted Delivery Phase. It is not a bundle of multiple phases.
+
+Phase notes are optional source files for phase-specific human decisions:
+
+```text
+notes.phase-<n>-<slug>.md
+```
+
+Use a phase note when a phase has detailed product direction, references, screenshots, constraints, or accepted follow-up decisions. A feature created from that phase must list the phase note under `Source Requirements`.
+
+Phase to feature rules:
+
+- A phase may map to one feature when scope is clear.
+- A phase may map to multiple features when one feature would be too broad.
+- A normal feature should implement one accepted phase or one phase slice by default. Do not combine multiple phases into one feature just because the human asks to move quickly.
+- If the human wants to implement multiple phases together, stop and ask whether to merge/rewrite the Delivery Phases first, or choose one phase/slice for the current feature.
+- A deferred phase must not create a feature until the human chooses to start it.
+- A phase that changes substantially should be updated only after human confirmation; if the old direction is replaced, mark it `superseded` and link the new phase or requirement set.
+- Feature `spec.md` should name the requirement set and Delivery Phase it implements.
+- When a feature starts or closes, update `Feature Mapping` and phase status in the requirement set `README.md` after human confirmation.
+- If Drift Check finds a completed or active feature that implements a phase but the phase still has `Feature Mapping: none`, treat that as requirement memory drift and propose a README backfill.
+- Mark a phase `implemented` only after the implementing feature has fresh verification/review evidence for the accepted phase scope; feature close still requires its separate close confirmation.
+
+Ask before creating, reordering, accepting, deferring, rejecting, superseding, or converting Delivery Phases. Agent may draft a phase table as a proposal, but the human owns the delivery order and scope decision.
+
 ## Source File Immutability
 
 Requirement source files are immutable by default.
@@ -149,6 +215,13 @@ Lifecycle:
 
 Summary:
 - One-line summary:
+
+Delivery Phases:
+- Use only when the requirement needs staged delivery.
+
+| Phase | Goal | Scope | Out Of Scope | Acceptance Direction | Status | Feature Mapping | Source Notes |
+|---|---|---|---|---|---|---|---|
+| Phase 1: <name> |  |  |  |  | proposed | none | none |
 
 Source Files:
 - Requirement: requirement.md

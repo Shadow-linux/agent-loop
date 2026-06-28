@@ -27,7 +27,8 @@ Agent 的职责是主导研发闭环。你主要负责提出目标、确认关�
 | “agent-loop skill 更新了，检查一下这个项目的 AGENTS.md 要不要同步” | root guidance 版本检查 / 托管块刷新 | 比较 root `AGENTS.md` 的 managed version 和当前 skill 版本，过期时提议刷新托管块 |
 | “我要做一个登录功能” | 需求归档 -> 功能规范（Feature Spec） | 整理需求，生成功能规范 |
 | “这是需求文档和原型图” | 需求归档（Requirement Archive） | 归档人类原始材料到 `.agent-loop/requirements/` |
-| “先帮我梳理产品需求” | 产品说明（Product Brief） | 生成 feature 级 `product.md` |
+| “先帮我梳理这个需求，不要实现” | 需求讨论（Requirements Discussion） | 形成 requirement document，必要时建议 Delivery Phases |
+| “先帮我梳理这个 feature 的产品意图” | 产品说明（Product Brief） | 生成 feature 级 `product.md` |
 | “把这个需求拆成任务” | 任务拆分（Work Breakdown） | 生成 `tasks.md` 或复杂任务目录 |
 | “设计测试方案” | 测试设计（Test Design） | 生成 `tests.md`、测试矩阵、E2E 候选用例 |
 | “开始执行这个 task” | 计划确认 / 执行任务（Plan Gate / Execute Task） | 先确认 plan，再按 TDD、验证、review、drift 执行 |
@@ -283,6 +284,27 @@ Agent 不应该把这类未来需求写进 `project.md` 当 planned capability�
 
 旧格式 requirement set `README.md` 仍然有效；缺少 lifecycle 字段不算 stale。`requirement.md` 等原始 source files 默认不可变，需求状态变化写入 README / INDEX。
 
+### 需求分期
+
+当一个需求比较大、会拆成多个 feature，或你想先做 MVP、后面再补增强时，可以说：
+
+```text
+这个需求比较大，先帮我拆成 phase。
+```
+
+Agent 会建议在 requirement set 的 `README.md` 中维护：
+
+```md
+## Delivery Phases
+
+| Phase | Goal | Scope | Out Of Scope | Acceptance Direction | Status | Feature Mapping | Source Notes |
+|---|---|---|---|---|---|---|---|
+```
+
+`Delivery Phases` 用来让人类确认“现在做哪一段、哪些先不做、做到什么算完成”。它只属于 requirement 层，不会把 project memory、ADR、product brief、feature spec、task、plan 或 close 流程都改成 phase 模式。
+
+它不是 task，也不是 feature；当你确认开始某个 phase 后，Agent 再创建对应 feature，并在 `spec.md` 里引用这个 phase。后续阶段只在需要时引用 phase，或在 Drift Check / Requirement Reconciliation 时回填 phase 状态和 `Feature Mapping`。
+
 ### 产品需求
 
 你可以说：
@@ -298,6 +320,8 @@ product.md
 ```
 
 这里记录用户目标、产品共识、领域语言、非目标，以及和后续 spec 的关系。
+
+如果你只是想讨论和整理需求，并明确不要开始实现，Agent 应先走 Requirements Discussion，把内容记录到 `.agent-loop/requirements/<date-topic>/`；只有进入某个 feature 时才生成 feature 级 `product.md`。
 
 ### 功能规范
 
@@ -321,6 +345,8 @@ spec.md
 - 行为变化
 - 依赖和非目标
 - 未决问题
+
+如果来源需求使用了 `Delivery Phases`，`spec.md` 应明确引用一个已确认 phase，或该 phase 内部的一个更小切片；不要为了加快推进把多个 phase 合并进同一个 feature。多期一起做之前，Agent 应先回到 requirement README 让你确认是否重写或合并 phase。
 
 确认 `spec.md` 后，才进入任务拆分。
 
@@ -406,7 +432,7 @@ plan 需要包含：
 
 如果当前 Agent CLI 携带 Superpowers 或其他阶段 helper，Brainstorm、Plan Gate、Execute、Diagnose、Verify、Review 和已批准的 Subagent Execution 会先强制解析对应 helper。Agent 按 `superpowers:<name>`、`<name>` 的顺序检查，找到后必须加载完整 skill；只有记录 `unavailable` 或 `load-failed` 后才能走 agent-loop fallback。
 
-helper 只增强阶段内部方法，不接管 agent-loop。产物仍写回 feature 的 `product.md`、`spec.md`、`plan.md`、`notes.md`、`handoffs/*`；不会因为 Superpowers 的默认规则创建 `docs/superpowers/*`。阶段选择、人类门禁、task done、project memory、submit、pause 和 close 仍由 agent-loop 控制。
+helper 只增强阶段内部方法，不接管 agent-loop。产物仍写回当前 agent-loop 阶段的正式 artifact：需求讨论写回 `requirements/<set>/README.md` / `requirement.md`，feature 工作写回 `product.md`、`spec.md`、`plan.md`、`notes.md`、`handoffs/*`；不会因为 Superpowers 的默认规则创建 `docs/superpowers/*`。阶段选择、人类门禁、task done、project memory、submit、pause 和 close 仍由 agent-loop 控制。
 
 ### 任务完成标准
 
@@ -587,7 +613,7 @@ Agent 会先检查：
 |---|---|---|
 | `.agent-loop/project.md` | 长期项目记忆、当前工作、当前恢复动作 | 任务日志、原始测试输出、需求待办 |
 | `.agent-loop/onboarding-db/` | 给人类读的项目理解文档、图、证据链 | 当前 task 状态 |
-| `requirements/` | 人类原始需求材料归档、需求生命周期、需求待办 | Agent 改写后的执行计划 |
+| `requirements/` | 人类原始需求材料归档、需求生命周期、需求待办、可选 Delivery Phases | Agent 改写后的执行计划 |
 | `product.md` | feature 级产品意图 | 工程执行细节 |
 | `spec.md` | feature 行为规范 | 执行日志 |
 | `tasks.md` | 任务拆分和状态 | 原始测试输出 |

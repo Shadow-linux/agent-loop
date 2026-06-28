@@ -2,6 +2,14 @@
 
 ## 1.2.3 — 2026-06-19
 
+### Requirement Delivery Phases
+- Added optional requirement-level `Delivery Phases` for complex requirements that need MVP/later scope, staged delivery confirmation, or likely multiple downstream features before feature construction.
+- Defined phase ownership under requirement set `README.md`, with optional `notes.phase-<n>-<slug>.md`, while keeping `requirement.md` as stable source material rather than lifecycle state.
+- Clarified that phases are human-readable delivery slices, not feature workspaces, tasks, plans, ADRs, or project memory.
+- Required phased feature specs to reference one accepted phase or one single-phase slice; agents must stop before combining multiple phases into one feature unless the human first confirms phase rewrite or merge.
+- Added Drift Check / Requirement Reconciliation rules so phase status and `Feature Mapping` are backfilled in the requirement README when feature implementation changes requirement lifecycle state.
+- Updated requirement README, root AGENTS, Usage, stage guide, workflow checklist, and document-template guidance to keep phase behavior scoped to requirements and referenced by downstream feature artifacts only when applicable.
+
 ### Requirement Lifecycle / Backlog
 - Added requirement lifecycle/backlog rules so future or deferred work is captured in requirement sets and optional `requirements/INDEX.md`, not in `project.md`.
 - Extended requirement set README and requirements index templates with lifecycle, backlog/deferred, in-progress, implemented, superseded, and rejected views while keeping source files free-form.
@@ -19,6 +27,7 @@
 - Added per-managed-block `block-version` metadata and root AGENTS refresh protocol so same-version templates can still detect missing or stale managed blocks.
 - Shortened the Managed Block Rule in root AGENTS guidance while preserving confirmation, outside-content protection, and cleanup / migration review requirements.
 - Clarified that target-project AGENTS refreshes must copy the full template block revision, such as `block-version:1.2.3-20260625`; bare skill-version-only values like `block-version:1.2.3` are stale.
+- Extended root AGENTS refresh checks so date-only or malformed block versions and missing Managed Block Rule are treated as stale startup guidance.
 
 ### Medium Consistency Fixes
 - Clarified Auto Mode stop conditions for Delivery Contract creation, acceptance, and breaking changes across runtime guidance.
@@ -26,6 +35,13 @@
 - Added explicit helper scan coverage for Work Breakdown, Test Design, E2E Discovery, and Technical Design / Code Context.
 - Added onboarding mode recording and guided-onboarding fallback routing when onboarding-db is missing.
 - Aligned Standards Review triggers across Task Done Gate, Review, Feature Completion Check, and workflow checklists.
+- Hardened Submit / Integrate exits so successful submission routes to Feature Completion Check instead of direct Close.
+- Added a shared blocked routing matrix covering Ask Human, Diagnose Failure, Verify, Pause, and Targeted Feature Scan.
+
+### Deep Onboarding Quality
+- Added a Deep Onboarding Quality Gate so Deep scans are judged as newcomer handoff packages, not by file count alone.
+- Required Core Domain Handoff Pack and Service Startup / Config Matrix coverage for Deep onboarding completion.
+- Added validation coverage for thin expanded onboarding-db outputs with many small files but insufficient core flow, data, startup, verification, or change-risk detail.
 
 ### Complex Artifact Thresholds
 - Replaced hard Complex Artifact recommendation thresholds with a simpler assessment model: stories > 3 pauses for assessment, but does not itself recommend Complex Artifact Mode.
