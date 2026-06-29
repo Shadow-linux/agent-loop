@@ -1,43 +1,40 @@
 # Onboarding Batch Review
 
-Document Language: 中文
-Created:
-Last Updated:
-Batch:
-Human Review Status: draft
+## Batch <n>: <name>
 
-## Review Principle
+## Scope
 
-No file-count completion. A batch passes only when the planned learning outcome is readable, evidenced, and reviewed.
-
-## Batch Summary
-
-| Item | Result | Evidence | Reviewer Decision |
-|---|---|---|---|
+-
 
 ## Files Changed
 
-| File | Action | Why This File Exists | Quality Gate | Coverage Impact |
+| File | Change Type | Topic | Review Status |
+|---|---|---|---|
+
+## Evidence Read
+
+| Evidence | Why It Was Needed | Used In |
+|---|---|---|
+
+## Coverage Changes
+
+| Topic | Old Status | New Status | Score | Reason |
 |---|---|---|---|---|
 
-## Deep-Dive Quality Check
+## Score
 
-| Deep-Dive Doc | Phase Detail | Code Evidence | Data / State | Failure Paths | Verification | Concrete Example | Decision |
-|---|---|---|---|---|---|---|---|
+| Topic | Wireframe | Use Cases | Data Objects | State | Evidence | Failure / Troubleshooting | Change Guidance | Readability | Overall |
+|---|---|---|---|---|---|---|---|---|---|
 
-## Coverage Updates
+## Gaps / Unknowns
 
-| Topic | Previous Status | New Status | Reason | Human Decision |
-|---|---|---|---|---|
+| Gap | Impact | Next Action | Human Needed? |
+|---|---|---|---|
 
-## Human Decision
+## Recommended Next Batch
 
-Allowed choices:
+-
 
-```text
-approve batch
-approve selected
-revise selected
-defer selected
-reject batch
-```
+## Human Review Status
+
+-

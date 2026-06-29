@@ -1,6 +1,6 @@
 # Project Architecture Init
 
-Use this file when initializing a new project, onboarding an existing project, proposing code layout, recording architecture profile, or creating durable code boundaries.
+Use this file when initializing a new project, adopting an existing project, proposing code layout, recording architecture profile, or creating durable code boundaries.
 
 ## Core Rule
 

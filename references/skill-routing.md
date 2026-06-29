@@ -103,7 +103,7 @@ If Superpowers is available, these map cleanly:
 - `verification-before-completion`: Verify and Close; completion still requires agent-loop evidence, review, drift, memory, and human gates.
 - `requesting-code-review`: Review; findings go to `notes.md` and cannot directly mark tasks `done`.
 - `finishing-a-development-branch`: Submit / Integrate and Close decision support; agent-loop submit/close gates still apply.
-- `subagent-driven-development`: for explicitly parallel independent tasks, or bounded large-project onboarding scans when the human confirms; briefs and returns go to `handoffs/*`.
+- `subagent-driven-development`: for explicitly parallel independent tasks, or bounded large Project Entry Scan lanes when the human confirms; briefs and returns go to `handoffs/*`.
 
 Browser, Chrome, and computer-use tools are execution tools, not assumptions. Use them for Web E2E only after `e2e-discovery.md` has established the app URL, start command, auth/test data, and appropriate automation route.
 
@@ -115,9 +115,9 @@ Subagents are optional. In v1, use them only when:
 - or the human explicitly confirms one bounded task group after the agent lists task boundaries, subagent briefs, stop conditions, and main-agent review responsibility
 - Feature Auto-Loop or Task Auto-Run approval is not subagent approval
 - tasks or scan lanes are independent
-- each subagent has a bounded task/story or onboarding scan lane
+- each subagent has a bounded task/story or Project Entry Scan lane
 - each implementation subagent receives a `templates/subagent-brief.md`-style brief
-- onboarding scan subagents return findings, evidence, confidence, uncertainties, files read, and suggested `project.md` entries
+- Project Entry Scan subagents return findings, evidence, confidence, uncertainties, files read, and suggested `project.md` entries
 - outputs can be merged back into `tasks.md`, `tests.md`, `notes.md`, or proposed `project.md`
 
 Default remains one task in the current agent session.

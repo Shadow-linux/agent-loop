@@ -1,6 +1,6 @@
 # Project Guidance
 
-Use this file when initializing/onboarding a project, syncing long-term project rules, or deciding whether `AGENTS.md` / `CLAUDE.md` should exist.
+Use this file when initializing or adopting a project, syncing long-term project rules, or deciding whether `AGENTS.md` / `CLAUDE.md` should exist.
 
 ## Core Split
 
@@ -62,7 +62,7 @@ Compare versions as semantic versions in `major.minor.patch` form, not as plain 
 
 `CLAUDE.md` is stale when it duplicates independent long-lived rules, diverges from `AGENTS.md`, or does not clearly point Claude Code to `AGENTS.md`.
 
-Onboarding, re-adoption, or project initialization is not complete until:
+Project Entry Scan, re-adoption, or project initialization is not complete until:
 
 ```text
 AGENTS.md status = present | created | human-deferred
@@ -73,7 +73,7 @@ If the human defers guidance repair, record the defer decision and reason in `pr
 
 ## Root Guidance Default
 
-For Init Project and Existing Project Onboarding, the default recommendation is to create or update:
+For Init Project and Project Entry Scan, the default recommendation is to create or update:
 
 ```text
 AGENTS.md
@@ -82,14 +82,14 @@ CLAUDE.md -> AGENTS.md
 
 Only write after human confirmation.
 
-For any project that is initialized, onboarded, re-adopted, or otherwise managed by `agent-loop`, root guidance must be checked every time the agent enters the project:
+For any project that is initialized, Project Entry scanned, re-adopted, or otherwise managed by `agent-loop`, root guidance must be checked every time the agent enters the project:
 
 ```text
 AGENTS.md status: present | created | stale | missing | human-deferred
 CLAUDE.md status: points-to-AGENTS | created-pointer | stale | missing | human-deferred
 ```
 
-Onboarding is not complete if root `AGENTS.md` or `CLAUDE.md` is missing or stale unless the human explicitly defers it. Record the decision in `project.md`.
+Project Entry Scan is not complete if root `AGENTS.md` or `CLAUDE.md` is missing or stale unless the human explicitly defers it. Record the decision in `project.md`.
 
 Guidance language should follow the project language when it is clear from existing docs or human preference.
 
@@ -143,7 +143,7 @@ hard-constraints
 Rules:
 
 - `agent-loop` may propose updates inside managed blocks when the source artifact changes.
-- Managed blocks must include `section`; they should include `source` when the content comes from a stable artifact such as `.agent-loop/project.md`, `.agent-loop/project/*.md`, `.agent-loop/onboarding-db/README.md`, or `ARCHITECTURE.md`.
+- Managed blocks must include `section`; they should include `source` when the content comes from a stable artifact such as `.agent-loop/project.md`, `.agent-loop/project/*.md`, or `ARCHITECTURE.md`.
 - The root `meta` managed block should include `version:<agent-loop-version>` so future agents can compare the synced guidance version against the current local skill version.
 - Every managed block should include `block-version:<agent-loop-version>-<YYYYMMDD>` so future agents can refresh specific blocks when the file-level version is unchanged. Use `block-version:<agent-loop-version>-<YYYYMMDD>`; do not shorten it to the skill version alone.
 - Content outside managed blocks is human/project-owned. Do not rewrite it automatically.
@@ -204,7 +204,7 @@ Use this protocol when root `AGENTS.md` exists and the project already uses `age
 
 ## AGENTS Cleanup / Migration Review
 
-Run this review when creating or updating root `AGENTS.md`, during Existing Project Onboarding, during Re-Adopt, during root guidance version refresh, or when root guidance is stale.
+Run this review when creating or updating root `AGENTS.md`, during Project Entry Scan, during Re-Adopt, during root guidance version refresh, or when root guidance is stale.
 
 Inspect existing root `AGENTS.md` and `CLAUDE.md`. Classify content outside managed blocks before writing:
 
@@ -226,7 +226,7 @@ Rules:
 - Do not delete, move, or rewrite human-owned content automatically.
 - If a conflicting rule is intentional, keep it only after human confirmation and record the override in project memory when it affects future agents.
 - If long-term project memory is migrated, preserve the source location as evidence and update `project.md` or enterprise project-memory detail files only after human confirmation.
-- Root `AGENTS.md` should keep only startup-critical summaries. Rich long-term memory belongs in `.agent-loop/project.md`, enterprise `.agent-loop/project/*.md`, `.agent-loop/onboarding-db/`, or project docs.
+- Root `AGENTS.md` should keep only startup-critical summaries. Rich long-term memory belongs in `.agent-loop/project.md`, enterprise `.agent-loop/project/*.md`, or project docs.
 - `CLAUDE.md` should point to `AGENTS.md`; if it contains duplicated or conflicting rules, include it in the same cleanup / migration review.
 
 ## Root `AGENTS.md` Should Contain
@@ -244,7 +244,7 @@ Keep it short and long-lived:
 - if `project.md` says `Status: remote-entry`, read `.agent-loop/remote.md` and verify the remote project before acting
 - if the project used `agent-loop` before but recent development bypassed it, route to Re-Adopt Agent Loop Project before new feature work
 - Operational Support Guard: if the human asks to test, run, deploy, switch account/config/model/provider, check quota/rate limits, diagnose production, arrange rollout, or use existing code to solve an operational problem, default to read-only operational support; do not create a feature, edit code, change config, deploy, or run destructive commands unless the human confirms feature implementation or an operational change
-- if the human reports a bug, regression, post-close correction, field/schema/algorithm/API change, test failure, screenshot issue, QA/user feedback, or "small tweak", route to Feature Follow-up / Flow-back before creating a new feature or editing code only after project memory exists; otherwise preserve the report and route through Init Project or Existing Project Onboarding first
+- if the human reports a bug, regression, post-close correction, field/schema/algorithm/API change, test failure, screenshot issue, QA/user feedback, or "small tweak", route to Feature Follow-up / Flow-back before creating a new feature or editing code only after project memory exists; otherwise preserve the report and route through Init Project or Project Entry Scan first
 - Feature Follow-up / Flow-back should inspect Active / Paused / Closed features, use the 30-day default lookback as a default rather than a hard boundary, read candidate `spec.md`, `tasks.md`, `tests.md`, and `notes.md`, and present a Candidate Match Matrix before recommending flow-back, linked new feature, maintenance-fix, or investigate-first
 - when working in a subdirectory, check for the nearest directory-level `AGENTS.md`
 - when creating a new long-lived boundary directory, propose a directory-level `AGENTS.md` before or alongside the directory creation
@@ -296,7 +296,7 @@ Use `.agent-loop/project.md` for richer memory:
 - directory map
 - directory guidance inventory
 - test commands
-- onboarding uncertainties
+- Project Entry uncertainties
 - known constraints
 - long-term decisions
 

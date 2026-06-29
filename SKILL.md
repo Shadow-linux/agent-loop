@@ -85,11 +85,8 @@ references/product-brief.md        feature product brief and product consensus r
 references/delivery-contracts.md   durable producer-consumer interface handoff rules
 references/e2e-discovery.md        Web E2E environment discovery and recording rules
 references/large-projects.md       rules for complex or 100k+ LOC projects
-references/existing-project-onboarding.md layered scan for taking over old projects
-references/project-onboarding-scan.md    single Deep Onboarding flow, focused scope, and onboarding-db drafting
-references/onboarding-db.md              onboarding-db lifecycle, reading, writing, freshness, and problem routing
-references/onboarding-db-templates.md    spec-first onboarding-db template and deep-dive quality contracts
-references/onboarding-diagnostics.md     startup failure, change impact, and state-change trace procedures
+references/project-entry-scan.md Project Entry Scan for taking over old projects safely
+references/onboarding-knowledge-base.md Evidence-Graph + DDD newcomer project understanding rules
 references/feature-follow-up.md          bug/change flow-back to recent features
 references/complex-artifacts.md    triggered tasks/tests/plans directory mode
 references/implementation-planning.md construction-grade task/story planning rules
@@ -122,36 +119,32 @@ CHANGELOG.md                        skill maintenance history; append meaningful
 3c. Classify the entry scenario.
 4. Load the stage guide for the current scenario.
 4a. Run Stage Helper Capability Scan for the current stage. For a mandatory helper-backed stage, load `references/skill-routing.md` and `references/external-skill-adapters.md`, resolve canonical and alias names, load the complete helper before stage actions when found, and record the resolution. Use fallback only after recording `unavailable` or `load-failed`.
-5. Load `references/project-guidance.md` during project init/onboarding/re-adoption, when root guidance is missing/stale, or when long-term agent instructions may need sync.
-6. Load `references/project-memory-mode.md` during init, onboarding, re-adoption, drift check, project memory update, or when `project.md` is large, hard to read, or likely insufficient for future continuation.
-7. Load `references/project-architecture-init.md` during init/onboarding, when proposing project structure, when recording architecture profile, or when a task creates durable code boundaries.
+5. Load `references/project-guidance.md` during project init, Project Entry Scan, or re-adoption, when root guidance is missing/stale, or when long-term agent instructions may need sync.
+6. Load `references/project-memory-mode.md` during init, Project Entry Scan, re-adoption, drift check, project memory update, or when `project.md` is large, hard to read, or likely insufficient for future continuation.
+7. Load `references/project-architecture-init.md` during init or Project Entry Scan, when proposing project structure, when recording architecture profile, or when a task creates durable code boundaries.
 8. Load `references/remote-project-discovery.md` when the human says the project is remote, local files contain remote-entry hints, or local/remote/container execution is unclear. Do not treat an empty local directory alone as remote.
 9. Load `references/requirement-management.md` before copying, moving, renaming, indexing, or referencing human source requirements.
 10. Load `references/product-brief.md` when a feature needs product intent, product consensus, user stories, product scope, or PRD-like synthesis.
 11. Load `references/e2e-discovery.md` before designing or executing Web E2E/browser verification.
 12. Load `references/delivery-contracts.md` when the human requests cross-boundary handoff/API/interface documentation, or when the agent detects a likely downstream consumer boundary such as frontend/backend, service, event, public data, SDK/library, UI state, or runtime behavior. Delivery Contracts are not created by default.
-13. Load `references/existing-project-onboarding.md` when taking over an existing project without reliable `agent-loop` memory.
-13a. There is only one project-understanding onboarding mode: Deep Onboarding. Deep Onboarding starts with accepted `onboarding-spec.md` and accepted `onboarding-plan.md`, then writes reviewed batches of deep-dive docs. Deep Onboarding has no total document count cap. Do not offer Quick / Deep / Targeted onboarding modes.
-14. Load `references/project-onboarding-scan.md` when the human asks to understand/onboard/take over an existing project, asks for durable onboarding docs, or asks for focused understanding of one module, flow, async task, deployment path, state transition, or problem area.
-15. Load `references/onboarding-db.md` when reading, writing, refreshing, correcting, or relying on `.agent-loop/onboarding-db/`.
-16. Load `references/onboarding-db-templates.md` before creating or updating onboarding-db documents or diagrams.
-17. Load `references/onboarding-diagnostics.md` when a human says setup docs do not work, asks what a change might break, asks why a state/status changed, or asks who/what updates a state field.
-17a. Load `references/feature-follow-up.md` when the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, screenshot issue, behavior tweak, "small tweak", test failure, or QA/user feedback that may belong to a recent feature.
-18. Load `references/large-projects.md` when the repo is large, old, unfamiliar, multi-package, or likely above 100k LOC.
-19. Load `references/complex-artifacts.md` when story/task/test/plan complexity crosses its trigger conditions.
-20. Load `references/implementation-planning.md` before writing or approving `plan.md` for a task/story.
-21. Load `references/recovery-and-backfill.md` when project memory is missing, stale, incomplete, when continuing work from code reality, or when re-adopting a project after development happened outside `agent-loop`.
-21a. Load `references/onboarding-db.md` and `references/recovery-and-backfill.md` when `project.md` or root guidance claims onboarding-db exists, is expanded/reviewed, or should be the newcomer entrypoint, but `.agent-loop/onboarding-db/README.md` or indexed onboarding-db files are missing, stale, or contradictory.
-22. Load `references/feature-completion-check.md` after verification/project-memory updates, before starting a new feature when another is active, and when resuming an active feature that may already be complete.
-23. Load `references/human-review-summary.md` before asking the human to approve or confirm a stage, unless the confirmation is trivial enough for a 3-line summary.
-24. Load `references/skill-routing.md` before every mandatory helper-backed stage and before fallback for any other helper-friendly stage.
-25. Load `references/external-skill-adapters.md` before every mandatory helper-backed stage. Agent-loop paths, gates, task status, project memory, submit, pause, and close rules override external skill defaults.
-25a. Before leaving a mandatory helper-backed stage, verify its Stage Helper Resolution record exists and that fallback was used only with `unavailable` or `load-failed`.
-26. Load `references/submit-and-integrate.md` before creating commits, PR text, merge notes, or any submission claim.
-27. Summarize current state in the response.
-28. Recommend exactly one next stage.
-29. Ask for human confirmation before mutating files, crossing stages, or enabling an auto mode.
-30. After the stage, update artifacts, summarize evidence, and ask whether to continue, revise, pause, submit, or close.
+13. Load `references/project-entry-scan.md` when taking over an existing project without reliable `agent-loop` memory. This is now a Project Entry Scan only: build safe project memory, guidance status, commands, boundaries, and uncertainties. Do not create `.agent-loop/onboarding-db/`, module docs, flow docs, onboarding diagrams, or old Quick / Deep / Targeted onboarding artifacts during Project Entry Scan.
+13a. Load `references/onboarding-knowledge-base.md` when the human asks for newcomer-facing docs, durable project understanding, guided learning paths, or onboarding-db construction. Run it only after Project Entry Scan or reliable project memory. Use Evidence Graph first, then accepted Onboarding Spec, Onboarding Tasks, single-file module/flow docs by default, wireframe architecture flow diagrams as the preferred flow expression, coverage scoring, and reviewed batches.
+14. Load `references/feature-follow-up.md` when the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, screenshot issue, behavior tweak, "small tweak", test failure, or QA/user feedback that may belong to a recent feature.
+15. Load `references/large-projects.md` when the repo is large, old, unfamiliar, multi-package, or likely above 100k LOC.
+16. Load `references/complex-artifacts.md` when story/task/test/plan complexity crosses its trigger conditions.
+17. Load `references/implementation-planning.md` before writing or approving `plan.md` for a task/story.
+18. Load `references/recovery-and-backfill.md` when project memory is missing, stale, incomplete, when continuing work from code reality, or when re-adopting a project after development happened outside `agent-loop`.
+18a. Load `references/recovery-and-backfill.md` when `project.md` or root guidance claims legacy onboarding-db exists, is expanded/reviewed, or should be the newcomer entrypoint, but `.agent-loop/onboarding-db/README.md` or indexed onboarding-db files are missing, stale, or contradictory. Treat legacy onboarding-db as evidence only; do not run a guided onboarding flow.
+19. Load `references/feature-completion-check.md` after verification/project-memory updates, before starting a new feature when another is active, and when resuming an active feature that may already be complete.
+20. Load `references/human-review-summary.md` before asking the human to approve or confirm a stage, unless the confirmation is trivial enough for a 3-line summary.
+21. Load `references/skill-routing.md` before every mandatory helper-backed stage and before fallback for any other helper-friendly stage.
+22. Load `references/external-skill-adapters.md` before every mandatory helper-backed stage. Agent-loop paths, gates, task status, project memory, submit, pause, and close rules override external skill defaults.
+22a. Before leaving a mandatory helper-backed stage, verify its Stage Helper Resolution record exists and that fallback was used only with `unavailable` or `load-failed`.
+23. Load `references/submit-and-integrate.md` before creating commits, PR text, merge notes, or any submission claim.
+24. Summarize current state in the response.
+25. Recommend exactly one next stage.
+26. Ask for human confirmation before mutating files, crossing stages, or enabling an auto mode.
+27. After the stage, update artifacts, summarize evidence, and ask whether to continue, revise, pause, submit, or close.
 
 ## Artifact Layout
 
@@ -160,7 +153,7 @@ CHANGELOG.md                        skill maintenance history; append meaningful
   remote.md optional local-entry pointer for remote projects
   project.md
   project/ optional enterprise memory detail files
-  onboarding-db/ optional human-readable project onboarding database
+  onboarding-db/ Evidence-Graph + DDD human-readable project understanding docs; legacy layouts are evidence only until migrated
   requirements/
     <archive-date>-<topic>/
       README.md
@@ -209,11 +202,12 @@ If the local directory is only a remote-project entry point, create only thin lo
 - In complex projects, every task plan must name boundaries, files/areas to inspect, verification commands, and rollback notes.
 - A task cannot be marked `done` from implementation alone. After code changes, move the task to `review` until fresh test/verification evidence, required review, and drift decision are recorded.
 - Task Done Gate: mark a task `done` only after implementation is complete, required tests or substitute verification have run fresh, evidence is recorded in `notes.md`, lightweight Spec Review is recorded, Standards Review is recorded when triggered, drift decision is recorded, and `tasks.md` links or names the evidence.
-- During large-project onboarding, recommend bounded subagent scanning when available and human-confirmed; otherwise use single-agent layered scan.
-- During existing-project onboarding, route durable project understanding through the single Deep Onboarding mode. Deep Onboarding writes onboarding-db only after human confirmation, starts with accepted `onboarding-spec.md` and accepted `onboarding-plan.md`, then writes reviewed batches of deep-dive docs with Batch Human Review. Do not use Compact/Standard/Expanded layout modes as generation targets; document count is controlled by project evidence, required-core onboarding topics, newcomer handoff needs, and human review.
-- When onboarding discovers stable project facts missing from project memory, propose or perform project memory backfill after human confirmation. Do not duplicate long-term project facts across onboarding-db and `project.md`; onboarding-db teaches, project memory indexes current facts.
-- For focused questions about one module, flow, async task, deployment path, or problem area, use the same Deep Onboarding mode with a narrow spec/plan and one focused deep-dive doc or update.
-- When local and remote project reality are split, discover the remote environment before onboarding or initializing project memory.
+- During large Project Entry Scan, recommend bounded subagent scanning when available and human-confirmed; otherwise use single-agent layered scan.
+- During existing-project Project Entry Scan, create or propose only safe project memory, root guidance status, commands, boundaries, capabilities, and uncertainties. Do not create onboarding-db detail docs, module docs, flow docs, onboarding diagrams, onboarding-spec, or onboarding-tasks during Project Entry Scan.
+- During Evidence-Graph + DDD Onboarding, create or update onboarding-db only through `references/onboarding-knowledge-base.md`: build Evidence Graph, confirm Onboarding Spec, write Onboarding Tasks, then produce reviewed batches with single-file module/flow docs by default, wireframe architecture flow diagrams, coverage scoring, and no placeholder files.
+- When Project Entry Scan discovers stable project facts missing from project memory, propose or perform project memory backfill after human confirmation.
+- For focused questions about one module, flow, async task, deployment path, or problem area, answer from existing docs/code as chat or operational support unless the human explicitly authorizes feature/fix work. Do not create focused onboarding-db artifacts.
+- When local and remote project reality are split, discover the remote environment before Project Entry Scan or initializing project memory.
 - Historical execution evidence belongs in `notes.md`.
 - Web E2E capability is discovered from the real project environment. Stable E2E capability belongs in `project.md`; feature-specific E2E cases belong in `tests.md` or `tests/e2e/*`.
 - Human source requirements are archived as requirement set directories, not new flat files. Each requirement set groups the human's requirement, prototype, feedback, screenshots, recordings, links, and follow-up notes for one intake event or topic.
@@ -231,9 +225,9 @@ If the local directory is only a remote-project entry point, create only thin lo
 - During re-adoption, do not start new feature work first. Compare current code/tests/scripts against existing `agent-loop` memory, propose backfill, ask human confirmation, then resume or start feature work.
 - For bug reports, regressions, post-close corrections, field/schema changes, algorithm changes, API mismatches, screenshot issues, behavior tweaks, "small tweaks", and QA/test failures, do not default to a new feature. First run Feature Follow-up And Flow-back: inspect recent features in the default 30-day lookback window, present candidate feature matches, and ask whether to flow the work back to an owning feature, create a linked new feature, create a maintenance-fix feature, or investigate first.
 - When no recent feature owns a narrow bugfix/internal correction, use `Feature Type: maintenance-fix` under `.agent-loop/features/YYYY-MM-DD-fix-<slug>/`. Maintenance fix is not a naked edit and still requires spec/tasks/tests/plan, verification, review, drift, project-memory impact check, Feature Completion Check, and close.
-- During Project Entry and re-adoption, verify the existence of long-term memory index targets before trusting them. If `project.md` says onboarding-db exists, lists onboarding-db documents, or root guidance tells newcomers to read onboarding-db, but the directory or README is missing, report onboarding memory drift and route to reconcile/backfill before guided onboarding or feature work.
-- Root `AGENTS.md` and `CLAUDE.md` are default project guidance artifacts for new/onboarded projects, created only after human confirmation.
-- Every initialized, onboarded, re-adopted, or managed project must re-check root `AGENTS.md` and `CLAUDE.md`; onboarding is incomplete if either is missing or stale unless the human explicitly defers it.
+- During Project Entry and re-adoption, verify the existence of long-term memory index targets before trusting them. If `project.md` says legacy onboarding-db exists, lists onboarding-db documents, or root guidance tells newcomers to read onboarding-db, but the directory or README is missing, report memory drift and route to reconcile/backfill before feature work.
+- Root `AGENTS.md` and `CLAUDE.md` are default project guidance artifacts for new or adopted projects, created only after human confirmation.
+- Every initialized, Project Entry scanned, re-adopted, or managed project must re-check root `AGENTS.md` and `CLAUDE.md`; Project Entry is incomplete if either is missing or stale unless the human explicitly defers it.
 - `AGENTS.md` is the primary maintained startup guidance. `CLAUDE.md` must load, symlink to, include, or briefly point to `AGENTS.md`; do not maintain duplicated root guidance bodies.
 - When creating or updating root `AGENTS.md`, run AGENTS Cleanup / Migration Review: preserve human-owned content, surface workflow rules that conflict with current agent-loop, and migrate long-term project facts to `.agent-loop/project.md` or enterprise project memory only after human confirmation.
 - Root and directory guidance language follows the project language when clear; default to English only when project language is unclear. Preserve stable artifact names, stage names, and file paths in English.

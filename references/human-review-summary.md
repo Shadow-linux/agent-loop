@@ -17,8 +17,8 @@ risk / blocker / human decision = never hidden
 
 Use before human confirmation for:
 
-- Project Entry / Existing Project Onboarding
-- Project Onboarding Scan / Onboarding DB
+- Project Entry / Project Entry Scan
+- legacy onboarding-db reference cleanup
 - Remote Project Discovery
 - Requirement Archive
 - Product Brief
@@ -79,7 +79,7 @@ skip this batch
 
 Use Batch Human Review for:
 
-- onboarding-db document creation or refresh
+- legacy onboarding-db reference cleanup when project memory or root guidance points to missing/stale docs
 - project memory backfill with multiple facts
 - AGENTS.md / CLAUDE.md or directory guidance updates
 - drift check backfill
@@ -164,18 +164,16 @@ For breaking changes, list every affected consumer, scan evidence, compatibility
 | Directory Map |  |  |  |  | accept / skip |
 | Domain Language |  |  |  |  | accept / skip |
 
-### Project Onboarding Scan Approval
+### Project Entry Scan Approval
 
 | Item | Summary | Evidence | Confidence | Human Decision |
 |---|---|---|---|---|
-| Path | safe-entry project memory only / Deep Onboarding |  |  | approve / revise |
-| Deep Scope | global newcomer handoff / focused topic |  |  | approve / revise |
-| Batch Cadence | default 1-3 deep-dive docs per review batch; no total document cap |  |  | approve / revise |
-| Scope |  |  |  | approve / revise |
+| Scope | safe project memory / root guidance / commands / boundaries / uncertainties |  |  | approve / revise |
 | Subagents | none / proposed lanes |  |  | approve / skip |
-| Write Plan | project memory / onboarding-db / guidance |  |  | approve / revise |
+| Explicit Non-Goals | no onboarding-db / no deep dives / no onboarding diagrams |  |  | approve / revise |
+| Write Plan | project memory / guidance |  |  | approve / revise |
 
-### Onboarding DB Batch
+### Legacy Onboarding-DB Reference Cleanup
 
 | File / Item | Action | Change Summary | Source Evidence | Confidence | Affects Long-Term Memory | Suggested Action |
 |---|---|---|---|---|---|---|

@@ -99,7 +99,7 @@ If three or more soft triggers are true, recommend enterprise mode and ask the h
 Check memory mode during:
 
 - Init Project
-- Existing Project Onboarding
+- Project Entry Scan
 - Re-Adopt Agent Loop Project
 - Drift Check when long-term facts changed
 - Project Memory Update

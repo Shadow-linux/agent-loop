@@ -1,50 +1,42 @@
-# Onboarding Coverage Matrix
+# Coverage Matrix
 
-Document Language: 中文
-Created:
-Last Updated:
-Last Verified:
-Confidence:
-Source Evidence:
-Human Review Status: draft
+Coverage tracks topic readiness, not file count.
 
-## Purpose
+| Topic | Type | Doc Path | Score | Status | Missing Evidence | Next Action |
+|---|---|---|---|---|---|---|
 
-Coverage tracks learning outcomes, not file existence. `newcomer-ready requires an accepted deep-dive doc` for required-core topics.
-
-## Status Values
+## Status Definitions
 
 | Status | Meaning |
 |---|---|
-| discovered | found but not planned |
-| planned | included in onboarding spec / plan |
-| needs-deep-trace | required-core but not deeply documented |
-| draft-deep-dive | deep-dive doc exists but has not passed human review |
-| newcomer-ready | accepted deep-dive doc teaches the topic with evidence |
-| supporting-summary | summarized in README/maps; no standalone deep-dive needed |
-| blocked-by-unknown | missing code evidence or business confirmation blocks completion |
-| not-applicable | explicitly not relevant |
+| discovered | 证据图中发现，但尚未计划 |
+| planned | 已进入 Onboarding Spec / Tasks |
+| in-progress | 当前 batch 正在写 |
+| draft | 草稿存在，但未 review |
+| needs-review | 等待人类或 Agent review |
+| newcomer-ready | 评分 >= 4/5 且人类确认新人可读 |
+| stale | 代码现实已变化，需要刷新 |
+| blocked-by-unknown | 缺少代码证据或业务确认 |
+| not-applicable | 明确不适用 |
 
-## Coverage Table
+## Score Dimensions
 
-| Topic | Core Role | Canonical Location | Planned Batch | Evidence | Confidence | Status | Missing For Newcomer-Ready | Human Review |
-|---|---|---|---|---|---|---|---|---|
+| Dimension | Score | Notes |
+|---|---|---|
+| Required diagram set present |  |  |
+| Architecture diagram clarity |  |  |
+| State diagram clarity |  |  |
+| Timeline / sequence clarity |  |  |
+| Use case completeness |  |  |
+| Data object completeness |  |  |
+| State transition clarity |  |  |
+| Code evidence |  |  |
+| Failure troubleshooting |  |  |
+| Change guidance |  |  |
+| Newcomer readability |  |  |
 
-## Completion Decision
+Rules:
 
-Allowed decisions:
-
-```text
-Safe-entry project memory updated; onboarding-db docs not requested.
-Onboarding spec accepted; implementation not started.
-Onboarding batch <n> accepted; remaining topics incomplete.
-Onboarding DB draft is usable but incomplete.
-Deep onboarding complete.
-```
-
-Deep onboarding cannot complete while any required-core topic is `discovered`, `planned`, `needs-deep-trace`, `draft-deep-dive`, or `blocked-by-unknown`.
-
-## Split Rationale Audit
-
-| File | Type | Why It Exists | Merge Candidate? |
-|---|---|---|---|
+- Below 4/5 cannot be `newcomer-ready`.
+- Below 3/5 must enter next batch or be `blocked-by-unknown`.
+- Every formal topic should include at least architecture/boundary + ASCII state diagram. Module and flow docs should also include Timeline / sequence diagrams by default. Mermaid flowchart / sequenceDiagram is preferred for normal flow and timing; ASCII is preferred for state-machine / decision diagrams and complex examples. Swimlane-style ownership lanes are optional supporting detail, but the timeline explanation is required for module/flow docs unless explicitly exempted in the accepted spec.

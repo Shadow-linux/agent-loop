@@ -1,53 +1,38 @@
-# Existing Project Onboarding Scan
+# Project Entry Scan For Existing Projects
 
 Use this file when taking over an existing codebase without reliable `agent-loop` memory, or when `project.md` is too thin to guide future feature work.
 
-If the existing codebase is remote and the local directory is only an entry point, load `remote-project-discovery.md` first. Do not run this onboarding against an empty local directory unless local-shadow mode has been selected and every finding will include remote evidence.
+This stage is safe-entry only. It does not generate newcomer documentation. Evidence-Graph + DDD Onboarding lives in `references/onboarding-knowledge-base.md` and should run only after Project Entry Scan or reliable project memory.
 
 ## Goal
 
-Do not read the whole repository. Build a trustworthy project map quickly, then route durable understanding into Deep Onboarding:
+Build enough evidence-backed project memory for safe continuation:
 
 ```text
-startup docs -> shallow structure -> commands -> architecture profile -> capabilities -> boundaries -> project memory gaps -> onboarding spec/plan proposal -> guidance -> uncertainties -> human confirmation
+startup docs -> shallow repo shape -> commands -> architecture profile -> capabilities -> boundaries -> guidance status -> uncertainties -> human confirmation
 ```
 
-The result is a draft `.agent-loop/project.md` that is useful enough for safe continuation, plus a Deep Onboarding proposal when the human wants durable project understanding. If onboarding discovers stable project facts missing from project memory, propose project memory backfill after human confirmation.
+Outputs are limited to:
 
-For remote projects, the draft `project.md` should live next to the remote source of truth when remote writes are allowed. If not, keep it in local-shadow mode and label code facts with remote location.
+- `.agent-loop/project.md` proposal or update
+- root `AGENTS.md` / `CLAUDE.md` status and repair proposal
+- stable command, boundary, capability, and uncertainty facts
+- recommended next stage, such as Start Feature, Operational Support, Requirement Archive, Re-Adopt, or Targeted Feature Scan
 
-## Onboarding Gate
+Do not create:
 
-This file is the entry scan. Do not turn it into a directory-first onboarding manual.
+- `.agent-loop/onboarding-db/`
+- `onboarding-spec.md`
+- `onboarding-tasks.md`
+- module / flow playbooks
+- onboarding diagrams
+- Quick / Deep / Targeted onboarding mode records
+- directory-first module/flow/runtime docs
 
-There is only one onboarding mode for durable project understanding: Deep Onboarding.
+If the human asks for newcomer-facing docs, durable onboarding docs, or a guided learning path, explain that Project Entry Scan must first establish safe project memory and offer one of two next actions:
 
-When the human asks to take over, understand, or continue an existing project:
-
-- first do the shallow entry scan needed for safe continuation
-- update/propose `project.md` facts that are stable and missing
-- if the human wants durable onboarding docs, route to Deep Onboarding
-- if the human asks a focused question, run Deep Onboarding with a narrow spec/plan and one focused deep-dive doc/update
-
-Deep Onboarding begins with:
-
-```text
-.agent-loop/onboarding-db/onboarding-spec.md
-.agent-loop/onboarding-db/coverage-matrix.md
-.agent-loop/onboarding-db/onboarding-plan.md
-```
-
-Do not create `modules/<module>.md`, `flows/<flow>.md`, `diagrams/*`, or many thin onboarding files. Required-core teaching belongs in reviewed `deep-dives/<topic>.md` docs.
-
-For Deep Onboarding or focused onboarding questions, load:
-
-```text
-project-onboarding-scan.md
-onboarding-db.md
-onboarding-db-templates.md
-```
-
-If the human only wants safe continuation and not onboarding docs, update/propose `project.md`, root guidance, and uncertainties only.
+1. run Project Entry Scan now so development can continue safely
+2. after reliable memory exists, run Evidence-Graph + DDD Onboarding through `references/onboarding-knowledge-base.md`
 
 ## Core Rules
 
@@ -55,17 +40,23 @@ If the human only wants safe continuation and not onboarding docs, update/propos
 - Code and tests are current fact.
 - CI/build scripts reveal real commands.
 - Low-confidence findings must be labeled, not silently treated as truth.
-- Do not start feature implementation during onboarding.
+- Do not read the whole repository.
+- Do not start feature implementation during Project Entry Scan.
 - Ask human confirmation before writing `.agent-loop/`, `project.md`, `AGENTS.md`, `CLAUDE.md`, or directory-level guidance.
-- Ask human confirmation before creating `.agent-loop/onboarding-db/` or onboarding diagrams.
-- Subagents are optional accelerators for large-project onboarding, not a dependency.
-- Use DDD-inspired architecture mapping, but record existing code reality. Do not rename or move code during onboarding.
-- Root `AGENTS.md` and `CLAUDE.md` are startup guidance artifacts for every `agent-loop`-managed project. During onboarding, check both. `CLAUDE.md` must load or point to `AGENTS.md`; do not maintain duplicated root guidance in two files.
-- Do not finish onboarding after writing only `.agent-loop/project.md`. Root guidance must be present, created, or explicitly deferred by the human, and that status must be recorded in `project.md`.
+- Subagents are optional accelerators for large Project Entry Scan only after human confirmation.
+- Use DDD-inspired architecture mapping when useful, but record existing code reality. Do not rename or move code during Project Entry Scan.
+- Root `AGENTS.md` and `CLAUDE.md` are startup guidance artifacts for every `agent-loop`-managed project. During Project Entry Scan, check both. `CLAUDE.md` must load or point to `AGENTS.md`; do not maintain duplicated root guidance in two files.
+- Do not finish Project Entry Scan after writing only `.agent-loop/project.md`. Root guidance must be present, created, or explicitly deferred by the human, and that status must be recorded in `project.md`.
+
+## Remote Projects
+
+If the existing codebase is remote and the local directory is only an entry point, load `remote-project-discovery.md` first. Do not scan an empty local directory as if it were the source of truth unless local-shadow mode has been selected and every finding will include remote evidence.
+
+For remote projects, the draft `project.md` should live next to the remote source of truth when remote writes are allowed. If not, keep it in local-shadow mode and label code facts with remote location.
 
 ## Large Project Trigger
 
-Treat onboarding as large or complex when any of these are true:
+Treat Project Entry Scan as large or complex when any of these are true:
 
 - roughly more than 100k lines of code
 - monorepo or workspace with multiple `apps/`, `packages/`, or `services/`
@@ -109,6 +100,7 @@ Subagents must not:
 
 - write `project.md`
 - create or update `AGENTS.md` / `CLAUDE.md`
+- create legacy onboarding-db documents
 - start feature implementation
 - make architecture decisions
 - claim global project understanding
@@ -177,7 +169,7 @@ Record commands with confidence:
   - Confidence: high
 ```
 
-### Layer 3b: Architecture Profile
+### Layer 4: Architecture Profile
 
 Classify with evidence:
 
@@ -197,7 +189,7 @@ domain / application-use-case / infrastructure-adapter / interface-controller / 
 
 Do not treat the adapter as a mandate. Framework convention and existing project reality win unless the human explicitly asks for architecture migration.
 
-### Layer 4: Capability Map
+### Layer 5: Capability Map
 
 Identify existing product or platform capabilities from public entry points:
 
@@ -218,7 +210,7 @@ Write capabilities with evidence:
   - Confidence: medium
 ```
 
-### Layer 5: Boundary Map
+### Layer 6: Boundary Map
 
 Identify durable boundaries:
 
@@ -234,7 +226,7 @@ Identify durable boundaries:
 
 Write them into `project.md` `Directory Map`.
 
-### Layer 6: Guidance Inventory
+### Layer 7: Guidance Inventory
 
 Find existing guidance:
 
@@ -252,12 +244,12 @@ Guidance: root only | has AGENTS.md | propose AGENTS.md | not needed | deferred
 
 Only propose directory `AGENTS.md` for long-lived boundaries. Do not create it during the scan without confirmation.
 
-### Layer 7: Uncertainty And Questions
+### Layer 8: Uncertainty And Questions
 
 Create an uncertainty list:
 
 ```md
-## Onboarding Uncertainties
+## Project Entry Uncertainties
 
 - Billing capability appears present, but no tests were found.
   - Evidence:
@@ -274,27 +266,29 @@ Before mutating files, summarize:
 ```text
 Project summary:
 Tech stack:
+Architecture profile:
 Capabilities:
 Boundaries:
 Commands:
 Guidance files:
 Low-confidence findings:
 Recommended project.md updates:
-Recommended onboarding path:
-Recommended onboarding-db updates:
+Explicitly not doing:
+- no onboarding-db generation
+- no module / flow playbooks
+- no onboarding diagrams
 Recommended AGENTS.md / CLAUDE.md updates:
 Human gate:
 ```
 
-For focused explanation requests, output only the narrow project memory backfill item needed for safe continuation. Do not produce a full `project.md` proposal unless the human confirms broader project onboarding.
+For focused explanation requests, answer from existing docs/code as chat or operational support. Do not produce a full `project.md` proposal unless the human confirms broader Project Entry Scan.
 
 ## Write After Confirmation
 
-After human confirmation, write or update:
+After human confirmation, write or update only confirmed items:
 
 ```text
 .agent-loop/project.md
-.agent-loop/onboarding-db/ only when Deep Onboarding docs are confirmed
 .agent-loop/requirements/
 .agent-loop/features/
 AGENTS.md
@@ -313,9 +307,9 @@ next stage selected
 
 ## Feature Continuation
 
-After onboarding:
+After Project Entry Scan:
 
-1. Ask what feature to continue or start.
-2. Do a targeted deep scan only for that feature's boundaries.
-3. Create or update the feature workspace.
+1. Ask what feature, operational task, or requirement to continue or start.
+2. If the selected work has unclear impact boundaries, do Targeted Feature Scan.
+3. Create or update the feature/requirement workspace only after human confirmation.
 4. Continue the normal agent-loop stages.

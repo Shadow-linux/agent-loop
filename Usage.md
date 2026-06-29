@@ -19,10 +19,10 @@ Agent 的职责是主导研发闭环。你主要负责提出目标、确认关�
 | 你可以这样说 | 会触发什么能力 | Agent 会做什么 |
 |---|---|---|
 | “帮我在这个项目里启用 agent-loop” | 初始化项目（Init Project） | 创建 `.agent-loop/project.md`、root `AGENTS.md`、`CLAUDE.md` 指针 |
-| “接管这个旧项目” | 旧项目接管（Existing Project Onboarding） | 扫描现有代码和文档，建立项目记忆 |
-| “深度接管这个项目，让新人能看懂” | Deep Onboarding | 先写 `onboarding-spec.md` 和 `onboarding-plan.md`，再分批写高质量 `deep-dives/<topic>.md` |
+| “接管这个旧项目” | Project Entry Scan | 浅层扫描现有代码和文档，建立安全继续工作的项目记忆 |
+| “深度接管这个项目，让新人能看懂” | Evidence-Graph + DDD Onboarding | 先确认 Project Entry Scan / 可靠项目记忆，再按 Evidence Graph → Onboarding Spec → Onboarding Tasks → 模块/流程 playbook 生成新人知识库 |
 | “我只想先知道怎么启动和测试” | 安全接管 / 项目记忆 | 建立项目记忆、root guidance 状态、关键命令、边界和未知项；不生成 onboarding-db 细节文档 |
-| “解释一下这个模块/流程/异步任务” | 聚焦 Deep Onboarding | 用窄范围 spec/plan 解释一个模块、流程、异步任务、部署路径或问题点，必要时沉淀一个 deep-dive doc |
+| “解释一下这个模块/流程/异步任务” | 聊天 / 操作支持 / Targeted Feature Scan | 先基于现有代码和文档解释；需要改代码或沉淀文档时再确认进入对应流程 |
 | “这个项目以前用过 agent-loop，但最近没维护” | 重新托管 / 回补（Re-Adopt / Recovery Backfill） | 以代码现实为准，回补 `.agent-loop/` 文档 |
 | “agent-loop skill 更新了，检查一下这个项目的 AGENTS.md 要不要同步” | root guidance 版本检查 / 托管块刷新 | 比较 root `AGENTS.md` 的 managed version 和当前 skill 版本，过期时提议刷新托管块 |
 | “我要做一个登录功能” | 需求归档 -> 功能规范（Feature Spec） | 整理需求，生成功能规范 |
@@ -119,7 +119,7 @@ Agent 不会直接覆盖整份 `AGENTS.md`。checker 也只报告，不写文件
 接管这个旧项目，先帮我搞明白现在是什么结构。
 ```
 
-Agent 会先做浅层扫描：
+Agent 现在会做 Project Entry Scan，也就是浅层、安全的项目入口扫描：
 
 - README / docs
 - package、脚本、测试命令
@@ -129,15 +129,15 @@ Agent 会先做浅层扫描：
 - 测试入口
 - 是否已有 `AGENTS.md` / `CLAUDE.md`
 
-然后向你推荐：
+它只会推荐或生成：
 
-| 路径 | 适合什么时候 | 会生成什么 |
-|---|---|---|
-| 安全接管 / 项目记忆 | 你想尽快开始开发 | `.agent-loop/project.md`、root guidance 状态、关键命令、边界、未知项 |
-| Deep Onboarding | 你想让新人系统看懂项目 | `onboarding-spec.md`、`onboarding-plan.md`、`coverage-matrix.md`、高质量 `deep-dives/<topic>.md` |
-| 聚焦 Deep Onboarding | 你只关心一个问题 | 窄范围 spec/plan、一个聚焦 deep-dive doc 或现有 deep-dive doc 更新、必要的图和证据链 |
+| 内容 | 说明 |
+|---|---|
+| `.agent-loop/project.md` | 长期项目事实、关键命令、边界、能力、未知项 |
+| root guidance 状态 | `AGENTS.md` / `CLAUDE.md` 是否存在、是否过期、是否需要托管块刷新 |
+| 后续阶段 | Start Feature、Operational Support、Requirement Archive、Re-Adopt 或 Targeted Feature Scan |
 
-旧项目 onboarding 不算完成，除非：
+Project Entry Scan 不算完成，除非：
 
 - root `AGENTS.md` 已存在、已创建，或你明确暂缓
 - root `AGENTS.md` 有 agent-loop 托管块，或你明确暂缓
@@ -145,73 +145,27 @@ Agent 会先做浅层扫描：
 
 ---
 
-## 深度项目接管
+## 新人文档 / 深度理解
 
 你可以说：
 
 ```text
-做一次 Deep Onboarding，让新人能靠文档接手项目。
+我想让新人能靠文档接手项目。
 ```
 
-Deep Onboarding 现在只有一种模式：先定规格，再定计划，再小批量写高质量文档。它不是按目录平均铺文件，也不会先生成一堆很薄的 module/flow 文档。
+当前使用 Evidence-Graph + DDD Onboarding，不再通过旧 Quick / Deep / Targeted 模式、目录镜像式模板或一堆空心小文件生成新人文档。
 
-Deep 的展开顺序是：
+推荐流程：
 
-```text
-onboarding-spec.md
-→ onboarding-plan.md
-→ deep-dives/<topic>.md batch 1
-→ batch-review.md
-→ Coverage Matrix
-→ README / maps indexes
-→ project memory backfill proposal
-```
-
-Deep Onboarding 不设总文档数量上限；有多少核心领域、主流程、数据流、启动运行、验证策略和变更风险需要新人接手，就写多少。默认每批 1-3 篇 deep-dive docs 只是方便人类 review 的节奏，不是总量限制。每个新文件都要说明为什么必须独立成文、为什么不能合并、是不是 required-core、对新人有什么价值。
-
-人类给的示例只代表“详细程度和解释质量”，不代表固定 topic 名称、topic 数量、领域词汇或项目结构；除非当前项目证据支持，否则 Agent 不能照抄示例。
-
-复杂项目不会只画几张总览图就结束。核心领域、主流程、数据流、数据模型、服务启动配置、验证策略、变更风险都要能被新人读懂。图可以有颜色和 Mermaid / HTML 辅助视觉，但不能替代证据表、代码路径、符号、数据流、失败路径和验证说明。
-
-默认入口：
-
-```text
-.agent-loop/onboarding-db/README.md
-```
-
-核心文件：
-
-```text
-onboarding-spec.md
-onboarding-plan.md
-coverage-matrix.md
-deep-dives/<topic>.md
-batch-review.md
-```
-
-Deep onboarding 应该覆盖：
-
-| 内容 | 说明 |
-|---|---|
-| 一页项目总览 | 项目用途、技术栈、启动命令、测试命令、主要目录 |
-| 核心领域 | 业务目的、参与者、核心能力、约束、模块边界 |
-| 主流程 / 核心流程 | API/job/callback 入口、阶段、分支、失败路径、补偿 |
-| 数据流 / 数据模型 | 表、模型、实体关系、状态字段、谁读写、事实来源 |
-| 异步 / 队列 / 任务 | producer、queue、consumer、retry、幂等、最终一致性 |
-| 部署和运行 | 本地启动、环境变量、依赖服务、健康检查、日志 |
-| 测试和风险 | 测试命令、验证路径、已知风险、未知项 |
-| 证据链 | 文件路径、核心函数/对象/参数、这些证据证明什么 |
-
-旧项目里已有的 `modules/`、`flows/`、`runtime/`、`domain/`、`quality/` 等目录可以作为证据读取或兼容维护；新的 onboarding-db 默认不再按这些目录模板批量生成。
-
-图不是只放 Mermaid。每张图都必须配两段文字：
-
-| 说明 | 用途 |
-|---|---|
-| `How To Read` | 解释这张图回答什么问题、怎么看、颜色/形状/箭头是什么意思 |
-| `Step-by-Step Walkthrough` | 按执行顺序一步步解释从哪里开始、经过哪些节点、在哪里结束 |
-
-每次给你解释完项目后，Agent 还应该推荐一个下一步：继续读哪个文档、看哪个模块/流程、是否需要补一张聚焦图、是否运行启动/测试命令，或者是否回到 feature 开发。
+1. 先做 Project Entry Scan，保证项目记忆、root guidance、命令和边界是可靠的。
+2. 进入 Evidence-Graph + DDD Onboarding，先建立 `08-review/evidence-graph.md`，把模块、流程、数据对象、异步任务、配置、部署、风险和证据来源串起来。
+3. 写 `onboarding-spec.md`：读者、范围、模块计划、流程计划、DDD 映射、文件策略、图规则、质量门禁和批次计划。
+4. 让人类确认 spec / tasks 后，可以全盘执行计划内能写透的 onboarding-db；batch 是 Agent 组织和 review 单位，不是每批都要重新等人类授权。
+5. 模块默认写成 `02-modules/<module-name>.md`，流程默认写成 `03-flows/<flow-name>.md`；除非内容过大或人类要求，否则不要拆成一堆小文件。
+6. 模块和流程默认必须有架构/边界图、ASCII 状态图、Timeline / 时序图；普通流程图和时序图优先用 Mermaid flowchart / sequenceDiagram，状态机、复杂原理图和复杂示例图优先用 ASCII。
+7. 每个模块 / 流程文档都必须讲清楚用例、领域对象、数据对象、信息传递、状态变化、失败路径、排障、验证、示例和代码证据。
+8. 再按 coverage 和人类优先级分批推进。批次大小只是 review 节奏，不是总量限制。
+9. 未来网站只作为 Markdown 生成的阅读体验，不是本轮事实来源。
 
 ---
 
@@ -621,7 +575,7 @@ Agent 会先检查：
 | 文件 | 用途 | 不应该放什么 |
 |---|---|---|
 | `.agent-loop/project.md` | 长期项目记忆、当前工作、当前恢复动作 | 任务日志、原始测试输出、需求待办 |
-| `.agent-loop/onboarding-db/` | 给人类读的项目理解文档、图、证据链 | 当前 task 状态 |
+| `.agent-loop/onboarding-db/` | legacy/deferred 项目理解文档；当前只作为证据读取，不再自动生成 | 当前 task 状态、项目记忆事实源、新 onboarding 生成目标 |
 | `requirements/` | 人类原始需求材料归档、需求生命周期、需求待办、可选 Delivery Phases | Agent 改写后的执行计划 |
 | `product.md` | feature 级产品意图 | 工程执行细节 |
 | `spec.md` | feature 行为规范 | 执行日志 |

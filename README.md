@@ -30,7 +30,7 @@ Agent Loop fixes this with a repeatable, inspectable workflow:
 Message Intent → Chat And Requirements Discussion if needed
 → Project Entry → Remote Project Discovery if needed
 → Re-Adopt Agent Loop Project if needed
-→ Project Onboarding Scan if needed
+→ Project Entry Scan if needed
 → Operational Support if needed → Requirement Archive
 → Product Brief if needed → Brainstorm / Clarify if needed
 → Feature Follow-up / Flow-back if needed
@@ -67,13 +67,7 @@ Message Intent → Chat And Requirements Discussion if needed
   remote.md                           # optional local-entry pointer for remote projects
   project.md                          # Long-term project memory
   project/                            # optional enterprise memory detail files
-  onboarding-db/                      # optional human-readable project onboarding docs
-    maps/                             # optional categorized navigation docs
-    modules/                          # optional core module detail docs
-    flows/                            # optional flow detail docs
-    runtime/                          # optional run / async / deploy docs
-    domain/                           # optional data / state / glossary docs
-    quality/                          # optional testing / risk docs
+  onboarding-db/                      # Evidence-Graph + DDD project-understanding docs; legacy layouts are evidence only
   requirements/
     INDEX.md                           # optional inventory and backlog/deferred view
     YYYY-MM-DD-<topic>/
@@ -126,19 +120,19 @@ The agent will:
 - Load the right references
 - Propose `.agent-loop/project.md`, root `AGENTS.md`, and a `CLAUDE.md` pointer to `AGENTS.md`
 
-For existing projects, the agent separates safe-entry memory from durable onboarding docs:
+For existing projects, the agent separates safe-entry memory from newcomer learning docs:
 
 | Path | Use When |
 |---|---|
-| **Safe-entry project memory** | Build enough project memory, root guidance status, commands, boundaries, and uncertainties to continue work soon |
-| **Deep Onboarding** | Create durable `.agent-loop/onboarding-db/` docs through accepted `onboarding-spec.md`, accepted `onboarding-plan.md`, and reviewed batches of `deep-dives/<topic>.md` |
-| **Focused Deep Onboarding** | Preserve understanding for one module, flow, async task, deployment path, state transition, or problem area using the same Deep Onboarding gates with a narrow scope |
+| **Project Entry Scan** | Build enough project memory, root guidance status, commands, boundaries, capabilities, and uncertainties to continue work safely |
+| **Evidence-Graph + DDD Onboarding** | Build `.agent-loop/onboarding-db/` as a newcomer handoff knowledge base after Project Entry Scan or reliable project memory |
+| **Existing legacy onboarding-db files** | Evidence only until migrated through an accepted Onboarding Spec or focused update |
 
 ### 3. Start a Feature
 
 > "I want to add login."
 
-After project init/onboarding is accepted, the agent will:
+After project init / Project Entry Scan is accepted, the agent will:
 
 - Archive your requirement
 - Write `spec.md` with stories and acceptance criteria
@@ -150,15 +144,22 @@ After project init/onboarding is accepted, the agent will:
 
 > "带我熟悉这个项目，从哪里开始看？"
 
-If `.agent-loop/onboarding-db/` exists, the agent uses it first: it checks freshness, gives a short orientation, recommends one reading path, answers targeted questions, and proposes focused diagram/doc updates only after confirmation.
+Evidence-Graph + DDD Onboarding is the current durable project-understanding flow.
 
-There is only one durable project-understanding onboarding mode: Deep Onboarding. If onboarding-db is missing and the human only wants to continue work, the agent should update project memory/root guidance and not create onboarding-db detail docs.
+It builds `.agent-loop/onboarding-db/` from verified code evidence into macro-to-micro handoff docs:
 
-Deep Onboarding is spec-first: `onboarding-spec.md` defines readers, goals, required-core onboarding topic inventory, non-goals, and quality bar; `onboarding-plan.md` defines batch review cadence, split gate, batches, and review checkpoints; then the agent writes evidence-backed `deep-dives/<topic>.md` docs. Deep Onboarding has no total document count cap. Batch size is review pacing, not a total limit. Focused questions use the same flow with a narrow spec/plan and usually one focused deep-dive doc or update.
+- `08-review/evidence-graph.md` before formal docs
+- `onboarding-spec.md` for module/flow coverage, DDD mapping, file strategy, quality gates, and batch plan
+- `onboarding-tasks.md` for accepted batch execution
+- module playbooks under `02-modules/<module-name>.md` by default
+- flow playbooks under `03-flows/<flow-name>.md` by default
+- coverage matrix and reviewed batch records
 
-After each onboarding explanation, the agent should recommend one next action: read a specific doc, inspect a module/flow, generate or update a focused diagram, run a setup/verification command, or return to feature development.
+The agent must first confirm Project Entry Scan or reliable project memory, then build an Evidence Graph and present an Onboarding Spec for human review before writing or replacing formal onboarding-db files. Module and flow docs default to single long files, not many small files. Wireframe architecture flow diagrams are the preferred main way to express every module and flow process. The old Quick / Deep / Targeted onboarding modes and directory-first legacy generation flow are not used.
 
-Onboarding-db human-readable docs default to Chinese, while code symbols, file paths, commands, API names, and artifact names stay as-is. Legacy `modules/`, `flows/`, `runtime/`, `domain/`, and similar directories may be read as evidence in old projects, but new onboarding generation should not recreate directory-first template files.
+Existing legacy onboarding-db files may be read as evidence, but they are not trusted without checking code reality. They are migrated or replaced only through an accepted Onboarding Spec or focused update.
+
+For focused project-understanding questions, the agent should answer from existing code/docs as `chat` or `operational-support`. It should only enter feature/fix work, requirement discussion, or a future onboarding-document workflow after the human confirms that intent.
 
 ### 5. Continue Later
 

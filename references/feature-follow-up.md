@@ -8,7 +8,7 @@ Closed features are not dead history. If a bug or change clearly belongs to a re
 
 The human does not need to know whether to say "reopen feature", "new feature", or "drift". The agent owns the classification and recommends one next action.
 
-Feature Follow-up requires existing agent-loop memory. If `.agent-loop/` or legacy `agent-loop/` is missing, do not run this stage directly. First route through Project Entry and Existing Project Onboarding or Init Project, preserve the bug/change report as intake context, and return to Feature Follow-up only after project memory and feature history can be inspected.
+Feature Follow-up requires existing agent-loop memory. If `.agent-loop/` or legacy `agent-loop/` is missing, do not run this stage directly. First route through Project Entry Scan or Init Project, preserve the bug/change report as intake context, and return to Feature Follow-up only after project memory and feature history can be inspected.
 
 ## Trigger Phrases
 

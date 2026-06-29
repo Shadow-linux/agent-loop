@@ -4,7 +4,7 @@ Use this when the local directory is only an entry point for a remote project, o
 
 ## Trigger Conditions
 
-Enter this stage before Init Project or Existing Project Onboarding when any are true:
+Enter this stage before Init Project or Project Entry Scan when any are true:
 
 - the human says this is a remote project
 - the human mentions SSH, remote server, remote IDE, devcontainer, Docker container, Codespaces, tunnel, or remote workspace
@@ -64,7 +64,7 @@ In local shadow mode, every code fact, command, test result, and browser observa
 
 Ask only what cannot be safely discovered. Prefer reading existing connection docs first.
 
-Minimum required facts before onboarding:
+Minimum required facts before Project Entry Scan:
 
 - Remote Host or remote workspace identifier
 - Remote Path
@@ -165,7 +165,7 @@ Next Suggested Action: Verify remote connection and load remote project memory.
 Gate Mode: Strict Mode
 ```
 
-## Onboarding Route
+## Project Entry Route
 
 After remote facts are confirmed:
 
@@ -175,8 +175,8 @@ After remote facts are confirmed:
    - remote if remote writes are allowed
    - local-shadow if remote writes are not allowed
    - undecided if human decision is needed
-4. If remote memory is allowed, continue Existing Project Onboarding against the remote source of truth.
-5. If local-shadow mode is required, continue Existing Project Onboarding from the local entry but label all facts with remote evidence.
+4. If remote memory is allowed, continue Project Entry Scan against the remote source of truth.
+5. If local-shadow mode is required, continue Project Entry Scan from the local entry but label all facts with remote evidence.
 
 ## Stop Conditions
 

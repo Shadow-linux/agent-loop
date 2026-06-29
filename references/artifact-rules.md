@@ -36,7 +36,7 @@ New human source material should be archived inside a requirement set directory.
 | `remote.md` | how to find, verify, and access a remote project from a local entry directory | feature logs or project capabilities |
 | `project.md` | long-term project facts in simple mode; memory index and current state in enterprise mode | task logs, backlog lists, deferred requirements |
 | `project/*.md` | enterprise long-term project memory details | feature execution logs |
-| `onboarding-db/*` | human-readable project onboarding, reading paths, module/flow/boundary/deployment explanations, diagrams, evidence/confidence | current task status, feature execution logs, raw test output, human original requirements |
+| `onboarding-db/*` | Evidence-Graph + DDD human-readable project understanding docs when created through `onboarding-knowledge-base.md`; old layouts are legacy evidence | current task status, feature execution logs, raw test output, human original requirements, project memory replacement |
 | `requirements/<archive-date>-<topic>/*` | original human material package and lifecycle record: requirements, prototypes, feedback, screenshots, recordings, links, references, status, backlog/deferred state | edited specs, task plans |
 | `product.md` | feature-level product intent, users, stories, product scope | engineering execution plan |
 | `spec.md` | intended feature behavior | execution logs |
@@ -174,29 +174,15 @@ Requirement set directory:
 
 The date is the archive date only. It is not a deadline, feature duration, implementation start date, or implementation end date.
 
-Onboarding DB directory:
+Onboarding-db directory:
 
 ```text
 .agent-loop/onboarding-db/
 ```
 
-Use stable, human-readable names. Onboarding DB no longer has Compact / Standard / Expanded generation modes. File shape is controlled by the accepted `onboarding-spec.md`, accepted `onboarding-plan.md`, project evidence, required-core onboarding topics, and Batch Human Review:
+New Evidence-Graph + DDD onboarding-db writes are allowed only through `references/onboarding-knowledge-base.md` after Project Entry Scan or reliable project memory and human confirmation of the Onboarding Spec.
 
-```text
-onboarding-spec.md
-onboarding-plan.md
-coverage-matrix.md
-deep-dives/<topic>.md
-batch-review.md
-```
-
-Standalone diagrams live under:
-
-```text
-.agent-loop/onboarding-db/diagrams/
-```
-
-Embedded diagrams inside module/flow/runtime docs are preferred when they answer the question locally. Do not create whole-repo function graphs or full file dependency graphs by default.
+Do not create, refresh, reorganize, or complete onboarding-db artifacts through the removed legacy flow. Existing legacy onboarding-db files may be read as evidence when present, but they are not trusted without code reality checks and do not replace `project.md` or root guidance. Migrate or replace legacy files only through an accepted Onboarding Spec or focused update proposal.
 
 ## Plan Lifecycle
 
@@ -270,7 +256,7 @@ confirmed producer-consumer API/event/public-data/UI-state/SDK-library/runtime i
 long-term project fact changed -> update project.md in simple mode, or matching project/*.md in enterprise mode
 submission/integration happened -> update notes.md Submit / Integrate
 new long-lived boundary directory created -> update project.md Directory Map in simple mode, or project/boundaries.md in enterprise mode, and propose directory AGENTS.md
-old-project scan finding has low confidence -> record in project.md Onboarding Uncertainties in simple mode, or relevant enterprise detail uncertainty section, not as settled fact
+old-project scan finding has low confidence -> record in project.md Project Entry Uncertainties in simple mode, or relevant enterprise detail uncertainty section, not as settled fact
 ```
 
 Never overwrite human original requirements. Add a new file to the requirement set, create a new requirement set, or reference the original path.

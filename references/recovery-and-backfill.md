@@ -1,6 +1,6 @@
 # Recovery And Backfill
 
-Use this file when `agent-loop` memory is stale, incomplete, or when a feature must continue from code that already exists. For an existing codebase with no `agent-loop` memory at all, route to Existing Project Onboarding first and use this protocol only when onboarding discovers backfill work.
+Use this file when `agent-loop` memory is stale, incomplete, or when a feature must continue from code that already exists. For an existing codebase with no `agent-loop` memory at all, route to Project Entry Scan first and use this protocol only when the scan discovers backfill work.
 
 ## Core Rule
 
@@ -18,9 +18,9 @@ Code reality can correct `agent-loop` documents after human confirmation. It mus
 
 Use this protocol when:
 
-- Existing Project Onboarding finds code reality that should be backfilled into newly proposed `agent-loop` memory
+- Project Entry Scan finds code reality that should be backfilled into newly proposed `agent-loop` memory
 - `.agent-loop/project.md` is stale
-- `.agent-loop/project.md`, root guidance, or feature artifacts point to missing long-term memory files such as `.agent-loop/onboarding-db/README.md`, enterprise `project/*.md`, contracts, or guidance files
+- `.agent-loop/project.md`, root guidance, or feature artifacts point to missing long-term memory files such as legacy `.agent-loop/onboarding-db/README.md`, enterprise `project/*.md`, contracts, or guidance files
 - the project used `agent-loop` before, but recent development happened without updating `agent-loop`
 - the human says "re-adopt", "re-take-over", "re-sync", "重新托管", "重新接管", "回补 agent-loop", or similar
 - a feature was partly built but docs are incomplete
@@ -36,7 +36,7 @@ Use this when `.agent-loop/` or legacy `agent-loop/` exists but a period of deve
 Do not start new feature work first. The agent should:
 
 1. Read the active memory root's `project.md` and active or paused feature docs. If `project.md` says `Memory Mode: enterprise`, read only the relevant linked `.agent-loop/project/*.md` or legacy `agent-loop/project/*.md` files.
-2. Check that project-memory index targets exist before relying on them: onboarding-db README and indexed docs, enterprise project detail files, active feature docs, contracts, root guidance, and directory guidance.
+2. Check that project-memory index targets exist before relying on them: legacy onboarding-db README/indexed docs, enterprise project detail files, active feature docs, contracts, root guidance, and directory guidance.
 3. Inspect current code reality only as needed: README, scripts, tests, obvious changed areas, entry points, and relevant recent feature files.
 4. Compare current code/tests/scripts and index-target existence against `project.md`, `spec.md`, `tasks.md`, `tests.md`, `plan.md`, and `notes.md`.
 5. Produce the Compare Matrix.
@@ -135,7 +135,7 @@ Action:
 - do not rely on the missing artifact
 - use code reality and existing docs for temporary answers
 - propose one of: create the missing artifact, remove/correct the index, or mark it planned/deferred
-- ask human confirmation before changing memory or creating onboarding-db
+- ask human confirmation before changing memory; do not recreate legacy onboarding-db as a recovery shortcut
 
 ### Code Conflicts With Human Requirements
 

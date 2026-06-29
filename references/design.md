@@ -144,10 +144,10 @@ Confirm remote host, path, access, permissions, command locations, browser URL, 
 Write local remote.md and thin project.md after confirmation.
 Prefer full remote agent-loop memory next to remote code when remote writes are allowed.
 Use local-shadow mode only when remote writes are unavailable.
-Then run Existing Project Onboarding against the remote source of truth.
+Then run Project Entry Scan against the remote source of truth.
 ```
 
-### Existing Project Onboarding
+### Project Entry Scan For Existing Projects
 
 Condition:
 
@@ -225,7 +225,7 @@ Update project.md or feature docs after confirmation.
 Then continue feature work.
 ```
 
-### Guided Newcomer Onboarding
+### Evidence-Graph + DDD Onboarding Docs
 
 Condition:
 
@@ -237,13 +237,14 @@ Human asks to be guided through the project or understand where to start
 Action:
 
 ```text
-Load onboarding-db.md.
-Use existing onboarding-db before rerunning Deep Onboarding.
-Recommend one next reading path, targeted diagram update, setup/verification action, or return to feature work.
-Ask before writing onboarding-db updates.
+If onboarding-db was produced through an accepted Evidence-Graph + DDD Onboarding Spec, answer from those docs after checking obvious code reality.
+If onboarding-db is an old layout, treat it as legacy evidence only until an Evidence-Graph + DDD migration or focused update is accepted.
+Answer from existing docs/code as chat or operational support when the human only asks a question.
+Recommend Project Entry Scan if project memory is missing, thin, or stale.
+Do not create or refresh onboarding-db through the removed legacy flow.
 ```
 
-If onboarding-db is missing, route to Existing Project Onboarding and explain that durable onboarding uses the single Deep Onboarding flow. Do not offer Quick / Deep / Targeted onboarding modes. If project memory or root guidance claims onboarding-db should exist, route to stale-memory recovery before guided onboarding.
+If onboarding-db is missing but project memory or root guidance claims it should exist, route to stale-memory recovery and ask before correcting `project.md` or root guidance. Do not recreate onboarding-db through the removed legacy flow.
 
 ### Feature Follow-up And Flow-back
 
@@ -306,7 +307,6 @@ Do not continue execution until the blocker is resolved.
 Project Entry
 → Remote Project Discovery if Needed
 → Re-Adopt Agent Loop Project if Needed
-→ Project Onboarding Scan if Needed
 → Code-Guided Operational Support if Needed
 → Requirement Archive
 → Product Brief if Needed

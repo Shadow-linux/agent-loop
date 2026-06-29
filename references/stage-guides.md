@@ -11,7 +11,7 @@ For every stage, the agent owns the next-step recommendation. After producing, u
 | Current Stage | Result | Recommended Next Stage | Why | Human Gate |
 |---|---|---|---|---|
 
-Use this especially for onboarding, Feature Spec, Work Breakdown, Test Design, Plan Gate, Execute, Verify, Review, Drift Check, Project Memory Update, Feature Completion Check, and Feature Follow-up. Do not ask the human "what next?" without first recommending one concrete next action.
+Use this especially for Project Entry Scan, Feature Spec, Work Breakdown, Test Design, Plan Gate, Execute, Verify, Review, Drift Check, Project Memory Update, Feature Completion Check, and Feature Follow-up. Do not ask the human "what next?" without first recommending one concrete next action.
 
 ## Project Entry
 
@@ -60,7 +60,7 @@ Rules:
 Write:
 
 - no artifact by default
-- optional `notes.md`, `.agent-loop/project.md`, onboarding-db, or project docs only after human confirmation
+- optional `notes.md`, `.agent-loop/project.md`, or project docs only after human confirmation
 
 Exit:
 
@@ -216,19 +216,17 @@ Exit:
 
 - local entry memory can locate the remote project
 - the remote project memory location is decided: remote, local-shadow, or blocked
-- next stage: Existing Project Onboarding against the remote source of truth, or Ask Human if access is blocked
+- next stage: Project Entry Scan against the remote source of truth, or Ask Human if access is blocked
 
-## Existing Project Onboarding
+## Project Entry Scan For Existing Projects
 
 Entry: existing code, no `.agent-loop/` or legacy `agent-loop/`.
 
-If the existing code is remote, perform onboarding against the remote source of truth. If local-shadow mode is active, all findings must include remote evidence labels.
+If the existing code is remote, perform Project Entry Scan against the remote source of truth. If local-shadow mode is active, all findings must include remote evidence labels.
 
 Load:
 
-- `existing-project-onboarding.md`
-- `project-onboarding-scan.md` only when the human asks for durable onboarding docs, guided newcomer handoff, or a focused preserved explanation of one module/flow/deployment/async scope
-- `onboarding-db.md` and `onboarding-db-templates.md` only when reading, writing, refreshing, or drafting `.agent-loop/onboarding-db/`
+- `project-entry-scan.md`
 - `large-projects.md` when old, unfamiliar, multi-package, multi-service, or likely 100k+ LOC
 - `project-guidance.md`
 - `project-memory-mode.md`
@@ -236,11 +234,10 @@ Load:
 
 First decision:
 
-- Explain that there is only one durable project-understanding onboarding mode: Deep Onboarding.
+- Explain that Project Entry Scan is safe-entry memory only, not newcomer documentation.
 - Do not offer Quick / Deep / Targeted onboarding modes.
-- If the human wants to continue feature work quickly, do a safe-entry scan and update or propose project memory, root guidance status, commands, boundaries, and uncertainties only.
-- Use Deep Onboarding when the human wants newcomer-friendly project understanding, long-term onboarding docs, or a focused preserved explanation of one module, flow, async task, deployment path, or problem area.
-- Explain that Deep Onboarding starts with accepted `onboarding-spec.md` and accepted `onboarding-plan.md` before any detail docs.
+- If the human wants to continue feature work, do Project Entry Scan and update or propose project memory, root guidance status, commands, boundaries, and uncertainties only.
+- If the human wants newcomer-facing or durable project-understanding docs, recommend Evidence-Graph + DDD Onboarding after Project Entry Scan or reliable project memory.
 
 Inspect:
 
@@ -259,36 +256,24 @@ Use layered scan order:
 6. architecture profile and actual code layout
 7. capability map
 8. boundary map
-9. onboarding spec seed when useful
-10. guidance inventory
-11. uncertainty list
+9. guidance inventory
+10. uncertainty list
 
-Do not read the whole repository. Do not start feature implementation during onboarding.
+Do not read the whole repository. Do not start feature implementation during Project Entry Scan.
 
 If subagents are used, the main agent keeps ownership of synthesis and all writes. Subagents only return findings, evidence, confidence, uncertainties, files read, and suggested `project.md` entries.
 
-If the human only wants safe continuation:
+Project Entry Scan output:
 
 - draft `.agent-loop/project.md`, guidance status/proposal, and uncertainties
-- do not write onboarding-db detail docs, deep-dive docs, or onboarding diagrams
-- recommend Deep Onboarding later only when durable newcomer-facing docs would help
-
-If Deep Onboarding is selected:
-
-- write or refresh `onboarding-spec.md` before detail docs
-- write or refresh `onboarding-plan.md` with batch cadence, split gate, and batches before detail docs
-- write deep-dive docs in reviewed batches; default batch size is 1-3 deep-dive docs unless the human chooses another review cadence
-- treat batch size as review pacing, not a total limit
-- create diagrams only inside deep-dive docs when they answer a concrete onboarding question and have walkthrough text
-- use Batch Human Review before writing onboarding-db, project memory backfill, or guidance changes
-- when onboarding discovers stable project facts missing from project memory, propose or perform project memory backfill after human confirmation
+- do not write onboarding-db detail docs, module docs, flow docs, onboarding diagrams, onboarding-spec, or onboarding-tasks
+- when the scan discovers stable project facts missing from project memory, propose or perform project memory backfill after human confirmation
 - keep code reality as current fact when docs conflict with code
 
-If the human asks a focused onboarding question:
+If the human asks a focused project-understanding question:
 
-- use the same Deep Onboarding mode with a narrow spec/plan
 - inspect only the selected module, flow, async task, deployment path, state transition, or problem area plus minimal safe context
-- propose one focused deep-dive doc or deep-dive doc update for that target
+- answer from existing docs/code as chat or operational support
 - propose narrow project memory backfill only when the focused scope exposes stale or missing facts required for safe continuation
 - do not create unrelated onboarding-db files
 
@@ -303,8 +288,8 @@ Output before writing:
 - boundary map with evidence and confidence
 - discovered commands with evidence and confidence
 - recommended Project Memory Mode: simple or enterprise, with trigger evidence
-- recommended onboarding path: safe-entry project memory only, or Deep Onboarding with scope and reason
-- Deep Onboarding spec/plan/batch cadence summary when onboarding-db docs are requested
+- explicitly not doing: onboarding-db generation, module docs, flow docs, onboarding diagrams, onboarding-spec, onboarding-tasks
+- Evidence-Graph + DDD onboarding proposal link when the human asks for newcomer docs
 - existing/proposed guidance files
 - low-confidence findings and recommended follow-up
 - one recommended next action
@@ -320,7 +305,6 @@ Directory guidance:
 Write after confirmation:
 
 - `.agent-loop/project.md`
-- `.agent-loop/onboarding-db/` only when Deep Onboarding docs are confirmed
 - enterprise `.agent-loop/project/*.md` files only when recommended and confirmed
 - `.agent-loop/requirements/`
 - `.agent-loop/features/`
@@ -333,6 +317,57 @@ Exit:
 - root guidance status is `present`, `created`, or `human-deferred` for `AGENTS.md`
 - `CLAUDE.md` status is `points-to-AGENTS`, `created-pointer`, or `human-deferred`
 - next stage: Start Feature or Targeted Feature Scan
+
+## Evidence-Graph + DDD Onboarding Knowledge Base
+
+Entry: human asks for newcomer-facing docs, durable project understanding, guided learning paths, or onboarding-db construction, and Project Entry Scan or reliable project memory exists.
+
+Load:
+
+- `onboarding-knowledge-base.md`
+- `project-entry-scan.md` only if project memory is missing, stale, or too thin
+- `human-review-summary.md` before accepting the Onboarding Spec, current batch, or newcomer-ready claim
+
+Rules:
+
+- Evidence Graph is the first onboarding artifact and must exist before formal module or flow docs.
+- Do not run Quick / Deep / Targeted onboarding modes.
+- Do not copy legacy directory-first onboarding-db structure unless the accepted Onboarding Spec says to migrate a specific useful file.
+- Markdown is the source of truth; website generation is out of scope unless the human starts a separate website feature.
+- Default language is Chinese. Preserve code symbols, file paths, commands, API paths, env vars, config keys, errors, and third-party product names.
+- 全部正式文档默认使用中文；写不透但有证据可推断的内容要标明“推断”、证据、置信度和待验证点。
+- Human examples are quality/detail references only. Do not copy their topic list, count, domain names, or project structure.
+- 状态图优先。Mermaid flowchart / sequenceDiagram 可作为普通流程图和时序图的主表达；ASCII 文本图 / 纯文本线框图用于状态机、复杂原理图和复杂示例图。不要把复杂流程画成 stacked box diagram / 阶段堆叠图。
+- 每个正式 onboarding 文档至少包含架构/边界图和 ASCII 状态图 / 状态机图 / 状态机/决策图：架构/边界图讲结构边界，状态图讲状态变化、异常恢复、重试/补偿。
+- 模块和流程文档默认还必须包含 Timeline / 时序图，优先用 Mermaid sequenceDiagram，讲清流程怎么跑，并在流程讲解中引入相关数据模型。Timeline Diagram 用于故障恢复和延迟一致性时间线。
+- Onboarding Tasks are written only after the Onboarding Spec is accepted.
+- Module and Flow docs default to single long files: `02-modules/<module-name>.md` and `03-flows/<flow-name>.md`.
+- 计划确认后 Agent 可以全盘执行：人类确认 Onboarding Spec / Onboarding Tasks 后，Agent 可以一次性创建并连续完成计划内的完整 onboarding-db。
+- batch 是 Agent 的组织和 review 单位，不是人类闸门；不要每批都停下来等人类再次授权，除非计划变更、证据不足、权限/环境阻塞或人类明确要求暂停。
+- 禁止创建空目录、薄 README、planned/later 占位文件，或用文件数量假装完整。
+
+Flow:
+
+1. Confirm Project Entry Scan / reliable memory exists.
+2. Build `08-review/evidence-graph.md` before formal onboarding docs.
+3. Draft `onboarding-spec.md` with module plan, flow plan, DDD mapping, diagram type plan, architecture/boundary + ASCII state + Timeline/sequence requirements, Mermaid/ASCII format choices, file strategy, quality gates, and batch plan.
+4. Ask human confirmation for the Onboarding Spec / Onboarding Tasks execution plan before writing or replacing formal onboarding docs.
+5. Write `onboarding-tasks.md` after spec acceptance.
+6. After plan confirmation, execute all planned docs that can be written with meaningful evidence-backed content. Do not create empty directories or placeholder docs.
+7. Write module docs as `02-modules/<module-name>.md` by default, not many small files.
+8. Write flow docs as `03-flows/<flow-name>.md` by default, not many small files.
+9. Require at least architecture/boundary + ASCII state diagram in every formal onboarding doc; module and flow docs also require Timeline / sequence diagrams by default. Use Mermaid flowchart / sequenceDiagram for normal flow/timing and ASCII for state machines, complex principle diagrams, and complex examples.
+10. Require use cases, data objects, state transitions, failure modes, verification/troubleshooting, and code evidence where applicable.
+11. Score changed topics in `coverage-matrix.md`; below 4/5 cannot be `newcomer-ready`.
+12. Record each batch in `batch-review.md`.
+
+Exit:
+
+- Onboarding Spec awaiting review
+- next onboarding batch recommended
+- focused update recommended
+- Project Memory Update recommended only for stable facts that belong in `project.md`
+- Pause or Close Onboarding Work after human confirmation
 
 ## Reconcile Project Context / Re-Adopt Agent Loop Project
 
@@ -499,7 +534,7 @@ Exit:
 
 Entry: human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, test failure, QA/user feedback, or any change that may belong to recent feature work.
 
-Do not enter Feature Follow-up before Project Entry has established or verified agent-loop memory. If `.agent-loop/` or legacy `agent-loop/` is missing, preserve the report as intake context and route to Existing Project Onboarding or Init Project first.
+Do not enter Feature Follow-up before Project Entry has established or verified agent-loop memory. If `.agent-loop/` or legacy `agent-loop/` is missing, preserve the report as intake context and route to Project Entry Scan or Init Project first.
 
 Load:
 
@@ -581,11 +616,11 @@ Exit:
 
 ## Targeted Feature Scan
 
-Entry: existing project has been onboarded and the human selected a feature, but the affected boundaries are not yet understood.
+Entry: existing project has reliable project memory and the human selected a feature, but the affected boundaries are not yet understood.
 
 Load:
 
-- `existing-project-onboarding.md`
+- `project-entry-scan.md`
 - `large-projects.md` for old, large, or multi-package projects
 
 Inspect only feature-relevant areas:
@@ -864,7 +899,7 @@ Exit:
 
 ## Subagent Execution If Approved
 
-Entry: human explicitly approves subagent use for an independent task/story group, onboarding scan lane, or bounded implementation lane.
+Entry: human explicitly approves subagent use for an independent task/story group, Project Entry Scan lane, or bounded implementation lane.
 
 Mandatory helper: Subagent Execution If Approved resolves and loads `superpowers:subagent-driven-development` or `subagent-driven-development` after human approval and before dispatch. Record Stage Helper Resolution; helper availability never replaces subagent authorization.
 
@@ -1084,7 +1119,7 @@ Update only durable project facts:
 - directory map or guidance status changes
 - domain language that future feature work should reuse
 - known constraints and long-term decisions
-- onboarding uncertainties resolved by code reality
+- Project Entry uncertainties resolved by code reality
 
 Do not write:
 

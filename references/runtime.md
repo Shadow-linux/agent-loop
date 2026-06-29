@@ -14,7 +14,7 @@ Do not jump from a human goal directly to code. Do not move to a later stage unt
 
 Skill Re-entry: AGENTS.md is bootstrap guidance, not a replacement for the agent-loop skill. If the current runtime exposes the agent-loop skill, load/use it before making workflow decisions during Project Entry, Resume, Re-Adopt, stage boundaries, after context compaction, after long-running sessions, or whenever workflow state is uncertain. Stage Helper Capability Scan does not satisfy Skill Re-entry because helper scan resolves stage methods, not the agent-loop controller. If the skill is unavailable or load-failed, follow root guidance as fallback and report that fallback.
 
-Agent ownership is mandatory. The agent must not wait for the human to name the next internal stage. For every human goal, bug report, onboarding question, vague product idea, or "what next" request, the agent classifies the current state and recommends exactly one next action with a reason. If required artifacts are missing, recommend creating or repairing them. If work appears ready, recommend the next stage. If work appears complete, run Feature Completion Check and recommend close, pause, or continue.
+Agent ownership is mandatory. The agent must not wait for the human to name the next internal stage. For every human goal, bug report, project-understanding question, vague product idea, or "what next" request, the agent classifies the current state and recommends exactly one next action with a reason. If required artifacts are missing, recommend creating or repairing them. If work appears ready, recommend the next stage. If work appears complete, run Feature Completion Check and recommend close, pause, or continue.
 
 Explicit bypass is allowed only for narrow one-off edits that do not create or change feature behavior, public interfaces, data/security boundaries, project memory, submit state, or close state. Record the bypass reason in the response or `notes.md` when a feature exists.
 
@@ -57,17 +57,16 @@ Classify the project into exactly one state:
 |---|---|---|
 | `new-project` | No `.agent-loop/` or legacy `agent-loop/`; little/no existing code | Init Project |
 | `remote-entry` | Human says project is remote/SSH/devcontainer/container/tunnel, or local files contain remote-entry hints and real source of truth is outside local path | Remote Project Discovery |
-| `existing-project` | No `.agent-loop/` or legacy `agent-loop/`; meaningful existing code | Existing Project Onboarding |
+| `existing-project` | No `.agent-loop/` or legacy `agent-loop/`; meaningful existing code | Project Entry Scan |
 | `resume` | `.agent-loop/` or legacy `agent-loop/` exists and project memory looks current | Resume / Start Feature |
 | `re-adopt` | `.agent-loop/` or legacy `agent-loop/` exists, but recent work happened outside the loop or the human asks to re-adopt/re-take-over/re-sync the project | Re-Adopt Agent Loop Project / Recovery Backfill |
 | `stale-memory` | `.agent-loop/` or legacy `agent-loop/` exists but docs conflict with code reality, or long-term memory indexes point to missing/stale artifacts | Reconcile Project Context / Recovery Backfill |
-| `guided-onboarding` | `.agent-loop/onboarding-db/` exists and the human asks to be onboarded, guided through the project, or helped understand where to start | Guided Newcomer Onboarding |
 | `operational-support` | human asks to test, run, deploy, switch account/config/model/provider, check quota/rate limits, diagnose production, arrange rollout, or use existing code to solve an operational problem without clearly requesting implementation | Code-Guided Operational Support |
 | `feature-follow-up` | human reports bug/regression/post-close correction/field or algorithm change/API mismatch/screenshot issue/small tweak/test failure that may relate to a recent feature | Feature Follow-up And Flow-back |
 | `active-feature` | active feature exists and next action is clear | Continue Current Stage |
 | `blocked` | blocker or missing decision prevents next stage | Choose One Unblock Stage |
 
-Entry priority: remote-entry is evaluated before existing-project. If remote-entry and existing-project both appear to match, classify as remote-entry and run Remote Project Discovery before Existing Project Onboarding so the agent does not treat a local entrypoint or mirror as the source of truth.
+Entry priority: remote-entry is evaluated before existing-project. If remote-entry and existing-project both appear to match, classify as remote-entry and run Remote Project Discovery before Project Entry Scan so the agent does not treat a local entrypoint or mirror as the source of truth.
 
 Blocked must resolve to exactly one recommended next stage. Ask Human when the blocker is a missing decision, access, approval, environment, or external input; Diagnose Failure when the blocker is caused by observed system behavior, failing verification, or unclear technical cause. If the blocker is a narrow unknown about code ownership or impact, recommend Targeted Feature Scan instead.
 
@@ -87,7 +86,7 @@ Use this order:
 2. Check `.agent-loop/`; if missing, check legacy `agent-loop/`.
 3. If present, read `<memory-root>/project.md`.
 4. If `project.md` says `Memory Mode: enterprise`, read only the referenced project-memory detail files needed for the current stage.
-5. If `project.md` says `Status: remote-entry`, read `<memory-root>/remote.md` and route through Remote Project Discovery before local onboarding.
+5. If `project.md` says `Status: remote-entry`, read `<memory-root>/remote.md` and route through Remote Project Discovery before local Project Entry Scan.
 6. Locate `Active Feature` and `Paused Features`.
 7. Read current feature `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`, and `contracts.md` if present.
 8. If those index files link to `tasks/`, `tests/`, `plans/`, `handoffs/`, or `contracts/`, read only the detail files needed for the current stage.
@@ -97,9 +96,11 @@ Use this order:
 12. Compare project memory with obvious repo reality.
 13. Choose the next stage.
 
-If `.agent-loop/onboarding-db/` exists and the human asks to be guided through the project, understand where to start, or explain project structure before coding, classify as `guided-onboarding`, load `references/onboarding-db.md`, and use Guided Newcomer Onboarding before normal resume. Do not rerun Deep Onboarding by default.
+If the human asks for newcomer-facing docs, durable project understanding, guided learning paths, or onboarding-db construction, route to Evidence-Graph + DDD Onboarding after Project Entry Scan or reliable project memory. Load `references/onboarding-knowledge-base.md`. Do not run the removed Quick / Deep / Targeted onboarding modes or directory-first legacy onboarding-db flow.
 
-If the human asks for guided onboarding but onboarding-db is missing, do not classify as `guided-onboarding`. Route through Existing Project Onboarding and explain that durable onboarding uses the single Deep Onboarding flow; do not offer Quick / Deep / Targeted onboarding modes. If root guidance or `project.md` claims onboarding-db should exist, classify as `stale-memory` and reconcile the missing onboarding memory first.
+If `.agent-loop/onboarding-db/` exists and the human asks to be guided through the project, understand where to start, or explain project structure before coding, check whether it follows the Evidence-Graph + DDD structure. If it does, use it through `references/onboarding-knowledge-base.md` Guided / Focused Use. If it is an old layout, treat the existing onboarding-db as legacy evidence only until an Onboarding Spec migration or focused update is confirmed.
+
+If the human asks for guided onboarding but onboarding-db is missing, do not create onboarding-db from the removed legacy flow. Route through Project Entry Scan if project memory is missing/stale; otherwise load `references/onboarding-knowledge-base.md`, build Evidence Graph, and propose an Onboarding Spec before writing formal docs. If root guidance or `project.md` claims onboarding-db should exist but the path is missing, classify as `stale-memory` and reconcile the missing memory reference first.
 
 If the human asks to test, run, deploy, switch account/config/model/provider, check quota/rate limits, arrange rollout, diagnose production, or use existing code to solve an operational problem, default to read-only operational support. Route to Code-Guided Operational Support before Feature Spec, Plan Gate, Execute Task / Story, or code edits. If the request could mean either existing operational use or new implementation, ask whether the human wants help using current project functionality or feature implementation.
 
@@ -107,7 +108,7 @@ If the human asks to "先记一下", do something later, defer work, add a backl
 
 If code reality and the memory root disagree, if long-term memory indexes point to missing artifacts, or if the human says the project used `agent-loop` before but recent work bypassed it, classify as `re-adopt` or `stale-memory`, treat code as the current fact base for agent-maintained docs, preserve human requirements as original intent, and load `references/recovery-and-backfill.md`.
 
-If `project.md` claims an onboarding layout, lists onboarding-db files, or root `AGENTS.md` / `CLAUDE.md` tells newcomers to start from `.agent-loop/onboarding-db/README.md`, but `.agent-loop/onboarding-db/` or its README is missing, classify as `stale-memory`. Do not run Guided Newcomer Onboarding from the missing path. Recommend the smallest onboarding memory reconcile: report the missing index target, use existing docs/code as evidence, and ask before updating `project.md`, root guidance, or creating onboarding-db.
+If `project.md` claims a legacy onboarding layout, lists onboarding-db files, or root `AGENTS.md` / `CLAUDE.md` tells newcomers to start from `.agent-loop/onboarding-db/README.md`, but `.agent-loop/onboarding-db/` or its README is missing, classify as `stale-memory`. Do not run Guided Newcomer Onboarding from the missing path and do not create onboarding-db as a repair. Recommend the smallest memory reconcile: report the missing index target, use existing docs/code as evidence, and ask before updating `project.md` or root guidance.
 
 Project Entry has priority over feature-follow-up. If no .agent-loop/ or legacy agent-loop/ memory exists, do not classify directly as feature-follow-up; classify as `existing-project` or `new-project` first, preserve the bug/change report as intake context, and establish or confirm project memory before running Feature Follow-up.
 
@@ -117,13 +118,13 @@ If the human reports a bug, regression, post-close correction, field/schema chan
 
 Default memory root for new projects is `.agent-loop/`. If legacy `agent-loop/` exists, use it for the current run and ask before migrating.
 
-For existing projects without reliable memory, load `references/existing-project-onboarding.md`. Build a shallow, evidence-backed project map before feature work. Do not do a whole-repo deep read unless a targeted feature scan requires it.
+For existing projects without reliable memory, load `references/project-entry-scan.md`. Run Project Entry Scan: build a shallow, evidence-backed project map before feature work. Do not do a whole-repo deep read unless a targeted feature scan requires it.
 
-When the human wants newcomer-friendly project understanding, a guided takeover, durable onboarding documents, or a focused preserved explanation of one project area, route Existing Project Onboarding through the single Deep Onboarding flow. Load `references/project-onboarding-scan.md`, `references/onboarding-db.md`, and `references/onboarding-db-templates.md` only when Deep Onboarding is requested or onboarding-db is being read/written/refreshed.
+When the human wants newcomer-friendly project understanding, a guided takeover, durable onboarding documents, or a focused preserved explanation of one project area, do not route to the removed onboarding-db flow. Use Evidence-Graph + DDD Onboarding after Project Entry Scan or reliable project memory. For focused questions, answer from existing docs/code first and propose a focused onboarding-db update only when the durable knowledge base has a real gap.
 
-For local entry directories that point to a remote project, load `references/remote-project-discovery.md` before Init Project or Existing Project Onboarding. Do not treat the local empty directory as the code reality.
+For local entry directories that point to a remote project, load `references/remote-project-discovery.md` before Init Project or Project Entry Scan. Do not treat the local empty directory as the code reality.
 
-During Project Entry, Existing Project Onboarding, Re-Adopt, Drift Check, and Project Memory Update, load `references/project-memory-mode.md` when long-term project memory is being created, repaired, or likely too large for one readable `project.md`.
+During Project Entry, Project Entry Scan, Re-Adopt, Drift Check, and Project Memory Update, load `references/project-memory-mode.md` when long-term project memory is being created, repaired, or likely too large for one readable `project.md`.
 
 ## Response Frame
 
@@ -164,7 +165,6 @@ Chat Entry / Requirements Discussion if Needed
 Project Entry
 Remote Project Discovery if Needed
 Re-Adopt Agent Loop Project if Needed
-Project Onboarding Scan if Needed
 Code-Guided Operational Support if Needed
 Requirement Archive
 Product Brief if Needed

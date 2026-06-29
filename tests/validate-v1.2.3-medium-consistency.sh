@@ -31,14 +31,17 @@ for stage in "Work Breakdown" "Test Design" "E2E Discovery if Web" "Technical De
   assert_contains "references/workflow-checklists.md" "Run Stage Helper Capability Scan before fallback $stage"
 done
 
-# M5: onboarding outputs must use the single Deep Onboarding path instead of mode disambiguation.
-assert_contains "references/existing-project-onboarding.md" "There is only one onboarding mode for durable project understanding: Deep Onboarding."
-assert_contains "references/project-onboarding-scan.md" "There is only one durable project-understanding onboarding mode: Deep Onboarding."
-assert_contains "references/project-onboarding-scan.md" "Focused requests use a narrow Deep Onboarding scope, not a separate Targeted mode."
+# M5: existing-project entry must use Project Entry Scan, not the removed onboarding generation flow.
+assert_contains "references/project-entry-scan.md" "This stage is safe-entry only."
+assert_contains "references/project-entry-scan.md" "Do not create:"
+assert_contains "references/project-entry-scan.md" ".agent-loop/onboarding-db/"
+assert_contains "references/runtime.md" 'For existing projects without reliable memory, load `references/project-entry-scan.md`.'
+assert_contains "references/runtime.md" "do not route to the removed onboarding-db flow"
 
-# M6: guided onboarding request without onboarding-db must route to onboarding, not dead-end.
+# M6: guided onboarding request without onboarding-db must not dead-end or regenerate legacy docs.
 assert_contains "references/runtime.md" "If the human asks for guided onboarding but onboarding-db is missing"
-assert_contains "references/design.md" "If onboarding-db is missing, route to Existing Project Onboarding and explain that durable onboarding uses the single Deep Onboarding flow."
+assert_contains "references/runtime.md" "do not create onboarding-db"
+assert_contains "references/design.md" "Do not recreate onboarding-db through the removed legacy flow."
 
 # M7: Standards Review triggers must be consistent.
 assert_contains "references/runtime.md" "Standards Review is recorded when triggered by large project, broad diff, directory or durable boundary change, security/data change, architecture change, or human request"

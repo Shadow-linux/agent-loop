@@ -68,21 +68,21 @@ Before feature work, inspect only enough to form a useful map:
 
 Record stable findings in `project.md`, not in a feature note.
 
-For existing-project onboarding, prefer the layered scan in `existing-project-onboarding.md`. This file adds large-project expectations:
+For Project Entry Scan, prefer the layered scan in `project-entry-scan.md`. This file adds large-project expectations:
 
 - keep scans shallow until a feature boundary is selected
 - record evidence for every capability and command
 - assign confidence labels instead of pretending certainty
 - identify package/app/service boundaries before task splitting
 - defer deep code reading to a targeted feature scan
-- when subagents are available and the human confirms, parallelize onboarding with bounded scan lanes
+- when subagents are available and the human confirms, parallelize Project Entry Scan with bounded scan lanes
 - evaluate whether simple project memory is still enough, or whether enterprise mode should be recommended
 
 Recommend enterprise Project Memory Mode when any hard trigger applies, including about 200k+ LOC, 5+ durable boundaries, 2+ test systems, 3+ execution environments, `project.md` above about 600 lines, repeated re-scans, or 5+ directory-level guidance files.
 
-## Large Onboarding Subagent Recommendation
+## Large Project Entry Scan Subagent Recommendation
 
-Recommend optional subagent scanning during onboarding when the project is large or complex:
+Recommend optional subagent scanning during Project Entry Scan when the project is large or complex:
 
 ```text
 100k+ LOC
@@ -100,7 +100,7 @@ If subagents are not available or the human declines, continue with single-agent
 
 ## Targeted Feature Scan
 
-After project onboarding and after the human selects a feature, do a focused scan only inside relevant boundaries:
+After Project Entry Scan and after the human selects a feature, do a focused scan only inside relevant boundaries:
 
 ```text
 feature keywords
@@ -131,7 +131,7 @@ If the affected boundaries are unclear, stop and clarify or run a bounded scan b
 
 When a boundary has downstream consumers, load `delivery-contracts.md` and propose a Delivery Contract. Write `contracts.md` or optional `contracts/` details only after human confirmation. Keep temporary subagent briefs in `handoffs/`; keep confirmed durable interface handoffs in `contracts.md` and optional `contracts/` details.
 
-For old-project onboarding, also record each stable boundary in `project.md` with its guidance status:
+For old-project Project Entry Scan, also record each stable boundary in `project.md` with its guidance status:
 
 ```text
 Guidance: root only | has AGENTS.md | propose AGENTS.md | not needed | deferred

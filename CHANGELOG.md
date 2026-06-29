@@ -2,6 +2,27 @@
 
 ## 1.2.3 — 2026-06-19
 
+### Project Entry / Onboarding Reset
+- Removed the active legacy onboarding-db generation flow before replacing it with Evidence-Graph + DDD Onboarding.
+- Renamed the old existing-project onboarding reference to `references/project-entry-scan.md` and scoped it to safe project memory, root guidance status, commands, boundaries, capabilities, and uncertainties.
+- Deleted old onboarding generation references and templates: `project-onboarding-scan.md`, `onboarding-db.md`, `onboarding-db-templates.md`, `onboarding-diagnostics.md`, and `templates/onboarding-db/*`.
+- Updated runtime, stage guides, workflow checklists, Usage, root AGENTS template, validation scenarios, and examples so Project Entry Scan does not create onboarding-db detail docs, module/flow docs, onboarding diagrams, `onboarding-spec.md`, or `onboarding-tasks.md`.
+- Treat existing `.agent-loop/onboarding-db/` paths as legacy evidence only; missing/stale references now route to recovery/backfill without regenerating onboarding-db.
+
+### Evidence-Graph + DDD Onboarding
+- Added `references/onboarding-knowledge-base.md` as the Evidence-Graph + DDD onboarding reference for newcomer-facing project understanding after Project Entry Scan or reliable project memory.
+- Reintroduced `templates/onboarding-db/` around Evidence Graph, Onboarding Spec, Onboarding Tasks, single-file module playbooks, single-file flow playbooks, coverage matrix, and batch review.
+- Updated runtime, stage guides, workflow checklists, Usage, README, artifact rules, and validation scenarios so agents build onboarding-db through Evidence Graph, a human-confirmed Onboarding Spec, accepted tasks, reviewed batches, and coverage scoring.
+- Clarified that after humans confirm Onboarding Spec / Onboarding Tasks, agents may execute the full planned onboarding-db autonomously; batches are agent organization/review units, not repeated human gates.
+- For full onboarding execution, required content-rich Chinese documents and banned empty directories, thin README placeholders, planned/later placeholder files, and TBD/待补充 files.
+- Required evidence-backed inferred content to be labeled as 推断 with evidence, confidence, and validation gaps instead of being omitted or presented as fact.
+- Replaced generic stacked wireframe guidance with state-first diagram rules: every formal onboarding doc should include architecture/boundary + ASCII state diagrams.
+- Made module and flow docs default to architecture/boundary + ASCII state + Timeline/sequence diagrams so onboarding explains where the module is, how state changes, and how the process runs over time.
+- Tightened diagram coverage so every content-bearing onboarding-db document must plan and include its required diagram set unless explicitly exempted; coverage scoring now checks the diagram set, architecture clarity, state clarity, and timeline/sequence clarity separately.
+- Upgraded onboarding diagrams to a module/flow teaching model: module and flow docs default to architecture/boundary + ASCII state + Timeline/sequence diagrams, Mermaid flowchart/sequenceDiagram is preferred for normal flow/timing, and ASCII remains preferred for state machines, complex principle diagrams, and complex examples.
+- Kept old Quick / Deep / Targeted onboarding and directory-first legacy generation removed; old onboarding-db layouts remain evidence only until migrated through an accepted Onboarding Spec or focused update.
+- Documented Chinese-default onboarding-db output, multi-project/fullstack requirements, no total topic cap, and the rule that human examples are quality/detail references only.
+
 ### Requirement Delivery Phases
 - Added optional requirement-level `Delivery Phases` for complex requirements that need MVP/later scope, staged delivery confirmation, or likely multiple downstream features before feature construction.
 - Defined phase ownership under requirement set `README.md`, with optional `notes.phase-<n>-<slug>.md`, while keeping `requirement.md` as stable source material rather than lifecycle state.
@@ -40,17 +61,17 @@
 - Hardened Submit / Integrate exits so successful submission routes to Feature Completion Check instead of direct Close.
 - Added a shared blocked routing matrix covering Ask Human, Diagnose Failure, Verify, Pause, and Targeted Feature Scan.
 
-### Deep Onboarding Quality
-- Replaced Quick / Deep / Targeted onboarding modes with one durable project-understanding mode: Deep Onboarding. Safe continuation now updates project memory/root guidance only, while focused questions use a narrow Deep Onboarding scope.
-- Rebuilt onboarding-db generation as spec-first: accepted `onboarding-spec.md`, accepted `onboarding-plan.md`, then reviewed batches of `deep-dives/<topic>.md` with no total document count cap; batch size is review pacing, not a total limit.
+### Superseded Deep Onboarding Quality Iteration
+- Earlier in the 1.2.3 onboarding redesign, Quick / Deep / Targeted modes were temporarily replaced with a single "Deep Onboarding" quality model. This intermediate model is superseded by the current Evidence-Graph + DDD Onboarding section above.
+- Earlier spec-first onboarding drafts used `onboarding-plan.md` and `deep-dives/<topic>.md`; current active guidance uses `onboarding-tasks.md`, `02-modules/<module-name>.md`, and `03-flows/<flow-name>.md` by default.
 - Removed legacy onboarding-db form templates and Compact / Standard / Expanded generation modes; legacy categorized docs may still be read as evidence or maintained for compatibility in existing onboarding-db directories.
-- Added a Deep Onboarding Quality Gate so Deep scans are judged as newcomer handoff packages, not by file count alone.
-- Required Core Domain Handoff Pack and Service Startup / Config Matrix coverage for Deep onboarding completion.
+- Added an intermediate quality-gate idea so onboarding was judged as newcomer handoff material, not by file count alone; this survives in the current coverage scoring and `newcomer-ready` gate.
+- Required core domain and service startup/config coverage in the intermediate model; this survives in the current Evidence Graph, Onboarding Spec, and coverage matrix expectations.
 - Added validation coverage for thin expanded onboarding-db outputs with many small files but insufficient core flow, data, startup, verification, or change-risk detail.
-- Implemented Graph-first onboarding: Quick now creates the lightweight Evidence Graph package and records `Quick onboarding complete; Deep onboarding not complete.`
+- Tried an intermediate graph-first split where Quick created a lightweight Evidence Graph package; this was superseded by the current rule that Project Entry Scan never creates onboarding-db, and Evidence-Graph + DDD Onboarding owns Evidence Graph creation after reliable memory exists.
 - Added required-core status model, Evidence Graph node/edge schemas, graph slices, Coverage Matrix completion rules, and colored diagram policy.
 - Added templates for Evidence Graph, Core Domain Inventory, Core Flow Inventory, Coverage Matrix, Service Startup Matrix, Main Traffic Flow, Core Flow Deep Trace, Core Module Deep Dive, and Targeted Graph Slice.
-- Demoted old flow/module templates to ordinary/supporting use; required-core flow and module completion now requires deep-trace/deep-dive structures with code evidence, branch/failure matrices, concrete examples, and verification/observability.
+- Demoted old flow/module templates to ordinary/supporting use; the current replacement requires single-file module/flow playbooks with appropriate ASCII diagram types, code evidence, examples, failure modes, and verification/observability.
 
 ### Complex Artifact Thresholds
 - Replaced hard Complex Artifact recommendation thresholds with a simpler assessment model: stories > 3 pauses for assessment, but does not itself recommend Complex Artifact Mode.

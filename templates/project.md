@@ -203,7 +203,7 @@ External Services:
 - Evidence:
 - Confidence: high | medium | low
 
-## Onboarding Scan
+## Project Entry Scan
 
 Last Scan:
 
@@ -220,7 +220,7 @@ Confidence:
 - Test commands:
 - Directory boundaries:
 
-## Onboarding Uncertainties
+## Project Entry Uncertainties
 
 - `<uncertainty>`:
   - Evidence:

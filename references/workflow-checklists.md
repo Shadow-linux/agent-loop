@@ -94,13 +94,14 @@ Before using an external skill or plugin inside a stage:
 - [ ] Create remote `.agent-loop/`, `AGENTS.md`, or `CLAUDE.md` only after explicit confirmation.
 - [ ] If local-shadow mode is used, label every code fact and command evidence with remote location.
 
-## Existing Project Onboarding
+## Project Entry Scan For Existing Projects
 
-- [ ] Load `existing-project-onboarding.md`.
+- [ ] Load `project-entry-scan.md`.
 - [ ] Load `project-architecture-init.md`.
-- [ ] Explain that durable onboarding uses the single Deep Onboarding flow. Do not offer Quick / Deep / Targeted onboarding modes.
-- [ ] If the human only wants safe continuation, update or propose project memory, root guidance status, commands, boundaries, and uncertainties only.
-- [ ] If the human wants durable onboarding docs, newcomer handoff docs, or a focused understanding artifact, load `project-onboarding-scan.md`, `onboarding-db.md`, and `onboarding-db-templates.md`.
+- [ ] Explain that Project Entry Scan is safe-entry memory only, not newcomer documentation.
+- [ ] Do not offer Quick / Deep / Targeted onboarding modes.
+- [ ] Update or propose project memory, root guidance status, commands, boundaries, capabilities, and uncertainties only.
+- [ ] If the human wants durable onboarding docs, newcomer handoff docs, or a focused understanding artifact, recommend Evidence-Graph + DDD Onboarding after Project Entry Scan or reliable project memory.
 - [ ] Read startup docs first.
 - [ ] Inspect shallow repo shape.
 - [ ] Decide whether large-project triggers apply.
@@ -133,24 +134,51 @@ Before using an external skill or plugin inside a stage:
 - [ ] Record guidance language and evidence in `project.md`.
 - [ ] Record root guidance status in `project.md`: `AGENTS.md` present/created/stale/missing/human-deferred and `CLAUDE.md` points-to-AGENTS/created-pointer/stale/missing/human-deferred.
 - [ ] Attach evidence and confidence to commands, capabilities, and boundaries.
-- [ ] Do not create onboarding-db detail docs during safe continuation work; recommend Deep Onboarding when durable newcomer-facing docs are useful.
+- [ ] Do not create onboarding-db detail docs, module docs, flow docs, onboarding diagrams, onboarding-spec, or onboarding-tasks during Project Entry Scan.
 - [ ] Decide whether Project Memory Mode should be `simple` or `enterprise`.
 - [ ] Recommend enterprise when any hard trigger applies, including about 200k+ LOC, 5+ durable boundaries, 2+ test systems, 3+ execution environments, `project.md` above about 600 lines, repeated re-scans, or 5+ directory-level guidance files.
-- [ ] List onboarding uncertainties and follow-up scans.
+- [ ] List Project Entry uncertainties and follow-up scans.
 - [ ] Summarize proposed `project.md` before writing.
-- [ ] Write or refresh `onboarding-spec.md` before Deep onboarding detail docs.
-- [ ] Write or refresh `onboarding-plan.md` with batches, batch review cadence, and split rationale before writing deep-dive docs.
-- [ ] Do not create directory-first module/flow/detail files before the spec and plan are accepted.
-- [ ] Deep Onboarding has no total document count cap; batch size is review pacing, not a total limit.
-- [ ] Write deep-dives for all required-core onboarding topics justified by project evidence and newcomer handoff needs.
-- [ ] For focused questions, use a narrow Deep Onboarding spec/plan and one focused deep-dive doc or existing deep-dive doc update.
-- [ ] When onboarding discovers stable project facts missing from project memory, propose or perform project memory backfill after human confirmation.
-- [ ] Confirm Deep onboarding passes the Newcomer Handoff Quality Gate, not only file-count coverage.
-- [ ] Confirm service startup/config, core domain flows, core data flow, data model, verification strategy, and change-risk map are evidence-backed.
-- [ ] Required-core topics cannot remain discovered, planned, needs-deep-trace, draft-deep-dive, or blocked-by-unknown when Deep onboarding is marked complete.
-- [ ] Use Batch Human Review before writing `.agent-loop/onboarding-db/`, multiple project memory facts, root guidance, or directory guidance.
-- [ ] Ask human confirmation before writing `.agent-loop/`, root guidance, directory guidance, onboarding-db, or diagrams.
-- [ ] Do not mark onboarding complete until root `AGENTS.md` is present/created/human-deferred and root `CLAUDE.md` is points-to-AGENTS/created-pointer/human-deferred.
+- [ ] When Project Entry Scan discovers stable project facts missing from project memory, propose or perform project memory backfill after human confirmation.
+- [ ] Use Batch Human Review before writing multiple project memory facts, root guidance, or directory guidance.
+- [ ] Ask human confirmation before writing `.agent-loop/`, root guidance, or directory guidance.
+- [ ] Do not mark Project Entry Scan complete until root `AGENTS.md` is present/created/human-deferred and root `CLAUDE.md` is points-to-AGENTS/created-pointer/human-deferred.
+
+## Evidence-Graph + DDD Onboarding Knowledge Base
+
+- [ ] Load `onboarding-knowledge-base.md`.
+- [ ] Confirm Project Entry Scan is complete or reliable project memory exists.
+- [ ] If memory is missing, stale, or too thin, route to Project Entry Scan or recovery before writing onboarding-db.
+- [ ] Do not run Quick / Deep / Targeted onboarding modes.
+- [ ] Do not generate directory-first module/flow/runtime docs from the removed legacy flow.
+- [ ] Treat old onboarding-db files as legacy evidence unless an Onboarding Spec migration is accepted.
+- [ ] State that Markdown is source of truth and website generation is out of scope.
+- [ ] Build `08-review/evidence-graph.md` before formal onboarding docs.
+- [ ] Draft `onboarding-spec.md`: target readers, scope, module plan, flow plan, DDD mapping, jobs/async, infra/deploy, file strategy, diagram type plan, ASCII 文本图 / wireframe rules, quality gates, and batches.
+- [ ] Ask human confirmation for the Onboarding Spec / Onboarding Tasks execution plan before writing or replacing formal onboarding docs.
+- [ ] Write `onboarding-tasks.md` after spec acceptance.
+- [ ] After plan confirmation, Agent may create and complete all planned onboarding-db docs in one continuous execution pass.
+- [ ] batch is not a human gate; batch is an Agent organization/review unit unless the plan changes, evidence is insufficient, permissions/environment block progress, or the human explicitly asks to pause.
+- [ ] Do not create empty directories, thin README files, planned/later placeholders, or files that only say TBD/待补充.
+- [ ] If a topic cannot be written meaningfully, track it in `coverage-matrix.md` / `onboarding-tasks.md` instead of creating a thin file.
+- [ ] Module docs default to single long files: `02-modules/<module-name>.md`.
+- [ ] Flow docs default to single long files: `03-flows/<flow-name>.md`.
+- [ ] state diagram first: every formal onboarding doc should have at least 架构/边界图 for structure plus ASCII 状态图 / 状态机图 for state/exceptions.
+- [ ] Every content-bearing onboarding-db document must include the required diagram set unless the accepted Diagram Plan records an explicit exemption and reason.
+- [ ] module docs require architecture/boundary + state + timeline/sequence diagrams by default, plus core-principle explanation and diagrammed examples when internal behavior is not obvious.
+- [ ] flow docs require architecture/boundary + state + timeline/sequence diagrams by default.
+- [ ] Mermaid flowchart / sequenceDiagram can be the main expression for normal flow and timing; ASCII remains preferred for state-machine / decision diagrams and complex principle/example diagrams.
+- [ ] ASCII 泳道图 is optional supporting detail for ownership lanes; do not use it to replace the required Timeline / 时序图 in module/flow docs.
+- [ ] Use Timeline Diagram when recovery/timing matters; avoid stacked box diagram as the main explanation.
+- [ ] Plain flowcharts are only supporting detail.
+- [ ] Reject outline-only onboarding: module/flow docs must include use cases, domain/data objects, information transfer, state transitions, failure modes, verification/troubleshooting, and code evidence where applicable.
+- [ ] 全部正式文档默认使用中文；推断内容要标明“推断”、证据、置信度和待验证点。
+- [ ] Use coverage matrix to track topic readiness and score, not file count.
+- [ ] Below 4/5 score cannot be marked `newcomer-ready`.
+- [ ] Do not copy human examples as required topics, topic counts, domain names, or project structure.
+- [ ] Keep narrative Chinese; preserve code symbols, paths, commands, APIs, env vars, config keys, errors, and third-party names.
+- [ ] Record batch review with changed files, evidence read, coverage changes, gaps, and next batch.
+- [ ] Recommend exactly one next stage: next onboarding batch, focused update, Project Memory Update, Operational Support, Start Feature, Pause, or Close Onboarding Work.
 
 ## Requirement Archive
 
@@ -238,7 +266,7 @@ Before using an external skill or plugin inside a stage:
 
 ## Targeted Feature Scan
 
-- [ ] Use only after existing-project onboarding or stale-memory recovery.
+- [ ] Use only after Project Entry Scan or stale-memory recovery.
 - [ ] Identify feature keywords and likely boundaries.
 - [ ] Read related routes/controllers/pages/actions.
 - [ ] Read related domain/core modules.
@@ -509,7 +537,7 @@ Checklist:
 - [ ] Update Architecture Profile if project shape, language/framework adapter, DDD intensity, or durable dependency direction changed.
 - [ ] Update Test Commands or Testing if commands or test systems changed.
 - [ ] Update Domain Language, Product Context, Known Constraints, or Long-Term Decisions if future agents need them.
-- [ ] Resolve or add Onboarding Uncertainties when confidence changes.
+- [ ] Resolve or add Project Entry Uncertainties when confidence changes.
 - [ ] Run Requirement Reconciliation when the feature references or creates requirement sets.
 - [ ] Do not edit `requirement.md` or other source files for lifecycle/status updates.
 - [ ] Update requirement set README / optional requirements INDEX for lifecycle status, Delivery Phase status, and Feature Mapping only after human confirmation.

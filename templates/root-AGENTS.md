@@ -18,7 +18,7 @@ Copy template marker metadata for refreshed sections; adjust only `source` when 
 ## Agent Loop Guidance Version
 
 - This root guidance was last synced from `agent-loop` skill version `1.2.3`.
-- During Project Entry, Existing Project Onboarding, or Re-Adopt, compare this managed version with the current local `agent-loop` skill version using semantic version ordering (`major.minor.patch`), not plain string comparison.
+- During Project Entry, Project Entry Scan, or Re-Adopt, compare this managed version with the current local `agent-loop` skill version using semantic version ordering (`major.minor.patch`), not plain string comparison.
 - If the current skill version is newer, classify root guidance as `stale` and propose refreshing managed blocks through Human Review Summary before relying on outdated startup rules.
 <!-- agent-loop:managed-end section:meta -->
 
@@ -57,13 +57,13 @@ Before development work:
 2. Apply the Skill Re-entry Rule: if the runtime exposes the agent-loop skill, load/use it before relying on this bootstrap cache.
 3. Inspect `.agent-loop/`.
 4. If `.agent-loop/` is missing, also inspect legacy `agent-loop/`.
-5. If neither exists, propose Init Project or Existing Project Onboarding and ask for confirmation.
+5. If neither exists, propose Init Project or Project Entry Scan and ask for confirmation.
 6. If memory exists, read `.agent-loop/project.md` or the active legacy `agent-loop/project.md`.
 7. If `project.md` says `Status: remote-entry`, read `.agent-loop/remote.md`, verify the remote project, and continue from the remote project memory or local-shadow memory.
 8. If `Memory Mode: enterprise`, read only the linked `.agent-loop/project/*.md` detail files needed for the current stage.
 9. If recent development bypassed `agent-loop`, route to Re-Adopt Agent Loop Project before new feature work.
 10. Operational Support Guard: if the human asks to test, run, deploy, switch account/config/model/provider, check quota/rate limits, diagnose production, arrange rollout, or use existing code to solve an operational problem, default to read-only code/process analysis. Do not create a feature, edit code, change config, deploy, or run destructive commands unless the human confirms feature implementation or an operational change. If unclear, ask whether they want feature implementation or help using current project functionality.
-11. If the human reports a bug, regression, post-close correction, field/schema/algorithm/API change, test failure, screenshot issue, QA/user feedback, or "small tweak", route to Feature Follow-up / Flow-back before creating a new feature or editing code, but only after project memory exists or Project Entry has routed through Init Project / Existing Project Onboarding.
+11. If the human reports a bug, regression, post-close correction, field/schema/algorithm/API change, test failure, screenshot issue, QA/user feedback, or "small tweak", route to Feature Follow-up / Flow-back before creating a new feature or editing code, but only after project memory exists or Project Entry has routed through Init Project / Project Entry Scan.
 12. Run Stage Helper Capability Scan for the current stage: inspect whether the current Agent CLI exposes Superpowers or other helper skills/plugins before using fallback stage guidance.
 13. Check for the nearest directory-level `AGENTS.md` when working in a subdirectory.
 14. Classify the current `agent-loop` stage and recommend exactly one next action.
@@ -154,7 +154,7 @@ Auto modes do not bypass these stops.
 <!-- agent-loop:managed-start section:architecture source:.agent-loop/project.md block-version:1.2.3-20260628 -->
 ## Architecture Snapshot
 
-Add only startup-critical architecture boundaries that every future agent must know immediately. If the project has `ARCHITECTURE.md`, this block may use `source:ARCHITECTURE.md` instead. Keep details in `ARCHITECTURE.md`, `.agent-loop/project.md`, or `.agent-loop/onboarding-db/`.
+Add only startup-critical architecture boundaries that every future agent must know immediately. If the project has `ARCHITECTURE.md`, this block may use `source:ARCHITECTURE.md` instead. Keep details in `ARCHITECTURE.md`, `.agent-loop/project.md`, or enterprise `.agent-loop/project/*.md`.
 <!-- agent-loop:managed-end section:architecture -->
 
 <!-- agent-loop:managed-start section:directory-guidance source:.agent-loop/project.md block-version:1.2.3-20260628 -->

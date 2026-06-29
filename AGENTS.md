@@ -80,7 +80,7 @@ feat, fix, docs, refactor, test, chore
 Rules:
 
 - Prefer Chinese for the summary and body unless the project context requires English.
-- Include the current skill version scope, for example `docs(v1.2.0): 更新 onboarding scan 文档结构`.
+- Include the current skill version scope, for example `docs(v1.2.3): 调整 Project Entry Scan 文档结构`.
 - Do not use one-line-only commit messages for meaningful behavior, gate, artifact, template, reference, validation, or example changes.
 - Use 3-7 bullet lines in the commit body, focused on concrete changes and user/agent-facing behavior.
 - Use `docs` for proposals, README, Usage, and explanatory docs.
@@ -127,12 +127,12 @@ Validate these six domains. Each domain checks logic correctness, not operationa
    - Stage Helper Capability Scan is agent-initiated; fallback is automatic; external skills are accelerators only
    - No "I don't know what to do next" legal exit — `blocked` still recommends "Ask Human / Diagnose"
 
-3. **Onboarding Logic**
-   - Quick / Deep / Targeted three modes have mutually exclusive entry conditions and non-overlapping outputs
-   - Expanded / Standard / Compact layout logic is self-consistent; no information loss across layouts
-   - onboarding-db freshness check is trigger-only, not auto-rewrite; stale-memory routing is consistent across files
-   - onboarding diagnostics has a clear logical position (onboarding-only, not replacing TDD debugging)
-   - Cross-file consistency: Quick rules, README requirements, Entry Classification routing are aligned
+3. **Project Entry / Evidence-Graph + DDD Onboarding Logic**
+   - Existing projects route to Project Entry Scan only: project memory, root guidance, commands, boundaries, capabilities, uncertainties
+   - Old onboarding-db / Deep Onboarding generation is replaced by Evidence-Graph + DDD Onboarding after Project Entry Scan or reliable memory
+   - Deleted legacy references and templates are not loaded or recreated
+   - Existing legacy onboarding-db paths are evidence only; stale references route to recovery/backfill without regeneration
+   - Cross-file consistency: SKILL.md, runtime, stage guides, checklists, Usage, and validation scenarios all require Evidence Graph, Onboarding Spec, Onboarding Tasks, single-file module/flow docs by default, and wireframe architecture flow diagrams as the preferred main flow expression
 
 4. **Dev/Test Workflow Logic**
    - Plan Gate blocks "create tasks then immediately implement"; two exits (accepted plan / No-Plan Decision) cover all scenarios
@@ -147,11 +147,11 @@ Validate these six domains. Each domain checks logic correctness, not operationa
    - Stale Memory detection → Recovery Backfill path is complete; "code reality wins" holds in all scenarios
    - Managed Block version sync logic is sound; semver comparison; human content preserved
    - Cross-feature memory consistency: project memory update is triggered after feature changes; no multi-active-feature memory conflict漏洞
-   - Memory and Guidance dependency: onboarding incomplete if guidance missing/stale; no bootstrap gap
+   - Memory and Guidance dependency: Project Entry Scan is incomplete if guidance is missing/stale; no bootstrap gap
 
 6. **Recommendation Logic**
    - All stage completions have明确 exits (Submit / Pause / Close)
-   - Vague goals route to onboarding / resume / clarify
+   - Vague goals route to Project Entry Scan / resume / clarify
    - Uncompletable tasks route to "Ask Human"
    - Recommendation has uniqueness: agent recommends exactly one next stage
 
