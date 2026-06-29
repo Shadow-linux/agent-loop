@@ -149,7 +149,7 @@ Rules:
 - Content outside managed blocks is human/project-owned. Do not rewrite it automatically.
 - If an existing `AGENTS.md` has no managed blocks, propose adding the minimal needed managed blocks instead of replacing the whole file.
 - If the file-level managed version is equal but a block-version is missing or older than the current template, treat that block as stale.
-- Treat bare skill-version-only block revisions such as `block-version:1.2.3` as stale because they cannot distinguish same-version template revisions.
+- Treat bare skill-version-only block revisions such as `block-version:1.2.4` as stale because they cannot distinguish same-version template revisions.
 - If a managed block exists in the current template but is missing from root AGENTS.md, treat it as a missing managed block and propose adding it.
 - If a managed block source is missing, stale, or contradictory, classify the block as stale and propose either source correction or block refresh through Human Review Summary.
 - If marker pairs are broken, duplicated, nested, or ambiguous, stop and ask before editing.
@@ -191,7 +191,7 @@ Use this protocol when root `AGENTS.md` exists and the project already uses `age
 4. Compare the file-level managed version with the current local `agent-loop` skill version.
 5. Compare each managed block `section` and `block-version` against the current root AGENTS template.
 6. If the file-level managed version is equal but a block-version is missing or older than the current template, treat that block as stale.
-7. Treat bare skill-version-only block revisions such as `block-version:1.2.3` as stale because they cannot distinguish same-version template revisions.
+7. Treat bare skill-version-only block revisions such as `block-version:1.2.4` as stale because they cannot distinguish same-version template revisions.
 8. Treat date-only block revisions such as `block-version:2026-06-27` as stale because they are not tied to the agent-loop template version.
 9. Treat malformed or different block-version values as stale; exact full template block-version match is required.
 10. If a managed block exists in the current template but is missing from root AGENTS.md, treat it as a missing managed block and propose adding it.

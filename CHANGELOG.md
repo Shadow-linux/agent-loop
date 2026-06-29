@@ -1,5 +1,13 @@
 # Agent Loop Changelog
 
+## 1.2.4 — 2026-06-29
+
+### Version Baseline
+- Started the 1.2.4 development line from the current alpha branch so new behavior changes are recorded under 1.2.4 instead of the closed 1.2.3 section.
+- Updated version-bearing skill metadata, human-facing docs, and root AGENTS template metadata to use 1.2.4 as the active skill version.
+- Updated the root AGENTS managed-block revision to `block-version:1.2.4-20260629` so target projects can detect stale same-version guidance blocks during refresh.
+- Updated validation coverage so version sync checks fail if SKILL, plugin metadata, README, Usage, or root AGENTS template drift back to 1.2.3.
+
 ## 1.2.3 — 2026-06-19
 
 ### Release Shape

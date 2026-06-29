@@ -36,6 +36,7 @@ This repository contains the `agent-loop` skill source.
 - Commit messages for this skill repository should use type + version scope, prefer Chinese, and include a concrete multi-line body for meaningful changes.
 - Stable release branches use the exact version name, for example `v1.0.1`, not `release/1.0.1`.
 - This repository is mirrored to two remotes: `origin` (`git@github.com:Shadow-linux/agent-loop.git`) and `ai-factory` (`git@124.174.38.59:ai-factory/agent-loop.git`). When pushing release branches or tags, push the same branch and tag to both remotes.
+- Do not create or push git tags unless the human explicitly asks for a tag.
 
 ## Version Sync Checklist
 
@@ -81,7 +82,7 @@ feat, fix, docs, refactor, test, chore
 Rules:
 
 - Prefer Chinese for the summary and body unless the project context requires English.
-- Include the current skill version scope, for example `docs(v1.2.3): 调整 Project Entry Scan 文档结构`.
+- Include the current skill version scope, for example `docs(v1.2.4): 调整 Project Entry Scan 文档结构`.
 - Do not use one-line-only commit messages for meaningful behavior, gate, artifact, template, reference, validation, or example changes.
 - Use 3-7 bullet lines in the commit body, focused on concrete changes and user/agent-facing behavior.
 - Use `docs` for proposals, README, Usage, and explanatory docs.

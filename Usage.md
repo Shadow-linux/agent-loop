@@ -1,6 +1,6 @@
 # Agent Loop 使用指南
 
-**版本：** 1.2.3
+**版本：** 1.2.4
 
 这份文档是给人类看的。你不需要记住内部阶段名，只要用自然语言说出你想做什么，Agent 应该自己判断当前状态、推荐一个下一步，并在需要你确认的地方停下来。
 
@@ -45,7 +45,7 @@ Project Entry Scan 不算完成，除非 root `AGENTS.md` 已存在、已创建�
 | “重点讲清楚支付/钱包/任务调度这块。” | 先从现有代码和文档回答；如果要沉淀长期文档，再走聚焦的 onboarding-db 更新。 |
 | “这个旧 onboarding-db 还能信吗？” | 把旧文档当 evidence，先和代码现实核对；不直接按旧布局刷新。 |
 
-当前 1.2.3 使用的是 **Evidence-Graph + DDD Onboarding**，不是旧 Quick / Deep / Targeted 模式。
+当前 1.2.4 使用的是 **Evidence-Graph + DDD Onboarding**，不是旧 Quick / Deep / Targeted 模式。
 
 推荐流程：
 
@@ -90,7 +90,7 @@ Agent 不应该用空目录、薄 README、planned/later 占位文件、`TBD`、
 
 | 你可以这样说 | Agent 应该怎么做 |
 |---|---|
-| “1.2.3 更新了什么？” | 读取 `CHANGELOG.md` 的 1.2.3 段落，按能力分类总结，不凭记忆回答。 |
+| “1.2.4 更新了什么？” | 读取 `CHANGELOG.md` 的 1.2.4 段落，按能力分类总结，不凭记忆回答。 |
 | “和 1.2.2 比有什么变化？” | 对比 `CHANGELOG.md` 里的两个版本段落，说明新增、删除、替换和迁移影响。 |
 | “现在 agent-loop 怎么用？” | 基于 `Usage.md` 用人类语言介绍常见触发方式。 |
 | “这个功能怎么触发？” | 从 `Usage.md` 找对应说法，再说明 Agent 会进入哪个处理流。 |

@@ -1186,14 +1186,14 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Root AGENTS.md has `version:1.2.3`, but it lacks Message Intent Guard and all managed-start comments are missing `block-version`. Continue feature work.
+Use agent-loop. Root AGENTS.md has `version:1.2.4`, but it lacks Message Intent Guard and all managed-start comments are missing `block-version`. Continue feature work.
 ```
 
 Expected:
 
 - read root `AGENTS.md` before feature work
 - compare the file-level managed version and per-block `block-version` values against the current root AGENTS template
-- do not treat matching file-level `version:1.2.3` as sufficient
+- do not treat matching file-level `version:1.2.4` as sufficient
 - classify root guidance as stale because required managed sections or block revisions are missing
 - propose adding the missing managed block and refreshing older/missing block-version markers through Human Review Summary
 - preserve all human-owned content outside managed blocks
@@ -1204,15 +1204,15 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. It has `version:1.2.3` and every managed block has `block-version:1.2.3`, while the current root AGENTS template uses `block-version:1.2.3-20260628`.
+Use agent-loop. Refresh root AGENTS.md. It has `version:1.2.4` and every managed block has `block-version:1.2.4`, while the current root AGENTS template uses `block-version:1.2.4-20260629`.
 ```
 
 Expected:
 
 - read root `AGENTS.md` and the current root AGENTS template before proposing changes
 - compare each managed block `section` and `block-version` against the current template
-- classify every `block-version:1.2.3` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
-- propose replacing stale block revisions with the full current template revision such as `block-version:1.2.3-20260628`
+- classify every `block-version:1.2.4` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
+- propose replacing stale block revisions with the full current template revision such as `block-version:1.2.4-20260629`
 - copy the current template start marker metadata for each refreshed section unless `source` must point at the target project's active memory root or artifact source
 - preserve all human-owned content outside managed blocks
 - ask for human confirmation before writing
@@ -1222,7 +1222,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. It has `version:1.2.3` and managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.2.3-20260628`.
+Use agent-loop. Refresh root AGENTS.md. It has `version:1.2.4` and managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.2.4-20260629`.
 ```
 
 Expected:

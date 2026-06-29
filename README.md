@@ -1,6 +1,6 @@
 # Agent Loop
 
-**Current version:** 1.2.3
+**Current version:** 1.2.4
 
 A reusable [Codex](https://github.com/openai/codex) / CLI-agent skill for single-person software development workflows—from goal intake to verified close.
 

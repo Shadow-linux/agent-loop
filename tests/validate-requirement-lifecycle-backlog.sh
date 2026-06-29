@@ -74,12 +74,12 @@ assert_contains "README.md" "Requirement Lifecycle / Backlog"
 assert_contains "Usage.md" "需求待办"
 assert_contains "Usage.md" "当前恢复动作"
 assert_contains "CHANGELOG.md" "Requirement Lifecycle / Backlog"
-assert_contains "SKILL.md" "Version: 1.2.3"
-assert_contains "README.md" "**Current version:** 1.2.3"
-assert_contains "Usage.md" "**版本：** 1.2.3"
-assert_contains "plugin.json" '"version": "1.2.3"'
-assert_contains "templates/root-AGENTS.md" "version:1.2.3"
-assert_contains "templates/root-AGENTS.md" 'skill version `1.2.3`'
+assert_contains "SKILL.md" "Version: 1.2.4"
+assert_contains "README.md" "**Current version:** 1.2.4"
+assert_contains "Usage.md" "**版本：** 1.2.4"
+assert_contains "plugin.json" '"version": "1.2.4"'
+assert_contains "templates/root-AGENTS.md" "version:1.2.4"
+assert_contains "templates/root-AGENTS.md" 'skill version `1.2.4`'
 assert_contains "AGENTS.md" 'ignore the `alpha` prefix for version records'
 
 echo "PASS: requirement lifecycle/backlog contract is complete"
