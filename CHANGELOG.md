@@ -2,84 +2,72 @@
 
 ## 1.2.3 — 2026-06-19
 
-### Project Entry / Onboarding Reset
-- Removed the active legacy onboarding-db generation flow before replacing it with Evidence-Graph + DDD Onboarding.
-- Renamed the old existing-project onboarding reference to `references/project-entry-scan.md` and scoped it to safe project memory, root guidance status, commands, boundaries, capabilities, and uncertainties.
-- Deleted old onboarding generation references and templates: `project-onboarding-scan.md`, `onboarding-db.md`, `onboarding-db-templates.md`, `onboarding-diagnostics.md`, and `templates/onboarding-db/*`.
-- Updated runtime, stage guides, workflow checklists, Usage, root AGENTS template, validation scenarios, and examples so Project Entry Scan does not create onboarding-db detail docs, module/flow docs, onboarding diagrams, `onboarding-spec.md`, or `onboarding-tasks.md`.
-- Treat existing `.agent-loop/onboarding-db/` paths as legacy evidence only; missing/stale references now route to recovery/backfill without regenerating onboarding-db.
+### Release Shape
+- 1.2.3 finalizes the split between safe project entry and durable project understanding: Project Entry Scan is for safe continuation, while Evidence-Graph + DDD Onboarding is for newcomer-facing knowledge base construction.
+- The old Quick / Deep / Targeted onboarding modes, directory-first onboarding generation, and thin onboarding-db file spray are removed from the active workflow.
+- The 1.2.3 changelog is grouped by final behavior area. Intermediate Deep Onboarding / graph-first experiments are treated as superseded by the final Evidence-Graph + DDD Onboarding model.
+
+### Project Entry Scan
+- Replaced existing-project onboarding with `references/project-entry-scan.md`, scoped to safe project memory, root guidance status, commands, boundaries, capabilities, and uncertainties.
+- Project Entry Scan now explicitly does not create `.agent-loop/onboarding-db/`, module/flow docs, onboarding diagrams, `onboarding-spec.md`, or `onboarding-tasks.md`.
+- Updated runtime, stage guides, workflow checklists, Usage, root AGENTS template, validation scenarios, and examples so existing projects enter through Project Entry Scan before feature work or durable onboarding docs.
+- Existing legacy `.agent-loop/onboarding-db/` paths are treated as evidence only. Missing or stale onboarding references route to recovery/backfill instead of automatic regeneration.
 
 ### Evidence-Graph + DDD Onboarding
-- Added `references/onboarding-knowledge-base.md` as the Evidence-Graph + DDD onboarding reference for newcomer-facing project understanding after Project Entry Scan or reliable project memory.
-- Reintroduced `templates/onboarding-db/` around Evidence Graph, Onboarding Spec, Onboarding Tasks, single-file module playbooks, single-file flow playbooks, coverage matrix, and batch review.
-- Updated runtime, stage guides, workflow checklists, Usage, README, artifact rules, and validation scenarios so agents build onboarding-db through Evidence Graph, a human-confirmed Onboarding Spec, accepted tasks, reviewed batches, and coverage scoring.
-- Clarified that after humans confirm Onboarding Spec / Onboarding Tasks, agents may execute the full planned onboarding-db autonomously; batches are agent organization/review units, not repeated human gates.
-- For full onboarding execution, required content-rich Chinese documents and banned empty directories, thin README placeholders, planned/later placeholder files, and TBD/待补充 files.
-- Required evidence-backed inferred content to be labeled as 推断 with evidence, confidence, and validation gaps instead of being omitted or presented as fact.
-- Replaced generic stacked wireframe guidance with state-first diagram rules: every formal onboarding doc should include architecture/boundary + ASCII state diagrams.
-- Made module and flow docs default to architecture/boundary + ASCII state + Timeline/sequence diagrams so onboarding explains where the module is, how state changes, and how the process runs over time.
-- Tightened diagram coverage so every content-bearing onboarding-db document must plan and include its required diagram set unless explicitly exempted; coverage scoring now checks the diagram set, architecture clarity, state clarity, and timeline/sequence clarity separately.
-- Upgraded onboarding diagrams to a module/flow teaching model: module and flow docs default to architecture/boundary + ASCII state + Timeline/sequence diagrams, Mermaid flowchart/sequenceDiagram is preferred for normal flow/timing, and ASCII remains preferred for state machines, complex principle diagrams, and complex examples.
-- Kept old Quick / Deep / Targeted onboarding and directory-first legacy generation removed; old onboarding-db layouts remain evidence only until migrated through an accepted Onboarding Spec or focused update.
-- Documented Chinese-default onboarding-db output, multi-project/fullstack requirements, no total topic cap, and the rule that human examples are quality/detail references only.
-
-### Requirement Delivery Phases
-- Added optional requirement-level `Delivery Phases` for complex requirements that need MVP/later scope, staged delivery confirmation, or likely multiple downstream features before feature construction.
-- Defined phase ownership under requirement set `README.md`, with optional `notes.phase-<n>-<slug>.md`, while keeping `requirement.md` as stable source material rather than lifecycle state.
-- Clarified that phases are human-readable delivery slices, not feature workspaces, tasks, plans, ADRs, or project memory.
-- Required phased feature specs to reference one accepted phase or one single-phase slice; agents must stop before combining multiple phases into one feature unless the human first confirms phase rewrite or merge.
-- Added Drift Check / Requirement Reconciliation rules so phase status and `Feature Mapping` are backfilled in the requirement README when feature implementation changes requirement lifecycle state.
-- Updated requirement README, root AGENTS, Usage, stage guide, workflow checklist, and document-template guidance to keep phase behavior scoped to requirements and referenced by downstream feature artifacts only when applicable.
+- Added `references/onboarding-knowledge-base.md` for newcomer-facing project understanding after Project Entry Scan or reliable project memory.
+- Rebuilt `templates/onboarding-db/` around Evidence Graph, Onboarding Spec, Onboarding Tasks, single-file module playbooks, single-file flow playbooks, coverage matrix, and batch review.
+- Onboarding now flows through Evidence Graph -> human-reviewed Onboarding Spec -> Onboarding Tasks -> module/flow/infra docs -> coverage scoring.
+- After humans confirm Onboarding Spec / Onboarding Tasks, agents may complete the accepted onboarding-db plan in one continuous execution pass. Batches are agent organization and review units, not repeated human gates.
+- Required content-rich Chinese onboarding docs and banned empty directories, thin README placeholders, planned/later placeholder files, unresolved `TBD` / `TODO` / `待补充`, and vague "see code" evidence.
+- Required inferred content to be labeled as `推断` with evidence, confidence, and validation gaps.
+- Module and flow docs default to architecture/boundary diagrams, ASCII state diagrams, and Timeline / sequence diagrams so readers understand boundaries, state changes, and process timing.
+- Mermaid flowchart / sequenceDiagram is preferred for normal flow and timing; ASCII remains preferred for state machines, complex principle diagrams, and complex examples.
+- Human examples are quality/detail references only. They must not be copied as fixed topic lists, topic counts, domain names, or project structures.
 
 ### Requirement Lifecycle / Backlog
+- Added Message Intent classification for `chat` and `requirements-discussion` so ordinary discussion stays answer-only, while requirements discussion goes through Brainstorm / Clarify into human-reviewed requirement documents under `.agent-loop/requirements/`.
 - Added requirement lifecycle/backlog rules so future or deferred work is captured in requirement sets and optional `requirements/INDEX.md`, not in `project.md`.
-- Extended requirement set README and requirements index templates with lifecycle, backlog/deferred, in-progress, implemented, superseded, and rejected views while keeping source files free-form.
-- Added backward compatibility rules for old requirement set README files and immutable-source rules so `requirement.md` is not rewritten for lifecycle/status updates.
+- Extended requirement set README and requirements index templates with lifecycle, backlog/deferred, in-progress, implemented, superseded, rejected, and reference-only views while keeping original source files stable.
 - Added Requirement Conflict Review for large follow-up conflicts that should create a new requirement set or supersede the old one after human confirmation.
-- Clarified Targeted Onboarding output, Feature Completion blocked handling, and Feature Follow-up priority behind Project Entry when agent-loop memory is missing.
-- Added Message Intent classification for `chat` and `requirements-discussion` so ordinary discussion stays answer-only, while requirements discussion goes through Brainstorm / Clarify into human-reviewed requirement documents under `.agent-loop/requirements/` before feature construction.
-- Clarified that features derive `product.md` / `spec.md` from requirement sets but never own requirement source or lifecycle.
+- Clarified that feature `product.md` and `spec.md` derive from requirement sets but never own requirement source or lifecycle.
 
-### Root Guidance Skill Re-entry
+### Delivery Phases
+- Added optional requirement-level `Delivery Phases` for complex requirements that need MVP/later scope, staged delivery confirmation, or likely multiple downstream features before feature construction.
+- Defined phase ownership under requirement set `README.md`, with optional `notes.phase-<n>-<slug>.md`; `requirement.md` remains stable source material rather than lifecycle state.
+- Clarified that phases are human-readable delivery slices, not feature workspaces, tasks, plans, ADRs, or project memory.
+- Required phased feature specs to reference one accepted phase or one single-phase slice. Agents stop before combining multiple phases unless the human first confirms a phase rewrite or merge.
+- Added Drift Check / Requirement Reconciliation rules so phase status and `Feature Mapping` are backfilled in the requirement README when feature implementation changes requirement lifecycle state.
+
+### Root Guidance And AGENTS Refresh
 - Added Skill Re-entry Rule so root `AGENTS.md` is treated as a bootstrap cache, not a replacement for the `agent-loop` skill.
 - Required agents to load/use the available `agent-loop` skill during Project Entry, Resume, Re-Adopt, stage boundaries, after context compaction, long-running sessions, or workflow uncertainty.
-- Added fallback reporting for unavailable/load-failed skill resolution and validation coverage for long-running agents that try to continue from memory or static root guidance alone.
-- Clarified that Stage Helper Capability Scan does not satisfy Skill Re-entry because helper scan resolves stage methods, not the `agent-loop` controller.
-- Added per-managed-block `block-version` metadata and root AGENTS refresh protocol so same-version templates can still detect missing or stale managed blocks.
-- Added `scripts/check-root-agents-blocks.sh`, a read-only checker that compares target root `AGENTS.md` managed sections against `templates/root-AGENTS.md` and reports missing, stale, broken, unexpected, or source-missing managed blocks before human-approved refresh.
-- Shortened the Managed Block Rule in root AGENTS guidance while preserving confirmation, outside-content protection, and cleanup / migration review requirements.
-- Clarified that target-project AGENTS refreshes must copy the full template block revision, such as `block-version:1.2.3-20260628`; bare skill-version-only values like `block-version:1.2.3` are stale.
-- Extended root AGENTS refresh checks so date-only or malformed block versions and missing Managed Block Rule are treated as stale startup guidance.
+- Added per-managed-block `block-version` metadata and root AGENTS refresh protocol so same-version template changes can still detect missing or stale managed blocks.
+- Added `scripts/check-root-agents-blocks.sh`, a read-only checker that reports missing, stale, broken, unexpected, or source-missing managed blocks before human-approved refresh.
+- Clarified that target-project AGENTS refreshes must copy the full template block revision, such as `block-version:1.2.3-20260628`; bare skill-version-only, date-only, malformed, or missing revisions are stale.
 - Added an explicit pre-commit artifact review reminder to root AGENTS Submit And Commit Rules so agents review feature docs, requirement records, code diff, verification evidence, drift, project memory, root/directory guidance impact, and unrelated changes before commit.
 
-### Medium Consistency Fixes
+### Workflow Safety And Consistency
 - Clarified Auto Mode stop conditions for Delivery Contract creation, acceptance, and breaking changes across runtime guidance.
 - Added routing priority for `remote-entry` before `existing-project`, single-next-stage blocked routing, and no-direct-close Drift Check exits.
 - Added explicit helper scan coverage for Work Breakdown, Test Design, E2E Discovery, and Technical Design / Code Context.
-- Added onboarding mode recording and guided-onboarding fallback routing when onboarding-db is missing.
 - Aligned Standards Review triggers across Task Done Gate, Review, Feature Completion Check, and workflow checklists.
 - Hardened Submit / Integrate exits so successful submission routes to Feature Completion Check instead of direct Close.
 - Added a shared blocked routing matrix covering Ask Human, Diagnose Failure, Verify, Pause, and Targeted Feature Scan.
 
-### Superseded Deep Onboarding Quality Iteration
-- Earlier in the 1.2.3 onboarding redesign, Quick / Deep / Targeted modes were temporarily replaced with a single "Deep Onboarding" quality model. This intermediate model is superseded by the current Evidence-Graph + DDD Onboarding section above.
-- Earlier spec-first onboarding drafts used `onboarding-plan.md` and `deep-dives/<topic>.md`; current active guidance uses `onboarding-tasks.md`, `02-modules/<module-name>.md`, and `03-flows/<flow-name>.md` by default.
-- Removed legacy onboarding-db form templates and Compact / Standard / Expanded generation modes; legacy categorized docs may still be read as evidence or maintained for compatibility in existing onboarding-db directories.
-- Added an intermediate quality-gate idea so onboarding was judged as newcomer handoff material, not by file count alone; this survives in the current coverage scoring and `newcomer-ready` gate.
-- Required core domain and service startup/config coverage in the intermediate model; this survives in the current Evidence Graph, Onboarding Spec, and coverage matrix expectations.
-- Added validation coverage for thin expanded onboarding-db outputs with many small files but insufficient core flow, data, startup, verification, or change-risk detail.
-- Tried an intermediate graph-first split where Quick created a lightweight Evidence Graph package; this was superseded by the current rule that Project Entry Scan never creates onboarding-db, and Evidence-Graph + DDD Onboarding owns Evidence Graph creation after reliable memory exists.
-- Added required-core status model, Evidence Graph node/edge schemas, graph slices, Coverage Matrix completion rules, and colored diagram policy.
-- Added templates for Evidence Graph, Core Domain Inventory, Core Flow Inventory, Coverage Matrix, Service Startup Matrix, Main Traffic Flow, Core Flow Deep Trace, Core Module Deep Dive, and Targeted Graph Slice.
-- Demoted old flow/module templates to ordinary/supporting use; the current replacement requires single-file module/flow playbooks with appropriate ASCII diagram types, code evidence, examples, failure modes, and verification/observability.
+### Complex Artifact Mode
+- Replaced hard Complex Artifact recommendation thresholds with semantic assessment: story/task/test/file counts are signals, not sufficient triggers.
+- Defined Complex Artifact Mode by "牵一发而动全身": recommend it only when a feature cannot be safely understood, planned, or verified as one cohesive change because it spans collaborating modules, services, workflows, ownership lanes, or release/operation concerns.
+- Preserved human confirmation before creating `tasks/`, `tests/`, and `plans/` detail directories and added Feature Auto-Loop stop conditions for that creation.
 
-### Complex Artifact Thresholds
-- Replaced hard Complex Artifact recommendation thresholds with a simpler assessment model: stories > 3 pauses for assessment, but does not itself recommend Complex Artifact Mode.
-- Defined Complex Artifact Mode by "牵一发而动全身" semantics: recommend only when a feature cannot be safely understood, planned, or verified as one cohesive change because it spans collaborating modules, services, workflows, ownership lanes, or release/operation concerns.
-- Clarified that story count, task count, test count, and ordinary file/module count are assessment signals only, not sufficient recommendation triggers.
-- Aligned large-project guidance and stage write rules so Complex Mode assessment does not auto-materialize detail directories; `tasks/`, `tests/`, and `plans/` details are created only where needed after confirmation.
-- Preserved human confirmation before creating complex detail directories and updated threshold-boundary validation coverage around semantic complexity.
-- Added explicit Feature Auto-Loop stop condition for Complex Artifact Mode detail directory creation so `tasks/`, `tests/`, and `plans/` directories cannot be auto-created without human confirmation.
+### Templates, Docs, And Validation
+- Updated README, Usage, SKILL package map, runtime, stage guides, workflow checklists, artifact rules, validation scenarios, and examples to match the final 1.2.3 model.
+- Removed superseded references and templates: `project-onboarding-scan.md`, `onboarding-db.md`, `onboarding-db-templates.md`, `onboarding-diagnostics.md`, legacy deep-dive templates, and old deep-onboarding validation scripts.
+- Added validation scripts for Evidence-Graph + DDD Onboarding and Project Entry onboarding reset, while keeping existing contracts for requirements, helper routing, root AGENTS refresh, operational support, and medium consistency.
+
+### Human Help / Version Questions
+- Added a human-help routing rule so CHANGELOG.md is the source of truth for version-change answers, Usage.md is the source of truth for human-facing trigger phrases, and README.md remains the overview/install/quick-start source.
+- Clarified that every meaningful version should update `CHANGELOG.md`, while `Usage.md` changes only when human-facing usage, trigger phrases, or workflow explanation changes.
+- Added validation coverage so future agents answer "what changed in 1.2.3?" and "how do I use this?" from maintained docs instead of memory.
 
 ## 1.2.2 — 2026-06-15
 

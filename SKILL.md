@@ -39,6 +39,17 @@ Also treat long-term memory indexes as claims that must be verified before relia
 
 Before project-state classification, classify the latest human message intent. `chat` means ordinary discussion, rules questions, status questions, or design talk; answer or discuss only and do not create requirement sets or feature workspaces by default. Message intent is not permanent: if chat turns into demand shaping, `proposal-doc`, implementation, operational support, follow-up, or deferred work, reclassify and route accordingly. If the human explicitly wants discussion without documentation, keep `chat`. `requirements-discussion` means the human is shaping product needs, business goals, capability ideas, constraints, tradeoffs, or user scenarios without authorizing implementation; use Brainstorm / Clarify to produce a human-reviewed requirement document under `.agent-loop/requirements/` before feature construction. If unclear, ask whether the human wants ordinary discussion, requirements documentation, or feature implementation.
 
+## Human Help And Version Questions
+
+When the human asks what changed in a version, what is new, how to use agent-loop, how to trigger a capability, or how behavior differs across versions:
+
+- use `CHANGELOG.md` as the source of truth for version changes
+- use `Usage.md` as the source of truth for human-facing usage examples and trigger phrases
+- use `README.md` for high-level overview, install, and quick-start explanation
+- answer from those docs instead of memory
+- if the question names a version, read that version section first
+- if the question asks how to use agent-loop, summarize in human wording from `Usage.md`
+
 ## Mandatory Stage Helper Protocol
 
 Seven stages are mandatory helper-backed stages when a matching helper is exposed by the runtime: Brainstorm / Clarify, Plan Gate / Plan, Execute Task / Story, Diagnose Failure, Verify, Review / Feature Close Review, and approved Subagent Execution.
@@ -106,7 +117,9 @@ templates/                         copy-ready artifact templates
 examples/login-feature/            small finished feature workspace
 examples/complex-saas-project/     larger takeover + feature execution workspace
 examples/remote-entry/             local empty directory pointing to a remote project
-CHANGELOG.md                        skill maintenance history; append meaningful future changes
+README.md                           human overview, install, and quick-start source
+Usage.md                            human-facing trigger phrase and usage guide
+CHANGELOG.md                        version-change source of truth for "what changed" questions
 ```
 
 ## Required Runtime Behavior
