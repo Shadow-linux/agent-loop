@@ -35,6 +35,7 @@ This repository contains the `agent-loop` skill source.
 - For this repository, when working on an `alpha-v<x.y.z>` branch, treat `<x.y.z>` as the intended skill version; ignore the `alpha` prefix for version records and changelog headings after the human approves implementation for that version.
 - Commit messages for this skill repository should use type + version scope, prefer Chinese, and include a concrete multi-line body for meaningful changes.
 - Stable release branches use the exact version name, for example `v1.0.1`, not `release/1.0.1`.
+- This repository is mirrored to two remotes: `origin` (`git@github.com:Shadow-linux/agent-loop.git`) and `ai-factory` (`git@124.174.38.59:ai-factory/agent-loop.git`). When pushing release branches or tags, push the same branch and tag to both remotes.
 
 ## Version Sync Checklist
 
