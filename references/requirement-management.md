@@ -69,6 +69,20 @@ Do not move the requirement source into a feature workspace when implementation 
 
 Feature `product.md` and `spec.md` may be derived from accepted requirements, but they are implementation views. They do not replace the requirement set and do not own requirement lifecycle.
 
+## Requirement/Product Grill
+
+Use Requirement/Product Grill during requirements discussion when terminology, business rules, flows, boundaries, exception paths, or historical feature behavior need clarification.
+
+Rules:
+
+- Load `requirement-product-grill.md` before asking grill-style questions.
+- Ask one blocking question at a time and include the recommended answer.
+- Inspect project memory, source requirements, code/docs/tests, and targeted prior feature artifacts before asking when those sources may already answer the question.
+- Record accepted local terminology, scenarios, open questions, and conflicts in the requirement set `README.md` or reviewed requirement document.
+- Do not promote grill output to project memory, product.md, spec.md, or decisions without the owning human gate.
+- Route hard-to-reverse, surprising, or real-trade-off signals to Decision Scan as candidates, not accepted ADRs.
+- Do not create `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/`.
+
 ## Requirement Delivery Phases
 
 Use Delivery Phases when a requirement is too large to turn directly into one clear feature, or when humans need to confirm delivery order before implementation.

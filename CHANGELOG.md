@@ -18,6 +18,9 @@
 - Defined output mapping from `CONTEXT.md` and `docs/adr/` concepts into agent-loop artifacts such as requirement README, `product.md`, project Domain Language candidates, and `.agent-loop/decisions/`.
 - Clarified that `grill-with-docs` asks targeted domain questions and surfaces decision signals, while `to-prd` synthesizes known context and Decision Scan decides whether long-term decisions need durable records.
 - Clarified that grill questions should inspect relevant prior feature artifacts with targeted lookup before asking humans, and surface conflicts for a human choice between reuse, override, or new-scope handling.
+- Implemented the Requirement/Product Grill lane across runtime guidance, stage guides, product/requirement references, helper adapters, workflow checklists, Usage, and validation scenarios.
+- Added grill-enriched requirement and product templates so clarified terminology, flows, exceptions, source-of-truth data, historical conflicts, decision candidates, product journeys, tradeoffs, and success signals are captured structurally.
+- Hardened the Product Brief Source Gate so chat or requirements discussion cannot directly create feature `product.md` without a requirement source and confirmed feature context.
 
 ## 1.2.3 — 2026-06-19
 

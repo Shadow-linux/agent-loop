@@ -73,7 +73,7 @@ Do not ask the human whether to use a helper just because it exists. Announce or
 | Stage | Preferred Skill Type | Fallback |
 |---|---|---|
 | Brainstorm / Clarify if Needed | brainstorming / product discovery | Ask 1-5 high-impact questions from `stage-guides.md` |
-| Product Brief If Needed | PRD/product synthesis, grill-with-docs | Use `templates/product.md` |
+| Product Brief If Needed | PRD/product synthesis, grill-with-docs style helpers | Use `templates/product.md` |
 | Feature Spec | spec writing | Use `templates/spec.md` |
 | Human Review Summary | approval summary / decision table | Use `human-review-summary.md` |
 | Work Breakdown | issue/task splitter | Use `templates/tasks.md` |
@@ -96,7 +96,8 @@ If Superpowers is available, these map cleanly:
 
 - `using-superpowers`: reminder that relevant skills should be loaded before acting.
 - `brainstorming`: Brainstorm / Clarify if Needed; translate output to `product.md` or `spec.md`, not `docs/superpowers/specs/`.
-- PRD/product skills such as mattpocock `to-prd`: Product Brief If Needed, translated into local `product.md`.
+- PRD/product skills such as mattpocock `to-prd`: Product Brief If Needed, translated into local `product.md` only after Product Brief Source Gate passes.
+- Requirement/Product Grill and mattpocock `grill-with-docs`: Requirements Discussion, Product Brief, and Brainstorm / Clarify clarification; translate output to requirement README, `product.md`, `spec.md`, `notes.md`, or Decision Candidate routing, not native `CONTEXT.md` or `docs/adr/`.
 - `writing-plans`: Plan Gate / Plan If Needed; translate into construction-grade `plan.md` or `plans/*`, or record a justified No-Plan Decision for a trivial task, not `docs/superpowers/plans/`.
 - `test-driven-development`: Execute Task / Story; evidence still goes to `notes.md` and task status still follows Task Done Gate.
 - `systematic-debugging`: Diagnose Failure; root cause and fix evidence go to `notes.md`.

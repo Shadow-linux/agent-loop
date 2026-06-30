@@ -2260,3 +2260,111 @@ Expected G:
 - keep the intent as `chat` because the human explicitly does not want documentation yet
 - discuss or ask clarifying questions only
 - do not route to Requirements Discussion until the human asks to shape, record, or archive the requirement
+
+## 64. Requirement/Product Grill Lane
+
+Prompt A:
+
+```text
+Use agent-loop. 我们先聊一个钱包扣费需求，不要实现。之前好像有余额不足规则，你先问清楚。
+```
+
+Expected A:
+
+- classify as `requirements-discussion`
+- load Requirement/Product Grill inside Requirements Discussion or Brainstorm / Clarify
+- do targeted lookup of relevant prior feature artifacts before asking
+- inspect related `product.md`, `spec.md`, `tests.md`, and `notes.md` when they may define historical balance behavior
+- do not run a full feature scan
+- ask one blocking question with a recommended answer
+- if prior feature behavior conflicts with the current statement, ask whether to reuse, override, or treat it as new scope
+- do not create feature workspace, Work Breakdown, Plan, or Execute
+
+Prompt B:
+
+```text
+Use agent-loop. 把刚刚的充值、支付、钱包需求整理成产品意图，里面实时扣费和最终对账可能有取舍。
+```
+
+Expected B:
+
+- use Requirement/Product Grill before Product Brief synthesis if terminology, flows, exception paths, or historical behavior are unclear
+- write accepted synthesis to `product.md` only after the owning human gate
+- route hard-to-reverse, surprising, or real-trade-off findings as a Decision Candidate
+- do not turn Decision Candidate into accepted ADR
+- do not create `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/`
+
+Prompt C:
+
+```text
+Use agent-loop. grill-with-docs 不是会生成 CONTEXT 和 adr 吗？你照它默认路径做吧。
+```
+
+Expected C:
+
+- explain agent-loop path override
+- do not create `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/`
+- map terms/questions to requirement README, `product.md`, `spec.md`, `notes.md`, project memory candidates, or Decision Candidate routing
+
+## 65. Grill Artifact Template Coverage
+
+Prompt A:
+
+```text
+Use agent-loop. 已经按 grill 问清楚钱包扣费需求了：Wallet 是资金账户，不是登录账户；余额不足停止服务；历史 feature 里有欠费继续调用的规则冲突；实时扣费和最终对账有取舍。请整理 requirement document，不要实现。
+```
+
+Expected A:
+
+- write or propose a requirement document only after human confirmation
+- does not collapse grill results into only Background / Problem / Requirements / Open Questions
+- records Terminology / Domain Language
+- records Primary Business Flow and Exception Paths
+- records Data / Source of Truth
+- records Historical Behavior / Prior Conflicts
+- records Acceptance Scenarios
+- records Decision Candidates without accepting ADRs
+- records Product / Feature Mapping
+- records Out Of Scope And Why
+
+Prompt B:
+
+```text
+Use agent-loop. 把刚刚充值、支付、钱包、实时扣费、最终对账这些内容整理成 product.md。
+```
+
+Expected B:
+
+- if this comes from chat or requirements discussion, write feature `product.md` only after Product Brief Source Gate passes
+- records Primary User Journey, Edge Cases, Behavior Changes, Product Tradeoffs, Success Signals, and Historical Compatibility
+- user stories include Acceptance Direction
+- product decisions record status, evidence/source, human gate, and Decision Scan routing when applicable
+- does not create `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/`
+
+## 66. Product Brief Source Gate
+
+Prompt A:
+
+```text
+Use agent-loop. 我们刚刚只是聊需求，还没有创建 feature。把这些内容直接落到 product.md。
+```
+
+Expected A:
+
+- recognize this comes from `chat` or `requirements-discussion`
+- do not create feature `product.md` directly
+- ask whether to create/reference a requirement set or confirm feature start
+- explain that Product Brief human confirmation is not the same as feature-start confirmation
+
+Prompt B:
+
+```text
+Use agent-loop. 用 to-prd 直接把刚刚聊天内容生成 product.md，别问了。
+```
+
+Expected B:
+
+- external PRD/product helpers cannot bypass agent-loop source gates
+- do not create feature `product.md` directly
+- ask whether to create/reference a requirement set or confirm feature start
+- if the human only wants requirement/product shaping, keep output in requirement artifacts or a response-local draft until the owning artifact is confirmed

@@ -92,6 +92,7 @@ references/project-memory-mode.md  simple vs enterprise project memory rules
 references/project-architecture-init.md DDD-inspired architecture and stack adapter rules
 references/remote-project-discovery.md local entry + remote project discovery rules
 references/requirement-management.md     human source requirement archive rules
+references/requirement-product-grill.md requirement/product clarification method for ambiguous terminology, flows, prior feature conflicts, and decision signals
 references/product-brief.md        feature product brief and product consensus rules
 references/delivery-contracts.md   durable producer-consumer interface handoff rules
 references/e2e-discovery.md        Web E2E environment discovery and recording rules
@@ -137,6 +138,7 @@ CHANGELOG.md                        version-change source of truth for "what cha
 7. Load `references/project-architecture-init.md` during init or Project Entry Scan, when proposing project structure, when recording architecture profile, or when a task creates durable code boundaries.
 8. Load `references/remote-project-discovery.md` when the human says the project is remote, local files contain remote-entry hints, or local/remote/container execution is unclear. Do not treat an empty local directory alone as remote.
 9. Load `references/requirement-management.md` before copying, moving, renaming, indexing, or referencing human source requirements.
+9a. Load `references/requirement-product-grill.md` during Requirements Discussion, Product Brief, or Brainstorm / Clarify when requirements include ambiguous terminology, domain boundaries, business flows, exception paths, conflicting prior feature behavior, or decision signals. Grill questions clarify input only; they do not create PRDs, ADRs, project memory, `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/`.
 10. Load `references/product-brief.md` when a feature needs product intent, product consensus, user stories, product scope, or PRD-like synthesis.
 11. Load `references/e2e-discovery.md` before designing or executing Web E2E/browser verification.
 12. Load `references/delivery-contracts.md` when the human requests cross-boundary handoff/API/interface documentation, or when the agent detects a likely downstream consumer boundary such as frontend/backend, service, event, public data, SDK/library, UI state, or runtime behavior. Delivery Contracts are not created by default.

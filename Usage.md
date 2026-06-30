@@ -103,6 +103,8 @@ Agent 不应该用空目录、薄 README、planned/later 占位文件、`TBD`、
 | 你可以这样说 | Agent 应该怎么做 |
 |---|---|
 | “先帮我梳理这个需求，不要实现。” | 进入 Requirements Discussion，问清目标、用户、范围、约束、验收方向。 |
+| “先按 grill-with-docs 问清这个需求。” | 先问清术语、业务流程、边界和异常场景；提问前会查已有文档、代码和相关历史 feature。 |
+| “把这些内容落到 product.md。” | 如果还在聊天或需求澄清阶段，先问你是要创建/引用 requirement set，还是确认进入 feature Product Brief；不会直接创建 feature `product.md`。 |
 | “这个需求比较大，先拆成几个阶段。” | 建议在 requirement README 里写 `Delivery Phases`，让你确认先做哪一段。 |
 | “这个先记一下，后面做。” | 作为 deferred requirement 写进 requirement set 或 optional `requirements/INDEX.md`，不写进 `project.md`。 |
 | “这是需求文档、原型图和反馈。” | 归档到 `.agent-loop/requirements/<archive-date>-<topic>/`，保留人类原始材料。 |
@@ -121,6 +123,8 @@ Agent 不应该用空目录、薄 README、planned/later 占位文件、`TBD`、
 日期是归档日期，不是 deadline，也不是 feature 周期。
 
 `Delivery Phases` 是给人类确认“现在做什么、先不做什么、做到什么算完成”的需求层分期。它不是 task、不是 feature、不是 ADR、也不是 project memory。
+
+`grill-with-docs` 在 agent-loop 里是需求/产品澄清方法，不是新的阶段。它会先查 project memory、需求来源、代码文档和相关过往 feature，再问人类一个阻塞问题；如果发现长期取舍，只会标成 Decision Candidate 交给 Decision Scan，不会直接创建 ADR。
 
 示例：
 

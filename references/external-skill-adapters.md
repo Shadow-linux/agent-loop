@@ -108,6 +108,7 @@ Use Superpowers when available for these stages, while applying the path and gat
 |---|---|---|---|
 | Brainstorm / Clarify if Needed | `superpowers:brainstorming` | context exploration, one-question-at-a-time, options, design approval | write to `product.md` / `spec.md`; do not write `docs/superpowers/specs/`; do not auto-transition to `writing-plans` |
 | Product Brief If Needed | `superpowers:brainstorming` plus product/PRD skills when available | product intent, alternatives, user outcomes | write to `product.md`; long-term consensus only via Project Memory Update |
+| Requirements Discussion / Product Brief | `grill-with-docs` style helpers | domain terminology, concrete scenarios, boundary conflicts, prior feature conflict discovery | write to requirement README, `product.md`, `spec.md`, or `notes.md`; Decision Candidates go to Decision Scan |
 | Feature Spec | brainstorming/spec methods | ambiguity removal, scope check, acceptance thinking | write to `spec.md`; use agent-loop Human Review Summary |
 | Plan Gate / Plan If Needed | `superpowers:writing-plans` | decide plan vs recorded No-Plan Decision; construction-grade plan, exact paths, test code, commands, expected outputs, no placeholders, self-review | write to `plan.md` or `plans/*`, or record No-Plan Decision only for trivial tasks; do not write `docs/superpowers/plans/`; execution mode remains agent-loop controlled |
 | Execute Task / Story | `superpowers:test-driven-development` | RED, verify RED, GREEN, verify GREEN, refactor | task status still controlled by Task Done Gate; evidence to `notes.md` |
@@ -131,6 +132,24 @@ When `Brainstorm / Clarify if Needed` starts and Superpowers is available:
 6. Write approved content to `product.md` when product intent is substantial, or `spec.md` when behavior and acceptance are clear.
 7. Do not create `docs/superpowers/specs/*` unless the human explicitly requests native Superpowers docs and confirms the external directory after path-override explanation.
 8. Do not automatically transition to `superpowers:writing-plans`; recommend the next `agent-loop` stage.
+
+## Product Brief Source Gate
+
+External PRD/product helpers cannot turn chat or requirements discussion directly into feature `product.md`.
+
+If an external helper produces product-shaped content before requirement source and feature context are confirmed, keep it in the owning Requirements Discussion artifact, requirement README, or response-local draft. Ask whether to create/reference a requirement set or confirm feature start before writing feature `product.md`.
+
+## Grill-With-Docs Adapter
+
+When a grill-with-docs style helper is available:
+
+1. Use it as a clarification method inside Requirements Discussion, Product Brief, or Brainstorm / Clarify.
+2. Load `requirement-product-grill.md` and keep agent-loop as the controller.
+3. Inspect project memory, source requirements, code/docs/tests, and targeted prior feature artifacts before asking questions when relevant.
+4. Ask one blocking question at a time and include the agent's recommended answer.
+5. Write accepted output to the owning artifact: requirement README / requirement document, `product.md`, `spec.md`, or `notes.md`.
+6. Do not create `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/` from grill-with-docs defaults.
+7. Hard-to-reverse, surprising, or real-trade-off findings are Decision Candidates for Decision Scan; they are not accepted ADRs.
 
 ## Writing-Plans Adapter
 

@@ -144,6 +144,7 @@ requirements-discussion -> Brainstorm / Clarify -> Requirement Document Draft ->
 Use:
 
 - `requirement-management.md`
+- `requirement-product-grill.md` when terminology, business rules, flows, boundaries, exception paths, prior feature behavior, or decision signals are unclear
 - `document-templates.md`
 - `human-review-summary.md` before approval
 - `skill-routing.md` and `external-skill-adapters.md` when a brainstorming or product-discovery helper is available
@@ -151,7 +152,11 @@ Use:
 Rules:
 
 - use Brainstorm / Clarify to shape the demand before writing the requirement document
+- use Requirement/Product Grill before asking humans when terminology, roles, business objects, flows, exception paths, or historical behavior are unclear
+- run targeted lookup of relevant prior feature `product.md`, `spec.md`, `tests.md`, and `notes.md` before asking a grill question
+- send hard-to-reverse, surprising, or real-trade-off signals to Decision Scan as Decision Candidates, not accepted ADRs
 - ask only questions that affect requirement clarity, scope, users/operators, constraints, non-goals, or acceptance direction
+- When Requirement/Product Grill was used, the requirement document draft must include the grill-enriched sections from `document-templates.md`; use `Not applicable` plus a short reason instead of empty headings.
 - run a lightweight Phase Scan when the demand looks larger than one feature, has MVP/later scope, contains multiple journeys or roles, crosses multiple technical boundaries, or the human uses staged-delivery language such as "先做核心闭环" or "后面再补"
 - when Phase Scan triggers, propose a `Delivery Phases` table for human review before feature construction
 - write a requirement document draft only after the intent is clear enough for human review
@@ -463,11 +468,18 @@ Exit:
 
 ## Product Brief If Needed
 
-Entry: source requirements or conversation need product/PRD-style synthesis before engineering specification.
+Entry: accepted or referenced source requirements need feature-level product/PRD-style synthesis before engineering specification, and feature context is confirmed.
+
+Product Brief Source Gate:
+
+If the human asks from `chat` or `requirements-discussion` to write `product.md`, first ask whether to create/reference a requirement set or confirm feature start.
+
+Do not enter Product Brief If Needed directly from requirements discussion without a requirement source or confirmed feature context.
 
 Load:
 
 - `product-brief.md`
+- `requirement-product-grill.md` when product terminology, flows, boundaries, exception paths, or prior feature behavior need clarification before synthesis
 - `skill-routing.md` for Stage Helper Capability Scan
 - `external-skill-adapters.md` when Stage Helper Capability Scan finds Superpowers, PRD/product synthesis, or grill-with-docs style helpers
 
@@ -483,6 +495,9 @@ Trigger examples:
 Rules:
 
 - before fallback product synthesis, run Stage Helper Capability Scan; when a product/PRD helper is available, use it as the method quality bar while writing accepted output to `product.md` and `notes.md`
+- confirm the source requirement and feature context before writing feature `product.md`; product-shaping confirmation alone is not feature-start confirmation
+- resolve enough Requirement/Product Grill questions before synthesizing `product.md`
+- When Requirement/Product Grill was used before Product Brief, write the enriched `templates/product.md` sections that apply; use `Not applicable` plus a short reason instead of empty headings.
 - create `product.md` only when useful; skip for narrow bugfixes or clear technical tasks
 - if source requirements are still too broad for one feature, recommend returning to requirement `Delivery Phases` before writing `product.md`
 - inspect `project.md` Product Context and Domain Language before asking product questions
@@ -507,6 +522,7 @@ Mandatory helper: Brainstorm / Clarify resolves and loads `superpowers:brainstor
 
 Load:
 
+- `requirement-product-grill.md` when clarification is about domain terminology, business flow, prior feature conflict, or decision signal
 - `skill-routing.md` for Stage Helper Capability Scan
 - `external-skill-adapters.md` when Stage Helper Capability Scan finds Superpowers or another brainstorming/product-discovery skill
 
@@ -518,6 +534,7 @@ Rules:
 - Questions must affect scope, UX, data, architecture, testing, or acceptance.
 - Do not ask filler questions.
 - If a question can be answered by reading project docs, code, tests, source requirements, `project.md`, or `product.md`, inspect those first instead of asking the human.
+- For grill questions, also inspect targeted prior feature artifacts when relevant; do not run a full feature scan.
 - When product terminology is fuzzy or conflicts with `project.md` Domain Language, propose a canonical meaning and ask only if still ambiguous.
 
 Write:

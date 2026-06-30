@@ -141,11 +141,73 @@ Source: conversation | file | link | prototype | mixed
 
 ## Users / Operators
 
+## Roles / Operators / Permission Boundary
+
+| Role / Operator | What They Do | Permission / Boundary | Notes |
+|---|---|---|---|
+|  |  |  |  |
+
 ## Goals
 
 ## Requirements
 
+## Terminology / Domain Language
+
+Use this when terms are ambiguous, overloaded, project-specific, or clarified through Requirement/Product Grill.
+
+| Term | Meaning In This Requirement | Avoid / Ambiguity | Promote To Project Domain Language |
+|---|---|---|---|
+|  |  |  | yes / no / pending |
+
+## Primary Business Flow
+
+Describe the normal business path in human-readable steps. Prefer concrete actor/system/state wording over abstract summaries.
+
+1.
+
+## Exception Paths
+
+| Scenario | Trigger | Expected Handling | Recovery / Operator Action | Acceptance Direction |
+|---|---|---|---|---|
+|  |  |  |  |  |
+
+## Data / Source of Truth
+
+| Data / Fact | Source Of Truth | Who Can Change It | Consistency / Timing Notes |
+|---|---|---|---|
+|  |  |  |  |
+
+## Historical Behavior / Prior Conflicts
+
+Use this when prior features, code, docs, or project memory define related behavior.
+
+| Prior Source | Existing Rule / Behavior | Current Requirement Says | Human Decision |
+|---|---|---|---|
+|  |  |  | reuse / override / new scope / unresolved |
+
+## Acceptance Scenarios
+
+Use concrete examples that show the requirement is understood, not just a broad acceptance direction.
+
+| Scenario | Given | When | Then | Notes |
+|---|---|---|---|---|
+|  |  |  |  |  |
+
+## Decision Candidates
+
+Only list candidates. Do not mark ADRs accepted here.
+
+| Candidate | Why It Matters | Signal | Suggested Destination | Status |
+|---|---|---|---|---|
+|  |  | hard-to-reverse / surprising-without-context / real-trade-off | product.md / spec.md / tests.md / notes.md / Decision Scan | proposed |
+
 ## Non-goals
+
+## Out Of Scope And Why
+
+| Out Of Scope | Why | Revisit Trigger |
+|---|---|---|
+|  |  |  |
 
 ## Constraints / Assumptions
 
@@ -161,8 +223,18 @@ Use only when staged delivery has been discussed and human-reviewed. If used, mi
 
 ## Open Questions
 
+## Product / Feature Mapping
+
+| Downstream Artifact | Mapping Direction | Status |
+|---|---|---|
+| product.md |  | not-created / proposed / created |
+| spec.md |  | not-created / proposed / created |
+| Decision Scan |  | none / candidate / completed |
+
 ## Source Conversation Summary
 ```
+
+When Requirement/Product Grill was used, do not leave these sections as empty headings. Fill the applicable sections with concrete terms, flows, exceptions, data facts, conflicts, scenarios, and candidates; for non-applicable sections, write `Not applicable` plus a short reason.
 
 Write the human-reviewed document as `.agent-loop/requirements/<archive-date>-<topic>/requirement.md` after the human confirms the document should be recorded. Do not write it directly into a feature workspace. Feature `product.md` and `spec.md` derive from this source and link back to the requirement set.
 

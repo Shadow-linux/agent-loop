@@ -21,23 +21,71 @@ Summary:
 
 ## Solution Summary
 
+What changes for user/operator/system:
+
+- User:
+- Operator:
+- System:
+
+## Primary User Journey
+
+1.
+
 ## User Stories
 
 ### US1: <Story Title>
 
 As a <actor>, I want <capability>, so that <benefit>.
 
+Acceptance Direction:
+
 Notes:
+
+## Edge Cases
+
+| Scenario | Expected Product Behavior | User / Operator Feedback | Notes |
+|---|---|---|---|
+|  |  |  |  |
+
+## Behavior Changes
+
+| Actor / System | Before | After | Notes |
+|---|---|---|---|
+| User |  |  |  |
+| Operator |  |  |  |
+| System |  |  |  |
 
 ## Product Scope
 
 ## Out Of Scope
 
+## Product Tradeoffs
+
+| Tradeoff | Options Considered | Recommended Direction | Decision Scan |
+|---|---|---|---|
+|  |  |  | none / candidate |
+
 ## Product Decisions
 
 - Decision:
+  - Status: proposed | accepted | deferred | rejected | needs-decision
   - Reason:
+  - Evidence / Source:
+  - Human Gate:
+  - Decision Scan:
   - Applies To: this feature | future features
+
+## Historical Compatibility
+
+| Prior Feature / Rule | Current Direction | Compatibility Decision | Notes |
+|---|---|---|---|
+|  |  | reuse / override / new scope / unresolved |  |
+
+## Success Signals
+
+| Signal | Target / Direction | How To Observe | Notes |
+|---|---|---|---|
+|  |  |  |  |
 
 ## Terminology
 

@@ -25,6 +25,16 @@ Before using an external skill or plugin inside a stage:
 - [ ] Do not create external default directories such as `docs/superpowers/*` unless the human explicitly requests native external output and then confirms after the agent explains the agent-loop path override.
 - [ ] Do not let the external skill mark tasks `done`, close a feature, submit code, update project memory, accept Delivery Contracts, approve breaking changes, or skip human gates.
 
+## Requirement/Product Grill
+
+- [ ] Load `requirement-product-grill.md` when Requirements Discussion, Product Brief, or Brainstorm / Clarify has ambiguous terminology, business rules, flows, boundaries, exception paths, historical feature behavior, or decision signals.
+- [ ] Before asking a grill question, inspect project memory, requirement source, product.md, code/docs/tests, and targeted prior feature artifacts when relevant.
+- [ ] Ask one blocking question at a time and include the agent's recommended answer.
+- [ ] If prior feature artifacts conflict with the current statement, state the conflict and ask whether to reuse, override, or treat it as new scope.
+- [ ] Do not turn a grill decision signal into an accepted ADR; route it to Decision Scan.
+- [ ] Do not create external `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/` paths.
+- [ ] If Requirement/Product Grill was used, verify the owning requirement document or product brief has structured sections for terminology, flows, exceptions, data/source of truth, historical conflicts, acceptance scenarios, and Decision Candidates where applicable.
+
 ## Message Intent
 
 - [ ] Classify the latest human message intent before project state classification.
@@ -204,6 +214,9 @@ Before using an external skill or plugin inside a stage:
 ## Product Brief If Needed
 
 - [ ] Load `product-brief.md`.
+- [ ] Product Brief Source Gate: If the request says write product.md / 落到 product.md from chat or requirements discussion, ask whether to create/reference a requirement set or confirm feature start.
+- [ ] Do not write feature product.md until a requirement source and confirmed feature context exist.
+- [ ] Load `requirement-product-grill.md` when product terms, business flows, exception paths, or prior feature behavior need clarification before synthesis.
 - [ ] Run Stage Helper Capability Scan before fallback product synthesis.
 - [ ] If a PRD/product synthesis or grill-with-docs style helper is available, use it through `external-skill-adapters.md` while writing accepted output to agent-loop `product.md` / `notes.md`.
 - [ ] Decide whether Product Brief trigger conditions apply.
@@ -219,6 +232,7 @@ Before using an external skill or plugin inside a stage:
 
 - [ ] Resolve and load `superpowers:brainstorming` or `brainstorming` before clarification actions; record Stage Helper Resolution, or record `unavailable` / `load-failed` before fallback.
 - [ ] If Superpowers `brainstorming` or another product-discovery helper is available, use it through `external-skill-adapters.md` while writing accepted output to the current stage artifact.
+- [ ] Use Requirement/Product Grill for domain terminology, business flow, prior feature conflict, or decision-signal clarification.
 - [ ] Use only when goal is unstable, scope unclear, or meaningful approaches differ.
 - [ ] Check project docs, code, tests, source requirements, Product Context, and Domain Language before asking.
 - [ ] Ask 1-5 high-impact questions.

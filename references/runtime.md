@@ -39,6 +39,8 @@ If message intent is `chat`, do not create requirement sets, feature workspaces,
 
 If message intent is `requirements-discussion`, do not create a feature workspace or enter Work Breakdown, Plan Gate, or Execute. Route to Requirements Discussion: brainstorm/clarify, draft a human-reviewed requirement document, then archive the document under `.agent-loop/requirements/<archive-date>-<topic>/` after the human confirms the document should be recorded. For `requirements-discussion`, reviewed/recorded does not mean accepted for implementation.
 
+Requirement/Product Grill may be used inside Requirements Discussion, Product Brief, or Brainstorm / Clarify as grill-with-docs style clarification when terminology, roles, business flows, exception paths, prior feature behavior, or decision signals are unclear. It does not create a new stage: it clarifies input for the owning stage, writes only through that stage's artifacts and human gates, and routes hard-to-reverse, surprising, or real-trade-off signals to Decision Scan.
+
 Message intent is not permanent; reclassify when the conversation changes intent.
 
 Chat defaults to answer-only, but it may convert to `requirements-discussion`, `proposal-doc`, `feature-request`, `operational-support`, `feature-follow-up`, or `deferred-requirement` when the human intent changes. Do not keep using `chat` merely because the conversation started as chat.
