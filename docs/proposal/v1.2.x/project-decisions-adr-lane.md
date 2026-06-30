@@ -1,12 +1,12 @@
 # Proposal: Project Decisions / ADR Lane
 
 状态：讨论草案
-目标版本：v1.2.x
+目标版本：v1.2.4
 创建时间：2026-06-16
 
 ## 目的
 
-这份 proposal 先讨论 `agent-loop` 中项目级决策记录的目录规范和触发时机。
+这份 proposal 先讨论 `agent-loop` 中项目级决策记录的目录规范、介入时机、上游输入和技术设计内容。
 
 它暂不定义完整 ADR 方法论，也不要求所有需求都创建 ADR。当前目标是先把这些问题收敛清楚：
 
@@ -14,17 +14,21 @@
 - requirement、feature、project memory 如何引用这些决策；
 - 什么情况下 Agent 应该建议创建 ADR；
 - 在 agent-loop 哪些阶段执行 Decision Scan；
+- Product Brief / PRD / `to-prd` 输出如何作为 Decision Scan 输入；
+- Decision / ADR 中技术设计部分应该覆盖什么；
 - feature-local 小决策什么时候直接写进 `spec.md`，什么时候升级为独立 ADR。
 
 ## 核心观点
 
 ```text
-Decision Scan 是必选检查。
-ADR / project decision file 是可选产物。
+Decision Scan 是必选检查；Decision File / ADR 是可选产物。
+Decision Scan 早介入，Decision File 晚创建。
 决策记录应该放在它影响范围的最小稳定层级。
 ```
 
 ADR 不是 feature spec 的替代品，也不是 project memory 的替代品。
+
+同时，first-version exclusion 仍然禁止 complex ADR system。本 proposal 只定义一条轻量 Decision Lane：它允许 Agent 识别、建议、草拟和引用长期决策，但不要求每个需求、每个 feature 或每个技术选择都创建 ADR。
 
 | 对象 | 主要职责 | 不负责 |
 |---|---|---|
@@ -32,7 +36,7 @@ ADR 不是 feature spec 的替代品，也不是 project memory 的替代品。
 | `features/<feature>/spec.md` | 记录 feature 行为、约束、验收标准和轻量设计决策 | 不承载跨 feature 的长期项目决策 |
 | `project.md` | 当前工作状态、长期记忆入口、enterprise memory 索引 | 不成为完整决策历史库 |
 | `project/*.md` | enterprise mode 下的长期事实分片 | 不解释每个事实当初为什么成立 |
-| `decisions/*.md` | 记录跨 feature / 长期项目决策的原因、取舍、结果 | 不记录普通执行日志 |
+| `.agent-loop/decisions/*.md` | 记录跨 feature / 长期项目决策的原因、取舍、结果 | 不记录普通执行日志 |
 
 ## 建议目录
 
@@ -50,7 +54,7 @@ ADR 不是 feature spec 的替代品，也不是 project memory 的替代品。
     boundaries.md
 ```
 
-`decisions/` 是 `.agent-loop/` 的一等长期 artifact，不属于 enterprise-only `project/` memory 分片。
+`.agent-loop/decisions/` 是 simple 和 enterprise memory mode 都可使用的一等长期 artifact，不属于 enterprise-only `project/` memory 分片。
 
 它和 `project.md`、`project/*.md` 的职责不同：
 
@@ -60,7 +64,7 @@ project/*.md = enterprise mode 下的当前长期事实和导航。
 decisions/*.md = 为什么形成这些事实和约束。
 ```
 
-因此 `decisions/` 可以在 simple memory mode 和 enterprise memory mode 下使用。创建 `decisions/` 不应自动触发 enterprise mode；enterprise mode 仍只由 `project.md` 可读性、项目复杂度、边界数量等 memory trigger 决定。
+因此 `.agent-loop/decisions/` 可以在 simple memory mode 和 enterprise memory mode 下使用。创建 `decisions/` 不应自动触发 enterprise mode；enterprise mode 仍只由 `project.md` 可读性、项目复杂度、边界数量等 memory trigger 决定。
 
 ## 决策放置规则
 
@@ -68,16 +72,15 @@ decisions/*.md = 为什么形成这些事实和约束。
 
 | 决策范围 | 推荐位置 | 示例 |
 |---|---|---|
-| 只影响当前 feature，且取舍简单 | `features/<feature>/spec.md` 的 `Design Decisions` | 某个交互或内部实现小选择 |
-| 只影响当前 feature，但取舍复杂 | `features/<feature>/decisions/`，需另行讨论是否支持 | 某个 feature 的状态机或迁移策略 |
-| 来自某个 requirement，影响多个 feature | 优先 `decisions/`，requirement README 只引用 | 需求拆分策略、统一工作流约束 |
-| 影响长期项目结构、边界、依赖、工作流 | `decisions/` | artifact ownership、技术栈、数据存储、跨 feature 规则 |
+| 只影响当前 feature，且取舍简单或中等复杂 | `features/<feature>/spec.md` 的 `Design Decisions` | 某个交互、内部实现选择、单 feature 状态机 |
+| 来自某个 requirement，影响多个 feature | 优先 `.agent-loop/decisions/`，requirement README 只引用 | 需求拆分策略、统一工作流约束 |
+| 影响长期项目结构、边界、依赖、工作流 | `.agent-loop/decisions/` | artifact ownership、技术栈、数据存储、跨 feature 规则 |
 
-v1.2.x 建议先只正式支持两类：
+第一版只正式支持两类决策记录：
 
 ```text
-1. feature-local 小决策：写入 feature/spec.md。
-2. project-level 长期决策：写入 decisions/*.md。
+1. feature-local 小决策写入 `features/<feature>/spec.md` 的 `Design Decisions`。
+2. project / cross-feature 长期决策写入 `.agent-loop/decisions/*.md`。
 ```
 
 暂不把 requirement-level ADR 和 feature-level ADR 复杂体系纳入正式规则，避免第一版把 artifact 体系变重。
@@ -156,7 +159,38 @@ project/architecture.md or project/boundaries.md
   records current project reality after the decision is accepted.
 ```
 
-## Decision Scan 触发阶段
+## Decision / ADR 介入时机
+
+Decision / ADR 不应等产品文档完全定稿后才介入。更合适的规则是：
+
+```text
+需求沟通 / 产品目标成形
+→ Decision Scan
+→ 产品文档 / requirement README / product.md 明确
+→ Decision Scan
+→ Feature Spec 前
+→ Decision Placement
+→ Technical Design / Code Context
+→ Decision Scan
+→ Plan Gate 前
+→ Decision Scan
+→ Implementation
+→ Drift Check / Close Feature
+```
+
+核心原则：
+
+```text
+Decision Scan 早介入，Decision File 晚创建。
+```
+
+含义：
+
+- 在需求沟通、产品目标成形时，Agent 就应该开始扫描长期决策信号。
+- 在 requirement README / product.md / PRD 明确后，Agent 才判断是否需要创建 `.agent-loop/decisions/*.md`。
+- 在 Feature Spec 前，如果不先确定共同约束会导致多个 feature 各写各的，应建议创建 decision file。
+- 在 Technical Design / Code Context 或 Plan Gate 前，如果技术设计引入长期边界、依赖、存储、协议、一致性模型、并发控制或运行约束，应再次扫描。
+- 在 Drift Check / Close Feature 时，如果实现改变了长期事实，应建议补写 decision、更新引用，或回补 project memory。
 
 Decision Scan 是一个轻量检查，不等于创建 ADR。
 
@@ -164,13 +198,41 @@ Decision Scan 是一个轻量检查，不等于创建 ADR。
 
 | 阶段 | 行为 |
 |---|---|
-| Requirement Intake / Archive 后 | 检查需求是否可能触发跨 feature 或长期项目决策 |
-| Product Brief 后 | 检查产品范围、用户角色、权限、术语是否形成长期约束 |
+| 需求沟通 / 产品目标成形 | 检查需求是否可能触发跨 feature、长期项目约束或业务概念定义 |
+| Requirement Intake / Archive 后 | 检查 requirement README 是否需要引用已有 decisions，或记录 triggered decisions |
+| Product Brief / PRD / `product.md` 后 | 检查产品范围、用户角色、权限、术语、业务流程是否形成长期约束 |
 | Work Breakdown / Feature Split 前 | 检查一个 requirement 是否会拆多个 feature，以及是否需要共同决策 |
 | Feature Spec 前 | 检查 spec 是否必须引用已有 project decisions，或是否有新 decision 需要先确认 |
 | Technical Design / Code Context | 检查实现方案是否引入新边界、依赖、存储、接口、状态协议 |
 | Plan Gate 前 | 确认 plan 没有绕过未接受的 decision |
 | Drift Check / Close Feature | 检查实现是否改变了长期项目事实，是否需要补写或更新 decision 引用 |
+
+## Decision Scan Inputs
+
+Decision Scan 应从多个上游来源读取候选信号，而不是只看 feature spec。
+
+| Input | 读取什么 | 输出倾向 |
+|---|---|---|
+| requirement README | 人类目标、Delivery Phases、scope、out of scope、source index | 是否需要共同约束或引用已有 decision |
+| product.md / PRD | Problem、Solution、User Stories、Out of Scope、Product Decisions | 是否存在跨 feature 产品约束或业务流程决策 |
+| to-prd `Implementation Decisions` | 模块、接口、架构、schema、API、交互等候选实现决策 | 进入 Decision Candidate Routing |
+| to-prd `Testing Decisions` | 外部行为测试、关键模块测试、先例测试 | 进入 `tests.md` 或 decision verification plan |
+| feature spec draft | added/modified/removed behavior、acceptance、edge cases | 是否需要引用 existing decisions 或补充 design decisions |
+| Technical Design / Code Context | 边界、依赖、存储、事务、协议、状态、一致性 | 是否需要 project-level decision |
+| current project memory | `project.md`、enterprise `project/*.md`、Domain Language、boundaries | 是否已有长期事实或需要回补 |
+| existing decisions | `.agent-loop/decisions/*.md` | 是否已有 accepted decision 覆盖 |
+
+## Decision Candidate Routing
+
+`to-prd` 的 `Implementation Decisions` 和 `Testing Decisions` 不能直接等同于 ADR。它们是候选输入，需要分流。
+
+| Candidate | Destination | Rule |
+|---|---|---|
+| Product-level decision | `product.md` | 只影响产品范围、用户价值、角色、非目标，不形成工程长期约束 |
+| Feature-local implementation decision | `spec.md` 的 `Design Decisions` 或 `plan.md` | 只约束当前 feature，未来可改，或没有跨 feature 影响 |
+| Cross-feature or long-term architecture decision | `.agent-loop/decisions/*.md` | 跨 feature、长期、难逆转、有真实 trade-off，或未来读者会问为什么 |
+| Testing decision | `tests.md`；必要时同步到 decision verification plan | 描述如何证明需求、流程或架构目标满足 |
+| Human-gated question | 阶段总结 / Human Review Summary | 影响范围、目标、方案或风险尚不清楚 |
 
 ## ADR 建议触发条件
 
@@ -215,6 +277,42 @@ Agent 不应静默执行：
 - 删除或重编号旧 decision；
 - 把 feature-local 小决策升级成 project-level 约束。
 
+## 技术设计部分
+
+Decision / ADR 中的技术部分不应该只写“用了什么技术”。它应该说明技术设计如何支撑业务目标、业务流程和关键决策。
+
+技术设计至少应覆盖：
+
+| 模块 | 要回答的问题 |
+|---|---|
+| 技术选型 | 用什么数据库、缓存、队列、事务机制、锁、框架、外部服务，为什么 |
+| 架构组件 | 有哪些组件，各自负责什么，不负责什么 |
+| 数据模型 | 哪些表、对象、事件是事实源，关键字段和约束是什么 |
+| 接口 / 协议 | 服务之间、前后端之间、外部系统之间如何交互 |
+| 事务边界 | 哪些操作必须在一个事务里，哪些可以异步 |
+| 一致性模型 | 强一致、最终一致、对账补偿分别用在哪里 |
+| 并发控制 | 如何避免重复提交、扣穿、乱序、竞态 |
+| 幂等设计 | 重试、回调、消息消费、支付通知如何幂等 |
+| 失败恢复 | 超时、中断、部分成功、外部服务失败后怎么恢复 |
+| 性能设计 | 延迟、吞吐、热点、索引、缓存、批处理、限流 |
+| 高可用设计 | 降级、重试、熔断、隔离、任务补偿 |
+| 安全 / 风控 | 权限、签名、防重放、敏感数据、审计 |
+| 可观测性 | 日志、指标、trace、告警、对账报表 |
+| 验证计划 | 单测、集成测试、压测、故障演练、对账验证 |
+
+对于充值、支付、钱包、token 实时扣费这类设计，技术部分必须能回答：
+
+- 余额事实源在哪里；
+- 流水是否 append-only；
+- 扣费是预冻结、后扣，还是组合模式；
+- LLM 请求前如何检查余额；
+- LLM 返回后如何按 token 计算费用并扣费；
+- 中途失败如何补偿；
+- 钱包扣完如何停止服务；
+- 对账如何证明数据库数目准确；
+- 高并发下如何避免扣穿；
+- 外部支付回调如何幂等。
+
 ## Decision And Design 模板草案
 
 这里的文件不应该只是传统 ADR 的简短结论，而应该记录一条完整推导链：
@@ -235,7 +333,7 @@ Agent 不应静默执行：
 
 Status: proposed | accepted | superseded | deprecated
 Created: YYYY-MM-DD
-Scope: project | cross-feature | feature
+Scope: project | cross-feature
 Triggered By:
 - .agent-loop/requirements/<set>/
 - .agent-loop/features/<feature>/spec.md
@@ -309,33 +407,51 @@ Step 1
 We will ...
 ```
 
-## 6. Architecture Design
+## 6. Technical Architecture Design
 
-说明架构如何支撑业务主体流程。这里要把组件、数据、事务边界、异步边界讲清楚。
+说明技术设计如何支撑业务主体流程。这里要把技术选型、组件职责、数据事实源、接口协议、事务边界、一致性、并发幂等、失败恢复讲清楚。
 
-### 6.1 Component Responsibilities
+### 6.1 Technology Choices
+
+| Area | Choice | Why | Alternatives Rejected | Risk |
+|---|---|---|---|---|
+| <database/cache/queue/provider> | <chosen technology> | <why it satisfies goals> | <rejected options> | <risk / mitigation> |
+
+### 6.2 Component Responsibilities
 
 | Component | Responsibility | Owns | Does Not Own |
 |---|---|---|---|
 | <component> | <职责> | <数据/行为> | <不负责什么> |
 
-### 6.2 Data Model
+### 6.3 Data Model And Source Of Truth
 
-| Data Object | Purpose | Key Fields | Invariant |
-|---|---|---|---|
-| <table/model> | <用途> | <关键字段> | <必须保持的规则> |
+| Data Object | Purpose | Source Of Truth | Key Fields | Invariant |
+|---|---|---|---|---|
+| <table/model/event> | <用途> | <DB / ledger / provider / event stream> | <关键字段> | <必须保持的规则> |
 
-### 6.3 Transaction And Consistency Boundaries
+### 6.4 Interfaces And Protocols
+
+| Interface | Producer | Consumer | Contract | Failure / Retry |
+|---|---|---|---|---|
+| <API/event/callback/job> | <producer> | <consumer> | <request/event/schema> | <failure behavior> |
+
+### 6.5 Transaction And Consistency Boundaries
 
 | Boundary | In Transaction | Outside Transaction | Consistency Model |
 |---|---|---|---|
 | <operation> | <同步事务内完成> | <异步副作用> | strong / eventual |
 
-### 6.4 Idempotency And Concurrency
+### 6.6 Idempotency And Concurrency
 
 | Scenario | Idempotency Key | Concurrency Control | Expected Behavior |
 |---|---|---|---|
 | <场景> | <key> | <DB lock / unique index / queue> | <结果> |
+
+### 6.7 Failure Recovery And Compensation
+
+| Failure | Detection | Recovery / Compensation | Owner | Evidence |
+|---|---|---|---|---|
+| <failure mode> | <logs/metric/job/query> | <retry/release/rollback/reconcile> | <component/team> | <test/runbook/alert> |
 
 ## 7. Non-Functional Design
 
@@ -408,11 +524,36 @@ Decision Placement = 决定写在 spec.md、notes.md，还是建议 decisions/*.
 decisions/*.md = 只有长期/跨 feature 决策才创建。
 ```
 
+## 与 grill-with-docs / to-prd 的关系
+
+`grill-with-docs` 和 `to-prd` 都适合作为 Decision / ADR 的上游，但职责不同：
+
+```text
+grill-with-docs = 问清楚领域语言、业务场景和边界。
+to-prd = 将已知上下文合成为 product.md / PRD-like Product Brief。
+Decision / ADR = 从产品上下文和技术设计中抽取长期、跨 feature、难逆转、有真实 trade-off 的决策。
+```
+
+建议组合：
+
+| 工具 / 阶段 | 主要作用 | 写入 agent-loop |
+|---|---|---|
+| grill-with-docs | 拷问术语、场景、边界、领域模型冲突 | requirement README、product.md、project.md Domain Language 候选 |
+| to-prd | 从已知上下文合成 Problem、Solution、User Stories、Implementation Decisions、Testing Decisions | `product.md`，并把候选决策喂给 Decision Scan |
+| Decision Scan | 判断候选内容应留在 product/spec/tests，还是升级为 decision file | stage summary、Human Review Summary、decision draft |
+| Decision / ADR | 记录长期 / 跨 feature / 难逆转 / 有 trade-off 的业务与技术设计链路 | `.agent-loop/decisions/*.md` |
+
+注意：
+
+- `to-prd` 默认发布 issue tracker 的行为不应直接照搬；agent-loop 应将内容翻译到 `product.md`，除非人类明确要求发布 issue。
+- `grill-with-docs` 默认写 `CONTEXT.md` / `docs/adr/` 的路径不应直接照搬；agent-loop 应把领域语言写入 requirement / product / project memory，把长期决策写入 `.agent-loop/decisions/`。
+- `Implementation Decisions` 不是 ADR；它们只是 Decision Scan 输入。
+- `Testing Decisions` 优先进入 `tests.md`，只有当它用于证明长期设计目标时才同步到 decision verification plan。
+
 ## 待讨论问题
 
-- 顶层目录应命名为 `decisions/` 还是 `adr/`？
 - 是否需要在 simple memory mode 下限制 `decisions/` 的创建门槛？
 - 是否需要 requirement README 的固定 `Applicable Project Decisions` 字段？
 - feature spec 的 `Applicable Decisions` 是否应成为标准字段？
 - accepted decision 是否需要 supersede 机制和编号规则？
-- 后续是否需要独立 `references/project-decisions.md`？
+- 是否需要独立 `references/project-decisions.md`？

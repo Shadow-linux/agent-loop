@@ -8,6 +8,17 @@
 - Updated the root AGENTS managed-block revision to `block-version:1.2.4-20260629` so target projects can detect stale same-version guidance blocks during refresh.
 - Updated validation coverage so version sync checks fail if SKILL, plugin metadata, README, Usage, or root AGENTS template drift back to 1.2.3.
 
+### Project Decisions / ADR Proposal
+- Refined the Decision / ADR proposal into a lightweight Decision Lane: Decision Scan starts during requirement and product shaping, while decision files are created later only when long-term or cross-feature trade-offs need durable records.
+- Added `to-prd` and `grill-with-docs` as upstream inputs for product context, domain language, implementation-decision candidates, and testing-decision candidates without adopting their native output paths.
+- Expanded the proposed Decision And Design Record technical section to cover technology choices, component ownership, data source of truth, interfaces, transaction boundaries, consistency, idempotency, concurrency, failure recovery, observability, and verification closure.
+
+### Requirement / Product Grill Proposal
+- Added a proposal for using `grill-with-docs` as a requirement and product clarification method before `to-prd` or Product Brief synthesis.
+- Defined output mapping from `CONTEXT.md` and `docs/adr/` concepts into agent-loop artifacts such as requirement README, `product.md`, project Domain Language candidates, and `.agent-loop/decisions/`.
+- Clarified that `grill-with-docs` asks targeted domain questions and surfaces decision signals, while `to-prd` synthesizes known context and Decision Scan decides whether long-term decisions need durable records.
+- Clarified that grill questions should inspect relevant prior feature artifacts with targeted lookup before asking humans, and surface conflicts for a human choice between reuse, override, or new-scope handling.
+
 ## 1.2.3 — 2026-06-19
 
 ### Release Shape
