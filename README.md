@@ -128,7 +128,15 @@ For existing projects, the agent separates safe-entry memory from newcomer learn
 | **Evidence-Graph + DDD Onboarding** | Build `.agent-loop/onboarding-db/` as a newcomer handoff knowledge base after Project Entry Scan or reliable project memory |
 | **Existing legacy onboarding-db files** | Evidence only until migrated through an accepted Onboarding Spec or focused update |
 
-### 3. Start a Feature
+### 3. Shape Requirements Before Features
+
+> "先帮我梳理这个需求，不要实现。"
+
+For requirement shaping, the agent should enter Requirements Discussion instead of creating a feature workspace. Requirement/Product Grill is the clarification method for fuzzy terminology, business flows, exception paths, prior feature conflicts, source-of-truth questions, and decision signals. It asks one blocking question at a time, includes a recommended answer, and checks relevant project memory, source requirements, docs, code, tests, and prior feature artifacts before asking when those sources may already answer the question.
+
+Reviewed requirements live under `.agent-loop/requirements/<date>-<topic>/`. If the human later asks to "落到 product.md" from chat or requirements discussion, Product Brief Source Gate applies: the agent first asks whether to create/reference a requirement set or confirm feature start. Feature-level `product.md` is written only after there is a requirement source and confirmed feature context.
+
+### 4. Start a Feature
 
 > "I want to add login."
 
@@ -140,7 +148,7 @@ After project init / Project Entry Scan is accepted, the agent will:
 - Design `tests.md`
 - Execute tasks with TDD
 
-### 4. Get Guided Through An Existing Project
+### 5. Get Guided Through An Existing Project
 
 > "带我熟悉这个项目，从哪里开始看？"
 
@@ -161,13 +169,13 @@ Existing legacy onboarding-db files may be read as evidence, but they are not tr
 
 For focused project-understanding questions, the agent should answer from existing code/docs as `chat` or `operational-support`. It should only enter feature/fix work, requirement discussion, or a future onboarding-document workflow after the human confirms that intent.
 
-### 5. Continue Later
+### 6. Continue Later
 
 > "Continue the login feature."
 
 The agent reads `.agent-loop/project.md`, finds the active feature, and resumes from the last checkpoint.
 
-### 6. Handle Bugs After Close
+### 7. Handle Bugs After Close
 
 > "测试发现上次做的上传功能有 bug."
 

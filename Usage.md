@@ -126,6 +126,10 @@ Agent 不应该用空目录、薄 README、planned/later 占位文件、`TBD`、
 
 `grill-with-docs` 在 agent-loop 里是需求/产品澄清方法，不是新的阶段。它会先查 project memory、需求来源、代码文档和相关过往 feature，再问人类一个阻塞问题；如果发现长期取舍，只会标成 Decision Candidate 交给 Decision Scan，不会直接创建 ADR。
 
+如果用了 Requirement/Product Grill，requirement document 会承接术语、主流程、异常路径、事实源、历史冲突、验收场景和 Decision Candidates，而不是只写一段摘要。
+
+Product Brief Source Gate 的意思是：从聊天或需求澄清直接说“落到 product.md”时，Agent 不能立刻创建 feature 级 `product.md`。它要先问你是要创建/引用 requirement set，还是确认开始 feature Product Brief。如果只是整理产品意图，可以先保留在 requirement artifact 或回复草稿，等 feature context 明确后再写入 `product.md`。
+
 示例：
 
 ```md

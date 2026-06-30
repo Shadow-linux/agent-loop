@@ -21,6 +21,7 @@
 - Implemented the Requirement/Product Grill lane across runtime guidance, stage guides, product/requirement references, helper adapters, workflow checklists, Usage, and validation scenarios.
 - Added grill-enriched requirement and product templates so clarified terminology, flows, exceptions, source-of-truth data, historical conflicts, decision candidates, product journeys, tradeoffs, and success signals are captured structurally.
 - Hardened the Product Brief Source Gate so chat or requirements discussion cannot directly create feature `product.md` without a requirement source and confirmed feature context.
+- Documented the human-facing Requirement/Product Grill and Product Brief Source Gate usage in Usage and README so humans can trigger requirement shaping without accidentally starting feature-level Product Brief work.
 
 ## 1.2.3 — 2026-06-19
 
