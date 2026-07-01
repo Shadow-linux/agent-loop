@@ -10,6 +10,7 @@ Source Requirements:
 - Prototype:
 
 Product Brief: product.md | none
+
 Related Feature:
 Flow-back Decision: none | flow-back | linked-new-feature | maintenance-fix | investigate-first | declined-reopen | defer
 
@@ -17,6 +18,10 @@ Summary:
 - 
 
 ## Problem / Goal
+
+## Applicable Decisions
+
+-
 
 ## Maintenance Fix Scope
 
@@ -70,6 +75,21 @@ Acceptance scenarios:
 ### Removed
 
 ## Dependencies
+
+## Implements Decisions
+
+| Decision | Implemented Slice | Notes |
+|---|---|---|
+|  |  |  |
+
+## Design Decisions
+
+Feature-local decisions that do not need standalone project ADR files:
+
+- Decision:
+  - Reason:
+  - Applies To:
+  - Decision Scan: none / candidate / project-decision-not-needed
 
 ## Out of Scope
 

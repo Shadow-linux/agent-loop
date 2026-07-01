@@ -93,6 +93,7 @@ references/project-architecture-init.md DDD-inspired architecture and stack adap
 references/remote-project-discovery.md local entry + remote project discovery rules
 references/requirement-management.md     human source requirement archive rules
 references/requirement-product-grill.md requirement/product clarification method for ambiguous terminology, flows, prior feature conflicts, and decision signals
+references/project-decisions.md   Decision Scan / Placement and optional project-level ADR rules
 references/product-brief.md        feature product brief and product consensus rules
 references/delivery-contracts.md   durable producer-consumer interface handoff rules
 references/e2e-discovery.md        Web E2E environment discovery and recording rules
@@ -139,6 +140,7 @@ CHANGELOG.md                        version-change source of truth for "what cha
 8. Load `references/remote-project-discovery.md` when the human says the project is remote, local files contain remote-entry hints, or local/remote/container execution is unclear. Do not treat an empty local directory alone as remote.
 9. Load `references/requirement-management.md` before copying, moving, renaming, indexing, or referencing human source requirements.
 9a. Load `references/requirement-product-grill.md` during Requirements Discussion, Product Brief, or Brainstorm / Clarify when requirements include ambiguous terminology, domain boundaries, business flows, exception paths, conflicting prior feature behavior, or decision signals. Grill questions clarify input only; they do not create PRDs, ADRs, project memory, `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/`.
+9b. Load `references/project-decisions.md` when Decision Scan / Placement is needed: complex accepted requirements before Feature Spec, product tradeoffs, cross-feature or long-term decision candidates, architecture/data/runtime boundary choices, or drift that changes durable project facts. Decision Scan may start early, but `.agent-loop/decisions/` files are optional Human-gated artifacts and are usually created after requirement acceptance and before feature spec synthesis for complex requirements.
 10. Load `references/product-brief.md` when a feature needs product intent, product consensus, user stories, product scope, or PRD-like synthesis.
 11. Load `references/e2e-discovery.md` before designing or executing Web E2E/browser verification.
 12. Load `references/delivery-contracts.md` when the human requests cross-boundary handoff/API/interface documentation, or when the agent detects a likely downstream consumer boundary such as frontend/backend, service, event, public data, SDK/library, UI state, or runtime behavior. Delivery Contracts are not created by default.
@@ -168,6 +170,7 @@ CHANGELOG.md                        version-change source of truth for "what cha
   remote.md optional local-entry pointer for remote projects
   project.md
   project/ optional enterprise memory detail files
+  decisions/ optional project / cross-feature decision records
   onboarding-db/ Evidence-Graph + DDD human-readable project understanding docs; legacy layouts are evidence only until migrated
   requirements/
     <archive-date>-<topic>/

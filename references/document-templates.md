@@ -20,6 +20,8 @@ CLAUDE.md -> AGENTS.md
     testing.md
     environments.md
     guidance-inventory.md
+  decisions/
+    0001-<decision-slug>.md
   requirements/
     <archive-date>-<topic>/
       README.md
@@ -95,6 +97,14 @@ Preferred requirement-set layout:
 ```
 
 Use `templates/requirement-set-README.md` for the set README.
+
+## Project Decision Rules
+
+Use `.agent-loop/decisions/` for Human-gated project / cross-feature Decision And Design Records. Creating this directory does not require or enable enterprise memory mode.
+
+Use `templates/decision.md` when the human explicitly confirms drafting a project / cross-feature decision file. A new draft starts as `Status: proposed`; `accepted` status still requires explicit human acceptance of the decision itself. Requirement README files may list `Applicable Decisions` and `Triggered Decisions`; feature `product.md` and `spec.md` may list `Applicable Decisions`; feature `spec.md` may also list `Implements Decisions` and feature-local `Design Decisions`.
+
+Do not create ADR files from ordinary chat, early fuzzy requirements discussion, or feature-local implementation preferences. Keep early signals as Decision Candidates until Decision Scan / Placement and human confirmation decide the destination.
 
 New requirements should be grouped by requirement set directory. Do not create flat files directly under `requirements/`.
 
@@ -584,6 +594,10 @@ Summary:
 
 ## Problem / Goal
 
+## Applicable Decisions
+
+-
+
 ## Maintenance Fix Scope
 
 Use this section only when `Feature Type: maintenance-fix`.
@@ -636,6 +650,21 @@ Acceptance scenarios:
 ### Removed
 
 ## Dependencies
+
+## Implements Decisions
+
+| Decision | Implemented Slice | Notes |
+|---|---|---|
+|  |  |  |
+
+## Design Decisions
+
+Feature-local decisions that do not need standalone project ADR files:
+
+- Decision:
+  - Reason:
+  - Applies To:
+  - Decision Scan: none / candidate / project-decision-not-needed
 
 ## Out of Scope
 

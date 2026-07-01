@@ -105,6 +105,8 @@ Agent 不应该用空目录、薄 README、planned/later 占位文件、`TBD`、
 | “先帮我梳理这个需求，不要实现。” | 进入 Requirements Discussion，问清目标、用户、范围、约束、验收方向。 |
 | “先按 grill-with-docs 问清这个需求。” | 先问清术语、业务流程、边界和异常场景；提问前会查已有文档、代码和相关历史 feature。 |
 | “把这些内容落到 product.md。” | 如果还在聊天或需求澄清阶段，先问你是要创建/引用 requirement set，还是确认进入 feature Product Brief；不会直接创建 feature `product.md`。 |
+| “聊需求时遇到复杂架构取舍，要不要 ADR？” | 只启动 Decision Scan 并记录 Decision Candidate；不会直接创建 ADR。等 requirement 被确认后、feature spec 前，再判断是否需要 Human-gated ADR draft。 |
+| “这个需求进入 feature 前先做 ADR / Decision Design。” | 在 requirement 被确认后、feature spec 前做 Decision Scan；只有长期、跨 feature、难逆转或有真实取舍时才建议 `.agent-loop/decisions/*.md`。 |
 | “这个需求比较大，先拆成几个阶段。” | 建议在 requirement README 里写 `Delivery Phases`，让你确认先做哪一段。 |
 | “这个先记一下，后面做。” | 作为 deferred requirement 写进 requirement set 或 optional `requirements/INDEX.md`，不写进 `project.md`。 |
 | “这是需求文档、原型图和反馈。” | 归档到 `.agent-loop/requirements/<archive-date>-<topic>/`，保留人类原始材料。 |
@@ -129,6 +131,8 @@ Agent 不应该用空目录、薄 README、planned/later 占位文件、`TBD`、
 如果用了 Requirement/Product Grill，requirement document 会承接术语、主流程、异常路径、事实源、历史冲突、验收场景和 Decision Candidates，而不是只写一段摘要。
 
 Product Brief Source Gate 的意思是：从聊天或需求澄清直接说“落到 product.md”时，Agent 不能立刻创建 feature 级 `product.md`。它要先问你是要创建/引用 requirement set，还是确认开始 feature Product Brief。如果只是整理产品意图，可以先保留在 requirement artifact 或回复草稿，等 feature context 明确后再写入 `product.md`。
+
+ADR / Decision Design 是 requirement 和 feature 之间的设计桥梁。聊需求时，Agent 启动的是 Decision Scan：发现长期、跨 feature、难逆转或真实取舍信号后，先把它写成 Decision Candidate，不直接创建 ADR 文件。等 requirement 被确认后、feature spec 前，Agent 才会建议是否创建 Human-gated decision file。新的 decision draft 默认是 `proposed`，只有你明确确认后才会变成 `accepted`。普通 feature 内的小取舍写在 `spec.md` 的 `Design Decisions`。
 
 示例：
 

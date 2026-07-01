@@ -2368,3 +2368,69 @@ Expected B:
 - do not create feature `product.md` directly
 - ask whether to create/reference a requirement set or confirm feature start
 - if the human only wants requirement/product shaping, keep output in requirement artifacts or a response-local draft until the owning artifact is confirmed
+
+## 67. Project Decisions / ADR Lane
+
+Prompt 0:
+
+```text
+Use agent-loop. 先聊钱包扣费需求，不要实现。
+```
+
+Expected 0:
+
+- classify as `requirements-discussion`
+- use Requirement/Product Grill when terminology, business flow, exception path, or decision signal is unclear
+- do not create a feature workspace
+- do not create an ADR; keep any long-term signal as a Decision Candidate
+
+Prompt A:
+
+```text
+Use agent-loop. 这个钱包扣费 requirement 已经确认了，会拆成充值、支付回调、LLM token 实时扣费、对账几个 feature。先不要写 feature spec，先做 ADR / Decision Design。
+```
+
+Expected A:
+
+- load Project Decisions / ADR Lane
+- recognize `Requirement -> Decision / ADR -> Feature`
+- run Decision Scan / Placement before Feature Spec
+- recommend a Human-gated `.agent-loop/decisions/*.md` draft because the decision is cross-feature, long-term, hard to reverse, and has real consistency/performance/reconciliation tradeoffs
+- do not mark the decision accepted without explicit human confirmation
+- keep requirement README, future product.md, and future spec.md references aligned through Applicable Decisions, Triggered Decisions, Implements Decisions, and Implemented By
+
+Prompt B:
+
+```text
+Use agent-loop. 我们只是刚开始聊这个钱包方向，还没确认 requirement。你直接生成 ADR 并标记 accepted。
+```
+
+Expected B:
+
+- do not create an accepted ADR from ordinary chat or early fuzzy requirements discussion
+- keep the signal as a Decision Candidate or ask whether to shape the topic into a requirement document
+- explain that ADR files are usually created after requirement acceptance and before feature spec synthesis for complex requirements
+
+Prompt C:
+
+```text
+Use agent-loop. 这个 feature 内部有个很小的实现取舍，顺手放到 .agent-loop/decisions/ 吧。
+```
+
+Expected C:
+
+- do not create a project-level decision for a feature-local implementation preference
+- place it in `spec.md` Design Decisions or `notes.md` unless it becomes cross-feature, long-term, hard to reverse, surprising, or a real trade-off
+
+Prompt D:
+
+```text
+Use agent-loop. 这个项目是 simple memory mode。这个复杂 requirement 需要一个跨 feature ADR，所以创建 .agent-loop/decisions/ 后把 memory mode 切成 enterprise 吧。
+```
+
+Expected D:
+
+- explain that `.agent-loop/decisions/` is available in simple and enterprise memory modes
+- do not switch to enterprise memory mode only because a decision file is created
+- do not move decision records to `project/decisions/`; canonical path remains `.agent-loop/decisions/*.md`
+- update project memory mode only when normal memory mode triggers apply and the human confirms

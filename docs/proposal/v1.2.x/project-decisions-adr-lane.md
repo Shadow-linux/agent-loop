@@ -1,8 +1,10 @@
 # Proposal: Project Decisions / ADR Lane
 
-状态：讨论草案
+状态：轻量版已实施
 目标版本：v1.2.4
 创建时间：2026-06-16
+
+实施说明：v1.2.4 已将轻量 Decision / ADR Lane 落到 `references/project-decisions.md`、`templates/decision.md`、stage guidance、workflow checklist、README、Usage 和验证脚本。本文保留为设计背景和后续扩展讨论。
 
 ## 目的
 
@@ -25,6 +27,14 @@ Decision Scan 是必选检查；Decision File / ADR 是可选产物。
 Decision Scan 早介入，Decision File 晚创建。
 决策记录应该放在它影响范围的最小稳定层级。
 ```
+
+更具体地说，ADR 是 requirement 和 feature 之间的设计桥梁：
+
+```text
+Requirement -> Decision / ADR -> Feature
+```
+
+Requirement 说明人类要什么，Decision / ADR 说明为满足目标而选择的业务流程和架构方向，Feature 说明这次具体实现哪些切片。
 
 ADR 不是 feature spec 的替代品，也不是 project memory 的替代品。
 
@@ -553,7 +563,7 @@ Decision / ADR = 从产品上下文和技术设计中抽取长期、跨 feature�
 ## 待讨论问题
 
 - 是否需要在 simple memory mode 下限制 `decisions/` 的创建门槛？
-- 是否需要 requirement README 的固定 `Applicable Project Decisions` 字段？
-- feature spec 的 `Applicable Decisions` 是否应成为标准字段？
+- requirement README 的固定 `Applicable Decisions` / `Triggered Decisions` 字段已在轻量版实施，后续可观察是否过重。
+- feature spec 的 `Applicable Decisions` / `Implements Decisions` / `Design Decisions` 已成为标准字段，后续可观察是否需要裁剪。
 - accepted decision 是否需要 supersede 机制和编号规则？
-- 是否需要独立 `references/project-decisions.md`？
+- 独立 `references/project-decisions.md` 已实施。

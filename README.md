@@ -58,6 +58,7 @@ Message Intent → Chat And Requirements Discussion if needed
 | **Operational Support** | Read-only code-guided help for testing, running, deploying, switching accounts/config/models/providers, quota checks, rollout, and production diagnosis before deciding whether feature work is needed. |
 | **Requirement Lifecycle / Backlog** | Requirement memory for proposed, accepted, deferred, in-progress, implemented, superseded, rejected, or reference-only requirements without using project memory as a backlog. |
 | **Chat And Requirements Discussion** | `chat` answers or discusses without creating artifacts; `requirements-discussion → Brainstorm / Clarify → requirement document → requirements/` before any feature construction. |
+| **Decision / ADR** | Optional bridge between requirement and feature work. Decision Scan is lightweight; `.agent-loop/decisions/*.md` is used only for Human-gated project / cross-feature design decisions. |
 | **Delivery Contract** | Optional producer-consumer boundary handoff. Used only when API, event, public data, UI state/behavior, SDK/library, runtime, or explicit cross-agent/human handoff needs a stable contract. |
 
 ## Artifact Layout
@@ -67,6 +68,8 @@ Message Intent → Chat And Requirements Discussion if needed
   remote.md                           # optional local-entry pointer for remote projects
   project.md                          # Long-term project memory
   project/                            # optional enterprise memory detail files
+  decisions/                          # optional project / cross-feature Decision And Design Records
+    0001-<decision-slug>.md
   onboarding-db/                      # Evidence-Graph + DDD project-understanding docs; legacy layouts are evidence only
   requirements/
     INDEX.md                           # optional inventory and backlog/deferred view
@@ -135,6 +138,16 @@ For existing projects, the agent separates safe-entry memory from newcomer learn
 For requirement shaping, the agent should enter Requirements Discussion instead of creating a feature workspace. Requirement/Product Grill is the clarification method for fuzzy terminology, business flows, exception paths, prior feature conflicts, source-of-truth questions, and decision signals. It asks one blocking question at a time, includes a recommended answer, and checks relevant project memory, source requirements, docs, code, tests, and prior feature artifacts before asking when those sources may already answer the question.
 
 Reviewed requirements live under `.agent-loop/requirements/<date>-<topic>/`. If the human later asks to "落到 product.md" from chat or requirements discussion, Product Brief Source Gate applies: the agent first asks whether to create/reference a requirement set or confirm feature start. Feature-level `product.md` is written only after there is a requirement source and confirmed feature context.
+
+During requirements discussion, decision signals start Decision Scan only; the agent records Decision Candidates and does not create ADR files until the requirement source is accepted and the human confirms the draft.
+
+When the accepted requirement is complex or likely to become multiple features, the agent runs Decision Scan before Feature Spec. A Decision / ADR file is created only after human confirmation, usually after requirement acceptance and before feature spec synthesis. This keeps the chain explicit:
+
+```text
+Requirement -> Decision / ADR -> Feature
+```
+
+Simple work can skip decision files and go straight from requirement to feature spec. Feature-local choices stay in `spec.md` Design Decisions.
 
 ### 4. Start a Feature
 

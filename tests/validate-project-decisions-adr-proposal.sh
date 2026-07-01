@@ -20,10 +20,12 @@ assert_not_contains() {
   fi
 }
 
-assert_contains "状态：讨论草案"
+assert_contains "状态：轻量版已实施"
 assert_contains "目标版本：v1.2.4"
+assert_contains 'v1.2.4 已将轻量 Decision / ADR Lane 落到 `references/project-decisions.md`'
 assert_contains "Decision Scan 早介入，Decision File 晚创建。"
 assert_contains "Decision Scan 是必选检查；Decision File / ADR 是可选产物。"
+assert_contains "Requirement -> Decision / ADR -> Feature"
 assert_contains "first-version exclusion 仍然禁止 complex ADR system"
 assert_contains '`.agent-loop/decisions/` 是 simple 和 enterprise memory mode 都可使用的一等长期 artifact'
 assert_contains "第一版只正式支持两类决策记录"
@@ -85,6 +87,6 @@ assert_contains "to-prd = 将已知上下文合成为 product.md / PRD-like Prod
 assert_contains "Decision / ADR = 从产品上下文和技术设计中抽取长期、跨 feature、难逆转、有真实 trade-off 的决策"
 
 assert_contains "## 待讨论问题"
-assert_contains '是否需要独立 `references/project-decisions.md`'
+assert_contains '独立 `references/project-decisions.md` 已实施。'
 
 printf 'PASS: project decisions ADR proposal contract is complete\n'

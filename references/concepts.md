@@ -41,6 +41,8 @@ First version excludes:
 
 **Product Brief**: Optional feature-level product understanding in `product.md`: problem, users, user stories, product scope, product decisions, and open product questions.
 
+**Decision / ADR**: Optional project / cross-feature Decision And Design Record under `.agent-loop/decisions/*.md`. It bridges accepted requirements and feature work when a requirement needs shared business-flow, architecture, data, consistency, reliability, performance, security, or verification decisions. It is not a complex ADR system and is not required for every feature.
+
 **Stories**: User-perspective slices inside a feature. They live in `spec.md` and are referenced by labels such as `US1`.
 
 **Task**: Default executable engineering unit. Tasks should be small, verifiable, and linked to a story when possible.
@@ -87,6 +89,7 @@ First version excludes:
 remote.md  = local entry pointer for remote projects
 project.md = long-term project facts in simple mode; memory index and current state in enterprise mode
 project/   = optional enterprise long-term project memory details
+decisions/ = optional project / cross-feature decision records explaining why durable choices were made
 requirements/ = original human material packages, references, and requirement lifecycle/backlog records, grouped by archive-date requirement set directory
 product.md = optional feature product intent and product scope
 spec.md    = intended feature behavior

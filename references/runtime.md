@@ -41,6 +41,8 @@ If message intent is `requirements-discussion`, do not create a feature workspac
 
 Requirement/Product Grill may be used inside Requirements Discussion, Product Brief, or Brainstorm / Clarify as grill-with-docs style clarification when terminology, roles, business flows, exception paths, prior feature behavior, or decision signals are unclear. It does not create a new stage: it clarifies input for the owning stage, writes only through that stage's artifacts and human gates, and routes hard-to-reverse, surprising, or real-trade-off signals to Decision Scan.
 
+Project Decisions / ADR is the lightweight bridge between accepted requirements and feature implementation when a requirement needs shared business-flow or architecture direction. Decision Scan may start during requirement and product shaping, but a decision file is optional and Human-gated. For complex requirements, `.agent-loop/decisions/*.md` files are usually created after requirement acceptance and before Feature Spec synthesis. Ordinary chat and early fuzzy requirements discussion should capture Decision Candidates, not create ADR files.
+
 Message intent is not permanent; reclassify when the conversation changes intent.
 
 Chat defaults to answer-only, but it may convert to `requirements-discussion`, `proposal-doc`, `feature-request`, `operational-support`, `feature-follow-up`, or `deferred-requirement` when the human intent changes. Do not keep using `chat` merely because the conversation started as chat.
@@ -170,6 +172,7 @@ Re-Adopt Agent Loop Project if Needed
 Code-Guided Operational Support if Needed
 Requirement Archive
 Product Brief if Needed
+Decision Scan / Placement if needed
 Brainstorm / Clarify if Needed
 Feature Follow-up And Flow-back if Needed
 Targeted Feature Scan if Needed

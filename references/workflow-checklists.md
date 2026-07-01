@@ -35,6 +35,18 @@ Before using an external skill or plugin inside a stage:
 - [ ] Do not create external `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/` paths.
 - [ ] If Requirement/Product Grill was used, verify the owning requirement document or product brief has structured sections for terminology, flows, exceptions, data/source of truth, historical conflicts, acceptance scenarios, and Decision Candidates where applicable.
 
+## Decision Scan / Placement
+
+- [ ] Load `project-decisions.md` when a requirement/product/spec/technical design/drift signal may affect multiple features or long-term project direction.
+- [ ] Confirm whether the candidate belongs in product.md, spec.md Design Decisions, tests.md, notes.md, or `.agent-loop/decisions/*.md`.
+- [ ] Do not create or accept a decision file without explicit human confirmation.
+- [ ] Do not mark a decision file `accepted` unless the human explicitly accepted that decision.
+- [ ] Do not create ADR files from ordinary chat or early fuzzy requirements discussion.
+- [ ] Before Feature Spec for complex accepted requirements, verify whether shared business-flow or architecture direction is needed.
+- [ ] If a project-level decision is required but unresolved, stop before Feature Spec or Plan Gate.
+- [ ] Verify requirement README, product.md, and spec.md decision references stay aligned.
+- [ ] Remember that `.agent-loop/decisions/` is available in simple and enterprise memory modes and does not trigger enterprise mode by itself.
+
 ## Message Intent
 
 - [ ] Classify the latest human message intent before project state classification.

@@ -145,6 +145,7 @@ Use:
 
 - `requirement-management.md`
 - `requirement-product-grill.md` when terminology, business rules, flows, boundaries, exception paths, prior feature behavior, or decision signals are unclear
+- `project-decisions.md` when hard-to-reverse, surprising, cross-feature, or real-trade-off decisions appear
 - `document-templates.md`
 - `human-review-summary.md` before approval
 - `skill-routing.md` and `external-skill-adapters.md` when a brainstorming or product-discovery helper is available
@@ -155,6 +156,7 @@ Rules:
 - use Requirement/Product Grill before asking humans when terminology, roles, business objects, flows, exception paths, or historical behavior are unclear
 - run targeted lookup of relevant prior feature `product.md`, `spec.md`, `tests.md`, and `notes.md` before asking a grill question
 - send hard-to-reverse, surprising, or real-trade-off signals to Decision Scan as Decision Candidates, not accepted ADRs
+- keep early ADR signals as Decision Candidates until the requirement is human-reviewed and the owning gate is clear
 - ask only questions that affect requirement clarity, scope, users/operators, constraints, non-goals, or acceptance direction
 - When Requirement/Product Grill was used, the requirement document draft must include the grill-enriched sections from `document-templates.md`; use `Not applicable` plus a short reason instead of empty headings.
 - run a lightweight Phase Scan when the demand looks larger than one feature, has MVP/later scope, contains multiple journeys or roles, crosses multiple technical boundaries, or the human uses staged-delivery language such as "先做核心闭环" or "后面再补"
@@ -480,6 +482,7 @@ Load:
 
 - `product-brief.md`
 - `requirement-product-grill.md` when product terminology, flows, boundaries, exception paths, or prior feature behavior need clarification before synthesis
+- `project-decisions.md` when product tradeoffs or product decisions may affect multiple features or long-term project direction
 - `skill-routing.md` for Stage Helper Capability Scan
 - `external-skill-adapters.md` when Stage Helper Capability Scan finds Superpowers, PRD/product synthesis, or grill-with-docs style helpers
 
@@ -504,6 +507,7 @@ Rules:
 - ask one blocking product question at a time
 - include the agent's recommended answer when asking
 - record long-term consensus candidates for Project Memory Update
+- route cross-feature product tradeoffs and Product Decisions through Decision Scan / Placement before Feature Spec
 
 Write after confirmation:
 
@@ -513,6 +517,49 @@ Write after confirmation:
 Exit:
 
 - product intent is stable enough for Feature Spec
+
+## Decision Scan / Placement If Needed
+
+Entry: accepted or referenced requirements, product.md, PRD-like synthesis, Requirement/Product Grill output, Technical Design / Code Context, or Drift Check contains decision candidates that may affect multiple features or long-term project direction.
+
+Load:
+
+- `project-decisions.md`
+- `document-templates.md`
+- `human-review-summary.md` before asking the human to create, accept, supersede, deprecate, or reference project-level decisions
+
+Position:
+
+```text
+Requirement -> Decision / ADR -> Feature
+```
+
+Rules:
+
+- run Decision Scan after requirement acceptance and before Feature Spec when a requirement is complex, likely to split into multiple features, changes business flow, or needs shared architecture direction
+- do not create ADR files from ordinary chat or early fuzzy requirements discussion
+- place product-only decisions in `product.md`
+- place feature-local decisions in `spec.md` Design Decisions
+- place testing decisions in `tests.md` unless they verify a long-term design goal
+- recommend `.agent-loop/decisions/*.md` only for project / cross-feature, long-term, hard-to-reverse, surprising, or real-trade-off decisions
+- creating `.agent-loop/decisions/` does not imply enterprise memory mode
+- do not create, accept, supersede, deprecate, delete, or renumber decision files without explicit human confirmation
+- do not enter Feature Spec when an unresolved project-level decision is required to write the feature coherently
+- update requirement README, product.md, and spec.md decision references after human confirmation
+
+Write after confirmation:
+
+- optional `.agent-loop/decisions/000N-<slug>.md` from `templates/decision.md`
+- requirement README `Applicable Decisions`, `Triggered Decisions`, and `Implemented By`
+- feature `product.md` / `spec.md` `Applicable Decisions`
+- feature `spec.md` `Implements Decisions`
+
+Exit:
+
+- no project-level decision is needed
+- decision candidate stays in product.md, spec.md, tests.md, or notes.md
+- decision draft is ready for human review
+- accepted decision is referenced by downstream feature artifacts
 
 ## Brainstorm / Clarify
 
@@ -600,6 +647,7 @@ Entry: goal and source requirements are clear enough.
 
 Load:
 
+- `project-decisions.md` when accepted requirements or product decisions have Decision Candidates, Applicable Decisions, or unresolved long-term/cross-feature choices
 - `skill-routing.md` for Stage Helper Capability Scan
 - `external-skill-adapters.md` when Stage Helper Capability Scan finds Superpowers, brainstorming, or another spec-writing helper
 
@@ -625,6 +673,10 @@ Include:
 Rules:
 
 - before fallback spec writing, run Stage Helper Capability Scan; when a spec/brainstorming helper is available, use it for ambiguity removal, scope checks, and acceptance thinking while writing to `spec.md`
+- inspect Source Requirements, product.md, and Applicable Decisions before writing behavior and acceptance
+- include `Applicable Decisions`, `Implements Decisions`, and feature-local `Design Decisions`
+- use Decision Scan / Placement before Feature Spec if the requirement needs a shared business-flow or architecture decision
+- do not enter Feature Spec when an unresolved project-level decision is required
 
 Exit:
 
@@ -818,6 +870,7 @@ Helper-friendly stage: Technical Design / Code Context runs Stage Helper Capabil
 Load:
 
 - `implementation-planning.md`
+- `project-decisions.md` when implementation design introduces long-term/cross-feature boundaries, dependencies, data ownership, transaction, consistency, concurrency, idempotency, or recovery choices
 - `large-projects.md` for large, old, or multi-package projects
 - nearest root/directory `AGENTS.md`
 - relevant accepted or verified Delivery Contracts when the task crosses a producer-consumer boundary
@@ -844,6 +897,7 @@ Rules:
 - prefer existing local patterns over new abstractions
 - if an interface will be created, define it explicitly before implementation
 - if a durable consumer-facing interface is created or changed, load `delivery-contracts.md`, update the contract draft, and stop for human acceptance or breaking-change approval when required
+- if technical design changes a project-level decision candidate, run Decision Scan / Placement before plan execution
 
 Exit:
 
@@ -1100,6 +1154,7 @@ Check:
 - completed work vs `tasks.md`
 - test reality vs `tests.md`
 - long-term changes vs `project.md`
+- long-term/cross-feature decision reality vs `.agent-loop/decisions/` when present
 - producer-consumer interfaces vs `contracts.md` and linked `contracts/*` details when present
 - human original requirements vs current implementation when relevant
 - whether long-term startup guidance changed and `AGENTS.md` should be synced
@@ -1108,6 +1163,7 @@ Write after confirmation:
 
 - feature docs for feature drift
 - `project.md` for long-term project facts
+- `.agent-loop/decisions/*.md` reference backfill, new decision draft, or superseding decision draft only after human confirmation
 - `notes.md` drift record
 - `contracts.md` and matching `contracts/*` details for interface drift; ask before accepting breaking changes
 - `AGENTS.md` / `CLAUDE.md` only for long-term guidance changes

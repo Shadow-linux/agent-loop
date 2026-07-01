@@ -32,6 +32,20 @@ Use this table when the requirement is too large for one feature or has MVP / la
 |---|---|---|---|---|---|---|---|
 | Phase 1: <name> |  |  |  |  | proposed | none | none |
 
+## Applicable Decisions
+
+Project / cross-feature decisions that constrain this requirement:
+
+-
+
+## Triggered Decisions
+
+Decisions caused by this requirement:
+
+| Decision | Why Triggered | Status |
+|---|---|---|
+|  |  | candidate / draft / proposed / accepted / not-needed |
+
 ## Source Files
 
 - Requirement:
@@ -56,6 +70,10 @@ Source Conversation Summary:
 ## Used By
 
 - `.agent-loop/features/<feature>/spec.md`
+
+## Implemented By
+
+- `.agent-loop/features/<feature>/`
 
 ## Status History
 

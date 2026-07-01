@@ -12,6 +12,8 @@
 - Refined the Decision / ADR proposal into a lightweight Decision Lane: Decision Scan starts during requirement and product shaping, while decision files are created later only when long-term or cross-feature trade-offs need durable records.
 - Added `to-prd` and `grill-with-docs` as upstream inputs for product context, domain language, implementation-decision candidates, and testing-decision candidates without adopting their native output paths.
 - Expanded the proposed Decision And Design Record technical section to cover technology choices, component ownership, data source of truth, interfaces, transaction boundaries, consistency, idempotency, concurrency, failure recovery, observability, and verification closure.
+- Implemented the lightweight Decision / ADR lane as a requirement-to-feature bridge with `references/project-decisions.md`, `.agent-loop/decisions/`, `templates/decision.md`, stage/checklist routing, and requirement/product/spec relationship fields.
+- Clarified the human-facing ADR trigger: requirements discussion starts Decision Scan and records Decision Candidates, while ADR drafts wait for an accepted requirement source, feature-spec timing, and human confirmation.
 
 ### Requirement / Product Grill Proposal
 - Added a proposal for using `grill-with-docs` as a requirement and product clarification method before `to-prd` or Product Brief synthesis.
