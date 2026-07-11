@@ -1,6 +1,6 @@
 # Agent Loop Changelog
 
-## 1.2.4 — 2026-06-29
+## 1.2.4 — 2026-07-11
 
 ### Version Baseline
 - Started the 1.2.4 development line from the current alpha branch so new behavior changes are recorded under 1.2.4 instead of the closed 1.2.3 section.
@@ -50,6 +50,12 @@
 - Reduced root `AGENTS.md` to a mandatory maintainer entrypoint with explicit triggers for control-flow changes, RED/GREEN revalidation, Chinese scoring reports, and repository/user-runtime scope separation.
 - Added a regression test that prevents the maintainer validation guide, six-domain audit contract, and `AGENTS.md` reference from drifting apart.
 - Added an explicit repository perspective and audience-to-surface map so maintainers do not confuse skill-development guidance, distributed user-Agent runtime rules, generated target-project guidance, and human-facing documentation.
+
+### Feature Monthly Compaction Proposal
+- Added a discussion proposal for compacting fully completed historical feature workspaces into monthly buckets while keeping the current month flat.
+- Defined `Slim With History` as the conservative default, retained historical implementation detail, and kept deep archive or deletion behind explicit Human Gates.
+- Documented affected requirement, decision, project-memory, follow-up, drift, and validation indexes without treating the proposal as a published runtime capability.
+- Added a proposal contract test so future edits preserve the safety gates, history-retention rules, and proposal-only boundary.
 
 ## 1.2.3 — 2026-06-19
 
