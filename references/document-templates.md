@@ -104,7 +104,7 @@ Use `.agent-loop/decisions/` for Human-gated project / cross-feature Decision An
 
 Use `templates/decision.md` when the human explicitly confirms drafting a project / cross-feature decision file. A new draft starts as `Status: proposed`; `accepted` status still requires explicit human acceptance of the decision itself. Requirement README files may list `Applicable Decisions` and `Triggered Decisions`; feature `product.md` and `spec.md` may list `Applicable Decisions`; feature `spec.md` may also list `Implements Decisions` and feature-local `Design Decisions`.
 
-Do not create ADR files from ordinary chat, early fuzzy requirements discussion, or feature-local implementation preferences. Keep early signals as Decision Candidates until Decision Scan / Placement and human confirmation decide the destination.
+Do not create ADR files from ordinary chat, early fuzzy requirements discussion, or feature-local implementation preferences. Keep early signals as Design Readiness evidence and Decision Candidates until Decision & Design, its Decision Scan / Placement method, and human confirmation decide the destination.
 
 New requirements should be grouped by requirement set directory. Do not create flat files directly under `requirements/`.
 
@@ -124,6 +124,22 @@ Use `Delivery Phases` in requirement set `README.md` when the requirement is too
 | Phase | Goal | Scope | Out Of Scope | Acceptance Direction | Status | Feature Mapping | Source Notes |
 |---|---|---|---|---|---|---|---|
 | Phase 1: <name> |  |  |  |  | proposed | none | none |
+```
+
+Before an accepted requirement enters feature construction, add or update this requirement README summary:
+
+```md
+## Design Readiness
+
+Status: not-scanned | design-not-needed | candidate | required | completed
+Signals:
+-
+Shared Design Needs:
+-
+Recommended Next Stage: Decision & Design If Needed | Product Brief If Needed | Feature Spec
+Decision Records:
+-
+Coverage Status: not-applicable | unassigned | planned | complete
 ```
 
 Phase notes are optional source files when one phase needs detailed accepted direction:
@@ -209,7 +225,7 @@ Only list candidates. Do not mark ADRs accepted here.
 
 | Candidate | Why It Matters | Signal | Suggested Destination | Status |
 |---|---|---|---|---|
-|  |  | hard-to-reverse / surprising-without-context / real-trade-off | product.md / spec.md / tests.md / notes.md / Decision Scan | proposed |
+|  |  | cross-feature / shared-design / hard-to-reverse / real-trade-off | product.md / spec.md / tests.md / notes.md / Decision & Design | proposed |
 
 ## Non-goals
 
@@ -239,7 +255,7 @@ Use only when staged delivery has been discussed and human-reviewed. If used, mi
 |---|---|---|
 | product.md |  | not-created / proposed / created |
 | spec.md |  | not-created / proposed / created |
-| Decision Scan |  | none / candidate / completed |
+| Design Readiness |  | design-not-needed / candidate / required / completed |
 
 ## Source Conversation Summary
 ```
@@ -653,9 +669,9 @@ Acceptance scenarios:
 
 ## Implements Decisions
 
-| Decision | Implemented Slice | Notes |
-|---|---|---|
-|  |  |  |
+| Decision | Design Slice ID | Responsibility | Verification | Coverage Status |
+|---|---|---|---|---|
+|  | DS-00 |  |  | planned / implemented / verified |
 
 ## Design Decisions
 
@@ -664,7 +680,7 @@ Feature-local decisions that do not need standalone project ADR files:
 - Decision:
   - Reason:
   - Applies To:
-  - Decision Scan: none / candidate / project-decision-not-needed
+  - Placement: feature-local / Decision & Design candidate / project-decision-not-needed
 
 ## Out of Scope
 
@@ -685,7 +701,7 @@ Status: active
 
 ## Execution Mode
 
-Mode: linear | parallel | staged-linear | staged-parallel
+Mode: linear | parallel | barrier
 Default Split: vertical-slice
 
 ## Task Mode Legend
@@ -719,6 +735,7 @@ Default Split: vertical-slice
   - Depends on:
   - Blocked By:
   - Covers Stories: US1
+  - Design Slices:
   - Human Gate:
   - Acceptance:
   - Verification:
@@ -758,6 +775,12 @@ Status: active
 - [ ] Requirements are testable and unambiguous.
 - [ ] Success criteria are measurable.
 - [ ] Edge cases are identified.
+
+## Design Slice Verification Matrix
+
+| Design Slice ID | Required Verification | Test / Evidence | Status |
+|---|---|---|---|
+| DS-00 |  |  | planned / verified / blocked |
 
 ## Functional Test Cases
 
@@ -823,6 +846,7 @@ Plan Scope:
 - ID:
 - Title:
 - Included Tasks:
+- Design Slices:
 
 Plan Detail:
 - Path: plans/YYYY-MM-DD-TNNN-<slug>.md

@@ -124,6 +124,20 @@ We will:
 | Security / Risk |  |  |  |
 | Observability |  |  |  |
 
+## Design Slice Coverage
+
+Turn every implementation-bearing flow step, invariant, recovery responsibility, and non-functional target into a stable Design Slice ID.
+
+| Design Slice ID | Required Capability / Rule | Owning Feature(s) | Verification | Coverage Status |
+|---|---|---|---|---|
+| DS-01 |  |  |  | unassigned / planned / implemented / verified / deferred / out-of-scope |
+
+Coverage rules:
+- no required slice remains `unassigned` before Feature Spec
+- every owning feature copies its assigned slice IDs into `spec.md` `Implements Decisions`
+- `deferred` or `out-of-scope` requires an explicit human decision
+- update this table when feature scope or ownership changes
+
 ## Closure And Verification Plan
 
 | Requirement / Goal | Verification Method | Evidence Location |

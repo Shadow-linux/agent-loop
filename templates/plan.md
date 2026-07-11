@@ -12,6 +12,7 @@ Plan Scope:
 - ID:
 - Title:
 - Included Tasks:
+- Design Slices:
 
 ## Goal
 

@@ -10,6 +10,15 @@ assert_contains() {
   fi
 }
 
+assert_not_contains() {
+  local file="$1"
+  local unexpected="$2"
+  if grep -Fq "$unexpected" "$file"; then
+    echo "FAIL: unexpected '$unexpected' in $file" >&2
+    exit 1
+  fi
+}
+
 assert_not_exists() {
   local path="$1"
   if [ -e "$path" ]; then
@@ -19,7 +28,8 @@ assert_not_exists() {
 }
 
 assert_contains "references/requirement-management.md" "Requirement Lifecycle / Backlog"
-assert_contains "references/requirement-management.md" "proposed | accepted | deferred | in-progress | implemented | superseded | rejected | reference-only"
+assert_contains "references/requirement-management.md" "proposed | accepted | deferred | in-progress | partially-implemented | implemented | superseded | rejected | reference-only"
+assert_contains "references/requirement-management.md" "Delivery Phase Status Roll-up"
 assert_contains "references/requirement-management.md" "Requirement source files are immutable by default"
 assert_contains "references/requirement-management.md" 'Do not overwrite, rewrite, summarize over, or edit `requirement.md`'
 assert_contains "references/requirement-management.md" "Backward Compatibility"
@@ -28,7 +38,7 @@ assert_contains "references/requirement-management.md" "Never bulk migrate requi
 assert_contains "references/requirement-management.md" "Requirement Conflict Review"
 assert_contains "references/requirement-management.md" "create a new requirement set and mark the old one superseded"
 
-assert_contains "templates/requirement-set-README.md" "Status: proposed | accepted | deferred | in-progress | implemented | superseded | rejected | reference-only"
+assert_contains "templates/requirement-set-README.md" "Status: proposed | accepted | deferred | in-progress | partially-implemented | implemented | superseded | rejected | reference-only"
 assert_contains "templates/requirement-set-README.md" "## Lifecycle"
 assert_contains "templates/requirement-set-README.md" "Intake Type: human-request | follow-up | deferred-from-feature | ops-discovery | bug-report | idea | reference"
 assert_contains "templates/requirement-set-README.md" "Implemented By:"
@@ -39,6 +49,7 @@ assert_contains "templates/requirements-index.md" "inventory and backlog view"
 assert_contains "templates/requirements-index.md" "## Backlog / Deferred Requirements"
 assert_contains "templates/requirements-index.md" "## In Progress"
 assert_contains "templates/requirements-index.md" "## Implemented"
+assert_contains "templates/requirements-index.md" "## Partially Implemented"
 assert_contains "templates/requirements-index.md" "## Superseded / Rejected"
 
 assert_not_exists "templates/requirement.md"
@@ -78,8 +89,8 @@ assert_contains "SKILL.md" "Version: 1.2.4"
 assert_contains "README.md" "**Current version:** 1.2.4"
 assert_contains "Usage.md" "**版本：** 1.2.4"
 assert_contains "plugin.json" '"version": "1.2.4"'
-assert_contains "templates/root-AGENTS.md" "version:1.2.4"
-assert_contains "templates/root-AGENTS.md" 'skill version `1.2.4`'
+assert_contains "templates/root-AGENTS.md" "block-version:1.2.4-20260711.1"
+assert_not_contains "templates/root-AGENTS.md" "## Agent Loop Guidance Version"
 assert_contains "AGENTS.md" 'ignore the `alpha` prefix for version records'
 
 echo "PASS: requirement lifecycle/backlog contract is complete"

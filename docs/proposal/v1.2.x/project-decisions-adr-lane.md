@@ -1,10 +1,10 @@
-# Proposal: Project Decisions / ADR Lane
+# Proposal: Decision & Design / ADR Lane
 
-状态：轻量版已实施
+状态：Decision & Design 增强版已实施
 目标版本：v1.2.4
 创建时间：2026-06-16
 
-实施说明：v1.2.4 已将轻量 Decision / ADR Lane 落到 `references/project-decisions.md`、`templates/decision.md`、stage guidance、workflow checklist、README、Usage 和验证脚本。本文保留为设计背景和后续扩展讨论。
+实施说明：v1.2.4 已将 Decision & Design / ADR Lane 落到 `references/project-decisions.md`、`templates/decision.md`、stage guidance、workflow checklist、README、Usage 和验证脚本，并补充 Design Readiness、Design Slice Coverage 与实现一致性检查。本文保留为设计背景和后续扩展讨论。
 
 ## 目的
 
@@ -15,26 +15,29 @@
 - 项目级长期决策放在哪里；
 - requirement、feature、project memory 如何引用这些决策；
 - 什么情况下 Agent 应该建议创建 ADR；
-- 在 agent-loop 哪些阶段执行 Decision Scan；
-- Product Brief / PRD / `to-prd` 输出如何作为 Decision Scan 输入；
+- 在 agent-loop 哪些边界执行 Design Readiness，并何时进入 Decision & Design；
+- Product Brief / PRD / `to-prd` 输出如何作为 Decision & Design 输入；
 - Decision / ADR 中技术设计部分应该覆盖什么；
 - feature-local 小决策什么时候直接写进 `spec.md`，什么时候升级为独立 ADR。
 
 ## 核心观点
 
 ```text
-Decision Scan 是必选检查；Decision File / ADR 是可选产物。
-Decision Scan 早介入，Decision File 晚创建。
+Design Readiness Check 是 Requirement 进入 feature construction 前的必选方法。
+Decision Scan / Placement 是 Decision & Design 阶段内部的分流方法。
+Decision File / ADR 全局可选；当共享设计是需求落地前提且没有 accepted decision 覆盖时，它是有条件必需的 Human-gated 产物。
 决策记录应该放在它影响范围的最小稳定层级。
 ```
 
 更具体地说，ADR 是 requirement 和 feature 之间的设计桥梁：
 
 ```text
-Requirement -> Decision / ADR -> Feature
+Requirement -> Design Readiness Check -> Decision & Design If Needed -> Feature Mapping -> Product Brief / Feature Spec
 ```
 
-Requirement 说明人类要什么，Decision / ADR 说明为满足目标而选择的业务流程和架构方向，Feature 说明这次具体实现哪些切片。
+Requirement 说明人类要什么以及如何验收；Decision & Design 说明完整业务如何闭环、共享领域与数据规则如何成立、架构如何支撑目标；Feature 只实现并验证被分配的 Design Slice。
+
+这里的触发条件不要求存在技术争议。一个 requirement 只要会拆成多个 feature，或需要共享业务流程、状态机、事实源、一致性、恢复、性能、高可用、安全、可观测性设计，就应该进入 Decision & Design。
 
 ADR 不是 feature spec 的替代品，也不是 project memory 的替代品。
 
@@ -169,29 +172,45 @@ project/architecture.md or project/boundaries.md
   records current project reality after the decision is accepted.
 ```
 
-## Decision / ADR 介入时机
+## Design Readiness Check
 
-Decision / ADR 不应等产品文档完全定稿后才介入。更合适的规则是：
+Design Readiness Check 不是独立 stage，而是 Requirement Archive、Product Brief、Feature Spec 边界上的必选检查。它判断 Requirement 是否已经具备直接进入 feature construction 的条件，还是需要先形成跨 feature 的整体落地设计。
+
+| 检查信号 | 进入 Decision & Design 的原因 |
+|---|---|
+| 一个 requirement 会拆成多个 feature | 需要共享蓝图，不能让 feature 各自发明规则 |
+| 需要端到端业务闭环 | 独立 story 通过不代表整体流程闭环 |
+| 共享领域概念、状态机、事实源或不变量 | 多个 feature 必须使用同一语义 |
+| 涉及事务、一致性、并发、幂等、补偿、对账或恢复 | 异常行为跨越 feature 边界 |
+| 有性能、高可用、安全、成本、审计、可观测性目标 | 目标需要分配 owner 和验证路径 |
+| 新增跨系统或长期边界 | 后续 feature 必须继承同一约束 |
+
+检查输出写入 requirement README：`design-not-needed`、`candidate`、`required` 或 `completed`，并记录触发信号、共享设计问题、推荐阶段、decision records 和 coverage status。
+
+## Decision & Design / ADR 介入时机
+
+Decision & Design 不应等 feature story 或技术实现已经拆完才介入。更合适的规则是：
 
 ```text
 需求沟通 / 产品目标成形
-→ Decision Scan
+→ 记录 Design Readiness evidence / Decision Candidates
 → 产品文档 / requirement README / product.md 明确
-→ Decision Scan
-→ Feature Spec 前
-→ Decision Placement
+→ Design Readiness Check
+→ Decision & Design If Needed
+→ Feature Mapping / Design Slice Coverage
+→ Product Brief / Feature Spec
 → Technical Design / Code Context
-→ Decision Scan
+→ 新信号则回到 Design Readiness / Decision & Design
 → Plan Gate 前
-→ Decision Scan
+→ Design Slice Coverage 检查
 → Implementation
-→ Drift Check / Close Feature
+→ Review / Drift Check / Feature Completion Check
 ```
 
 核心原则：
 
 ```text
-Decision Scan 早介入，Decision File 晚创建。
+Design Readiness 早介入，Decision File 在 Requirement 被接受且共享设计需要长期记录时创建。
 ```
 
 含义：
@@ -217,9 +236,9 @@ Decision Scan 是一个轻量检查，不等于创建 ADR。
 | Plan Gate 前 | 确认 plan 没有绕过未接受的 decision |
 | Drift Check / Close Feature | 检查实现是否改变了长期项目事实，是否需要补写或更新 decision 引用 |
 
-## Decision Scan Inputs
+## Decision & Design Inputs
 
-Decision Scan 应从多个上游来源读取候选信号，而不是只看 feature spec。
+Decision & Design 应从多个上游来源读取需求落地和候选决策信号，而不是只看 feature spec。Decision Scan / Placement 只负责在阶段内部决定稳定归属。
 
 | Input | 读取什么 | 输出倾向 |
 |---|---|---|
@@ -267,6 +286,20 @@ Agent 应该建议创建 project-level decision file，当发现以下任一情�
 | 普通 bugfix 或小配置调整 | `notes.md` 或 task evidence |
 | 没有长期影响的 UI 文案、布局、小型交互 | `spec.md` |
 | 已有 accepted decision 完全覆盖 | 只引用已有 decision |
+
+## Design Slice Coverage
+
+Decision & Design 不能只被 feature 引用，还必须证明整体设计已经被 feature 完整承接。
+
+每个会产生实现工作的业务流程步骤、不变量、恢复责任和非功能目标都分配稳定 ID：`DS-01`、`DS-02`、`DS-03`。Decision record 保存反向覆盖表：
+
+| Design Slice ID | Required Capability / Rule | Owning Feature(s) | Verification | Coverage Status |
+|---|---|---|---|---|
+| DS-01 |  |  |  | unassigned / planned / implemented / verified / deferred / out-of-scope |
+
+进入 Feature Spec 前，所有 required slice 必须至少有一个 planned owner；feature `spec.md` 必须在 `Implements Decisions` 中引用被分配的 Design Slice ID。`Applicable Decisions` 只证明 feature 知道这个约束，不能证明它已经承接实现责任。
+
+Review、Drift Check 和 Feature Completion Check 继续验证 Design Slice 的实现与证据。任何偏离 accepted design 的实现都必须回到 Decision & Design 或 superseding decision，不能只凭本地 story 测试通过就 close。
 
 ## Human Gate
 
@@ -514,12 +547,13 @@ Open / Follow-up:
 
 这份 proposal 应保持轻量，不引入 complex ADR system。
 
-它只增加一条可选 lane：
+它只增加一条条件触发的轻量 lane：
 
 ```text
 Requirement
-→ Decision Scan
-→ Decision Placement
+→ Design Readiness Check
+→ Decision & Design If Needed
+→ Feature Mapping / Design Slice Coverage
 → Feature Spec
 → Tasks / Tests / Plan
 → Implementation
@@ -529,9 +563,10 @@ Requirement
 其中：
 
 ```text
-Decision Scan = 阶段检查。
-Decision Placement = 决定写在 spec.md、notes.md，还是建议 decisions/*.md。
-decisions/*.md = 只有长期/跨 feature 决策才创建。
+Design Readiness Check = Requirement 进入 feature construction 前的必选方法。
+Decision & Design = 形成跨 feature 的业务与架构落地蓝图。
+Decision Scan / Placement = 阶段内部决定内容写在 product/spec/tests/notes，还是建议 decisions/*.md。
+decisions/*.md = 当共享设计需要长期记录且没有 accepted decision 覆盖时，在 Human Gate 后创建。
 ```
 
 ## 与 grill-with-docs / to-prd 的关系
@@ -541,7 +576,7 @@ decisions/*.md = 只有长期/跨 feature 决策才创建。
 ```text
 grill-with-docs = 问清楚领域语言、业务场景和边界。
 to-prd = 将已知上下文合成为 product.md / PRD-like Product Brief。
-Decision / ADR = 从产品上下文和技术设计中抽取长期、跨 feature、难逆转、有真实 trade-off 的决策。
+Decision & Design / ADR = 把复杂 Requirement 推导为跨 feature 的业务闭环、领域/数据规则、架构、恢复、非功能目标和可验证设计。
 ```
 
 建议组合：
@@ -549,15 +584,16 @@ Decision / ADR = 从产品上下文和技术设计中抽取长期、跨 feature�
 | 工具 / 阶段 | 主要作用 | 写入 agent-loop |
 |---|---|---|
 | grill-with-docs | 拷问术语、场景、边界、领域模型冲突 | requirement README、product.md、project.md Domain Language 候选 |
-| to-prd | 从已知上下文合成 Problem、Solution、User Stories、Implementation Decisions、Testing Decisions | `product.md`，并把候选决策喂给 Decision Scan |
-| Decision Scan | 判断候选内容应留在 product/spec/tests，还是升级为 decision file | stage summary、Human Review Summary、decision draft |
-| Decision / ADR | 记录长期 / 跨 feature / 难逆转 / 有 trade-off 的业务与技术设计链路 | `.agent-loop/decisions/*.md` |
+| to-prd | 从已知上下文合成 Problem、Solution、User Stories、Implementation Decisions、Testing Decisions | `product.md`，并把共享设计信号交给 Design Readiness |
+| Design Readiness Check | 判断 Requirement 是否可直接进入 feature construction | requirement README summary、recommended next stage |
+| Decision Scan / Placement | 在 Decision & Design 内判断候选内容的稳定归属 | Human Review Summary、decision draft、feature-local placement |
+| Decision & Design / ADR | 记录跨 feature 的业务与技术落地蓝图、Design Slice Coverage 和验证链路 | `.agent-loop/decisions/*.md` |
 
 注意：
 
 - `to-prd` 默认发布 issue tracker 的行为不应直接照搬；agent-loop 应将内容翻译到 `product.md`，除非人类明确要求发布 issue。
 - `grill-with-docs` 默认写 `CONTEXT.md` / `docs/adr/` 的路径不应直接照搬；agent-loop 应把领域语言写入 requirement / product / project memory，把长期决策写入 `.agent-loop/decisions/`。
-- `Implementation Decisions` 不是 ADR；它们只是 Decision Scan 输入。
+- `Implementation Decisions` 不是 accepted ADR；它们只是 Design Readiness / Decision & Design 输入。
 - `Testing Decisions` 优先进入 `tests.md`，只有当它用于证明长期设计目标时才同步到 decision verification plan。
 
 ## 待讨论问题

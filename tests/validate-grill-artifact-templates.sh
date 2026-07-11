@@ -35,7 +35,7 @@ assert_contains "templates/product.md" "Acceptance Direction:"
 assert_contains "templates/product.md" "Status: proposed | accepted | deferred | rejected | needs-decision"
 assert_contains "templates/product.md" "Evidence / Source:"
 assert_contains "templates/product.md" "Human Gate:"
-assert_contains "templates/product.md" "Decision Scan:"
+assert_contains "templates/product.md" "Decision & Design Routing:"
 
 assert_contains "references/product-brief.md" "primary user journey"
 assert_contains "references/product-brief.md" "edge cases"
@@ -43,7 +43,7 @@ assert_contains "references/product-brief.md" "behavior changes for user/operato
 assert_contains "references/product-brief.md" "product tradeoffs"
 assert_contains "references/product-brief.md" "success signals"
 assert_contains "references/product-brief.md" "historical compatibility"
-assert_contains "references/product-brief.md" "Product Decisions must record status, evidence/source, human gate, and Decision Scan routing when applicable."
+assert_contains "references/product-brief.md" "Product Decisions must record status, evidence/source, human gate, and Decision & Design routing when applicable."
 
 assert_contains "references/requirement-product-grill.md" "When Requirement/Product Grill was used, the owning artifact must carry grill results into structured sections, not only a prose summary."
 assert_contains "references/requirement-product-grill.md" "Requirement document sections"

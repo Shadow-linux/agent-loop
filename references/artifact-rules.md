@@ -82,7 +82,7 @@ Task status meaning:
 - `review`: implementation and fresh verification may exist, but Task Done Gate is not complete
 - `done`: Task Done Gate passed; do not use for code-only completion
 - `blocked`: cannot proceed without a blocker being resolved
-- `skipped`: explicitly removed or deferred with a reason
+- `skipped`: explicitly removed from the current feature scope after human-approved reconciliation; deferred work must first move to the owning requirement/phase backlog and leave current scope
 
 Task Done Gate:
 
@@ -183,7 +183,7 @@ Onboarding-db directory:
 
 New Evidence-Graph + DDD onboarding-db writes are allowed only through `references/onboarding-knowledge-base.md` after Project Entry Scan or reliable project memory and human confirmation of the Onboarding Spec.
 
-Do not create, refresh, reorganize, or complete onboarding-db artifacts through the removed legacy flow. Existing legacy onboarding-db files may be read as evidence when present, but they are not trusted without code reality checks and do not replace `project.md` or root guidance. Migrate or replace legacy files only through an accepted Onboarding Spec or focused update proposal.
+Do not create, refresh, reorganize, or complete onboarding-db artifacts through the removed legacy flow. Existing legacy onboarding-db files may be read as evidence when present, but they are not trusted without code reality checks and do not replace `project.md` or root guidance. Migrate or replace legacy files only through an accepted Onboarding Spec, Onboarding Tasks, and Full Execution Gate.
 
 ## Plan Lifecycle
 

@@ -17,7 +17,7 @@ Outputs are limited to:
 - `.agent-loop/project.md` proposal or update
 - root `AGENTS.md` / `CLAUDE.md` status and repair proposal
 - stable command, boundary, capability, and uncertainty facts
-- recommended next stage, such as Start Feature, Operational Support, Requirement Archive, Re-Adopt, or Targeted Feature Scan
+- recommended next stage, such as Decision & Design If Needed, Product Brief If Needed, Feature Spec, Code-Guided Operational Support, Requirement Archive, Re-Adopt Agent Loop Project, or Targeted Feature Scan
 
 Do not create:
 
@@ -289,8 +289,6 @@ After human confirmation, write or update only confirmed items:
 
 ```text
 .agent-loop/project.md
-.agent-loop/requirements/
-.agent-loop/features/
 AGENTS.md
 CLAUDE.md -> AGENTS.md or pointer
 directory AGENTS.md only when explicitly confirmed

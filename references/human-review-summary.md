@@ -113,7 +113,7 @@ High-confidence rows can be drafted, but cannot become reviewed or written as ac
 Add a short summary:
 
 ```text
-Recommended execution: linear | parallel | staged-linear | staged-parallel
+Recommended execution: linear | parallel | barrier
 Next recommended stage:
 Auto mode option:
 ```

@@ -9,16 +9,18 @@ Version: 1.2.4
 
 Run a single-human, CLI-agent development loop from goal intake to verified close. This skill is a controller: it decides the current stage, loads the right reference, produces or updates `agent-loop` artifacts, and stops at human gates.
 
-## Design Source Rule
+## Published Source Authority
 
-This skill must stay aligned with the repo design sources:
+The published skill package has two operational sources of truth:
 
 ```text
-draft_agent_loop_struct.md
-final_agent_loop_skill_design.md
+references/design.md = core model and constraints
+references/runtime.md = executable routing, stage order, gates, and state transitions
 ```
 
-The references in this skill are operational extracts from those files. If this skill conflicts with either design source, the design source wins and the skill should be updated. New additions, including large-project behavior, may only extend the design without changing its core model, directory structure, stage order, or first-version exclusions.
+`SKILL.md` is the concise controller entrypoint. Stage references implement one stage without changing `runtime.md` order or gates. Templates and validation scenarios are derived views and must not create new rules. Workspace-level design drafts are historical or planning evidence only; they cannot override the published package.
+
+When core design and executable routing need to change, update `references/design.md` and `references/runtime.md` together, then align affected stage references, templates, scenarios, and human-facing docs in the same change.
 
 ## Non-Negotiable Rule
 
@@ -93,7 +95,7 @@ references/project-architecture-init.md DDD-inspired architecture and stack adap
 references/remote-project-discovery.md local entry + remote project discovery rules
 references/requirement-management.md     human source requirement archive rules
 references/requirement-product-grill.md requirement/product clarification method for ambiguous terminology, flows, prior feature conflicts, and decision signals
-references/project-decisions.md   Decision Scan / Placement and optional project-level ADR rules
+references/project-decisions.md   Design Readiness, Decision & Design, placement, coverage, and project-level ADR rules
 references/product-brief.md        feature product brief and product consensus rules
 references/delivery-contracts.md   durable producer-consumer interface handoff rules
 references/e2e-discovery.md        Web E2E environment discovery and recording rules
@@ -140,7 +142,7 @@ CHANGELOG.md                        version-change source of truth for "what cha
 8. Load `references/remote-project-discovery.md` when the human says the project is remote, local files contain remote-entry hints, or local/remote/container execution is unclear. Do not treat an empty local directory alone as remote.
 9. Load `references/requirement-management.md` before copying, moving, renaming, indexing, or referencing human source requirements.
 9a. Load `references/requirement-product-grill.md` during Requirements Discussion, Product Brief, or Brainstorm / Clarify when requirements include ambiguous terminology, domain boundaries, business flows, exception paths, conflicting prior feature behavior, or decision signals. Grill questions clarify input only; they do not create PRDs, ADRs, project memory, `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/`.
-9b. Load `references/project-decisions.md` when Decision Scan / Placement is needed: complex accepted requirements before Feature Spec, product tradeoffs, cross-feature or long-term decision candidates, architecture/data/runtime boundary choices, or drift that changes durable project facts. Decision Scan may start early, but `.agent-loop/decisions/` files are optional Human-gated artifacts and are usually created after requirement acceptance and before feature spec synthesis for complex requirements.
+9b. Load `references/project-decisions.md` for Design Readiness Check and `Decision & Design If Needed`: before accepted requirements enter feature construction, when a requirement spans multiple features or needs shared business-flow/domain/data/architecture/recovery/non-functional design, when product or technical work reveals cross-feature decisions, or when drift changes durable facts. Decision Scan / Placement is an internal method. A `.agent-loop/decisions/*.md` file is globally optional, but it becomes conditionally required when shared design is required and no accepted decision already covers it; creation and acceptance remain Human-gated.
 10. Load `references/product-brief.md` when a feature needs product intent, product consensus, user stories, product scope, or PRD-like synthesis.
 11. Load `references/e2e-discovery.md` before designing or executing Web E2E/browser verification.
 12. Load `references/delivery-contracts.md` when the human requests cross-boundary handoff/API/interface documentation, or when the agent detects a likely downstream consumer boundary such as frontend/backend, service, event, public data, SDK/library, UI state, or runtime behavior. Delivery Contracts are not created by default.
@@ -170,7 +172,7 @@ CHANGELOG.md                        version-change source of truth for "what cha
   remote.md optional local-entry pointer for remote projects
   project.md
   project/ optional enterprise memory detail files
-  decisions/ optional project / cross-feature decision records
+  decisions/ Human-gated project / cross-feature Decision & Design records; conditionally required when shared design has no accepted source
   onboarding-db/ Evidence-Graph + DDD human-readable project understanding docs; legacy layouts are evidence only until migrated
   requirements/
     <archive-date>-<topic>/
@@ -218,7 +220,7 @@ If the local directory is only a remote-project entry point, create only thin lo
 - Do not date the core `plan.md` filename. Date each plan cycle with `Plan ID`, `Created`, `Updated`, and record completed plan cycles in `notes.md`.
 - In complex artifact mode, `tasks.md`, `tests.md`, and `plan.md` become stable indexes that link to detailed files under `tasks/`, `tests/`, and `plans/`.
 - In complex projects, every task plan must name boundaries, files/areas to inspect, verification commands, and rollback notes.
-- A task cannot be marked `done` from implementation alone. After code changes, move the task to `review` until fresh test/verification evidence, required review, and drift decision are recorded.
+- A task cannot be marked `done` from implementation alone. Move it to `review` only after implementation and all applicable fresh verification (or a human-approved substitute) exist; otherwise keep it `in-progress` or `blocked`. Required review and drift still gate `done`.
 - Task Done Gate: mark a task `done` only after implementation is complete, required tests or substitute verification have run fresh, evidence is recorded in `notes.md`, lightweight Spec Review is recorded, Standards Review is recorded when triggered, drift decision is recorded, and `tasks.md` links or names the evidence.
 - During large Project Entry Scan, recommend bounded subagent scanning when available and human-confirmed; otherwise use single-agent layered scan.
 - During existing-project Project Entry Scan, create or propose only safe project memory, root guidance status, commands, boundaries, capabilities, and uncertainties. Do not create onboarding-db detail docs, module docs, flow docs, onboarding diagrams, onboarding-spec, or onboarding-tasks during Project Entry Scan.
@@ -251,13 +253,13 @@ If the local directory is only a remote-project entry point, create only thin lo
 - Root and directory guidance language follows the project language when clear; default to English only when project language is unclear. Preserve stable artifact names, stage names, and file paths in English.
 - Directory-level `AGENTS.md` is proposed for new or existing long-lived boundary directories, created only after human confirmation.
 - Strict Mode is default: ask before and after every stage.
-- Feature Auto-Loop may run Agent-ready feature work after Feature Spec acceptance and explicit human confirmation.
-- Task Auto-Run may run one task/story after its plan is accepted and explicit human confirmation.
+- Feature Auto-Loop may run Agent-ready feature work after a passed Requirement Checklist, Feature Spec acceptance, and explicit human confirmation.
+- Task Auto-Run runs Analyze Consistency before executing one accepted task/story plan after explicit human confirmation.
 - If the human appears slowed down by repeated confirmations, or when starting a feature/task execution lane, proactively explain the available gate modes and recommend either Feature Auto-Loop or Task Auto-Run when safe.
 - Auto modes stop at Human-gated work, unclear decisions, risky changes, failed verification, drift needing approval, unrelated dirty work blocking progress, Delivery Contract creation/acceptance/breaking changes, directory guidance changes, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, or publish.
 - Human confirmations should use table-first Human Review Summary by default; full artifacts remain the source of truth. When multiple documents, facts, or long-term memory entries will change, use Batch Human Review.
 - Root `AGENTS.md` / `CLAUDE.md` guidance must tell future agents to own the workflow: classify the stage, recommend one next action, propose missing artifacts, and keep responsibility for sequencing, diagnosis, verification, drift checks, and project-memory updates.
-- Root guidance must also explain autonomous execution after approval: Feature Auto-Loop may continue Agent-ready feature work after accepted Feature Spec and explicit enablement; Task Auto-Run may complete one accepted task/story plan through TDD, implementation, verification, bug fixing, review, drift, status update, and final report.
+- Root guidance must also explain autonomous execution after approval: Feature Auto-Loop may continue Agent-ready work after Requirement Checklist passes, Feature Spec is accepted, and the mode is explicitly enabled; Task Auto-Run must run Analyze Consistency before completing one accepted task/story plan through TDD, implementation, verification, bug fixing, review, drift, status update, and final report.
 - TDD is default: RED, verify RED, GREEN, verify GREEN, refactor.
 - No completion claim without fresh verification evidence.
 - Submit requires fresh verification, drift check, diff review, human confirmation, and a recorded submit note.

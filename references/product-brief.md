@@ -63,7 +63,7 @@ Include:
 - terminology used in this feature
 - long-term consensus candidates
 
-Product Decisions must record status, evidence/source, human gate, and Decision Scan routing when applicable.
+Product Decisions must record status, evidence/source, human gate, and Decision & Design routing when applicable.
 
 When Requirement/Product Grill was used, `product.md` must carry the clarified terminology, journey, edge cases, behavior changes, historical compatibility, tradeoffs, and success signals that apply. Do not collapse grill results into only Problem Statement, Solution Summary, and Open Product Questions.
 
@@ -92,7 +92,7 @@ Rules:
 - Include the agent's recommended answer with each question.
 - Record accepted product clarifications in `product.md`.
 - Record durable terminology in `project.md Domain Language` only after human confirmation.
-- to-prd-style Implementation Decisions and Testing Decisions are Decision Scan inputs, not ADRs.
+- to-prd-style Implementation Decisions and Testing Decisions are Design Readiness / Decision & Design inputs, not accepted ADRs.
 
 ## Product Context Backfill
 
@@ -108,6 +108,10 @@ During Project Memory Update, ask whether product decisions should be promoted w
 Do not promote feature-local scope choices.
 
 ## Product To Spec
+
+Before Product To Spec, repeat Design Readiness Check. Enter Decision & Design If Needed when Applicable Decisions, Decision Candidates, or newly discovered shared business-flow/domain/data/architecture/recovery/non-functional needs exist.
+
+Do not enter Feature Spec while required shared design remains unresolved or any required design slice is unassigned.
 
 `spec.md` should reference `product.md` when it exists:
 

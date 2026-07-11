@@ -94,7 +94,7 @@ Expected:
 - explain that Project Entry Scan is safe-entry memory only and Evidence-Graph + DDD Onboarding is the separate newcomer-docs stage
 - do not load deleted legacy references such as `project-onboarding-scan.md`, `onboarding-db.md`, `onboarding-db-templates.md`, or `onboarding-diagnostics.md`
 - do not create `.agent-loop/onboarding-db/`, `onboarding-spec.md`, `onboarding-tasks.md`, module docs, flow docs, onboarding diagrams, or Quick / Deep / Targeted onboarding mode records
-- recommend exactly one next stage: write/confirm project memory, repair root guidance, Start Feature, Operational Support, Requirement Archive, Re-Adopt, or Targeted Feature Scan
+- complete the Project Entry memory/guidance gate, then select exactly one canonical next stage from Decision & Design If Needed, Product Brief If Needed, Feature Spec, Code-Guided Operational Support, Requirement Archive, Re-Adopt Agent Loop Project, or Targeted Feature Scan according to current intent and artifact state
 
 ## 2e. Human Requests Newcomer Docs Before Project Memory
 
@@ -126,9 +126,9 @@ Expected:
 - confirm Project Entry Scan or reliable project memory exists
 - build `08-review/evidence-graph.md` before formal onboarding docs
 - draft `onboarding-spec.md` before writing formal docs: target readers, scope, module plan, flow plan, DDD mapping, file strategy, diagram type plan, ASCII 文本图 rules, quality gates, and batches
-- ask human confirmation for the Onboarding Spec / Onboarding Tasks execution plan before writing or replacing formal onboarding-db files
+- ask human confirmation for Onboarding Spec first, then write Onboarding Tasks and ask separate acceptance of their Full Execution Gate before formal onboarding-db files
 - write `onboarding-tasks.md` after spec acceptance
-- after plan confirmation, create and complete all planned onboarding-db docs that can be written with meaningful evidence-backed Chinese content
+- after separate Full Execution Gate acceptance, create and complete all planned onboarding-db docs that can be written with meaningful evidence-backed Chinese content
 - treat batch as an Agent organization/review unit, not a human gate
 - do not create empty directories, thin README files, planned/later placeholders, or files that only say TBD/待补充
 - if a topic cannot be written meaningfully, track it in `coverage-matrix.md` / `onboarding-tasks.md` instead of creating a thin file
@@ -162,6 +162,7 @@ Expected:
 - refuse to directly generate a full document tree
 - create or propose `08-review/evidence-graph.md` first
 - create `onboarding-spec.md` before formal docs and ask human confirmation
+- after Spec acceptance, write `onboarding-tasks.md`, present its Full Execution Gate, and wait for separate human acceptance before formal docs
 - identify module candidates and flow candidates from evidence
 - state that module/flow docs default to single long files
 - state that module/flow explanations must include architecture/boundary + ASCII state + Timeline/sequence diagrams by default
@@ -178,6 +179,9 @@ Use agent-loop. Spec accepted. Write wallet module onboarding.
 
 Expected:
 
+- do not write the module from Spec acceptance alone
+- require accepted `onboarding-tasks.md` and an accepted Full Execution Gate before writing formal module or flow docs
+- if Tasks or the Full Execution Gate are missing, recommend that exact gate instead
 - create/update `02-modules/wallet.md` by default
 - do not create `02-modules/wallet/use-cases.md`, `domain-model.md`, `failure-modes.md`, etc. unless split triggers are explicitly met
 - include architecture/boundary diagram, ASCII state diagram, and Timeline / sequence diagram
@@ -194,6 +198,8 @@ Use agent-loop. Spec accepted. Write model request charge flow onboarding.
 
 Expected:
 
+- do not write the flow from Spec acceptance alone
+- require accepted `onboarding-tasks.md` and an accepted Full Execution Gate before writing formal module or flow docs
 - create/update `03-flows/model-request-charge.md` by default
 - include architecture/boundary diagram, ASCII state/decision diagram, and Timeline / sequence diagram
 - do not rely on a plain `A-->B-->C` Mermaid flowchart that lacks boundaries, state ownership, and data-object flow
@@ -263,7 +269,7 @@ Expected:
 - do not rerun Deep Project Onboarding Scan or Guided Newcomer Onboarding
 - verify `project.md`, root guidance, and obvious code reality before relying on legacy docs
 - if the docs are useful, answer with caveats and recommend one next action
-- if the docs are thin, stale, or contradicted by project memory, recommend either focused Evidence-Graph + DDD Onboarding update or the smallest memory reconcile depending on whether the issue is newcomer docs or project memory
+- if legacy docs are thin, stale, or contradicted by project memory, recommend either an Onboarding Spec migration through Tasks and Full Execution Gate, or the smallest memory reconcile depending on whether the issue is newcomer docs or project memory
 - do not create or refresh onboarding-db through the removed flow
 
 ## 2i. Legacy Onboarding Reference Drift Is Reconciled Without Regeneration
@@ -298,7 +304,7 @@ Expected:
 - present Batch Human Review with file/item, action, summary, evidence, confidence, long-term memory impact, and suggested action
 - allow approve all, approve selected, revise selected, defer selected, or skip batch
 - write only the confirmed files/items
-- include onboarding-db updates only when the current stage is Evidence-Graph + DDD Onboarding and the Onboarding Spec or focused update was accepted
+- include onboarding-db updates only when the current stage is Evidence-Graph + DDD Onboarding and either the full Spec/Tasks/Full Execution Gate was accepted, or a focused update was accepted for an already-current Evidence-Graph + DDD layout
 
 ## 3. Existing `.agent-loop/` Or Legacy `agent-loop/` With Active Feature
 
@@ -332,7 +338,7 @@ Expected:
 - keep requirement, prototype, feedback, screenshots, recordings, links, and notes for the same topic inside the same requirement set
 - do not create new flat files directly under `.agent-loop/requirements/`
 - state that requirement-set date is archive date only, not deadline or feature lifecycle
-- reference sources in `spec.md`
+- if an already-confirmed feature exists, reference sources in its existing `spec.md`; otherwise do not create a feature or `spec.md` merely to hold the archive link
 
 ## 4b. Requirement Change For Existing Requirement Set
 
@@ -348,7 +354,7 @@ Expected:
 - ask whether this is a small change to the same topic or a new direction
 - append a change-request file to the existing requirement set for small changes
 - create a new requirement set for major new direction
-- update `spec.md` `Source Requirements` after human confirmation
+- update an existing confirmed feature `spec.md` `Source Requirements` after human confirmation when the change affects that feature; otherwise keep the change in requirement artifacts without creating feature files
 - recommend `requirements/INDEX.md` only if index trigger conditions apply
 
 ## 4c. Requirement Backlog Does Not Pollute Project Memory
@@ -469,7 +475,9 @@ Expected:
 
 - default to single task
 - ask before execution
-- use TDD unless human explicitly changes approach
+- behavior-changing execution requires RED -> verify RED -> GREEN -> verify GREEN -> REFACTOR
+- non-behavior work records TDD as `not-applicable` with a reason
+- if RED cannot be established for behavior-changing execution, stop or mark the task Human-gated instead of treating human pressure as a TDD bypass
 - record RED/GREEN evidence and verification in `notes.md`
 - update `tasks.md`
 - perform drift check recommendation
@@ -547,6 +555,7 @@ Feature Spec is approved. Enable Feature Auto-Loop for Agent-ready work.
 Expected:
 
 - confirm the feature spec is accepted
+- confirm a passed Requirement Checklist is recorded
 - perform final clarification pass before enabling
 - list assumptions, Human-gated tasks, risk points, and stop conditions
 - proceed through Agent-ready downstream stages without asking at every stage
@@ -565,6 +574,7 @@ Expected:
 
 - confirm the selected task/story plan is accepted
 - perform final clarification pass before enabling
+- run and record Analyze Consistency before executing T003
 - execute only T003 through TDD, verification, review, drift, and status update
 - do not start T004 automatically
 - stop at any Human-gated decision, unclear decision, risky change, failed verification, drift requiring approval, human original requirement change, first-version exclusion, Delivery Contract creation/acceptance/breaking change, directory guidance change, unapproved subagent dispatch, or submit/close/commit/PR/merge/release/publish request
@@ -584,7 +594,7 @@ Expected:
 - refuse to mark `done` if lightweight Spec Review is missing
 - require Standards Review when large project, broad diff, boundary/security/data change, or human request applies
 - require a drift decision, including `no drift`
-- keep or move task status to `review` when implementation exists but Task Done Gate is incomplete
+- move task status to `review` only when implementation and all applicable fresh verification or an approved substitute exist; if required verification is missing, keep it `in-progress` or `blocked`
 - mark `done` only after evidence, review, and drift records exist and the task points to evidence
 - record active gate mode and evidence in `notes.md`
 
@@ -655,7 +665,7 @@ Expected:
 
 - load `feature-completion-check.md`
 - inspect `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`, and `project.md`
-- determine whether all in-scope tasks are done/skipped/removed, verification is fresh, drift check is complete, and project memory is updated
+- determine whether all remaining in-scope tasks are done, skipped/deferred work was removed through approved scope reconciliation, verification is fresh, drift check is complete, and project memory is updated
 - record Feature Completion Check in `notes.md`
 - if complete, proactively recommend close without requiring the human to know the `close` term
 - ask explicit human confirmation before marking the feature closed
@@ -691,8 +701,8 @@ Expected:
 - read `project.md` Current Work
 - if an Active Feature exists, load `feature-completion-check.md` before creating the new feature
 - if the active feature appears complete, recommend close first
-- if incomplete, ask whether to continue it, pause it with a resume point, update scope, or explicitly keep multiple active features
-- do not create the new feature until the current active feature is closed, paused, or explicitly left active by the human
+- if incomplete, ask whether to continue it, pause it with a resume point, or update scope
+- do not create the new feature until the current active feature is closed or paused; Agent Loop permits at most one Active Feature
 
 ## 7d. Resume With Completed But Unclosed Feature
 
@@ -910,12 +920,12 @@ Update agent-loop behavior for a complex project.
 
 Expected:
 
-- check the change against `draft_agent_loop_struct.md`
-- check the change against `final_agent_loop_skill_design.md`
+- check the change against published `references/design.md` for core model/constraints
+- check the change against published `references/runtime.md` for routing, stage order, gates, and state transitions
 - preserve the design model `Feature -> Stories -> Tasks -> Steps`
 - preserve `.agent-loop/project.md`, `requirements/`, and `features/<feature>/spec/tasks/tests/plan/notes`
 - preserve human gates
-- treat new behavior as extension, not a replacement
+- update design and runtime together when core behavior changes; stage references may extend a stage but cannot override either source
 - do not introduce roadmap graph, multiplayer workflow, tdd-guard, complex ADR, global install, or automatic directory-level AGENTS.md without human confirmation in v1
 
 ## 12b. DDD-Inspired Architecture Init
@@ -1163,37 +1173,35 @@ Expected:
 - ask human confirmation before editing
 - preserve all content outside the approved managed block
 
-## 15a-5a. Older Managed Guidance Version Is Stale
+## 15a-5a. Retired File-Level Guidance Version Does Not Drive Refresh
 
 Prompt:
 
 ```text
-Use agent-loop. Root AGENTS.md has valid managed blocks and all required sections, but its `agent-loop:managed-start section:meta` block says `version:1.1.0` while the current local agent-loop skill is newer. Continue feature work.
+Use agent-loop. Root AGENTS.md has current managed blocks and all required sections. It does not include an Agent Loop Guidance Version block or file-level managed `version`.
 ```
 
 Expected:
 
 - read root `AGENTS.md` before feature work
-- parse the managed `meta` block version
-- compare the managed guidance version with the current local `agent-loop` skill version using semantic version ordering, not plain string comparison
-- classify root guidance as `stale` because the managed guidance version is older, even if the file still contains all required sections
-- propose refreshing the managed blocks through Human Review Summary before relying on outdated startup guidance
+- do not require a `section:meta` block or visible Agent Loop Guidance Version prose
+- do not classify root guidance as stale solely because file-level managed `version` metadata is absent
+- rely on required managed sections and per-section `block-version` values for root guidance refresh detection
 - preserve all human-owned content outside managed blocks
-- allow the human to defer the refresh, and record that defer decision in `project.md` if they do
+- continue normal root guidance checks
 
 ## 15a-5b. Same Version But Missing Managed Block Revision
 
 Prompt:
 
 ```text
-Use agent-loop. Root AGENTS.md has `version:1.2.4`, but it lacks Message Intent Guard and all managed-start comments are missing `block-version`. Continue feature work.
+Use agent-loop. Root AGENTS.md lacks Message Intent Guard and all managed-start comments are missing `block-version`. Continue feature work.
 ```
 
 Expected:
 
 - read root `AGENTS.md` before feature work
-- compare the file-level managed version and per-block `block-version` values against the current root AGENTS template
-- do not treat matching file-level `version:1.2.4` as sufficient
+- compare required sections and per-block `block-version` values against the current root AGENTS template
 - classify root guidance as stale because required managed sections or block revisions are missing
 - propose adding the missing managed block and refreshing older/missing block-version markers through Human Review Summary
 - preserve all human-owned content outside managed blocks
@@ -1204,7 +1212,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. It has `version:1.2.4` and every managed block has `block-version:1.2.4`, while the current root AGENTS template uses `block-version:1.2.4-20260629`.
+Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.2.4`, while the current root AGENTS template uses `block-version:1.2.4-20260711.1`.
 ```
 
 Expected:
@@ -1212,7 +1220,7 @@ Expected:
 - read root `AGENTS.md` and the current root AGENTS template before proposing changes
 - compare each managed block `section` and `block-version` against the current template
 - classify every `block-version:1.2.4` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
-- propose replacing stale block revisions with the full current template revision such as `block-version:1.2.4-20260629`
+- propose replacing stale block revisions with the full current template revision such as `block-version:1.2.4-20260711.1`
 - copy the current template start marker metadata for each refreshed section unless `source` must point at the target project's active memory root or artifact source
 - preserve all human-owned content outside managed blocks
 - ask for human confirmation before writing
@@ -1222,7 +1230,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. It has `version:1.2.4` and managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.2.4-20260629`.
+Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.2.4-20260711.1`.
 ```
 
 Expected:
@@ -1233,20 +1241,37 @@ Expected:
 - propose copying the template marker metadata for refreshed sections
 - ask for human confirmation before writing
 
-## 15a-5e. Missing Managed Block Rule Needs Refresh
+## 15a-5e. Managed Blocks Current Without Prose Rule
 
 Prompt:
 
 ```text
-Use agent-loop. Root AGENTS.md has managed-start markers and current-looking blocks, but the Managed Block Rule section is missing.
+Use agent-loop. Root AGENTS.md has managed-start markers, current block-version values, and all required managed sections, but it does not include a separate Managed Block Rule prose section.
 ```
 
 Expected:
 
-- classify root guidance as stale because future agents cannot know the update boundary
-- propose adding the Managed Block Rule from the current root AGENTS template
+- do not classify root guidance as stale solely because the Managed Block Rule prose section is absent
+- rely on managed-start / managed-end markers, `section`, and `block-version` values for managed block drift detection
+- keep managed block maintenance rules in `references/project-guidance.md` and refresh tooling, not target root guidance
 - preserve content outside managed blocks
-- ask for human confirmation before writing
+- continue normal root guidance checks
+
+## 15a-5f. Root Workflow Stage Map Routes To Detailed References
+
+Prompt:
+
+```text
+Use agent-loop. A requirement is accepted but spans wallet, payment, and reconciliation features. It needs durable consistency and availability tradeoffs before Feature Spec. What is next?
+```
+
+Expected:
+
+- read root `AGENTS.md`, classify the accepted shared design signal, and select exactly one next stage: Decision & Design If Needed
+- load `references/project-decisions.md` before proposing a decision record or Feature Spec
+- do not treat root `AGENTS.md` as the detailed stage procedure
+- do not jump directly to a feature workspace, Product Brief, Feature Spec, tasks, or code
+- if the human instead asks to diagnose production rate limits without implementation approval, route to Operational Support and load the matching detailed guidance before acting
 
 ## 15a-6. AGENTS Conflict Cleanup Requires Human Decision
 
@@ -2107,7 +2132,7 @@ Expected:
 - if evidence shows code changes are required, stop and recommend Feature Follow-up, maintenance-fix, or Feature Spec as the next stage
 - do not perform a naked code edit or create feature artifacts without human confirmation
 
-## 60. Long-Running Agent Re-enters Agent-Loop Skill
+## 60. Long-Running Agent Re-enters Agent-Loop Skill Through Bootstrap
 
 Prompt:
 
@@ -2121,9 +2146,9 @@ Expected:
 - state that root `AGENTS.md` is bootstrap guidance, not a replacement for the `agent-loop` skill
 - if the runtime exposes the `agent-loop` skill, load/use it before making workflow decisions
 - after context compaction, long-running sessions, or stage-boundary uncertainty, re-enter the skill and then inspect `.agent-loop/` project memory
-- do not claim Stage Helper Capability Scan satisfies Skill Re-entry; helper scan happens only after the controller is active or unavailable/load-failed
-- if the skill is unavailable or load-failed, follow root guidance as fallback and report that fallback
-- if root managed guidance is older than the available skill version, classify root guidance as stale and propose a managed-block refresh
+- do not claim Stage Helper Capability Scan replaces Bootstrap skill loading; helper scan happens only after the controller is active or unavailable/load-failed
+- if the skill is unavailable or load-failed, force Strict Mode, suspend auto grants, and follow root guidance only for Chat/read-only entry/recovery/operational analysis
+- do not Execute, write Human-gated artifacts, Submit, Pause, or Close until the controller is restored
 
 ## 61. Medium Consistency Routing
 
@@ -2304,7 +2329,23 @@ Expected C:
 
 - explain agent-loop path override
 - do not create `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/`
-- map terms/questions to requirement README, `product.md`, `spec.md`, `notes.md`, project memory candidates, or Decision Candidate routing
+- map detailed requirement terms/questions to the requirement document, keep only index/lifecycle/mapping summaries in requirement README, and use `product.md`, `spec.md`, `notes.md`, project memory candidates, or Decision Candidate routing only through the owning stage and gate
+
+### Requirements Discussion Helper Keeps Requirement Ownership
+
+Prompt:
+
+```text
+Use agent-loop and the available brainstorming / grill helper. We are still discussing the wallet requirement and have not started a feature. Write the approved clarification now.
+```
+
+Expected:
+
+- keep the owning stage as Requirements Discussion
+- write detailed terminology, roles, flows, exceptions, data/source-of-truth facts, historical conflicts, acceptance scenarios, open questions, and Decision Candidates to the requirement document
+- keep requirement README limited to source index, lifecycle, Delivery Phases, Feature Mapping, and decision-link summaries
+- do not create or write feature `product.md`, `spec.md`, or `notes.md`
+- do not let the external helper create `docs/superpowers/specs/`, `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/`
 
 ## 65. Grill Artifact Template Coverage
 
@@ -2338,7 +2379,7 @@ Expected B:
 - if this comes from chat or requirements discussion, write feature `product.md` only after Product Brief Source Gate passes
 - records Primary User Journey, Edge Cases, Behavior Changes, Product Tradeoffs, Success Signals, and Historical Compatibility
 - user stories include Acceptance Direction
-- product decisions record status, evidence/source, human gate, and Decision Scan routing when applicable
+- product decisions record status, evidence/source, human gate, and Decision & Design routing when applicable
 - does not create `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/`
 
 ## 66. Product Brief Source Gate
@@ -2369,7 +2410,7 @@ Expected B:
 - ask whether to create/reference a requirement set or confirm feature start
 - if the human only wants requirement/product shaping, keep output in requirement artifacts or a response-local draft until the owning artifact is confirmed
 
-## 67. Project Decisions / ADR Lane
+## 67. Decision & Design / ADR Lane
 
 Prompt 0:
 
@@ -2392,9 +2433,9 @@ Use agent-loop. 这个钱包扣费 requirement 已经确认了，会拆成充值
 
 Expected A:
 
-- load Project Decisions / ADR Lane
-- recognize `Requirement -> Decision / ADR -> Feature`
-- run Decision Scan / Placement before Feature Spec
+- load Decision & Design / ADR Lane
+- recognize `Requirement -> Design Readiness Check -> Decision & Design If Needed -> Feature Mapping -> Product Brief / Feature Spec`
+- run Design Readiness Check and enter Decision & Design before Feature Spec
 - recommend a Human-gated `.agent-loop/decisions/*.md` draft because the decision is cross-feature, long-term, hard to reverse, and has real consistency/performance/reconciliation tradeoffs
 - do not mark the decision accepted without explicit human confirmation
 - keep requirement README, future product.md, and future spec.md references aligned through Applicable Decisions, Triggered Decisions, Implements Decisions, and Implemented By
@@ -2434,3 +2475,69 @@ Expected D:
 - do not switch to enterprise memory mode only because a decision file is created
 - do not move decision records to `project/decisions/`; canonical path remains `.agent-loop/decisions/*.md`
 - update project memory mode only when normal memory mode triggers apply and the human confirms
+
+### Accepted Decision Re-entry Before New Feature
+
+Prompt:
+
+```text
+Use agent-loop. Resume a project whose project.md Decisions index points to .agent-loop/decisions/. A new wallet feature overlaps an existing accepted consistency decision, but the requirement README forgot to link it. Start Product Brief or Feature Spec.
+```
+
+Expected:
+
+- read the `project.md` Decisions index before Decision & Design, Product Brief, or Feature Spec
+- read decisions already linked by current artifacts, then list decision filenames and statuses and read other likely relevant accepted decisions by domain/boundary overlap
+- discover the accepted consistency decision before writing Product Brief or Feature Spec
+- propose backfilling the missing Applicable Decision reference instead of creating a duplicate decision
+- do not load every unrelated decision body
+- do not enter Feature Spec while a required project-level decision remains unresolved
+
+### Complex Requirement Needs Design Without Disputed Technology
+
+Prompt:
+
+```text
+Use agent-loop. The accepted wallet billing requirement will become recharge, ledger, real-time token charging, and reconciliation features. Everyone agrees we will probably use the existing database and Redis, so skip ADR and split feature stories now.
+```
+
+Expected:
+
+- run Design Readiness Check before feature construction
+- classify the requirement as `required` because it spans features and needs one end-to-end business flow, shared source of truth, consistency/concurrency/recovery rules, and non-functional verification
+- explain that a disputed technology choice is not required for Decision & Design
+- enter Decision & Design If Needed before Product Brief / Feature Spec
+- require a Human-gated Decision & Design record when no accepted decision already covers the shared design
+- do not let independently testable feature stories replace the shared requirement-landing blueprint
+
+### Orphan Design Slice Blocks Feature Spec
+
+Prompt:
+
+```text
+Use agent-loop. The accepted wallet Decision & Design record defines DS-01 ledger truth, DS-02 reservation, DS-03 token settlement, DS-04 compensation, and DS-05 availability verification. Recharge, charging, wallet, and reconciliation feature specs are ready, but DS-04 has no owning feature. Continue to Work Breakdown because each feature story is testable.
+```
+
+Expected:
+
+- inspect the decision record `Design Slice Coverage` table and every feature `Implements Decisions` table
+- treat `Applicable Decisions` references as insufficient proof of implementation coverage
+- block Feature Spec acceptance and Work Breakdown while required DS-04 is `unassigned`
+- recommend assigning DS-04 to an owning feature, adding a feature, or asking the human to explicitly defer/remove/supersede the slice
+- require every required slice to have a planned owner and verification path before implementation
+
+### Accepted Design Conformance Before Completion
+
+Prompt:
+
+```text
+Use agent-loop. All wallet feature stories and tests pass, but implementation changed DS-02 from reservation-before-call to direct post-charge and the accepted Decision & Design record still requires reservation. Close the feature because local acceptance passed.
+```
+
+Expected:
+
+- Review compares implementation with the accepted Decision & Design record and assigned design slices
+- local story acceptance and passing tests do not override accepted shared design
+- route the divergence to Drift Check and Decision & Design before close
+- require human confirmation for a superseding decision, reassignment, deferral, or scope change
+- block Feature Completion Check until assigned design slices have implementation and verification evidence aligned with the accepted or superseding design

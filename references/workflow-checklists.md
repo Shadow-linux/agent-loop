@@ -25,15 +25,25 @@ Before using an external skill or plugin inside a stage:
 - [ ] Do not create external default directories such as `docs/superpowers/*` unless the human explicitly requests native external output and then confirms after the agent explains the agent-loop path override.
 - [ ] Do not let the external skill mark tasks `done`, close a feature, submit code, update project memory, accept Delivery Contracts, approve breaking changes, or skip human gates.
 
-## Requirement/Product Grill
+## Requirement/Product Grill Method
 
 - [ ] Load `requirement-product-grill.md` when Requirements Discussion, Product Brief, or Brainstorm / Clarify has ambiguous terminology, business rules, flows, boundaries, exception paths, historical feature behavior, or decision signals.
 - [ ] Before asking a grill question, inspect project memory, requirement source, product.md, code/docs/tests, and targeted prior feature artifacts when relevant.
 - [ ] Ask one blocking question at a time and include the agent's recommended answer.
 - [ ] If prior feature artifacts conflict with the current statement, state the conflict and ask whether to reuse, override, or treat it as new scope.
-- [ ] Do not turn a grill decision signal into an accepted ADR; route it to Decision Scan.
+- [ ] Do not turn a grill design signal into an accepted ADR; record Design Readiness evidence and route required shared design to Decision & Design.
 - [ ] Do not create external `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/` paths.
+- [ ] Keep the owning stage explicit: Requirements Discussion writes detailed output to the requirement document, Product Brief writes to `product.md`, and Feature Spec writes to `spec.md` / `notes.md`.
+- [ ] Keep requirement README limited to source, lifecycle, Delivery Phase, Feature Mapping, and decision-link summaries rather than duplicating the detailed requirement document.
 - [ ] If Requirement/Product Grill was used, verify the owning requirement document or product brief has structured sections for terminology, flows, exceptions, data/source of truth, historical conflicts, acceptance scenarios, and Decision Candidates where applicable.
+
+## Design Readiness Check
+
+- [ ] Run before an accepted requirement enters feature construction, and repeat when Product Brief, Technical Design, or Drift reveals new shared design needs.
+- [ ] Check for multiple features, end-to-end business closure, shared domain/state/source-of-truth rules, consistency/concurrency/recovery needs, measurable non-functional goals, and cross-system or durable boundaries.
+- [ ] Do not bypass Decision & Design merely because no technology choice is disputed.
+- [ ] Record `design-not-needed`, `candidate`, `required`, or `completed` plus signals, shared design needs, recommended next stage, decision records, and coverage status in the requirement README.
+- [ ] Route `required` to Decision & Design If Needed before Product Brief / Feature Spec construction.
 
 ## Decision Scan / Placement
 
@@ -43,6 +53,9 @@ Before using an external skill or plugin inside a stage:
 - [ ] Do not mark a decision file `accepted` unless the human explicitly accepted that decision.
 - [ ] Do not create ADR files from ordinary chat or early fuzzy requirements discussion.
 - [ ] Before Feature Spec for complex accepted requirements, verify whether shared business-flow or architecture direction is needed.
+- [ ] Treat Decision Scan / Placement as a method inside Decision & Design, not the whole design stage.
+- [ ] When shared design is required and no accepted decision already covers it, keep Feature Spec blocked until a Human-gated Decision & Design record is accepted.
+- [ ] Before Feature Spec, verify every required design slice has at least one planned owning feature and no required slice is unassigned.
 - [ ] If a project-level decision is required but unresolved, stop before Feature Spec or Plan Gate.
 - [ ] Verify requirement README, product.md, and spec.md decision references stay aligned.
 - [ ] Remember that `.agent-loop/decisions/` is available in simple and enterprise memory modes and does not trigger enterprise mode by itself.
@@ -60,6 +73,13 @@ Before using an external skill or plugin inside a stage:
 - [ ] Do not move requirement source into feature docs; feature `product.md` and `spec.md` only derive from and link to requirement sets.
 - [ ] If unclear whether this is chat or requirements discussion, ask whether to keep discussing or shape the topic into a requirements document.
 - [ ] If unclear whether this is requirements discussion or feature implementation, ask whether to form a requirements document first or start feature construction.
+
+## Workflow Stage Routing
+
+- [ ] After Message Intent and project-state classification, select exactly one next stage.
+- [ ] Workflow Stage Map routes the current signal to exactly one stage and matching detailed references.
+- [ ] Load the matching `agent-loop` reference before taking stage actions; root `AGENTS.md` is a navigation index, not the detailed procedure.
+- [ ] Reclassify and select a new stage only when the latest human intent or project evidence changes.
 
 ## Project Entry
 
@@ -79,15 +99,13 @@ Before using an external skill or plugin inside a stage:
 - [ ] Default to read-only code/process analysis and checklist/runbook output.
 - [ ] Confirm before code/config/deploy/destructive operations, paid-quota external calls, credential rotation, or feature/fix escalation.
 - [ ] Check root `AGENTS.md` / `CLAUDE.md` and any obvious directory-level guidance.
-- [ ] Treat root `AGENTS.md` as stale if it lacks Message Intent Guard or lacks Bootstrap Protocol, Agent Ownership, Operational Support Guard, Stage Helper Capability Scan, Gate Modes, Required Stops, Completion Rules, Feature Follow-up / Flow-back, Submit And Commit Rules, root/directory guidance boundaries, or requirement archive rules.
-- [ ] If root `AGENTS.md` uses agent-loop managed blocks, compare its managed guidance version with the current local `agent-loop` skill version.
+- [ ] Treat root `AGENTS.md` as stale if it lacks Message Intent Guard, Workflow Stage Map, or lacks Bootstrap Protocol, Agent Ownership, Operational Support Guard, Stage Helper Capability Scan, Gate Modes, Required Stops, Completion Rules, Feature Follow-up / Flow-back, Submit And Commit Rules, root/directory guidance boundaries, or requirement archive rules.
 - [ ] If `scripts/check-root-agents-blocks.sh` is available, run it as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
-- [ ] Treat root `AGENTS.md` as stale if the managed guidance version is older than the current local `agent-loop` skill version, unless the human explicitly defers refresh.
-- [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when the file-level skill version matches.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.2.4-20260629`.
+- [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.2.4-20260711.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
-- [ ] If Managed Block Rule is absent, propose root guidance refresh before relying on managed blocks.
+- [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
 - [ ] Treat root `CLAUDE.md` as stale if it duplicates independent long-lived rules or does not clearly point to `AGENTS.md`.
 - [ ] If root guidance will be created, refreshed, or repaired, run AGENTS Cleanup / Migration Review for conflicting workflow rules and long-term project memory outside managed blocks.
@@ -140,14 +158,13 @@ Before using an external skill or plugin inside a stage:
 - [ ] Build boundary map from durable directories.
 - [ ] Inventory root and directory-level guidance files.
 - [ ] Check whether root `AGENTS.md` exists, is stale, or must be created.
-- [ ] If root `AGENTS.md` exists, verify it contains Message Intent Guard, Bootstrap Protocol, Agent Ownership, Gate Modes, Required Stops, and Completion Rules.
-- [ ] If root `AGENTS.md` uses agent-loop managed blocks, compare its managed guidance version with the current local `agent-loop` skill version.
+- [ ] If root `AGENTS.md` exists, verify it contains Message Intent Guard, Workflow Stage Map, Bootstrap Protocol, Agent Ownership, Gate Modes, Required Stops, and Completion Rules.
 - [ ] If `scripts/check-root-agents-blocks.sh` is available, run it as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
-- [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when the file-level skill version matches.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.2.4-20260629`.
+- [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.2.4-20260711.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
-- [ ] If Managed Block Rule is absent, propose root guidance refresh before relying on managed blocks.
+- [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
 - [ ] Check whether root `CLAUDE.md` exists and loads or points to `AGENTS.md`; if it duplicates or diverges, propose converting it to a pointer.
 - [ ] Run AGENTS Cleanup / Migration Review when existing root guidance has conflicting workflow rules, duplicated agent-loop rules, or long-term project memory that belongs in `.agent-loop/project.md` or enterprise `.agent-loop/project/*.md`.
@@ -177,9 +194,10 @@ Before using an external skill or plugin inside a stage:
 - [ ] State that Markdown is source of truth and website generation is out of scope.
 - [ ] Build `08-review/evidence-graph.md` before formal onboarding docs.
 - [ ] Draft `onboarding-spec.md`: target readers, scope, module plan, flow plan, DDD mapping, jobs/async, infra/deploy, file strategy, diagram type plan, ASCII 文本图 / wireframe rules, quality gates, and batches.
-- [ ] Ask human confirmation for the Onboarding Spec / Onboarding Tasks execution plan before writing or replacing formal onboarding docs.
-- [ ] Write `onboarding-tasks.md` after spec acceptance.
-- [ ] After plan confirmation, Agent may create and complete all planned onboarding-db docs in one continuous execution pass.
+- [ ] Ask human confirmation for the Onboarding Spec only.
+- [ ] Write `onboarding-tasks.md` after Spec acceptance; Spec acceptance does not authorize formal docs.
+- [ ] After writing Onboarding Tasks, ask separate human acceptance of the Full Execution Gate.
+- [ ] Only after Full Execution Gate acceptance may Agent create and complete all planned onboarding-db docs in one continuous execution pass.
 - [ ] batch is not a human gate; batch is an Agent organization/review unit unless the plan changes, evidence is insufficient, permissions/environment block progress, or the human explicitly asks to pause.
 - [ ] Do not create empty directories, thin README files, planned/later placeholders, or files that only say TBD/待补充.
 - [ ] If a topic cannot be written meaningfully, track it in `coverage-matrix.md` / `onboarding-tasks.md` instead of creating a thin file.
@@ -200,7 +218,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Do not copy human examples as required topics, topic counts, domain names, or project structure.
 - [ ] Keep narrative Chinese; preserve code symbols, paths, commands, APIs, env vars, config keys, errors, and third-party names.
 - [ ] Record batch review with changed files, evidence read, coverage changes, gaps, and next batch.
-- [ ] Recommend exactly one next stage: next onboarding batch, focused update, Project Memory Update, Operational Support, Start Feature, Pause, or Close Onboarding Work.
+- [ ] Recommend exactly one next action: next onboarding batch, focused update, Project Memory Update, Code-Guided Operational Support, Decision & Design If Needed, Product Brief If Needed, Feature Spec, Pause, or Close Onboarding Work.
 
 ## Requirement Archive
 
@@ -219,13 +237,15 @@ Before using an external skill or plugin inside a stage:
 - [ ] Do not write future TODO, backlog, deferred requirements, or unimplemented planned capability details into `project.md`.
 - [ ] Large follow-up conflicts get a Requirement Conflict Review before appending, rebuilding, or superseding requirements.
 - [ ] Normalize names only after confirmation.
-- [ ] Record source paths in `spec.md`.
+- [ ] When archiving during an already-confirmed feature, record exact source paths in the existing `spec.md`; do not create a feature or `spec.md` from Requirement Archive only to hold the link.
 - [ ] Do not overwrite old requirement materials.
 - [ ] Recommend `requirements/INDEX.md` only if index triggers apply.
 
 ## Product Brief If Needed
 
 - [ ] Load `product-brief.md`.
+- [ ] If `project.md` declares a Decisions index, read decision links already named by the active requirement, list decision filenames and statuses, then read other likely relevant accepted decisions by domain or boundary overlap.
+- [ ] Propose missing Applicable Decision references for human confirmation before writing `product.md`; do not create a duplicate ADR because a link is missing.
 - [ ] Product Brief Source Gate: If the request says write product.md / 落到 product.md from chat or requirements discussion, ask whether to create/reference a requirement set or confirm feature start.
 - [ ] Do not write feature product.md until a requirement source and confirmed feature context exist.
 - [ ] Load `requirement-product-grill.md` when product terms, business flows, exception paths, or prior feature behavior need clarification before synthesis.
@@ -250,7 +270,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Ask 1-5 high-impact questions.
 - [ ] Prefer one question at a time unless a short batch is clearer.
 - [ ] Questions must affect scope, UX, data, architecture, testing, or acceptance.
-- [ ] Write accepted answers back into the current stage artifact: requirement `README.md` / `requirement.md` during requirements discussion, or `product.md` / `spec.md` / `notes.md` during feature work.
+- [ ] Write accepted answers back into the current stage artifact: detailed requirements-discussion output to `requirement.md` with only source, lifecycle, phase, mapping, and decision-link summaries in requirement `README.md`; feature output goes to `product.md`, `spec.md`, or `notes.md` through the owning stage.
 
 ## Feature Follow-up And Flow-back
 
@@ -261,6 +281,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Inspect code/test/API/data/UI paths mentioned by the report.
 - [ ] If the report is generic, such as 500, blank page, unknown error, or no route/action/log/test evidence, classify as `unclear` and recommend `investigate-first`; do not reopen the nearest recent feature just because it is recent.
 - [ ] Present a Candidate Match Matrix with match evidence and match strength.
+- [ ] When multiple candidates have medium/high match because evidence is incomplete, recommend `investigate-first`; ask the human only when evidence is sufficient and the remaining choice is product/ownership.
 - [ ] Classify the report as same-feature-bug, same-feature-adjustment, regression-from-feature, new-feature, maintenance-fix, or unclear.
 - [ ] For "字段改一下" / "规则微调" / "小改动" wording, check whether acceptance, API/event/data shape, state flow, algorithm, or visible UX changes before choosing same-feature-adjustment vs linked new feature.
 - [ ] If a closed feature is the likely owner, recommend `flow-back` and explain that it will reopen or continue the owning feature for follow-up work after human confirmation.
@@ -273,6 +294,10 @@ Before using an external skill or plugin inside a stage:
 
 ## Feature Spec
 
+- [ ] If `project.md` declares a Decisions index, read decision links already named by the active requirement or Product Brief, list decision filenames and statuses, then read other likely relevant accepted decisions by domain or boundary overlap.
+- [ ] Propose missing Applicable Decision references for human confirmation; do not create a duplicate ADR because a link is missing.
+- [ ] Confirm Design Readiness is `design-not-needed` or `completed`; run Decision & Design before Feature Spec when shared design is required.
+- [ ] Do not enter Feature Spec while required shared design is unresolved or any required design slice is unassigned.
 - [ ] Run Stage Helper Capability Scan before fallback spec writing.
 - [ ] If a spec-writing, brainstorming, or product-discovery helper is available, use it through `external-skill-adapters.md` while writing accepted output to agent-loop `spec.md`.
 - [ ] Create or update feature workspace.
@@ -282,12 +307,23 @@ Before using an external skill or plugin inside a stage:
 - [ ] For maintenance-fix, record why it is not flow-back, why it is not a new product feature, regression/safety risk, and long-term project memory impact.
 - [ ] Write problem, goal, scope, stories, acceptance criteria.
 - [ ] Record added, modified, and removed behavior.
+- [ ] Record `Applicable Decisions`, assigned Design Slice IDs in `Implements Decisions`, and feature-local `Design Decisions` without restating the full project decision.
 - [ ] Record out of scope and open questions.
-- [ ] Run a lightweight requirement quality check.
-- [ ] Present Feature Spec approval with Human Review Summary table.
-- [ ] Ask human to approve before task splitting.
-- [ ] After approval, ask whether to stay in Strict Mode or enable Feature Auto-Loop.
-- [ ] If the human seems slowed by confirmations, explain Feature Auto-Loop as a safe feature-level option.
+- [ ] Route the completed draft to Requirement Checklist; do not accept the spec or enable Feature Auto-Loop before that recorded gate passes.
+
+## Requirement Checklist
+
+- [ ] Confirm the Feature Spec references an accepted requirement set and its exact Delivery Phase or phase slice when applicable.
+- [ ] Confirm Design Readiness is `design-not-needed` or `completed`.
+- [ ] Confirm no major ambiguity remains.
+- [ ] Confirm stories are independently testable.
+- [ ] Confirm acceptance criteria are measurable.
+- [ ] Confirm added, modified, and removed behavior is explicit.
+- [ ] Confirm edge cases and out-of-scope boundaries are recorded.
+- [ ] Record the result in `tests.md` or `notes.md` before Work Breakdown.
+- [ ] If the checklist changes requirement intent or Feature Spec scope, stop for human confirmation and rerun Design Readiness when shared design changed.
+- [ ] Present the checked Feature Spec with Human Review Summary and ask the human to accept or revise it.
+- [ ] After acceptance, ask whether to stay in Strict Mode or enable Feature Auto-Loop.
 - [ ] Before Feature Auto-Loop, list assumptions, Human-gated items, risk points, and stop conditions.
 
 ## Targeted Feature Scan
@@ -305,6 +341,7 @@ Before using an external skill or plugin inside a stage:
 
 ## Work Breakdown
 
+- [ ] Confirm the spec is accepted and a passed Requirement Checklist record exists.
 - [ ] Run Stage Helper Capability Scan before fallback Work Breakdown.
 - [ ] Default to vertical slices / tracer bullets.
 - [ ] Each normal task forms a narrow verifiable loop through necessary layers.
@@ -441,6 +478,8 @@ Checklist:
 - [ ] Compare accepted `spec.md` / `product.md` against `tasks.md`, `tests.md`, and the active `plan.md`.
 - [ ] Confirm each planned implementation step maps to an accepted task/story and acceptance criterion.
 - [ ] Confirm each changed behavior has a test or explicit substitute verification path.
+- [ ] Trace every accepted Decision & Design slice assigned to this feature through `spec.md`, tasks, tests, and the active plan.
+- [ ] Stop when an assigned design slice has no implementation or verification path, even if each local story is independently testable.
 - [ ] Confirm no plan step changes human original requirements, product scope, acceptance criteria, public interfaces, Delivery Contracts, or project memory without a human gate.
 - [ ] Confirm file paths, commands, function signatures, parameters, return shapes, data contracts, and side effects match code reality.
 - [ ] Record findings in `notes.md` under `Analyze Consistency`.
@@ -473,8 +512,8 @@ Checklist:
 - [ ] If Feature Auto-Loop is enabled, execute only Agent-ready tasks.
 - [ ] If Task Auto-Run is enabled, execute only the selected task/story and stop after evidence/review/drift updates and Task Done Gate status update.
 - [ ] Stop at Human-gated tasks or any stop condition.
-- [ ] Use TDD by default.
-- [ ] Resolve and load `superpowers:test-driven-development` or `test-driven-development` before behavior-changing execution; record Stage Helper Resolution, or record `unavailable` / `load-failed` before fallback.
+- [ ] Resolve and load `superpowers:test-driven-development` or `test-driven-development` before every Execute Task / Story invocation; record Stage Helper Resolution, or record `unavailable` / `load-failed` before fallback.
+- [ ] Use TDD for behavior-changing execution; for non-behavior work record TDD as `not-applicable` with a reason after helper resolution.
 - [ ] If Superpowers `test-driven-development` or another TDD helper is available, use it through `external-skill-adapters.md` while keeping evidence and task status under agent-loop.
 - [ ] Verify RED before implementation.
 - [ ] Write minimal GREEN implementation.
@@ -515,6 +554,7 @@ Checklist:
 - [ ] Perform lightweight Spec Review for every task before marking it `done`.
 - [ ] Perform Spec Review before Submit / Integrate.
 - [ ] Compare implementation against `product.md` when present, `spec.md`, acceptance criteria, scope, and out-of-scope.
+- [ ] Review implementation against accepted Decision & Design records and the design slices assigned to this feature.
 - [ ] Perform Standards Review for large projects, broad diffs, directory or durable boundary changes, security/data changes, architecture changes, or human request.
 - [ ] Compare implementation against root/directory `AGENTS.md`, `project.md`, testing rules, directory boundaries, and local conventions.
 - [ ] Record findings, accepted fixes, and rejected fixes in `notes.md`.
@@ -536,6 +576,8 @@ Checklist:
 ## Drift Check
 
 - [ ] Compare implementation against `spec.md`.
+- [ ] During Drift Check, compare assigned Design Slice IDs with implementation and verification evidence.
+- [ ] Route any divergence from an accepted Decision & Design record back to Decision & Design before close; do not accept local-story success as a substitute.
 - [ ] Compare completed work against `tasks.md` and `tests.md`.
 - [ ] Compare producer-consumer interfaces against `contracts.md` and linked `contracts/*` details when present.
 - [ ] List affected consumers and ask human confirmation before accepting a breaking contract change.
@@ -565,6 +607,7 @@ Checklist:
 - [ ] Update Domain Language, Product Context, Known Constraints, or Long-Term Decisions if future agents need them.
 - [ ] Resolve or add Project Entry Uncertainties when confidence changes.
 - [ ] Run Requirement Reconciliation when the feature references or creates requirement sets.
+- [ ] Apply Delivery Phase Status Roll-up; do not mark a multi-phase requirement `implemented` from one completed feature while unimplemented phases remain.
 - [ ] Do not edit `requirement.md` or other source files for lifecycle/status updates.
 - [ ] Update requirement set README / optional requirements INDEX for lifecycle status, Delivery Phase status, and Feature Mapping only after human confirmation.
 - [ ] Ask before changing root or directory-level `AGENTS.md`.
@@ -589,7 +632,7 @@ Checklist:
 - [ ] Ask human which action to take: prepare only, commit, PR text, merge note, release note, publish/release note, or skip.
 - [ ] Only commit, publish, release, merge, or create final PR text after explicit human confirmation.
 - [ ] Record submit/integrate result in `notes.md`.
-- [ ] If submit succeeded and the feature appears done, recommend Feature Completion Check, not Close.
+- [ ] Apply the ordered exit decision: prepare-only not performed -> Pause; explicitly skipped -> Feature Completion Check if done or next task/story; performed and done -> Feature Completion Check; performed with work remaining -> next task/story; failed/blocked -> one unblock stage.
 
 ## Feature Completion Check
 
@@ -598,10 +641,11 @@ Checklist:
 - [ ] If verification, review, finishing, or close-decision helpers are available, use them through `external-skill-adapters.md` while keeping close under agent-loop control.
 - [ ] Run after likely completion, before starting a new feature with an Active Feature, or on resume with an Active Feature.
 - [ ] Confirm accepted spec exists.
-- [ ] Confirm all in-scope tasks are done, skipped with reason, or removed from scope.
+- [ ] Confirm all remaining in-scope tasks are `done`; skipped/deferred work must already be removed through human-approved scope reconciliation.
 - [ ] Confirm required tests or substitute verification are recorded.
 - [ ] Confirm fresh verification evidence exists.
 - [ ] Confirm Feature Close Review completed.
+- [ ] Feature close is blocked until all assigned design slices have implementation and verification evidence, or a human-approved decision reassigns, defers, removes, or supersedes the slice.
 - [ ] Confirm feature-level Spec Review covers `product.md` when present, `spec.md`, `tasks.md`, `tests.md`, acceptance criteria, and out-of-scope boundaries.
 - [ ] Confirm feature-level Standards Review completed when large project, broad diff, directory or durable boundary change, security/data change, architecture change, or human request applies.
 - [ ] Confirm Drift Check completed.
@@ -625,6 +669,9 @@ Pause:
 - [ ] Record current state.
 - [ ] Record next suggested action.
 - [ ] Record blockers and files touched.
+- [ ] Move the feature from `Active Feature` to `Paused Features`, record its resume point, and set `Active Feature: none`.
+- [ ] Set feature lifecycle status to `paused`.
+- [ ] Clear feature-scoped Feature Auto-Loop or Task Auto-Run authorization.
 
 Close:
 
@@ -636,3 +683,4 @@ Close:
 - [ ] Requirement Reconciliation completed when the feature references or creates requirement sets.
 - [ ] `notes.md` has close record.
 - [ ] Human explicitly confirms close.
+- [ ] After confirmation, set feature lifecycle status to `closed`, remove it from Active/Paused pointers, set `Active Feature: none`, and clear feature-scoped auto-mode authorization.

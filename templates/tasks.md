@@ -6,7 +6,7 @@ Status: active
 
 ## Execution Mode
 
-Mode: linear | parallel | staged-linear | staged-parallel
+Mode: linear | parallel | barrier
 Default Split: vertical-slice
 
 ## Task Mode Legend
@@ -40,6 +40,7 @@ Default Split: vertical-slice
   - Depends on:
   - Blocked By:
   - Covers Stories: US1
+  - Design Slices:
   - Human Gate:
   - Acceptance:
   - Verification:

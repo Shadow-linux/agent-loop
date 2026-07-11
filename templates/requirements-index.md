@@ -30,6 +30,11 @@ Requirement-set dates are archive dates only. They are not deadlines or feature 
 | Requirement Set | Implemented By | Closed At | Project Memory Updated |
 |---|---|---|---|
 
+## Partially Implemented
+
+| Requirement Set | Implemented Phases | Remaining Phases | Next Action |
+|---|---|---|---|
+
 ## Superseded / Rejected
 
 | Requirement Set | Final Status | Reason | Superseded By |

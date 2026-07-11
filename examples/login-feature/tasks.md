@@ -6,7 +6,7 @@ Status: active
 
 ## Execution Mode
 
-Mode: staged-linear
+Mode: linear
 
 ## Stories to Tasks
 

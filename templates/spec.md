@@ -2,7 +2,7 @@
 
 Created: YYYY-MM-DD
 Updated: YYYY-MM-DD
-Status: draft
+Status: draft | active | blocked | paused | closed
 Feature Type: normal | maintenance-fix | follow-up
 
 Source Requirements:
@@ -78,9 +78,9 @@ Acceptance scenarios:
 
 ## Implements Decisions
 
-| Decision | Implemented Slice | Notes |
-|---|---|---|
-|  |  |  |
+| Decision | Design Slice ID | Responsibility | Verification | Coverage Status |
+|---|---|---|---|---|
+|  | DS-00 |  |  | planned / implemented / verified |
 
 ## Design Decisions
 
@@ -89,7 +89,7 @@ Feature-local decisions that do not need standalone project ADR files:
 - Decision:
   - Reason:
   - Applies To:
-  - Decision Scan: none / candidate / project-decision-not-needed
+  - Placement: feature-local / Decision & Design candidate / project-decision-not-needed
 
 ## Out of Scope
 

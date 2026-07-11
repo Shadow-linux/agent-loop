@@ -5,7 +5,7 @@
 ### Version Baseline
 - Started the 1.2.4 development line from the current alpha branch so new behavior changes are recorded under 1.2.4 instead of the closed 1.2.3 section.
 - Updated version-bearing skill metadata, human-facing docs, and root AGENTS template metadata to use 1.2.4 as the active skill version.
-- Updated the root AGENTS managed-block revision to `block-version:1.2.4-20260629` so target projects can detect stale same-version guidance blocks during refresh.
+- Updated the root AGENTS managed-block revision to `block-version:1.2.4-20260711.1` so target projects can detect stale same-version guidance blocks and multiple managed-content revisions on the same day.
 - Updated validation coverage so version sync checks fail if SKILL, plugin metadata, README, Usage, or root AGENTS template drift back to 1.2.3.
 
 ### Project Decisions / ADR Proposal
@@ -14,6 +14,10 @@
 - Expanded the proposed Decision And Design Record technical section to cover technology choices, component ownership, data source of truth, interfaces, transaction boundaries, consistency, idempotency, concurrency, failure recovery, observability, and verification closure.
 - Implemented the lightweight Decision / ADR lane as a requirement-to-feature bridge with `references/project-decisions.md`, `.agent-loop/decisions/`, `templates/decision.md`, stage/checklist routing, and requirement/product/spec relationship fields.
 - Clarified the human-facing ADR trigger: requirements discussion starts Decision Scan and records Decision Candidates, while ADR drafts wait for an accepted requirement source, feature-spec timing, and human confirmation.
+- Added a project-level Decisions index and re-entry discovery rule so later Product Brief, Decision Scan, and Feature Spec work can find relevant accepted decisions before creating or duplicating an ADR.
+- Added a Product Brief to Feature Spec decision gate so unresolved project-level decisions cannot be bypassed during product-to-spec synthesis.
+- Reframed the lane as Decision & Design / ADR for requirement landing: Design Readiness now triggers on multi-feature delivery, end-to-end closure, shared domain/data/state, recovery, and non-functional goals even without a disputed technology choice.
+- Added stable Design Slice Coverage from accepted decisions into owning feature specs, consistency analysis, review, drift, and feature completion so locally valid stories cannot leave shared design obligations unowned.
 
 ### Requirement / Product Grill Proposal
 - Added a proposal for using `grill-with-docs` as a requirement and product clarification method before `to-prd` or Product Brief synthesis.
@@ -24,6 +28,28 @@
 - Added grill-enriched requirement and product templates so clarified terminology, flows, exceptions, source-of-truth data, historical conflicts, decision candidates, product journeys, tradeoffs, and success signals are captured structurally.
 - Hardened the Product Brief Source Gate so chat or requirements discussion cannot directly create feature `product.md` without a requirement source and confirmed feature context.
 - Documented the human-facing Requirement/Product Grill and Product Brief Source Gate usage in Usage and README so humans can trigger requirement shaping without accidentally starting feature-level Product Brief work.
+- Kept Requirement/Product Grill as a clarification method inside the owning stage, with detailed requirement output in the requirement document and only source, lifecycle, phase, mapping, and decision-link summaries in requirement README.
+
+### Root Workflow Navigation
+- Added a Workflow Stage Map that uses canonical stage names and full `references/...` paths, keeps Agent Ownership immediately after Bootstrap, and directs target-project agents back to the skill for detailed stage procedures.
+- Added repository maintenance and validation coverage so stage-name, routing-condition, and reference-path changes must review the root map and cannot leave missing or compound lane entries behind.
+- Expanded the root map to cover the complete canonical navigation path, including Requirement Archive, Evidence-Graph onboarding, Requirement Checklist, contracts, test/design/consistency stages, Verify, Drift, and Pause / Close.
+
+### Workflow Control Hardening
+- Moved published source authority inside the distributable skill package: `references/design.md` owns the core model and `references/runtime.md` owns executable routing, gates, and state transitions; workspace-level design drafts no longer override shipped behavior.
+- Split routing into Entry Context, Memory Health, Message Intent, and Work State axes with one ordered precedence ladder, eliminating overlapping `resume` / stale / operational / follow-up / blocked classifications.
+- Made root fallback fail closed: unavailable controller state forces Strict Mode, suspends auto grants, and allows only chat or read-only entry/recovery/operational analysis.
+- Closed the Delivery Contract pre-write loophole, required Analyze Consistency before Execute, and removed the human-pressure skip-RED path for behavior-changing work.
+- Limited project memory to one Active Feature, defined Pause pointer mutation, and required skipped/deferred work to leave current feature scope before close.
+- Added deterministic multi-phase requirement roll-up with `partially-implemented` and aligned requirement templates/index views.
+- Separated Onboarding Spec acceptance from the later Onboarding Tasks Full Execution Gate, and unified ambiguous follow-up ownership under investigate-first until evidence is sufficient.
+- Added regression coverage for critical control rules, routing/lifecycle state, full root stage coverage, and same-day managed-block revisions.
+
+### Repository Validation
+- Moved the Agent Loop repository's full semantic validation and pressure-test method out of the user-facing skill references into `docs/maintenance/full-validation-method.md`.
+- Reduced root `AGENTS.md` to a mandatory maintainer entrypoint with explicit triggers for control-flow changes, RED/GREEN revalidation, Chinese scoring reports, and repository/user-runtime scope separation.
+- Added a regression test that prevents the maintainer validation guide, six-domain audit contract, and `AGENTS.md` reference from drifting apart.
+- Added an explicit repository perspective and audience-to-surface map so maintainers do not confuse skill-development guidance, distributed user-Agent runtime rules, generated target-project guidance, and human-facing documentation.
 
 ## 1.2.3 — 2026-06-19
 

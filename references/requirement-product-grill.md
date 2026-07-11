@@ -3,7 +3,7 @@
 Requirement/Product Grill is a clarification method, not a PRD generator, not an ADR generator, and not a new agent-loop stage.
 
 ```text
-Grill early; synthesize later; route decision signals through Decision Scan.
+Grill early; synthesize later; send shared design signals through Design Readiness Check.
 ```
 
 Use it inside Requirements Discussion, Product Brief, and Brainstorm / Clarify when the demand has fuzzy terminology, unclear roles, domain boundaries, business flows, exception paths, conflicting prior feature behavior, or decision signals.
@@ -31,20 +31,22 @@ Ask only when the answer affects one of these:
 | Exception path | failure, insufficient balance, retry, compensation, manual recovery |
 | Data / source of truth | canonical entity, balance, status, record ownership |
 | Acceptance direction | what proves the requirement is closed |
-| Long-term decision signal | hard to reverse, surprising without context, real trade-off |
+| Shared design / long-term signal | multiple features, end-to-end closure, shared state or source of truth, recovery, non-functional target, hard to reverse, surprising without context, real trade-off |
 
 ## Output Mapping
 
 | Grill output | Agent-loop destination |
 |---|---|
-| Clarified local term | Requirement README terminology, `product.md` terminology, or `spec.md` wording |
-| Ambiguous term | Requirement README / `product.md` open questions, or `notes.md` |
+| Clarified local term | Requirement document terminology, `product.md` terminology, or `spec.md` wording |
+| Ambiguous term | Requirement document / `product.md` open questions, or `notes.md` |
 | Concrete scenario | Requirement document, Product Brief user story, or Feature Spec acceptance / edge case |
-| Prior feature conflict | Requirement README, `notes.md`, or Human Review Summary conflict table |
+| Prior feature conflict | Requirement document, `notes.md`, or Human Review Summary conflict table |
 | Durable domain language candidate | Project Memory Update proposal only after human confirmation |
-| Hard to reverse / surprising / real trade-off | Decision Candidate for Decision Scan |
+| Cross-feature / shared design / hard to reverse / real trade-off | Design Readiness evidence and Decision Candidate |
 
 Do not promote grill output to project memory, `product.md`, `spec.md`, or decisions without the owning human gate.
+
+Detailed grill results belong in the requirement document; the requirement README keeps source, lifecycle, Delivery Phase, Feature Mapping, and decision-link summaries.
 
 When Requirement/Product Grill was used, the owning artifact must carry grill results into structured sections, not only a prose summary.
 
@@ -83,7 +85,7 @@ Decision Candidate signals:
 | Surprising without context | Future agents will ask why this rule exists |
 | Real trade-off | Multiple reasonable options exist and the choice excludes another route |
 
-Route these to Decision Scan in the stage summary or Human Review Summary. Decision Scan decides whether the candidate stays in `product.md`, `spec.md`, `tests.md`, `notes.md`, or becomes a human-gated decision file.
+Record these in the stage summary or Human Review Summary as Design Readiness evidence and Decision Candidates. When Decision & Design is required, its Decision Scan / Placement method decides whether the candidate stays in `product.md`, `spec.md`, `tests.md`, `notes.md`, or becomes a human-gated decision file.
 
 ## Path Overrides
 
@@ -92,11 +94,12 @@ External grill-with-docs defaults are advisory only.
 - Do not create `CONTEXT.md`.
 - Do not create `CONTEXT-MAP.md`.
 - Do not create `docs/adr/`.
-- Requirement README owns requirement-local terminology, open questions, Delivery Phases, and source index.
+- Requirement document owns requirement-local terminology, roles, business flows, exception paths, data/source-of-truth detail, historical conflicts, acceptance scenarios, open questions, and Decision Candidates.
+- Requirement README owns source index, lifecycle, Delivery Phases, Feature Mapping, and decision-link summaries.
 - Product Brief owns feature-level product synthesis.
 - Feature Spec owns engineering behavior and feature-local design decisions.
 - Project memory owns durable domain language only after human confirmation.
-- `.agent-loop/decisions/` owns accepted long-term / cross-feature decisions only through Decision Scan and human gate.
+- `.agent-loop/decisions/` owns accepted long-term / cross-feature Decision & Design records only through Decision & Design and the human gate.
 
 ## Example
 

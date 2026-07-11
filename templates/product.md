@@ -65,7 +65,7 @@ Notes:
 
 ## Product Tradeoffs
 
-| Tradeoff | Options Considered | Recommended Direction | Decision Scan |
+| Tradeoff | Options Considered | Recommended Direction | Decision & Design Routing |
 |---|---|---|---|
 |  |  |  | none / candidate |
 
@@ -76,7 +76,7 @@ Notes:
   - Reason:
   - Evidence / Source:
   - Human Gate:
-  - Decision Scan:
+  - Decision & Design Routing:
   - Applies To: this feature | future features
 
 ## Historical Compatibility

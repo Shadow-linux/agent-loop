@@ -41,7 +41,7 @@ First version excludes:
 
 **Product Brief**: Optional feature-level product understanding in `product.md`: problem, users, user stories, product scope, product decisions, and open product questions.
 
-**Decision / ADR**: Optional project / cross-feature Decision And Design Record under `.agent-loop/decisions/*.md`. It bridges accepted requirements and feature work when a requirement needs shared business-flow, architecture, data, consistency, reliability, performance, security, or verification decisions. It is not a complex ADR system and is not required for every feature.
+**Decision & Design / ADR**: Requirement-landing design for accepted requirements that need shared business-flow, domain/state/data, architecture, consistency, recovery, non-functional goals, or cross-feature ownership. The record lives under `.agent-loop/decisions/*.md`, is Human-gated, and is conditionally required only when shared design needs a durable source that no accepted decision already provides. It is not required for every feature and is not a complex ADR system.
 
 **Stories**: User-perspective slices inside a feature. They live in `spec.md` and are referenced by labels such as `US1`.
 
@@ -73,9 +73,9 @@ First version excludes:
 
 **Strict Mode**: Default gate mode. Ask before and after every stage.
 
-**Feature Auto-Loop**: Feature-level authorization after Feature Spec acceptance. The agent may advance Agent-ready feature stages/tasks until a stop condition appears. It must stop before Submit / Integrate and Close.
+**Feature Auto-Loop**: Feature-level authorization after Requirement Checklist passes and Feature Spec is accepted. The agent may advance Agent-ready feature stages/tasks until a stop condition appears. It must stop before Submit / Integrate and Close.
 
-**Task Auto-Run**: Task/story-level authorization after the selected task/story plan is accepted. The agent may complete only that task/story through TDD, verification, review, drift, and status update.
+**Task Auto-Run**: Task/story-level authorization after the selected task/story plan is accepted. The agent runs Analyze Consistency before TDD execution, then may complete only that task/story through verification, review, drift, and status update.
 
 **Feature Completion Check**: Proactive check that determines whether an active feature should be closed, continued, paused before a new feature, or have scope updated. Humans do not need to ask for close by name; the agent recommends it when conditions pass.
 
@@ -89,7 +89,7 @@ First version excludes:
 remote.md  = local entry pointer for remote projects
 project.md = long-term project facts in simple mode; memory index and current state in enterprise mode
 project/   = optional enterprise long-term project memory details
-decisions/ = optional project / cross-feature decision records explaining why durable choices were made
+decisions/ = Human-gated project / cross-feature Decision & Design records; globally optional and conditionally required when shared design has no accepted source
 requirements/ = original human material packages, references, and requirement lifecycle/backlog records, grouped by archive-date requirement set directory
 product.md = optional feature product intent and product scope
 spec.md    = intended feature behavior
