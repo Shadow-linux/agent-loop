@@ -5,20 +5,22 @@ description: Use when starting, continuing, resuming, structuring, testing, impl
 
 # Agent Loop
 
-Version: 1.2.3
+Version: 1.2.4
 
 Run a single-human, CLI-agent development loop from goal intake to verified close. This skill is a controller: it decides the current stage, loads the right reference, produces or updates `agent-loop` artifacts, and stops at human gates.
 
-## Design Source Rule
+## Published Source Authority
 
-This skill must stay aligned with the repo design sources:
+The published skill package has two operational sources of truth:
 
 ```text
-draft_agent_loop_struct.md
-final_agent_loop_skill_design.md
+references/design.md = core model and constraints
+references/runtime.md = executable routing, stage order, gates, and state transitions
 ```
 
-The references in this skill are operational extracts from those files. If this skill conflicts with either design source, the design source wins and the skill should be updated. New additions, including large-project behavior, may only extend the design without changing its core model, directory structure, stage order, or first-version exclusions.
+`SKILL.md` is the concise controller entrypoint. Stage references implement one stage without changing `runtime.md` order or gates. Templates and validation scenarios are derived views and must not create new rules. Workspace-level design drafts are historical or planning evidence only; they cannot override the published package.
+
+When core design and executable routing need to change, update `references/design.md` and `references/runtime.md` together, then align affected stage references, templates, scenarios, and human-facing docs in the same change.
 
 ## Non-Negotiable Rule
 
@@ -37,7 +39,7 @@ Also treat long-term memory indexes as claims that must be verified before relia
 
 ## Message Intent Guard
 
-Before project-state classification, classify the latest human message intent. `chat` means ordinary discussion, rules questions, status questions, or design talk; answer or discuss only and do not create requirement sets or feature workspaces by default. Message intent is not permanent: if chat turns into demand shaping, `proposal-doc`, implementation, operational support, follow-up, or deferred work, reclassify and route accordingly. If the human explicitly wants discussion without documentation, keep `chat`. `requirements-discussion` means the human is shaping product needs, business goals, capability ideas, constraints, tradeoffs, or user scenarios without authorizing implementation; use Brainstorm / Clarify to produce a human-reviewed requirement document under `.agent-loop/requirements/` before feature construction. If unclear, ask whether the human wants ordinary discussion, requirements documentation, or feature implementation.
+Before project-state classification, classify the latest human message intent. `chat` means ordinary discussion, rules questions, status questions, or design talk; answer or discuss only and do not create requirement sets or feature workspaces by default. Message intent is not permanent: if chat turns into demand shaping, `proposal-doc`, implementation, operational support, follow-up, deferred work, or project-skill management, reclassify and route accordingly. If the human explicitly wants discussion without documentation, keep `chat`. `requirements-discussion` means the human is shaping product needs, business goals, capability ideas, constraints, tradeoffs, or user scenarios without authorizing implementation; use Brainstorm / Clarify to produce a human-reviewed requirement document under `.agent-loop/requirements/` before feature construction. `project-skill-management` means the human asks to turn a repeatable project workflow into a project-local skill or to update, disable, or deprecate one; load `references/project-skills.md`. If unclear, ask whether the human wants ordinary discussion, requirements documentation, feature implementation, or project-skill management.
 
 ## Human Help And Version Questions
 
@@ -52,11 +54,11 @@ When the human asks what changed in a version, what is new, how to use agent-loo
 
 ## Mandatory Stage Helper Protocol
 
-Seven stages are mandatory helper-backed stages when a matching helper is exposed by the runtime: Brainstorm / Clarify, Plan Gate / Plan, Execute Task / Story, Diagnose Failure, Verify, Review / Feature Close Review, and approved Subagent Execution.
+Eight stages are mandatory helper-backed stages when matching helpers are exposed by the runtime: Brainstorm / Clarify, Project Skill Creation / Update, Plan Gate / Plan, Execute Task / Story, Diagnose Failure, Verify, Review / Feature Close Review, and approved Subagent Execution.
 
 Before any action in one of these stages, load `references/skill-routing.md` and `references/external-skill-adapters.md`, resolve the canonical Superpowers name and supported alias, and load the complete helper `SKILL.md`. A mandatory helper-backed stage cannot start stage actions until resolution status is `loaded`, `unavailable`, or `load-failed`. Fallback is allowed only for `unavailable` or `load-failed`.
 
-Record every resolution in the current feature `notes.md`, including candidates checked, resolved helper, status, fallback, and agent-loop overrides. If no feature workspace is confirmed, use the response-local pending-record rule in `skill-routing.md`; never create a feature merely for helper logging. A mandatory helper-backed stage cannot complete without a Stage Helper Resolution record.
+Record every resolution in the current feature `notes.md`, including candidates checked, resolved helper, status, fallback, and agent-loop overrides. If no feature workspace is confirmed, use the response-local pending-record rule in `skill-routing.md`; never create a feature merely for helper logging. After Gate 1 creates a proposed project skill, Project Skill Creation / Update records its helper resolution and RED/GREEN/REFACTOR evidence in `.agent-loop/skills/<skill-name>/validation.md`. A mandatory helper-backed stage cannot complete without a Stage Helper Resolution record.
 
 The helper improves the method only. Agent-loop remains the controller: its artifact paths, human gates, task and feature status, project memory, drift, submit, pause, and close rules override helper defaults. Never create native helper output directories such as `docs/superpowers/` unless the human explicitly requests them and separately confirms after the path override is explained.
 
@@ -70,6 +72,7 @@ Use this skill when the user wants to:
 - shape product needs through requirements-discussion into requirement documents under `.agent-loop/requirements/`
 - turn requirements or prototypes into feature specs, tasks, tests, plans, and implementation
 - use existing project code, configuration, scripts, or deployment docs to support operational testing, rollout, account/config/model switching, production diagnosis, or runbook/checklist creation without defaulting to code changes
+- create or update a Human-gated project-local skill from a repeatable workflow, or propose one after a complex verified operation
 - continue a paused feature or recover project context
 - reconcile `agent-loop` documents with code reality
 - execute a task/story with TDD and verification
@@ -92,11 +95,14 @@ references/project-memory-mode.md  simple vs enterprise project memory rules
 references/project-architecture-init.md DDD-inspired architecture and stack adapter rules
 references/remote-project-discovery.md local entry + remote project discovery rules
 references/requirement-management.md     human source requirement archive rules
+references/requirement-product-grill.md requirement/product clarification method for ambiguous terminology, flows, prior feature conflicts, and decision signals
+references/project-decisions.md   Design Readiness, Decision & Design, placement, coverage, and project-level ADR rules
 references/product-brief.md        feature product brief and product consensus rules
 references/delivery-contracts.md   durable producer-consumer interface handoff rules
 references/e2e-discovery.md        Web E2E environment discovery and recording rules
 references/large-projects.md       rules for complex or 100k+ LOC projects
 references/project-entry-scan.md Project Entry Scan for taking over old projects safely
+references/project-skills.md      project-local skill creation, lifecycle, discovery, loading, and execution gates
 references/onboarding-knowledge-base.md Evidence-Graph + DDD newcomer project understanding rules
 references/feature-follow-up.md          bug/change flow-back to recent features
 references/complex-artifacts.md    triggered tasks/tests/plans directory mode
@@ -126,10 +132,11 @@ CHANGELOG.md                        version-change source of truth for "what cha
 
 1. Inspect `.agent-loop/`; if missing, also check legacy `agent-loop/`.
 2. Check root `AGENTS.md` / `CLAUDE.md` as the Root Agent Bootstrap Gate; if either is missing or stale, load `references/project-guidance.md` and include the guidance repair in the recommended Project Entry action unless the human has explicitly deferred it.
-3. Classify the latest message intent: `chat`, `requirements-discussion`, `feature-request`, `operational-support`, `feature-follow-up`, `deferred-requirement`, or `unknown`.
+3. Classify the latest message intent: `chat`, `requirements-discussion`, `project-skill-management`, `feature-request`, `operational-support`, `feature-follow-up`, `deferred-requirement`, or `unknown`.
 3a. For `chat`, answer or discuss only; do not create requirement sets, feature workspaces, tasks, tests, or plans.
 3b. For `requirements-discussion`, load `references/requirement-management.md`, use Brainstorm / Clarify, produce a human-reviewed requirement document, and archive it under `.agent-loop/requirements/<archive-date>-<topic>/` after confirmation before any feature construction.
-3c. Classify the entry scenario.
+3c. For `project-skill-management`, load `references/project-skills.md`, require reliable Project Entry/memory, and route to Project Skill Creation / Update without creating a requirement set or feature workspace.
+3d. Classify the entry scenario.
 4. Load the stage guide for the current scenario.
 4a. Run Stage Helper Capability Scan for the current stage. For a mandatory helper-backed stage, load `references/skill-routing.md` and `references/external-skill-adapters.md`, resolve canonical and alias names, load the complete helper before stage actions when found, and record the resolution. Use fallback only after recording `unavailable` or `load-failed`.
 5. Load `references/project-guidance.md` during project init, Project Entry Scan, or re-adoption, when root guidance is missing/stale, or when long-term agent instructions may need sync.
@@ -137,11 +144,14 @@ CHANGELOG.md                        version-change source of truth for "what cha
 7. Load `references/project-architecture-init.md` during init or Project Entry Scan, when proposing project structure, when recording architecture profile, or when a task creates durable code boundaries.
 8. Load `references/remote-project-discovery.md` when the human says the project is remote, local files contain remote-entry hints, or local/remote/container execution is unclear. Do not treat an empty local directory alone as remote.
 9. Load `references/requirement-management.md` before copying, moving, renaming, indexing, or referencing human source requirements.
+9a. Load `references/requirement-product-grill.md` during Requirements Discussion, Product Brief, or Brainstorm / Clarify when requirements include ambiguous terminology, domain boundaries, business flows, exception paths, conflicting prior feature behavior, or decision signals. Grill questions clarify input only; they do not create PRDs, ADRs, project memory, `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/`.
+9b. Load `references/project-decisions.md` for Design Readiness Check and `Decision & Design If Needed`: before accepted requirements enter feature construction, when a requirement spans multiple features or needs shared business-flow/domain/data/architecture/recovery/non-functional design, when product or technical work reveals cross-feature decisions, or when drift changes durable facts. Decision Scan / Placement is an internal method. A `.agent-loop/decisions/*.md` file is globally optional, but it becomes conditionally required when shared design is required and no accepted decision already covers it; creation and acceptance remain Human-gated.
 10. Load `references/product-brief.md` when a feature needs product intent, product consensus, user stories, product scope, or PRD-like synthesis.
 11. Load `references/e2e-discovery.md` before designing or executing Web E2E/browser verification.
 12. Load `references/delivery-contracts.md` when the human requests cross-boundary handoff/API/interface documentation, or when the agent detects a likely downstream consumer boundary such as frontend/backend, service, event, public data, SDK/library, UI state, or runtime behavior. Delivery Contracts are not created by default.
 13. Load `references/project-entry-scan.md` when taking over an existing project without reliable `agent-loop` memory. This is now a Project Entry Scan only: build safe project memory, guidance status, commands, boundaries, and uncertainties. Do not create `.agent-loop/onboarding-db/`, module docs, flow docs, onboarding diagrams, or old Quick / Deep / Targeted onboarding artifacts during Project Entry Scan.
 13a. Load `references/onboarding-knowledge-base.md` when the human asks for newcomer-facing docs, durable project understanding, guided learning paths, or onboarding-db construction. Run it only after Project Entry Scan or reliable project memory. Use Evidence Graph first, then accepted Onboarding Spec, Onboarding Tasks, single-file module/flow docs by default, wireframe architecture flow diagrams as the preferred flow expression, coverage scoring, and reviewed batches.
+13b. During Project Entry, Resume, Re-Adopt, context recovery, and controller re-entry, check `.agent-loop/skills/INDEX.md` when present. Load only `active` project skills whose current instruction-bearing and executable files match the validation manifest, according to `bootstrap` / `on-demand`; discovery and loading never satisfy the per-invocation Execution Gate.
 14. Load `references/feature-follow-up.md` when the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, screenshot issue, behavior tweak, "small tweak", test failure, or QA/user feedback that may belong to a recent feature.
 15. Load `references/large-projects.md` when the repo is large, old, unfamiliar, multi-package, or likely above 100k LOC.
 16. Load `references/complex-artifacts.md` when story/task/test/plan complexity crosses its trigger conditions.
@@ -153,6 +163,7 @@ CHANGELOG.md                        version-change source of truth for "what cha
 21. Load `references/skill-routing.md` before every mandatory helper-backed stage and before fallback for any other helper-friendly stage.
 22. Load `references/external-skill-adapters.md` before every mandatory helper-backed stage. Agent-loop paths, gates, task status, project memory, submit, pause, and close rules override external skill defaults.
 22a. Before leaving a mandatory helper-backed stage, verify its Stage Helper Resolution record exists and that fallback was used only with `unavailable` or `load-failed`.
+22b. For Project Skill Creation / Update, resolve `superpowers:writing-skills` / `writing-skills` and `skill-creator` independently. Use both when available, override their output paths to `.agent-loop/skills/<skill-name>/`, and never treat one helper as excluding the other.
 23. Load `references/submit-and-integrate.md` before creating commits, PR text, merge notes, or any submission claim.
 24. Summarize current state in the response.
 25. Recommend exactly one next stage.
@@ -166,7 +177,13 @@ CHANGELOG.md                        version-change source of truth for "what cha
   remote.md optional local-entry pointer for remote projects
   project.md
   project/ optional enterprise memory detail files
+  decisions/ Human-gated project / cross-feature Decision & Design records; conditionally required when shared design has no accepted source
   onboarding-db/ Evidence-Graph + DDD human-readable project understanding docs; legacy layouts are evidence only until migrated
+  skills/ optional Human-gated project-local skill index and packages
+    INDEX.md
+    <skill-name>/
+      SKILL.md
+      validation.md
   requirements/
     <archive-date>-<topic>/
       README.md
@@ -205,6 +222,9 @@ If the local directory is only a remote-project entry point, create only thin lo
 - Create or update Delivery Contract files only after human confirmation. The agent may proactively recommend one when it detects downstream impact, but simple single-person tasks, pure internal logic, and changes with no downstream consumer should skip contracts.
 - During Work Breakdown, Technical Design / Code Context, Plan, Review, and Drift Check, detect whether a Delivery Contract should be recommended.
 - Feature Auto-Loop and Task Auto-Run do not silently create Delivery Contract files. They must pause before contract file creation, contract acceptance, or breaking contract changes.
+- Project-local skill directories are created only after Gate 1 confirms a Project Skill Candidate. Verified proposed skills automatically become `active`; failed validation keeps them `proposed`.
+- Every project-skill invocation requires the Execution Gate. A prior human message naming the active skill and concrete scope may satisfy it only after the agent emits the execution summary and confirms the entire planned action/effect stays inside that disclosed scope. `active`, `bootstrap`, prior success, Feature Auto-Loop, and Task Auto-Run never authorize execution.
+- Agent may propose a Project Skill Candidate after a complex verified workflow, but must finish the current authorized stage and wait for Gate 1 before creating files.
 - Keep temporary subagent assignment notes in `handoffs/`.
 - `plan.md` is the active plan for the current task/story, not the default whole-feature plan.
 - After task/story selection and before Execute Task / Story, the agent must pass Plan Gate. It may not create tasks and immediately implement.
@@ -213,7 +233,7 @@ If the local directory is only a remote-project entry point, create only thin lo
 - Do not date the core `plan.md` filename. Date each plan cycle with `Plan ID`, `Created`, `Updated`, and record completed plan cycles in `notes.md`.
 - In complex artifact mode, `tasks.md`, `tests.md`, and `plan.md` become stable indexes that link to detailed files under `tasks/`, `tests/`, and `plans/`.
 - In complex projects, every task plan must name boundaries, files/areas to inspect, verification commands, and rollback notes.
-- A task cannot be marked `done` from implementation alone. After code changes, move the task to `review` until fresh test/verification evidence, required review, and drift decision are recorded.
+- A task cannot be marked `done` from implementation alone. Move it to `review` only after implementation and all applicable fresh verification (or a human-approved substitute) exist; otherwise keep it `in-progress` or `blocked`. Required review and drift still gate `done`.
 - Task Done Gate: mark a task `done` only after implementation is complete, required tests or substitute verification have run fresh, evidence is recorded in `notes.md`, lightweight Spec Review is recorded, Standards Review is recorded when triggered, drift decision is recorded, and `tasks.md` links or names the evidence.
 - During large Project Entry Scan, recommend bounded subagent scanning when available and human-confirmed; otherwise use single-agent layered scan.
 - During existing-project Project Entry Scan, create or propose only safe project memory, root guidance status, commands, boundaries, capabilities, and uncertainties. Do not create onboarding-db detail docs, module docs, flow docs, onboarding diagrams, onboarding-spec, or onboarding-tasks during Project Entry Scan.
@@ -246,13 +266,13 @@ If the local directory is only a remote-project entry point, create only thin lo
 - Root and directory guidance language follows the project language when clear; default to English only when project language is unclear. Preserve stable artifact names, stage names, and file paths in English.
 - Directory-level `AGENTS.md` is proposed for new or existing long-lived boundary directories, created only after human confirmation.
 - Strict Mode is default: ask before and after every stage.
-- Feature Auto-Loop may run Agent-ready feature work after Feature Spec acceptance and explicit human confirmation.
-- Task Auto-Run may run one task/story after its plan is accepted and explicit human confirmation.
+- Feature Auto-Loop may run Agent-ready feature work after a passed Requirement Checklist, Feature Spec acceptance, and explicit human confirmation.
+- Task Auto-Run runs Analyze Consistency before executing one accepted task/story plan after explicit human confirmation.
 - If the human appears slowed down by repeated confirmations, or when starting a feature/task execution lane, proactively explain the available gate modes and recommend either Feature Auto-Loop or Task Auto-Run when safe.
 - Auto modes stop at Human-gated work, unclear decisions, risky changes, failed verification, drift needing approval, unrelated dirty work blocking progress, Delivery Contract creation/acceptance/breaking changes, directory guidance changes, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, or publish.
 - Human confirmations should use table-first Human Review Summary by default; full artifacts remain the source of truth. When multiple documents, facts, or long-term memory entries will change, use Batch Human Review.
 - Root `AGENTS.md` / `CLAUDE.md` guidance must tell future agents to own the workflow: classify the stage, recommend one next action, propose missing artifacts, and keep responsibility for sequencing, diagnosis, verification, drift checks, and project-memory updates.
-- Root guidance must also explain autonomous execution after approval: Feature Auto-Loop may continue Agent-ready feature work after accepted Feature Spec and explicit enablement; Task Auto-Run may complete one accepted task/story plan through TDD, implementation, verification, bug fixing, review, drift, status update, and final report.
+- Root guidance must also explain autonomous execution after approval: Feature Auto-Loop may continue Agent-ready work after Requirement Checklist passes, Feature Spec is accepted, and the mode is explicitly enabled; Task Auto-Run must run Analyze Consistency before completing one accepted task/story plan through TDD, implementation, verification, bug fixing, review, drift, status update, and final report.
 - TDD is default: RED, verify RED, GREEN, verify GREEN, refactor.
 - No completion claim without fresh verification evidence.
 - Submit requires fresh verification, drift check, diff review, human confirmation, and a recorded submit note.
@@ -265,6 +285,7 @@ If the local directory is only a remote-project entry point, create only thin lo
 The controller owns the loop. External skills are optional stage accelerators.
 
 - Before falling back to built-in stage guidance, run Stage Helper Capability Scan against the current runtime's available skills/plugins/helpers.
+- Project Skill Creation / Update: prefer `superpowers:writing-skills` / `writing-skills` for RED/GREEN/REFACTOR and also use `skill-creator` for scaffolding and validation when available; write only to `.agent-loop/skills/<skill-name>/`.
 - Clarify: use a brainstorming skill if available.
 - Product Brief: use PRD/product discovery or grill-with-docs style skills if available.
 - Planning: use a plan-writing skill if available.
@@ -287,6 +308,8 @@ Stop when:
 - a new dependency, migration, destructive operation, credential, external service, or long-lived boundary directory is needed
 - directory-level `AGENTS.md` creation/update is recommended
 - a Delivery Contract needs creation, human acceptance, or an accepted contract needs a breaking change
+- a Project Skill Candidate needs Gate 1 before creation or material update
+- an active project skill is about to execute without a current bounded Execution Gate grant or with undisclosed planned actions/effects
 - TDD cannot be followed or verification repeatedly fails
 - review finds behavior, scope, or architecture changes
 - unrelated dirty work blocks progress

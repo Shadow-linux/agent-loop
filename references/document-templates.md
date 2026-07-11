@@ -20,6 +20,8 @@ CLAUDE.md -> AGENTS.md
     testing.md
     environments.md
     guidance-inventory.md
+  decisions/
+    0001-<decision-slug>.md
   requirements/
     <archive-date>-<topic>/
       README.md
@@ -96,6 +98,14 @@ Preferred requirement-set layout:
 
 Use `templates/requirement-set-README.md` for the set README.
 
+## Project Decision Rules
+
+Use `.agent-loop/decisions/` for Human-gated project / cross-feature Decision And Design Records. Creating this directory does not require or enable enterprise memory mode.
+
+Use `templates/decision.md` when the human explicitly confirms drafting a project / cross-feature decision file. A new draft starts as `Status: proposed`; `accepted` status still requires explicit human acceptance of the decision itself. Requirement README files may list `Applicable Decisions` and `Triggered Decisions`; feature `product.md` and `spec.md` may list `Applicable Decisions`; feature `spec.md` may also list `Implements Decisions` and feature-local `Design Decisions`.
+
+Do not create ADR files from ordinary chat, early fuzzy requirements discussion, or feature-local implementation preferences. Keep early signals as Design Readiness evidence and Decision Candidates until Decision & Design, its Decision Scan / Placement method, and human confirmation decide the destination.
+
 New requirements should be grouped by requirement set directory. Do not create flat files directly under `requirements/`.
 
 Never silently modify original human requirements. If the human declines normalization, reference the original path in feature docs.
@@ -114,6 +124,22 @@ Use `Delivery Phases` in requirement set `README.md` when the requirement is too
 | Phase | Goal | Scope | Out Of Scope | Acceptance Direction | Status | Feature Mapping | Source Notes |
 |---|---|---|---|---|---|---|---|
 | Phase 1: <name> |  |  |  |  | proposed | none | none |
+```
+
+Before an accepted requirement enters feature construction, add or update this requirement README summary:
+
+```md
+## Design Readiness
+
+Status: not-scanned | design-not-needed | candidate | required | completed
+Signals:
+-
+Shared Design Needs:
+-
+Recommended Next Stage: Decision & Design If Needed | Product Brief If Needed | Feature Spec
+Decision Records:
+-
+Coverage Status: not-applicable | unassigned | planned | complete
 ```
 
 Phase notes are optional source files when one phase needs detailed accepted direction:
@@ -141,11 +167,73 @@ Source: conversation | file | link | prototype | mixed
 
 ## Users / Operators
 
+## Roles / Operators / Permission Boundary
+
+| Role / Operator | What They Do | Permission / Boundary | Notes |
+|---|---|---|---|
+|  |  |  |  |
+
 ## Goals
 
 ## Requirements
 
+## Terminology / Domain Language
+
+Use this when terms are ambiguous, overloaded, project-specific, or clarified through Requirement/Product Grill.
+
+| Term | Meaning In This Requirement | Avoid / Ambiguity | Promote To Project Domain Language |
+|---|---|---|---|
+|  |  |  | yes / no / pending |
+
+## Primary Business Flow
+
+Describe the normal business path in human-readable steps. Prefer concrete actor/system/state wording over abstract summaries.
+
+1.
+
+## Exception Paths
+
+| Scenario | Trigger | Expected Handling | Recovery / Operator Action | Acceptance Direction |
+|---|---|---|---|---|
+|  |  |  |  |  |
+
+## Data / Source of Truth
+
+| Data / Fact | Source Of Truth | Who Can Change It | Consistency / Timing Notes |
+|---|---|---|---|
+|  |  |  |  |
+
+## Historical Behavior / Prior Conflicts
+
+Use this when prior features, code, docs, or project memory define related behavior.
+
+| Prior Source | Existing Rule / Behavior | Current Requirement Says | Human Decision |
+|---|---|---|---|
+|  |  |  | reuse / override / new scope / unresolved |
+
+## Acceptance Scenarios
+
+Use concrete examples that show the requirement is understood, not just a broad acceptance direction.
+
+| Scenario | Given | When | Then | Notes |
+|---|---|---|---|---|
+|  |  |  |  |  |
+
+## Decision Candidates
+
+Only list candidates. Do not mark ADRs accepted here.
+
+| Candidate | Why It Matters | Signal | Suggested Destination | Status |
+|---|---|---|---|---|
+|  |  | cross-feature / shared-design / hard-to-reverse / real-trade-off | product.md / spec.md / tests.md / notes.md / Decision & Design | proposed |
+
 ## Non-goals
+
+## Out Of Scope And Why
+
+| Out Of Scope | Why | Revisit Trigger |
+|---|---|---|
+|  |  |  |
 
 ## Constraints / Assumptions
 
@@ -161,8 +249,18 @@ Use only when staged delivery has been discussed and human-reviewed. If used, mi
 
 ## Open Questions
 
+## Product / Feature Mapping
+
+| Downstream Artifact | Mapping Direction | Status |
+|---|---|---|
+| product.md |  | not-created / proposed / created |
+| spec.md |  | not-created / proposed / created |
+| Design Readiness |  | design-not-needed / candidate / required / completed |
+
 ## Source Conversation Summary
 ```
+
+When Requirement/Product Grill was used, do not leave these sections as empty headings. Fill the applicable sections with concrete terms, flows, exceptions, data facts, conflicts, scenarios, and candidates; for non-applicable sections, write `Not applicable` plus a short reason.
 
 Write the human-reviewed document as `.agent-loop/requirements/<archive-date>-<topic>/requirement.md` after the human confirms the document should be recorded. Do not write it directly into a feature workspace. Feature `product.md` and `spec.md` derive from this source and link back to the requirement set.
 
@@ -512,6 +610,10 @@ Summary:
 
 ## Problem / Goal
 
+## Applicable Decisions
+
+-
+
 ## Maintenance Fix Scope
 
 Use this section only when `Feature Type: maintenance-fix`.
@@ -565,6 +667,21 @@ Acceptance scenarios:
 
 ## Dependencies
 
+## Implements Decisions
+
+| Decision | Design Slice ID | Responsibility | Verification | Coverage Status |
+|---|---|---|---|---|
+|  | DS-00 |  |  | planned / implemented / verified |
+
+## Design Decisions
+
+Feature-local decisions that do not need standalone project ADR files:
+
+- Decision:
+  - Reason:
+  - Applies To:
+  - Placement: feature-local / Decision & Design candidate / project-decision-not-needed
+
 ## Out of Scope
 
 ## Open Questions
@@ -584,7 +701,7 @@ Status: active
 
 ## Execution Mode
 
-Mode: linear | parallel | staged-linear | staged-parallel
+Mode: linear | parallel | barrier
 Default Split: vertical-slice
 
 ## Task Mode Legend
@@ -618,6 +735,7 @@ Default Split: vertical-slice
   - Depends on:
   - Blocked By:
   - Covers Stories: US1
+  - Design Slices:
   - Human Gate:
   - Acceptance:
   - Verification:
@@ -657,6 +775,12 @@ Status: active
 - [ ] Requirements are testable and unambiguous.
 - [ ] Success criteria are measurable.
 - [ ] Edge cases are identified.
+
+## Design Slice Verification Matrix
+
+| Design Slice ID | Required Verification | Test / Evidence | Status |
+|---|---|---|---|
+| DS-00 |  |  | planned / verified / blocked |
 
 ## Functional Test Cases
 
@@ -722,6 +846,7 @@ Plan Scope:
 - ID:
 - Title:
 - Included Tasks:
+- Design Slices:
 
 Plan Detail:
 - Path: plans/YYYY-MM-DD-TNNN-<slug>.md

@@ -107,14 +107,14 @@ feat, fix, docs, refactor, test, chore
 For the `agent-loop` skill repository:
 
 - prefer Chinese in the summary and body
-- include the current skill version scope, for example `docs(v1.2.3): 调整 Project Entry Scan 文档结构`
+- include the current skill version scope, for example `docs(v1.2.4): 调整 Project Entry Scan 文档结构`
 - use 3-7 concrete bullet lines for behavior, gate, artifact, template, reference, validation scenario, or documentation changes
 - keep version numbers unchanged unless the human explicitly approves a version bump
 
 Example:
 
 ```text
-docs(v1.2.3): 调整 Project Entry Scan 文档结构
+docs(v1.2.4): 调整 Project Entry Scan 文档结构
 
 - 移除旧 onboarding-db 生成入口
 - 统一旧项目入口为 Project Entry Scan
@@ -154,12 +154,14 @@ Append to `notes.md`:
 - Remaining Risk:
 ```
 
-## Exit
+## Ordered Exit Decision
 
-After submit:
+Submit / Integrate does not route directly to Close. Apply the first matching row so prepare-only and completion cannot recommend different next stages.
 
-Submit / Integrate does not route directly to Close.
-
-- recommend `Feature Completion Check` if the feature appears done
-- recommend the next task/story if work remains
-- recommend `Pause` if submission is prepared but not performed
+| Priority | Condition | Exactly One Next Stage |
+|---:|---|---|
+| 1 | submission is prepare-only and was not performed | `Pause`, with the pending submit action and resume point |
+| 2 | submission action is explicitly `skipped` | record the human decision; `Feature Completion Check` if done, otherwise next task/story |
+| 3 | submit succeeded and the feature appears done | `Feature Completion Check` |
+| 4 | submit succeeded and work remains | next task/story |
+| 5 | submit failed or an external blocker remains | one unblock stage from the blocked routing matrix |

@@ -10,8 +10,11 @@ If Superpowers is available, prefer these helpers:
 
 | Stage | Preferred Superpowers helper |
 |---|---|
+| Requirements Discussion | `superpowers:brainstorming` plus grill-with-docs style helpers when available |
 | Brainstorm / Clarify | `superpowers:brainstorming` |
-| Product Brief / Feature Spec | `superpowers:brainstorming` plus product/PRD helpers when available |
+| Project Skill Creation / Update | `superpowers:writing-skills` / `writing-skills`; also `skill-creator` when available |
+| Product Brief If Needed | `superpowers:brainstorming` plus product/PRD helpers when available |
+| Feature Spec | `superpowers:brainstorming` plus spec helpers when available |
 | Plan Gate / Plan If Needed | `superpowers:writing-plans` |
 | Execute Task / Story | `superpowers:test-driven-development` |
 | Diagnose Failure | `superpowers:systematic-debugging` |
@@ -46,21 +49,22 @@ Write to the current `agent-loop` artifact instead.
 
 | External output | Agent-loop destination |
 |---|---|
-| brainstormed design/spec | `.agent-loop/features/<feature>/product.md` and/or `.agent-loop/features/<feature>/spec.md` |
+| brainstormed requirement/product/design/spec | owning-stage artifact: requirement document plus requirement README summary during Requirements Discussion; `.agent-loop/features/<feature>/product.md` during Product Brief; `.agent-loop/features/<feature>/spec.md` or `notes.md` during Feature Spec |
 | implementation plan | `.agent-loop/features/<feature>/plan.md` or `.agent-loop/features/<feature>/plans/*` |
 | test strategy | `.agent-loop/features/<feature>/tests.md` or `.agent-loop/features/<feature>/tests/*` |
 | debugging notes | `.agent-loop/features/<feature>/notes.md` |
 | verification evidence | `.agent-loop/features/<feature>/notes.md` |
 | review findings | `.agent-loop/features/<feature>/notes.md` |
 | subagent brief / return | `.agent-loop/features/<feature>/handoffs/*` |
+| project-local skill package | `.agent-loop/skills/<skill-name>/` |
 
-The table uses the default `.agent-loop/` memory root. When an existing project uses the accepted legacy `agent-loop/` root, keep that current memory root; never create repository-root `features/`.
+The table uses the default `.agent-loop/` memory root. When an existing project uses the accepted legacy `agent-loop/` root, keep that current memory root for feature and project-memory artifacts; never create repository-root `features/`. The Project-local skill package is the exception: it always uses `.agent-loop/skills/<skill-name>/` and never inherits the legacy `agent-loop/` root.
 
 Do not create `docs/superpowers/` in a target project unless the human explicitly asks for native Superpowers output and then confirms the external directory after the agent explains the agent-loop path override. A request such as "use Superpowers" or "save it where Superpowers normally saves it" is not enough by itself.
 
 ## Stage Helper Resolution Record
 
-Create the initial `templates/notes.md` Stage Helper Resolution record before the first stage action, then finish its method/fallback/evidence fields before stage exit. If no feature workspace has been confirmed, use the response-local pending-record rule from `skill-routing.md` instead of creating files without approval.
+Create the initial `templates/notes.md` Stage Helper Resolution record before the first stage action, then finish its method/fallback/evidence fields before stage exit. If no feature workspace has been confirmed, use the response-local pending-record rule from `skill-routing.md` instead of creating files without approval. Project Skill Creation / Update uses a response-local record before Gate 1 and persists the completed record to `.agent-loop/skills/<skill-name>/validation.md` after the proposed directory exists.
 
 The record includes:
 
@@ -99,6 +103,7 @@ External skills may not:
 - submit, commit, PR, merge, release, or publish
 - update project memory outside the current `agent-loop` stage rules
 - accept Delivery Contracts or approve breaking contract changes
+- execute an active project-local skill without the current invocation Execution Gate
 
 ## Superpowers Mapping
 
@@ -106,7 +111,9 @@ Use Superpowers when available for these stages, while applying the path and gat
 
 | Agent-loop stage | Superpowers adapter | Borrow | Override |
 |---|---|---|---|
-| Brainstorm / Clarify if Needed | `superpowers:brainstorming` | context exploration, one-question-at-a-time, options, design approval | write to `product.md` / `spec.md`; do not write `docs/superpowers/specs/`; do not auto-transition to `writing-plans` |
+| Requirements Discussion | `superpowers:brainstorming` plus grill-with-docs style helpers when available | context exploration, one-question-at-a-time, terminology, flows, exceptions, prior-feature conflicts | write approved details to the requirement document and only index/lifecycle/mapping summaries to requirement README; do not create feature artifacts |
+| Brainstorm / Clarify if Needed | `superpowers:brainstorming` | context exploration, one-question-at-a-time, options, design approval | write to the owning stage artifact; do not write `docs/superpowers/specs/`; do not auto-transition to `writing-plans` |
+| Project Skill Creation / Update | `superpowers:writing-skills` / `writing-skills`, plus `skill-creator` when available | RED/GREEN/REFACTOR, pressure testing, concise skill authoring, scaffolding, metadata generation, structural validation | Gate 1 before files; write only to `.agent-loop/skills/<skill-name>/`; activation only after validation; Execution Gate for every invocation |
 | Product Brief If Needed | `superpowers:brainstorming` plus product/PRD skills when available | product intent, alternatives, user outcomes | write to `product.md`; long-term consensus only via Project Memory Update |
 | Feature Spec | brainstorming/spec methods | ambiguity removal, scope check, acceptance thinking | write to `spec.md`; use agent-loop Human Review Summary |
 | Plan Gate / Plan If Needed | `superpowers:writing-plans` | decide plan vs recorded No-Plan Decision; construction-grade plan, exact paths, test code, commands, expected outputs, no placeholders, self-review | write to `plan.md` or `plans/*`, or record No-Plan Decision only for trivial tasks; do not write `docs/superpowers/plans/`; execution mode remains agent-loop controlled |
@@ -123,14 +130,34 @@ Use Superpowers when available for these stages, while applying the path and gat
 
 When `Brainstorm / Clarify if Needed` starts and Superpowers is available:
 
+Requirements Discussion writes approved details to the requirement document and only source, lifecycle, Delivery Phase, Feature Mapping, and decision-link summaries to requirement README; Product Brief writes to `product.md`; Feature Spec writes to `spec.md` and `notes.md`.
+
 1. Use `superpowers:brainstorming` as the preferred method.
 2. Inspect project context first.
 3. Ask one high-impact question at a time.
 4. Offer 2-3 approaches when meaningful.
 5. Present a design summary for human approval.
-6. Write approved content to `product.md` when product intent is substantial, or `spec.md` when behavior and acceptance are clear.
+6. Write approved content to the owning stage artifact: requirement document plus requirement README summary during Requirements Discussion, `product.md` during Product Brief, or `spec.md` / `notes.md` during Feature Spec.
 7. Do not create `docs/superpowers/specs/*` unless the human explicitly requests native Superpowers docs and confirms the external directory after path-override explanation.
 8. Do not automatically transition to `superpowers:writing-plans`; recommend the next `agent-loop` stage.
+
+## Product Brief Source Gate
+
+External PRD/product helpers cannot turn chat or requirements discussion directly into feature `product.md`.
+
+If an external helper produces product-shaped content before requirement source and feature context are confirmed, keep detailed output in the owning Requirements Discussion requirement document, keep only index/lifecycle/mapping summaries in requirement README, or use a response-local draft. Ask whether to create/reference a requirement set or confirm feature start before writing feature `product.md`.
+
+## Grill-With-Docs Adapter
+
+When a grill-with-docs style helper is available:
+
+1. Use it as a clarification method inside Requirements Discussion, Product Brief, or Brainstorm / Clarify.
+2. Load `requirement-product-grill.md` and keep agent-loop as the controller.
+3. Inspect project memory, source requirements, code/docs/tests, and targeted prior feature artifacts before asking questions when relevant.
+4. Ask one blocking question at a time and include the agent's recommended answer.
+5. Write accepted output to the owning artifact: detailed Requirements Discussion output to the requirement document with only index/lifecycle/mapping summaries in requirement README; Product Brief output to `product.md`; Feature Spec output to `spec.md` or `notes.md`.
+6. Do not create `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/` from grill-with-docs defaults.
+7. Cross-feature, shared design, hard-to-reverse, surprising, or real-trade-off findings are Design Readiness evidence and Decision Candidates for Decision & Design; they are not accepted ADRs.
 
 ## Writing-Plans Adapter
 
@@ -144,6 +171,21 @@ When `Plan Gate / Plan If Needed` starts and Superpowers is available:
 6. If a plan is not required, record the No-Plan Decision in `notes.md` and the selected task row/detail with exact files, exact verification command, and why no trigger applies.
 7. Do not create `docs/superpowers/plans/*` unless the human explicitly requests native Superpowers docs and confirms the external directory after path-override explanation.
 8. Do not let the external skill choose execution mode. Offer agent-loop modes: Strict Mode, Feature Auto-Loop, Task Auto-Run, or human-approved subagent execution. Task Auto-Run still requires an accepted plan.
+
+## Project Skill Authoring Adapter
+
+When Project Skill Creation / Update starts:
+
+1. Load `references/project-skills.md`, `skill-routing.md`, and this adapter.
+2. Classify entry mode. For an explicit request, resolve helpers before Candidate analysis and Gate 1. For a human-accepted proactive Candidate, treat Gate 1 as already satisfied and resolve helpers before the first authoring action; return to Gate 1 only for material scope change.
+3. Resolve `superpowers:writing-skills` then `writing-skills`; load the complete helper before authoring actions.
+4. Independently resolve `skill-creator`. A loaded writing-skills helper does not end the scan.
+5. Use writing-skills for RED/GREEN/REFACTOR and forward tests. Use skill-creator for scaffolding, `agents/openai.yaml`, resource selection, and structural validation when available.
+6. If helper instructions conflict, writing-skills controls test-first discipline and trigger-only descriptions; Agent Loop controls paths and gates.
+7. For explicit-request entry, present Project Skill Candidate and Gate 1 before creating `.agent-loop/skills/`, INDEX, or the skill directory.
+8. Override `~/.agents/skills/`, `~/.codex/skills/`, `~/.claude/skills/`, `.kimi/skills/`, and `docs/superpowers/` defaults to `.agent-loop/skills/<skill-name>/`.
+9. Keep status `proposed` during authoring. Finalize the active INDEX row, record its exact-row SHA-256 plus the current-file manifest, and automatically mark `active` only after all required validation passes.
+10. Before each real invocation, apply the bounded Execution Gate and emit its summary even when the human's named-skill/concrete-scope request already satisfies confirmation. Neither auto mode nor helper load authorizes execution.
 
 ## TDD Adapter
 
@@ -204,6 +246,8 @@ Artifact destinations:
 .agent-loop/features/<feature>/notes.md summary
 .agent-loop/features/<feature>/tasks.md status updates only after main-agent review
 ```
+
+Project Skill authoring pressure tests are the no-feature exception: after the Candidate/Gate 1 explicitly satisfies every bounded-dispatch field above, persist approval, per-agent briefs, exact returns/rationalizations, main-agent review, and consumed status in `.agent-loop/skills/<skill-name>/validation.md`. Do not create a feature or `handoffs/` only for skill-authoring tests.
 
 Record the approval date, approved task/story IDs or scan lanes, allowed file/boundary scope, and stop conditions in `notes.md` and each brief. Expanding the approved scope requires new human confirmation; old approval cannot be reused for new tasks or boundaries.
 

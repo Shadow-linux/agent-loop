@@ -2,18 +2,13 @@
 
 Use this reference when the main skill needs definitions, entry scenarios, or flow rules.
 
-## Source Of Truth
+## Published Source Of Truth
 
-This reference is a condensed operational extract of:
+This file is the published core model and constraint source. `runtime.md` is the published executable routing, stage-order, gate, and state-transition source. Both ship inside the skill package and must change together when core behavior changes.
 
-```text
-draft_agent_loop_struct.md
-final_agent_loop_skill_design.md
-```
+Workspace-level drafts and historical design documents may explain rationale, but they are not distributed dependencies and cannot override the published package. Other references implement stages without changing this model or `runtime.md` routing.
 
-Those two files are the design sources for this skill. If another skill reference conflicts with them, update the reference instead of changing the design model.
-
-The core constraints inherited from the design sources are:
+The core constraints are:
 
 - single-person + CLI agent first
 - human controls goals, source requirements, and stage gates
@@ -24,6 +19,7 @@ The core constraints inherited from the design sources are:
 - `project.md` is project-level long-term memory
 - Project Memory Mode is `simple` by default; in `enterprise`, `project.md` becomes an index and long-term details move to optional `.agent-loop/project/*.md`
 - `project.md` owns cross-feature Product Context and Domain Language
+- optional `.agent-loop/skills/` owns Human-gated project-local reusable capabilities; `INDEX.md` owns lifecycle and discovery metadata
 - stable Web E2E capability belongs in `project.md`; feature-specific E2E cases belong in feature `tests.md` or `tests/e2e/*`
 - `requirements/` stores human source material packages and requirement lifecycle/backlog records as requirement set directories: requirements, prototypes, feedback, screenshots, recordings, links, follow-up notes, status, and optional `requirements/INDEX.md`
 - requirement-set dates mean archive date only, not deadlines or feature lifecycle dates
@@ -38,6 +34,7 @@ The core constraints inherited from the design sources are:
 - submit/integrate is explicit and never commits, opens PRs, merges, or publishes without human confirmation
 - Delivery Contracts live in `contracts.md` and optional `contracts/*`; file creation/update, contract acceptance, and breaking changes require human confirmation
 - non-trivial human confirmations use table-first Human Review Summary; complete artifacts remain source of truth
+- project-local skills require Gate 1 before creation/material update and an Execution Gate for every invocation; validated proposed skills activate automatically
 - first version does not include multiplayer, roadmap graph, roadmap adapter, tdd-guard, complex ADR, global install, or automatic directory-level AGENTS.md without human confirmation
 
 ## Core Model
@@ -45,6 +42,7 @@ The core constraints inherited from the design sources are:
 ```text
 Human Goal
 → Operational Support when the goal is to use/run/test/deploy current project behavior without confirmed implementation
+→ Project Skill Creation / Update when a repeatable project workflow should become a durable local capability
 → Feature Workspace
 → Task / Test / Plan
 → Execute / Verify
@@ -102,6 +100,8 @@ If plan.md exists, it must be construction-grade: exact paths, code context, int
 **E2E Discovery**: the stage that discovers real Web E2E capability from project reality before writing or executing browser automation. It records durable environment facts in `project.md` and feature-specific cases in `tests.md` or `tests/e2e/*`.
 
 **Drift**: mismatch between implementation, code reality, human decision, and existing `agent-loop` documents.
+
+**Project Skill**: a reusable project-specific capability under `.agent-loop/skills/<skill-name>/`. The index uses `proposed | active | disabled | deprecated` lifecycle and `bootstrap | on-demand` load policy. Active trust is bound to a validated content manifest. Loading is read-only preparation; every actual invocation requires the Execution Gate, with a named-skill/concrete-scope request accepted only when the disclosed plan stays fully inside that scope.
 
 ## Entry Scenarios
 
@@ -238,7 +238,7 @@ Action:
 
 ```text
 If onboarding-db was produced through an accepted Evidence-Graph + DDD Onboarding Spec, answer from those docs after checking obvious code reality.
-If onboarding-db is an old layout, treat it as legacy evidence only until an Evidence-Graph + DDD migration or focused update is accepted.
+If onboarding-db is an old layout, treat it as legacy evidence only; migration or replacement requires an accepted Evidence-Graph + DDD Onboarding Spec, Onboarding Tasks, and Full Execution Gate.
 Answer from existing docs/code as chat or operational support when the human only asks a question.
 Recommend Project Entry Scan if project memory is missing, thin, or stale.
 Do not create or refresh onboarding-db through the removed legacy flow.
@@ -301,6 +301,26 @@ Ask one focused human question, or route to Diagnose Failure / Targeted Feature 
 Do not continue execution until the blocker is resolved.
 ```
 
+### Project Skill Creation / Update
+
+Condition:
+
+```text
+Human asks to turn a repeatable project workflow into a skill, or to update, disable, or deprecate one
+Project Entry / project memory is reliable
+```
+
+Action:
+
+```text
+Load references/project-skills.md.
+Present Project Skill Candidate and Gate 1 before files are created or materially updated.
+Resolve writing-skills and skill-creator independently; use both when available.
+Write only under .agent-loop/skills/<skill-name>/.
+Keep proposed until RED/GREEN/REFACTOR and validation pass, then activate automatically.
+Require the Execution Gate for every invocation.
+```
+
 ## Main Flow
 
 ```text
@@ -308,7 +328,9 @@ Project Entry
 → Remote Project Discovery if Needed
 → Re-Adopt Agent Loop Project if Needed
 → Code-Guided Operational Support if Needed
+→ Project Skill Creation / Update if Needed
 → Requirement Archive
+→ Decision & Design If Needed
 → Product Brief if Needed
 → Brainstorm / Clarify if Needed
 → Feature Follow-up And Flow-back if Needed

@@ -66,6 +66,87 @@ Exit:
 
 - operational checklist delivered, blocker/question identified, or human confirms escalation into feature/fix workflow
 
+## Project Skill Creation / Update
+
+Entry: message intent is `project-skill-management`, or the human accepts an Agent-proposed Project Skill Candidate after a complex verified workflow. Reliable Project Entry/memory must exist.
+
+Entry modes:
+
+- explicit request: resolve authoring helpers before Candidate analysis, then present Gate 1;
+- accepted proactive Candidate: the accepted Candidate already satisfies Gate 1, so resolve helpers after entry and before the first authoring action; do not ask Gate 1 again unless helper analysis materially changes scope.
+
+Mandatory helpers:
+
+- resolve `superpowers:writing-skills` / `writing-skills` for RED/GREEN/REFACTOR;
+- independently resolve `skill-creator` for scaffolding and structural validation;
+- use both when available;
+- for explicit-request entry, record initial resolution response-locally before Gate 1; for accepted proactive-Candidate entry, record it after Gate 1 and before authoring; persist either record in `.agent-loop/skills/<skill-name>/validation.md` after creation.
+
+Load:
+
+- `project-skills.md`
+- `skill-routing.md`
+- `external-skill-adapters.md`
+- `human-review-summary.md` before Gate 1
+- existing `.agent-loop/skills/INDEX.md` and matching skill files for updates
+
+Candidate analysis:
+
+- inspect the successful source workflow and fresh evidence;
+- identify repeatability, ordering, failure, rollback, environment, secrets, and external effects;
+- choose `bootstrap` or `on-demand` with a reason;
+- propose exact `.agent-loop/skills/<skill-name>/` files and resources;
+- distinguish reusable procedural knowledge from one-off work, ordinary project facts, or mechanically enforceable checks.
+
+Gate 1:
+
+- present Project Skill Candidate and exact file tree;
+- ask before creating `.agent-loop/skills/`, INDEX, or a new skill directory;
+- use the same Gate 1 before material updates to an active skill;
+- if implementation scope materially expands, stop and re-present Gate 1.
+
+After Gate 1:
+
+1. Create the INDEX entry and skill directory with status `proposed`.
+2. Run RED scenarios without the new or revised skill and record exact failures in `validation.md`.
+3. Write the minimum GREEN skill and required resources.
+4. Re-run the scenarios with the skill, capture loopholes, REFACTOR, and re-test.
+5. Validate frontmatter, trigger wording, resources, scripts, sensitive values, symlinks, and exact paths; finalize the active INDEX row and record a SHA-256 Validated Content Manifest for that exact row and current files.
+6. If every required check passes and current content matches the manifest, update INDEX and validation evidence; status automatically becomes `active`.
+7. If any required check fails, keep `proposed`, report the blocker, and do not route normal work through the skill.
+
+Path rule:
+
+```text
+write: <target-project>/.agent-loop/skills/<skill-name>/
+do not default: ~/.agents/skills/ | ~/.codex/skills/ | ~/.claude/skills/ | ~/.kimi/skills/ | docs/superpowers/
+```
+
+Execution Gate:
+
+- discovery, INDEX reading, loading, and trigger matching are read-only preparation;
+- before following the skill workflow or causing side effects, summarize skill, scope, steps, commands/files/external effects, risks, rollback, and verification;
+- obtain human confirmation for one invocation;
+- a human message that already names the skill and concrete scope may satisfy the gate only after the summary shows no undisclosed action/effect and no additional question is needed;
+- `active`, `bootstrap`, previous success, previous confirmation, Feature Auto-Loop, and Task Auto-Run do not authorize execution;
+- scope expansion requires a new confirmation.
+
+Write after Gate 1:
+
+- `.agent-loop/skills/INDEX.md`
+- `.agent-loop/skills/<skill-name>/SKILL.md`
+- `.agent-loop/skills/<skill-name>/validation.md`
+- optional resources required by the accepted Candidate
+
+Do not create a requirement set or feature workspace for this stage. Do not globally install the skill; global installation is a first-version exclusion. Do not commit, push, publish, or execute the skill without the matching separate authorization.
+
+Exit:
+
+- `active` with validation evidence and one recommended next stage;
+- `proposed` with exactly one unblock action;
+- lifecycle updated to `disabled` / `deprecated`; or
+- no files created because Gate 1 was declined.
+
 ## Init Project
 
 Entry: no `.agent-loop/` or legacy `agent-loop/`, little or no code.
@@ -144,6 +225,8 @@ requirements-discussion -> Brainstorm / Clarify -> Requirement Document Draft ->
 Use:
 
 - `requirement-management.md`
+- `requirement-product-grill.md` when terminology, business rules, flows, boundaries, exception paths, prior feature behavior, or decision signals are unclear
+- `project-decisions.md` when hard-to-reverse, surprising, cross-feature, or real-trade-off decisions appear
 - `document-templates.md`
 - `human-review-summary.md` before approval
 - `skill-routing.md` and `external-skill-adapters.md` when a brainstorming or product-discovery helper is available
@@ -151,7 +234,12 @@ Use:
 Rules:
 
 - use Brainstorm / Clarify to shape the demand before writing the requirement document
+- use Requirement/Product Grill before asking humans when terminology, roles, business objects, flows, exception paths, or historical behavior are unclear
+- run targeted lookup of relevant prior feature `product.md`, `spec.md`, `tests.md`, and `notes.md` before asking a grill question
+- record shared design signals as Design Readiness evidence and Decision Candidates; do not create accepted ADRs from Requirements Discussion
+- keep early ADR signals as Decision Candidates until the requirement is human-reviewed and the owning gate is clear
 - ask only questions that affect requirement clarity, scope, users/operators, constraints, non-goals, or acceptance direction
+- When Requirement/Product Grill was used, the requirement document draft must include the grill-enriched sections from `document-templates.md`; use `Not applicable` plus a short reason instead of empty headings.
 - run a lightweight Phase Scan when the demand looks larger than one feature, has MVP/later scope, contains multiple journeys or roles, crosses multiple technical boundaries, or the human uses staged-delivery language such as "先做核心闭环" or "后面再补"
 - when Phase Scan triggers, propose a `Delivery Phases` table for human review before feature construction
 - write a requirement document draft only after the intent is clear enough for human review
@@ -171,7 +259,7 @@ Write after confirmation:
 
 Exit:
 
-- requirement document accepted and archived
+- requirement document human-reviewed and recorded
 - requirement discussion remains open with next clarification question
 - human chooses to start feature implementation from the accepted requirement set
 
@@ -306,8 +394,6 @@ Write after confirmation:
 
 - `.agent-loop/project.md`
 - enterprise `.agent-loop/project/*.md` files only when recommended and confirmed
-- `.agent-loop/requirements/`
-- `.agent-loop/features/`
 - root `AGENTS.md` / `CLAUDE.md` guidance, if missing or stale
 - directory-level `AGENTS.md` only if specific boundary directories are confirmed
 
@@ -316,7 +402,8 @@ Exit:
 - human accepts project memory
 - root guidance status is `present`, `created`, or `human-deferred` for `AGENTS.md`
 - `CLAUDE.md` status is `points-to-AGENTS`, `created-pointer`, or `human-deferred`
-- next stage: Start Feature or Targeted Feature Scan
+- next stage: Evidence-Graph + DDD Onboarding when newcomer-facing or durable project-understanding docs are the current intent
+- next stage: Decision & Design If Needed, Product Brief If Needed, Feature Spec, Code-Guided Operational Support, Requirement Archive, Re-Adopt Agent Loop Project, or Targeted Feature Scan, selected from current intent and artifact state
 
 ## Evidence-Graph + DDD Onboarding Knowledge Base
 
@@ -341,8 +428,10 @@ Rules:
 - 每个正式 onboarding 文档至少包含架构/边界图和 ASCII 状态图 / 状态机图 / 状态机/决策图：架构/边界图讲结构边界，状态图讲状态变化、异常恢复、重试/补偿。
 - 模块和流程文档默认还必须包含 Timeline / 时序图，优先用 Mermaid sequenceDiagram，讲清流程怎么跑，并在流程讲解中引入相关数据模型。Timeline Diagram 用于故障恢复和延迟一致性时间线。
 - Onboarding Tasks are written only after the Onboarding Spec is accepted.
+- Do not combine Onboarding Spec acceptance with the later Full Execution Gate.
+- Onboarding Spec acceptance authorizes writing `onboarding-tasks.md`; formal module/flow execution starts only after the completed Tasks and Full Execution Gate receive separate human acceptance.
 - Module and Flow docs default to single long files: `02-modules/<module-name>.md` and `03-flows/<flow-name>.md`.
-- 计划确认后 Agent 可以全盘执行：人类确认 Onboarding Spec / Onboarding Tasks 后，Agent 可以一次性创建并连续完成计划内的完整 onboarding-db。
+- Full Execution Gate 确认后 Agent 可以全盘执行：Spec 先单独确认，Tasks 写完后再单独确认 Full Execution Gate，之后 Agent 可以一次性创建并连续完成计划内的完整 onboarding-db。
 - batch 是 Agent 的组织和 review 单位，不是人类闸门；不要每批都停下来等人类再次授权，除非计划变更、证据不足、权限/环境阻塞或人类明确要求暂停。
 - 禁止创建空目录、薄 README、planned/later 占位文件，或用文件数量假装完整。
 
@@ -351,15 +440,16 @@ Flow:
 1. Confirm Project Entry Scan / reliable memory exists.
 2. Build `08-review/evidence-graph.md` before formal onboarding docs.
 3. Draft `onboarding-spec.md` with module plan, flow plan, DDD mapping, diagram type plan, architecture/boundary + ASCII state + Timeline/sequence requirements, Mermaid/ASCII format choices, file strategy, quality gates, and batch plan.
-4. Ask human confirmation for the Onboarding Spec / Onboarding Tasks execution plan before writing or replacing formal onboarding docs.
-5. Write `onboarding-tasks.md` after spec acceptance.
-6. After plan confirmation, execute all planned docs that can be written with meaningful evidence-backed content. Do not create empty directories or placeholder docs.
-7. Write module docs as `02-modules/<module-name>.md` by default, not many small files.
-8. Write flow docs as `03-flows/<flow-name>.md` by default, not many small files.
-9. Require at least architecture/boundary + ASCII state diagram in every formal onboarding doc; module and flow docs also require Timeline / sequence diagrams by default. Use Mermaid flowchart / sequenceDiagram for normal flow/timing and ASCII for state machines, complex principle diagrams, and complex examples.
-10. Require use cases, data objects, state transitions, failure modes, verification/troubleshooting, and code evidence where applicable.
-11. Score changed topics in `coverage-matrix.md`; below 4/5 cannot be `newcomer-ready`.
-12. Record each batch in `batch-review.md`.
+4. Ask human confirmation for the Onboarding Spec.
+5. After Spec acceptance, write `onboarding-tasks.md` with exact outputs, evidence, quality gates, and execution scope.
+6. Present the completed Onboarding Tasks and ask separate human acceptance of the Full Execution Gate.
+7. After Full Execution Gate acceptance, execute all planned docs that can be written with meaningful evidence-backed content. Do not create empty directories or placeholder docs.
+8. Write module docs as `02-modules/<module-name>.md` by default, not many small files.
+9. Write flow docs as `03-flows/<flow-name>.md` by default, not many small files.
+10. Require at least architecture/boundary + ASCII state diagram in every formal onboarding doc; module and flow docs also require Timeline / sequence diagrams by default. Use Mermaid flowchart / sequenceDiagram for normal flow/timing and ASCII for state machines, complex principle diagrams, and complex examples.
+11. Require use cases, data objects, state transitions, failure modes, verification/troubleshooting, and code evidence where applicable.
+12. Score changed topics in `coverage-matrix.md`; below 4/5 cannot be `newcomer-ready`.
+13. Record each batch in `batch-review.md`.
 
 Exit:
 
@@ -390,7 +480,7 @@ Output before writing:
 - which recent outside-loop changes appear relevant
 - whether original human requirements conflict with code
 - root `AGENTS.md` and `CLAUDE.md` guidance status, including whether `CLAUDE.md` points to `AGENTS.md`
-- whether root `AGENTS.md` managed guidance version is older than the current local `agent-loop` skill version
+- whether root `AGENTS.md` managed blocks are missing, stale, or different from the current root AGENTS template
 - what should update
 - what should stay unchanged
 
@@ -425,6 +515,8 @@ Rules:
 - Old requirement set README files remain valid; do not require migration only because `Lifecycle`, `Summary`, or `Status History` is missing.
 - Run Phase Scan for complex requirement archives. Recommend `Delivery Phases` in the requirement set `README.md` when the requirement will likely become multiple features, has MVP/later scope, crosses multiple boundaries, or needs staged human delivery confirmation.
 - Do not create a feature merely because a phase exists. A phase becomes feature work only after the human chooses to start that accepted phase or phase slice.
+- Before an accepted requirement enters feature construction, run Design Readiness Check from `project-decisions.md` and record the result in the requirement README.
+- Route to Decision & Design If Needed when the requirement spans features or needs shared business-flow, domain, state, source-of-truth, architecture, consistency, recovery, or non-functional design. A disputed technology choice is not required.
 
 ### Future / Deferred Requirement Intake
 
@@ -455,7 +547,7 @@ Write:
 - optional feedback, screenshot, recording, design-link, meeting-note, and other source files inside the same requirement set
 - optional change-request files inside the same requirement set
 - optional `.agent-loop/requirements/INDEX.md` only when trigger conditions apply
-- source references in `spec.md`
+- source references in an existing confirmed feature `spec.md` when the requirement was discovered during feature work; do not create a feature or `spec.md` from Requirements Discussion or Requirement Archive only to hold the link
 
 Exit:
 
@@ -463,11 +555,19 @@ Exit:
 
 ## Product Brief If Needed
 
-Entry: source requirements or conversation need product/PRD-style synthesis before engineering specification.
+Entry: accepted or referenced source requirements need feature-level product/PRD-style synthesis before engineering specification, and feature context is confirmed.
+
+Product Brief Source Gate:
+
+If the human asks from `chat` or `requirements-discussion` to write `product.md`, first ask whether to create/reference a requirement set or confirm feature start.
+
+Do not enter Product Brief If Needed directly from requirements discussion without a requirement source or confirmed feature context.
 
 Load:
 
 - `product-brief.md`
+- `requirement-product-grill.md` when product terminology, flows, boundaries, exception paths, or prior feature behavior need clarification before synthesis
+- `project-decisions.md` when product tradeoffs or product decisions may affect multiple features or long-term project direction
 - `skill-routing.md` for Stage Helper Capability Scan
 - `external-skill-adapters.md` when Stage Helper Capability Scan finds Superpowers, PRD/product synthesis, or grill-with-docs style helpers
 
@@ -483,12 +583,16 @@ Trigger examples:
 Rules:
 
 - before fallback product synthesis, run Stage Helper Capability Scan; when a product/PRD helper is available, use it as the method quality bar while writing accepted output to `product.md` and `notes.md`
+- confirm the source requirement and feature context before writing feature `product.md`; product-shaping confirmation alone is not feature-start confirmation
+- resolve enough Requirement/Product Grill questions before synthesizing `product.md`
+- When Requirement/Product Grill was used before Product Brief, write the enriched `templates/product.md` sections that apply; use `Not applicable` plus a short reason instead of empty headings.
 - create `product.md` only when useful; skip for narrow bugfixes or clear technical tasks
 - if source requirements are still too broad for one feature, recommend returning to requirement `Delivery Phases` before writing `product.md`
 - inspect `project.md` Product Context and Domain Language before asking product questions
 - ask one blocking product question at a time
 - include the agent's recommended answer when asking
 - record long-term consensus candidates for Project Memory Update
+- repeat Design Readiness Check for new product signals and route shared design needs through Decision & Design before Feature Spec
 
 Write after confirmation:
 
@@ -499,6 +603,55 @@ Exit:
 
 - product intent is stable enough for Feature Spec
 
+## Decision & Design If Needed
+
+Entry: Design Readiness is `required`, or accepted/referenced requirements, product.md, PRD-like synthesis, Requirement/Product Grill output, Technical Design / Code Context, or Drift Check reveals shared business-flow, domain, data, architecture, recovery, non-functional, cross-feature, or long-term design needs.
+
+Load:
+
+- `project-decisions.md`
+- `document-templates.md`
+- `human-review-summary.md` before asking the human to create, accept, supersede, deprecate, or reference project-level decisions
+
+Position:
+
+```text
+Requirement -> Design Readiness Check -> Decision & Design If Needed -> Feature Mapping -> Product Brief / Feature Spec
+```
+
+Rules:
+
+- run Design Readiness Check after requirement acceptance and before feature construction
+- enter Decision & Design when a requirement is complex, likely to split into multiple features, changes an end-to-end business flow, shares domain/data/state rules, or needs common architecture, recovery, or non-functional direction
+- do not bypass Decision & Design merely because no technology choice is disputed
+- use Decision Scan / Placement inside this stage to place product-only, feature-local, testing, and project-level decisions
+- do not create ADR files from ordinary chat or early fuzzy requirements discussion
+- place product-only decisions in `product.md`
+- place feature-local decisions in `spec.md` Design Decisions
+- place testing decisions in `tests.md` unless they verify a long-term design goal
+- recommend `.agent-loop/decisions/*.md` only for project / cross-feature, long-term, hard-to-reverse, surprising, or real-trade-off decisions
+- creating `.agent-loop/decisions/` does not imply enterprise memory mode
+- do not create, accept, supersede, deprecate, delete, or renumber decision files without explicit human confirmation
+- convert every implementation-bearing shared flow step, invariant, recovery responsibility, and non-functional target into a stable Design Slice ID
+- assign every required design slice to at least one planned feature; no required slice may remain `unassigned` before Feature Spec
+- do not enter Feature Spec when required shared design is unresolved or design-slice coverage is incomplete
+- update requirement README, product.md, and spec.md decision references after human confirmation
+
+Write after confirmation:
+
+- conditionally required `.agent-loop/decisions/000N-<slug>.md` from `templates/decision.md` when shared design is required and no accepted decision covers it; otherwise no new file is needed
+- requirement README `Applicable Decisions`, `Triggered Decisions`, and `Implemented By`
+- feature `product.md` / `spec.md` `Applicable Decisions`
+- feature `spec.md` `Implements Decisions`
+- decision record `Design Slice Coverage` with stable slice IDs, planned owning features, verification, and coverage status
+
+Exit:
+
+- Design Readiness records `design-not-needed`, or no new project-level design record is needed because accepted decisions already cover the requirement
+- decision candidate stays in product.md, spec.md, tests.md, or notes.md
+- decision draft is ready for human review
+- accepted Decision & Design is referenced by downstream feature artifacts and every required design slice has a planned owner
+
 ## Brainstorm / Clarify
 
 Entry: goal is vague, scope unclear, or meaningful approaches differ.
@@ -507,28 +660,31 @@ Mandatory helper: Brainstorm / Clarify resolves and loads `superpowers:brainstor
 
 Load:
 
+- `requirement-product-grill.md` when clarification is about domain terminology, business flow, prior feature conflict, or decision signal
 - `skill-routing.md` for Stage Helper Capability Scan
 - `external-skill-adapters.md` when Stage Helper Capability Scan finds Superpowers or another brainstorming/product-discovery skill
 
 Rules:
 
-- after mandatory helper resolution, use the loaded Brainstorming Adapter; use fallback only for recorded `unavailable` or `load-failed`, while writing accepted output to the current stage artifact. Requirements Discussion writes `requirements/<set>/requirement.md` and `README.md`; Product Brief / Feature Spec writes `product.md`, `spec.md`, and `notes.md`.
+- after mandatory helper resolution, use the loaded Brainstorming Adapter; use fallback only for recorded `unavailable` or `load-failed`, while writing accepted output to the current stage artifact. Requirements Discussion writes detailed output to `requirements/<set>/requirement.md` and summary links or lifecycle state to `README.md`; Product Brief writes `product.md`; Feature Spec writes `spec.md` and `notes.md`.
 - Ask 1-5 high-impact questions.
 - Default to one question at a time.
 - Questions must affect scope, UX, data, architecture, testing, or acceptance.
 - Do not ask filler questions.
 - If a question can be answered by reading project docs, code, tests, source requirements, `project.md`, or `product.md`, inspect those first instead of asking the human.
+- For grill questions, also inspect targeted prior feature artifacts when relevant; do not run a full feature scan.
 - When product terminology is fuzzy or conflicts with `project.md` Domain Language, propose a canonical meaning and ask only if still ambiguous.
 
 Write:
 
-- accepted product clarifications into `product.md` when it exists
-- accepted engineering clarifications into `spec.md`
-- human decisions into `notes.md`
+- Requirements Discussion: write approved clarification and design output to the requirement document; keep requirement README to source, lifecycle, Delivery Phase, Feature Mapping, and decision-link summaries.
+- Product Brief: write accepted product clarifications into `product.md`.
+- Feature Spec: write accepted engineering clarifications into `spec.md` and human decisions into `notes.md`.
 
 Exit:
 
-- intent stable enough for Feature Spec
+- Requirements Discussion: requirement document draft is ready for Human Review and Requirement Archive.
+- Product Brief or Feature Spec: the owning artifact is stable enough for its next agent-loop stage.
 
 ## Feature Follow-up And Flow-back
 
@@ -561,7 +717,8 @@ Rules:
 - if the human declines reopen or flow-back, preserve old close state and require the new linked feature or maintenance-fix to keep `Related Feature`, declined reason, inherited acceptance/tests/evidence, and affected paths
 - if scope is new or ownership is weak, recommend a linked new feature or investigate-first path
 - if no recent feature owns the report and the work is a narrow internal fix, recommend a new `Feature Type: maintenance-fix` workspace instead of a naked code edit
-- if multiple candidates match, ask the human to choose
+- if multiple candidates have medium/high match because evidence is incomplete, recommend investigate-first and route to Targeted Feature Scan or Diagnose Failure
+- ask the human only after evidence is sufficient and the remaining ambiguity is a product or ownership decision
 
 Write after confirmation:
 
@@ -581,8 +738,12 @@ Exit:
 
 Entry: goal and source requirements are clear enough.
 
+Every feature start must reference an accepted requirement set. For a narrow direct feature request, create and accept the minimum requirement set before Feature Spec. This keeps Design Readiness, lifecycle, and Feature Mapping in one requirement-owned location without forcing a large PRD.
+
 Load:
 
+- `project.md` Decisions index and linked accepted decisions when present
+- `project-decisions.md` when accepted requirements or product decisions have Decision Candidates, Applicable Decisions, or unresolved long-term/cross-feature choices
 - `skill-routing.md` for Stage Helper Capability Scan
 - `external-skill-adapters.md` when Stage Helper Capability Scan finds Superpowers, brainstorming, or another spec-writing helper
 
@@ -608,11 +769,15 @@ Include:
 Rules:
 
 - before fallback spec writing, run Stage Helper Capability Scan; when a spec/brainstorming helper is available, use it for ambiguity removal, scope checks, and acceptance thinking while writing to `spec.md`
+- inspect Source Requirements, product.md, and Applicable Decisions before writing behavior and acceptance
+- confirm Design Readiness is `design-not-needed` or `completed` before writing the Feature Spec
+- include `Applicable Decisions`, assigned Design Slice IDs in `Implements Decisions`, and feature-local `Design Decisions`
+- use Decision & Design before Feature Spec if the requirement needs shared business-flow, domain, data, architecture, recovery, or non-functional design
+- do not enter Feature Spec when shared design is unresolved or any required design slice is unassigned
 
 Exit:
 
-- human accepts spec or requests revision
-- after acceptance, explain that Strict Mode asks before each stage and offer Feature Auto-Loop for Agent-ready downstream work if the human wants fewer confirmations
+- draft spec is ready for Requirement Checklist or requires revision
 
 ## Targeted Feature Scan
 
@@ -660,11 +825,13 @@ Write:
 
 Exit:
 
-- spec ready for task split
+- human accepts the checked spec or requests revision
+- accepted spec and recorded passed Requirement Checklist are ready for Work Breakdown
+- after acceptance, explain that Strict Mode asks before each stage and offer Feature Auto-Loop for Agent-ready downstream work if the human wants fewer confirmations
 
 ## Work Breakdown
 
-Entry: accepted spec.
+Entry: accepted spec with a recorded passed Requirement Checklist.
 
 Helper-friendly stage: Work Breakdown runs Stage Helper Capability Scan before fallback. Use matching issue/task splitting helpers as method support only; keep `tasks.md`, task status, gates, and next-stage routing under agent-loop control.
 
@@ -801,6 +968,7 @@ Helper-friendly stage: Technical Design / Code Context runs Stage Helper Capabil
 Load:
 
 - `implementation-planning.md`
+- `project-decisions.md` when implementation design introduces long-term/cross-feature boundaries, dependencies, data ownership, transaction, consistency, concurrency, idempotency, or recovery choices
 - `large-projects.md` for large, old, or multi-package projects
 - nearest root/directory `AGENTS.md`
 - relevant accepted or verified Delivery Contracts when the task crosses a producer-consumer boundary
@@ -826,7 +994,9 @@ Rules:
 - if the context cannot be discovered from code/docs, stop and ask or mark the task `Human-gated`
 - prefer existing local patterns over new abstractions
 - if an interface will be created, define it explicitly before implementation
-- if a durable consumer-facing interface is created or changed, load `delivery-contracts.md`, update the contract draft, and stop for human acceptance or breaking-change approval when required
+- if a durable consumer-facing interface is created or changed, recommend Delivery Contract If Needed and stop before any contract file is created or updated
+- do not create or update contract files from Technical Design / Code Context; only the human-confirmed Delivery Contract stage may write them
+- if technical design changes shared or project-level design, repeat Design Readiness and return to Decision & Design before plan execution
 
 Exit:
 
@@ -887,6 +1057,8 @@ Check:
 - each task maps to spec or explicit technical need
 - tests cover acceptance criteria
 - plan scope matches selected task/story, or No-Plan Decision is limited to a trivial task with exact files and verification
+- each accepted Decision & Design slice assigned to the feature maps through `spec.md`, tasks, tests, and the active plan
+- no assigned design slice lacks an implementation or verification path, even when every local story is independently testable
 
 Write:
 
@@ -939,9 +1111,9 @@ Exit:
 
 ## Execute Task / Story
 
-Entry: selected execution unit accepted and Plan Gate has passed.
+Entry: selected execution unit is accepted, Plan Gate has passed, and Analyze Consistency has a clean recorded result.
 
-Mandatory helper: Execute Task / Story resolves and loads `superpowers:test-driven-development` or `test-driven-development` before behavior-changing implementation. Record Stage Helper Resolution; fallback requires `unavailable` or `load-failed`.
+Mandatory helper: Execute Task / Story resolves and loads `superpowers:test-driven-development` or `test-driven-development` before every Execute invocation. Record Stage Helper Resolution; fallback requires `unavailable` or `load-failed`. For non-behavior work, record TDD as `not-applicable` with a reason after resolution.
 
 Rules:
 
@@ -950,10 +1122,11 @@ Rules:
 - whole-feature execution requires explicit human confirmation and only for tiny features
 - do not execute a task directly after task creation; first confirm accepted plan or recorded No-Plan Decision
 - if neither accepted plan nor No-Plan Decision exists, route back to Plan Gate / Plan If Needed
+- if Analyze Consistency is missing, stale, or reports a gap, route back to Analyze Consistency and do not execute
 - Task Auto-Run requires an accepted plan for the selected task/story
 - in Feature Auto-Loop, execute only Agent-ready tasks and stop at Human-gated tasks
 - in Task Auto-Run, execute only the selected task/story and stop after evidence/review/drift updates and Task Done Gate status update
-- TDD by default
+- behavior-changing execution requires TDD; non-behavior work records TDD as `not-applicable`
 - after mandatory helper resolution, use the loaded TDD Adapter; use fallback only for recorded `unavailable` or `load-failed`, while task status and evidence remain controlled by agent-loop
 - verify RED before implementation
 - verify GREEN after implementation
@@ -1044,6 +1217,7 @@ Load:
 Check:
 
 - Spec Review: implementation matches `product.md` when present, `spec.md`, acceptance criteria, scope, and out-of-scope
+- Decision & Design Review: implementation matches accepted Decision & Design records and every design slice assigned to this feature has current evidence
 - Standards Review: implementation follows root/directory `AGENTS.md`, `project.md` rules, directory boundaries, testing rules, and local code conventions
 - test adequacy
 - integration risk
@@ -1054,6 +1228,7 @@ Rules:
 
 - after mandatory helper resolution, use the loaded review adapter; use fallback only for recorded `unavailable` or `load-failed`, and record findings in `notes.md` without directly marking tasks `done`
 - perform lightweight Spec Review for every task before marking it `done`
+- Review implementation against accepted Decision & Design records and the design slices assigned to this feature.
 - perform Feature Close Review before recommending or performing close
 - Feature Close Review includes feature-level Spec Review against product/spec/tasks/tests/acceptance/out-of-scope
 - before Submit / Integrate, perform at least Spec Review
@@ -1083,6 +1258,8 @@ Check:
 - completed work vs `tasks.md`
 - test reality vs `tests.md`
 - long-term changes vs `project.md`
+- long-term/cross-feature decision reality vs `.agent-loop/decisions/` when present
+- assigned Design Slice IDs vs implementation and verification evidence
 - producer-consumer interfaces vs `contracts.md` and linked `contracts/*` details when present
 - human original requirements vs current implementation when relevant
 - whether long-term startup guidance changed and `AGENTS.md` should be synced
@@ -1091,6 +1268,8 @@ Write after confirmation:
 
 - feature docs for feature drift
 - `project.md` for long-term project facts
+- `.agent-loop/decisions/*.md` reference backfill, new decision draft, or superseding decision draft only after human confirmation
+- Decision & Design coverage-status updates after confirming implementation evidence; route design divergence back to Decision & Design before close
 - `notes.md` drift record
 - `contracts.md` and matching `contracts/*` details for interface drift; ask before accepting breaking changes
 - `AGENTS.md` / `CLAUDE.md` only for long-term guidance changes
@@ -1131,7 +1310,7 @@ Do not write:
 
 Requirement Reconciliation:
 
-- If a feature references requirement sets, check whether their lifecycle status should become `in-progress`, `implemented`, `superseded`, `rejected`, or remain unchanged.
+- If a feature references requirement sets, apply the Delivery Phase Status Roll-up from `requirement-management.md`; check whether lifecycle status should become `in-progress`, `partially-implemented`, `implemented`, `superseded`, `rejected`, or remain unchanged.
 - If the requirement set uses `Delivery Phases`, check whether the referenced phase status and `Feature Mapping` should become `in-progress`, `implemented`, `superseded`, `rejected`, `deferred`, or remain unchanged.
 - If the feature implements a Delivery Phase but `Feature Mapping` is still `none`, propose a requirement README backfill even when no `project.md` facts changed.
 - Do not edit `requirement.md` or other source files for lifecycle/status updates.
@@ -1175,11 +1354,13 @@ Write after confirmation:
 - `notes.md` submit/integrate record
 - commit only if explicitly confirmed
 
-Exit:
+Exit, in order:
 
-- If submit succeeded and the feature appears done, recommend Feature Completion Check, not Close.
-- recommend next task/story if work remains
-- recommend Pause if submit is prepared but not performed
+1. If submission is prepare-only and was not performed, recommend Pause with the pending submit action.
+2. If submission was explicitly skipped, record that decision; recommend Feature Completion Check when done, otherwise the next task/story.
+3. Otherwise, if submit succeeded and the feature appears done, recommend Feature Completion Check, not Close.
+4. Otherwise, if work remains, recommend the next task/story.
+5. If submit failed or is blocked, recommend exactly one unblock stage.
 
 ## Feature Completion Check
 
@@ -1199,18 +1380,20 @@ Read:
 - active feature `tests.md`
 - active feature `plan.md`
 - active feature `notes.md`
+- accepted Decision & Design records linked by the active feature
 
 Check:
 
 - before fallback completion analysis, run Stage Helper Capability Scan; when a matching verification/review/finishing helper is available, use it for evidence discipline and close decision support while keeping feature close under agent-loop control
 - accepted spec
-- all in-scope tasks done, skipped with reason, or removed from scope
+- all remaining in-scope tasks are done; skipped or deferred work was first removed through human-approved scope reconciliation
 - required tests or substitute verification recorded
 - fresh verification evidence exists
 - Feature Close Review completed
 - feature-level Spec Review confirms product/spec/tasks/tests/acceptance and out-of-scope boundaries
 - feature-level Standards Review completed when triggered by large project, broad diff, directory or durable boundary change, security/data change, architecture change, or human request
 - drift check completed
+- all assigned design slices have implementation and verification evidence, or a human-approved reassignment, deferral, removal, or superseding decision
 - long-term memory updated
 - submit/integration status recorded when requested
 - no unresolved Human-gated decisions or blockers
@@ -1247,6 +1430,10 @@ Pause writes:
 - blockers
 - touched files
 - resume point
+- move the current feature from `Active Feature` to `Paused Features` in `project.md`
+- set `Active Feature: none` after the paused feature and resume point are recorded
+- set the feature lifecycle status to `paused` and record the transition in `notes.md`
+- clear any feature-scoped auto-mode grant; a resumed feature requires a newly confirmed applicable mode
 
 Close requires:
 
@@ -1261,4 +1448,6 @@ Close requires:
 Write:
 
 - `notes.md` close record
-- `project.md` current work update
+- set the feature lifecycle status to `closed` in `spec.md` and the close record
+- remove the feature from `Active Feature` and `Paused Features` in `project.md`
+- set `Active Feature: none`, clear feature-scoped auto-mode grants, and record the next suggested action

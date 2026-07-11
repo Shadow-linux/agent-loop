@@ -1,6 +1,6 @@
 # Agent Loop 使用指南
 
-**版本：** 1.2.3
+**版本：** 1.2.4
 
 这份文档是给人类看的。你不需要记住内部阶段名，只要用自然语言说出你想做什么，Agent 应该自己判断当前状态、推荐一个下一步，并在需要你确认的地方停下来。
 
@@ -41,19 +41,19 @@ Project Entry Scan 不算完成，除非 root `AGENTS.md` 已存在、已创建�
 | 你可以这样说 | Agent 应该怎么做 |
 |---|---|
 | “我想让新人能靠文档接手项目。” | 先确认 Project Entry Scan 或可靠项目记忆，再进入 Evidence-Graph + DDD Onboarding。 |
-| “给这个项目做一套新人知识库。” | 先做 Evidence Graph，再给你看 Onboarding Spec 和 Onboarding Tasks，确认后写 onboarding-db。 |
+| “给这个项目做一套新人知识库。” | 先做 Evidence Graph；你先确认 Onboarding Spec，Agent 再写 Onboarding Tasks；你另行确认 Full Execution Gate 后才写正式 onboarding-db。 |
 | “重点讲清楚支付/钱包/任务调度这块。” | 先从现有代码和文档回答；如果要沉淀长期文档，再走聚焦的 onboarding-db 更新。 |
 | “这个旧 onboarding-db 还能信吗？” | 把旧文档当 evidence，先和代码现实核对；不直接按旧布局刷新。 |
 
-当前 1.2.3 使用的是 **Evidence-Graph + DDD Onboarding**，不是旧 Quick / Deep / Targeted 模式。
+当前 1.2.4 使用的是 **Evidence-Graph + DDD Onboarding**，不是旧 Quick / Deep / Targeted 模式。
 
 推荐流程：
 
 ```text
 可靠项目记忆
 -> 08-review/evidence-graph.md
--> onboarding-spec.md
--> onboarding-tasks.md
+-> onboarding-spec.md（第一次确认）
+-> onboarding-tasks.md / Full Execution Gate（第二次确认）
 -> 02-modules/<module-name>.md
 -> 03-flows/<flow-name>.md
 -> coverage-matrix.md / batch-review.md
@@ -90,7 +90,7 @@ Agent 不应该用空目录、薄 README、planned/later 占位文件、`TBD`、
 
 | 你可以这样说 | Agent 应该怎么做 |
 |---|---|
-| “1.2.3 更新了什么？” | 读取 `CHANGELOG.md` 的 1.2.3 段落，按能力分类总结，不凭记忆回答。 |
+| “1.2.4 更新了什么？” | 读取 `CHANGELOG.md` 的 1.2.4 段落，按能力分类总结，不凭记忆回答。 |
 | “和 1.2.2 比有什么变化？” | 对比 `CHANGELOG.md` 里的两个版本段落，说明新增、删除、替换和迁移影响。 |
 | “现在 agent-loop 怎么用？” | 基于 `Usage.md` 用人类语言介绍常见触发方式。 |
 | “这个功能怎么触发？” | 从 `Usage.md` 找对应说法，再说明 Agent 会进入哪个处理流。 |
@@ -103,6 +103,11 @@ Agent 不应该用空目录、薄 README、planned/later 占位文件、`TBD`、
 | 你可以这样说 | Agent 应该怎么做 |
 |---|---|
 | “先帮我梳理这个需求，不要实现。” | 进入 Requirements Discussion，问清目标、用户、范围、约束、验收方向。 |
+| “先按 grill-with-docs 问清这个需求。” | 先问清术语、业务流程、边界和异常场景；提问前会查已有文档、代码和相关历史 feature。 |
+| “把这些内容落到 product.md。” | 如果还在聊天或需求澄清阶段，先问你是要创建/引用 requirement set，还是确认进入 feature Product Brief；不会直接创建 feature `product.md`。 |
+| “聊需求时遇到复杂架构取舍，要不要 ADR？” | 记录 Design Readiness evidence 和 Decision Candidate；不会直接创建 ADR。requirement 被确认后、feature construction 前判断是否需要 Decision & Design。 |
+| “这个需求进入 feature 前先做 ADR / Decision Design。” | 先做 Design Readiness；涉及多 feature、业务闭环、共享状态/事实源、恢复或非功能目标时进入 Decision & Design，不要求先出现技术争议。 |
+| “这个需求会拆成多个 feature，先检查整体设计是否完整。” | 运行 Design Readiness Check；需要共享设计时先形成 Decision & Design 和 Design Slice Coverage，再创建各 feature spec。 |
 | “这个需求比较大，先拆成几个阶段。” | 建议在 requirement README 里写 `Delivery Phases`，让你确认先做哪一段。 |
 | “这个先记一下，后面做。” | 作为 deferred requirement 写进 requirement set 或 optional `requirements/INDEX.md`，不写进 `project.md`。 |
 | “这是需求文档、原型图和反馈。” | 归档到 `.agent-loop/requirements/<archive-date>-<topic>/`，保留人类原始材料。 |
@@ -122,6 +127,16 @@ Agent 不应该用空目录、薄 README、planned/later 占位文件、`TBD`、
 
 `Delivery Phases` 是给人类确认“现在做什么、先不做什么、做到什么算完成”的需求层分期。它不是 task、不是 feature、不是 ADR、也不是 project memory。
 
+当至少一个 Phase 已实现、还有其他 Phase 未实现时，requirement 状态是 `partially-implemented`；只有确认范围内的所有 Phase 都进入实现或明确的终态后，才是 `implemented`。
+
+`grill-with-docs` 在 agent-loop 里是需求/产品澄清方法，不是新的阶段。它会先查 project memory、需求来源、代码文档和相关过往 feature，再问人类一个阻塞问题；如果发现跨 feature、共享状态、恢复或长期取舍，只会记录 Design Readiness evidence / Decision Candidate，不会直接创建 ADR。
+
+如果用了 Requirement/Product Grill，requirement document 会承接术语、主流程、异常路径、事实源、历史冲突、验收场景和 Decision Candidates，而不是只写一段摘要。
+
+Product Brief Source Gate 的意思是：从聊天或需求澄清直接说“落到 product.md”时，Agent 不能立刻创建 feature 级 `product.md`。它要先问你是要创建/引用 requirement set，还是确认开始 feature Product Brief。如果只是整理产品意图，可以先保留在 requirement artifact 或回复草稿，等 feature context 明确后再写入 `product.md`。
+
+Decision & Design / ADR 是 requirement 和 feature 之间的需求落地层。Requirement 接受后先运行 Design Readiness Check；只要需求会拆成多个 feature，或需要共享业务流程、领域/数据规则、事实源、一致性、恢复、性能、高可用、安全或可观测性设计，就会建议先完成整体 Decision & Design，即使没有技术争议。新的 decision draft 默认是 `proposed`，只有你明确确认后才会变成 `accepted`。每项 required Design Slice 都必须映射到 owning feature 和验证路径，普通 feature 内的小取舍仍写在 `spec.md` 的 `Design Decisions`。
+
 示例：
 
 ```md
@@ -137,7 +152,7 @@ Agent 不应该用空目录、薄 README、planned/later 占位文件、`TBD`、
 
 | 你可以这样说 | Agent 应该怎么做 |
 |---|---|
-| “我要做手机号验证码登录。” | 先确认项目状态和需求来源，再创建 feature spec。 |
+| “我要做手机号验证码登录。” | 先确认项目状态并创建/引用一个已接受的 requirement set；窄需求可以只建最小 requirement，再运行 Design Readiness 和创建 feature spec。 |
 | “把这个需求写成 feature spec。” | 写 `spec.md`，包含目标、用户故事、验收标准、行为变化、非目标和未决问题。 |
 | “先帮我梳理这个 feature 的产品意图。” | 必要时写 feature 级 `product.md`，记录产品目标、共识、领域语言和非目标。 |
 | “把 spec 拆成 task。” | 写 `tasks.md`，优先 vertical slice，让每个 task 尽量能验证闭环。 |
@@ -163,8 +178,8 @@ Agent 不应该用空目录、薄 README、planned/later 占位文件、`TBD`、
 
 | 你可以这样说 | Agent 可以自动做什么 |
 |---|---|
-| “这个 feature spec 确认了，后续 Agent-ready 阶段你自动推进。” | Feature Auto-Loop：在当前 feature 内推进拆任务、测试设计、计划、执行、验证、review、drift、memory update。 |
-| “这个 task 的 plan 确认了，你自己跑完。” | Task Auto-Run：只完成当前 task/story，从 TDD 到验证、review、drift 和状态更新。 |
+| “这个 feature spec 确认了，后续 Agent-ready 阶段你自动推进。” | Agent 先确认 Requirement Checklist 已通过，再启用 Feature Auto-Loop，在当前 feature 内推进拆任务、测试设计、计划、执行、验证、review、drift、memory update。 |
+| “这个 task 的 plan 确认了，你自己跑完。” | Task Auto-Run：先运行 Analyze Consistency，再只完成当前 task/story，从 TDD 到验证、review、drift 和状态更新。 |
 
 自动模式不会跳过风险门禁。遇到这些情况必须停下来问你：
 
@@ -179,6 +194,8 @@ Agent 不应该用空目录、薄 README、planned/later 占位文件、`TBD`、
 - 有无关 dirty work
 - submit、commit、PR、merge、release、publish、pause、close
 
+同一时间最多只有一个 Active Feature。切换功能时，Agent 会先把当前 Feature pause，记录恢复点，再激活另一个 Feature。若 agent-loop Skill 无法加载，已有自动模式授权会被暂停，只保留安全的只读接管、恢复和操作分析。
+
 ### 我想测试、部署、排查线上问题
 
 | 你可以这样说 | Agent 应该怎么做 |
@@ -188,6 +205,29 @@ Agent 不应该用空目录、薄 README、planned/later 占位文件、`TBD`、
 | “切一下模型/账号/配置，先确认风险。” | 先定位配置入口、依赖、验证方式、回滚方式；涉及外部服务、付费额度、生产/预发操作前要停下来确认。 |
 
 操作支持默认不写代码、不改配置、不部署、不读取或暴露 secrets。它输出的是当前理解、必要输入、操作步骤、验证、回滚、风险和未决问题。
+
+### 我想把常用流程做成项目技能
+
+| 你可以这样说 | Agent 应该怎么做 |
+|---|---|
+| “把这个流程做成技能。” | 进入 Project Skill Creation / Update，先展示 Project Skill Candidate、精确文件树、风险和验证计划，通过 Gate 1 后才在目标项目创建 `.agent-loop/skills/<skill-name>/`。 |
+| “把刚才成功的操作沉淀成 skill。” | 复用刚才的新鲜成功证据，但仍要补 RED 基线、GREEN/REFACTOR、结构验证和前向执行测试；成功后自动从 `proposed` 变为 `active`。 |
+| “以后这种复杂操作你可以主动建议做成技能。” | Agent 可在当前授权阶段完成且验证成功后主动提出 Candidate；主动建议不等于获准创建。 |
+| “使用 deploy-check 技能检查测试环境。” | 如果技能和范围都已明确，Agent 仍先展示执行摘要；计划没有新增未披露动作或影响时，这句话可作为本次调用的 Execution Gate，无需再问一次。扩大范围、换任务或下次调用都要重新确认。 |
+
+Project Skill 只写入使用 Agent Loop 的目标项目：
+
+```text
+.agent-loop/skills/
+  INDEX.md
+  <skill-name>/
+    SKILL.md
+    validation.md
+```
+
+创建或实质更新只有一个文件写入门禁：Gate 1。验证通过后会自动激活，不再增加 activation gate；验证失败则保持 `proposed`，不能进入正常路由。
+
+执行是独立门禁。读取 INDEX、匹配触发条件、加载 `SKILL.md` 都可以只读完成；但真正按照技能步骤运行命令、调用工具、修改文件、访问外部系统或产生副作用前，必须为这一次有边界的调用获得 Execution Gate。`active`、`bootstrap`、Feature Auto-Loop、Task Auto-Run、以前执行成功或以前确认过都不能复用为下一次授权。
 
 ### 关闭后发现 bug 或要小改
 
@@ -253,6 +293,7 @@ scripts/check-root-agents-blocks.sh
 解释一下钱包扣费流程。
 这个需求先聊清楚，不要实现。
 这个需求比较大，拆成 phase。
+把这个流程做成技能。
 我要做一个新功能。
 把需求写成 spec。
 拆 task。
@@ -277,6 +318,8 @@ Agent 的责任是把这些话翻译成正确的下一步，而不是让你背�
 | `.agent-loop/project/*.md` | enterprise memory 下的长期项目细节 | 临时执行日志 |
 | `.agent-loop/onboarding-db/` | Evidence-Graph + DDD 新人/项目理解知识库 | 当前 task 状态、原始需求、测试长日志 |
 | `.agent-loop/requirements/` | 人类原始需求材料、需求生命周期、待办、Delivery Phases | Agent 的工程执行计划 |
+| `.agent-loop/skills/INDEX.md` | 项目技能状态、加载策略、触发条件、范围和验证证据 | 技能正文、执行授权 |
+| `.agent-loop/skills/<skill-name>/` | 项目常驻技能、验证记录和必要资源 | secrets、全局安装副本、feature 状态 |
 | `product.md` | feature 级产品意图 | 工程执行细节 |
 | `spec.md` | feature 行为规范 | 执行日志 |
 | `tasks.md` | 任务拆分和状态 | 原始测试输出 |
@@ -295,6 +338,8 @@ Agent 可以推荐下一步，但不能替你批准：
 
 - 创建或改写 root/directory `AGENTS.md`
 - 创建或接受 Delivery Contract
+- 创建或实质更新 Project Skill（Gate 1）
+- 每次实际执行 Project Skill（Execution Gate）
 - 修改人类原始需求材料
 - 合并多个 Delivery Phases
 - 提交、PR、merge、release、publish

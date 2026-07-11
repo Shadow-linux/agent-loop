@@ -113,7 +113,9 @@ Match strength:
 high | medium | low
 ```
 
-If more than one candidate has medium/high match, ask the human to choose before updating docs.
+When multiple candidates have medium/high match because evidence is incomplete, recommend `investigate-first` and route to Targeted Feature Scan or Diagnose Failure before updating feature ownership or docs.
+
+Ask the human only when evidence is sufficient and the remaining choice is a product or ownership decision. Present the evidence-backed alternatives and recommend one default; do not use Ask Human merely because investigation is unfinished.
 
 ## Flow-back Rules
 
@@ -175,7 +177,7 @@ If the owning feature is closed:
 3. Ask human confirmation before changing status or adding work.
 4. Record the Follow-up Intake in `notes.md`.
 5. Update `spec.md`, `tasks.md`, `tests.md`, and `plan.md` only as needed. Requirement changes that alter acceptance, field meaning, API shape, algorithm behavior, or visible UX must update `spec.md` and `tests.md` before execution.
-6. Move the feature to active or follow-up-active in `project.md`.
+6. Move the feature to `Active Feature` and set its lifecycle status to `active`.
 7. Execute through normal Plan Gate, TDD, Verify, Review, Drift Check, Project Memory Update, Feature Completion Check, and Close.
 
 Do not erase the original Close Record. Add a new follow-up section and a new Close Record when the follow-up is complete.
