@@ -24,6 +24,7 @@ Run this check:
 - active feature `tests.md`
 - active feature `plan.md`
 - active feature `notes.md`
+- accepted Decision & Design records linked by the feature
 - active feature `contracts.md` and linked `contracts/*` details when present
 - linked detail files only when needed
 
@@ -32,7 +33,8 @@ Run this check:
 Check:
 
 - Is the feature spec accepted?
-- Are all in-scope tasks done, skipped with reason, or explicitly removed from scope?
+- Are all remaining in-scope tasks `done`?
+- Were skipped or deferred items first removed from current scope through human-approved spec/tasks/tests/requirement reconciliation?
 - Are all required tests or substitute verification recorded?
 - Is there fresh verification evidence in `notes.md`?
 - Did Feature Close Review complete?
@@ -40,11 +42,15 @@ Check:
 - Did feature-level Standards Review complete when triggered by large project, broad diff, directory or durable boundary change, security/data change, architecture change, or human request?
 - Did Drift Check complete?
 - Are feature docs aligned with implementation reality?
+- Do all design slices assigned to this feature have implementation and verification evidence?
+- Does implementation conform to accepted Decision & Design records, or has any divergence returned to Decision & Design / Drift Check for human review?
 - Are Delivery Contracts implemented and verified when downstream consumers rely on them?
 - Are accepted Delivery Contracts aligned with producer code and tests, with no unapproved breaking changes?
 - Are long-term facts reflected in `project.md` for simple mode, or the matching `project/*.md` detail files for enterprise mode?
 - Is submit/integration status recorded when the human requested submit/commit/PR?
 - Are there unresolved Human-gated decisions, blockers, or open questions?
+
+Feature close is blocked until all assigned design slices have implementation and verification evidence, or a human-approved decision explicitly reassigns, defers, removes, or supersedes the slice.
 
 ## Outcomes
 
@@ -116,20 +122,24 @@ Record the blocker, evidence, owner if known, and the next unblock action in `no
 
 ## Blocked Routing Matrix
 
-- missing human decision/access/approval -> Ask Human
-- observed failure or unclear technical cause -> Diagnose Failure
-- verification not run but runnable -> Verify
-- external blocker with no immediate unblock path -> Pause
-- unclear ownership/impact -> Targeted Feature Scan
+Apply the first matching blocker route using the same order as runtime:
+
+1. observed failure or unclear technical cause -> Diagnose Failure
+2. required verification not run but runnable in the available environment -> Verify
+3. missing human decision/access/approval required for the next safe action -> Ask Human
+4. unclear ownership/impact -> Targeted Feature Scan
+5. external blocker with no immediate unblock path -> Pause
 
 ## Start-New-Feature Guard
 
 Before creating a new feature, if `project.md` has an Active Feature:
 
+Agent Loop permits at most one Active Feature. Other resumable features must be paused with a recorded resume point.
+
 1. Run Feature Completion Check.
 2. If complete, recommend close first.
 3. If incomplete, ask whether to continue, pause, or revise scope.
-4. Only start the new feature after the current feature is closed or paused, unless the human explicitly chooses to keep multiple active features.
+4. Only start the new feature after the current feature is closed or paused. Do not keep multiple active features.
 
 ## Resume Guard
 
@@ -138,6 +148,15 @@ On resume, if an Active Feature exists:
 1. Read the active feature docs.
 2. Run Feature Completion Check.
 3. Recommend either close, continue the next unfinished item, pause, or start a new feature after handling the active one.
+
+If no Active Feature exists and the human asks to resume paused work:
+
+1. Use the named paused feature, or ask which one only when more than one paused feature remains and intent does not identify it.
+2. Read its feature docs and recorded resume point.
+3. Move the selected feature from `Paused Features` to `Active Feature` in `project.md` and remove its paused entry.
+4. Set the feature lifecycle status to `active` and record the resume transition in `notes.md`.
+5. Resume in Strict Mode unless the human separately re-enables an auto mode after reviewing current scope and stop conditions.
+6. Run Feature Completion Check before continuing the recorded next stage.
 
 ## Notes Record
 

@@ -154,6 +154,10 @@ Read detail files only when needed:
 
 In simple mode, long-term facts usually go to `project.md`.
 
+Project / cross-feature decision records go to `.agent-loop/decisions/*.md` in both simple and enterprise memory modes. Creating `.agent-loop/decisions/` does not switch the project to enterprise mode; update project memory only with the current fact or index that the accepted decision creates.
+
+The presence of `.agent-loop/decisions/` is not a hard trigger or soft trigger for enterprise mode.
+
 In enterprise mode:
 
 | Fact | Write |

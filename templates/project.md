@@ -17,6 +17,8 @@ Language Evidence:
 
 Mode: simple | enterprise
 
+- Decisions: `.agent-loop/decisions/` | none
+
 If simple:
 - This file is the main long-term project memory body.
 
@@ -77,7 +79,7 @@ Confidence: high | medium | low
 
 ## Current Work
 
-Active Feature:
+Active Feature: one feature path | none
 Paused Features:
 Next Suggested Action:
 Gate Mode: Strict Mode | Feature Auto-Loop | Task Auto-Run

@@ -25,7 +25,7 @@ Project memory must not be used as a backlog. Future work, deferred requirements
 Requirement set status values:
 
 ```text
-proposed | accepted | deferred | in-progress | implemented | superseded | rejected | reference-only
+proposed | accepted | deferred | in-progress | partially-implemented | implemented | superseded | rejected | reference-only
 ```
 
 | Status | Meaning |
@@ -34,6 +34,7 @@ proposed | accepted | deferred | in-progress | implemented | superseded | reject
 | `accepted` | Confirmed requirement, not yet in a feature |
 | `deferred` | Deferred future work |
 | `in-progress` | Entered an active feature |
+| `partially-implemented` | At least one Delivery Phase is implemented while another phase remains proposed, accepted, deferred, or in-progress |
 | `implemented` | Implemented by a feature |
 | `superseded` | Replaced by a newer requirement |
 | `rejected` | Explicitly not doing it |
@@ -68,6 +69,20 @@ Reviewed/recorded does not mean accepted for implementation.
 Do not move the requirement source into a feature workspace when implementation starts. features reference requirement sets; requirements own source and lifecycle.
 
 Feature `product.md` and `spec.md` may be derived from accepted requirements, but they are implementation views. They do not replace the requirement set and do not own requirement lifecycle.
+
+## Requirement/Product Grill
+
+Use Requirement/Product Grill during requirements discussion when terminology, business rules, flows, boundaries, exception paths, or historical feature behavior need clarification.
+
+Rules:
+
+- Load `requirement-product-grill.md` before asking grill-style questions.
+- Ask one blocking question at a time and include the recommended answer.
+- Inspect project memory, source requirements, code/docs/tests, and targeted prior feature artifacts before asking when those sources may already answer the question.
+- Record accepted local terminology, scenarios, open questions, and conflicts in the reviewed requirement document. Keep the requirement set `README.md` to source, lifecycle, Delivery Phase, Feature Mapping, and decision-link summaries.
+- Do not promote grill output to project memory, product.md, spec.md, or decisions without the owning human gate.
+- Record cross-feature, shared design, hard-to-reverse, surprising, or real-trade-off signals as Design Readiness evidence and Decision Candidates, not accepted ADRs.
+- Do not create `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/`.
 
 ## Requirement Delivery Phases
 
@@ -104,7 +119,7 @@ Field meanings:
 | `Scope` | capabilities included in this phase |
 | `Out Of Scope` | explicitly excluded from this phase |
 | `Acceptance Direction` | human-readable completion direction, not a full test plan |
-| `Status` | `proposed | accepted | deferred | in-progress | implemented | superseded | rejected` |
+| `Status` | `proposed | accepted | deferred | in-progress | partially-implemented | implemented | superseded | rejected` |
 | `Feature Mapping` | feature spec path when converted, otherwise `none` |
 | `Source Notes` | phase note, prototype, feedback, or change request that shapes the phase |
 
@@ -130,6 +145,38 @@ Phase to feature rules:
 - A phase that changes substantially should be updated only after human confirmation; if the old direction is replaced, mark it `superseded` and link the new phase or requirement set.
 - Feature `spec.md` should name the requirement set and Delivery Phase it implements.
 - When a feature starts or closes, update `Feature Mapping` and phase status in the requirement set `README.md` after human confirmation.
+
+## Delivery Phase Status Roll-up
+
+The requirement-set `Status` is derived from its Delivery Phases after each human-approved phase or Feature Mapping update. Do not set the top-level status from one feature alone.
+
+```text
+any phase is `implemented` and any other phase is not terminally implemented -> `partially-implemented`
+```
+
+For roll-up, `implemented`, `superseded`, and `rejected` are terminal for the agreed requirement scope. `proposed`, `accepted`, `deferred`, and `in-progress` still represent unimplemented scope.
+
+Apply the first matching row:
+
+| Phase State | Requirement Status |
+|---|---|
+| Requirement is superseded/rejected/reference-only as a whole | preserve that explicit terminal status |
+| Every phase is `proposed` | `proposed` |
+| Every phase is `deferred` | `deferred` |
+| No phase is implemented; at least one phase is `in-progress` | `in-progress` |
+| No phase is implemented; at least one phase is `accepted` | `accepted` |
+| At least one phase is `implemented`; any other phase is proposed, accepted, deferred, or in-progress | `partially-implemented` |
+| Every phase is implemented, superseded, or rejected | `implemented` |
+
+When no Delivery Phases exist, use the ordinary requirement lifecycle table. Record the roll-up evidence in the requirement README and optional requirements index.
+
+## Design Readiness
+
+Before an accepted requirement enters Product Brief or Feature Spec construction, load `project-decisions.md` and run Design Readiness Check.
+
+Record the result in requirement README `Design Readiness`. Multiple features, end-to-end business closure, shared domain/state/source-of-truth rules, consistency/concurrency/recovery needs, measurable non-functional goals, or cross-system/durable boundaries route to `Decision & Design If Needed` even when no technology choice is disputed.
+
+Deferred, rejected, and reference-only requirements do not need Design Readiness until the human chooses to move them toward implementation.
 - If Drift Check finds a completed or active feature that implements a phase but the phase still has `Feature Mapping: none`, treat that as requirement memory drift and propose a README backfill.
 - Mark a phase `implemented` only after the implementing feature has fresh verification/review evidence for the accepted phase scope; feature close still requires its separate close confirmation.
 
@@ -197,7 +244,7 @@ Every requirement set should include `README.md`:
 
 Archived: YYYY-MM-DD
 Topic: <topic>
-Status: proposed | accepted | deferred | in-progress | implemented | superseded | rejected | reference-only
+Status: proposed | accepted | deferred | in-progress | partially-implemented | implemented | superseded | rejected | reference-only
 
 Date Meaning:
 - The date is the archive date only.
@@ -205,7 +252,7 @@ Date Meaning:
 
 Lifecycle:
 - Intake Type: human-request | follow-up | deferred-from-feature | ops-discovery | bug-report | idea | reference
-- Decision: proposed | accepted | deferred | rejected | converted-to-feature | implemented | superseded
+- Decision: proposed | accepted | deferred | rejected | converted-to-feature | partially-implemented | implemented | superseded
 - Priority: unset | low | medium | high
 - Owner Feature:
 - Implemented By:
@@ -335,7 +382,7 @@ Do not force an index for small projects.
 Recommend `.agent-loop/requirements/INDEX.md` when any are true:
 
 - more than 10 requirement sets
-- multiple active features share source requirements
+- multiple features share source requirements and humans need a cross-feature inventory
 - old requirement sets are frequently superseded
 - source materials include many external paths
 - humans ask for a requirements inventory
@@ -381,4 +428,4 @@ Ask before:
 - marking a requirement `implemented`, `superseded`, or `rejected`
 - rebuilding a requirement set because follow-up conflicts with original requirements
 
-After archiving, update `spec.md` `Source Requirements` with exact paths.
+After archiving during an already-confirmed feature, update an existing `spec.md` `Source Requirements` with exact paths. Requirements Discussion and Requirement Archive do not create a feature workspace or `spec.md` merely to hold the link.

@@ -2,18 +2,13 @@
 
 Use this reference when the main skill needs definitions, entry scenarios, or flow rules.
 
-## Source Of Truth
+## Published Source Of Truth
 
-This reference is a condensed operational extract of:
+This file is the published core model and constraint source. `runtime.md` is the published executable routing, stage-order, gate, and state-transition source. Both ship inside the skill package and must change together when core behavior changes.
 
-```text
-draft_agent_loop_struct.md
-final_agent_loop_skill_design.md
-```
+Workspace-level drafts and historical design documents may explain rationale, but they are not distributed dependencies and cannot override the published package. Other references implement stages without changing this model or `runtime.md` routing.
 
-Those two files are the design sources for this skill. If another skill reference conflicts with them, update the reference instead of changing the design model.
-
-The core constraints inherited from the design sources are:
+The core constraints are:
 
 - single-person + CLI agent first
 - human controls goals, source requirements, and stage gates
@@ -238,7 +233,7 @@ Action:
 
 ```text
 If onboarding-db was produced through an accepted Evidence-Graph + DDD Onboarding Spec, answer from those docs after checking obvious code reality.
-If onboarding-db is an old layout, treat it as legacy evidence only until an Evidence-Graph + DDD migration or focused update is accepted.
+If onboarding-db is an old layout, treat it as legacy evidence only; migration or replacement requires an accepted Evidence-Graph + DDD Onboarding Spec, Onboarding Tasks, and Full Execution Gate.
 Answer from existing docs/code as chat or operational support when the human only asks a question.
 Recommend Project Entry Scan if project memory is missing, thin, or stale.
 Do not create or refresh onboarding-db through the removed legacy flow.
@@ -309,6 +304,7 @@ Project Entry
 → Re-Adopt Agent Loop Project if Needed
 → Code-Guided Operational Support if Needed
 → Requirement Archive
+→ Decision & Design If Needed
 → Product Brief if Needed
 → Brainstorm / Clarify if Needed
 → Feature Follow-up And Flow-back if Needed

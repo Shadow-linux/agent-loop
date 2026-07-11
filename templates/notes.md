@@ -2,7 +2,7 @@
 
 Created: YYYY-MM-DD
 Updated: YYYY-MM-DD
-Status: active
+Status: active | blocked | paused | closed
 
 ## Human Decisions
 

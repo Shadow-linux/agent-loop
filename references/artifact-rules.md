@@ -36,6 +36,7 @@ New human source material should be archived inside a requirement set directory.
 | `remote.md` | how to find, verify, and access a remote project from a local entry directory | feature logs or project capabilities |
 | `project.md` | long-term project facts in simple mode; memory index and current state in enterprise mode | task logs, backlog lists, deferred requirements |
 | `project/*.md` | enterprise long-term project memory details | feature execution logs |
+| `decisions/*.md` | Human-gated project / cross-feature decision reasons, trade-offs, architecture design, consequences, and verification closure | ordinary execution logs, feature-local preferences, unresolved fuzzy requirement notes |
 | `onboarding-db/*` | Evidence-Graph + DDD human-readable project understanding docs when created through `onboarding-knowledge-base.md`; old layouts are legacy evidence | current task status, feature execution logs, raw test output, human original requirements, project memory replacement |
 | `requirements/<archive-date>-<topic>/*` | original human material package and lifecycle record: requirements, prototypes, feedback, screenshots, recordings, links, references, status, backlog/deferred state | edited specs, task plans |
 | `product.md` | feature-level product intent, users, stories, product scope | engineering execution plan |
@@ -81,7 +82,7 @@ Task status meaning:
 - `review`: implementation and fresh verification may exist, but Task Done Gate is not complete
 - `done`: Task Done Gate passed; do not use for code-only completion
 - `blocked`: cannot proceed without a blocker being resolved
-- `skipped`: explicitly removed or deferred with a reason
+- `skipped`: explicitly removed from the current feature scope after human-approved reconciliation; deferred work must first move to the owning requirement/phase backlog and leave current scope
 
 Task Done Gate:
 
@@ -182,7 +183,7 @@ Onboarding-db directory:
 
 New Evidence-Graph + DDD onboarding-db writes are allowed only through `references/onboarding-knowledge-base.md` after Project Entry Scan or reliable project memory and human confirmation of the Onboarding Spec.
 
-Do not create, refresh, reorganize, or complete onboarding-db artifacts through the removed legacy flow. Existing legacy onboarding-db files may be read as evidence when present, but they are not trusted without code reality checks and do not replace `project.md` or root guidance. Migrate or replace legacy files only through an accepted Onboarding Spec or focused update proposal.
+Do not create, refresh, reorganize, or complete onboarding-db artifacts through the removed legacy flow. Existing legacy onboarding-db files may be read as evidence when present, but they are not trusted without code reality checks and do not replace `project.md` or root guidance. Migrate or replace legacy files only through an accepted Onboarding Spec, Onboarding Tasks, and Full Execution Gate.
 
 ## Plan Lifecycle
 

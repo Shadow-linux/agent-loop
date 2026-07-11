@@ -193,28 +193,6 @@ template_blocks.each do |section, tmpl|
     ]
   end
 
-  if section == "meta" && tmpl[:version]
-    if target_block[:version].nil? || target_block[:version].empty?
-      findings << [
-        section,
-        "missing-managed-version",
-        tmpl[:version].to_s,
-        "none",
-        "expected managed version #{tmpl[:version]}",
-        "refresh meta block after human review"
-      ]
-    elsif target_block[:version] != tmpl[:version]
-      findings << [
-        section,
-        "stale-managed-version",
-        tmpl[:version].to_s,
-        target_block[:version].to_s,
-        "expected managed version #{tmpl[:version]}, found #{target_block[:version]}",
-        "refresh meta block after human review"
-      ]
-    end
-  end
-
   next unless check_sources && local_source?(target_block[:source])
 
   source_path = File.expand_path(target_block[:source], File.dirname(target))

@@ -1,6 +1,6 @@
 # Onboarding Spec
 
-本文件是给 Agent 使用的文档生产规格。人类确认本 spec 和 onboarding tasks 后，Agent 可以全盘执行计划，连续创建并完成计划内能写透的 onboarding-db 文档。
+本文件是给 Agent 使用的文档生产规格。人类先确认本 Spec，Agent 再写 Onboarding Tasks；人类另行接受 Tasks 中的 Full Execution Gate 后，Agent 才可以连续创建并完成计划内能写透的 onboarding-db 文档。
 
 ## Target Readers
 
@@ -52,7 +52,7 @@
 - Module docs default to `02-modules/<module-name>.md`.
 - Flow docs default to `03-flows/<flow-name>.md`.
 - Split into directory only when justified by size, subdomains, update frequency, or human request.
-- 计划确认后 Agent 可以全盘执行，可以一次性创建计划内的完整 onboarding-db。
+- Spec 确认只授权创建 Onboarding Tasks；Full Execution Gate 另行确认后，Agent 才可以一次性创建计划内的完整 onboarding-db。
 - batch 是 Agent 的组织和 review 单位，不是人类闸门。
 - 不创建空目录、薄 README、planned/later 占位文件、TBD/待补充文件。
 - 写不透但有证据可推断的内容，要写出“推断”、证据、置信度和待验证点；完全缺少关键证据时，只在 coverage/tasks 记录 planned / blocked，不落薄文档。
@@ -111,8 +111,10 @@
 
 ## Spec Acceptance Gate
 
+Spec acceptance authorizes Onboarding Tasks only; it does not authorize formal docs.
+
 - [ ] Evidence Graph 已有具体 code/config evidence。
 - [ ] Module / Flow Plan 没有无证据候选项。
 - [ ] 全量 planned docs 和 execution scope 已明确。
 - [ ] Gateway / Runtime、consistency / idempotency 风险已决定是否适用。
-- [ ] 人类已确认 Agent 可以按计划全盘执行。
+- [ ] 人类已确认可以创建 `onboarding-tasks.md`，随后再审查 Full Execution Gate。

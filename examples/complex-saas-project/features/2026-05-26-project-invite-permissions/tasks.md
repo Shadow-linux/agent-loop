@@ -6,7 +6,7 @@ Status: active
 
 ## Execution Mode
 
-Mode: staged-linear
+Mode: linear
 Default Split: vertical-slice
 
 ## Task Mode Legend

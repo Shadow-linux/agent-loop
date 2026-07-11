@@ -10,6 +10,12 @@ Status: active
 - [ ] Success criteria are measurable.
 - [ ] Edge cases are identified.
 
+## Design Slice Verification Matrix
+
+| Design Slice ID | Required Verification | Test / Evidence | Status |
+|---|---|---|---|
+| DS-00 |  |  | planned / verified / blocked |
+
 ## Functional Test Cases
 
 ## Module Tests

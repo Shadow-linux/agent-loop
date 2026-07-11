@@ -2,7 +2,7 @@
 
 Created: YYYY-MM-DD
 Updated: YYYY-MM-DD
-Status: draft
+Status: draft | active | blocked | paused | closed
 Feature Type: normal | maintenance-fix | follow-up
 
 Source Requirements:
@@ -10,6 +10,7 @@ Source Requirements:
 - Prototype:
 
 Product Brief: product.md | none
+
 Related Feature:
 Flow-back Decision: none | flow-back | linked-new-feature | maintenance-fix | investigate-first | declined-reopen | defer
 
@@ -17,6 +18,10 @@ Summary:
 - 
 
 ## Problem / Goal
+
+## Applicable Decisions
+
+-
 
 ## Maintenance Fix Scope
 
@@ -70,6 +75,21 @@ Acceptance scenarios:
 ### Removed
 
 ## Dependencies
+
+## Implements Decisions
+
+| Decision | Design Slice ID | Responsibility | Verification | Coverage Status |
+|---|---|---|---|---|
+|  | DS-00 |  |  | planned / implemented / verified |
+
+## Design Decisions
+
+Feature-local decisions that do not need standalone project ADR files:
+
+- Decision:
+  - Reason:
+  - Applies To:
+  - Placement: feature-local / Decision & Design candidate / project-decision-not-needed
 
 ## Out of Scope
 

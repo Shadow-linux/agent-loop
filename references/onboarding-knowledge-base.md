@@ -16,7 +16,7 @@ Enter only after one of these is true:
 
 If project memory is missing, stale, contradictory, or too thin, recommend Project Entry Scan or recovery first.
 
-If existing `.agent-loop/onboarding-db/` files use an old layout, treat them as legacy evidence. Read them when useful, but do not refresh old layouts directly. Migrate or replace only through an accepted Onboarding Spec.
+If existing `.agent-loop/onboarding-db/` files use an old layout, treat them as legacy evidence. Read them when useful, but do not refresh old layouts directly. Migration or replacement requires an accepted Onboarding Spec, Onboarding Tasks, and Full Execution Gate.
 
 ## Core Principles
 
@@ -35,7 +35,7 @@ If existing `.agent-loop/onboarding-db/` files use an old layout, treat them as 
 - Default narrative language is Chinese; preserve code symbols, file paths, commands, API paths, env vars, config keys, error messages, and third-party product names.
 - 全部正式文档默认使用中文；只有代码符号、路径、命令、API、配置键、错误信息和第三方产品名保持原文。
 - Human examples are quality/detail references only. Do not copy their topic list, count, domain names, or project structure.
-- 计划确认后 Agent 可以全盘执行。人类确认 Onboarding Spec / Onboarding Tasks 后，Agent 可以一次性创建计划内的完整 onboarding-db 并连续写完能写透的文档。
+- Full Execution Gate 确认后 Agent 可以全盘执行。人类先确认 Onboarding Spec，Agent 再写 Onboarding Tasks；人类另行确认 Full Execution Gate 后，Agent 可以一次性创建计划内的完整 onboarding-db 并连续写完能写透的文档。
 - batch 是 Agent 的组织和 review 单位，不是人类闸门。不要把 batch 当成每批都需要人类再次授权的暂停点，除非计划变更、证据不足、权限/环境阻塞或人类明确要求暂停。
 - 可以一次性创建计划内的完整 onboarding-db，但每个落盘文件必须是内容型文档。禁止空目录、薄 README、planned/later 占位文件、TBD/待补充文件，或用文件数量假装完整。
 - 写不透但有证据可推断的内容，应尽量写出并标明“推断”、证据、置信度和待验证点；只有完全搞不明白或缺少关键证据时，才在 `coverage-matrix.md` / `onboarding-tasks.md` 标记 planned / blocked / missing evidence，而不是创建薄文档占位。
@@ -106,7 +106,7 @@ Default layout:
     human-review-summary.md
 ```
 
-This layout is a planning target. After the human accepts the Onboarding Spec / Onboarding Tasks, the agent may create the full planned tree and write all planned docs in one continuous execution pass, as long as each created file is content-rich and evidence-backed. If a planned topic cannot yet be written with meaningful content, keep it in `coverage-matrix.md` / `onboarding-tasks.md` instead of creating an empty or thin file.
+This layout is a planning target. After the human accepts the Onboarding Spec, the agent writes Onboarding Tasks. Only after the human separately accepts their Full Execution Gate may the agent create the full planned tree and write all planned docs in one continuous execution pass, as long as each created file is content-rich and evidence-backed. If a planned topic cannot yet be written with meaningful content, keep it in `coverage-matrix.md` / `onboarding-tasks.md` instead of creating an empty or thin file.
 
 ## Phase 1: Evidence Graph
 
@@ -209,14 +209,21 @@ This is the production spec for future Agents. It must define:
 - non-goals;
 - human confirmation questions.
 
-Ask human confirmation for the Onboarding Spec / Onboarding Tasks before creating formal module, flow, infra, deploy, or change-guide docs.
+Use this gate sequence:
 
-Do not create formal module / flow docs unless both are true:
+```text
+Evidence Graph -> accept Onboarding Spec -> write Onboarding Tasks -> accept Full Execution Gate -> formal docs
+```
+
+Onboarding Spec acceptance authorizes writing `onboarding-tasks.md`; it does not authorize formal module, flow, infra, deploy, or change-guide docs. After Tasks exist, present their exact outputs, evidence requirements, scope, and Full Execution Gate for a separate human decision.
+
+Do not create formal docs unless all are true:
 
 - Onboarding Spec is accepted;
-- the planned docs and execution scope are recorded in `onboarding-tasks.md`.
+- planned docs and execution scope are recorded in `onboarding-tasks.md`;
+- the Full Execution Gate in `onboarding-tasks.md` is explicitly accepted.
 
-After that confirmation, the agent should execute the plan autonomously until the planned onboarding package is complete, paused by a real blocker, or a scope/quality issue requires human review.
+After Full Execution Gate acceptance, the agent should execute the plan autonomously until the planned onboarding package is complete, paused by a real blocker, or a scope/quality issue requires human review.
 
 ## Phase 3: Onboarding Tasks
 
@@ -231,7 +238,8 @@ Rules:
 - split tasks by batch, not by full tree generation;
 - each batch covers a coherent set of topics; batch size is an execution/review pacing tool, not a human approval boundary;
 - each task lists output path, evidence required, and quality gate;
-- after the onboarding plan is accepted, create and complete all planned docs that can be written with meaningful evidence-backed content;
+- present the completed task ledger and Full Execution Gate for explicit human acceptance before formal-doc execution;
+- after the Full Execution Gate is accepted, create and complete all planned docs that can be written with meaningful evidence-backed content;
 - do not create thin planned files for topics that are still unknown; track those topics in `coverage-matrix.md` and `onboarding-tasks.md`;
 - every batch updates `coverage-matrix.md` and `batch-review.md`.
 
@@ -589,10 +597,12 @@ Rules:
 
 When onboarding-db exists and the human asks a project-understanding or operational-support question:
 
+Focused Update is available only when the existing onboarding-db already follows an accepted Evidence-Graph + DDD Onboarding Spec and has the current Evidence Graph, Tasks, and review structure. Legacy layouts remain evidence-only and require the migration gate defined in Entry Rules.
+
 1. Read `README.md`, `coverage-matrix.md`, and relevant module / flow docs.
 2. Check code reality for stale claims before relying on them.
 3. Answer directly in Chinese unless requested otherwise.
-4. If docs are thin, stale, or contradictory, propose a focused update.
+4. If current-format docs are thin, stale, or contradictory, propose a focused update. If the layout is legacy, propose an Onboarding Spec migration instead.
 5. Focused update touches only relevant module / flow / review docs.
 6. Do not rerun full onboarding by default.
 
@@ -620,4 +630,4 @@ Do not call onboarding complete unless:
 - no unresolved placeholders, empty required rows, `TBD`, `TODO`, `待补充`, or vague “see code / 看代码” evidence remain in submitted batch files;
 - human has reviewed or explicitly paused the current batch.
 
-Exit with exactly one recommended next stage: next onboarding batch, focused update, Project Memory Update, Operational Support, Start Feature, Pause, or Close Onboarding Work.
+Exit with exactly one recommended next action: next onboarding batch, focused update, Project Memory Update, Code-Guided Operational Support, Decision & Design If Needed, Product Brief If Needed, Feature Spec, Pause, or Close Onboarding Work.
