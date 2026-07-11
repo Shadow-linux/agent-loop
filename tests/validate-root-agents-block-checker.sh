@@ -71,14 +71,14 @@ fi
 assert_contains "$tmpdir/missing-stage-map.out" "FAIL root AGENTS drift found"
 assert_contains "$tmpdir/missing-stage-map.out" "workflow-stage-map | missing"
 
-sed 's/block-version:1\.2\.4-20260711\.1/block-version:1.2.4/' "$template" > "$tmpdir/stale.md"
+sed 's/block-version:1\.2\.4-20260711\.3/block-version:1.2.4/' "$template" > "$tmpdir/stale.md"
 if "$checker" --template "$template" --target "$tmpdir/stale.md" > "$tmpdir/stale.out"; then
   printf 'FAIL: checker should fail when block-version values are stale\n' >&2
   cat "$tmpdir/stale.out" >&2
   exit 1
 fi
 assert_contains "$tmpdir/stale.out" "message-intent | stale-block-version"
-assert_contains "$tmpdir/stale.out" "expected 1.2.4-20260711.1"
+assert_contains "$tmpdir/stale.out" "expected 1.2.4-20260711.3"
 
 awk '
   /<!-- agent-loop:managed-end section:ownership -->/ { next }
@@ -94,7 +94,7 @@ assert_contains "$tmpdir/broken.out" "ownership | broken-markers"
 awk '
   /<!-- agent-loop:managed-start section:ownership/ && inserted != 1 {
     print
-    print "<!-- agent-loop:managed-start section:nested source:.agent-loop/project.md block-version:1.2.4-20260711.1 -->"
+    print "<!-- agent-loop:managed-start section:nested source:.agent-loop/project.md block-version:1.2.4-20260711.3 -->"
     print "nested"
     print "<!-- agent-loop:managed-end section:nested -->"
     inserted = 1
@@ -112,7 +112,7 @@ assert_contains "$tmpdir/nested.out" "ownership | nested-managed-block"
 awk '
   { print }
   /<!-- agent-loop:managed-end section:ownership -->/ && inserted != 1 {
-    print "<!-- agent-loop:managed-start section:ownership source:.agent-loop/project.md block-version:1.2.4-20260711.1 -->"
+    print "<!-- agent-loop:managed-start section:ownership source:.agent-loop/project.md block-version:1.2.4-20260711.3 -->"
     print "duplicate"
     print "<!-- agent-loop:managed-end section:ownership -->"
     inserted = 1
@@ -127,7 +127,7 @@ assert_contains "$tmpdir/duplicate.out" "ownership | duplicate-section"
 
 {
   cat "$template"
-  printf '\n<!-- agent-loop:managed-start section:legacy-extra source:.agent-loop/project.md block-version:1.2.4-20260711.1 -->\n'
+  printf '\n<!-- agent-loop:managed-start section:legacy-extra source:.agent-loop/project.md block-version:1.2.4-20260711.3 -->\n'
   printf '## Legacy Extra\n\n'
   printf '<!-- agent-loop:managed-end section:legacy-extra -->\n'
 } > "$tmpdir/extra.md"
@@ -176,7 +176,7 @@ assert_contains "$tmpdir/bare-end.out" "malformed-marker"
 
 {
   cat "$template"
-  printf '\n<!-- agent-loop:managed-start section:same-line source:.agent-loop/project.md block-version:1.2.4-20260711.1 --><!-- agent-loop:managed-end section:same-line -->\n'
+  printf '\n<!-- agent-loop:managed-start section:same-line source:.agent-loop/project.md block-version:1.2.4-20260711.3 --><!-- agent-loop:managed-end section:same-line -->\n'
 } > "$tmpdir/same-line.md"
 if "$checker" --template "$template" --target "$tmpdir/same-line.md" > "$tmpdir/same-line.out"; then
   printf 'FAIL: checker should fail when multiple managed markers are on the same line\n' >&2

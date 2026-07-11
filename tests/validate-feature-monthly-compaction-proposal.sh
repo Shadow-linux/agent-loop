@@ -2,7 +2,7 @@
 set -euo pipefail
 
 root=$(cd "$(dirname "$0")/.." && pwd)
-proposal="$root/docs/proposal/v1.2.x/feature-monthly-compaction.md"
+proposal="$root/docs/proposal/v1.3.x/feature-monthly-compaction.md"
 
 assert_contains() {
   local text=$1

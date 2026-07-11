@@ -65,6 +65,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Classify the latest human message intent before project state classification.
 - [ ] If message intent is `chat`, answer or discuss only; do not create a requirement set or feature workspace.
 - [ ] Reclassify chat when the conversation turns into requirements discussion, feature implementation, operational support, follow-up, or deferred requirement intake.
+- [ ] Reclassify as `project-skill-management` when the human asks to make a repeatable project workflow into a skill or manage an existing project skill.
 - [ ] Reclassify chat as `proposal-doc` when the human asks for a proposal/design note without implementation.
 - [ ] Keep intent as `chat` when the human explicitly wants discussion without documentation.
 - [ ] If message intent is `requirements-discussion`, route to Requirements Discussion before Feature Spec.
@@ -86,6 +87,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Inspect whether `.agent-loop/` exists.
 - [ ] If `.agent-loop/` is missing, inspect whether legacy `agent-loop/` exists.
 - [ ] If `.agent-loop/` or legacy `agent-loop/` is present, read `project.md`.
+- [ ] If `.agent-loop/skills/INDEX.md` exists, read its metadata, verify referenced active paths and SHA-256 manifests, and exclude missing/mismatched/proposed/disabled/deprecated entries from normal routing.
 - [ ] If legacy `agent-loop/` is present, use it for the current run and ask before migration or renaming.
 - [ ] If `project.md` says `Memory Mode: enterprise`, read only the needed linked project-memory detail files.
 - [ ] Locate active or paused feature.
@@ -103,7 +105,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.sh` is available, run it as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.2.4-20260711.1`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.2.4-20260711.3`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -115,6 +117,33 @@ Before using an external skill or plugin inside a stage:
 - [ ] For old or large projects, record directory guidance status in `project.md`.
 - [ ] Summarize state and recommend one next action.
 - [ ] Ask human confirmation before proceeding.
+
+## Project Skill Creation / Update
+
+- [ ] Confirm reliable Project Entry/memory exists; otherwise route to Project Entry or recovery first.
+- [ ] Classify entry mode: explicit request resolves helpers before Candidate/Gate 1; accepted proactive Candidate resolves helpers after the already-satisfied Gate 1 and before authoring.
+- [ ] Load `project-skills.md`, `skill-routing.md`, and `external-skill-adapters.md`.
+- [ ] Resolve `superpowers:writing-skills` / `writing-skills` before authoring actions.
+- [ ] Independently resolve `skill-creator`; use both helpers when available.
+- [ ] Inspect successful workflow evidence, repeatability, failures, rollback, secrets, environment, and external effects.
+- [ ] Present Project Skill Candidate, exact `.agent-loop/skills/<skill-name>/` tree, load policy, risks, validation plan, and any bounded independent authoring-pressure subagent lanes, per-agent briefs, boundaries, stop conditions, main-agent review, and authorization lifecycle.
+- [ ] Pass Gate 1 before creating `.agent-loop/skills/`, INDEX, a skill directory, or materially updating an active skill.
+- [ ] Record `proposed` during authoring.
+- [ ] Run and record RED scenarios without the skill.
+- [ ] Write minimum GREEN content and required resources.
+- [ ] Re-run scenarios with the skill, capture rationalizations, REFACTOR, and re-test.
+- [ ] Validate frontmatter, trigger description, scripts/resources, secrets, symlinks, and path boundaries.
+- [ ] Finalize the active INDEX row, then record and verify its exact-row SHA-256 plus current file manifest before activation.
+- [ ] Mark `active` automatically only when every required check passes; otherwise keep `proposed`.
+- [ ] Do not load proposed, disabled, or deprecated skills into normal routing.
+- [ ] Override helper output paths to `.agent-loop/skills/<skill-name>/`; do not default to global or external helper directories.
+- [ ] Before one invocation executes an active skill, present scope, actions, effects, risks, rollback, and verification through the Execution Gate.
+- [ ] Accept a human message naming the skill and concrete scope as the current one invocation grant only after emitting the execution summary and confirming planned actions/effects stay entirely inside the disclosed scope.
+- [ ] End the invocation after outcome report, abort/pause, context loss, manifest change, or material plan/scope change; retry only inside pre-confirmed retry bounds.
+- [ ] Combine other applicable operational/risk gates into one confirmation only when every gate fact is explicit in the summary.
+- [ ] Do not reuse a prior grant across invocation, task, session, environment, expanded scope, or another skill.
+- [ ] Do not treat active/bootstrap, previous success, Feature Auto-Loop, or Task Auto-Run as execution authorization.
+- [ ] Report helper resolution, files, lifecycle, RED/GREEN/REFACTOR evidence, project-memory/guidance impact, and one next stage.
 
 ## Remote Project Discovery
 
@@ -162,7 +191,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.sh` is available, run it as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.2.4-20260711.1`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.2.4-20260711.3`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.

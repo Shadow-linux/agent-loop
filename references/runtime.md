@@ -28,6 +28,7 @@ Message intent is evaluated before project state classification. It decides what
 |---|---|---|
 | `chat` | chat means ordinary discussion, rules questions, status questions, or design talk with no request to create requirements or start implementation | answer or discuss only |
 | `requirements-discussion` | requirements-discussion means the human is exploring product needs, business goals, capability ideas, constraints, tradeoffs, or user scenarios without authorizing implementation | Requirements Discussion |
+| `project-skill-management` | human asks to turn a repeatable project workflow into a project-local skill, or to update, disable, or deprecate one | Project Skill Creation / Update after reliable Project Entry/memory |
 | `feature-request` | human explicitly asks to implement, build, change behavior, or start work from accepted requirements | Project Entry, then Design Readiness and Decision & Design / Product Brief / Feature Spec / Feature Follow-up routing |
 | `proposal-doc` | human asks to write a proposal, design note, or discussion document without implementing | write the requested proposal/doc only |
 | `deferred-requirement` | human asks to remember, defer, backlog, or do something later | Requirement Archive with Future / Deferred Requirement Intake |
@@ -38,6 +39,8 @@ Message intent is evaluated before project state classification. It decides what
 If message intent is `chat`, do not create requirement sets, feature workspaces, tasks, tests, or plans. Answer, explain, or discuss. If the chat turns into demand shaping, reclassify as `requirements-discussion`.
 
 If message intent is `requirements-discussion`, do not create a feature workspace or enter Work Breakdown, Plan Gate, or Execute. Route to Requirements Discussion: brainstorm/clarify, draft a human-reviewed requirement document, then archive the document under `.agent-loop/requirements/<archive-date>-<topic>/` after the human confirms the document should be recorded. For `requirements-discussion`, reviewed/recorded does not mean accepted for implementation.
+
+If message intent is `project-skill-management`, load `references/project-skills.md`. Do not create a requirement set or feature workspace. Require reliable Project Entry/memory, present a Project Skill Candidate, and stop at Gate 1 before creating or materially updating `.agent-loop/skills/`.
 
 Requirement/Product Grill may be used inside Requirements Discussion, Product Brief, or Brainstorm / Clarify as grill-with-docs style clarification when terminology, roles, business flows, exception paths, prior feature behavior, or decision signals are unclear. It does not create a new stage: it clarifies input for the owning stage, writes only through that stage's artifacts and human gates, and sends shared design signals to Design Readiness Check.
 
@@ -132,6 +135,7 @@ Use this order:
 4. If `project.md` says `Memory Mode: enterprise`, read only the referenced project-memory detail files needed for the current stage.
 5. If `project.md` says `Status: remote-entry`, read `<memory-root>/remote.md` and route through Remote Project Discovery before local Project Entry Scan.
 6. Locate `Active Feature` and `Paused Features`.
+6a. If `.agent-loop/skills/INDEX.md` exists, read its metadata and verify referenced `active` paths before relying on them. Do not load `proposed`, `disabled`, or `deprecated` skills into normal routing.
 7. Read current feature `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`, and `contracts.md` if present.
 8. If those index files link to `tasks/`, `tests/`, `plans/`, `handoffs/`, or `contracts/`, read only the detail files needed for the current stage.
 9. Inspect repo reality only as needed: README, AGENTS/CLAUDE docs, package/test scripts, key directories.
@@ -151,6 +155,10 @@ If the human asks for guided onboarding but onboarding-db is missing, do not cre
 If the human asks to test, run, deploy, switch account/config/model/provider, check quota/rate limits, arrange rollout, diagnose production, or use existing code to solve an operational problem, default to read-only operational support. Route to Code-Guided Operational Support before Feature Spec, Plan Gate, Execute Task / Story, or code edits. If the request could mean either existing operational use or new implementation, ask whether the human wants help using current project functionality or feature implementation.
 
 If the human asks to "先记一下", do something later, defer work, add a backlog item, or keep a future requirement outside the current feature, route to Requirement Archive with Future / Deferred Requirement Intake. Do not put future TODO, backlog, deferred requirements, or unimplemented planned capability details into `project.md`; use a requirement set and optional `requirements/INDEX.md` after human confirmation.
+
+If the human asks to make a successful workflow into a skill, or asks to update/disable/deprecate a project skill, classify `project-skill-management` and route to Project Skill Creation / Update. If the agent notices a reusable skill opportunity after a complex verified workflow, finish the current stage first and propose a Project Skill Candidate at a safe boundary; do not change intent or create files until the human passes Gate 1.
+
+When an `active` project skill matches current work, discovery and read-only loading may proceed only after its current instruction-bearing and executable files match the SHA-256 validation manifest. Before following its workflow or causing side effects, require the Execution Gate for the current invocation. A human message that explicitly names the skill and concrete scope may satisfy the gate only after the agent emits the execution summary and verifies the plan adds no undisclosed action, effect, environment, or bound. Auto mode, previous success, prior confirmation, `active`, or `bootstrap` may not. One combined confirmation may cover other applicable operational/risk gates only when the summary explicitly includes every gate fact.
 
 If recent work bypassed the loop, set Memory Health to `outside-loop` and route to Re-Adopt / Recovery Backfill. Otherwise, if code reality and the memory root disagree or long-term memory indexes point to missing artifacts, set Memory Health to `stale` and route to Reconcile Project Context / Recovery Backfill. Treat code as the current fact base for agent-maintained docs and preserve human requirements as original intent in both routes.
 
@@ -212,6 +220,7 @@ Project Entry
 Remote Project Discovery if Needed
 Re-Adopt Agent Loop Project if Needed
 Code-Guided Operational Support if Needed
+Project Skill Creation / Update if Needed
 Requirement Archive
 Decision & Design If Needed
 Product Brief if Needed
@@ -276,7 +285,7 @@ Feature Auto-Loop means:
 Feature Auto-Loop = give one feature a bounded release lane.
 ```
 
-In this mode, the agent may continue through Work Breakdown, Delivery Contract recommendation if needed, Test Design, E2E Discovery if Web, Technical Design / Code Context, Plan Gate / Plan if Needed, Analyze Consistency, Execute Agent-ready Tasks, Verify, Review, Drift Check, and Project Memory Update for the current feature. It must not skip Plan Gate before execution. It must stop before creating or updating Delivery Contract files, contract acceptance, breaking contract changes, Submit / Integrate, and Pause / Close.
+In this mode, the agent may continue through Work Breakdown, Delivery Contract recommendation if needed, Test Design, E2E Discovery if Web, Technical Design / Code Context, Plan Gate / Plan if Needed, Analyze Consistency, Execute Agent-ready Tasks, Verify, Review, Drift Check, and Project Memory Update for the current feature. It must not skip Plan Gate before execution. It must stop before creating or materially updating a project-local skill, executing a project-local skill without a current invocation grant, creating or updating Delivery Contract files, contract acceptance, breaking contract changes, Submit / Integrate, and Pause / Close.
 
 Task Auto-Run means:
 
@@ -344,6 +353,8 @@ Auto modes do not remove stop conditions. Stop and ask when:
 - product, design, architecture, security, data, approval, or public-interface decisions are needed
 - a stage would modify human original requirements
 - a Delivery Contract needs creation, human acceptance, or an accepted contract needs a breaking change
+- a Project Skill Candidate needs Gate 1 before creation or material update
+- a project-local skill is ready to execute without a current invocation Execution Gate grant
 - spec, product scope, or acceptance criteria would change
 - code reality conflicts with project memory or feature docs
 - unrelated dirty work blocks progress
@@ -396,6 +407,8 @@ First version does not require `state.json`. State lives in markdown:
 - feature `plan.md` -> active execution unit
 - feature `notes.md` -> checkpoints, evidence, decisions, drift
 - feature `contracts.md` -> producer-consumer delivery contracts when present
+- `.agent-loop/skills/INDEX.md` -> project-local skill lifecycle, load policy, triggers, and validation evidence
+- `.agent-loop/skills/<skill-name>/validation.md` -> RED/GREEN/REFACTOR and activation evidence
 
 When resuming, reconstruct state from those files using the inspection order above.
 

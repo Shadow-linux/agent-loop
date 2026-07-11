@@ -19,6 +19,7 @@ The core constraints are:
 - `project.md` is project-level long-term memory
 - Project Memory Mode is `simple` by default; in `enterprise`, `project.md` becomes an index and long-term details move to optional `.agent-loop/project/*.md`
 - `project.md` owns cross-feature Product Context and Domain Language
+- optional `.agent-loop/skills/` owns Human-gated project-local reusable capabilities; `INDEX.md` owns lifecycle and discovery metadata
 - stable Web E2E capability belongs in `project.md`; feature-specific E2E cases belong in feature `tests.md` or `tests/e2e/*`
 - `requirements/` stores human source material packages and requirement lifecycle/backlog records as requirement set directories: requirements, prototypes, feedback, screenshots, recordings, links, follow-up notes, status, and optional `requirements/INDEX.md`
 - requirement-set dates mean archive date only, not deadlines or feature lifecycle dates
@@ -33,6 +34,7 @@ The core constraints are:
 - submit/integrate is explicit and never commits, opens PRs, merges, or publishes without human confirmation
 - Delivery Contracts live in `contracts.md` and optional `contracts/*`; file creation/update, contract acceptance, and breaking changes require human confirmation
 - non-trivial human confirmations use table-first Human Review Summary; complete artifacts remain source of truth
+- project-local skills require Gate 1 before creation/material update and an Execution Gate for every invocation; validated proposed skills activate automatically
 - first version does not include multiplayer, roadmap graph, roadmap adapter, tdd-guard, complex ADR, global install, or automatic directory-level AGENTS.md without human confirmation
 
 ## Core Model
@@ -40,6 +42,7 @@ The core constraints are:
 ```text
 Human Goal
 → Operational Support when the goal is to use/run/test/deploy current project behavior without confirmed implementation
+→ Project Skill Creation / Update when a repeatable project workflow should become a durable local capability
 → Feature Workspace
 → Task / Test / Plan
 → Execute / Verify
@@ -97,6 +100,8 @@ If plan.md exists, it must be construction-grade: exact paths, code context, int
 **E2E Discovery**: the stage that discovers real Web E2E capability from project reality before writing or executing browser automation. It records durable environment facts in `project.md` and feature-specific cases in `tests.md` or `tests/e2e/*`.
 
 **Drift**: mismatch between implementation, code reality, human decision, and existing `agent-loop` documents.
+
+**Project Skill**: a reusable project-specific capability under `.agent-loop/skills/<skill-name>/`. The index uses `proposed | active | disabled | deprecated` lifecycle and `bootstrap | on-demand` load policy. Active trust is bound to a validated content manifest. Loading is read-only preparation; every actual invocation requires the Execution Gate, with a named-skill/concrete-scope request accepted only when the disclosed plan stays fully inside that scope.
 
 ## Entry Scenarios
 
@@ -296,6 +301,26 @@ Ask one focused human question, or route to Diagnose Failure / Targeted Feature 
 Do not continue execution until the blocker is resolved.
 ```
 
+### Project Skill Creation / Update
+
+Condition:
+
+```text
+Human asks to turn a repeatable project workflow into a skill, or to update, disable, or deprecate one
+Project Entry / project memory is reliable
+```
+
+Action:
+
+```text
+Load references/project-skills.md.
+Present Project Skill Candidate and Gate 1 before files are created or materially updated.
+Resolve writing-skills and skill-creator independently; use both when available.
+Write only under .agent-loop/skills/<skill-name>/.
+Keep proposed until RED/GREEN/REFACTOR and validation pass, then activate automatically.
+Require the Execution Gate for every invocation.
+```
+
 ## Main Flow
 
 ```text
@@ -303,6 +328,7 @@ Project Entry
 → Remote Project Discovery if Needed
 → Re-Adopt Agent Loop Project if Needed
 → Code-Guided Operational Support if Needed
+→ Project Skill Creation / Update if Needed
 → Requirement Archive
 → Decision & Design If Needed
 → Product Brief if Needed

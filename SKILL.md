@@ -39,7 +39,7 @@ Also treat long-term memory indexes as claims that must be verified before relia
 
 ## Message Intent Guard
 
-Before project-state classification, classify the latest human message intent. `chat` means ordinary discussion, rules questions, status questions, or design talk; answer or discuss only and do not create requirement sets or feature workspaces by default. Message intent is not permanent: if chat turns into demand shaping, `proposal-doc`, implementation, operational support, follow-up, or deferred work, reclassify and route accordingly. If the human explicitly wants discussion without documentation, keep `chat`. `requirements-discussion` means the human is shaping product needs, business goals, capability ideas, constraints, tradeoffs, or user scenarios without authorizing implementation; use Brainstorm / Clarify to produce a human-reviewed requirement document under `.agent-loop/requirements/` before feature construction. If unclear, ask whether the human wants ordinary discussion, requirements documentation, or feature implementation.
+Before project-state classification, classify the latest human message intent. `chat` means ordinary discussion, rules questions, status questions, or design talk; answer or discuss only and do not create requirement sets or feature workspaces by default. Message intent is not permanent: if chat turns into demand shaping, `proposal-doc`, implementation, operational support, follow-up, deferred work, or project-skill management, reclassify and route accordingly. If the human explicitly wants discussion without documentation, keep `chat`. `requirements-discussion` means the human is shaping product needs, business goals, capability ideas, constraints, tradeoffs, or user scenarios without authorizing implementation; use Brainstorm / Clarify to produce a human-reviewed requirement document under `.agent-loop/requirements/` before feature construction. `project-skill-management` means the human asks to turn a repeatable project workflow into a project-local skill or to update, disable, or deprecate one; load `references/project-skills.md`. If unclear, ask whether the human wants ordinary discussion, requirements documentation, feature implementation, or project-skill management.
 
 ## Human Help And Version Questions
 
@@ -54,11 +54,11 @@ When the human asks what changed in a version, what is new, how to use agent-loo
 
 ## Mandatory Stage Helper Protocol
 
-Seven stages are mandatory helper-backed stages when a matching helper is exposed by the runtime: Brainstorm / Clarify, Plan Gate / Plan, Execute Task / Story, Diagnose Failure, Verify, Review / Feature Close Review, and approved Subagent Execution.
+Eight stages are mandatory helper-backed stages when matching helpers are exposed by the runtime: Brainstorm / Clarify, Project Skill Creation / Update, Plan Gate / Plan, Execute Task / Story, Diagnose Failure, Verify, Review / Feature Close Review, and approved Subagent Execution.
 
 Before any action in one of these stages, load `references/skill-routing.md` and `references/external-skill-adapters.md`, resolve the canonical Superpowers name and supported alias, and load the complete helper `SKILL.md`. A mandatory helper-backed stage cannot start stage actions until resolution status is `loaded`, `unavailable`, or `load-failed`. Fallback is allowed only for `unavailable` or `load-failed`.
 
-Record every resolution in the current feature `notes.md`, including candidates checked, resolved helper, status, fallback, and agent-loop overrides. If no feature workspace is confirmed, use the response-local pending-record rule in `skill-routing.md`; never create a feature merely for helper logging. A mandatory helper-backed stage cannot complete without a Stage Helper Resolution record.
+Record every resolution in the current feature `notes.md`, including candidates checked, resolved helper, status, fallback, and agent-loop overrides. If no feature workspace is confirmed, use the response-local pending-record rule in `skill-routing.md`; never create a feature merely for helper logging. After Gate 1 creates a proposed project skill, Project Skill Creation / Update records its helper resolution and RED/GREEN/REFACTOR evidence in `.agent-loop/skills/<skill-name>/validation.md`. A mandatory helper-backed stage cannot complete without a Stage Helper Resolution record.
 
 The helper improves the method only. Agent-loop remains the controller: its artifact paths, human gates, task and feature status, project memory, drift, submit, pause, and close rules override helper defaults. Never create native helper output directories such as `docs/superpowers/` unless the human explicitly requests them and separately confirms after the path override is explained.
 
@@ -72,6 +72,7 @@ Use this skill when the user wants to:
 - shape product needs through requirements-discussion into requirement documents under `.agent-loop/requirements/`
 - turn requirements or prototypes into feature specs, tasks, tests, plans, and implementation
 - use existing project code, configuration, scripts, or deployment docs to support operational testing, rollout, account/config/model switching, production diagnosis, or runbook/checklist creation without defaulting to code changes
+- create or update a Human-gated project-local skill from a repeatable workflow, or propose one after a complex verified operation
 - continue a paused feature or recover project context
 - reconcile `agent-loop` documents with code reality
 - execute a task/story with TDD and verification
@@ -101,6 +102,7 @@ references/delivery-contracts.md   durable producer-consumer interface handoff r
 references/e2e-discovery.md        Web E2E environment discovery and recording rules
 references/large-projects.md       rules for complex or 100k+ LOC projects
 references/project-entry-scan.md Project Entry Scan for taking over old projects safely
+references/project-skills.md      project-local skill creation, lifecycle, discovery, loading, and execution gates
 references/onboarding-knowledge-base.md Evidence-Graph + DDD newcomer project understanding rules
 references/feature-follow-up.md          bug/change flow-back to recent features
 references/complex-artifacts.md    triggered tasks/tests/plans directory mode
@@ -130,10 +132,11 @@ CHANGELOG.md                        version-change source of truth for "what cha
 
 1. Inspect `.agent-loop/`; if missing, also check legacy `agent-loop/`.
 2. Check root `AGENTS.md` / `CLAUDE.md` as the Root Agent Bootstrap Gate; if either is missing or stale, load `references/project-guidance.md` and include the guidance repair in the recommended Project Entry action unless the human has explicitly deferred it.
-3. Classify the latest message intent: `chat`, `requirements-discussion`, `feature-request`, `operational-support`, `feature-follow-up`, `deferred-requirement`, or `unknown`.
+3. Classify the latest message intent: `chat`, `requirements-discussion`, `project-skill-management`, `feature-request`, `operational-support`, `feature-follow-up`, `deferred-requirement`, or `unknown`.
 3a. For `chat`, answer or discuss only; do not create requirement sets, feature workspaces, tasks, tests, or plans.
 3b. For `requirements-discussion`, load `references/requirement-management.md`, use Brainstorm / Clarify, produce a human-reviewed requirement document, and archive it under `.agent-loop/requirements/<archive-date>-<topic>/` after confirmation before any feature construction.
-3c. Classify the entry scenario.
+3c. For `project-skill-management`, load `references/project-skills.md`, require reliable Project Entry/memory, and route to Project Skill Creation / Update without creating a requirement set or feature workspace.
+3d. Classify the entry scenario.
 4. Load the stage guide for the current scenario.
 4a. Run Stage Helper Capability Scan for the current stage. For a mandatory helper-backed stage, load `references/skill-routing.md` and `references/external-skill-adapters.md`, resolve canonical and alias names, load the complete helper before stage actions when found, and record the resolution. Use fallback only after recording `unavailable` or `load-failed`.
 5. Load `references/project-guidance.md` during project init, Project Entry Scan, or re-adoption, when root guidance is missing/stale, or when long-term agent instructions may need sync.
@@ -148,6 +151,7 @@ CHANGELOG.md                        version-change source of truth for "what cha
 12. Load `references/delivery-contracts.md` when the human requests cross-boundary handoff/API/interface documentation, or when the agent detects a likely downstream consumer boundary such as frontend/backend, service, event, public data, SDK/library, UI state, or runtime behavior. Delivery Contracts are not created by default.
 13. Load `references/project-entry-scan.md` when taking over an existing project without reliable `agent-loop` memory. This is now a Project Entry Scan only: build safe project memory, guidance status, commands, boundaries, and uncertainties. Do not create `.agent-loop/onboarding-db/`, module docs, flow docs, onboarding diagrams, or old Quick / Deep / Targeted onboarding artifacts during Project Entry Scan.
 13a. Load `references/onboarding-knowledge-base.md` when the human asks for newcomer-facing docs, durable project understanding, guided learning paths, or onboarding-db construction. Run it only after Project Entry Scan or reliable project memory. Use Evidence Graph first, then accepted Onboarding Spec, Onboarding Tasks, single-file module/flow docs by default, wireframe architecture flow diagrams as the preferred flow expression, coverage scoring, and reviewed batches.
+13b. During Project Entry, Resume, Re-Adopt, context recovery, and controller re-entry, check `.agent-loop/skills/INDEX.md` when present. Load only `active` project skills whose current instruction-bearing and executable files match the validation manifest, according to `bootstrap` / `on-demand`; discovery and loading never satisfy the per-invocation Execution Gate.
 14. Load `references/feature-follow-up.md` when the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, screenshot issue, behavior tweak, "small tweak", test failure, or QA/user feedback that may belong to a recent feature.
 15. Load `references/large-projects.md` when the repo is large, old, unfamiliar, multi-package, or likely above 100k LOC.
 16. Load `references/complex-artifacts.md` when story/task/test/plan complexity crosses its trigger conditions.
@@ -159,6 +163,7 @@ CHANGELOG.md                        version-change source of truth for "what cha
 21. Load `references/skill-routing.md` before every mandatory helper-backed stage and before fallback for any other helper-friendly stage.
 22. Load `references/external-skill-adapters.md` before every mandatory helper-backed stage. Agent-loop paths, gates, task status, project memory, submit, pause, and close rules override external skill defaults.
 22a. Before leaving a mandatory helper-backed stage, verify its Stage Helper Resolution record exists and that fallback was used only with `unavailable` or `load-failed`.
+22b. For Project Skill Creation / Update, resolve `superpowers:writing-skills` / `writing-skills` and `skill-creator` independently. Use both when available, override their output paths to `.agent-loop/skills/<skill-name>/`, and never treat one helper as excluding the other.
 23. Load `references/submit-and-integrate.md` before creating commits, PR text, merge notes, or any submission claim.
 24. Summarize current state in the response.
 25. Recommend exactly one next stage.
@@ -174,6 +179,11 @@ CHANGELOG.md                        version-change source of truth for "what cha
   project/ optional enterprise memory detail files
   decisions/ Human-gated project / cross-feature Decision & Design records; conditionally required when shared design has no accepted source
   onboarding-db/ Evidence-Graph + DDD human-readable project understanding docs; legacy layouts are evidence only until migrated
+  skills/ optional Human-gated project-local skill index and packages
+    INDEX.md
+    <skill-name>/
+      SKILL.md
+      validation.md
   requirements/
     <archive-date>-<topic>/
       README.md
@@ -212,6 +222,9 @@ If the local directory is only a remote-project entry point, create only thin lo
 - Create or update Delivery Contract files only after human confirmation. The agent may proactively recommend one when it detects downstream impact, but simple single-person tasks, pure internal logic, and changes with no downstream consumer should skip contracts.
 - During Work Breakdown, Technical Design / Code Context, Plan, Review, and Drift Check, detect whether a Delivery Contract should be recommended.
 - Feature Auto-Loop and Task Auto-Run do not silently create Delivery Contract files. They must pause before contract file creation, contract acceptance, or breaking contract changes.
+- Project-local skill directories are created only after Gate 1 confirms a Project Skill Candidate. Verified proposed skills automatically become `active`; failed validation keeps them `proposed`.
+- Every project-skill invocation requires the Execution Gate. A prior human message naming the active skill and concrete scope may satisfy it only after the agent emits the execution summary and confirms the entire planned action/effect stays inside that disclosed scope. `active`, `bootstrap`, prior success, Feature Auto-Loop, and Task Auto-Run never authorize execution.
+- Agent may propose a Project Skill Candidate after a complex verified workflow, but must finish the current authorized stage and wait for Gate 1 before creating files.
 - Keep temporary subagent assignment notes in `handoffs/`.
 - `plan.md` is the active plan for the current task/story, not the default whole-feature plan.
 - After task/story selection and before Execute Task / Story, the agent must pass Plan Gate. It may not create tasks and immediately implement.
@@ -272,6 +285,7 @@ If the local directory is only a remote-project entry point, create only thin lo
 The controller owns the loop. External skills are optional stage accelerators.
 
 - Before falling back to built-in stage guidance, run Stage Helper Capability Scan against the current runtime's available skills/plugins/helpers.
+- Project Skill Creation / Update: prefer `superpowers:writing-skills` / `writing-skills` for RED/GREEN/REFACTOR and also use `skill-creator` for scaffolding and validation when available; write only to `.agent-loop/skills/<skill-name>/`.
 - Clarify: use a brainstorming skill if available.
 - Product Brief: use PRD/product discovery or grill-with-docs style skills if available.
 - Planning: use a plan-writing skill if available.
@@ -294,6 +308,8 @@ Stop when:
 - a new dependency, migration, destructive operation, credential, external service, or long-lived boundary directory is needed
 - directory-level `AGENTS.md` creation/update is recommended
 - a Delivery Contract needs creation, human acceptance, or an accepted contract needs a breaking change
+- a Project Skill Candidate needs Gate 1 before creation or material update
+- an active project skill is about to execute without a current bounded Execution Gate grant or with undisclosed planned actions/effects
 - TDD cannot be followed or verification repeatedly fails
 - review finds behavior, scope, or architecture changes
 - unrelated dirty work blocks progress

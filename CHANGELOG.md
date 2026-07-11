@@ -1,5 +1,19 @@
 # Agent Loop Changelog
 
+## Unreleased
+
+### Project-Local Skills
+- Added Project Skill Creation / Update for durable target-project capabilities under `.agent-loop/skills/<skill-name>/`, with INDEX-based lifecycle, `bootstrap` / `on-demand` loading, and target-path ownership that never defaults to global skill directories.
+- Added Gate 1 before project-skill creation or material update, RED/GREEN/REFACTOR authoring through `writing-skills` with complementary `skill-creator` support, and automatic activation only after validation passes.
+- Added a per-invocation Execution Gate that separates read-only discovery/loading from commands, tools, file writes, external access, and other side effects; active state, bootstrap loading, auto modes, prior success, and prior approval do not authorize reuse.
+- Updated runtime/design sources, root Stage Map and required stops, project guidance, project memory template, human docs, validation scenarios, and regression coverage in the same control-flow change.
+- Updated the root AGENTS managed-block revision to `block-version:1.2.4-20260711.3` without changing the released skill version.
+
+### Maintenance Validation
+- Added a five-domain single-feature scoring method for focused logic, Human Gate, cross-surface consistency, pressure-resistance, and evidence audits.
+- Added a feature-scoped contract test and a Project-Local Skills scoring report without making full-repository tests part of the feature score.
+- Kept single-feature scoring in maintainer guidance only; it does not replace mandatory full validation for control-surface changes.
+
 ## 1.2.4 — 2026-07-11
 
 ### Version Baseline

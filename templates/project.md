@@ -18,6 +18,7 @@ Language Evidence:
 Mode: simple | enterprise
 
 - Decisions: `.agent-loop/decisions/` | none
+- Project Skills: `.agent-loop/skills/INDEX.md` | none
 
 If simple:
 - This file is the main long-term project memory body.
@@ -76,6 +77,17 @@ Confidence: high | medium | low
 ## Development Rules
 
 ## Testing Rules
+
+## Project Skills
+
+Index: `.agent-loop/skills/INDEX.md` | none
+Active Bootstrap Skills:
+- `<skill-name>` | none
+Active On-Demand Skills:
+- `<skill-name>` | none
+Proposed / Disabled / Deprecated:
+- `<skill-name>` | none
+Execution Rule: loading never authorizes execution; each invocation requires the Project Skill Execution Gate. A named-skill/concrete-scope request counts only after the execution summary shows no undisclosed action or effect.
 
 ## Current Work
 

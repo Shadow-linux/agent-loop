@@ -206,6 +206,29 @@ Decision & Design / ADR 是 requirement 和 feature 之间的需求落地层。R
 
 操作支持默认不写代码、不改配置、不部署、不读取或暴露 secrets。它输出的是当前理解、必要输入、操作步骤、验证、回滚、风险和未决问题。
 
+### 我想把常用流程做成项目技能
+
+| 你可以这样说 | Agent 应该怎么做 |
+|---|---|
+| “把这个流程做成技能。” | 进入 Project Skill Creation / Update，先展示 Project Skill Candidate、精确文件树、风险和验证计划，通过 Gate 1 后才在目标项目创建 `.agent-loop/skills/<skill-name>/`。 |
+| “把刚才成功的操作沉淀成 skill。” | 复用刚才的新鲜成功证据，但仍要补 RED 基线、GREEN/REFACTOR、结构验证和前向执行测试；成功后自动从 `proposed` 变为 `active`。 |
+| “以后这种复杂操作你可以主动建议做成技能。” | Agent 可在当前授权阶段完成且验证成功后主动提出 Candidate；主动建议不等于获准创建。 |
+| “使用 deploy-check 技能检查测试环境。” | 如果技能和范围都已明确，Agent 仍先展示执行摘要；计划没有新增未披露动作或影响时，这句话可作为本次调用的 Execution Gate，无需再问一次。扩大范围、换任务或下次调用都要重新确认。 |
+
+Project Skill 只写入使用 Agent Loop 的目标项目：
+
+```text
+.agent-loop/skills/
+  INDEX.md
+  <skill-name>/
+    SKILL.md
+    validation.md
+```
+
+创建或实质更新只有一个文件写入门禁：Gate 1。验证通过后会自动激活，不再增加 activation gate；验证失败则保持 `proposed`，不能进入正常路由。
+
+执行是独立门禁。读取 INDEX、匹配触发条件、加载 `SKILL.md` 都可以只读完成；但真正按照技能步骤运行命令、调用工具、修改文件、访问外部系统或产生副作用前，必须为这一次有边界的调用获得 Execution Gate。`active`、`bootstrap`、Feature Auto-Loop、Task Auto-Run、以前执行成功或以前确认过都不能复用为下一次授权。
+
 ### 关闭后发现 bug 或要小改
 
 | 你可以这样说 | Agent 应该怎么做 |
@@ -270,6 +293,7 @@ scripts/check-root-agents-blocks.sh
 解释一下钱包扣费流程。
 这个需求先聊清楚，不要实现。
 这个需求比较大，拆成 phase。
+把这个流程做成技能。
 我要做一个新功能。
 把需求写成 spec。
 拆 task。
@@ -294,6 +318,8 @@ Agent 的责任是把这些话翻译成正确的下一步，而不是让你背�
 | `.agent-loop/project/*.md` | enterprise memory 下的长期项目细节 | 临时执行日志 |
 | `.agent-loop/onboarding-db/` | Evidence-Graph + DDD 新人/项目理解知识库 | 当前 task 状态、原始需求、测试长日志 |
 | `.agent-loop/requirements/` | 人类原始需求材料、需求生命周期、待办、Delivery Phases | Agent 的工程执行计划 |
+| `.agent-loop/skills/INDEX.md` | 项目技能状态、加载策略、触发条件、范围和验证证据 | 技能正文、执行授权 |
+| `.agent-loop/skills/<skill-name>/` | 项目常驻技能、验证记录和必要资源 | secrets、全局安装副本、feature 状态 |
 | `product.md` | feature 级产品意图 | 工程执行细节 |
 | `spec.md` | feature 行为规范 | 执行日志 |
 | `tasks.md` | 任务拆分和状态 | 原始测试输出 |
@@ -312,6 +338,8 @@ Agent 可以推荐下一步，但不能替你批准：
 
 - 创建或改写 root/directory `AGENTS.md`
 - 创建或接受 Delivery Contract
+- 创建或实质更新 Project Skill（Gate 1）
+- 每次实际执行 Project Skill（Execution Gate）
 - 修改人类原始需求材料
 - 合并多个 Delivery Phases
 - 提交、PR、merge、release、publish

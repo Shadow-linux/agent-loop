@@ -66,6 +66,87 @@ Exit:
 
 - operational checklist delivered, blocker/question identified, or human confirms escalation into feature/fix workflow
 
+## Project Skill Creation / Update
+
+Entry: message intent is `project-skill-management`, or the human accepts an Agent-proposed Project Skill Candidate after a complex verified workflow. Reliable Project Entry/memory must exist.
+
+Entry modes:
+
+- explicit request: resolve authoring helpers before Candidate analysis, then present Gate 1;
+- accepted proactive Candidate: the accepted Candidate already satisfies Gate 1, so resolve helpers after entry and before the first authoring action; do not ask Gate 1 again unless helper analysis materially changes scope.
+
+Mandatory helpers:
+
+- resolve `superpowers:writing-skills` / `writing-skills` for RED/GREEN/REFACTOR;
+- independently resolve `skill-creator` for scaffolding and structural validation;
+- use both when available;
+- for explicit-request entry, record initial resolution response-locally before Gate 1; for accepted proactive-Candidate entry, record it after Gate 1 and before authoring; persist either record in `.agent-loop/skills/<skill-name>/validation.md` after creation.
+
+Load:
+
+- `project-skills.md`
+- `skill-routing.md`
+- `external-skill-adapters.md`
+- `human-review-summary.md` before Gate 1
+- existing `.agent-loop/skills/INDEX.md` and matching skill files for updates
+
+Candidate analysis:
+
+- inspect the successful source workflow and fresh evidence;
+- identify repeatability, ordering, failure, rollback, environment, secrets, and external effects;
+- choose `bootstrap` or `on-demand` with a reason;
+- propose exact `.agent-loop/skills/<skill-name>/` files and resources;
+- distinguish reusable procedural knowledge from one-off work, ordinary project facts, or mechanically enforceable checks.
+
+Gate 1:
+
+- present Project Skill Candidate and exact file tree;
+- ask before creating `.agent-loop/skills/`, INDEX, or a new skill directory;
+- use the same Gate 1 before material updates to an active skill;
+- if implementation scope materially expands, stop and re-present Gate 1.
+
+After Gate 1:
+
+1. Create the INDEX entry and skill directory with status `proposed`.
+2. Run RED scenarios without the new or revised skill and record exact failures in `validation.md`.
+3. Write the minimum GREEN skill and required resources.
+4. Re-run the scenarios with the skill, capture loopholes, REFACTOR, and re-test.
+5. Validate frontmatter, trigger wording, resources, scripts, sensitive values, symlinks, and exact paths; finalize the active INDEX row and record a SHA-256 Validated Content Manifest for that exact row and current files.
+6. If every required check passes and current content matches the manifest, update INDEX and validation evidence; status automatically becomes `active`.
+7. If any required check fails, keep `proposed`, report the blocker, and do not route normal work through the skill.
+
+Path rule:
+
+```text
+write: <target-project>/.agent-loop/skills/<skill-name>/
+do not default: ~/.agents/skills/ | ~/.codex/skills/ | ~/.claude/skills/ | ~/.kimi/skills/ | docs/superpowers/
+```
+
+Execution Gate:
+
+- discovery, INDEX reading, loading, and trigger matching are read-only preparation;
+- before following the skill workflow or causing side effects, summarize skill, scope, steps, commands/files/external effects, risks, rollback, and verification;
+- obtain human confirmation for one invocation;
+- a human message that already names the skill and concrete scope may satisfy the gate only after the summary shows no undisclosed action/effect and no additional question is needed;
+- `active`, `bootstrap`, previous success, previous confirmation, Feature Auto-Loop, and Task Auto-Run do not authorize execution;
+- scope expansion requires a new confirmation.
+
+Write after Gate 1:
+
+- `.agent-loop/skills/INDEX.md`
+- `.agent-loop/skills/<skill-name>/SKILL.md`
+- `.agent-loop/skills/<skill-name>/validation.md`
+- optional resources required by the accepted Candidate
+
+Do not create a requirement set or feature workspace for this stage. Do not globally install the skill; global installation is a first-version exclusion. Do not commit, push, publish, or execute the skill without the matching separate authorization.
+
+Exit:
+
+- `active` with validation evidence and one recommended next stage;
+- `proposed` with exactly one unblock action;
+- lifecycle updated to `disabled` / `deprecated`; or
+- no files created because Gate 1 was declined.
+
 ## Init Project
 
 Entry: no `.agent-loop/` or legacy `agent-loop/`, little or no code.

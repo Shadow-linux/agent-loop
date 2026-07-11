@@ -3,7 +3,7 @@ set -euo pipefail
 
 root=$(cd "$(dirname "$0")/.." && pwd)
 template="$root/templates/root-AGENTS.md"
-expected_revision="1.2.4-20260711.1"
+expected_revision="1.2.4-20260711.3"
 
 assert_contains() {
   local file=$1
@@ -20,6 +20,7 @@ if grep '^<!-- agent-loop:managed-start' "$template" | grep -Fvq "block-version:
 fi
 
 for stage in \
+  "Project Skill Creation / Update" \
   "Requirement Archive" \
   "Evidence-Graph + DDD Onboarding" \
   "Decision & Design If Needed" \

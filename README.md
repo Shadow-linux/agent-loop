@@ -31,6 +31,7 @@ Message Intent → Chat And Requirements Discussion if needed
 → Project Entry → Remote Project Discovery if needed
 → Re-Adopt Agent Loop Project if needed
 → Project Entry Scan if needed
+→ Project Skill Creation / Update if requested
 → Operational Support if needed → Requirement Archive
 → Decision & Design If Needed → Product Brief if needed
 → Brainstorm / Clarify if needed
@@ -57,6 +58,7 @@ Message Intent → Chat And Requirements Discussion if needed
 | **Drift** | Mismatch between docs, code reality, or human decisions |
 | **Feature Follow-up / Flow-back** | Bug/change intake that checks recent features before creating a new feature. Default lookback is 30 days. |
 | **Operational Support** | Read-only code-guided help for testing, running, deploying, switching accounts/config/models/providers, quota checks, rollout, and production diagnosis before deciding whether feature work is needed. |
+| **Project-Local Skill** | A reusable project capability under `.agent-loop/skills/<skill-name>/`. Creation or material update requires Gate 1; successful validation activates it, but every actual invocation still requires a bounded Execution Gate. |
 | **Requirement Lifecycle / Backlog** | Requirement memory for proposed, accepted, deferred, in-progress, partially implemented, implemented, superseded, rejected, or reference-only requirements without using project memory as a backlog. |
 | **Chat And Requirements Discussion** | `chat` answers or discusses without creating artifacts; `requirements-discussion → Brainstorm / Clarify → requirement document → requirements/` before any feature construction. |
 | **Decision & Design / ADR** | Requirement-landing bridge for shared business flow, domain/data rules, architecture, recovery, and non-functional goals. Design Readiness is required; `.agent-loop/decisions/*.md` is Human-gated and conditionally required only when shared design needs a durable record. |
@@ -71,6 +73,16 @@ Message Intent → Chat And Requirements Discussion if needed
   project/                            # optional enterprise memory detail files
   decisions/                          # optional project / cross-feature Decision And Design Records
     0001-<decision-slug>.md
+  skills/                             # optional, created only for a confirmed Project Skill Candidate
+    INDEX.md                          # lifecycle, load policy, triggers, scope, and validation evidence
+    <skill-name>/
+      SKILL.md
+      validation.md
+      agents/openai.yaml              # optional
+      references/                     # optional
+      scripts/                        # optional
+      assets/                         # optional
+      templates/                      # optional
   onboarding-db/                      # Evidence-Graph + DDD project-understanding docs; legacy layouts are evidence only
   requirements/
     INDEX.md                           # optional inventory and backlog/deferred view
@@ -211,11 +223,19 @@ Auto modes still stop for Human-gated decisions, unclear decisions, risky change
 
 Agent Loop keeps at most one Active Feature. Switching work pauses the current feature with a resume point before another feature becomes active. If the agent-loop controller cannot be loaded, existing auto-mode grants are suspended and root guidance is limited to safe read-only entry/recovery/support until the controller is restored.
 
+## Project-Local Skills
+
+Say “把这个流程做成技能” or “把刚才成功的操作沉淀成 skill” when a repeatable, verified project workflow should become a resident capability. The agent may also propose a Project Skill Candidate after a complex operation succeeds, but it must wait for Gate 1 before creating or materially updating files.
+
+Project skills are stored only in the target project under `.agent-loop/skills/`. New or updated skills use RED/GREEN/REFACTOR and remain `proposed` until validation passes; passing validation records a SHA-256 content manifest and automatically changes them to `active`, while failure or later content mismatch leaves them unavailable for normal routing.
+
+Discovery and loading are read-only. Before an active project skill follows its workflow, runs commands, calls tools, changes files, accesses external systems, or causes side effects, the agent must obtain an Execution Gate confirmation for one bounded invocation. `active`, `bootstrap`, Feature Auto-Loop, Task Auto-Run, or a prior invocation never grants reusable execution authority.
+
 ## External Skill Adapters
 
 Agent Loop can use external skills such as Superpowers for brainstorming, construction-grade planning, TDD, debugging, verification, review, finishing, and bounded subagent execution.
 
-Brainstorm, Plan Gate, Execute, Diagnose, Verify, Review, and approved Subagent Execution are mandatory helper-backed stages. Before stage actions, the agent resolves the canonical Superpowers name and unprefixed alias, loads the complete helper when found, and records the result. Fallback is permitted only after recording that the helper is unavailable or failed to load.
+Project Skill Creation / Update, Brainstorm, Plan Gate, Execute, Diagnose, Verify, Review, and approved Subagent Execution are mandatory helper-backed stages. Before stage actions, the agent resolves the canonical Superpowers name and unprefixed alias, loads the complete helper when found, and records the result. Fallback is permitted only after recording that the helper is unavailable or failed to load.
 
 External skills are stage helpers only. Agent Loop still owns artifact paths, human gates, task status, project memory, drift, submit, pause, and close. Native external directories such as `docs/superpowers/*` are not created by default, even when a helper declares them as its normal destination.
 

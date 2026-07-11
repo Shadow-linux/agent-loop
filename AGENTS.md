@@ -137,3 +137,9 @@ Also run that method after coordinated changes to canonical stage order, routing
 Full validation is a semantic audit plus executable regression testing. Mechanical checks alone are not sufficient. Preserve a RED baseline, add regression assertions for real loopholes, rerun all tests after repair, and save the Chinese report under `docs/reports/`.
 
 Do not put repository-maintenance validation rules in `references/`, `templates/root-AGENTS.md`, or target-project `.agent-loop/` artifacts. Those surfaces are for the Agent Loop user workflow; this `AGENTS.md` and `docs/maintenance/` govern development of the skill repository itself.
+
+## Single-Feature Validation
+
+When the human asks for a single-feature scoring report, focused logic test, feature pressure test, or feature-only acceptance, read and follow `docs/maintenance/feature-validation-method.md`.
+
+Use the five-domain 100-point model and feature-scoped regression boundary from that method. A single-feature report does not replace mandatory full validation when the change also triggers the Full Skill Validation rules above.

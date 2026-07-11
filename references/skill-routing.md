@@ -19,7 +19,7 @@ External skill default paths are advisory only. If a preferred skill says to wri
 
 ## Mandatory Helper Resolution Protocol
 
-The mandatory helper-backed stages are Brainstorm / Clarify, Plan Gate / Plan, Execute Task / Story, Diagnose Failure, Verify, Review / Feature Close Review, and approved Subagent Execution.
+The mandatory helper-backed stages are Brainstorm / Clarify, Project Skill Creation / Update, Plan Gate / Plan, Execute Task / Story, Diagnose Failure, Verify, Review / Feature Close Review, and approved Subagent Execution.
 
 For each mandatory stage:
 
@@ -44,6 +44,7 @@ Resolution status follows this truth table:
 | Stage | Canonical name | Supported alias |
 |---|---|---|
 | Brainstorm / Clarify | `superpowers:brainstorming` | `brainstorming` |
+| Project Skill Creation / Update | `superpowers:writing-skills` | `writing-skills` |
 | Plan Gate / Plan If Needed | `superpowers:writing-plans` | `writing-plans` |
 | Execute Task / Story | `superpowers:test-driven-development` | `test-driven-development` |
 | Diagnose Failure | `superpowers:systematic-debugging` | `systematic-debugging` |
@@ -52,6 +53,8 @@ Resolution status follows this truth table:
 | Subagent Execution If Approved | `superpowers:subagent-driven-development` | `subagent-driven-development` |
 
 An equivalent helper under another runtime namespace may be used only when its capability is verified. Record its actual resolved name and the evidence used to classify it as equivalent.
+
+Project Skill Creation / Update has an additional independent candidate: `skill-creator`. Resolve `superpowers:writing-skills` / `writing-skills` first for RED/GREEN/REFACTOR discipline, then check and load `skill-creator` for scaffolding and structural validation. When both load, use both. Do not stop scanning after the first success. Before Gate 1 creates the skill directory, keep the record response-local; after creation, persist it in `.agent-loop/skills/<skill-name>/validation.md`.
 
 ## Stage Helper Capability Scan
 
@@ -74,6 +77,7 @@ Do not ask the human whether to use a helper just because it exists. Announce or
 |---|---|---|
 | Requirements Discussion | brainstorming / product discovery, grill-with-docs style helpers | Use `requirement-management.md` and `requirement-product-grill.md`; write details to the requirement document and only source, lifecycle, mapping, and decision-link summaries to requirement README |
 | Brainstorm / Clarify if Needed | brainstorming / product discovery | Ask 1-5 high-impact questions from `stage-guides.md` |
+| Project Skill Creation / Update | `writing-skills` plus `skill-creator` when available | Use `project-skills.md` and `templates/project-skills/*`; keep all output under `.agent-loop/skills/<skill-name>/` |
 | Product Brief If Needed | PRD/product synthesis, grill-with-docs style helpers | Use `templates/product.md` after Product Brief Source Gate |
 | Feature Spec | spec writing | Use `templates/spec.md` |
 | Human Review Summary | approval summary / decision table | Use `human-review-summary.md` |
@@ -97,6 +101,7 @@ If Superpowers is available, these map cleanly:
 
 - `using-superpowers`: reminder that relevant skills should be loaded before acting.
 - `brainstorming`: Brainstorm / Clarify if Needed; Requirements Discussion writes approved details to the requirement document and only source, lifecycle, mapping, and decision-link summaries to requirement README, Product Brief writes to `product.md`, and Feature Spec writes to `spec.md` / `notes.md`; never default to `docs/superpowers/specs/`.
+- `writing-skills`: Project Skill Creation / Update; governs RED/GREEN/REFACTOR, pressure scenarios, trigger-focused descriptions, and loophole closure. When `skill-creator` is also available, use its scaffolding and validation tools without letting it replace writing-skills discipline.
 - PRD/product skills such as mattpocock `to-prd`: Product Brief If Needed, translated into local `product.md` only after Product Brief Source Gate passes.
 - Requirement/Product Grill and mattpocock `grill-with-docs`: clarification inside Requirements Discussion, Product Brief, and Brainstorm / Clarify; translate detailed requirement output to the requirement document, keep requirement README to index/lifecycle/mapping summaries, write feature output to `product.md`, `spec.md`, or `notes.md`, and route Decision Candidates without creating native `CONTEXT.md` or `docs/adr/`.
 - `writing-plans`: Plan Gate / Plan If Needed; translate into construction-grade `plan.md` or `plans/*`, or record a justified No-Plan Decision for a trivial task, not `docs/superpowers/plans/`.
@@ -120,7 +125,7 @@ Subagents are optional. In v1, use them only when:
 - each subagent has a bounded task/story or Project Entry Scan lane
 - each implementation subagent receives a `templates/subagent-brief.md`-style brief
 - Project Entry Scan subagents return findings, evidence, confidence, uncertainties, files read, and suggested `project.md` entries
-- outputs can be merged back into `tasks.md`, `tests.md`, `notes.md`, or proposed `project.md`
+- outputs can be merged back into `tasks.md`, `tests.md`, `notes.md`, or proposed `project.md`; Project Skill authoring pressure-test briefs/returns are instead persisted in the confirmed skill's `validation.md`
 
 Default remains one task in the current agent session.
 
@@ -138,7 +143,7 @@ Use external projects as ideas, not as copied workflows:
 
 When no external skill is available or loading fails:
 
-1. Record requested helper, candidates checked, and `unavailable` or `load-failed` in `notes.md`.
+1. Record requested helper, candidates checked, and `unavailable` or `load-failed` in `notes.md`, or in the project skill `validation.md` after Gate 1 creates the proposed skill.
 2. Name the fallback source.
 3. Load the current stage in `stage-guides.md`.
 4. Use the matching template.

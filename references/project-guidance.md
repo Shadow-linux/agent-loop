@@ -11,6 +11,8 @@ AGENTS.md / CLAUDE.md = agent startup guidance
 .agent-loop/remote.md = local entry pointer for remote projects
 .agent-loop/features/* = feature execution state
 .agent-loop/requirements/<archive-date>-<topic>/* = human source material package
+.agent-loop/skills/INDEX.md = optional project-skill lifecycle and discovery index
+.agent-loop/skills/<skill-name>/* = optional human-confirmed project-local capability
 ```
 
 Default memory root is `.agent-loop/` because it is workflow metadata, not product code. If a project already has legacy `agent-loop/`, use it for the current run and ask before migration.
@@ -33,21 +35,22 @@ Every time `agent-loop` is used inside a target project, check root guidance bef
 5. Check whether AGENTS.md contains the required bootstrap sections.
 6. If AGENTS.md uses agent-loop managed blocks, compare each managed block `section` and `block-version` with the current root AGENTS template.
 7. If `scripts/check-root-agents-blocks.sh` is available in the local `agent-loop` skill package, run it against the current `templates/root-AGENTS.md` and target root `AGENTS.md`; use its report as the managed-block drift evidence.
-8. Record or update guidance status in project.md.
-9. If missing or stale, propose a repair through Human Review Summary.
+8. If `.agent-loop/skills/INDEX.md` exists, read its metadata, verify each referenced `active` path and exact INDEX row plus instruction-bearing/executable files against the SHA-256 manifest, and exclude missing, mismatched, `proposed`, `disabled`, and `deprecated` skills from normal routing.
+9. Record or update guidance status in project.md.
+10. If missing or stale, propose a repair through Human Review Summary.
 ```
 
 `AGENTS.md` is stale when any of these are missing or contradicted:
 
 - project uses `agent-loop`
 - Bootstrap Protocol is missing skill-loading/fallback rules: root guidance must say root `AGENTS.md` is a bootstrap cache rather than a replacement for the `agent-loop` skill, must load/use the available skill before agent-loop workflow decisions, and must say Stage Helper Capability Scan happens only after the controller is active or unavailable/load-failed
-- Message Intent Guard: distinguish `chat`, `requirements-discussion`, and `feature-request` before project-state routing; chat answers only, while requirements discussion uses Brainstorm / Clarify to produce requirement documents under `.agent-loop/requirements/`
+- Message Intent Guard: distinguish `chat`, `requirements-discussion`, `project-skill-management`, and `feature-request` before project-state routing; chat answers only, requirements discussion uses Brainstorm / Clarify to produce requirement documents under `.agent-loop/requirements/`, and project-skill management routes to Project Skill Creation / Update
 - Workflow Stage Map: route common human/project signals to exactly one next stage and its matching detailed references; root guidance is navigation only, not the detailed stage procedure
 - Bootstrap Protocol: inspect `.agent-loop/`, classify the stage, and recommend exactly one next action
 - Agent Ownership: agents steer the loop instead of waiting for the human to name every step
 - Stage Helper Capability Scan: agents actively check available skills/plugins/helpers before fallback stage guidance
 - Gate Modes: Strict Mode, Feature Auto-Loop, Task Auto-Run, and their explicit human enablement rules
-- Required Stops: unclear scope, risky changes, Delivery Contract gates, subagent dispatch, submit, close, commit, PR, merge, release, publish
+- Required Stops: unclear scope, risky changes, Delivery Contract gates, Project Skill Gate 1, per-invocation Project Skill Execution Gate, subagent dispatch, submit, close, commit, PR, merge, release, publish
 - Completion Rules: fresh verification, review, drift check, project memory update, Feature Completion Check, Feature Close Review
 - Feature Follow-up / Flow-back: bugs, regressions, screenshots, QA feedback, API mismatches, and small tweaks are checked against active/paused/closed recent features before new feature creation or code edits, but only after Project Entry has established or verified agent-loop memory
 - Submit And Commit Rules: submit/commit/PR/merge/release/publish require explicit confirmation and only intended files are included
@@ -217,13 +220,14 @@ Keep it short and long-lived:
 
 - project uses `agent-loop`
 - Bootstrap Protocol skill loading: root `AGENTS.md` is bootstrap guidance, not a replacement for the `agent-loop` skill; if the runtime exposes the skill, load/use it before making workflow decisions, especially during Project Entry, Resume, Re-Adopt, stage boundaries, after context compaction, or when workflow state is uncertain; Stage Helper Capability Scan happens only after the controller is active or unavailable/load-failed; unavailable/load-failed fallback forces Strict Mode and permits only Chat/read-only entry/recovery/operational analysis while Execute, Human-gated writes, Submit, Pause, and Close remain blocked
-- Message Intent Guard: before project-state routing, distinguish `chat`, `requirements-discussion`, and `feature-request`; chat answers/discusses only, requirements discussion shapes demand through Brainstorm / Clarify into human-reviewed requirement documents under `.agent-loop/requirements/`, and feature requests enter normal feature workflow
+- Message Intent Guard: before project-state routing, distinguish `chat`, `requirements-discussion`, `project-skill-management`, and `feature-request`; chat answers/discusses only, requirements discussion shapes demand through Brainstorm / Clarify into human-reviewed requirement documents under `.agent-loop/requirements/`, project-skill management routes to Project Skill Creation / Update, and feature requests enter normal feature workflow
 - Workflow Stage Map: after intent and project-state classification, route common human/project signals to exactly one next stage and its matching detailed references; load the matching reference before acting and keep the root file as a navigation index
 - Root Agent Bootstrap: read `AGENTS.md`, inspect `.agent-loop/`, classify the current stage, and recommend exactly one next action
 - guidance language follows project language; keep stable artifact/stage names in English
 - before development, inspect `.agent-loop/`
 - if missing, initialize it
 - if present, read `.agent-loop/project.md` and active feature docs
+- if `.agent-loop/skills/INDEX.md` exists, read INDEX metadata, verify each referenced `active` path and exact INDEX row plus instruction-bearing/executable files against the SHA-256 manifest, and load only matching `bootstrap` or `on-demand` project skills; discovery and loading do not authorize execution
 - if `project.md` says `Status: remote-entry`, read `.agent-loop/remote.md` and verify the remote project before acting
 - if the project used `agent-loop` before but recent development bypassed it, route to Re-Adopt Agent Loop Project before new feature work
 - Operational Support Guard: if the human asks to test, run, deploy, switch account/config/model/provider, check quota/rate limits, diagnose production, arrange rollout, or use existing code to solve an operational problem, default to read-only operational support; do not create a feature, edit code, change config, deploy, or run destructive commands unless the human confirms feature implementation or an operational change
@@ -236,10 +240,12 @@ Keep it short and long-lived:
 - keep future/deferred work and backlog items in requirement sets and optional `requirements/INDEX.md`, not in `project.md`; do not edit `requirement.md` or other source files for lifecycle/status updates
 - Agent Ownership: agents steer the loop, classify the current stage, recommend exactly one next action, propose missing artifacts, and own diagnosis, sequencing, verification, drift checks, and project-memory updates
 - Stage Helper Capability Scan: before every helper-friendly stage listed in `skill-routing.md`, inspect the current runtime for available helper skills/plugins such as Superpowers; use matching helpers as methods while keeping agent-loop control
+- Project Skill Creation / Update: write only under `.agent-loop/skills/<skill-name>/`, require Gate 1 before creation or material update, keep the skill `proposed` during RED/GREEN/REFACTOR, and activate automatically only after validation passes
+- Project Skill Execution Gate: before following an active project skill workflow or causing commands, tool calls, file changes, external access, or side effects, obtain explicit human confirmation for one bounded invocation; `active`, `bootstrap`, auto modes, or prior approvals never authorize a later invocation
 - ask human confirmation before each agent-loop stage
 - use table-first Human Review Summary for non-trivial confirmations
 - Autonomous Execution After Approval: after explicit Feature Auto-Loop or Task Auto-Run enablement, agents may continue inside the accepted scope through implementation, testing, fixing, review, drift, status update, and final report
-- autonomous stop conditions: scope change, ambiguity, human original requirement change, unavailable infrastructure, drift needing approval, security/data boundary changes, broad architecture changes, directory guidance changes, first-version exclusions, repeated verification failure, unrelated dirty work, Delivery Contract creation/acceptance/breaking-change approval, subagent dispatch without explicit approval, submit, close, commit, PR, merge, release, or publish
+- autonomous stop conditions: scope change, ambiguity, human original requirement change, unavailable infrastructure, drift needing approval, security/data boundary changes, broad architecture changes, directory guidance changes, first-version exclusions, repeated verification failure, unrelated dirty work, Delivery Contract creation/acceptance/breaking-change approval, Project Skill Gate 1, Project Skill Execution Gate, subagent dispatch without explicit approval, submit, close, commit, PR, merge, release, or publish
 - submit and commit guidance: submit/commit/PR/merge/release/publish require explicit confirmation after diff, feature artifact review, requirement record review, verification, review, drift, project-memory/guidance impact, and unrelated-change checks; if no project-specific commit style exists, use `<type>: <summary>` plus a concrete bullet body
 - run fresh verification before completion claims
 - run Feature Completion Check after likely completion, before starting a new feature, or when resuming with an active feature
@@ -356,6 +362,7 @@ During Drift Check, Submit, or Close, ask whether to update `AGENTS.md` only whe
 - directory responsibility changed
 - security, auth, data, tenant, or approval boundary changed
 - project starts using or stops using a required skill/workflow
+- project-skill discovery, loading, lifecycle, or execution-gate startup guidance changed
 
 Do not sync `AGENTS.md` for normal feature progress.
 
