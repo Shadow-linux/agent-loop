@@ -413,7 +413,7 @@ Load:
 
 - `onboarding-knowledge-base.md`
 - `project-entry-scan.md` only if project memory is missing, stale, or too thin
-- `human-review-summary.md` before accepting the Onboarding Spec, current batch, or newcomer-ready claim
+- `human-review-summary.md` before accepting the Onboarding Spec or accepting the later Full Execution Gate
 
 Rules:
 
@@ -425,8 +425,8 @@ Rules:
 - 全部正式文档默认使用中文；写不透但有证据可推断的内容要标明“推断”、证据、置信度和待验证点。
 - Human examples are quality/detail references only. Do not copy their topic list, count, domain names, or project structure.
 - 状态图优先。Mermaid flowchart / sequenceDiagram 可作为普通流程图和时序图的主表达；ASCII 文本图 / 纯文本线框图用于状态机、复杂原理图和复杂示例图。不要把复杂流程画成 stacked box diagram / 阶段堆叠图。
-- 每个正式 onboarding 文档至少包含架构/边界图和 ASCII 状态图 / 状态机图 / 状态机/决策图：架构/边界图讲结构边界，状态图讲状态变化、异常恢复、重试/补偿。
-- 模块和流程文档默认还必须包含 Timeline / 时序图，优先用 Mermaid sequenceDiagram，讲清流程怎么跑，并在流程讲解中引入相关数据模型。Timeline Diagram 用于故障恢复和延迟一致性时间线。
+- `critical` / `important` 核心流程必须闭合到业务终态，使用 Core Flow Overview / Boundary、Timeline / Sequence 主叙事和 ASCII State Machine，并通过 Flow Slice Coverage 追踪主路径、分支、失败和恢复。
+- 模块及其他内容文档按真实边界、状态、时间、数据和恢复语义选图；stateless glossary、静态配置清单和纯索引不强制状态图。
 - Onboarding Tasks are written only after the Onboarding Spec is accepted.
 - Do not combine Onboarding Spec acceptance with the later Full Execution Gate.
 - Onboarding Spec acceptance authorizes writing `onboarding-tasks.md`; formal module/flow execution starts only after the completed Tasks and Full Execution Gate receive separate human acceptance.
@@ -438,17 +438,17 @@ Rules:
 Flow:
 
 1. Confirm Project Entry Scan / reliable memory exists.
-2. Build `08-review/evidence-graph.md` before formal onboarding docs.
-3. Draft `onboarding-spec.md` with module plan, flow plan, DDD mapping, diagram type plan, architecture/boundary + ASCII state + Timeline/sequence requirements, Mermaid/ASCII format choices, file strategy, quality gates, and batch plan.
+2. Build `08-review/evidence-graph.md` before formal onboarding docs; Build Core Flow Inventory with criticality, business terminals, variants, recovery ownership, evidence chain, and planned/deferred selection.
+3. Draft `onboarding-spec.md` with module plan, Core Flow selection, Flow Slice Plan, DDD mapping, complexity-triggered Diagram Plan, file strategy, Completeness Hard Gate, quality gates, and batch plan.
 4. Ask human confirmation for the Onboarding Spec.
-5. After Spec acceptance, write `onboarding-tasks.md` with exact outputs, evidence, quality gates, and execution scope.
+5. After Spec acceptance, write `onboarding-tasks.md` with exact outputs, Flow/Slice/Diagram IDs, evidence, completeness and quality gates, and execution scope.
 6. Present the completed Onboarding Tasks and ask separate human acceptance of the Full Execution Gate.
 7. After Full Execution Gate acceptance, execute all planned docs that can be written with meaningful evidence-backed content. Do not create empty directories or placeholder docs.
 8. Write module docs as `02-modules/<module-name>.md` by default, not many small files.
 9. Write flow docs as `03-flows/<flow-name>.md` by default, not many small files.
-10. Require at least architecture/boundary + ASCII state diagram in every formal onboarding doc; module and flow docs also require Timeline / sequence diagrams by default. Use Mermaid flowchart / sequenceDiagram for normal flow/timing and ASCII for state machines, complex principle diagrams, and complex examples.
+10. Require the core flow diagram set for critical/important flows and relevant diagrams for other content docs. Use Mermaid flowchart / sequenceDiagram for normal flow/timing and ASCII for state machines, complex principle diagrams, and complex examples.
 11. Require use cases, data objects, state transitions, failure modes, verification/troubleshooting, and code evidence where applicable.
-12. Score changed topics in `coverage-matrix.md`; below 4/5 cannot be `newcomer-ready`.
+12. Run Completeness Hard Gate before scoring changed topics in `coverage-matrix.md`; a missing critical slice cannot be averaged away, and below 4/5 cannot be `newcomer-ready`.
 13. Record each batch in `batch-review.md`.
 
 Exit:

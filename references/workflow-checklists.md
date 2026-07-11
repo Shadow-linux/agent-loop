@@ -105,7 +105,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.sh` is available, run it as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.2.4-20260711.3`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.3.0-20260711`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -191,7 +191,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.sh` is available, run it as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.2.4-20260711.3`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.3.0-20260711`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -222,7 +222,11 @@ Before using an external skill or plugin inside a stage:
 - [ ] Treat old onboarding-db files as legacy evidence unless an Onboarding Spec migration is accepted.
 - [ ] State that Markdown is source of truth and website generation is out of scope.
 - [ ] Build `08-review/evidence-graph.md` before formal onboarding docs.
+- [ ] Build Core Flow Inventory from entries, state writes, async handlers, recovery paths, tests/contracts/logs/config, and verified business outcomes.
+- [ ] Give every `critical` / `important` flow a stable Flow ID, business success/failure terminals, variants, owners, side effects, recovery responsibility, evidence chain, and planned/deferred decision.
+- [ ] Do not treat `accepted` / `pending` / `processing` as a business terminal when callback, consumer, job, or reconciler owns the final state.
 - [ ] Draft `onboarding-spec.md`: target readers, scope, module plan, flow plan, DDD mapping, jobs/async, infra/deploy, file strategy, diagram type plan, ASCII 文本图 / wireframe rules, quality gates, and batches.
+- [ ] Add Flow Slice Coverage for every planned critical/important flow; map each critical Slice ID to evidence, Diagram IDs, and a narrative section.
 - [ ] Ask human confirmation for the Onboarding Spec only.
 - [ ] Write `onboarding-tasks.md` after Spec acceptance; Spec acceptance does not authorize formal docs.
 - [ ] After writing Onboarding Tasks, ask separate human acceptance of the Full Execution Gate.
@@ -232,17 +236,19 @@ Before using an external skill or plugin inside a stage:
 - [ ] If a topic cannot be written meaningfully, track it in `coverage-matrix.md` / `onboarding-tasks.md` instead of creating a thin file.
 - [ ] Module docs default to single long files: `02-modules/<module-name>.md`.
 - [ ] Flow docs default to single long files: `03-flows/<flow-name>.md`.
-- [ ] state diagram first: every formal onboarding doc should have at least 架构/边界图 for structure plus ASCII 状态图 / 状态机图 for state/exceptions.
-- [ ] Every content-bearing onboarding-db document must include the required diagram set unless the accepted Diagram Plan records an explicit exemption and reason.
-- [ ] module docs require architecture/boundary + state + timeline/sequence diagrams by default, plus core-principle explanation and diagrammed examples when internal behavior is not obvious.
-- [ ] flow docs require architecture/boundary + state + timeline/sequence diagrams by default.
+- [ ] Critical/important flows require Core Flow Overview / Boundary, Timeline / Sequence as the primary per-flow narrative, and ASCII State Machine / Decision views.
+- [ ] Complexity-triggered diagrams cover recovery timing, data lineage, transaction/concurrency, async topology, decisions, ERD, runtime topology, or troubleshooting only when the corresponding signal exists.
+- [ ] Module and other content docs select diagrams that explain real semantics; stateless glossary, static config lists, and pure indexes do not invent state diagrams.
+- [ ] module docs use architecture/boundary, state, and timeline/sequence diagrams when real boundary/state/timing/data-movement semantics exist, plus core-principle explanation and diagrammed examples when internal behavior is not obvious.
+- [ ] critical/important flow docs require architecture/boundary + state + timeline/sequence diagrams by default; supporting flow docs stay lightweight unless they own core state, side effects, or recovery.
 - [ ] Mermaid flowchart / sequenceDiagram can be the main expression for normal flow and timing; ASCII remains preferred for state-machine / decision diagrams and complex principle/example diagrams.
 - [ ] ASCII 泳道图 is optional supporting detail for ownership lanes; do not use it to replace the required Timeline / 时序图 in module/flow docs.
 - [ ] Use Timeline Diagram when recovery/timing matters; avoid stacked box diagram as the main explanation.
 - [ ] Plain flowcharts are only supporting detail.
-- [ ] Reject outline-only onboarding: module/flow docs must include use cases, domain/data objects, information transfer, state transitions, failure modes, verification/troubleshooting, and code evidence where applicable.
+- [ ] Reject outline-only onboarding: critical/important module/flow docs must include use cases, domain/data objects, information transfer, state transitions, failure modes, verification/troubleshooting, and code evidence where applicable; supporting topics include only applicable semantics and evidence.
 - [ ] 全部正式文档默认使用中文；推断内容要标明“推断”、证据、置信度和待验证点。
 - [ ] Use coverage matrix to track topic readiness and score, not file count.
+- [ ] Run Completeness Hard Gate before quality scoring; any missing/blocked critical slice prevents `newcomer-ready` and cannot be averaged away.
 - [ ] Below 4/5 score cannot be marked `newcomer-ready`.
 - [ ] Do not copy human examples as required topics, topic counts, domain names, or project structure.
 - [ ] Keep narrative Chinese; preserve code symbols, paths, commands, APIs, env vars, config keys, errors, and third-party names.

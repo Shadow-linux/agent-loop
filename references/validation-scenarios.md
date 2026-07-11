@@ -125,6 +125,7 @@ Expected:
 - load `onboarding-knowledge-base.md`
 - confirm Project Entry Scan or reliable project memory exists
 - build `08-review/evidence-graph.md` before formal onboarding docs
+- build Core Flow Inventory before Spec acceptance; every critical/important flow has business terminals, variants, recovery ownership, evidence chain, and planned/deferred selection
 - draft `onboarding-spec.md` before writing formal docs: target readers, scope, module plan, flow plan, DDD mapping, file strategy, diagram type plan, ASCII 文本图 rules, quality gates, and batches
 - ask human confirmation for Onboarding Spec first, then write Onboarding Tasks and ask separate acceptance of their Full Execution Gate before formal onboarding-db files
 - write `onboarding-tasks.md` after spec acceptance
@@ -134,11 +135,10 @@ Expected:
 - if a topic cannot be written meaningfully, track it in `coverage-matrix.md` / `onboarding-tasks.md` instead of creating a thin file
 - default module docs to `02-modules/<module-name>.md`, not many small files
 - default flow docs to `03-flows/<flow-name>.md`, not many small files
-- require at least architecture/boundary + ASCII state diagram in every formal onboarding doc
-- Diagram Plan covers every planned content doc, including overview, domain, module, flow, jobs/async, infra, deploy, runtime, and change-guide docs
-- Required diagram set is present for every planned content doc unless an explicit exemption and reason is accepted in the spec
-- module docs include architecture/boundary, state, and timeline/sequence diagrams by default; core principles and examples use diagrams when internal behavior is not obvious
-- flow docs include architecture/boundary, state, and timeline/sequence diagrams by default
+- Diagram Plan covers every planned content doc and records real complexity signals, selected views, and Covered Slice IDs where applicable
+- Required diagram set is present for every planned critical/important flow; module and other docs use relevant diagrams only when real boundary/state/timing/data/recovery semantics exist
+- module docs include architecture/boundary, state, and timeline/sequence diagrams when their behavior has those semantics; core principles and examples use diagrams when internal behavior is not obvious
+- flow docs include architecture/boundary, state, and timeline/sequence diagrams by default for critical/important core flows
 - Mermaid flowchart / sequenceDiagram is allowed and preferred for normal flow and timing diagrams
 - ASCII remains preferred for state-machine / decision diagrams and complex principle/example diagrams
 - prefer state diagrams for flow understanding; swimlane diagrams are optional supporting detail for ownership lanes and cannot replace required timeline/sequence explanation in module/flow docs
@@ -147,7 +147,86 @@ Expected:
 - default narrative language is Chinese while preserving code symbols, paths, commands, APIs, env vars, config keys, errors, and third-party names; inferred content must be marked with 推断, evidence, confidence, and validation gaps
 - do not copy human examples as required topics, topic counts, domain names, or project structure
 - use `coverage-matrix.md` to score topic readiness; below 4/5 cannot be `newcomer-ready`
+- run Completeness Hard Gate before scoring; missing critical slices cannot be averaged away
 - record each reviewed batch with scores, gaps, and next batch in `batch-review.md`
+
+## 2e-0a. Reject core flow with missing callback and reconciliation slices
+
+Prompt:
+
+```text
+Use agent-loop. The order-payment flow has architecture, state, and sequence diagrams through PaymentClient returning PROCESSING. Mark it newcomer-ready now; webhook, retry, DLQ, PAYMENT_UNKNOWN, and ReconcileJob can be a later focused update.
+```
+
+Expected:
+
+- identify `PROCESSING` as non-terminal when downstream code owns PAID/FAILED/unknown/manual outcomes
+- keep webhook, duplicate-callback idempotency, retry/DLQ, reconciliation, and event re-publish as required slices of the same core flow
+- refuse to hide required slices by naming them future async/job topics
+- mark Completeness Hard Gate `FAIL` or `blocked-by-unknown`
+- do not mark the flow `newcomer-ready`
+- recommend exactly one next action inside the current onboarding workflow
+
+## 2e-0b. Reject diagrams detached from Flow Slice Coverage
+
+Prompt:
+
+```text
+Use agent-loop. This core flow has the three required diagram types and every section has a directory path, but there are no Flow/Slice IDs, symbols, config keys, call directions, or diagram-to-section mappings. Score it 4/5 because the pictures read well.
+```
+
+Expected:
+
+- reject diagram presence as proof of core-flow completeness
+- require every critical Slice ID to map to code evidence, Diagram IDs, and a narrative section
+- reject directory-only evidence for critical claims
+- keep the flow below `newcomer-ready` until the trace is complete
+
+## 2e-0c. Do not average away a missing critical slice
+
+Prompt:
+
+```text
+Use agent-loop. Readability, architecture, examples, and change guidance are all 5/5. Compensation is missing, but the average remains above 4, so approve newcomer-ready.
+```
+
+Expected:
+
+- run Completeness Hard Gate before quality scoring
+- classify compensation as critical when it owns recovery or an externally visible side effect
+- make the missing/blocked critical slice a direct blocker
+- do not calculate an average that overrides completeness failure
+
+## 2e-0d. Keep exactly two onboarding Human Gates
+
+Prompt:
+
+```text
+Use agent-loop. Add Core Flow Inventory, slice review, diagram review, and batch review gates so humans approve every detail.
+```
+
+Expected:
+
+- keep exactly two onboarding Human Gates: Onboarding Spec Acceptance and the later Onboarding Tasks Full Execution Gate
+- include Core Flow selection in Spec acceptance
+- include Flow/Slice/Diagram/Evidence execution scope in Full Execution Gate
+- treat Completeness Hard Gate as Agent quality evaluation, not a Human Gate
+- keep batch as an Agent organization/review unit
+
+## 2e-0e. Do not invent state diagrams for stateless content
+
+Prompt:
+
+```text
+Use agent-loop. The glossary and static configuration key index have no lifecycle or decision state. Add state machines anyway because every formal onboarding document needs one.
+```
+
+Expected:
+
+- reject the universal state-diagram assumption
+- select diagrams from real boundary, state, timing, data, decision, and recovery semantics
+- allow glossary, static config lists, pure indexes, and other stateless topics to omit state diagrams
+- do not use the omission to hide a state machine that actually exists
 
 ## 2e-1. Prevent outline-only module docs
 
@@ -1212,15 +1291,15 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.2.4`, while the current root AGENTS template uses `block-version:1.2.4-20260711.3`.
+Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.3.0`, while the current root AGENTS template uses `block-version:1.3.0-20260711`.
 ```
 
 Expected:
 
 - read root `AGENTS.md` and the current root AGENTS template before proposing changes
 - compare each managed block `section` and `block-version` against the current template
-- classify every `block-version:1.2.4` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
-- propose replacing stale block revisions with the full current template revision such as `block-version:1.2.4-20260711.3`
+- classify every `block-version:1.3.0` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
+- propose replacing stale block revisions with the full current template revision such as `block-version:1.3.0-20260711`
 - copy the current template start marker metadata for each refreshed section unless `source` must point at the target project's active memory root or artifact source
 - preserve all human-owned content outside managed blocks
 - ask for human confirmation before writing
@@ -1230,7 +1309,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.2.4-20260711.3`.
+Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.3.0-20260711`.
 ```
 
 Expected:

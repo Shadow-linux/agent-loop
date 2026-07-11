@@ -38,8 +38,11 @@
 
 ## 质量要求
 
-- 模块和流程默认必须包含架构/边界图、ASCII 状态图、Timeline / 时序图。
+- `critical` / `important` 核心流程必须从触发闭合到业务终态，并通过 Flow Slice Coverage 连接代码证据、图和正文。
+- 核心流程默认包含 Core Flow Overview / Boundary、ASCII State Machine / Decision、Timeline / Sequence；Timeline / Sequence 是单流程主叙事。
+- 模块和其他内容文档按真实语义选图；stateless glossary、静态配置清单和纯索引不强制状态图。
 - 普通流程图和时序图优先用 Mermaid flowchart / sequenceDiagram；状态机、复杂原理图和复杂示例图优先用 ASCII。
 - 禁止用无边界、无状态、无数据对象的 `A-->B-->C` flowchart 当主图。
 - module / flow 默认单文件长文档，不默认拆成很多小文件。
 - 不允许空文件、TODO 占位、泛泛摘要。
+- Completeness Hard Gate 先于质量评分；missing/blocked critical slice 不能标记 `newcomer-ready`。

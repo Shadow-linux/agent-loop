@@ -1,6 +1,20 @@
 # Agent Loop Changelog
 
-## Unreleased
+## 1.3.0 — 2026-07-11
+
+### Version Baseline
+- Started the 1.3.0 alpha development line from the refreshed `stable-v1.2.4` baseline.
+- Updated version-bearing skill metadata and human-facing version labels to 1.3.0.
+- Updated the root AGENTS managed-block revision to `block-version:1.3.0-20260711` for the first 1.3.0 template revision.
+- Updated version-sync, root-guidance, and human-help regression expectations for the 1.3.0 development line.
+
+### Core Flow Completeness
+- Added Core Flow Inventory and Flow Slice Coverage so critical/important onboarding flows close across callbacks, consumers, retries, compensation, reconciliation, jobs, and business terminal states.
+- Made timeline/sequence the primary per-flow narrative, kept overview/boundary and ASCII state-machine views complementary, and triggered lineage, transaction, async, decision, runtime, and troubleshooting diagrams only when their semantics apply.
+- Added a Completeness Hard Gate before quality scoring, aligned coverage and batch review dimensions, and prevented missing critical slices from being averaged into `newcomer-ready`.
+- Kept exactly two onboarding Human Gates and removed the default pressure to invent state diagrams for stateless content topics.
+
+## 1.2.4 — 2026-07-11
 
 ### Project-Local Skills
 - Added Project Skill Creation / Update for durable target-project capabilities under `.agent-loop/skills/<skill-name>/`, with INDEX-based lifecycle, `bootstrap` / `on-demand` loading, and target-path ownership that never defaults to global skill directories.
@@ -13,8 +27,6 @@
 - Added a five-domain single-feature scoring method for focused logic, Human Gate, cross-surface consistency, pressure-resistance, and evidence audits.
 - Added a feature-scoped contract test and a Project-Local Skills scoring report without making full-repository tests part of the feature score.
 - Kept single-feature scoring in maintainer guidance only; it does not replace mandatory full validation for control-surface changes.
-
-## 1.2.4 — 2026-07-11
 
 ### Version Baseline
 - Started the 1.2.4 development line from the current alpha branch so new behavior changes are recorded under 1.2.4 instead of the closed 1.2.3 section.

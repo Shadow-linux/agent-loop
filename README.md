@@ -1,6 +1,6 @@
 # Agent Loop
 
-**Current version:** 1.2.4
+**Current version:** 1.3.0
 
 A reusable [Codex](https://github.com/openai/codex) / CLI-agent skill for single-person software development workflows—from goal intake to verified close.
 
@@ -183,13 +183,14 @@ Evidence-Graph + DDD Onboarding is the current durable project-understanding flo
 It builds `.agent-loop/onboarding-db/` from verified code evidence into macro-to-micro handoff docs:
 
 - `08-review/evidence-graph.md` before formal docs
-- `onboarding-spec.md` for module/flow coverage, DDD mapping, file strategy, quality gates, and batch plan
+- Core Flow Inventory for business terminals, variants, owners, recovery responsibility, evidence chain, and planned/deferred selection
+- `onboarding-spec.md` for module/flow coverage, Flow Slice Plan, DDD mapping, file strategy, quality gates, and batch plan
 - `onboarding-tasks.md` for accepted batch execution
 - module playbooks under `02-modules/<module-name>.md` by default
 - flow playbooks under `03-flows/<flow-name>.md` by default
 - coverage matrix and reviewed batch records
 
-The agent must first confirm Project Entry Scan or reliable project memory, then build an Evidence Graph and present an Onboarding Spec for human review. Spec acceptance authorizes creation of Onboarding Tasks; formal onboarding docs begin only after the completed Tasks and their separate Full Execution Gate are accepted. Module and flow docs default to single long files, not many small files. Wireframe architecture flow diagrams are the preferred main way to express every module and flow process. The old Quick / Deep / Targeted onboarding modes and directory-first legacy generation flow are not used.
+The agent must first confirm Project Entry Scan or reliable project memory, then build an Evidence Graph with Core Flow Inventory and present an Onboarding Spec for human review. Spec acceptance authorizes creation of Onboarding Tasks; formal onboarding docs begin only after the completed Tasks and their separate Full Execution Gate are accepted. Critical/important flows use Flow Slice Coverage and a completeness gate before quality scoring. Timeline/sequence is the primary per-flow narrative, supported by overview/boundary and state-machine views; extra diagrams are triggered by real recovery, data, transaction, async, decision, runtime, or troubleshooting complexity. Stateless topics do not invent state diagrams. Module and flow docs default to single long files, not many small files. The old Quick / Deep / Targeted onboarding modes and directory-first legacy generation flow are not used.
 
 Existing legacy onboarding-db files may be read as evidence, but they are not trusted without checking code reality. Migration or replacement requires an accepted Onboarding Spec, Onboarding Tasks, and Full Execution Gate.
 

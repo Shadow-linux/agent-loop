@@ -5,7 +5,7 @@ description: Use when starting, continuing, resuming, structuring, testing, impl
 
 # Agent Loop
 
-Version: 1.2.4
+Version: 1.3.0
 
 Run a single-human, CLI-agent development loop from goal intake to verified close. This skill is a controller: it decides the current stage, loads the right reference, produces or updates `agent-loop` artifacts, and stops at human gates.
 
@@ -150,7 +150,7 @@ CHANGELOG.md                        version-change source of truth for "what cha
 11. Load `references/e2e-discovery.md` before designing or executing Web E2E/browser verification.
 12. Load `references/delivery-contracts.md` when the human requests cross-boundary handoff/API/interface documentation, or when the agent detects a likely downstream consumer boundary such as frontend/backend, service, event, public data, SDK/library, UI state, or runtime behavior. Delivery Contracts are not created by default.
 13. Load `references/project-entry-scan.md` when taking over an existing project without reliable `agent-loop` memory. This is now a Project Entry Scan only: build safe project memory, guidance status, commands, boundaries, and uncertainties. Do not create `.agent-loop/onboarding-db/`, module docs, flow docs, onboarding diagrams, or old Quick / Deep / Targeted onboarding artifacts during Project Entry Scan.
-13a. Load `references/onboarding-knowledge-base.md` when the human asks for newcomer-facing docs, durable project understanding, guided learning paths, or onboarding-db construction. Run it only after Project Entry Scan or reliable project memory. Use Evidence Graph first, then accepted Onboarding Spec, Onboarding Tasks, single-file module/flow docs by default, wireframe architecture flow diagrams as the preferred flow expression, coverage scoring, and reviewed batches.
+13a. Load `references/onboarding-knowledge-base.md` when the human asks for newcomer-facing docs, durable project understanding, guided learning paths, or onboarding-db construction. Run it only after Project Entry Scan or reliable project memory. Use Evidence Graph and Core Flow Inventory first, then accepted Onboarding Spec, Onboarding Tasks, Flow Slice Coverage for critical/important flows, evidence-linked diagrams, completeness gating, coverage scoring, and reviewed batches; module/flow docs remain single-file by default.
 13b. During Project Entry, Resume, Re-Adopt, context recovery, and controller re-entry, check `.agent-loop/skills/INDEX.md` when present. Load only `active` project skills whose current instruction-bearing and executable files match the validation manifest, according to `bootstrap` / `on-demand`; discovery and loading never satisfy the per-invocation Execution Gate.
 14. Load `references/feature-follow-up.md` when the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, screenshot issue, behavior tweak, "small tweak", test failure, or QA/user feedback that may belong to a recent feature.
 15. Load `references/large-projects.md` when the repo is large, old, unfamiliar, multi-package, or likely above 100k LOC.
@@ -237,7 +237,7 @@ If the local directory is only a remote-project entry point, create only thin lo
 - Task Done Gate: mark a task `done` only after implementation is complete, required tests or substitute verification have run fresh, evidence is recorded in `notes.md`, lightweight Spec Review is recorded, Standards Review is recorded when triggered, drift decision is recorded, and `tasks.md` links or names the evidence.
 - During large Project Entry Scan, recommend bounded subagent scanning when available and human-confirmed; otherwise use single-agent layered scan.
 - During existing-project Project Entry Scan, create or propose only safe project memory, root guidance status, commands, boundaries, capabilities, and uncertainties. Do not create onboarding-db detail docs, module docs, flow docs, onboarding diagrams, onboarding-spec, or onboarding-tasks during Project Entry Scan.
-- During Evidence-Graph + DDD Onboarding, create or update onboarding-db only through `references/onboarding-knowledge-base.md`: build Evidence Graph, confirm Onboarding Spec, write Onboarding Tasks, then produce reviewed batches with single-file module/flow docs by default, wireframe architecture flow diagrams, coverage scoring, and no placeholder files.
+- During Evidence-Graph + DDD Onboarding, create or update onboarding-db only through `references/onboarding-knowledge-base.md`: build Evidence Graph with Core Flow Inventory, confirm Onboarding Spec, write Onboarding Tasks, then produce reviewed batches with Flow Slice Coverage for critical/important flows, evidence-linked diagrams, completeness gating, single-file module/flow docs by default, and no placeholder files.
 - When Project Entry Scan discovers stable project facts missing from project memory, propose or perform project memory backfill after human confirmation.
 - For focused questions about one module, flow, async task, deployment path, or problem area, answer from existing docs/code as chat or operational support unless the human explicitly authorizes feature/fix work. Do not create focused onboarding-db artifacts.
 - When local and remote project reality are split, discover the remote environment before Project Entry Scan or initializing project memory.

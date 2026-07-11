@@ -103,7 +103,7 @@ feat, fix, docs, refactor, test, chore
 Rules:
 
 - Prefer Chinese for the summary and body unless the project context requires English.
-- Include the current skill version scope, for example `docs(v1.2.4): 调整 Project Entry Scan 文档结构`.
+- Include the current skill version scope, for example `docs(v1.3.0): 调整 Project Entry Scan 文档结构`.
 - Do not use one-line-only commit messages for meaningful behavior, gate, artifact, template, reference, validation, or example changes.
 - Use 3-7 bullet lines in the commit body, focused on concrete changes and user/agent-facing behavior.
 - Use `docs` for proposals, README, Usage, and explanatory docs.

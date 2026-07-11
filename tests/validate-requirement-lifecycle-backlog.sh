@@ -85,11 +85,12 @@ assert_contains "README.md" "Requirement Lifecycle / Backlog"
 assert_contains "Usage.md" "需求待办"
 assert_contains "Usage.md" "当前恢复动作"
 assert_contains "CHANGELOG.md" "Requirement Lifecycle / Backlog"
-assert_contains "SKILL.md" "Version: 1.2.4"
-assert_contains "README.md" "**Current version:** 1.2.4"
-assert_contains "Usage.md" "**版本：** 1.2.4"
-assert_contains "plugin.json" '"version": "1.2.4"'
-assert_contains "templates/root-AGENTS.md" "block-version:1.2.4-20260711.3"
+assert_contains "SKILL.md" "Version: 1.3.0"
+assert_contains "README.md" "**Current version:** 1.3.0"
+assert_contains "Usage.md" "**版本：** 1.3.0"
+assert_contains "plugin.json" '"version": "1.3.0"'
+assert_contains "templates/root-AGENTS.md" "block-version:1.3.0-20260711"
+assert_contains "CHANGELOG.md" "## 1.3.0 — 2026-07-11"
 assert_not_contains "templates/root-AGENTS.md" "## Agent Loop Guidance Version"
 assert_contains "AGENTS.md" 'ignore the `alpha` prefix for version records'
 

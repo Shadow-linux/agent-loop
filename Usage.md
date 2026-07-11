@@ -1,6 +1,6 @@
 # Agent Loop 使用指南
 
-**版本：** 1.2.4
+**版本：** 1.3.0
 
 这份文档是给人类看的。你不需要记住内部阶段名，只要用自然语言说出你想做什么，Agent 应该自己判断当前状态、推荐一个下一步，并在需要你确认的地方停下来。
 
@@ -45,13 +45,14 @@ Project Entry Scan 不算完成，除非 root `AGENTS.md` 已存在、已创建�
 | “重点讲清楚支付/钱包/任务调度这块。” | 先从现有代码和文档回答；如果要沉淀长期文档，再走聚焦的 onboarding-db 更新。 |
 | “这个旧 onboarding-db 还能信吗？” | 把旧文档当 evidence，先和代码现实核对；不直接按旧布局刷新。 |
 
-当前 1.2.4 使用的是 **Evidence-Graph + DDD Onboarding**，不是旧 Quick / Deep / Targeted 模式。
+当前 1.3.0 使用的是 **Evidence-Graph + DDD Onboarding**，不是旧 Quick / Deep / Targeted 模式。
 
 推荐流程：
 
 ```text
 可靠项目记忆
 -> 08-review/evidence-graph.md
+-> Core Flow Inventory（核心流程、业务终态、恢复责任和证据链）
 -> onboarding-spec.md（第一次确认）
 -> onboarding-tasks.md / Full Execution Gate（第二次确认）
 -> 02-modules/<module-name>.md
@@ -73,6 +74,10 @@ Agent 不应该用空目录、薄 README、planned/later 占位文件、`TBD`、
 - 怎么验证、怎么排查、怎么安全修改
 - 架构/边界图、ASCII 状态图、Timeline / 时序图
 
+核心流程完整性先于文档评分：`critical` / `important` 流程必须从触发闭合到业务成功、失败、取消、未知或人工处理终态；callback、consumer、retry、DLQ、compensation、reconciliation 和 job 不能因为被拆成其他 topic 就从流程中消失。每个关键 slice 都要连接代码证据、图和正文，缺失时不能标记 `newcomer-ready`。
+
+Timeline / Sequence 是单个核心流程的主叙事；Core Flow Overview / Boundary 讲 scope、owner、branch 和 terminal；ASCII State Machine 讲状态、非法转换和恢复。数据血缘、事务并发、异步拓扑、决策树、runtime 和排障图由真实复杂度触发。非流程的 stateless 文档不强制状态图。
+
 普通流程图和时序图可以优先使用 Mermaid flowchart / sequenceDiagram；状态机、复杂原理图和复杂示例图优先使用 ASCII。
 
 ### 我只是想问问题
@@ -90,7 +95,7 @@ Agent 不应该用空目录、薄 README、planned/later 占位文件、`TBD`、
 
 | 你可以这样说 | Agent 应该怎么做 |
 |---|---|
-| “1.2.4 更新了什么？” | 读取 `CHANGELOG.md` 的 1.2.4 段落，按能力分类总结，不凭记忆回答。 |
+| “1.3.0 更新了什么？” | 读取 `CHANGELOG.md` 的 1.3.0 段落，按能力分类总结，不凭记忆回答。 |
 | “和 1.2.2 比有什么变化？” | 对比 `CHANGELOG.md` 里的两个版本段落，说明新增、删除、替换和迁移影响。 |
 | “现在 agent-loop 怎么用？” | 基于 `Usage.md` 用人类语言介绍常见触发方式。 |
 | “这个功能怎么触发？” | 从 `Usage.md` 找对应说法，再说明 Agent 会进入哪个处理流。 |

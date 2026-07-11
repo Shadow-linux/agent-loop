@@ -246,6 +246,25 @@ Do not create or refresh onboarding-db through the removed legacy flow.
 
 If onboarding-db is missing but project memory or root guidance claims it should exist, route to stale-memory recovery and ask before correcting `project.md` or root guidance. Do not recreate onboarding-db through the removed legacy flow.
 
+#### Core Flow Completeness Invariant
+
+Evidence-Graph + DDD Onboarding must preserve this trace for every `critical` / `important` core flow:
+
+```text
+Core Flow Inventory
+-> accepted Core Flow selection
+-> Flow Slice Coverage
+-> Diagram + narrative + code-evidence trace
+-> Completeness Hard Gate
+-> Quality Score
+```
+
+A core flow is not closed merely because a synchronous call returned. It must trace to its business success, failure, cancellation, unknown, or manual-handling terminals and include any callback, consumer, retry, compensation, reconciliation, or job that owns a required transition, side effect, or recovery responsibility. Reclassifying those required slices as separate future topics does not remove them from the core flow.
+
+A missing critical slice cannot be averaged away by diagram presence, readability, or other topic scores. `supporting` flows remain lightweight unless they own core state, an externally visible side effect, or recovery. Stateless overview, glossary, configuration, and index topics use only diagrams that explain real semantics; they do not invent state machines to satisfy a file-wide quota.
+
+The invariant does not add a Human Gate. Onboarding has exactly two onboarding Human Gates: Onboarding Spec Acceptance, followed later by Onboarding Tasks Full Execution Gate. Completeness is an Agent quality gate inside the accepted scope.
+
 ### Feature Follow-up And Flow-back
 
 Project Entry and memory bootstrap have priority over Feature Follow-up.

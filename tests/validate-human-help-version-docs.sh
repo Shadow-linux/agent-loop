@@ -20,7 +20,7 @@ assert_contains "SKILL.md" "use \`README.md\` for high-level overview, install, 
 assert_contains "SKILL.md" "read that version section first"
 
 assert_contains "Usage.md" "### 我想知道版本更新或用法"
-assert_contains "Usage.md" "1.2.4 更新了什么？"
+assert_contains "Usage.md" "1.3.0 更新了什么？"
 assert_contains "Usage.md" "和 1.2.2 比有什么变化？"
 assert_contains "Usage.md" "现在 agent-loop 怎么用？"
 assert_contains "Usage.md" "CHANGELOG.md"

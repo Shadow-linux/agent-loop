@@ -28,8 +28,9 @@ If existing `.agent-loop/onboarding-db/` files use an old layout, treat them as 
 - Split a module/flow into a directory only when justified by size, independent subdomains, frequent separate updates, or explicit human request.
 - Use Mermaid flowchart / sequenceDiagram for normal flow and sequence diagrams; use ASCII 文本图 / 纯文本线框图 for state machines, complex principle diagrams, and complex examples.
 - When older docs say ASCII wireframe, interpret it as “choose the diagram format that best explains the boundary, state, and timing,” not as a generic stacked box.
-- 状态图优先。每个正式 onboarding 文档至少包含架构/边界图和 ASCII 状态图 / 状态机图，用来讲清楚结构边界和状态怎么变化。
-- 模块和流程文档默认还必须包含 Timeline / 时序图，用来讲清楚流程怎么跑，并在流程讲解中引入相关数据模型。
+- `critical` / `important` 核心流程必须闭合到业务终态，并用 Core Flow Overview / Boundary、Timeline / Sequence、ASCII State Machine 三类互补表达；不能停在同步 `PROCESSING` 一类非终态结果。
+- 模块文档在具有真实状态、时间顺序或数据移动时使用架构/边界、状态、Timeline / 时序图；没有对应语义时不要编造图。
+- overview、domain、jobs/async、infra、deploy、runtime、change-guide 等内容文档按实际解释需要选图。glossary、静态配置清单、纯索引和其他 stateless topic 不强制状态图。
 - Do not default complex flows to a stacked box diagram. stacked box diagram / 阶段堆叠图 is only acceptable for simple layer summaries.
 - Mermaid flowchart / sequenceDiagram can be the main diagram for normal flow and timing; ASCII remains preferred for state-machine / decision diagrams and complex examples.
 - Default narrative language is Chinese; preserve code symbols, file paths, commands, API paths, env vars, config keys, error messages, and third-party product names.
@@ -122,6 +123,7 @@ Evidence Graph is a code-backed inventory, not a summary. It must identify:
 - bounded-context candidates;
 - module candidates;
 - flow candidates;
+- core flow inventory and selection;
 - data object inventory;
 - async / job / callback inventory;
 - infra / dependency inventory;
@@ -135,6 +137,42 @@ Evidence quality gate:
 - each candidate module / flow / data object must include concrete evidence with file path, symbol/function/class/config key when available, and confidence;
 - claims without concrete evidence stay in `Unknowns` and must not enter the formal Module Plan or Flow Plan;
 - examples must come from real tests, fixtures, API contracts, logs, configs, or code-constructed objects; if no real example exists, mark it as unknown instead of inventing one.
+
+## Core Flow Inventory
+
+Evidence Graph must classify the discovered end-to-end business flows before Onboarding Spec. A core flow is defined by a business outcome and terminal states, not by one convenient synchronous call chain.
+
+Required fields for `critical` / `important` flows:
+
+| Field | Required meaning |
+|---|---|
+| Flow ID | stable ID used across Evidence Graph, Spec, Tasks, Flow doc, Coverage, and Review |
+| Business Outcome | user/business result the flow exists to produce |
+| Criticality | `critical`, `important`, or `supporting` |
+| Trigger / Entry | external trigger plus concrete entry evidence |
+| Success Terminal | observable business success terminal |
+| Failure Terminals | failure, cancellation, unknown, or manual-handling terminals |
+| Variants / Branches | synchronous, asynchronous, callback, fallback, or business variants |
+| Participants / Owners | modules, services, external systems, and truth owners |
+| State / Data Owners | state objects and source-of-truth owners |
+| Async / Jobs / Callbacks | producers, consumers, jobs, callbacks, retries, and DLQ paths |
+| External Side Effects | charge, quota, notification, delivery, event, or other visible effect |
+| Recovery Responsibility | retry, rollback, compensation, reconciliation, or manual action |
+| Evidence Chain | entry, state-write, async-handler, recovery, and terminal evidence with direction |
+| Selection | `planned`, `deferred`, or `not-applicable` |
+| Selection Reason | evidence-backed inclusion or deferral reason and impact |
+| Confidence / Unknowns | confidence plus unresolved facts that block claims |
+
+Discovery must triangulate API/CLI/UI/webhook/consumer/job entries, core state writes, transaction/cache/message side effects, callback/retry/compensation/reconciliation paths, tests/contracts/logs/config/runbooks, and human-described business outcomes checked against code.
+
+Rules:
+
+- a non-terminal response such as `accepted`, `pending`, or `processing` does not close a core flow when later code owns the business terminal;
+- callbacks, consumers, retry queues, DLQs, compensators, reconcilers, and jobs remain required slices when they own a core transition, side effect, or recovery responsibility, even if documented elsewhere too;
+- every `critical` / `important` candidate must be `planned` or carry a concrete deferred reason, impact, missing evidence, and next action;
+- a whole-project onboarding cannot be called complete while a discovered `critical` / `important` flow is merely deferred; focused onboarding must label its boundary and cannot claim whole-project readiness;
+- a `supporting` flow stays lightweight unless it owns core state, an externally visible side effect, or recovery, in which case it is promoted into the applicable core flow's slice coverage;
+- no evidence means Unknowns, not invented flow closure.
 
 Minimum sections:
 
@@ -152,6 +190,9 @@ Minimum sections:
 
 ## Flow Candidates
 | Flow | Trigger | Participants | State Changes | External Dependencies | Evidence | Risk |
+
+## Core Flow Inventory
+| Flow ID | Flow | Business Outcome | Criticality | Trigger / Entry | Success Terminal | Failure Terminals | Variants / Branches | Participants / Owners | State / Data Owners | Async / Jobs / Callbacks | External Side Effects | Recovery Responsibility | Evidence Chain | Selection | Selection Reason | Confidence / Unknowns |
 
 ## Relationship Wireframe
 ```text
@@ -197,6 +238,8 @@ This is the production spec for future Agents. It must define:
 - scope: whole project or focused area;
 - module plan;
 - flow plan;
+- Core Flow Inventory selection for the accepted scope;
+- Flow Slice Plan for every planned `critical` / `important` flow;
 - DDD bounded-context plan;
 - jobs / async / callback plan;
 - infra / deploy plan;
@@ -208,6 +251,8 @@ This is the production spec for future Agents. It must define:
 - batch plan;
 - non-goals;
 - human confirmation questions.
+
+Spec acceptance must confirm Core Flow Inventory selection. Every `critical` / `important` candidate is planned or explicitly deferred with evidence and impact; every planned core flow lists its success/failure terminals, known variants, required Slice IDs, and evidence chain. This is part of the existing Spec Acceptance Gate, not a new gate.
 
 Use this gate sequence:
 
@@ -238,6 +283,7 @@ Rules:
 - split tasks by batch, not by full tree generation;
 - each batch covers a coherent set of topics; batch size is an execution/review pacing tool, not a human approval boundary;
 - each task lists output path, evidence required, and quality gate;
+- each core-flow task lists Flow ID, required Slice IDs, default and complexity-triggered diagrams, Diagram IDs, evidence requirements, Completeness Hard Gate, and quality-score target;
 - present the completed task ledger and Full Execution Gate for explicit human acceptance before formal-doc execution;
 - after the Full Execution Gate is accepted, create and complete all planned docs that can be written with meaningful evidence-backed content;
 - do not create thin planned files for topics that are still unknown; track those topics in `coverage-matrix.md` and `onboarding-tasks.md`;
@@ -276,9 +322,9 @@ Required sections:
 
 Minimum content:
 
-- at least one Architecture / Boundary Diagram, using Mermaid flowchart or ASCII as appropriate;
-- at least one ASCII state diagram / state-machine diagram;
-- at least one Timeline / sequence diagram that explains how the module flow runs over time;
+- an Architecture / Boundary Diagram when module boundaries, ownership, or dependencies need a visual explanation;
+- an ASCII state diagram / state-machine diagram when the module owns a real lifecycle, decision, or recovery state;
+- a Timeline / sequence diagram when ordered calls, state phases, async interactions, or data movement exist;
 - a process narrative that introduces referenced data models while explaining the flow;
 - 工作原理与示例 section with 关键机制, principle / example diagram, and evidence-backed examples;
 - example trace with diagram when the module has non-trivial state or data movement;
@@ -306,35 +352,77 @@ Required sections:
 ```md
 # Flow: <flow-name>
 
-## 1. 用例
-## 2. 架构/边界图
-## 3. ASCII 状态图 / 状态机图
-## 4. Timeline / 时序图
-## 5. 阶段说明
-## 6. 数据流转
-## 7. 状态变化
-## 8. 示例
-## 9. 失败路径
-## 10. 排障路径
-## 11. 变更指南
-## 12. 代码证据
+## 1. Flow Identity And Outcomes
+## 2. Flow Slice Coverage
+## 3. Core Flow Overview / Boundary
+## 4. ASCII State Machine / Decision
+## 5. Timeline / Sequence
+## 6. Diagram Explanations / Complexity-Triggered Diagrams
+## 7. 阶段说明
+## 8. 数据流转
+## 9. 状态变化
+## 10. 示例
+## 11. 失败路径
+## 12. 排障路径
+## 13. 变更指南
+## 14. 代码证据
+## 15. 自检
 ```
 
-Every flow must include trigger, participants, ASCII Architecture / Boundary Diagram, ASCII state diagram / state-machine diagram, Timeline / sequence diagram, phase explanation, data transfer, state change, success path, failure path, retry/compensation/degradation, example request/object, troubleshooting path, change guide, and code evidence. 流程讲解时顺带解释涉及的数据模型 so the reader learns objects through the running flow instead of from a detached list.
+Every `critical` / `important` flow must include business terminals, required Slice IDs, trigger, participants, Architecture / Boundary Diagram, ASCII state diagram / state-machine diagram, Timeline / sequence diagram, phase explanation, data transfer, state change, success path, failure path, retry/compensation/degradation, example request/object, troubleshooting path, change guide, and code evidence. Supporting flows may stay lighter unless they own core state, external side effects, or recovery. 流程讲解时顺带解释涉及的数据模型 so the reader learns objects through the running flow instead of from a detached list.
+
+## Flow Slice Coverage
+
+Every planned `critical` / `important` flow must trace its required main, branch, failure, and recovery slices. A slice is a real behavior unit, not a document heading.
+
+```md
+| Flow ID | Slice ID | Path Kind | Trigger / Precondition | Owner | Input / Output | Action | State Read / Written | Transition | Sync / Async / External | Failure Result | Recovery | Evidence | Diagram IDs | Document Section | Coverage Status |
+```
+
+`Path Kind` is `main`, `branch`, `failure`, or `recovery`. `Coverage Status` is `covered`, `inferred`, or `blocked`.
+
+A slice is critical when it changes core business state, causes an externally visible side effect, determines a business terminal, owns retry/compensation/reconciliation/manual recovery, or crosses transaction, lock, idempotency, billing, quota, credential, permission, or security boundaries. Each critical Slice ID must map to concrete evidence, at least one Diagram ID, and a narrative section. A `blocked` or missing critical slice makes the flow incomplete.
 
 Examples must be evidence-backed. Prefer real tests, fixtures, API contracts, logs, configs, or code-constructed request/event objects. If an example is inferred, label it as inferred and explain the evidence gap.
 
 For billing, wallet, quota, apikey, order, balance-related, or message-retry flows, include consistency / idempotency / compensation details: idempotency key, transaction boundary, retry behavior, reconciliation path, and how to inspect mismatched state.
 
+For apikey / token / credential modules or flows, include generation, hash/encrypted storage, masked display, permission scope, expiry/rotation/revocation, leak response, and audit logs. Do not evade the security lifecycle by documenting only a flow and omitting its module doc.
+
 For gateway/runtime flows involving Nginx, OpenResty, ingress, API gateway, reverse proxy, sidecar, or runtime routing scripts, include route matching, header propagation, auth/rate-limit behavior, timeout/retry/upstream behavior, and access/error log fields.
 
 ## Diagram Rules
 
-Any content-bearing onboarding-db document must include the required diagram set for its document type. Content-bearing means formal onboarding docs that teach project behavior, such as overview, architecture, code organization, domain, module, flow, jobs/async, infra, deploy, runtime, and change-guide docs.
+Any content-bearing onboarding-db document must use diagrams that explain real semantics for its document type. Core flow docs have a fixed default diagram set. Module and other content docs use relevant diagrams when they have real boundary, state, timing, data, decision, or recovery semantics; stateless docs do not invent diagrams to satisfy a quota.
 
-Explicitly exempted docs are control/review artifacts such as `onboarding-spec.md`, `onboarding-tasks.md`, `coverage-matrix.md`, `batch-review.md`, `08-review/evidence-graph.md`, `08-review/open-questions.md`, and `08-review/human-review-summary.md`. If a planned content doc cannot reasonably include the required diagram set, record the explicit exemption and reason in the Diagram Plan before writing that doc.
+Explicitly exempted docs are control/review artifacts such as `onboarding-spec.md`, `onboarding-tasks.md`, `coverage-matrix.md`, `batch-review.md`, `08-review/evidence-graph.md`, `08-review/open-questions.md`, and `08-review/human-review-summary.md`. For other docs, Diagram Plan records the real semantics and selected view rather than forcing an irrelevant diagram.
 
-状态图优先；每个正式 onboarding 文档至少包含架构/边界图和 ASCII 状态图 / 状态机图。模块文档默认必须包含架构/边界图、ASCII 状态图、Timeline / 时序图。流程文档默认必须包含架构/边界图、ASCII 状态图、Timeline / 时序图。Timeline / 时序图 is required by default for module and flow docs because onboarding must explain how the process runs over time. Sequence and flow diagrams may use Mermaid because normal Markdown Mermaid is easier to read for calls and flowcharts. State machine diagrams and complex example diagrams should use ASCII because they often need compact annotations, recovery branches, and data-object notes. List state diagrams and timeline/sequence diagrams before optional supporting diagrams in planning and review so Agent does not default to detached static inventories. Choose extra diagram types by need; do not force every topic into one stacked box.
+## Core Flow Diagram Set
+
+Every `critical` / `important` core flow uses these complementary views:
+
+- Core Flow Overview / Architecture / Boundary: scope, owners, main/branch paths, data boundaries, and terminals; overview and boundary may be one diagram when all responsibilities remain visible;
+- Timeline / Sequence Diagram is the primary per-flow narrative for ordered calls, data objects, state reads/writes, messages, and external effects;
+- ASCII State Machine / Decision: state transitions, invalid transitions, failures, retries, compensation, and recovery.
+
+Each diagram has a stable Diagram ID and explanation: what to inspect, conclusion, Covered Slice IDs, data/state/message/config objects, code evidence, and any inferred content. A generic A→B→C flowchart or one copied diagram cannot satisfy multiple responsibilities without showing the required semantics.
+
+## Complexity-Triggered Diagrams
+
+Add diagrams only when the signal exists:
+
+| Signal | Diagram |
+|---|---|
+| callback, retry, compensation, reconciliation, eventual consistency | Failure Recovery Timeline |
+| DTO/command/entity/DB/event transformations | Data Lineage / Object Transformation |
+| transaction, lock, Lua, outbox, concurrency, idempotency | Transaction / Concurrency Boundary |
+| multiple topics, consumers, retry queues, DLQ | Async Message Topology |
+| routing, permission, provider, or policy decisions | Decision Tree |
+| entity relations affect understanding | ERD / Model Relationship |
+| gateway, sidecar, environment topology affects behavior | Runtime / Deployment Topology |
+| troubleshooting entry points are distributed | Observability / Troubleshooting Map |
+
+Diagram Plan records the complexity signal and Covered Slice IDs. Overview/domain/jobs/infra/deploy/runtime/change-guide docs select relevant views; glossary, static config lists, pure indexes, and other stateless topics do not require state diagrams. An exemption cannot hide state, branch, timing, or recovery semantics that really exist.
 
 Every diagram must have an explanation. 每张图必须带讲解，否则读者只能猜图在表达什么。The explanation must state what to look at, what conclusion the diagram supports, which data objects / state fields / messages / configs appear, and the concrete code evidence behind the diagram.
 
@@ -344,7 +432,7 @@ Recommended diagram types:
 |---|---|---|
 | Architecture / Boundary Diagram | 架构/边界图 / ASCII 架构图 / Mermaid flowchart | module location, boundaries, inbound/outbound, ownership, component relations, Redis key layout, wallet type structure, gateway / DB / MQ dependency |
 | ASCII State Machine / Decision Diagram | ASCII 状态机图 / 状态机/决策图 | state transition, validation decision, lock/Lua/Kafka/Rollback paths, retry/compensation |
-| Timeline / Sequence Diagram | Timeline / 时序图 / Mermaid sequenceDiagram / 纯文本时序图 | required by default for module and flow docs; ordered interactions, request/response, async publish/consume, retry windows, delayed consistency |
+| Timeline / Sequence Diagram | Timeline / 时序图 / Mermaid sequenceDiagram / 纯文本时序图 | primary for critical/important flows; used for modules when ordered interactions, request/response, async publish/consume, retry windows, or delayed consistency exist |
 | ASCII Swimlane Diagram | ASCII 泳道图 | optional supporting diagram when roles/systems are important and the reader must see who owns each action |
 | Timeline Diagram | 时间线图 | incident recovery, retry windows, delayed consistency, callback/reconciliation history |
 
@@ -352,7 +440,7 @@ Required diagram set:
 
 1. 架构/边界图：先讲模块在哪、结构边界、组件关系、数据/依赖位置；可用 Mermaid flowchart 或 ASCII，选择更清楚的格式。
 2. ASCII 状态图 / 状态机/决策图：再讲状态怎么变、异常怎么恢复。
-3. Timeline / 时序图：对 module / flow 默认必填，讲流程按时间怎么跑、谁先读写什么、哪个阶段引入哪些数据模型；优先用 Mermaid sequenceDiagram，必要时可用纯文本时序图。
+3. Timeline / 时序图：对 critical/important flow 默认必填；module 在存在时间顺序或数据移动时使用。讲流程按时间怎么跑、谁先读写什么、哪个阶段引入哪些数据模型；优先用 Mermaid sequenceDiagram，必要时可用纯文本时序图。
 
 Optional supporting diagrams:
 
@@ -566,12 +654,29 @@ Topic types:
 - deploy;
 - change-guide.
 
+## Completeness Hard Gate
+
+Completeness is evaluated before quality score. For every planned `critical` / `important` flow:
+
+A missing critical slice cannot be averaged away by diagram presence, readability, or any other quality score.
+
+- business success and failure/cancellation/unknown/manual terminals are identified;
+- every required critical Slice ID appears in the accepted plan/task and Flow Slice Coverage;
+- each critical slice maps to evidence, Diagram IDs, and a narrative section;
+- required callbacks, consumers, retries, DLQs, compensators, reconcilers, and jobs cannot be removed by renaming them as future topics;
+- complexity-triggered diagrams exist when their signal applies;
+- `blocked`, missing, or unjustifiably deferred critical slices force `FAIL` and prevent `newcomer-ready`.
+
+The hard gate is an Agent quality decision inside the accepted scope, not a Human Gate. A focused scope may pass for its explicitly named boundary, but cannot be represented as whole-project readiness.
+
 ## Review Score
 
 Every batch must score changed topics:
 
 | Dimension | Meaning |
 |---|---|
+| Core flow discovery completeness | critical/important outcomes, terminals, variants, owners, side effects, and recovery are discovered or explicitly blocked |
+| Slice and branch coverage | main, branch, failure, and recovery slices are traceably covered |
 | Required diagram set present | required architecture/boundary + state + timeline/sequence set is present unless explicitly exempted |
 | Architecture diagram clarity | boundaries, dependency direction, state ownership, and infra/data boundaries are visible |
 | State diagram clarity | state changes, decisions, failures, retries, and recovery paths are understandable |
@@ -582,13 +687,15 @@ Every batch must score changed topics:
 | Code evidence | concrete files/symbols/behavior support claims |
 | Evidence granularity | key claims include file path, symbol/config key, and direction of call/data flow |
 | Example authenticity | examples come from tests, fixtures, API contracts, logs, configs, or code-constructed objects |
-| Failure troubleshooting | failures are actionable |
+| Failure / recovery | failures, retries, compensation, reconciliation, and recovery terminals are complete |
+| Troubleshooting | symptoms, identifiers, logs, fields, and inspection order are actionable |
 | Consistency / gateway risk | idempotency, compensation, reconciliation, gateway routing, timeout, retry, and log fields are covered where applicable |
 | Change guidance | future changes have safe reading/verification path |
 | Newcomer readability | a newcomer can read continuously |
 
 Rules:
 
+- Completeness Hard Gate must pass before scoring;
 - below 4/5 cannot be `newcomer-ready`;
 - below 3/5 must enter next batch or be `blocked-by-unknown`;
 - review must record gaps and next action.
@@ -620,14 +727,17 @@ Do not call onboarding complete unless:
 
 - Project Entry Scan or reliable project memory exists;
 - Evidence Graph exists;
+- Core Flow Inventory covers the accepted whole-project or focused scope;
 - Onboarding Spec was accepted;
 - Onboarding Tasks exist for completed and next batches;
+- the Full Execution Gate was accepted;
+- every planned `critical` / `important` flow passes the Completeness Hard Gate;
 - current batch files contain architecture/boundary diagrams, ASCII state diagrams, Timeline/sequence diagrams for module/flow docs, use cases, data objects, state transitions, failure modes, code evidence, and verification/troubleshooting where applicable;
 - coverage matrix records all discovered core topics;
 - changed topics were scored;
 - low score / low-score topics are not marked newcomer-ready;
 - batch review records evidence read, gaps, scores, and next batch;
 - no unresolved placeholders, empty required rows, `TBD`, `TODO`, `待补充`, or vague “see code / 看代码” evidence remain in submitted batch files;
-- human has reviewed or explicitly paused the current batch.
+- batch review records current status and gaps; batch does not add a Human Gate.
 
 Exit with exactly one recommended next action: next onboarding batch, focused update, Project Memory Update, Code-Guided Operational Support, Decision & Design If Needed, Product Brief If Needed, Feature Spec, Pause, or Close Onboarding Work.
