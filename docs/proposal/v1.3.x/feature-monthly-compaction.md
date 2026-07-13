@@ -335,6 +335,14 @@ Feature Compaction Scan 可以视为月度 close 后维护动作。它不替代�
 
 ## 迁移策略
 
+### Phase 0: Cross-Platform Script Runtime
+
+- 先批准并实现 `docs/proposal/v1.3.x/cross-platform-python-script-runtime.md`；
+- 月度压缩的发现、执行、恢复和后检脚本统一使用 Python 3 标准库；
+- 新脚本必须在原生 Windows 与 macOS 上对相同 fixture 给出一致结果；
+- Python capability 不可用时 fail closed，不得回退到 Ruby、Bash 或 Agent 手工移动；
+- Phase 0 未完成前，不进入本 proposal 的 Runtime Support 或 Compaction Command 实现。
+
 ### Phase 1: Proposal
 
 - 只建立规则和影响面；

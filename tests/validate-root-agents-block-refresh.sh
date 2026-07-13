@@ -91,7 +91,7 @@ done < <(
 )
 
 assert_contains "references/project-guidance.md" "Root AGENTS Refresh Protocol"
-assert_contains "references/project-guidance.md" 'scripts/check-root-agents-blocks.sh'
+assert_contains "references/project-guidance.md" 'scripts/check-root-agents-blocks.py'
 assert_not_contains "references/project-guidance.md" "file-level managed version"
 assert_contains "references/project-guidance.md" "Do not require a separate Managed Block Rule or Agent Loop Guidance Version prose section in target root \`AGENTS.md\`; managed block maintenance rules live in this reference and refresh tooling."
 assert_contains "references/project-guidance.md" 'Use `block-version:<agent-loop-version>-<YYYYMMDD>[.<same-day-revision>]`; do not shorten it to the skill version alone.'
@@ -110,7 +110,7 @@ assert_contains "references/project-guidance.md" "route common human/project sig
 
 assert_contains "references/workflow-checklists.md" 'Compare each managed block `section` and `block-version` against the current root AGENTS template.'
 assert_contains "references/workflow-checklists.md" "Workflow Stage Map routes the current signal to exactly one stage and matching detailed references."
-assert_contains "references/workflow-checklists.md" 'If `scripts/check-root-agents-blocks.sh` is available, run it as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.'
+assert_contains "references/workflow-checklists.md" 'If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.'
 assert_contains "references/workflow-checklists.md" "Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current."
 assert_not_contains "references/workflow-checklists.md" "managed guidance version"
 assert_contains "references/workflow-checklists.md" 'Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.3.0-20260713.2`.'
@@ -129,13 +129,13 @@ assert_contains "references/validation-scenarios.md" "Root Workflow Stage Map Ro
 assert_contains "references/validation-scenarios.md" 'do not treat root `AGENTS.md` as the detailed stage procedure'
 assert_contains "references/validation-scenarios.md" "do not classify root guidance as stale solely because the Managed Block Rule prose section is absent"
 assert_contains "references/validation-scenarios.md" "block-version"
-assert_contains "Usage.md" 'scripts/check-root-agents-blocks.sh'
+assert_contains "Usage.md" 'scripts/check-root-agents-blocks.py'
 assert_contains "Usage.md" "提交前 Agent 应同时复核 feature 文档、requirement 记录、代码 diff、验证证据、drift、project memory、root/directory guidance 影响和 unrelated changes。"
-assert_contains "CHANGELOG.md" 'scripts/check-root-agents-blocks.sh'
+assert_contains "CHANGELOG.md" 'scripts/check-root-agents-blocks.py'
 assert_contains "CHANGELOG.md" "Added an explicit pre-commit artifact review reminder to root AGENTS Submit And Commit Rules"
 
-if [ ! -x "$root/scripts/check-root-agents-blocks.sh" ]; then
-  printf 'FAIL: root AGENTS checker script is missing or not executable\n' >&2
+if [ ! -f "$root/scripts/check-root-agents-blocks.py" ]; then
+  printf 'FAIL: canonical root AGENTS checker script is missing\n' >&2
   exit 1
 fi
 

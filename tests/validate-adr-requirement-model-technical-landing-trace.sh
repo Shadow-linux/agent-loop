@@ -121,41 +121,41 @@ fi
 # The generic template and validator must not learn fixture-specific business/action/technology values.
 for forbidden in FixtureSubject FixtureOperator perform_fixture_action FixtureStore FixtureProtocol; do
   assert_not_contains "templates/decision.md" "$forbidden"
-  assert_not_contains "scripts/check-adr-requirement-model-trace.rb" "$forbidden"
+  assert_not_contains "scripts/check-adr-requirement-model-trace.py" "$forbidden"
 done
 
 # Behavioral validation, not keyword-only assertions.
-assert_file_exists "scripts/check-adr-requirement-model-trace.rb"
+assert_file_exists "scripts/check-adr-requirement-model-trace.py"
 valid="$root/tests/fixtures/adr-technical-landing/valid"
-ruby "$root/scripts/check-adr-requirement-model-trace.rb" "$valid/README.md" "$valid/requirement.md" "$valid/decision.md"
-ruby "$root/tests/validate-adr-requirement-model-trace-adversarial.rb"
+python3 "$root/scripts/check-adr-requirement-model-trace.py" "$valid/README.md" "$valid/requirement.md" "$valid/decision.md"
+(cd "$root" && python3 -m unittest tests/test_adr_requirement_model_trace.py)
 
 not_needed="$root/tests/fixtures/adr-technical-landing/valid-not-needed"
-ruby "$root/scripts/check-adr-requirement-model-trace.rb" "$not_needed/README.md" "$not_needed/requirement.md" "$not_needed/decision.md"
+python3 "$root/scripts/check-adr-requirement-model-trace.py" "$not_needed/README.md" "$not_needed/requirement.md" "$not_needed/decision.md"
 
-if ruby "$root/scripts/check-adr-requirement-model-trace.rb" "$valid/README.md" "$valid/requirement.md" "$root/tests/fixtures/adr-technical-landing/invalid-missing-coverage/decision.md" >/dev/null 2>&1; then
+if python3 "$root/scripts/check-adr-requirement-model-trace.py" "$valid/README.md" "$valid/requirement.md" "$root/tests/fixtures/adr-technical-landing/invalid-missing-coverage/decision.md" >/dev/null 2>&1; then
   printf 'FAIL: missing-coverage ADR fixture unexpectedly passed\n' >&2
   exit 1
 fi
 
-if ruby "$root/scripts/check-adr-requirement-model-trace.rb" "$valid/README.md" "$valid/requirement.md" "$root/tests/fixtures/adr-technical-landing/invalid-empty-landing/decision.md" >/dev/null 2>&1; then
+if python3 "$root/scripts/check-adr-requirement-model-trace.py" "$valid/README.md" "$valid/requirement.md" "$root/tests/fixtures/adr-technical-landing/invalid-empty-landing/decision.md" >/dev/null 2>&1; then
   printf 'FAIL: empty-landing ADR fixture unexpectedly passed\n' >&2
   exit 1
 fi
 
 unaccepted="$root/tests/fixtures/adr-technical-landing/invalid-unaccepted-source"
-if ruby "$root/scripts/check-adr-requirement-model-trace.rb" "$unaccepted/README.md" "$unaccepted/requirement.md" "$valid/decision.md" >/dev/null 2>&1; then
+if python3 "$root/scripts/check-adr-requirement-model-trace.py" "$unaccepted/README.md" "$unaccepted/requirement.md" "$valid/decision.md" >/dev/null 2>&1; then
   printf 'FAIL: unaccepted-source ADR fixture unexpectedly passed\n' >&2
   exit 1
 fi
 
 reopened="$root/tests/fixtures/adr-technical-landing/invalid-reopened-source"
-if ruby "$root/scripts/check-adr-requirement-model-trace.rb" "$reopened/README.md" "$reopened/requirement.md" "$valid/decision.md" >/dev/null 2>&1; then
+if python3 "$root/scripts/check-adr-requirement-model-trace.py" "$reopened/README.md" "$reopened/requirement.md" "$valid/decision.md" >/dev/null 2>&1; then
   printf 'FAIL: reopened-source ADR fixture unexpectedly passed\n' >&2
   exit 1
 fi
 
-if ruby "$root/scripts/check-adr-requirement-model-trace.rb" "$valid/README.md" "$valid/requirement.md" "$root/tests/fixtures/adr-technical-landing/invalid-review-required/decision.md" >/dev/null 2>&1; then
+if python3 "$root/scripts/check-adr-requirement-model-trace.py" "$valid/README.md" "$valid/requirement.md" "$root/tests/fixtures/adr-technical-landing/invalid-review-required/decision.md" >/dev/null 2>&1; then
   printf 'FAIL: review-required ADR fixture unexpectedly passed\n' >&2
   exit 1
 fi

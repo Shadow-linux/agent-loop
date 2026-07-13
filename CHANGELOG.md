@@ -32,7 +32,13 @@
 - Added `Upstream Compatibility: review-required` as a blocking dependency judgment, not an ADR lifecycle status, and required superseding ADRs when accepted technical decisions no longer hold.
 - Added a Decision & Design Human Review Summary for source, coverage counts, preserved semantics, operational triggers, Design Slice ownership, verification, and explicit acceptance/revision routing.
 - Made Migration / Backfill, Compatibility, Rollout / Cutover, and Rollback / Reversibility operational landing conditional on concrete triggers instead of default empty sections.
-- Added a domain-neutral Ruby trace validator, adversarial bypass regression, valid/invalid fixtures, focused regression, pressure scenarios, root-guidance coordination, and full-validation evidence without changing the skill version or stage model.
+- Added a domain-neutral trace validator, adversarial bypass regression, valid/invalid fixtures, focused regression, pressure scenarios, root-guidance coordination, and full-validation evidence without changing the skill version or stage model.
+
+### Cross-Platform Python Script Runtime
+- Replaced the four checker implementations with canonical Python 3.10+ standard-library entrypoints: `scripts/check-root-agents-blocks.py`, `scripts/check-onboarding-core-flow-coverage.py`, `scripts/check-concept-foundation-trace.py`, and `scripts/check-adr-requirement-model-trace.py`.
+- Added 36 native `unittest` cases for valid, invalid, adversarial, BOM/CRLF, usage/exit-code, standard-library-only, runtime guard, compatibility-launcher, current-authority, read-only, determinism, and workspace-confinement behavior so the same suite can run on macOS and Windows.
+- Kept the former `.sh` / `.rb` paths as one-cycle compatibility launchers only; active tests and current guidance now call the canonical Python entrypoints directly.
+- Added fail-closed runtime guidance and native macOS/Windows invocation examples; no third-party Python package, shell emulation layer, or automatic runtime installation is required.
 
 ## 1.2.4 — 2026-07-11
 

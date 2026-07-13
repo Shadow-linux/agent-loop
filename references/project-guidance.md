@@ -34,7 +34,7 @@ Every time `agent-loop` is used inside a target project, check root guidance bef
 4. Apply the Bootstrap Protocol skill-loading step when the runtime exposes the agent-loop skill.
 5. Check whether AGENTS.md contains the required bootstrap sections.
 6. If AGENTS.md uses agent-loop managed blocks, compare each managed block `section` and `block-version` with the current root AGENTS template.
-7. If `scripts/check-root-agents-blocks.sh` is available in the local `agent-loop` skill package, run it against the current `templates/root-AGENTS.md` and target root `AGENTS.md`; use its report as the managed-block drift evidence.
+7. If `scripts/check-root-agents-blocks.py` is available in the local `agent-loop` skill package, run it with Python 3.10+ against the current `templates/root-AGENTS.md` and target root `AGENTS.md`; use its report as the managed-block drift evidence. Use `python3` on macOS or `py -3` / `python` on Windows. If Python 3.10+ is unavailable, fail closed and report the capability gap instead of using an obsolete checker implementation.
 8. If `.agent-loop/skills/INDEX.md` exists, read its metadata, verify each referenced `active` path and exact INDEX row plus instruction-bearing/executable files against the SHA-256 manifest, and exclude missing, mismatched, `proposed`, `disabled`, and `deprecated` skills from normal routing.
 9. Record or update guidance status in project.md.
 10. If missing or stale, propose a repair through Human Review Summary.
@@ -158,7 +158,7 @@ Managed block detection checklist:
 8. Check whether each `source` path exists or is intentionally external/deferred before relying on it.
 9. If any check fails, classify root guidance as `stale-marker` and stop before editing `AGENTS.md`.
 
-If `scripts/check-root-agents-blocks.sh` is available, use it as the first read-only managed-block drift check. The script validates section presence, marker integrity, per-section `block-version`, unexpected managed sections, and local `source` paths. Its output is evidence for the Human Review Summary; it must not be treated as approval to write.
+If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as the first read-only managed-block drift check. The script validates section presence, marker integrity, per-section `block-version`, unexpected managed sections, and local `source` paths. Its output is evidence for the Human Review Summary; it must not be treated as approval to write. Missing or unsupported Python is a capability blocker for checker-backed evidence, not permission to fall back to the old Bash/Ruby rules.
 
 Managed block update flow:
 
@@ -175,7 +175,7 @@ Managed block update flow:
 Use this protocol when root `AGENTS.md` exists and the project already uses `agent-loop`.
 
 1. Read the existing root `AGENTS.md` before proposing updates.
-2. If available, run `scripts/check-root-agents-blocks.sh --template <agent-loop-skill>/templates/root-AGENTS.md --target <project>/AGENTS.md` and use the report as read-only drift evidence.
+2. If available, run `python3 scripts/check-root-agents-blocks.py --template <agent-loop-skill>/templates/root-AGENTS.md --target <project>/AGENTS.md` on macOS, or the equivalent `py -3 scripts\check-root-agents-blocks.py ...` command on Windows, and use the report as read-only drift evidence.
 3. Validate managed block markers with the managed block detection checklist.
 4. Compare each managed block `section` and `block-version` against the current root AGENTS template.
 5. Treat missing, older, bare skill-version-only, date-only, malformed, or different `block-version` values as stale; exact full template block-version match is required.

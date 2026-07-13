@@ -124,16 +124,16 @@ if [ -e "$root/.agent-loop/concepts" ] || [ -e "$root/.agent-loop" ]; then
 fi
 
 # Behavioral artifact trace: valid chain passes; unaccepted and detached chains fail.
-ruby "$root/scripts/check-concept-foundation-trace.rb" \
+python3 "$root/scripts/check-concept-foundation-trace.py" \
   "$root/examples/concept-foundation-refund/requirement.md" \
   "$root/examples/concept-foundation-refund/product.md" \
   "$root/examples/concept-foundation-refund/spec.md"
 
 assert_contains "examples/concept-foundation-refund/requirement.md" "| PERM-ADMIN-SETTLEMENT | C-REFUND-ADMIN | C-REFUND-SETTLEMENT |"
 
-ruby "$root/tests/validate-concept-foundation-trace-adversarial.rb"
+(cd "$root" && python3 -m unittest tests/test_concept_foundation_trace.py)
 
-if ruby "$root/scripts/check-concept-foundation-trace.rb" \
+if python3 "$root/scripts/check-concept-foundation-trace.py" \
   "$root/tests/fixtures/concept-foundation/invalid-unaccepted/requirement.md" \
   "$root/tests/fixtures/concept-foundation/invalid-unaccepted/product.md" \
   "$root/tests/fixtures/concept-foundation/invalid-unaccepted/spec.md" >/dev/null 2>&1; then
@@ -141,7 +141,7 @@ if ruby "$root/scripts/check-concept-foundation-trace.rb" \
   exit 1
 fi
 
-if ruby "$root/scripts/check-concept-foundation-trace.rb" \
+if python3 "$root/scripts/check-concept-foundation-trace.py" \
   "$root/tests/fixtures/concept-foundation/invalid-detached-model/requirement.md" \
   "$root/tests/fixtures/concept-foundation/invalid-detached-model/product.md" \
   "$root/tests/fixtures/concept-foundation/invalid-detached-model/spec.md" >/dev/null 2>&1; then

@@ -267,13 +267,17 @@ Feature Follow-up / Flow-back 默认看最近 30 天，但这不是硬限制。�
 | “按最新 agent-loop 刷新这个项目的 AGENTS.md 托管块。” | 先给 Human Review Summary，说明要改哪些 block、为什么、风险是什么；你确认后才写。 |
 | “不要覆盖我自己写的项目规则。” | 保留 managed block 外的人类/项目内容；冲突规则单独列出来让你决定。 |
 
-如果当前 skill 提供脚本，Agent 应先运行：
+如果当前 skill 提供脚本，Agent 应使用 Python 3.10+ 直接运行 canonical `.py` 入口。脚本只使用 Python 标准库；macOS 和 Windows 分别可以这样调用：
 
 ```text
-scripts/check-root-agents-blocks.sh
+# macOS
+python3 scripts/check-root-agents-blocks.py --template <agent-loop-skill>/templates/root-AGENTS.md --target <project>/AGENTS.md
+
+# Windows PowerShell
+py -3 scripts\check-root-agents-blocks.py --template <agent-loop-skill>\templates\root-AGENTS.md --target <project>\AGENTS.md
 ```
 
-这个脚本只读检查，不写文件。它会报告 missing / stale / broken managed block、`block-version` 漂移、marker 问题、unexpected section、source 缺失等。
+这个脚本只读检查，不写文件。它会报告 missing / stale / broken managed block、`block-version` 漂移、marker 问题、unexpected section、source 缺失等。如果 Python 3.10+ 不可用，Agent 应报告 capability gap 并停止依赖该 checker 的判断，不能静默退回旧 Bash/Ruby 规则实现。
 
 注意：managed block 不等于都能模板覆盖。规则块可以按模板刷新；项目事实块必须结合 `.agent-loop/project.md` 或 enterprise memory 重新生成，并经过你确认。
 

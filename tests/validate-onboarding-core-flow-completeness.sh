@@ -119,7 +119,7 @@ assert_contains "Usage.md" "Timeline / Sequence"
 assert_contains "CHANGELOG.md" "Core Flow Completeness"
 
 # Executable artifact-level contract.
-assert_file_exists "scripts/check-onboarding-core-flow-coverage.rb"
+assert_file_exists "scripts/check-onboarding-core-flow-coverage.py"
 assert_file_exists "examples/ai-meeting-minutes-backend/onboarding-db/08-review/evidence-graph.md"
 assert_file_exists "examples/ai-meeting-minutes-backend/onboarding-db/onboarding-spec.md"
 assert_file_exists "examples/ai-meeting-minutes-backend/onboarding-db/onboarding-tasks.md"
@@ -144,12 +144,12 @@ assert_file_exists "tests/fixtures/onboarding-core-flow/valid-deferred/onboardin
 assert_file_exists "tests/fixtures/onboarding-core-flow/valid-deferred/coverage-matrix.md"
 assert_file_exists "tests/fixtures/onboarding-core-flow/valid-deferred/batch-review.md"
 
-ruby "$ROOT/scripts/check-onboarding-core-flow-coverage.rb" \
+python3 "$ROOT/scripts/check-onboarding-core-flow-coverage.py" \
   "$ROOT/examples/ai-meeting-minutes-backend/onboarding-db"
 
 invalid_output="$(mktemp)"
 trap 'rm -f "$invalid_output"' EXIT
-if ruby "$ROOT/scripts/check-onboarding-core-flow-coverage.rb" \
+if python3 "$ROOT/scripts/check-onboarding-core-flow-coverage.py" \
   "$ROOT/tests/fixtures/onboarding-core-flow/invalid-missing-recovery" \
   >"$invalid_output" 2>&1; then
   echo "invalid fixture unexpectedly passed" >&2
@@ -164,7 +164,7 @@ fi
 
 detached_output="$(mktemp)"
 trap 'rm -f "$invalid_output" "$detached_output"' EXIT
-if ruby "$ROOT/scripts/check-onboarding-core-flow-coverage.rb" \
+if python3 "$ROOT/scripts/check-onboarding-core-flow-coverage.py" \
   "$ROOT/tests/fixtures/onboarding-core-flow/invalid-detached-trace" \
   >"$detached_output" 2>&1; then
   echo "detached-trace fixture unexpectedly passed" >&2
@@ -177,7 +177,7 @@ if ! grep -Fq "missing diagram definition: D-RECOVERY" "$detached_output"; then
   exit 1
 fi
 
-ruby "$ROOT/scripts/check-onboarding-core-flow-coverage.rb" \
+python3 "$ROOT/scripts/check-onboarding-core-flow-coverage.py" \
   "$ROOT/tests/fixtures/onboarding-core-flow/valid-deferred"
 
 echo "PASS: onboarding core-flow completeness contract is complete"

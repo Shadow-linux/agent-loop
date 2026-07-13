@@ -118,7 +118,11 @@ references/submit-and-integrate.md explicit git submit / commit / PR gate
 references/validation-scenarios.md pressure scenarios for checking this skill works
 references/document-templates.md   inline markdown templates
 references/workflow-checklists.md  checklist form for each stage
-scripts/check-root-agents-blocks.sh read-only root AGENTS managed-block drift checker
+scripts/checker_support.py          shared standard-library Markdown checker support
+scripts/check-root-agents-blocks.py read-only root AGENTS managed-block drift checker
+scripts/check-onboarding-core-flow-coverage.py onboarding core-flow coverage checker
+scripts/check-concept-foundation-trace.py accepted concept/model trace checker
+scripts/check-adr-requirement-model-trace.py ADR requirement-model landing checker
 templates/                         copy-ready artifact templates
 examples/login-feature/            small finished feature workspace
 examples/complex-saas-project/     larger takeover + feature execution workspace
@@ -132,6 +136,7 @@ CHANGELOG.md                        version-change source of truth for "what cha
 
 1. Inspect `.agent-loop/`; if missing, also check legacy `agent-loop/`.
 2. Check root `AGENTS.md` / `CLAUDE.md` as the Root Agent Bootstrap Gate; if either is missing or stale, load `references/project-guidance.md` and include the guidance repair in the recommended Project Entry action unless the human has explicitly deferred it.
+2a. Canonical `scripts/check-*.py` validation requires Python 3.10+ and only the Python standard library. Run the `.py` entrypoints natively on macOS or Windows; if a required checker cannot run because Python is missing or unsupported, fail closed and report the capability gap instead of silently using an obsolete implementation.
 3. Classify the latest message intent: `chat`, `requirements-discussion`, `project-skill-management`, `feature-request`, `operational-support`, `feature-follow-up`, `deferred-requirement`, or `unknown`.
 3a. For `chat`, answer or discuss only; do not create requirement sets, feature workspaces, tasks, tests, or plans.
 3b. For `requirements-discussion`, load `references/requirement-management.md`, use Brainstorm / Clarify, produce a human-reviewed requirement document, and archive it under `.agent-loop/requirements/<archive-date>-<topic>/` after confirmation before any feature construction.
