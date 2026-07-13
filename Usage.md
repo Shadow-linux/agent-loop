@@ -115,6 +115,7 @@ Timeline / Sequence 是单个核心流程的主叙事；Core Flow Overview / Bou
 | “聊需求时遇到复杂架构取舍，要不要 ADR？” | 记录 Design Readiness evidence 和 Decision Candidate；不会直接创建 ADR。requirement 被确认后、feature construction 前判断是否需要 Decision & Design。 |
 | “这个需求进入 feature 前先做 ADR / Decision Design。” | 先做 Design Readiness；涉及多 feature、业务闭环、共享状态/事实源、恢复或非功能目标时进入 Decision & Design，不要求先出现技术争议。 |
 | “这个需求会拆成多个 feature，先检查整体设计是否完整。” | 运行 Design Readiness Check；需要共享设计时先形成 Decision & Design 和 Design Slice Coverage，再创建各 feature spec。 |
+| “检查 ADR 是否完整落地了 requirement model。” | 解析 Effective Requirement Snapshot，逐项检查 Requirement Model Technical Landing Trace、Design Slice 与 Verification；缺失 coverage 或 compatibility 待复核时停在 Decision & Design Human Review。 |
 | “这个需求比较大，先拆成几个阶段。” | 建议在 requirement README 里写 `Delivery Phases`，让你确认先做哪一段。 |
 | “这个先记一下，后面做。” | 作为 deferred requirement 写进 requirement set 或 optional `requirements/INDEX.md`，不写进 `project.md`。 |
 | “这是需求文档、原型图和反馈。” | 归档到 `.agent-loop/requirements/<archive-date>-<topic>/`，保留人类原始材料。 |
@@ -147,6 +148,12 @@ Concept Foundation 被确认后，effective requirement source 才推导 Concept
 Product Brief Source Gate 的意思是：从聊天或需求澄清直接说“落到 product.md”时，Agent 不能立刻创建 feature 级 `product.md`。它要先问你是要创建/引用 requirement set，还是确认开始 feature Product Brief。如果只是整理产品意图，可以先保留在 requirement artifact 或回复草稿，等 feature context 明确后再写入 `product.md`。
 
 Decision & Design / ADR 是 requirement 和 feature 之间的需求落地层。Requirement 接受后先运行 Design Readiness Check；只要需求会拆成多个 feature，或需要共享业务流程、领域/数据规则、事实源、一致性、恢复、性能、高可用、安全或可观测性设计，就会建议先完成整体 Decision & Design，即使没有技术争议。新的 decision draft 默认是 `proposed`，只有你明确确认后才会变成 `accepted`。每项 required Design Slice 都必须映射到 owning feature 和验证路径，普通 feature 内的小取舍仍写在 `spec.md` 的 `Design Decisions`。
+
+Requirement-driven ADR 会先记录 Effective Requirement Snapshot，再用 Requirement Model Scope Inventory 对来源中的 `REL/PERM/CMD/EVT/FLOW/STATE/PM/EX` 稳定 ID 做完整盘点，最后用 Requirement Model Technical Landing Trace 给 scope 内每个 accepted model ID 安排 `landed`、`covered-by-accepted-decision`、`feature-local` 或 `not-applicable`。`landed` 必须明确技术落点、保留的不变量、Design Slice 和验证方向；inventory/coverage 不完整或 `Upstream Compatibility: review-required` 时，ADR 不能接受，依赖的 Feature Spec、Plan 和实现也会停止。
+
+结构预检期间 ADR 保持 `proposed`；校验通过只表示可以提交人类评审。你明确接受后，Agent 才记录 Human Review Evidence、改为 `accepted` 并运行 accepted-mode validation。对于有具体理由的 `concept-foundation-not-needed`，使用 trace-not-applicable 分支，不伪造数据模型或流程。ADR 仍不能重新定义 Concept、流程、状态、不变量或事实归属；上游变化使既有技术结论失效时，必须经人类确认创建 superseding ADR。
+
+Operational landing 不是每份 ADR 的默认大章节。只有持久化表示、协议/provider、runtime boundary 或上线兼容性发生变化时，才展开 Migration / Backfill、Compatibility、Rollout / Cutover 或 Rollback / Reversibility；未触发时只记录具体原因。
 
 示例：
 

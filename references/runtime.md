@@ -91,6 +91,51 @@ The Concept Foundation confirmation is the product-semantic Human Gate inside Re
 
 Before setting a triggered foundation to `accepted`, load `references/human-review-summary.md` and present the Concept Foundation Human Review Summary. The summary shows every confirmed or still-blocking Concept ID, evidence, identity/lifecycle boundary, relationship/state impact, and the explicit human decision; it does not replace the one-question-per-turn Grill Contract.
 
+## ADR Requirement Model Technical Landing
+
+When Decision & Design is driven by an accepted Requirement Product Model, resolve the requirement README `Effective Concept Foundation` pointer before drafting or reusing an ADR. Older requirement sets without the pointer use the reviewed requirement document as a backward-compatible source.
+
+Record this Effective Requirement Snapshot in the existing decision record:
+
+```text
+Effective Concept Source:
+Concept Foundation Status: accepted | concept-foundation-not-needed
+Accepted Concept IDs:
+Accepted Requirement Model IDs:
+Upstream Compatibility: current | review-required
+Last Compatibility Check:
+Trace Applicability: required | not-applicable
+Trace Not-Applicable Reason:
+```
+
+Triggered Concept Foundation status must be `accepted`; `candidate` or `reopened` stops Decision & Design acceptance and returns to the Human Grill Contract. The snapshot cites accepted meanings and constraints but never copies a new definition into the ADR.
+
+Before selecting the coherent ADR scope, add a Requirement Model Scope Inventory row for every stable model ID in the effective source: `REL-*`, `PERM-*`, `CMD-*`, `EVT-*`, `FLOW-*`, `STATE-*`, `PM-*`, and `EX-*`. Use `in-scope | covered-by-accepted-decision | feature-local | proposed-decision | not-applicable`. Existing external owners must resolve to the named artifact; future owner paths must be explicit with a `planned:` prefix. `not-applicable` requires a concrete reason. The in-scope inventory IDs must exactly equal the snapshot IDs.
+
+For every in-scope accepted Requirement Model ID, add exactly one row to the Requirement Model Technical Landing Trace with one disposition:
+
+```text
+landed | covered-by-accepted-decision | feature-local | not-applicable
+```
+
+`landed` requires a concrete Technical Landing, Preserved Invariant, Design Slice, and Verification target. `covered-by-accepted-decision` names an existing accepted decision Markdown path. `feature-local` names an existing Feature Spec or explicit canonical `planned:` owner path and cannot hide a shared rule. `not-applicable` records a concrete reason and is visible at the Human Gate. The trace never creates product meaning; missing or ambiguous meaning returns to Requirements Discussion.
+
+Coverage Hard Gate blocks ADR acceptance and dependent Feature Spec work unless the effective source resolves, Upstream Compatibility is `current`, the Scope Inventory exactly covers the source ID set, every in-scope accepted Requirement Model ID has one disposition, every `landed` row has complete landing/slice/verification data, no product-semantic blocker remains, and the human has seen non-landed dispositions plus deferred/out-of-scope Design Slices. `Applicable Decisions` proves awareness only; it does not satisfy trace coverage.
+
+Run structural preflight while the ADR is `proposed`. A successful preflight permits the Agent to ask for Decision & Design approval; it does not accept the ADR. After explicit human acceptance, record Human Review Evidence, change status to `accepted`, and rerun accepted-mode validation. Accepted-mode validation requires the recorded human decision, confirmer, date, and concrete evidence.
+
+For a reasoned `concept-foundation-not-needed` source, keep Accepted Concept IDs and Accepted Requirement Model IDs as `none`, set Trace Applicability to `not-applicable`, record a concrete reason, and do not fabricate Concept Definitions, Scope Inventory, or Technical Landing Trace rows.
+
+When the README effective source changes or new accepted requirement evidence changes an upstream model, set the dependency judgment to:
+
+```text
+Upstream Compatibility: review-required
+```
+
+`review-required` is a dependency-availability judgment, not an ADR lifecycle status. Stop new dependent Feature Spec, Plan, and implementation work; compare old/new Concept and Requirement Model IDs. If product meaning changed but the technical decision still holds, update the snapshot/trace only after Decision & Design Human Review. If the accepted decision meaning or technical conclusion no longer holds, create a Human-gated superseding ADR and preserve the accepted record unchanged.
+
+Operational landing is triggered, not default. Expand Migration / Backfill, Compatibility, Rollout / Cutover, or Rollback / Reversibility detail only when the decision introduces or changes persistence representation, protocol, provider, runtime boundary, or rollout compatibility. Otherwise record one concrete `not-triggered` reason without expanding the corresponding section.
+
 ## Routing Axes And Precedence
 
 Do not force project topology, memory health, message intent, and feature progress into one mutually exclusive state. Inspect all four axes, then use the precedence ladder to select exactly one next stage.

@@ -24,6 +24,16 @@
 - Added cumulative Concept Foundation Human Review Summary and append-only post-archive reopen handling through the requirement README `Effective Concept Foundation` pointer.
 - Added focused regression, behavioral artifact validation, pressure scenarios, examples, and a full-validation report for Phase 1/2 while leaving Design Skill, E2E Skill, Jam Kits, and executable schemas out of scope.
 
+### ADR Requirement Model Technical Landing
+- Added Effective Requirement Snapshot resolution so requirement-driven ADRs freeze the current effective source, accepted Concept/Model IDs, compatibility judgment, and last check without copying product definitions.
+- Added a source-wide Requirement Model Scope Inventory covering stable relationship, permission, command/event, flow, state, product-model, and exception IDs so coherent ADR scope cannot silently omit upstream models.
+- Added the Requirement Model Technical Landing Trace with explicit `landed | covered-by-accepted-decision | feature-local | not-applicable` dispositions and hard coverage before ADR acceptance or dependent Feature Spec work.
+- Split validation into `proposed` structural preflight and post-human-review `accepted` validation with recorded Human Review Evidence; added a reasoned trace-not-applicable branch for `concept-foundation-not-needed` sources.
+- Added `Upstream Compatibility: review-required` as a blocking dependency judgment, not an ADR lifecycle status, and required superseding ADRs when accepted technical decisions no longer hold.
+- Added a Decision & Design Human Review Summary for source, coverage counts, preserved semantics, operational triggers, Design Slice ownership, verification, and explicit acceptance/revision routing.
+- Made Migration / Backfill, Compatibility, Rollout / Cutover, and Rollback / Reversibility operational landing conditional on concrete triggers instead of default empty sections.
+- Added a domain-neutral Ruby trace validator, adversarial bypass regression, valid/invalid fixtures, focused regression, pressure scenarios, root-guidance coordination, and full-validation evidence without changing the skill version or stage model.
+
 ## 1.2.4 — 2026-07-11
 
 ### Project-Local Skills

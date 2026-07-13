@@ -640,7 +640,11 @@ Rules:
 - use Decision Scan / Placement inside this stage to place product-only, feature-local, testing, and project-level decisions
 - do not create ADR files from ordinary chat or early fuzzy requirements discussion
 - treat PRD / Requirement Product Model as the product-semantics authority; Decision & Design may consume accepted Concept IDs but must not redefine product identity, lifecycle, relationship, invariant, or terminal meaning
-- requirement modeling does not add Concept-to-technical-representation mapping; technical design remains in the later Decision & Design lane after requirement acceptance and its Human Gate
+- resolve the requirement README effective-source pointer and record an Effective Requirement Snapshot before technical landing; a triggered Concept Foundation must be `accepted`
+- inventory every stable source Requirement Model ID (`REL-*`, `PERM-*`, `CMD-*`, `EVT-*`, `FLOW-*`, `STATE-*`, `PM-*`, `EX-*`) before selecting the coherent ADR scope; every out-of-scope ID needs an explicit owner or reason
+- record one Requirement Model Technical Landing Trace disposition for every accepted Requirement Model ID declared inside the ADR scope; `landed` rows require Technical Landing, Preserved Invariant, Design Slice, and Verification
+- keep `Upstream Compatibility: review-required` as a blocking dependency judgment, not a decision lifecycle status; stop dependent Feature Spec, Plan, and implementation until compatibility review returns it to `current`
+- requirement modeling does not add Concept-to-technical-representation mapping; technical landing remains inside the existing Human-gated Decision & Design record
 - place product-only decisions in `product.md`
 - place feature-local decisions in `spec.md` Design Decisions
 - place testing decisions in `tests.md` unless they verify a long-term design goal
@@ -650,6 +654,11 @@ Rules:
 - convert every implementation-bearing shared flow step, invariant, recovery responsibility, and non-functional target into a stable Design Slice ID
 - assign every required design slice to at least one planned feature; no required slice may remain `unassigned` before Feature Spec
 - do not enter Feature Spec when required shared design is unresolved or design-slice coverage is incomplete
+- do not accept an ADR while its Effective Requirement Snapshot is unresolved, its Requirement Model coverage is incomplete, or its compatibility is `review-required`
+- run structural preflight while the draft remains `proposed`; only explicit human acceptance authorizes Human Review Evidence plus `Status: accepted`, followed by accepted-mode validation
+- allow a reasoned `concept-foundation-not-needed` ADR to use the explicit trace-not-applicable path without inventing product models
+- when upstream accepted meaning invalidates an accepted technical decision, preserve history and propose a superseding ADR; do not rewrite accepted decision meaning in place
+- assess Migration / Backfill, Compatibility, Rollout / Cutover, and Rollback / Reversibility, but expand operational landing only for triggered concerns
 - update requirement README, product.md, and spec.md decision references after human confirmation
 
 Write after confirmation:
@@ -659,13 +668,15 @@ Write after confirmation:
 - feature `product.md` / `spec.md` `Applicable Decisions`
 - feature `spec.md` `Implements Decisions`
 - decision record `Design Slice Coverage` with stable slice IDs, planned owning features, verification, and coverage status
+- decision record `Effective Requirement Snapshot`, source-wide `Requirement Model Scope Inventory`, `Requirement Model Technical Landing Trace`, Coverage Hard Gate evidence, Human Review Evidence after acceptance, and operational trigger assessment
 
 Exit:
 
 - Design Readiness records `design-not-needed`, or no new project-level design record is needed because accepted decisions already cover the requirement
 - decision candidate stays in product.md, spec.md, tests.md, or notes.md
 - decision draft is ready for human review
-- accepted Decision & Design is referenced by downstream feature artifacts and every required design slice has a planned owner
+- Decision & Design Human Review Summary is ready with effective source, source-wide scope counts, coverage counts, preserved semantics, operational triggers, Design Slice ownership, verification, and explicit human decision
+- accepted Decision & Design is compatible with the effective source, referenced by downstream feature artifacts, covers every in-scope Requirement Model ID, and gives every required design slice a planned owner
 
 ## Brainstorm / Clarify
 
@@ -790,9 +801,11 @@ Rules:
 - do not let Feature Spec introduce a new meaning, state, invariant, role boundary, relationship, or product object for an accepted Concept ID; return to Requirements Discussion when product semantics must change
 - block Feature Spec when a triggered source foundation is `candidate` or `reopened`
 - confirm Design Readiness is `design-not-needed` or `completed` before writing the Feature Spec
+- for each applicable requirement-driven ADR, confirm its Effective Requirement Snapshot still resolves, `Upstream Compatibility` is `current`, and Requirement Model Technical Landing Trace coverage is complete
 - include `Applicable Decisions`, assigned Design Slice IDs in `Implements Decisions`, and feature-local `Design Decisions`
 - use Decision & Design before Feature Spec if the requirement needs shared business-flow, domain, data, architecture, recovery, or non-functional design
 - do not enter Feature Spec when shared design is unresolved or any required design slice is unassigned
+- do not treat `Applicable Decisions` alone as coverage; block when an in-scope Requirement Model ID lacks disposition, technical ownership, or verification
 
 Exit:
 
@@ -1016,6 +1029,7 @@ Rules:
 - if a durable consumer-facing interface is created or changed, recommend Delivery Contract If Needed and stop before any contract file is created or updated
 - do not create or update contract files from Technical Design / Code Context; only the human-confirmed Delivery Contract stage may write them
 - if technical design changes shared or project-level design, repeat Design Readiness and return to Decision & Design before plan execution
+- if the effective requirement source changed or an applicable ADR is `review-required`, stop before Plan and return to Decision & Design compatibility review
 
 Exit:
 
@@ -1279,6 +1293,7 @@ Check:
 - long-term changes vs `project.md`
 - long-term/cross-feature decision reality vs `.agent-loop/decisions/` when present
 - assigned Design Slice IDs vs implementation and verification evidence
+- applicable ADR Effective Requirement Snapshot / Requirement Model Technical Landing Trace vs the current effective source, implementation, and verification evidence
 - producer-consumer interfaces vs `contracts.md` and linked `contracts/*` details when present
 - human original requirements vs current implementation when relevant
 - whether long-term startup guidance changed and `AGENTS.md` should be synced
@@ -1289,6 +1304,7 @@ Write after confirmation:
 - `project.md` for long-term project facts
 - `.agent-loop/decisions/*.md` reference backfill, new decision draft, or superseding decision draft only after human confirmation
 - Decision & Design coverage-status updates after confirming implementation evidence; route design divergence back to Decision & Design before close
+- compatibility-review updates only after Human Review; create a superseding ADR when accepted decision meaning or technical conclusions no longer hold instead of rewriting the accepted record
 - `notes.md` drift record
 - `contracts.md` and matching `contracts/*` details for interface drift; ask before accepting breaking changes
 - `AGENTS.md` / `CLAUDE.md` only for long-term guidance changes

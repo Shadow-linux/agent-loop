@@ -124,6 +124,7 @@ required_order = [
   "## Primary Business Flow",
   "## Product State Model",
   "## Requirement Product Model",
+  "## Exception Paths",
   "## Concept-To-Product Traceability"
 ]
 positions = required_order.map do |heading|
@@ -176,6 +177,9 @@ assert_defined!(relationship_concepts, concept_ids, "Concept Relationships")
 assert_confirmed!(relationship_concepts, confirmed, "Concept Relationships")
 
 role_rows = table(requirement, "Role / Permission Matrix")
+permission_id_values = role_rows.map { |row| row.fetch("Permission Rule ID", "") }
+assert_unique_ids!(permission_id_values, "Role / Permission Matrix", /\APERM-[A-Z0-9-]+\z/)
+permission_ids = permission_id_values.to_set
 role_concepts = role_rows.flat_map do |row|
   [row.fetch("Role Concept ID", ""), row.fetch("Product Object Concept ID", "")]
 end.to_set
@@ -251,6 +255,24 @@ end.to_set
 assert_defined!(product_model_concepts, concept_ids, "Requirement Product Model")
 assert_confirmed!(product_model_concepts, confirmed, "Requirement Product Model")
 
+exception_rows = table(requirement, "Exception Paths")
+exception_id_values = exception_rows.map { |row| row.fetch("Scenario ID", "") }
+assert_unique_ids!(exception_id_values, "Exception Paths", /\AEX-[A-Z0-9-]+\z/)
+exception_ids = exception_id_values.to_set
+exception_concepts = exception_rows.flat_map do |row|
+  ids(row.fetch("Concept / State / Action IDs", ""), /\bC-[A-Z0-9-]+\b/).to_a
+end.to_set
+exception_states = exception_rows.flat_map do |row|
+  ids(row.fetch("Concept / State / Action IDs", ""), /\bSTATE-[A-Z0-9-]+\b/).to_a
+end.to_set
+exception_actions = exception_rows.flat_map do |row|
+  ids(row.fetch("Concept / State / Action IDs", ""), /\b(?:CMD|EVT)-[A-Z0-9-]+\b/).to_a
+end.to_set
+assert_defined!(exception_concepts, concept_ids, "Exception Paths concepts")
+assert_confirmed!(exception_concepts, confirmed, "Exception Paths concepts")
+assert_defined!(exception_states, state_ids, "Exception Paths states")
+assert_defined!(exception_actions, action_ids, "Exception Paths actions")
+
 trace_rows = table(requirement, "Concept-To-Product Traceability")
 trace_id_values = trace_rows.map { |row| row.fetch("Trace ID", "") }
 assert_unique_ids!(trace_id_values, "Concept-To-Product Traceability", /\ATRACE-[A-Z0-9-]+\z/)
@@ -260,9 +282,9 @@ end.to_set
 assert_defined!(trace_concepts, concept_ids, "Concept-To-Product Traceability")
 assert_confirmed!(trace_concepts, confirmed, "Concept-To-Product Traceability")
 
-defined_model_ids = relationship_ids | action_ids | flow_ids | state_ids | product_model_ids
+defined_model_ids = relationship_ids | permission_ids | action_ids | flow_ids | state_ids | product_model_ids | exception_ids
 trace_models = trace_rows.flat_map do |row|
-  ids(row.fetch("Derived Model IDs / Sections", ""), /\b(?:REL|CMD|EVT|FLOW|STATE|PM)-[A-Z0-9-]+\b/).to_a
+  ids(row.fetch("Derived Model IDs / Sections", ""), /\b(?:REL|PERM|CMD|EVT|FLOW|STATE|PM|EX)-[A-Z0-9-]+\b/).to_a
 end.to_set
 assert_defined!(trace_models, defined_model_ids, "Concept-To-Product Traceability models")
 untraced_models = defined_model_ids - trace_models
@@ -285,7 +307,7 @@ end
 
 product_coverage = table(product, "Requirement Product Model Coverage")
 product_coverage_ids = product_coverage.flat_map do |row|
-  ids(row.fetch("Requirement Model ID", ""), /\b(?:REL|CMD|EVT|FLOW|STATE|PM)-[A-Z0-9-]+\b/).to_a
+  ids(row.fetch("Requirement Model ID", ""), /\b(?:REL|PERM|CMD|EVT|FLOW|STATE|PM|EX)-[A-Z0-9-]+\b/).to_a
 end.to_set
 assert_defined!(product_coverage_ids, defined_model_ids, "Product Brief model coverage")
 assert_defined!(product_coverage_ids, trace_models, "Product Brief traced model coverage")
@@ -302,8 +324,8 @@ end
 
 spec_trace = table(spec, "Requirement Product Model Trace")
 spec_model_ids = spec_trace.flat_map do |row|
-  ids(row.fetch("Requirement Model ID", ""), /\b(?:REL|CMD|EVT|FLOW|STATE|PM)-[A-Z0-9-]+\b/).to_a +
-    ids(row.fetch("Concept / Action / Flow / State IDs", ""), /\b(?:REL|CMD|EVT|FLOW|STATE|PM)-[A-Z0-9-]+\b/).to_a
+  ids(row.fetch("Requirement Model ID", ""), /\b(?:REL|PERM|CMD|EVT|FLOW|STATE|PM|EX)-[A-Z0-9-]+\b/).to_a +
+    ids(row.fetch("Concept / Action / Flow / State IDs", ""), /\b(?:REL|PERM|CMD|EVT|FLOW|STATE|PM|EX)-[A-Z0-9-]+\b/).to_a
 end.to_set
 spec_trace_concepts = spec_trace.flat_map do |row|
   ids(row.fetch("Concept / Action / Flow / State IDs", ""), /\bC-[A-Z0-9-]+\b/).to_a

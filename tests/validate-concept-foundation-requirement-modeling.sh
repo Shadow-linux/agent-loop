@@ -73,10 +73,13 @@ assert_contains "references/document-templates.md" "## Concept Candidate Invento
 assert_contains "references/document-templates.md" "## Concept Definitions"
 assert_contains "references/document-templates.md" "## Concept Relationships"
 assert_contains "references/document-templates.md" "## Role / Permission Matrix"
+assert_contains "references/document-templates.md" "Permission Rule ID"
+assert_contains "references/document-templates.md" "PERM-01"
 assert_contains "references/document-templates.md" "## Commands / Events"
 assert_contains "references/document-templates.md" "## Product State Model"
 assert_contains "references/document-templates.md" "## Requirement Product Model"
 assert_contains "references/document-templates.md" "## Concept-To-Product Traceability"
+assert_contains "references/document-templates.md" "EX-01"
 assert_contains "references/document-templates.md" "Human Confirmation"
 
 # Phase 2 consumers cite accepted product semantics instead of redefining them.
@@ -126,7 +129,7 @@ ruby "$root/scripts/check-concept-foundation-trace.rb" \
   "$root/examples/concept-foundation-refund/product.md" \
   "$root/examples/concept-foundation-refund/spec.md"
 
-assert_contains "examples/concept-foundation-refund/requirement.md" "| C-REFUND-ADMIN | C-REFUND-SETTLEMENT |"
+assert_contains "examples/concept-foundation-refund/requirement.md" "| PERM-ADMIN-SETTLEMENT | C-REFUND-ADMIN | C-REFUND-SETTLEMENT |"
 
 ruby "$root/tests/validate-concept-foundation-trace-adversarial.rb"
 

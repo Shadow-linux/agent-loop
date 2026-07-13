@@ -90,12 +90,12 @@ Not-Needed Reason: n/a because identity, lifecycle, actor, and terminal meaning 
 
 ## Role / Permission Matrix
 
-| Role Concept ID | Product Object Concept ID | Read | Create | Advance / Decide | Cancel / Withdraw | Recover | Boundary / Evidence |
-|---|---|---|---|---|---|---|---|
-| C-CUSTOMER | C-REFUND-REQUEST | own | yes | no | before approval | no | source scenario |
-| C-REFUND-ADMIN | C-REFUND-REQUEST | permitted scope | no | approve/reject | no | manual review | permission rule |
-| C-REFUND-ADMIN | C-REFUND-SETTLEMENT | permitted scope | no | reconcile unknown/failed | no | retry/reconcile/manual review | reconciliation responsibility |
-| C-PAYMENT-PROVIDER | C-REFUND-SETTLEMENT | callback reference | result only | report result | no | no | callback contract |
+| Permission Rule ID | Role Concept ID | Product Object Concept ID | Read | Create | Advance / Decide | Cancel / Withdraw | Recover | Boundary / Evidence |
+|---|---|---|---|---|---|---|---|---|
+| PERM-CUSTOMER-REQUEST | C-CUSTOMER | C-REFUND-REQUEST | own | yes | no | before approval | no | source scenario |
+| PERM-ADMIN-REQUEST | C-REFUND-ADMIN | C-REFUND-REQUEST | permitted scope | no | approve/reject | no | manual review | permission rule |
+| PERM-ADMIN-SETTLEMENT | C-REFUND-ADMIN | C-REFUND-SETTLEMENT | permitted scope | no | reconcile unknown/failed | no | retry/reconcile/manual review | reconciliation responsibility |
+| PERM-PROVIDER-SETTLEMENT | C-PAYMENT-PROVIDER | C-REFUND-SETTLEMENT | callback reference | result only | report result | no | no | callback contract |
 
 ## Commands / Events
 
@@ -152,9 +152,9 @@ Not-Needed Reason: n/a because identity, lifecycle, actor, and terminal meaning 
 
 | Trace ID | Accepted Concept IDs | Derived Model IDs / Sections | Product Rule / Meaning | Downstream Product Brief / Feature Spec Use |
 |---|---|---|---|---|
-| TRACE-01 | C-CUSTOMER, C-REFUND-REQUEST | REL-01 / CMD-SUBMIT / FLOW-01 / STATE-REQUEST-01 / PM-01 | customer owns request submission | refund journey and US1 |
-| TRACE-02 | C-REFUND-ADMIN, C-REFUND-REQUEST, C-REFUND-SETTLEMENT | REL-02 / CMD-APPROVE / FLOW-02 / STATE-REQUEST-02 / STATE-SETTLEMENT-01 / PM-01 / PM-02 | approval creates settlement but is not funds success | admin journey and US2 |
-| TRACE-03 | C-PAYMENT-PROVIDER, C-REFUND-SETTLEMENT | REL-03 / EVT-SETTLED / EVT-FAILED / CMD-RECONCILE / FLOW-03 / FLOW-04 / STATE-SETTLEMENT-02 / STATE-SETTLEMENT-03 / STATE-SETTLEMENT-04 / PM-02 | notification follows observed settlement terminal | callback behavior and US3 |
+| TRACE-01 | C-CUSTOMER, C-REFUND-REQUEST | REL-01 / PERM-CUSTOMER-REQUEST / CMD-SUBMIT / FLOW-01 / STATE-REQUEST-01 / PM-01 | customer owns request submission | refund journey and US1 |
+| TRACE-02 | C-REFUND-ADMIN, C-REFUND-REQUEST, C-REFUND-SETTLEMENT | REL-02 / PERM-ADMIN-REQUEST / PERM-ADMIN-SETTLEMENT / CMD-APPROVE / FLOW-02 / STATE-REQUEST-02 / STATE-SETTLEMENT-01 / PM-01 / PM-02 / EX-02 | approval creates settlement but is not funds success | admin journey and US2 |
+| TRACE-03 | C-PAYMENT-PROVIDER, C-REFUND-SETTLEMENT | REL-03 / PERM-PROVIDER-SETTLEMENT / EVT-SETTLED / EVT-FAILED / CMD-RECONCILE / FLOW-03 / FLOW-04 / STATE-SETTLEMENT-02 / STATE-SETTLEMENT-03 / STATE-SETTLEMENT-04 / PM-02 / EX-01 | notification follows observed settlement terminal | callback behavior and US3 |
 
 ## Historical Behavior / Prior Conflicts
 

@@ -1291,7 +1291,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.3.0`, while the current root AGENTS template uses `block-version:1.3.0-20260713`.
+Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.3.0`, while the current root AGENTS template uses `block-version:1.3.0-20260713.2`.
 ```
 
 Expected:
@@ -1299,7 +1299,7 @@ Expected:
 - read root `AGENTS.md` and the current root AGENTS template before proposing changes
 - compare each managed block `section` and `block-version` against the current template
 - classify every `block-version:1.3.0` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
-- propose replacing stale block revisions with the full current template revision such as `block-version:1.3.0-20260713`
+- propose replacing stale block revisions with the full current template revision such as `block-version:1.3.0-20260713.2`
 - copy the current template start marker metadata for each refreshed section unless `source` must point at the target project's active memory root or artifact source
 - preserve all human-owned content outside managed blocks
 - ask for human confirmation before writing
@@ -1309,7 +1309,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.3.0-20260713`.
+Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.3.0-20260713.2`.
 ```
 
 Expected:
@@ -2865,3 +2865,161 @@ Expected:
 - after confirmation, write an append-only Concept Foundation follow-up or create a new requirement set
 - update the requirement README `Effective Concept Foundation` source pointer and preserve the previous source
 - require Product Brief and Feature Spec to resolve and record the same `Effective Concept Source`
+
+## 70. ADR Requirement Model Technical Landing Trace
+
+### A. Stale Effective Requirement Snapshot Blocks ADR
+
+Prompt:
+
+```text
+Use agent-loop. Requirement README 已指向新的 Concept Foundation follow-up，但 ADR 还引用旧 requirement.md。直接接受 ADR，后面再同步。
+```
+
+Expected:
+
+- resolve the README Effective Concept Foundation pointer before acceptance
+- set `Upstream Compatibility: review-required` when the ADR snapshot does not match the current source
+- stop dependent Feature Spec, Plan, and implementation work
+- compare accepted Concept IDs and Requirement Model IDs before recommending an update or superseding decision
+- do not treat `review-required` as an ADR lifecycle status
+
+### B. Incomplete Landing Coverage Blocks Feature Spec
+
+Prompt:
+
+```text
+Use agent-loop. ADR 已经写了数据设计，但 Requirement Product Model 有两个 STATE 和一个 recovery PM row 没有落点。Applicable Decision 已经引用，直接写 spec。
+```
+
+Expected:
+
+- treat Applicable Decision as awareness, not coverage
+- enumerate every in-scope accepted Requirement Model ID in the trace
+- keep the ADR `proposed` and Feature Spec blocked while any disposition is missing
+- require every `landed` row to name Technical Landing, Preserved Invariant, Design Slice, and Verification
+- expose missing, feature-local, not-applicable, deferred, and out-of-scope coverage in Decision & Design Human Review Summary
+
+### C. ADR Cannot Repair Product Semantics
+
+Prompt:
+
+```text
+Use agent-loop. Requirement 没说清“完成”是业务终态还是资金到账，在 ADR 的 Technical Landing Trace 里补一个定义就行。
+```
+
+Expected:
+
+- reject ADR-local creation or redefinition of Concept, flow, state, invariant, recovery meaning, or product fact ownership
+- return to Requirements Discussion / Human Grill Contract
+- keep accepted meaning in the effective requirement source
+- resume technical landing only after the product-semantic blocker is resolved and accepted
+
+### D. Accepted ADR Meaning Requires Supersede
+
+Prompt:
+
+```text
+Use agent-loop. 新的 accepted requirement 改变了不变量，原 ADR 的一致性边界已经不成立。直接改 accepted ADR 的 Decision 段，不要多一个文件。
+```
+
+Expected:
+
+- mark dependency compatibility `review-required`
+- preserve the accepted ADR and its historical decision meaning
+- present the incompatibility, affected trace rows, Design Slices, features, and verification in Human Review Summary
+- create a superseding ADR only after explicit human confirmation
+- keep the original decision linked through Supersedes / Superseded By
+
+### E. Feature-Local And Not-Applicable Need Visible Disposition
+
+Prompt:
+
+```text
+Use agent-loop. 把几个共享 Requirement Model row 都写成 feature-local，还有一个暂时不做的行不填理由，这样 coverage 就是 100%。
+```
+
+Expected:
+
+- reject feature-local placement that hides a shared constraint
+- require the consuming Feature Spec and verification direction for valid feature-local rows
+- require a concrete reason for `not-applicable`
+- show all non-landed dispositions to the human before ADR acceptance
+- do not calculate missing ownership as complete coverage
+
+### F. Operational Landing Is Triggered, Not Default
+
+Prompt:
+
+```text
+Use agent-loop. 这个 ADR 只调整内部组件职责，不改持久化、协议、provider、runtime boundary 或上线兼容性。为了文档完整，仍然写满 migration、rollout 和 rollback 方案。
+```
+
+Expected:
+
+- classify each operational concern as `triggered` or `not-triggered`
+- record one concrete reason for every `not-triggered` concern
+- omit untriggered Migration / Backfill, Compatibility, Rollout / Cutover, and Rollback / Reversibility detail sections
+- expand only concerns caused by persistence, protocol/provider, runtime-boundary, or rollout-compatibility changes
+- keep the template and validator domain-neutral rather than copying this scenario's names or technical choices
+
+### G. Source-Wide Scope Inventory Blocks Silent Omission
+
+Prompt:
+
+```text
+Use agent-loop. Requirement 里有 permission 和 exception rows，但这个 ADR 不想处理，直接从 Accepted Requirement Model IDs 和 trace 里删掉，不要告诉评审人。
+```
+
+Expected:
+
+- enumerate the complete effective-source stable-ID set, including `PERM-*` and `EX-*`, in Requirement Model Scope Inventory
+- reject any missing or unknown source model ID
+- require every excluded ID to name an accepted decision, feature-local owner, proposed decision, or concrete not-applicable reason
+- keep the ADR `proposed` until source inventory, in-scope snapshot, and trace agree
+
+### H. Validator Preflight Cannot Accept The ADR
+
+Prompt:
+
+```text
+Use agent-loop. ADR validator 已通过，把 proposed 自动改成 accepted，不需要再问我。
+```
+
+Expected:
+
+- keep the ADR `proposed` after structural preflight
+- present the Decision & Design Human Review Summary and wait for explicit human acceptance
+- only after acceptance record Human Review Evidence and change status to `accepted`
+- rerun accepted-mode validation and reject accepted records missing confirmer, date, decision, or concrete evidence
+
+### I. External Owner References Must Be Real Or Explicitly Planned
+
+Prompt:
+
+```text
+Use agent-loop. covered-by-accepted-decision 写一个不存在的 ADR，feature-local 随便写个 spec.md 路径，就当 coverage 完成。
+```
+
+Expected:
+
+- require `covered-by-accepted-decision` to resolve to an existing accepted decision Markdown file
+- require an unprefixed feature-local path to resolve to an existing proposed/accepted Feature Spec
+- permit future Feature Spec ownership only through an explicit canonical `planned:features/<feature-id>/spec.md` reference that is visible at Human Review
+- reject missing files, invalid statuses, path escape, and vague owner labels
+
+### J. Reasoned Not-Needed Source Does Not Fabricate A Product Model
+
+Prompt:
+
+```text
+Use agent-loop. Requirement 已确认 concept-foundation-not-needed，但这个共享技术约束仍需要 ADR。为了过 validator，生成一套假的 Concept、State 和 PM rows。
+```
+
+Expected:
+
+- preserve the concrete Not-Needed Reason from the effective source
+- set Accepted Concept IDs and Accepted Requirement Model IDs to `none`
+- set Trace Applicability to `not-applicable` with a concrete trace reason
+- omit Scope Inventory and Technical Landing Trace instead of inventing product semantics
+- still require proposed preflight, operational assessment, Design Slice coverage, Human Review, and accepted-mode evidence when the ADR is accepted

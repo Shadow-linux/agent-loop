@@ -128,6 +128,8 @@ After `accepted`, derive and trace these product views from Concept IDs instead 
 
 The Requirement Product Model is product-level. It may say which fact belongs to which product concept and actor, but it must not choose tables, documents, event topics, ledgers, providers, transactions, consistency algorithms, migrations, or other technical representations.
 
+Give every derived model row a stable ID so downstream Product Brief, Feature Spec, and Decision & Design can cite it without copying meaning: `REL-*` for relationships, `PERM-*` for permission rules, `CMD-*` / `EVT-*` for actions, `FLOW-*` for flow steps, `STATE-*` for state rules, `PM-*` for product models/facts, and `EX-*` for exception/recovery scenarios. Do not create a placeholder model merely to populate a category; when Concept Foundation is reasoned not-needed, keep the lightweight path.
+
 ## Question Targets
 
 Ask only when the answer affects one of these:

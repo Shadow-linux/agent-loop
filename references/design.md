@@ -24,6 +24,8 @@ The core constraints are:
 - `requirements/` stores human source material packages and requirement lifecycle/backlog records as requirement set directories: requirements, prototypes, feedback, screenshots, recordings, links, follow-up notes, status, and optional `requirements/INDEX.md`
 - Concept Foundation is an internal Requirements Discussion / Requirement Product Grill method, not a canonical stage; when triggered, it stabilizes requirement-local product concepts before business-flow, state, and product-data modeling
 - the effective human-reviewed requirement source owns accepted Concept Foundation and Requirement Product Model semantics; after archive, requirement README indexes the effective source/status without copying details, and Product Brief / Feature Spec consume those meanings by reference
+- requirement-driven ADRs freeze an Effective Requirement Snapshot, inventory every source Requirement Model ID, and trace every in-scope accepted ID to a disposition, technical landing, Design Slice, and verification without taking ownership of product semantics
+- upstream requirement changes invalidate dependency availability until compatibility review; `review-required` is not a decision lifecycle status, and incompatible accepted decisions are superseded rather than rewritten
 - requirement-set dates mean archive date only, not deadlines or feature lifecycle dates
 - future/deferred work belongs in requirement sets and optional `requirements/INDEX.md`, not in `project.md`
 - `product.md` is optional feature-level product understanding when needed
@@ -78,6 +80,12 @@ Behavior Intent
 **Concept Foundation**: a triggered method inside Requirements Discussion / Requirement Product Grill that derives requirement-local stable Concept IDs, definitions, identity, lifecycle boundaries, relationships, owners, state-bearing classification, invariants, and product fact-source questions from scenarios and evidence. It is not a stage or top-level artifact.
 
 **Requirement Product Model**: the product-layer derivation owned by the effective human-reviewed requirement source. It traces accepted concepts into relationships, roles/permissions, commands/events, business flow, product state, product data objects, invariants, and exception/recovery behavior without choosing tables, stores, protocols, or other technical representations. After archive, append-only follow-ups or a linked replacement set preserve prior sources while README indexes the effective source.
+
+**Effective Requirement Snapshot**: the read-only ADR header that resolves the requirement README's current Effective Concept Foundation pointer and records the accepted source, Concept Foundation status, accepted Concept IDs, accepted Requirement Model IDs, compatibility judgment, and last compatibility check. It does not copy or redefine product meaning.
+
+**Requirement Model Scope Inventory**: the source-wide ADR section that accounts for every stable Requirement Model ID (`REL-*`, `PERM-*`, `CMD-*`, `EVT-*`, `FLOW-*`, `STATE-*`, `PM-*`, and `EX-*`) before declaring the coherent ADR scope. It prevents silent omissions and records external, proposed, feature-local, or reasoned not-applicable ownership without becoming a separate artifact.
+
+**Requirement Model Technical Landing Trace**: the table inside an existing Decision & Design record that gives every in-scope accepted Requirement Model ID one disposition and, when landed by this ADR, connects it to a concrete technical landing, preserved invariant, Design Slice, and verification path. It is not a separate artifact or executable schema.
 
 **Prototype**: human-provided design artifact, screenshot, wireframe, or interaction reference.
 
@@ -359,6 +367,20 @@ Scenario / Evidence
 ```
 
 Simple requirements record `concept-foundation-not-needed` with a reason and remain lightweight. `candidate` and `reopened` are blocking; only `accepted` or a reasoned not-needed result may continue into requirement product modeling.
+
+Within Decision & Design, a requirement-driven ADR uses this internal order without adding a canonical stage or default mapping artifact:
+
+```text
+Effective Requirement Source
+→ Effective Requirement Snapshot
+→ Requirement Model Scope Inventory
+→ Requirement Model Technical Landing Trace
+→ proposed structural preflight
+→ Decision & Design Human Review
+→ accepted-mode validation and assigned Design Slices
+```
+
+The trace consumes accepted product semantics. Product ambiguity returns to Requirements Discussion; technical incompatibility with an accepted ADR creates a superseding decision after Human Review.
 
 ```text
 Project Entry

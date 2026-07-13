@@ -39,8 +39,8 @@ Effective Concept Source: requirement.md
 
 | Requirement Model ID | Concept / Action / Flow / State IDs | Feature Behavior / Story | Acceptance / Verification Direction | Coverage |
 |---|---|---|---|---|
-| PM-01 | C-CUSTOMER / C-REFUND-ADMIN / C-REFUND-REQUEST / CMD-SUBMIT / CMD-APPROVE / FLOW-01 / FLOW-02 / STATE-REQUEST-01 / STATE-REQUEST-02 | US1 / US2 | approval never claims funds success | covered |
-| PM-02 | C-PAYMENT-PROVIDER / C-REFUND-SETTLEMENT / EVT-SETTLED / EVT-FAILED / CMD-RECONCILE / FLOW-03 / FLOW-04 / STATE-SETTLEMENT-01 / STATE-SETTLEMENT-02 / STATE-SETTLEMENT-03 / STATE-SETTLEMENT-04 | US3 | settlement terminals and recovery are observable | covered |
+| PM-01 | C-CUSTOMER / C-REFUND-ADMIN / C-REFUND-REQUEST / PERM-CUSTOMER-REQUEST / PERM-ADMIN-REQUEST / CMD-SUBMIT / CMD-APPROVE / FLOW-01 / FLOW-02 / STATE-REQUEST-01 / STATE-REQUEST-02 | US1 / US2 | approval never claims funds success | covered |
+| PM-02 | C-PAYMENT-PROVIDER / C-REFUND-SETTLEMENT / PERM-ADMIN-SETTLEMENT / PERM-PROVIDER-SETTLEMENT / EVT-SETTLED / EVT-FAILED / CMD-RECONCILE / FLOW-03 / FLOW-04 / STATE-SETTLEMENT-01 / STATE-SETTLEMENT-02 / STATE-SETTLEMENT-03 / STATE-SETTLEMENT-04 / EX-01 / EX-02 | US3 | settlement terminals and recovery are observable | covered |
 
 ## Scope
 

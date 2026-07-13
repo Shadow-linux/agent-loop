@@ -36,7 +36,7 @@ Rules:
 
 | Requirement Model ID | Concept IDs | Feature Product Journey / Story | Coverage | Notes |
 |---|---|---|---|---|
-| PM-01 / FLOW-01 / STATE-01 | C-EXAMPLE |  | in-scope / out-of-scope / not-applicable |  |
+| PM-01 / PERM-01 / FLOW-01 / STATE-01 / EX-01 | C-EXAMPLE |  | in-scope / out-of-scope / not-applicable |  |
 
 ## Problem Statement
 

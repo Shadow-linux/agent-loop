@@ -39,7 +39,7 @@ Do not redefine accepted product meaning in this Feature Spec. Return to Require
 
 | Requirement Model ID | Concept / Action / Flow / State IDs | Feature Behavior / Story | Acceptance / Verification Direction | Coverage |
 |---|---|---|---|---|
-| PM-01 | C-EXAMPLE / CMD-01 / FLOW-01 / STATE-01 | US1 |  | planned / covered / out-of-scope |
+| PM-01 | C-EXAMPLE / PERM-01 / CMD-01 / FLOW-01 / STATE-01 / EX-01 | US1 |  | planned / covered / out-of-scope |
 
 ## Maintenance Fix Scope
 

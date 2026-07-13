@@ -168,6 +168,12 @@ Requirement -> Design Readiness Check -> Decision & Design If Needed -> Feature 
 
 Simple work records `design-not-needed` and can continue without a decision file. Feature-local choices stay in `spec.md` Design Decisions. Review and completion verify that implementation conforms to accepted design slices rather than checking feature stories alone.
 
+For a requirement-driven ADR, the Agent first resolves an Effective Requirement Snapshot from the requirement README and accepted source. A source-wide Requirement Model Scope Inventory accounts for every stable relationship, permission, command/event, flow, state, product-model, and exception ID before the ADR selects its coherent scope. The ADR then gives every in-scope ID one Requirement Model Technical Landing Trace disposition. A `landed` row must name its concrete technical landing, preserved invariant, Design Slice, and verification target; incomplete inventory/coverage or `Upstream Compatibility: review-required` blocks ADR acceptance and dependent Feature Spec, Plan, and implementation work.
+
+The ADR remains `proposed` while structural preflight runs. A passing validator authorizes review, not acceptance. Only explicit Decision & Design human acceptance permits recorded Human Review Evidence and `Status: accepted`, followed by accepted-mode validation. A reasoned `concept-foundation-not-needed` input uses an explicit trace-not-applicable branch without fabricated models. The ADR remains a consumer of product semantics: ambiguity returns to Requirements Discussion, while an incompatible accepted technical decision is preserved and superseded after Human Review instead of being rewritten.
+
+Migration, compatibility, rollout, and rollback detail are operational landing concerns triggered only when the decision changes persistence representation, protocol/provider, runtime boundary, or rollout compatibility. Untriggered concerns keep one concrete reason and do not generate empty default design sections. This enhancement stays inside the existing ADR and adds no canonical stage, mapping artifact, lifecycle status, or executable schema.
+
 ### 4. Start a Feature
 
 > "I want to add login."

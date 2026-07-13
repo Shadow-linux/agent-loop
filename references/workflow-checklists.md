@@ -75,6 +75,22 @@ Before using an external skill or plugin inside a stage:
 - [ ] Verify requirement README, product.md, and spec.md decision references stay aligned.
 - [ ] Remember that `.agent-loop/decisions/` is available in simple and enterprise memory modes and does not trigger enterprise mode by itself.
 
+## ADR Requirement Model Technical Landing
+
+- [ ] Resolve the requirement README `Effective Concept Foundation` pointer and record the Effective Requirement Snapshot before technical landing.
+- [ ] Require a triggered Concept Foundation to be `accepted`; return `candidate` / `reopened` to the Human Grill Contract.
+- [ ] Declare accepted Concept IDs and in-scope Requirement Model IDs without copying or redefining product meaning.
+- [ ] Inventory every stable source model ID (`REL-*`, `PERM-*`, `CMD-*`, `EVT-*`, `FLOW-*`, `STATE-*`, `PM-*`, `EX-*`) and give every out-of-scope ID an accepted-decision, feature-local, proposed-decision, or reasoned not-applicable owner.
+- [ ] Give every in-scope accepted Requirement Model ID exactly one Requirement Model Technical Landing Trace disposition.
+- [ ] Apply the Coverage Hard Gate: every `landed` row has Technical Landing, Preserved Invariant, Design Slice, and Verification; non-landed dispositions name an owner or concrete reason.
+- [ ] Treat `Applicable Decisions` as awareness only, never as a substitute for Requirement Model coverage or Design Slice ownership.
+- [ ] Keep `Upstream Compatibility: review-required` separate from ADR lifecycle status and block dependent Feature Spec, Plan, and implementation.
+- [ ] When an accepted decision no longer holds, create a Human-gated superseding ADR instead of rewriting accepted decision meaning.
+- [ ] Assess operational landing triggers; expand Migration / Backfill, Compatibility, Rollout / Cutover, or Rollback / Reversibility only when triggered, otherwise record a concrete `not-triggered` reason.
+- [ ] Keep the ADR `proposed` for structural preflight; after it passes, present the Human Review Summary and wait for explicit acceptance before recording Human Review Evidence and rerunning accepted-mode validation.
+- [ ] For a reasoned `concept-foundation-not-needed` source, use the explicit trace-not-applicable fields and do not invent Concept or Requirement Model rows.
+- [ ] Load `human-review-summary.md` and present the Decision & Design Human Review Summary before creating, accepting, superseding, or materially updating the record.
+
 ## Message Intent
 
 - [ ] Classify the latest human message intent before project state classification.
@@ -120,7 +136,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.sh` is available, run it as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.3.0-20260713`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.3.0-20260713.2`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -206,7 +222,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.sh` is available, run it as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.3.0-20260713`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.3.0-20260713.2`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -355,6 +371,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Add Accepted Concept References and Requirement Product Model Trace from the source requirement and Product Brief.
 - [ ] Reject feature-local redefinition of accepted concept name, identity, owner, lifecycle, relationship, invariant, state, terminal meaning, or product fact.
 - [ ] Do not enter Feature Spec while required shared design is unresolved or any required design slice is unassigned.
+- [ ] For each applicable requirement-driven ADR, require a current Effective Requirement Snapshot, complete Requirement Model Technical Landing Trace, and `Upstream Compatibility: current`.
 - [ ] Run Stage Helper Capability Scan before fallback spec writing.
 - [ ] If a spec-writing, brainstorming, or product-discovery helper is available, use it through `external-skill-adapters.md` while writing accepted output to agent-loop `spec.md`.
 - [ ] Create or update feature workspace.
@@ -536,6 +553,7 @@ Checklist:
 - [ ] Confirm each planned implementation step maps to an accepted task/story and acceptance criterion.
 - [ ] Confirm each changed behavior has a test or explicit substitute verification path.
 - [ ] Trace every accepted Decision & Design slice assigned to this feature through `spec.md`, tasks, tests, and the active plan.
+- [ ] Confirm every applicable ADR remains compatible with the current effective requirement source and every assigned Design Slice originates from a covered Requirement Model trace row.
 - [ ] Stop when an assigned design slice has no implementation or verification path, even if each local story is independently testable.
 - [ ] Confirm no plan step changes human original requirements, product scope, acceptance criteria, public interfaces, Delivery Contracts, or project memory without a human gate.
 - [ ] Confirm file paths, commands, function signatures, parameters, return shapes, data contracts, and side effects match code reality.
@@ -634,7 +652,9 @@ Checklist:
 
 - [ ] Compare implementation against `spec.md`.
 - [ ] During Drift Check, compare assigned Design Slice IDs with implementation and verification evidence.
+- [ ] Compare each applicable ADR Effective Requirement Snapshot and Requirement Model Technical Landing Trace with the current effective source; route `review-required` to Decision & Design before close.
 - [ ] Route any divergence from an accepted Decision & Design record back to Decision & Design before close; do not accept local-story success as a substitute.
+- [ ] If accepted decision meaning or technical conclusions no longer hold, propose a superseding ADR after Human Review; never rewrite accepted meaning in place.
 - [ ] Compare completed work against `tasks.md` and `tests.md`.
 - [ ] Compare producer-consumer interfaces against `contracts.md` and linked `contracts/*` details when present.
 - [ ] List affected consumers and ask human confirmation before accepting a breaking contract change.

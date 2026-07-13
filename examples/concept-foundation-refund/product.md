@@ -33,8 +33,8 @@ Not-Needed Reason: n/a
 
 | Requirement Model ID | Concept IDs | Feature Product Journey / Story | Coverage | Notes |
 |---|---|---|---|---|
-| PM-01 / FLOW-01 / FLOW-02 / STATE-REQUEST-01 / STATE-REQUEST-02 | C-CUSTOMER, C-REFUND-ADMIN, C-REFUND-REQUEST | submit and review | in-scope | approval is not funds success |
-| PM-02 / FLOW-03 / FLOW-04 / STATE-SETTLEMENT-01 / STATE-SETTLEMENT-02 / STATE-SETTLEMENT-03 / STATE-SETTLEMENT-04 | C-PAYMENT-PROVIDER, C-REFUND-SETTLEMENT | observe and recover settlement | in-scope | success notification uses settlement terminal |
+| PM-01 / PERM-CUSTOMER-REQUEST / PERM-ADMIN-REQUEST / FLOW-01 / FLOW-02 / STATE-REQUEST-01 / STATE-REQUEST-02 | C-CUSTOMER, C-REFUND-ADMIN, C-REFUND-REQUEST | submit and review | in-scope | approval is not funds success |
+| PM-02 / PERM-ADMIN-SETTLEMENT / PERM-PROVIDER-SETTLEMENT / FLOW-03 / FLOW-04 / STATE-SETTLEMENT-01 / STATE-SETTLEMENT-02 / STATE-SETTLEMENT-03 / STATE-SETTLEMENT-04 / EX-01 / EX-02 | C-PAYMENT-PROVIDER, C-REFUND-SETTLEMENT | observe and recover settlement | in-scope | success notification uses settlement terminal |
 
 ## Problem Statement
 

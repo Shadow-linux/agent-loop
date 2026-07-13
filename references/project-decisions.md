@@ -136,6 +136,114 @@ The agent must not:
 
 The decision file status cannot become `accepted` without explicit human confirmation.
 
+## Effective Requirement Snapshot
+
+Every ADR driven by a Requirement Product Model resolves the requirement README `Effective Concept Foundation` block before technical design. If the block exists, follow `Effective Source`; older requirement sets may use the reviewed requirement document as a backward-compatible source.
+
+Record this snapshot near the ADR header:
+
+```text
+Effective Concept Source:
+Concept Foundation Status: accepted | concept-foundation-not-needed
+Accepted Concept IDs:
+Accepted Requirement Model IDs:
+Upstream Compatibility: current | review-required
+Last Compatibility Check:
+Trace Applicability: required | not-applicable
+Trace Not-Applicable Reason:
+```
+
+Rules:
+
+- a triggered Concept Foundation must be `accepted`; `candidate` or `reopened` returns to the Human Grill Contract before ADR work continues
+- list only accepted Concept IDs and the accepted Requirement Model IDs declared inside this ADR's coherent decision scope
+- cite or concisely summarize unchanged accepted meaning; do not copy a new definition into the decision
+- resolve the effective source again before ADR acceptance and before a dependent Feature Spec, Plan, or implementation begins
+- `Upstream Compatibility` is a dependency judgment, not a new decision status
+- when the effective source is reasoned `concept-foundation-not-needed`, record both accepted-ID fields as `none`, set trace applicability to `not-applicable`, give a concrete reason, and do not invent product-model tables
+
+## Requirement Model Scope Inventory
+
+Before choosing the ADR scope, inventory every stable Requirement Model ID in the effective source: relationship (`REL-*`), permission (`PERM-*`), command/event (`CMD-*` / `EVT-*`), flow (`FLOW-*`), state (`STATE-*`), product model (`PM-*`), and exception/recovery (`EX-*`). Give each source ID exactly one scope disposition:
+
+```text
+in-scope | covered-by-accepted-decision | feature-local | proposed-decision | not-applicable
+```
+
+- `in-scope` names this ADR; these IDs exactly match `Accepted Requirement Model IDs` and the Technical Landing Trace rows
+- `covered-by-accepted-decision` names an existing accepted decision Markdown path
+- `feature-local` names an existing Feature Spec path, or an explicit canonical future path prefixed with `planned:`
+- `proposed-decision` names an existing decision draft, or an explicit canonical future path prefixed with `planned:`
+- `not-applicable` begins with `reason:` and gives a concrete scope reason
+
+The inventory is a section of the existing ADR, not a new mapping artifact. It makes out-of-scope ownership visible and prevents an Agent from shrinking the snapshot until an inconvenient source model disappears.
+
+## Requirement Model Technical Landing Trace
+
+Use one generic trace table inside the ADR:
+
+| Requirement Model Ref | Accepted Meaning / Constraint | Disposition | Technical Landing | Preserved Invariant | Design Slice | Verification |
+|---|---|---|---|---|---|---|
+| `<accepted-model-id>` | link or concise unchanged meaning | landed / covered-by-accepted-decision / feature-local / not-applicable |  |  |  |  |
+
+Every in-scope accepted relationship, permission rule, command, event, flow step, state rule, product-model row, and exception/recovery row needs exactly one disposition. Do not require an ADR to copy the whole PRD; the Scope Inventory accounts for the complete stable-ID set, while the snapshot and trace declare the coherent scope handled or deliberately delegated by this ADR.
+
+Disposition rules:
+
+- `landed`: name a concrete technical landing, preserved invariant, Design Slice, and verification target
+- `covered-by-accepted-decision`: reference the existing accepted decision Markdown path that owns the landing; do not duplicate its technical reasoning
+- `feature-local`: name an existing Feature Spec path or an explicit `planned:features/<feature-id>/spec.md` path plus verification direction; shared constraints cannot be hidden as feature-local
+- `not-applicable`: state a concrete reason and show it in the Decision & Design Human Review Summary
+
+ADR must not create, rename, split, merge, or redefine a Concept, relationship, role/permission, command/event, business flow, product state, invariant, exception/recovery meaning, or product fact ownership. If accepted meaning is missing or insufficient, return to Requirements Discussion rather than filling the gap in technical design.
+
+## Coverage Hard Gate
+
+A decision cannot become `accepted` while coverage is missing or Upstream Compatibility is `review-required`.
+
+The Agent first runs structural preflight while the ADR remains `proposed`. Only after preflight succeeds does it present the Decision & Design Human Review Summary. Explicit human acceptance authorizes the Agent to record Human Review Evidence, change the status to `accepted`, and rerun accepted-mode validation. A validator pass never grants acceptance by itself.
+
+Before asking for ADR acceptance or allowing a dependent Feature Spec:
+
+1. resolve the effective source and confirm compatibility is `current`;
+2. confirm every stable Requirement Model ID in the effective source has one Scope Inventory row;
+3. confirm the in-scope inventory IDs exactly equal the snapshot IDs and trace rows;
+4. confirm every `landed` row has a concrete Technical Landing, Preserved Invariant, Design Slice, and Verification target;
+5. confirm accepted-decision paths exist and are accepted; confirm feature-local paths either exist or use an explicit canonical `planned:` path;
+6. present every `not-applicable`, `feature-local`, proposed-decision, deferred, and out-of-scope item to the human;
+7. confirm every implementation-bearing technical rule is represented in Design Slice Coverage and no required slice remains `unassigned`;
+8. confirm no unresolved product-semantic blocker remains.
+
+An `Applicable Decisions` reference proves awareness only. It cannot replace Requirement Model coverage, Design Slice ownership, or verification.
+
+## Upstream Compatibility And Drift
+
+Re-run compatibility review when the requirement README effective source changes or newly accepted requirement evidence changes Concept IDs, Requirement Model IDs, or their accepted meaning.
+
+1. set the dependency judgment to `Upstream Compatibility: review-required`;
+2. stop new dependent Feature Spec, Plan, and implementation work;
+3. compare old/new effective sources, Concept IDs, Requirement Model IDs, and affected trace rows;
+4. if accepted product meaning changed but the existing technical decision remains valid, update only the snapshot and trace after Decision & Design Human Review;
+5. if the chosen technical boundary, representation, recovery, compatibility, NFR conclusion, or accepted decision meaning no longer holds, create a Human-gated superseding ADR;
+6. preserve the accepted ADR for audit; do not rewrite its decision meaning in place.
+
+Compatibility review may add references or current evidence to an accepted record only when repository policy permits append-only metadata. It must not use a metadata update to disguise a changed decision.
+
+## Triggered Operational Landing
+
+Operational landing detail is conditional. Assess these concerns before the ADR Human Gate:
+
+| Concern | Trigger | Required Result |
+|---|---|---|
+| Migration / Backfill | persistence representation or existing durable data changes | expand migration/backfill design |
+| Compatibility | protocol, consumer, provider, or version compatibility changes | expand compatibility design |
+| Rollout / Cutover | runtime boundary, traffic path, or staged activation changes | expand rollout/cutover design |
+| Rollback / Reversibility | safe reversal needs technical work or data repair | expand rollback/reversibility design |
+
+For each concern, record `triggered` with its ADR section or `not-triggered` with one concrete reason. Do not add empty operational sections by default, and do not copy a domain-specific action, vendor, storage choice, protocol, or rollout topology from examples into a new decision.
+
+Before creating or accepting the ADR, load `references/human-review-summary.md` and present the Decision & Design Human Review Summary. The summary exposes effective source, source-wide scope inventory, coverage counts, chosen decision, preserved product semantics, operational triggers, Design Slice ownership, verification direction, blockers, and the explicit human decision. It does not replace the ADR. An accepted ADR records `Decision`, `Confirmed By`, `Confirmed At`, and concrete evidence in its Human Review Evidence section.
+
 ## Relationship Model
 
 Use these relationship fields consistently:

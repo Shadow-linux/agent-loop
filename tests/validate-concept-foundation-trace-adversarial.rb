@@ -121,7 +121,7 @@ expect_reject(
 expect_reject(
   "command actor without target permission",
   validator,
-  base_requirement.sub(/^\| C-REFUND-ADMIN \| C-REFUND-SETTLEMENT .*\n/, ""),
+  base_requirement.sub(/^\| PERM-ADMIN-SETTLEMENT \| C-REFUND-ADMIN \| C-REFUND-SETTLEMENT .*\n/, ""),
   base_product,
   base_spec
 )

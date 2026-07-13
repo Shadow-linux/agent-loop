@@ -239,9 +239,9 @@ Derive canonical terms from accepted Concept IDs. This section may record displa
 
 ## Role / Permission Matrix
 
-| Role Concept ID | Product Object Concept ID | Read | Create | Advance / Decide | Cancel / Withdraw | Recover | Boundary / Evidence |
-|---|---|---|---|---|---|---|---|
-| C-ACTOR | C-EXAMPLE | yes / no | yes / no |  |  |  |  |
+| Permission Rule ID | Role Concept ID | Product Object Concept ID | Read | Create | Advance / Decide | Cancel / Withdraw | Recover | Boundary / Evidence |
+|---|---|---|---|---|---|---|---|---|
+| PERM-01 | C-ACTOR | C-EXAMPLE | yes / no | yes / no |  |  |  |  |
 
 ## Commands / Events
 
@@ -291,7 +291,7 @@ Every derived row must cite accepted Concept IDs. Product Brief and Feature Spec
 
 | Trace ID | Accepted Concept IDs | Derived Model IDs / Sections | Product Rule / Meaning | Downstream Product Brief / Feature Spec Use |
 |---|---|---|---|---|
-| TRACE-01 | C-EXAMPLE | REL-01 / CMD-01 / FLOW-01 / STATE-01 / PM-01 |  |  |
+| TRACE-01 | C-EXAMPLE | REL-01 / PERM-01 / CMD-01 / FLOW-01 / STATE-01 / PM-01 / EX-01 |  |  |
 
 ## Historical Behavior / Prior Conflicts
 
