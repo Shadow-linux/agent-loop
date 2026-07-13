@@ -23,6 +23,24 @@ Summary:
 
 -
 
+## Accepted Concept References
+
+Concept Foundation Status: accepted | concept-foundation-not-needed
+Source Requirement:
+Effective Concept Source:
+
+| Concept ID | Canonical Name | Feature Use | Source Definition / Trace |
+|---|---|---|---|
+| C-EXAMPLE |  |  | requirement.md#concept-definitions / TRACE-01 |
+
+Do not redefine accepted product meaning in this Feature Spec. Return to Requirements Discussion if identity, owner, relationship, lifecycle, invariant, state, terminal meaning, or product fact must change.
+
+## Requirement Product Model Trace
+
+| Requirement Model ID | Concept / Action / Flow / State IDs | Feature Behavior / Story | Acceptance / Verification Direction | Coverage |
+|---|---|---|---|---|
+| PM-01 | C-EXAMPLE / CMD-01 / FLOW-01 / STATE-01 | US1 |  | planned / covered / out-of-scope |
+
 ## Maintenance Fix Scope
 
 Use this section only when `Feature Type: maintenance-fix`.

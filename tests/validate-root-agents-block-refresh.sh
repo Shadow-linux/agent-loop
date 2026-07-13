@@ -23,7 +23,7 @@ assert_not_contains() {
 
 managed_count=$(grep -c '^<!-- agent-loop:managed-start' "$root/templates/root-AGENTS.md" || true)
 block_version_count=$(grep -c '^<!-- agent-loop:managed-start.*block-version:' "$root/templates/root-AGENTS.md" || true)
-current_block_version="1.3.0-20260711"
+current_block_version="1.3.0-20260713"
 
 if [ "$managed_count" -ne "$block_version_count" ]; then
   printf 'FAIL: every root AGENTS managed block needs block-version (%s managed, %s block-version)\n' "$managed_count" "$block_version_count" >&2
@@ -61,7 +61,7 @@ assert_contains "templates/root-AGENTS.md" "Treat root \`AGENTS.md\` as a bootst
 assert_contains "templates/root-AGENTS.md" "## Workflow Stage Map"
 assert_contains "templates/root-AGENTS.md" "After selecting a stage, load the matching \`references/...\` file from the \`agent-loop\` skill package before acting."
 assert_contains "templates/root-AGENTS.md" "Load From agent-loop Skill"
-assert_contains "templates/root-AGENTS.md" "| Product need, business goal, scope, constraint, scenario, or phased delivery is still being shaped | Requirements Discussion |"
+assert_contains "templates/root-AGENTS.md" "| Product need, business goal, scope, constraint, scenario, concept identity/lifecycle, or phased delivery is still being shaped | Requirements Discussion |"
 assert_contains "templates/root-AGENTS.md" "| Accepted requirement needs shared business-flow, domain, data, architecture, reliability, performance, security, or cross-feature design before feature specification | Decision & Design If Needed | \`references/project-decisions.md\` |"
 assert_contains "templates/root-AGENTS.md" "| Accepted requirement needs feature-level product intent before engineering specification | Product Brief If Needed |"
 assert_contains "templates/root-AGENTS.md" "| Accepted requirement or Product Brief has completed Design Readiness and is ready for engineering behavior and acceptance | Feature Spec |"
@@ -113,7 +113,7 @@ assert_contains "references/workflow-checklists.md" "Workflow Stage Map routes t
 assert_contains "references/workflow-checklists.md" 'If `scripts/check-root-agents-blocks.sh` is available, run it as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.'
 assert_contains "references/workflow-checklists.md" "Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current."
 assert_not_contains "references/workflow-checklists.md" "managed guidance version"
-assert_contains "references/workflow-checklists.md" 'Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.3.0-20260711`.'
+assert_contains "references/workflow-checklists.md" 'Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.3.0-20260713`.'
 assert_contains "references/workflow-checklists.md" "Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required."
 assert_contains "references/workflow-checklists.md" "Do not require a separate Managed Block Rule prose section in target root \`AGENTS.md\`; managed block maintenance rules live in \`references/project-guidance.md\` and refresh tooling."
 assert_contains "references/workflow-checklists.md" 'Root guidance refresh may update only human-approved managed blocks.'

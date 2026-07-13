@@ -8,6 +8,10 @@ Requirement -> Design Readiness Check -> Decision & Design If Needed -> Feature 
 
 Requirement explains what humans want and how success is recognized. Decision & Design explains how the complete requirement can work across features and which shared rules every feature must preserve. Feature artifacts implement and verify assigned design slices.
 
+PRD / Requirement Product Model owns product meaning. ADR consumes accepted product semantics and is responsible for later technical landing; it must not redefine accepted Concept IDs, identity, lifecycle, relationships, invariants, product states, terminal meaning, or product fact ownership.
+
+Concept Foundation and Requirement Product Model do not choose tables, stores, event topics, providers, or other technical representations. Decision & Design may select those representations only after requirement acceptance and through its own Human Gate, while preserving accepted product meaning.
+
 Design Readiness Check is a required method at Requirement Archive, Product Brief, and Feature Spec boundaries; it is not a standalone stage.
 
 Decision Scan / Placement remains a lightweight method inside Decision & Design. It decides where a decision belongs; it is not the whole design stage.
@@ -147,7 +151,7 @@ Use these relationship fields consistently:
 
 Requirement README owns lifecycle, phase mapping, triggered decisions, and implemented-by tracking.
 
-Decision files own the design reasoning: goals, domain concepts, business flow, chosen option, architecture design, consequences, and verification closure.
+Decision files own technical design reasoning: goals, accepted product-concept references, business-flow landing, chosen option, architecture design, consequences, and verification closure. The source PRD / Requirement Product Model continues to own product definitions.
 
 Feature `product.md` and `spec.md` reference applicable decisions and state which part of a decision they implement. They do not restate the whole decision.
 

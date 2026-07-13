@@ -62,6 +62,8 @@ Default behavior:
 4. Set status to `proposed`, `accepted`, `deferred`, `rejected`, or `reference-only` based on the human decision.
 5. Do not create a feature workspace unless the human explicitly says to start implementation.
 
+Before drafting detailed flow, state, or product-data sections, classify `Concept Foundation Status`. Triggered complex requirements must pass the Concept Foundation Human Gate inside Requirement/Product Grill. Simple requirements record `concept-foundation-not-needed` with a concrete reason.
+
 A requirement document produced from brainstorming is requirement source material after human review.
 
 Reviewed/recorded does not mean accepted for implementation.
@@ -69,6 +71,57 @@ Reviewed/recorded does not mean accepted for implementation.
 Do not move the requirement source into a feature workspace when implementation starts. features reference requirement sets; requirements own source and lifecycle.
 
 Feature `product.md` and `spec.md` may be derived from accepted requirements, but they are implementation views. They do not replace the requirement set and do not own requirement lifecycle.
+
+## Concept Foundation Status
+
+The human-reviewed requirement document records one of:
+
+```text
+candidate | accepted | reopened | concept-foundation-not-needed
+```
+
+- `candidate`: evidence and candidate concepts exist, but one or more product meanings can still change downstream flow/state/data.
+- `accepted`: the human confirmed every blocking concept definition; Requirement Product Model derivation may proceed.
+- `reopened`: later requirement evidence invalidated accepted product meaning; stop downstream synthesis and return to the Human Grill Contract.
+- `concept-foundation-not-needed`: a simple change has no product-semantic impact; record the specific reason.
+
+Before the first human-reviewed archive, status belongs in the requirement document draft. After archive, the requirement set README owns only the `Effective Concept Foundation` status/source pointer; complete definitions and the Requirement Product Model remain in the referenced immutable source file. Archiving a document does not convert `candidate` to `accepted`, and requirement acceptance for implementation does not repair an unresolved Concept Foundation.
+
+For a triggered foundation, preserve this order:
+
+```text
+evidence and scenarios
+-> Concept Candidate Inventory
+-> one recommended blocking definition
+-> Human Confirmation
+-> Requirement Product Model derivation
+-> downstream Product Brief / Feature Spec references
+```
+
+Do not edit original human source files to manufacture the Concept Foundation. When the human-reviewed `requirement.md` was Agent-created from discussion, it becomes immutable source material after review under the existing source-file rules.
+
+### Effective Concept Foundation And Reopen
+
+For a newly archived requirement set, record this pointer in README after human confirmation:
+
+```text
+Effective Concept Foundation:
+  Status: accepted | concept-foundation-not-needed
+  Effective Source: requirement.md
+```
+
+When later evidence invalidates accepted product meaning:
+
+1. classify `reopened` response-locally and stop Product Brief, Feature Spec, and other downstream synthesis immediately;
+2. preserve the previous requirement source unchanged;
+3. run Requirement Conflict Review to choose append-to-existing-set or a linked/superseding requirement set;
+4. after human confirmation, write an append-only Concept Foundation follow-up such as `YYYY-MM-DD-concept-foundation-<slug>.md`, or create the confirmed replacement requirement set for a material conflict;
+5. update README `Effective Concept Foundation` to `reopened` or the newly `accepted` effective source, preserving `Previous Source` and `Last Confirmed`;
+6. require downstream artifacts to resolve the README pointer and cite the effective human-reviewed source.
+
+The README pointer is an index and safety-routing fact, not a second copy of Concept Foundation. If an older requirement set has no pointer, read status from its human-reviewed requirement document and do not bulk-migrate it.
+
+An append-only Concept Foundation follow-up may clarify or supersede product semantics inside the same requirement set only when Requirement Conflict Review says the original user goal and scope remain recognizable. A changed goal, reversed core business rule, or substantially invalid acceptance requires a new linked requirement set under the existing conflict rules.
 
 ## Requirement/Product Grill
 
@@ -80,6 +133,9 @@ Rules:
 - Ask one blocking question at a time and include the recommended answer.
 - Inspect project memory, source requirements, code/docs/tests, and targeted prior feature artifacts before asking when those sources may already answer the question.
 - Record accepted local terminology, scenarios, open questions, and conflicts in the reviewed requirement document. Keep the requirement set `README.md` to source, lifecycle, Delivery Phase, Feature Mapping, and decision-link summaries.
+- When Concept Foundation triggers, follow the Human Grill Contract: evidence first, candidate inventory, one recommended definition with impact, then exactly one downstream-blocking question.
+- Do not write detailed Business Flow, Product State Model, or Requirement Product Model while status is `candidate` or `reopened`.
+- After `accepted`, derive relationships, roles/permissions, commands/events, business flow, state, product data, invariants, exceptions, and recovery from stable Concept IDs and keep a traceability matrix in the requirement document.
 - Do not promote grill output to project memory, product.md, spec.md, or decisions without the owning human gate.
 - Record cross-feature, shared design, hard-to-reverse, surprising, or real-trade-off signals as Design Readiness evidence and Decision Candidates, not accepted ADRs.
 - Do not create `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/`.
@@ -272,6 +328,7 @@ Delivery Phases:
 
 Source Files:
 - Requirement: requirement.md
+- Concept Foundation Follow-ups:
 - Prototype: prototype.png
 - Feedback:
 - Screenshots:

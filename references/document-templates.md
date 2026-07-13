@@ -26,6 +26,7 @@ CLAUDE.md -> AGENTS.md
     <archive-date>-<topic>/
       README.md
       requirement.md
+      YYYY-MM-DD-concept-foundation-<slug>.md optional append-only semantic follow-up
       prototype.png
       feedback.md
       design-link.md
@@ -114,6 +115,8 @@ Requirement source files such as `requirement.md` are immutable by default. Life
 
 When requirements change, add a new file to the requirement set or create a new requirement set. Do not overwrite the old source requirement material.
 
+After archive, requirement set README `Effective Concept Foundation` points to the current human-reviewed semantic source. It may record effective status, source, previous source, confirmation date, and reopen trigger, but it must not duplicate definitions or the Requirement Product Model. Later semantic changes use an append-only Concept Foundation follow-up or a linked/superseding requirement set after Requirement Conflict Review and human confirmation.
+
 Future/deferred work and backlog items belong in requirement sets and optional `requirements/INDEX.md`, not in `project.md`.
 
 Use `Delivery Phases` in requirement set `README.md` when the requirement is too large for one feature, has MVP/later scope, crosses multiple boundaries, or needs staged human delivery confirmation:
@@ -129,6 +132,14 @@ Use `Delivery Phases` in requirement set `README.md` when the requirement is too
 Before an accepted requirement enters feature construction, add or update this requirement README summary:
 
 ```md
+## Effective Concept Foundation
+
+Status: not-recorded | candidate | accepted | reopened | concept-foundation-not-needed
+Effective Source: requirement.md | YYYY-MM-DD-concept-foundation-<slug>.md | none
+Previous Source: none
+Last Confirmed: YYYY-MM-DD | none
+Reason / Reopen Trigger:
+
 ## Design Readiness
 
 Status: not-scanned | design-not-needed | candidate | required | completed
@@ -167,41 +178,120 @@ Source: conversation | file | link | prototype | mixed
 
 ## Users / Operators
 
-## Roles / Operators / Permission Boundary
-
-| Role / Operator | What They Do | Permission / Boundary | Notes |
-|---|---|---|---|
-|  |  |  |  |
-
 ## Goals
+
+## Concept Foundation
+
+Concept Foundation Status: candidate | accepted | reopened | concept-foundation-not-needed
+
+Not-Needed Reason:
+
+### Evidence And Scenarios
+
+- Success scenario:
+- Failure / cancel / recovery scenario:
+- Project Domain Language / source / code / test / historical feature evidence:
+
+## Concept Candidate Inventory
+
+| Concept ID | Candidate Name | Kind | Evidence / Example | Ambiguity / Conflict | Status |
+|---|---|---|---|---|---|
+| C-EXAMPLE |  | entity / action / result / role / value |  |  | candidate / accepted / rejected |
+
+## Concept Definitions
+
+Use only fields that affect the current requirement. Write `n/a` plus a reason instead of inventing facts.
+
+| Concept ID | Canonical Name | Definition / Non-example | Identity | Owner | Lifecycle Boundary / State-bearing | Invariants | Product Fact Owner | Evidence |
+|---|---|---|---|---|---|---|---|---|
+| C-EXAMPLE |  |  |  |  |  |  |  |  |
+
+## Concept Relationships
+
+| Relationship ID | From Concept ID | Relationship | To Concept ID | Cardinality / Boundary | Invariant | Evidence |
+|---|---|---|---|---|---|---|
+| REL-01 | C-EXAMPLE |  | C-OTHER |  |  |  |
+
+### Blocking Ambiguities
+
+| Blocking Question | Recommended Definition | Evidence | Accept Impact | Reject Impact | Status |
+|---|---|---|---|---|---|
+|  |  |  |  |  | open / resolved |
+
+### Human Confirmation
+
+- Confirmed Concept IDs:
+- Human decision:
+- Confirmed at:
+- Remaining non-blocking unknowns:
+
+Do not continue to the derived product sections while status is `candidate` or `reopened`.
 
 ## Requirements
 
 ## Terminology / Domain Language
 
-Use this when terms are ambiguous, overloaded, project-specific, or clarified through Requirement/Product Grill.
+Derive canonical terms from accepted Concept IDs. This section may record display wording or aliases, but must not redefine accepted meaning.
 
-| Term | Meaning In This Requirement | Avoid / Ambiguity | Promote To Project Domain Language |
-|---|---|---|---|
-|  |  |  | yes / no / pending |
+| Concept ID | Canonical Term | Allowed Alias / Display Wording | Avoid / Ambiguity | Promote To Project Domain Language |
+|---|---|---|---|---|
+| C-EXAMPLE |  |  |  | yes / no / pending |
+
+## Role / Permission Matrix
+
+| Role Concept ID | Product Object Concept ID | Read | Create | Advance / Decide | Cancel / Withdraw | Recover | Boundary / Evidence |
+|---|---|---|---|---|---|---|---|
+| C-ACTOR | C-EXAMPLE | yes / no | yes / no |  |  |  |  |
+
+## Commands / Events
+
+| Action ID | Type | Name | Actor / Producer Concept ID | Target Concept ID | Preconditions / Guard | Result / Event | Evidence |
+|---|---|---|---|---|---|---|---|
+| CMD-01 | command / event |  | C-ACTOR | C-EXAMPLE |  | EVT-01 |  |
 
 ## Primary Business Flow
 
-Describe the normal business path in human-readable steps. Prefer concrete actor/system/state wording over abstract summaries.
+Describe the normal business path in human-readable steps. Every step cites Action IDs and accepted Concept IDs and closes to a defined product terminal.
 
-1.
+| Flow Step ID | Actor Concept ID | Action ID | Input / Target Concept IDs | Product State Change | Result / Next Step |
+|---|---|---|---|---|---|
+| FLOW-01 | C-ACTOR | CMD-01 | C-EXAMPLE |  |  |
+
+## Product State Model
+
+| State Model ID | State-bearing Concept ID | From | Action / Event ID | Guard / Invariant | To | Terminal / Recovery | Forbidden Transition |
+|---|---|---|---|---|---|---|---|---|
+| STATE-01 | C-EXAMPLE | initial | CMD-01 |  | active | no |  |
+
+## Requirement Product Model
+
+This is a conceptual product model, not a table, document, topic, ledger, provider, or technical schema design.
+
+| Product Model ID | Product Object / Fact | Concept IDs | Identity / Relationship | Owner / Allowed Changer | Product Invariant | Product Fact Meaning |
+|---|---|---|---|---|---|---|
+| PM-01 |  | C-EXAMPLE |  |  |  |  |
 
 ## Exception Paths
 
-| Scenario | Trigger | Expected Handling | Recovery / Operator Action | Acceptance Direction |
-|---|---|---|---|---|
-|  |  |  |  |  |
+| Scenario ID | Concept / State / Action IDs | Trigger | Expected Handling | Recovery / Responsible Actor | Observable Result | Acceptance Direction |
+|---|---|---|---|---|---|---|
+| EX-01 |  |  |  |  |  |  |
 
 ## Data / Source of Truth
 
-| Data / Fact | Source Of Truth | Who Can Change It | Consistency / Timing Notes |
-|---|---|---|---|
-|  |  |  |  |
+Record product fact ownership or a Decision Candidate. Do not select a table/store/provider here.
+
+| Product Model ID | Product Fact | Product Fact Owner | Who Can Change It | Timing / Consistency Need | Decision Candidate |
+|---|---|---|---|---|---|
+| PM-01 |  |  |  |  | none / candidate |
+
+## Concept-To-Product Traceability
+
+Every derived row must cite accepted Concept IDs. Product Brief and Feature Spec consume these IDs instead of creating replacement definitions.
+
+| Trace ID | Accepted Concept IDs | Derived Model IDs / Sections | Product Rule / Meaning | Downstream Product Brief / Feature Spec Use |
+|---|---|---|---|---|
+| TRACE-01 | C-EXAMPLE | REL-01 / CMD-01 / FLOW-01 / STATE-01 / PM-01 |  |  |
 
 ## Historical Behavior / Prior Conflicts
 
@@ -260,7 +350,7 @@ Use only when staged delivery has been discussed and human-reviewed. If used, mi
 ## Source Conversation Summary
 ```
 
-When Requirement/Product Grill was used, do not leave these sections as empty headings. Fill the applicable sections with concrete terms, flows, exceptions, data facts, conflicts, scenarios, and candidates; for non-applicable sections, write `Not applicable` plus a short reason.
+When Requirement/Product Grill was used, do not leave these sections as empty headings. Fill the applicable sections with concrete concepts, relationships, roles, actions/events, flows, states, product-model facts, exceptions, trace rows, historical conflicts, scenarios, and candidates; for non-applicable sections, write `Not applicable` plus a short reason. A triggered Concept Foundation must be `accepted` before derived product sections are written. A simple requirement uses `concept-foundation-not-needed` and a concrete reason instead of a large empty model.
 
 Write the human-reviewed document as `.agent-loop/requirements/<archive-date>-<topic>/requirement.md` after the human confirms the document should be recorded. Do not write it directly into a feature workspace. Feature `product.md` and `spec.md` derive from this source and link back to the requirement set.
 

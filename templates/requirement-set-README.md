@@ -24,6 +24,16 @@ Exit Condition:
 
 One-line summary:
 
+## Effective Concept Foundation
+
+Status: not-recorded | candidate | accepted | reopened | concept-foundation-not-needed
+Effective Source: requirement.md | YYYY-MM-DD-concept-foundation-<slug>.md | none
+Previous Source: none
+Last Confirmed: YYYY-MM-DD | none
+Reason / Reopen Trigger:
+
+This block is an effective-status pointer only. Concept definitions and the Requirement Product Model stay in the referenced human-reviewed source file.
+
 ## Delivery Phases
 
 Use this table when the requirement is too large for one feature or has MVP / later-phase scope.
@@ -73,6 +83,7 @@ Decisions caused by this requirement:
 
 - Requirement:
 - Requirement Document:
+- Concept Foundation Follow-ups:
 - Prototype:
 - Feedback:
 - Screenshots:

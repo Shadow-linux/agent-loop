@@ -42,7 +42,7 @@ If message intent is `requirements-discussion`, do not create a feature workspac
 
 If message intent is `project-skill-management`, load `references/project-skills.md`. Do not create a requirement set or feature workspace. Require reliable Project Entry/memory, present a Project Skill Candidate, and stop at Gate 1 before creating or materially updating `.agent-loop/skills/`.
 
-Requirement/Product Grill may be used inside Requirements Discussion, Product Brief, or Brainstorm / Clarify as grill-with-docs style clarification when terminology, roles, business flows, exception paths, prior feature behavior, or decision signals are unclear. It does not create a new stage: it clarifies input for the owning stage, writes only through that stage's artifacts and human gates, and sends shared design signals to Design Readiness Check.
+Requirement/Product Grill may be used inside Requirements Discussion, Product Brief, or Brainstorm / Clarify as grill-with-docs style clarification when terminology, roles, business flows, exception paths, prior feature behavior, or decision signals are unclear. It does not create a new stage. Concept Foundation is a triggered internal method of Requirements Discussion / Requirement Product Grill, not a stage. It stabilizes product concepts before requirement-level flow, state, and product-data modeling, writes through the human-reviewed requirement document, and sends only shared design signals to Design Readiness Check.
 
 Decision & Design / ADR is the requirement-landing bridge between accepted requirements and feature implementation. Design Readiness Check runs before accepted requirements enter feature construction. Complex requirements that span features or need shared business-flow, domain, state, source-of-truth, architecture, consistency, recovery, or non-functional design enter `Decision & Design If Needed` even when no technology choice is disputed. Ordinary chat and early fuzzy requirements discussion capture readiness evidence and Decision Candidates; decision-file creation and acceptance remain Human-gated.
 
@@ -55,6 +55,41 @@ If the human explicitly says they only want to discuss and do not want documenta
 If unclear whether the human wants ordinary chat or requirements discussion, ask whether to keep discussing or shape the topic into a requirements document.
 
 If unclear whether the human wants requirements discussion or feature implementation, ask whether to form a requirements document first or start feature construction.
+
+## Concept Foundation Routing
+
+During Requirements Discussion, classify Concept Foundation before drafting detailed business flow, product state, or product data:
+
+```text
+candidate | accepted | reopened | concept-foundation-not-needed
+```
+
+Enter `candidate` when any current requirement signal can change downstream product meaning: one term covers multiple objects/actions/results; a business object gains or changes identity or lifecycle; multiple actors/tenants/systems participate; work spans features; ownership, balance, inventory, approval, order, task, quota, or other fact-source semantics matter; current language conflicts with project Domain Language, code, tests, or historical features.
+
+Use `concept-foundation-not-needed` only for a simple change with no product-semantic, identity, lifecycle, ownership, state, relationship, cross-role, cross-feature, or data meaning change. Record one concrete reason; do not use it to bypass ordinary ambiguity.
+
+`accepted` requires human confirmation of every blocking concept meaning. `reopened` means later requirement evidence invalidated an accepted meaning and returns to the same gate.
+
+Before archive, the requirement document draft records status directly. After archive, preserve reviewed source files: mark `reopened` response-locally, stop downstream work, run Requirement Conflict Review, and ask before writing an append-only Concept Foundation follow-up or linked replacement requirement set. The requirement README `Effective Concept Foundation` block then points to the current human-reviewed source and effective status without duplicating concept detail. Older sets without this block resolve status from their reviewed requirement document.
+
+Do not enter Business Flow, State Model, or Product Data Model while a triggered Concept Foundation is `candidate` or `reopened`.
+
+After `accepted`, derive one Requirement Product Model from accepted Concept IDs: Concept Relationships, Role / Permission Matrix, Commands / Events, Primary Business Flow, Product State Model, product-layer objects/facts/invariants, and Exception / Recovery behavior. This product model does not select tables, documents, events, ledgers, providers, transactions, or other technical representations.
+
+## Human Grill Contract
+
+When Concept Foundation is triggered, one interaction turn follows this order:
+
+1. inspect available evidence: project Domain Language, source requirements, relevant code/docs/tests, and targeted historical feature artifacts;
+2. extract candidate concepts from concrete scenarios, including nouns, actions, outcomes, constraints, synonyms, overloaded terms, and conflicts;
+3. present one recommended definition with Concept ID, evidence, identity/lifecycle boundary, downstream impact if accepted, and downstream impact if rejected;
+4. ask exactly one downstream-blocking question and wait for the human answer.
+
+Do not replace step 4 with a batch of concept questions. Generic Brainstorm / Clarify question-count flexibility does not override this contract. Non-blocking uncertainties remain recorded without delaying the one blocking decision.
+
+The Concept Foundation confirmation is the product-semantic Human Gate inside Requirements Discussion. It does not accept the requirement for implementation, authorize Requirement Archive writes, create an ADR, or start feature construction.
+
+Before setting a triggered foundation to `accepted`, load `references/human-review-summary.md` and present the Concept Foundation Human Review Summary. The summary shows every confirmed or still-blocking Concept ID, evidence, identity/lifecycle boundary, relationship/state impact, and the explicit human decision; it does not replace the one-question-per-turn Grill Contract.
 
 ## Routing Axes And Precedence
 

@@ -95,7 +95,7 @@ references/project-memory-mode.md  simple vs enterprise project memory rules
 references/project-architecture-init.md DDD-inspired architecture and stack adapter rules
 references/remote-project-discovery.md local entry + remote project discovery rules
 references/requirement-management.md     human source requirement archive rules
-references/requirement-product-grill.md requirement/product clarification method for ambiguous terminology, flows, prior feature conflicts, and decision signals
+references/requirement-product-grill.md requirement/product clarification plus triggered Concept Foundation and Requirement Product Model derivation
 references/project-decisions.md   Design Readiness, Decision & Design, placement, coverage, and project-level ADR rules
 references/product-brief.md        feature product brief and product consensus rules
 references/delivery-contracts.md   durable producer-consumer interface handoff rules
@@ -144,7 +144,7 @@ CHANGELOG.md                        version-change source of truth for "what cha
 7. Load `references/project-architecture-init.md` during init or Project Entry Scan, when proposing project structure, when recording architecture profile, or when a task creates durable code boundaries.
 8. Load `references/remote-project-discovery.md` when the human says the project is remote, local files contain remote-entry hints, or local/remote/container execution is unclear. Do not treat an empty local directory alone as remote.
 9. Load `references/requirement-management.md` before copying, moving, renaming, indexing, or referencing human source requirements.
-9a. Load `references/requirement-product-grill.md` during Requirements Discussion, Product Brief, or Brainstorm / Clarify when requirements include ambiguous terminology, domain boundaries, business flows, exception paths, conflicting prior feature behavior, or decision signals. Grill questions clarify input only; they do not create PRDs, ADRs, project memory, `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/`.
+9a. Load `references/requirement-product-grill.md` during Requirements Discussion, Product Brief, or Brainstorm / Clarify when requirements include ambiguous terminology, domain boundaries, business flows, exception paths, conflicting prior feature behavior, or decision signals. When Concept Foundation triggers, inspect evidence, extract candidate concepts, recommend one definition with impact, and ask exactly one blocking question before deriving the Requirement Product Model. Grill questions clarify input only; they do not create ADRs, project memory, `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/`.
 9b. Load `references/project-decisions.md` for Design Readiness Check and `Decision & Design If Needed`: before accepted requirements enter feature construction, when a requirement spans multiple features or needs shared business-flow/domain/data/architecture/recovery/non-functional design, when product or technical work reveals cross-feature decisions, or when drift changes durable facts. Decision Scan / Placement is an internal method. A `.agent-loop/decisions/*.md` file is globally optional, but it becomes conditionally required when shared design is required and no accepted decision already covers it; creation and acceptance remain Human-gated.
 10. Load `references/product-brief.md` when a feature needs product intent, product consensus, user stories, product scope, or PRD-like synthesis.
 11. Load `references/e2e-discovery.md` before designing or executing Web E2E/browser verification.
@@ -247,6 +247,8 @@ If the local directory is only a remote-project entry point, create only thin lo
 - `.agent-loop/requirements/` is canonical. Do not create or maintain legacy `inputs/` archives in current-version projects.
 - Human source requirement archive dates mean archive date only; never infer deadlines, scope duration, or lifecycle from input paths.
 - Requirements created from requirements-discussion live under `.agent-loop/requirements/`; feature `product.md` and `spec.md` only derive from and link to requirement sets, and do not own requirement lifecycle.
+- Concept Foundation is an internal Requirements Discussion / Requirement Product Grill method, never a canonical stage or `.agent-loop/concepts/` artifact. Triggered foundations stay `candidate` or `reopened` until the Human Grill Contract confirms blocking meanings; only `accepted` or a reasoned `concept-foundation-not-needed` path may continue to requirement-level flow, state, and product-data modeling.
+- The effective human-reviewed requirement source owns the accepted Concept Foundation and Requirement Product Model. After archive, requirement README indexes the effective source/status while append-only follow-ups preserve earlier sources. Product Brief and Feature Spec reference accepted Concept IDs/model rows rather than redefining product meaning; ADR work consumes accepted product semantics only through its own later Human Gate.
 - For complex requirements, recommend requirement-level `Delivery Phases` in the requirement set `README.md` before feature construction when the human needs to confirm staged delivery. Phases express human-readable delivery slices; they are not feature workspaces, tasks, or plans.
 - A feature may implement one accepted Delivery Phase or a smaller slice inside one phase. It should not combine multiple phases unless the human first confirms a phase rewrite/merge. Feature `spec.md` must reference the requirement set and phase when phase mode is used, and requirement reconciliation should update phase status and feature mapping after human confirmation.
 - Future/deferred work, backlog items, and unimplemented planned capabilities belong in requirement set lifecycle/status records and optional `requirements/INDEX.md`, not in `project.md`. Do not edit `requirement.md` or other source files for lifecycle/status updates.
@@ -303,6 +305,7 @@ Stop when:
 - intent, scope, product, design, architecture, security, data, approval, or public-interface decisions cannot be resolved from files
 - a stage would modify human original requirements
 - spec, product scope, or acceptance criteria would change
+- a triggered Concept Foundation is still `candidate` or `reopened`, or a downstream artifact would redefine an accepted Concept ID / Requirement Product Model rule
 - project memory and code reality materially disagree
 - code reality conflicts with feature docs
 - a new dependency, migration, destructive operation, credential, external service, or long-lived boundary directory is needed

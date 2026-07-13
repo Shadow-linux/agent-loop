@@ -109,6 +109,8 @@ Timeline / Sequence 是单个核心流程的主叙事；Core Flow Overview / Bou
 |---|---|
 | “先帮我梳理这个需求，不要实现。” | 进入 Requirements Discussion，问清目标、用户、范围、约束、验收方向。 |
 | “先按 grill-with-docs 问清这个需求。” | 先问清术语、业务流程、边界和异常场景；提问前会查已有文档、代码和相关历史 feature。 |
+| “这个需求概念容易混，先把概念、关系和状态讲清楚。” | 在 Requirements Discussion 内触发 Concept Foundation：先查证据、提取候选概念、给出推荐定义及影响，再一次只确认一个真正阻塞后续模型的问题。 |
+| “只是改按钮文案，不要搞复杂建模。” | 没有产品语义变化时记录 `concept-foundation-not-needed` 和理由，不生成大型概念表。 |
 | “把这些内容落到 product.md。” | 如果还在聊天或需求澄清阶段，先问你是要创建/引用 requirement set，还是确认进入 feature Product Brief；不会直接创建 feature `product.md`。 |
 | “聊需求时遇到复杂架构取舍，要不要 ADR？” | 记录 Design Readiness evidence 和 Decision Candidate；不会直接创建 ADR。requirement 被确认后、feature construction 前判断是否需要 Decision & Design。 |
 | “这个需求进入 feature 前先做 ADR / Decision Design。” | 先做 Design Readiness；涉及多 feature、业务闭环、共享状态/事实源、恢复或非功能目标时进入 Decision & Design，不要求先出现技术争议。 |
@@ -135,6 +137,10 @@ Timeline / Sequence 是单个核心流程的主叙事；Core Flow Overview / Bou
 当至少一个 Phase 已实现、还有其他 Phase 未实现时，requirement 状态是 `partially-implemented`；只有确认范围内的所有 Phase 都进入实现或明确的终态后，才是 `implemented`。
 
 `grill-with-docs` 在 agent-loop 里是需求/产品澄清方法，不是新的阶段。它会先查 project memory、需求来源、代码文档和相关过往 feature，再问人类一个阻塞问题；如果发现跨 feature、共享状态、恢复或长期取舍，只会记录 Design Readiness evidence / Decision Candidate，不会直接创建 ADR。
+
+Concept Foundation 是这套澄清方法在复杂需求里的前置约束，不是新的 stage。Agent 不会让你先写“领域模型”；它从成功/失败场景和项目证据提取 Concept Candidate，用 requirement-local `Concept ID` 固定定义、identity、owner、lifecycle、relationship、invariant 和 product fact meaning。每轮 Human Grill 只问一个 downstream blocker，并附推荐定义、证据以及接受/拒绝对流程、状态和产品数据的影响。
+
+Concept Foundation 被确认后，effective requirement source 才推导 Concept Relationships、Role / Permission Matrix、Commands / Events、Primary Business Flow、Product State Model 和 Requirement Product Model。`product.md` 与 `spec.md` 同时记录 `Effective Concept Source` 并只引用 accepted Concept/Model IDs；如果归档后要改变产品含义，Agent 保留原 source、把 Gate 设为 `reopened`，经人类确认后追加 follow-up 或新建 requirement set，再更新 README 的 effective pointer，而不是改写历史文档或在下游文档/ADR 里重新定义。
 
 如果用了 Requirement/Product Grill，requirement document 会承接术语、主流程、异常路径、事实源、历史冲突、验收场景和 Decision Candidates，而不是只写一段摘要。
 

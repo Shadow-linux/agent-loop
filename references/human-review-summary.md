@@ -17,6 +17,7 @@ risk / blocker / human decision = never hidden
 
 Use before human confirmation for:
 
+- Concept Foundation acceptance
 - Project Entry / Project Entry Scan
 - legacy onboarding-db reference cleanup
 - Remote Project Discovery
@@ -89,6 +90,25 @@ Use Batch Human Review for:
 High-confidence rows can be drafted, but cannot become reviewed or written as accepted long-term fact without human confirmation.
 
 ## Stage Table Patterns
+
+### Concept Foundation Approval
+
+Use after the one-question-per-turn Human Grill Contract has resolved each blocker and before changing a triggered foundation to `accepted`.
+
+| Concept ID | Recommended Definition | Identity / Lifecycle Boundary | Relationship / State Impact | Evidence | Open Conflict | Human Decision |
+|---|---|---|---|---|---|---|
+|  |  |  |  |  | none / blocking | accept / revise / keep candidate |
+
+Add:
+
+```text
+Effective Concept Source:
+Requirement Product Model derivation authorized: yes | no
+Artifacts to write/update:
+Recommended next stage: continue Requirements Discussion | Requirement Archive
+```
+
+This summary is cumulative confirmation of the current concept baseline. It does not replace the strict one-question-per-turn Grill used to resolve blocking meanings, and it does not accept implementation, create an ADR, archive files, or start a feature.
 
 ### Feature Spec Approval
 

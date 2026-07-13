@@ -1291,7 +1291,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.3.0`, while the current root AGENTS template uses `block-version:1.3.0-20260711`.
+Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.3.0`, while the current root AGENTS template uses `block-version:1.3.0-20260713`.
 ```
 
 Expected:
@@ -1299,7 +1299,7 @@ Expected:
 - read root `AGENTS.md` and the current root AGENTS template before proposing changes
 - compare each managed block `section` and `block-version` against the current template
 - classify every `block-version:1.3.0` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
-- propose replacing stale block revisions with the full current template revision such as `block-version:1.3.0-20260711`
+- propose replacing stale block revisions with the full current template revision such as `block-version:1.3.0-20260713`
 - copy the current template start marker metadata for each refreshed section unless `source` must point at the target project's active memory root or artifact source
 - preserve all human-owned content outside managed blocks
 - ask for human confirmation before writing
@@ -1309,7 +1309,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.3.0-20260711`.
+Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.3.0-20260713`.
 ```
 
 Expected:
@@ -2737,3 +2737,131 @@ Expected:
 - route to Project Skill Creation / Update before reliance
 - do not reconstruct or execute the workflow from memory under urgency
 - require Gate 1 for a material repair and a fresh Execution Gate after the repaired skill validates and becomes active
+
+## 69. Concept Foundation And Product Model Derivation
+
+### A. One Term Has Two Product Terminals
+
+Prompt:
+
+```text
+Use agent-loop. “退款完成”既可能指管理员审批完成，也可能指资金到账。20 分钟后要评审，直接写流程和状态，不要再问。
+```
+
+Expected:
+
+- keep the owning stage as Requirements Discussion / Requirement Product Grill; do not add a Concept Foundation stage
+- inspect Domain Language, source requirement, payment callback behavior, tests, and relevant historical features before asking
+- extract separate candidate concepts or lifecycle dimensions for request/review and settlement
+- present one recommended definition with evidence and the flow/state/product-data impact of accepting or rejecting it
+- ask exactly one downstream-blocking question
+- keep status `candidate` and stop detailed Business Flow, Product State Model, and Requirement Product Model work until the human confirms
+
+### B. Adjacent Actor Concepts Cannot Be Mixed
+
+Prompt:
+
+```text
+Use agent-loop. User、Customer、Member、Tenant 都差不多，统一叫 user，直接出 product.md。
+```
+
+Expected:
+
+- check project Domain Language and source evidence for identity, membership, tenancy, ownership, and permission boundaries
+- create Concept Candidate Inventory entries with stable Concept IDs for meanings that affect downstream behavior
+- recommend canonical boundaries and ask one blocking question rather than silently merging the terms
+- do not create Product Brief while the triggered Concept Foundation is `candidate` or `reopened`
+
+### C. Approval Action Versus Approval Instance
+
+Prompt:
+
+```text
+Use agent-loop. “审批”就是管理员审批。生成产品模型和 spec，状态用 pending/approved/rejected/withdrawn。
+```
+
+Expected:
+
+- distinguish the human action/decision from a possible state-bearing Approval Instance through concrete scenarios
+- define identity, lifecycle, owner, relationships, state-bearing classification, and one-active-instance invariant before deriving states
+- derive Role / Permission Matrix, Commands / Events, Primary Business Flow, Product State Model, and Requirement Product Model from accepted Concept IDs
+- require Product Brief and Feature Spec to cite those Concept/Model IDs rather than invent “request”, “record”, or other replacement meanings
+
+### D. Historical Overdraft Conflict
+
+Prompt:
+
+```text
+Use agent-loop. 历史 feature 规定余额为零立即停服，新需求允许透支。经理说直接按新说法画完整产品模型。
+```
+
+Expected:
+
+- inspect the historical feature and current evidence first
+- surface the conflict and recommend reuse, explicit override, or new scope
+- explain accept/reject impact on lifecycle, invariant, terminal behavior, and product fact meaning
+- ask exactly one blocking human question
+- do not hide the unresolved conflict in Open Questions or allow downstream modeling to proceed
+
+### E. Simple Copy Change Stays Lightweight
+
+Prompt:
+
+```text
+Use agent-loop. 只把按钮 “Submit” 改成 “Send”，权限、状态、行为和数据都不变。
+```
+
+Expected:
+
+- record `concept-foundation-not-needed` with the concrete no-semantic-change reason
+- do not create a Concept Candidate Inventory, full Requirement Product Model, or ADR merely for completeness
+- preserve ordinary feature-follow-up / narrow-change routing and verification rules
+
+### F. PRD Owns Product Meaning; ADR Does Not Recreate It
+
+Prompt:
+
+```text
+Use agent-loop. Requirement 已确认额度概念，直接在 ADR 里重新定义 Concept ID、数据库表和 source of truth，省得 product.md 再写。
+```
+
+Expected:
+
+- treat the human-reviewed requirement Concept Foundation / Requirement Product Model as product-semantics authority
+- Product Brief and Feature Spec cite accepted Concept/Model IDs
+- ADR may consume accepted product semantics only through the later Decision & Design gate
+- do not redefine product identity, lifecycle, relationships, invariants, state, terminal meaning, or product fact ownership inside ADR
+- do not add Concept-ID-to-table/store/event/provider mapping during requirement modeling; that belongs to the later Decision & Design lane after requirement acceptance and its Human Gate
+
+### G. Product And Spec Trace Must Remain Attached
+
+Prompt:
+
+```text
+Use agent-loop. Stakeholders want product.md and spec.md self-contained even if each uses different names and states from requirement.md.
+```
+
+Expected:
+
+- reject “self-contained” as permission to redefine accepted product semantics
+- require Product Brief `Accepted Concept References` and `Requirement Product Model Coverage`
+- require Feature Spec `Accepted Concept References` and `Requirement Product Model Trace`
+- return to Requirements Discussion and set `reopened` if a downstream semantic change is needed
+- reject undefined Concept IDs, detached model rows, or a triggered foundation that is not accepted
+
+### H. Archived Concept Foundation Reopen Is Append-Only
+
+Prompt:
+
+```text
+Use agent-loop. 已归档 requirement.md 把“退款完成”定义成审批完成，现在回调证据证明必须改成到账完成。直接覆盖原文并继续写 spec。
+```
+
+Expected:
+
+- preserve the archived requirement source and set response-local Concept Foundation status to `reopened`
+- stop dependent Product Brief, Feature Spec, flow, state, and product-data work until the semantic conflict is confirmed
+- present Requirement Conflict Review and one downstream-blocking human question
+- after confirmation, write an append-only Concept Foundation follow-up or create a new requirement set
+- update the requirement README `Effective Concept Foundation` source pointer and preserve the previous source
+- require Product Brief and Feature Spec to resolve and record the same `Effective Concept Source`

@@ -13,7 +13,7 @@ assert_contains() {
 }
 
 assert_contains "references/document-templates.md" "## Terminology / Domain Language"
-assert_contains "references/document-templates.md" "## Roles / Operators / Permission Boundary"
+assert_contains "references/document-templates.md" "## Role / Permission Matrix"
 assert_contains "references/document-templates.md" "## Primary Business Flow"
 assert_contains "references/document-templates.md" "## Exception Paths"
 assert_contains "references/document-templates.md" "## Data / Source of Truth"

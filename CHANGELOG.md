@@ -14,6 +14,16 @@
 - Added a Completeness Hard Gate before quality scoring, aligned coverage and batch review dimensions, and prevented missing critical slices from being averaged into `newcomer-ready`.
 - Kept exactly two onboarding Human Gates and removed the default pressure to invent state diagrams for stateless content topics.
 
+### Concept Foundation And Requirement Product Model
+- Implemented trigger-based Concept Foundation inside Requirements Discussion / Requirement Product Grill without adding a canonical stage or top-level artifact.
+- Added the Human Grill Contract: evidence inspection, Concept Candidate Inventory, one recommended definition with accept/reject impact, then exactly one downstream-blocking human question.
+- Added `candidate | accepted | reopened | concept-foundation-not-needed` routing and a hard stop before business-flow, state, and product-data modeling while blocking product meaning remains unresolved.
+- Added requirement-local Concept IDs, definitions, relationships, role/permission, commands/events, product state, Requirement Product Model, exception/recovery, and Concept-To-Product Traceability templates.
+- Made Product Brief and Feature Spec consume accepted Concept/Model references rather than redefine product semantics; clarified that ADR consumes accepted PRD meaning and kept Concept-to-technical mapping out of Phase 1/2.
+- Hardened Concept Foundation validation against unconfirmed concepts, missing candidate inventory, unresolved blockers, placeholder not-needed reasons, duplicate IDs, incomplete trace coverage, and unauthorized command actors.
+- Added cumulative Concept Foundation Human Review Summary and append-only post-archive reopen handling through the requirement README `Effective Concept Foundation` pointer.
+- Added focused regression, behavioral artifact validation, pressure scenarios, examples, and a full-validation report for Phase 1/2 while leaving Design Skill, E2E Skill, Jam Kits, and executable schemas out of scope.
+
 ## 1.2.4 — 2026-07-11
 
 ### Project-Local Skills

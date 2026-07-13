@@ -39,9 +39,11 @@ Non-Goals:
 
 ## Domain Concepts
 
-| Concept | Definition | Responsibility | Source Of Truth |
+Reference accepted PRD / Requirement Product Model semantics. Do not create, rename, split, merge, or redefine product concepts in this record; return to Requirements Discussion if product meaning must change.
+
+| Accepted Concept / Product Model Reference | Accepted Product Meaning Summary | Design Responsibility | Product Fact Owner / Decision Candidate |
 |---|---|---|---|
-|  |  |  |  |
+| C-... / PM-... | link or concise unchanged meaning |  |  |
 
 ## Business Flow
 
@@ -84,6 +86,8 @@ We will:
 |  |  |  |  |
 
 ### Data Model And Source Of Truth
+
+This technical-design section must preserve accepted product meaning. Selecting tables, stores, events, ledgers, or providers belongs to Decision & Design after its Human Gate; it never authorizes a product-definition change.
 
 | Data Object | Purpose | Source Of Truth | Key Fields | Invariant |
 |---|---|---|---|---|

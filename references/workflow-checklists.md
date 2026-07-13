@@ -37,6 +37,21 @@ Before using an external skill or plugin inside a stage:
 - [ ] Keep requirement README limited to source, lifecycle, Delivery Phase, Feature Mapping, and decision-link summaries rather than duplicating the detailed requirement document.
 - [ ] If Requirement/Product Grill was used, verify the owning requirement document or product brief has structured sections for terminology, flows, exceptions, data/source of truth, historical conflicts, acceptance scenarios, and Decision Candidates where applicable.
 
+## Concept Foundation Gate
+
+- [ ] Classify `Concept Foundation Status` before detailed requirement-level Business Flow, Product State Model, or Requirement Product Model work.
+- [ ] Trigger `candidate` for overloaded terms, identity/lifecycle/state changes, multi-actor/tenant/system flows, cross-feature work, hard-to-reverse fact semantics, or conflicts with Domain Language/code/tests/history.
+- [ ] Use `concept-foundation-not-needed` only with a concrete reason showing no product-semantic, identity, lifecycle, ownership, state, relationship, cross-role, cross-feature, or data-meaning change.
+- [ ] Follow the Human Grill Contract in order: inspect evidence; extract and display candidate concepts; present one recommended definition with Concept ID, evidence, boundary, and accept/reject impact; ask exactly one downstream-blocking question.
+- [ ] Keep status `candidate` or `reopened` while any unresolved meaning can change downstream flow, state, product data, terminal behavior, or invariants.
+- [ ] Do not draft Business Flow, Product State Model, or Requirement Product Model as assumptions plus open questions while the gate is blocked.
+- [ ] Set `accepted` only after the human confirms every blocking concept definition.
+- [ ] Before `accepted`, load `human-review-summary.md` and present the Concept Foundation Human Review Summary; keep the one-question-per-turn Grill as the method for resolving blockers.
+- [ ] After acceptance, derive Concept Relationships, Role / Permission Matrix, Commands / Events, Primary Business Flow, Product State Model, Requirement Product Model, invariants, exceptions, and recovery from stable Concept IDs.
+- [ ] Record Concept-To-Product Traceability and reject any derived row whose Concept ID is undefined or unaccepted.
+- [ ] After archive, preserve reviewed source files; route `reopened` through Requirement Conflict Review, an append-only Concept Foundation follow-up or linked replacement set, and README `Effective Concept Foundation` pointer update after human confirmation.
+- [ ] Keep Concept Foundation inside Requirements Discussion / Requirement Product Grill; do not add a canonical stage, `.agent-loop/concepts/`, YAML/JSON schema, ADR, Design Skill, or E2E Skill output.
+
 ## Design Readiness Check
 
 - [ ] Run before an accepted requirement enters feature construction, and repeat when Product Brief, Technical Design, or Drift reveals new shared design needs.
@@ -105,7 +120,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.sh` is available, run it as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.3.0-20260711`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.3.0-20260713`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -191,7 +206,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.sh` is available, run it as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.3.0-20260711`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.3.0-20260713`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -290,6 +305,10 @@ Before using an external skill or plugin inside a stage:
 - [ ] If source requirements are too broad for one feature, recommend requirement `Delivery Phases` before writing `product.md`.
 - [ ] Inspect `project.md` Product Context and Domain Language.
 - [ ] Inspect source requirements before asking product questions.
+- [ ] Resolve README `Effective Concept Foundation` when present, then read accepted Concept Foundation and Requirement Product Model rows before synthesis.
+- [ ] If the source Concept Foundation is `candidate` or `reopened`, return to Requirements Discussion instead of writing `product.md`.
+- [ ] Add Accepted Concept References and Requirement Product Model Coverage; cite Concept/Model IDs rather than writing a feature-local replacement definition.
+- [ ] When the source records `concept-foundation-not-needed`, carry its reason instead of creating a large concept table.
 - [ ] Ask one blocking product question at a time when needed.
 - [ ] Include the recommended answer with the question.
 - [ ] Write `product.md` only after human confirmation.
@@ -332,6 +351,9 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `project.md` declares a Decisions index, read decision links already named by the active requirement or Product Brief, list decision filenames and statuses, then read other likely relevant accepted decisions by domain or boundary overlap.
 - [ ] Propose missing Applicable Decision references for human confirmation; do not create a duplicate ADR because a link is missing.
 - [ ] Confirm Design Readiness is `design-not-needed` or `completed`; run Decision & Design before Feature Spec when shared design is required.
+- [ ] Resolve the effective Concept Foundation source/status, confirm it is accepted or reasoned `concept-foundation-not-needed`, and block when status is `candidate` or `reopened`.
+- [ ] Add Accepted Concept References and Requirement Product Model Trace from the source requirement and Product Brief.
+- [ ] Reject feature-local redefinition of accepted concept name, identity, owner, lifecycle, relationship, invariant, state, terminal meaning, or product fact.
 - [ ] Do not enter Feature Spec while required shared design is unresolved or any required design slice is unassigned.
 - [ ] Run Stage Helper Capability Scan before fallback spec writing.
 - [ ] If a spec-writing, brainstorming, or product-discovery helper is available, use it through `external-skill-adapters.md` while writing accepted output to agent-loop `spec.md`.

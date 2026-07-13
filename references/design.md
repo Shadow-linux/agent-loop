@@ -22,6 +22,8 @@ The core constraints are:
 - optional `.agent-loop/skills/` owns Human-gated project-local reusable capabilities; `INDEX.md` owns lifecycle and discovery metadata
 - stable Web E2E capability belongs in `project.md`; feature-specific E2E cases belong in feature `tests.md` or `tests/e2e/*`
 - `requirements/` stores human source material packages and requirement lifecycle/backlog records as requirement set directories: requirements, prototypes, feedback, screenshots, recordings, links, follow-up notes, status, and optional `requirements/INDEX.md`
+- Concept Foundation is an internal Requirements Discussion / Requirement Product Grill method, not a canonical stage; when triggered, it stabilizes requirement-local product concepts before business-flow, state, and product-data modeling
+- the effective human-reviewed requirement source owns accepted Concept Foundation and Requirement Product Model semantics; after archive, requirement README indexes the effective source/status without copying details, and Product Brief / Feature Spec consume those meanings by reference
 - requirement-set dates mean archive date only, not deadlines or feature lifecycle dates
 - future/deferred work belongs in requirement sets and optional `requirements/INDEX.md`, not in `project.md`
 - `product.md` is optional feature-level product understanding when needed
@@ -72,6 +74,10 @@ Behavior Intent
 **Local Shadow Mode**: fallback when remote project memory cannot be written remotely. Agent-loop artifacts stay local, but every code fact must cite remote evidence.
 
 **Requirement**: human-provided need, goal, document, or natural-language request.
+
+**Concept Foundation**: a triggered method inside Requirements Discussion / Requirement Product Grill that derives requirement-local stable Concept IDs, definitions, identity, lifecycle boundaries, relationships, owners, state-bearing classification, invariants, and product fact-source questions from scenarios and evidence. It is not a stage or top-level artifact.
+
+**Requirement Product Model**: the product-layer derivation owned by the effective human-reviewed requirement source. It traces accepted concepts into relationships, roles/permissions, commands/events, business flow, product state, product data objects, invariants, and exception/recovery behavior without choosing tables, stores, protocols, or other technical representations. After archive, append-only follow-ups or a linked replacement set preserve prior sources while README indexes the effective source.
 
 **Prototype**: human-provided design artifact, screenshot, wireframe, or interaction reference.
 
@@ -341,6 +347,18 @@ Require the Execution Gate for every invocation.
 ```
 
 ## Main Flow
+
+Within Requirements Discussion, triggered complex requirements use this internal semantic order before the canonical stage flow continues:
+
+```text
+Scenario / Evidence
+→ Concept Candidate Inventory
+→ Concept Foundation Human Confirmation
+→ Requirement Product Model
+→ human-reviewed Requirement Document
+```
+
+Simple requirements record `concept-foundation-not-needed` with a reason and remain lightweight. `candidate` and `reopened` are blocking; only `accepted` or a reasoned not-needed result may continue into requirement product modeling.
 
 ```text
 Project Entry
