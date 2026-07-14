@@ -1,6 +1,10 @@
 # Proposal: Cross-Platform Python Script Runtime
 
-状态：已批准；已实现并通过 macOS 验证，待 Windows CI 与最终 Human Review
+状态：v1.3.0 Release Human Gate 已批准；发布目标 stable-v1.3.0
+
+平台证据：`macOS-verified / Windows-verified`
+
+CI 证据：`7253461` 的四个 GitHub Actions matrix jobs 全部成功：<https://github.com/Shadow-linux/agent-loop/actions/runs/29320389912>
 
 目标版本：v1.3.0 候选
 

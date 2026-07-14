@@ -4,7 +4,7 @@
 
 **Goal:** Replace the four current Bash/Ruby checker implementations with Python 3.10+ standard-library canonical implementations that preserve existing safety behavior and run natively on Windows and macOS.
 
-**Execution Status:** Implemented and verified on macOS on 2026-07-13. The Windows/Python 3.10 matrix is defined but remains pending remote CI execution after a separately authorized commit/push.
+**Execution Status:** Implemented and verified on macOS and Windows. Commit `7253461` passed all four GitHub Actions jobs (`macos-latest` / `windows-latest` × Python 3.10 / 3.x) on 2026-07-14: <https://github.com/Shadow-linux/agent-loop/actions/runs/29320389912>. The v1.3.0 Release Human Gate was approved on 2026-07-14; the exact release-evidence commit must pass the same CI matrix before creating `stable-v1.3.0`.
 
 **Architecture:** A small `scripts/checker_support.py` module owns deterministic UTF-8 Markdown parsing, table parsing, path confinement, and CLI failure semantics. Four standalone `.py` entrypoints own their existing checker-specific rules. Existing `.sh` / `.rb` paths remain one-cycle compatibility launchers only; cross-platform `unittest` suites invoke the canonical scripts with `sys.executable` and run unchanged fixtures on Windows and macOS.
 

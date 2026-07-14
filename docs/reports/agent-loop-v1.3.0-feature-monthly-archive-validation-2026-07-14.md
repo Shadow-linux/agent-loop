@@ -2,14 +2,14 @@
 
 验证日期：2026-07-14
 验证范围：Feature Monthly Archive（目录归档、locator、Reader Compatibility、scan/check/apply/restore/rehydrate）
-平台结论：`macOS-verified / Windows-test-defined`
+平台结论：`macOS-verified / Windows-verified`
 版本结论：沿用 v1.3.0 开发线，未修改版本号
 
 ## 1. 结论
 
 Feature Monthly Archive 的本地专项实现通过。归档只把经过人类确认的完整 closed Feature 目录移动到 `.agent-loop/features/YYYY-MM/<feature-id>/`，并维护根级 `.agent-loop/features/archive.md`；没有内容压缩、per-feature summary、`historical/`、Deep Archive、删除或自动调度能力。
 
-本地最终 focused 回归为 79/79 个 Python 测试通过、2/2 个专项 shell contract 通过。由于当前环境没有可用的远程 Windows run 证据，跨平台结论不能写成已验收，只能保持 `macOS-verified / Windows-test-defined`。
+本地最终 focused 回归为 79/79 个 Python 测试通过、2/2 个专项 shell contract 通过。提交 `7253461` 的 GitHub Actions 四矩阵任务（Windows/macOS × Python 3.10/3.x）全部成功，跨平台结论更新为 `macOS-verified / Windows-verified`：<https://github.com/Shadow-linux/agent-loop/actions/runs/29320389912>。
 
 ## 2. RED 基线
 
@@ -88,8 +88,8 @@ bash tests/validate-feature-monthly-compaction-proposal.sh
 
 | 平台 | 状态 | 证据 |
 |---|---|---|
-| macOS | verified | Python 3.10+ 本地 79/79 focused tests 与 2/2 shell contracts 通过 |
-| Windows | test-defined | GitHub Actions 保留 `windows-latest` × Python `3.10`/`3.x`，已加入四个模块和四个 CLI `--help`；本轮没有取得成功 run |
+| macOS | verified | Python 3.10+ 本地 79/79 focused tests 与 2/2 shell contracts 通过；远端 `macos-latest` × Python 3.10/3.x 成功 |
+| Windows | verified | GitHub Actions `windows-latest` × Python 3.10/3.x 在 commit `7253461` 成功；run `29320389912` |
 
 实现只使用 Python 3.10+ 标准库。文档同时给出 macOS `python3` 与 Windows PowerShell `py -3` 调用方式。
 
@@ -99,9 +99,9 @@ bash tests/validate-feature-monthly-compaction-proposal.sh
 |---|---:|---|
 | Critical | 0 | 未发现删除历史内容、绕过 Human Gate、跳过 expected hash 或越界写入能力 |
 | High | 0 | 未发现 stale-plan、恢复、locator 或 lifecycle/archive-state 混淆缺口 |
-| Medium | 1 | Windows workflow 已定义但未取得实际成功 run；因此不能完成跨平台验收 |
+| Medium | 0 | Windows/macOS 执行证据、恢复安全和跨文件契约均已闭合 |
 
-专项评分：96/100。扣分仅来自 Windows 远程执行证据缺失，不将“测试已定义”冒充“跨平台已通过”。
+专项评分：100/100。跨平台结论引用具体 workflow run，不把 matrix configuration 单独视为执行证据。
 
 ## 7. 明确排除范围
 
@@ -116,4 +116,4 @@ bash tests/validate-feature-monthly-compaction-proposal.sh
 
 ## 8. 授权与边界
 
-本报告只覆盖实现与 focused validation。commit、push、tag、PR、merge、release、publish 均未获得本轮授权，也未执行。工作区原有 onboarding proposal 修改、v1.4 proposal 删除与 `docs/proposal/v2.0.x/` 内容不属于本功能，没有被恢复、覆盖、暂存或纳入本报告结论。
+本报告覆盖实现、focused validation 与跨平台 CI。功能提交 `7253461` 已推送到 `origin/alpha/v1.3.0` 和 `ai-factory/alpha/v1.3.0`。v1.3.0 Release Human Gate 已于 2026-07-14 批准，发布目标为 `stable-v1.3.0`；tag 只能在精确 release-evidence commit 的 Windows/macOS CI 全部成功后创建。发布复验在隔离 worktree 中进行，没有吸收主工作区的 onboarding proposal 修改、v1.4 proposal 删除或 `docs/proposal/v2.0.x/` 内容。

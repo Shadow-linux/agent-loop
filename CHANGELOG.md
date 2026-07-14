@@ -49,6 +49,12 @@
 - Added focused archive/restore fixtures and macOS/Windows CI definitions for eligibility, no-mutation, stale plans, exact reference edits, idempotency, interrupted recovery, and locator consistency; current local evidence is `macOS-verified / Windows-test-defined`.
 - Hardened recovery against self-consistent journal scope tampering, corrupt backups, and post-crash human edits; stranded transactions now block new scan/apply work, and inbound relative links into moving features are included in the exact reference plan.
 
+### Pre-Release Validation
+- Revalidated the complete `stable-v1.2.4..v1.3.0` behavior set across all six semantic audit domains, the full Python/shell suite, pressure scenarios, version synchronization, and mechanical checks.
+- Recorded successful Windows/macOS × Python 3.10/3.x GitHub Actions evidence for commit `7253461` instead of treating the configured matrix as execution proof.
+- Unified all five v1.3.0 capability proposals at the Release Human Gate and added a durable release-evidence contract so proposal, implementation, platform, report, and authorization status cannot silently drift backward.
+- Recorded Human approval for the v1.3.0 Release Gate and bound `stable-v1.3.0` creation to successful Windows/macOS CI for the exact release-evidence commit.
+
 ## 1.2.4 — 2026-07-11
 
 ### Project-Local Skills

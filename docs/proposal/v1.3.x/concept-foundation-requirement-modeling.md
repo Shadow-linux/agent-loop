@@ -1,6 +1,6 @@
 # Proposal: Concept Foundation For Requirement Modeling
 
-状态：已批准；Phase 1 / Phase 2 已实现并完成 review repair，待最终人类验收
+状态：v1.3.0 Release Human Gate 已批准；发布目标 stable-v1.3.0
 
 目标版本：v1.3.x 候选
 

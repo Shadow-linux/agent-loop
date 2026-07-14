@@ -40,7 +40,7 @@ if [ ! -f "$plan" ]; then
 fi
 
 assert_contains "# Proposal: Feature Monthly Archive"
-assert_contains "状态：已实现；待最终 Human Review"
+assert_contains "状态：v1.3.0 Release Human Gate 已批准；发布目标 stable-v1.3.0"
 assert_contains "Human Review：2026-07-14"
 assert_contains "docs/proposal/v1.3.x/feature-monthly-archive-implementation-plan.md"
 assert_contains "目标版本：v1.3.0 候选"
@@ -83,7 +83,7 @@ assert_contains "scripts/check-feature-monthly-archive.py"
 assert_contains "scripts/restore-feature-monthly-archive.py"
 assert_contains "Python 3.10+ 标准库"
 assert_contains "Windows 与 macOS"
-assert_contains "Windows-test-defined"
+assert_contains '平台证据：`macOS-verified / Windows-verified`'
 assert_contains "Proposal Boundary"
 assert_contains "本文件仍是 proposal，不是发布运行时权威"
 

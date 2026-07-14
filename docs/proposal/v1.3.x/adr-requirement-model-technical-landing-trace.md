@@ -1,6 +1,6 @@
 # Proposal: ADR Requirement Model Technical Landing Trace
 
-状态：已批准；审查修复与全量验证完成，待 Human Review
+状态：v1.3.0 Release Human Gate 已批准；发布目标 stable-v1.3.0
 
 版本边界：v1.3.x 行为增强，不修改 skill version
 

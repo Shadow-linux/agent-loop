@@ -1,8 +1,10 @@
 # Proposal: Feature Monthly Archive
 
-状态：已实现；待最终 Human Review
+状态：v1.3.0 Release Human Gate 已批准；发布目标 stable-v1.3.0
 
-平台证据：`macOS-verified / Windows-test-defined`
+平台证据：`macOS-verified / Windows-verified`
+
+CI 证据：`7253461` 的四个 GitHub Actions matrix jobs 全部成功：<https://github.com/Shadow-linux/agent-loop/actions/runs/29320389912>
 
 Human Review：2026-07-14，人类确认采用整目录按月归档、根 `features/archive.md` locator、统一引用更新、post-check、失败恢复与 rehydrate 设计
 
@@ -405,9 +407,9 @@ scripts/restore-feature-monthly-archive.py
 ### Phase 0: Cross-Platform Python Runtime Acceptance
 
 - canonical Python checker、macOS parity 和 CI matrix 已实现；
-- 当前本地报告仍标记 `Windows-test-defined`，不得把它写成 Windows 已通过；
-- 先读取远端 Windows CI 证据并完成最终 Human Review；
-- Phase 0 未最终 accepted 前，不实现 archive apply / restore。
+- `7253461` 的 Windows/macOS × Python 3.10/3.x matrix 已全部成功；
+- CI 配置本身仍不能替代执行证据，发布判断引用具体 run `29320389912`；
+- archive apply / restore 已实现并完成发布前全量验证，v1.3.0 Release Human Gate 已于 2026-07-14 批准，发布目标为 `stable-v1.3.0`。
 
 ### Phase 1: Proposal Revision
 

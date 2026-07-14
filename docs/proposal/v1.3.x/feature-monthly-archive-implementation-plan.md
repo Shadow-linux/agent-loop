@@ -15,10 +15,11 @@
 ```text
 Proposal: accepted by Human Review on 2026-07-14
 Plan: accepted and implementation authorized by Human Review on 2026-07-14
-Implementation: Task 0-7 completed; awaiting final Human Review
-Review: local Spec/Standards Review completed; subagent dispatch was not authorized
-Platform: macOS-verified / Windows-test-defined
-Commit / push / tag / PR: not authorized
+Implementation: Task 0-7 completed and pre-release full validation passed
+Review: local Spec/Standards Review and Human feature review completed
+Platform: macOS-verified / Windows-verified
+Release: Human Gate approved on 2026-07-14; target tag stable-v1.3.0
+Tag condition: the exact release-evidence commit must pass the Windows/macOS CI matrix before tag creation
 ```
 
 ## Execution Boundary
@@ -70,7 +71,7 @@ Human Gates Preserved: Plan approval; implementation start; any development-Agen
 
 ## Preconditions And Hard Stops
 
-1. Inspect the remote `cross-platform-checkers.yml` run for commit `e49673c`. The current local report records `Windows-test-defined`, not Windows execution success. Reader Compatibility and RED tests may proceed while evidence is pending; archive apply/restore may not be declared accepted until Windows evidence and Human Review are recorded.
+1. Preserve the verified remote `cross-platform-checkers.yml` evidence for commit `7253461`: all four macOS/Windows × Python 3.10/3.x jobs succeeded in run <https://github.com/Shadow-linux/agent-loop/actions/runs/29320389912>. Do not replace execution evidence with matrix configuration alone.
 2. Preserve unrelated dirty work. At plan time, unrelated paths include `docs/proposal/v1.3.x/onboarding-core-flow-completeness.md`, deleted v1.4 proposal files, and `docs/proposal/v2.0.x/`. Do not stage, revert, rewrite, or include them in validation claims.
 3. Do not move any real target-project feature directory while developing this source repository. All mutation tests use temporary fixtures.
 4. If any pre-existing full-suite test fails before the first RED, stop and diagnose it separately; do not normalize it into this feature.
@@ -1180,7 +1181,7 @@ Update the 1.3.0 changelog section with implemented behavior, not proposal promi
 Set proposal status only after fresh verification:
 
 ```text
-状态：已实现；待最终 Human Review
+状态：v1.3.0 Release Human Gate 已批准；发布目标 stable-v1.3.0
 ```
 
 If Windows jobs have not actually run successfully, write `macOS-verified / Windows-test-defined` and do not mark the proposal implemented cross-platform.
