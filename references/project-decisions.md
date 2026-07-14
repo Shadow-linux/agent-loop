@@ -39,6 +39,8 @@ Before Decision & Design, Product Brief, or Feature Spec:
 5. Do not create a duplicate decision merely because an existing accepted decision was not linked from the current feature yet; propose the missing reference instead.
 6. Before writing Product Brief or Feature Spec, present missing Applicable Decision references for human confirmation and backfill the approved links.
 
+Feature Monthly Archive changes the path of historical ownership, not accepted decision meaning. An ADR `feature-local` or Design Slice owner may resolve an archived closed Feature Spec through the stable Feature ID plus `features/archive.md`; the locator row and month path must agree, and `closed` is historical coverage only. New work or reopened execution must rehydrate the owner to a flat path first. Archive/rehydrate may update only the approved locator/path reference and must not rewrite accepted ADR content, status, rationale, Human Review Evidence, or product semantics.
+
 ## Timing
 
 Design Readiness starts during requirement shaping as soon as the agent can see cross-feature or end-to-end design needs, but a decision file is not created from the first fuzzy idea.

@@ -713,6 +713,33 @@ Exit:
 - Requirements Discussion: requirement document draft is ready for Human Review and Requirement Archive.
 - Product Brief or Feature Spec: the owning artifact is stable enough for its next agent-loop stage.
 
+## Feature Monthly Archive If Explicitly Requested
+
+Entry: explicit archive/rehydrate request after reliable project memory.
+
+Reads: `project.md`, `features/archive.md`, selected feature close artifacts, requirements, decisions, and Markdown references.
+
+Writes: none during scan; confirmed month moves, `features/archive.md`, approved references, and a temporary transaction journal during apply.
+
+Human Gate: exact plan SHA-256 Batch Review. Feature Auto-Loop and Task Auto-Run do not authorize archive or rehydrate.
+
+Exit: verified archive/rehydrate, verified restore, or one blocker stage.
+
+Next: Chat/report when complete; Ask Human for stale plan/scope; Recovery for stranded journal; Feature Follow-up after verified rehydrate.
+
+Procedure:
+
+1. Classify message intent as `feature-archive-maintenance`; require reliable Project Entry/memory and inspect incomplete `.archive-txn` before planning.
+2. Run `scripts/scan-feature-monthly-archive.py` only. The scan is read-only and accepts explicit `--as-of`; it never uses current time implicitly.
+3. Resolve stable Feature IDs through flat paths and `features/archive.md`. Active / blocked / paused features stay flat. Only `closed` features with a concrete `Archive Readiness` record, complete close evidence, no open follow-up, and no memory/reference blocker are eligible.
+4. Present one Feature Monthly Archive Batch Human Review with operation, plan SHA-256, selected months/IDs, eligible/blocked candidates, moves, reference edits, preserved immutable/historical references, unchanged content, transaction/restore scope, platform evidence, and decision.
+5. After exact confirmation, call apply with `--expected-plan-sha256`. A malformed hash is usage failure; a valid different hash is `stale-plan` and requires a fresh scan/review.
+6. Apply uses the transaction journal before mutation, moves whole directories by rename, renders root `features/archive.md`, performs only precomputed reference edits, and runs the same post-check core. Original human requirement sources are not rewritten.
+7. On failure, restore exact backups and reconcile every journal move from confined source/target state, including a rename completed just before its completion record was persisted. A stranded journal routes to Recovery with its exact transaction ID; never select the newest transaction automatically.
+8. Rehydrate uses its own plan and Batch Human Gate, keeps `spec.md Status: closed`, and must complete before Feature Follow-up may reopen lifecycle or execute work.
+
+Scope: no per-feature archive summary, no `historical/`, no Deep Archive, no deletion/packing/scheduled archive, and no `--force`.
+
 ## Feature Follow-up And Flow-back
 
 Entry: human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, test failure, QA/user feedback, or any change that may belong to recent feature work.

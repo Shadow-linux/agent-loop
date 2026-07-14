@@ -10,6 +10,8 @@ AGENTS.md / CLAUDE.md = agent startup guidance
 .agent-loop/project/* = optional enterprise project memory details
 .agent-loop/remote.md = local entry pointer for remote projects
 .agent-loop/features/* = feature execution state
+.agent-loop/features/archive.md = Feature Monthly Archive locator for stable Feature IDs
+.agent-loop/features/YYYY-MM/* = Human-gated closed-history month archive; never an execution path
 .agent-loop/requirements/<archive-date>-<topic>/* = human source material package
 .agent-loop/skills/INDEX.md = optional project-skill lifecycle and discovery index
 .agent-loop/skills/<skill-name>/* = optional human-confirmed project-local capability
@@ -18,6 +20,8 @@ AGENTS.md / CLAUDE.md = agent startup guidance
 Default memory root is `.agent-loop/` because it is workflow metadata, not product code. If a project already has legacy `agent-loop/`, use it for the current run and ask before migration.
 
 Do not use `AGENTS.md` as a task log. Do not use `project.md` as the startup instruction file for every agent.
+
+Root guidance may navigate a user Agent to the Feature Monthly Archive procedure, but it must not teach manual directory movement. Active/blocked/paused work remains at the first level. Archive and rehydrate use the canonical Python scan/check/apply/restore commands, an exact plan SHA-256 Human Gate, transaction recovery, and post-check; execution resumes only after rehydrate restores the flat feature path.
 
 ## Root Agent Bootstrap Gate
 

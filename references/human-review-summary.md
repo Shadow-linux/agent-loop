@@ -234,6 +234,24 @@ If subagent scan results conflict, include:
 | Conflict | Finding A | Finding B | Evidence A | Evidence B | Current Judgment | Action |
 |---|---|---|---|---|---|---|
 
+### Feature Monthly Archive Batch Human Review
+
+| Item | Summary | Evidence / Exact Value | Human Decision |
+|---|---|---|---|
+| Operation | archive / rehydrate |  | confirm / revise |
+| Plan SHA-256 | expected exact hash |  | confirm exact batch |
+| Selected Months / Feature IDs | explicit scope |  | confirm / revise |
+| Eligible | closed and complete |  | include / exclude |
+| Blocked | candidate plus blocker |  | acknowledge / resolve |
+| Moves | source -> target |  | confirm |
+| Reference Edits | path, old/new, occurrence, before/after hash |  | confirm |
+| Unchanged Content | whole feature contents and immutable requirement sources |  | acknowledge |
+| Transaction Journal / Restore | journal path, backups, reverse moves, post-check |  | acknowledge |
+| Platform evidence | macOS / Windows actual or test-defined |  | acknowledge |
+| Decision | apply exact hash / revise / stop |  | human only |
+
+The scan is read-only. The Batch Human Gate authorizes only the displayed expected plan SHA-256; a stale plan requires a new scan and review. Feature Monthly Archive maintains `features/archive.md`; rehydrate before reopened execution.
+
 ### Feature Completion Check
 
 | Check | Status | Evidence | Issue |

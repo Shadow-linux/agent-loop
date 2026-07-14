@@ -1,7 +1,11 @@
 from __future__ import annotations
 
+import hashlib
+import json
+import os
 import re
 import sys
+import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -26,6 +30,39 @@ def read_text(path: Path) -> str:
     """Read deterministic Markdown text, accepting UTF-8 BOM and CRLF input."""
     with path.open("r", encoding="utf-8-sig", newline=None) as handle:
         return handle.read()
+
+
+def strip_code_span(value: str) -> str:
+    cleaned = value.strip()
+    return (
+        cleaned[1:-1].strip()
+        if len(cleaned) >= 2 and cleaned[0] == cleaned[-1] == "`"
+        else cleaned
+    )
+
+
+def sha256_bytes(value: bytes) -> str:
+    return hashlib.sha256(value).hexdigest()
+
+
+def canonical_json_bytes(payload: object) -> bytes:
+    return json.dumps(
+        payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")
+
+
+def atomic_write_bytes(path: Path, content: bytes) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    handle, temporary = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
+    try:
+        with os.fdopen(handle, "wb") as stream:
+            stream.write(content)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, path)
+    except BaseException:
+        Path(temporary).unlink(missing_ok=True)
+        raise
 
 
 def metadata(text: str, name: str) -> str | None:

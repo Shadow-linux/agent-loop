@@ -51,6 +51,7 @@ New human source material should be archived inside a requirement set directory.
 | `plans/*` | dated plan cycles when complex mode is triggered | current-state summary |
 | `handoffs/*` | subagent briefs and returned summaries when subagent mode is triggered | authoritative task status |
 | `contracts/*` | optional confirmed durable producer-consumer contract details when interface detail is needed | temporary task logs |
+| `features/archive.md` | Feature Monthly Archive locator and move ledger: stable Feature ID, current path, archive state, close date, one-line delivery locator, source/decision locators, last move | feature lifecycle, product meaning, requirement meaning, decision content, verification evidence |
 
 ## Status Values
 
@@ -110,6 +111,22 @@ Strict Mode
 Feature Auto-Loop
 Task Auto-Run
 ```
+
+## Feature Monthly Archive Layout
+
+Feature ID is stable while its location may be flat or archived:
+
+```text
+features/<feature-id>/                 active, blocked, paused, recent closed, or rehydrated
+features/YYYY-MM/<feature-id>/         Human-reviewed archived closed history
+features/archive.md                    root locator and move ledger
+```
+
+Archive state is `archived | rehydrated`; archive state is not feature lifecycle. Lifecycle remains `draft | active | blocked | paused | closed`, and active / blocked / paused features stay flat.
+
+Feature Monthly Archive moves the complete eligible directory without content compression. The scan is read-only. Apply requires the expected plan SHA-256 Batch Human Gate, transaction journal, exact precomputed reference edits, post-check, and restore. Original human requirement source files are never rewritten.
+
+Scope boundaries are explicit: no per-feature archive summary, no historical/ directory, no Deep Archive, no deletion/packing/scheduled archive, and No `--force`. A closed archived feature must rehydrate before reopened execution.
 
 Record the active gate mode in `project.md` Current Work or the active feature `notes.md` checkpoint. If scope changes, switch back to Strict Mode unless the human renews the auto-mode grant.
 

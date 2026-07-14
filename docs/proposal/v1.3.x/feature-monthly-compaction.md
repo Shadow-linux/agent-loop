@@ -1,83 +1,88 @@
-# Proposal: Feature Monthly Compaction
+# Proposal: Feature Monthly Archive
 
-状态：讨论草案
-目标版本：v1.2.4 候选
+状态：已实现；待最终 Human Review
+
+平台证据：`macOS-verified / Windows-test-defined`
+
+Human Review：2026-07-14，人类确认采用整目录按月归档、根 `features/archive.md` locator、统一引用更新、post-check、失败恢复与 rehydrate 设计
+
+实施计划：`docs/proposal/v1.3.x/feature-monthly-archive-implementation-plan.md`
+
+目标版本：v1.3.0 候选
+
 创建时间：2026-07-01
 
-## 背景
+最近更新：2026-07-14
 
-`agent-loop` 现在把 feature workspace 直接放在 `.agent-loop/features/` 第一层：
+> 文件名保留 `feature-monthly-compaction.md` 以维持历史引用；本 proposal 的能力名称和行为已经收敛为 `Feature Monthly Archive`。这里的 archive 只改变 feature 目录位置和默认发现入口，不压缩、重组或删除 feature 内容。
 
-```text
-.agent-loop/features/YYYY-MM-DD-<feature-slug>/
-```
+## 摘要
 
-这个结构对当前开发很友好：路径短、Agent 易写、recent scan 易查。但 feature 越来越多以后，第一层目录会变长，人类浏览困难，Agent 做 Feature Follow-up / Flow-back、Targeted Feature Scan、Re-Adopt 时也容易扫描过多历史细节。
-
-问题不是“历史 feature 不重要”，而是旧 feature 的主要价值已经从施工过程转为交付摘要：
+人类可以选择一个或多个历史月份，例如 5 月和 6 月。Agent 先扫描这些月份对应的 flat feature，只有生命周期为 `closed` 且关闭证据完整的 feature 才能进入候选。人类确认后，Agent 把每个候选 feature 目录原样移动到各自的月份目录，并在 `.agent-loop/features/archive.md` 记录稳定 Feature ID、当前位置和一行交付摘要。
 
 ```text
-当前 feature 需要完整施工上下文。
-旧 feature 更需要稳定的最终事实、交付行为、验证摘要和索引关系。
+Human selects 2026-05 and 2026-06
+→ read-only Feature Monthly Archive Scan
+→ show eligible / blocked features and reference updates
+→ one Batch Human Gate
+→ move each eligible feature directory intact
+→ update features/archive.md and durable references
+→ post-check paths, links, indexes, and feature contents
 ```
+
+这个能力解决的是 `.agent-loop/features/` 第一层过长和历史 feature 默认扫描过重的问题，不解决磁盘空间问题。
 
 ## 目标
 
-本 proposal 目标是定义一套安全的 feature 月度压缩规则：
-
-1. 当前月保持 flat，不影响正在开发的 feature；
-2. 上个月且整月全部完成后，才允许月度压缩；
-3. 压缩后第一层目录按月份收束；
-4. 旧 feature 以 `archive.md` 作为主入口；
-5. 历史施工文件默认进入 `historical/`，不默认删除；
-6. 明确哪些索引关系、引用路径和扫描规则会受影响；
-7. 为未来实施提供安全 gate 和验证方向。
+1. 当前或仍在工作的 feature 继续留在 `.agent-loop/features/` 第一层；
+2. 人类可以一次选择一个或多个历史月份进行归档；
+3. 每个 eligible feature 目录完整移动到 `features/YYYY-MM/`，内部文件结构不变；
+4. `features/archive.md` 成为 archived Feature ID 到当前位置的稳定 locator；
+5. Follow-up、ADR、Requirement Mapping 和 Project Memory 使用统一引用更新逻辑；
+6. 归档前只读发现，归档后强制检查，失败时恢复；
+7. macOS 与 Windows 使用同一套 Python 标准库脚本和 fixture。
 
 ## 非目标
 
-第一版不做以下事情：
+第一版明确不做：
 
-- 不自动压缩当前月 feature；
-- 不在月份中存在 active / paused / in-progress feature 时自动压缩整月；
-- 不默认删除 `spec.md`、`tasks.md`、`tests.md`、`plan.md`、`notes.md` 等历史细节；
-- 不默认做 Partial month compaction；
-- 不把 `requirements/` 的原始需求材料压缩成摘要；
-- 不把 feature archive 变成 project memory；
-- 不替代 Feature Follow-up / Flow-back 的归属判断；
-- 不破坏 human gate：移动、压缩、删除历史细节都必须经过人类确认。
+- 不自动按日历月份运行；
+- 不自动归档当前月；
+- 不移动 `active`、`blocked` 或 `paused` feature；
+- 不修改 feature 的业务内容或生命周期含义；
+- 不生成每个 feature 的新 `archive.md`；
+- 不创建 `historical/`；
+- 不创建 `features/YYYY-MM/INDEX.md`；
+- 不删除、打包、外移或摘要替代 `spec.md`、`tasks.md`、`tests.md`、`plan.md`、`notes.md`、`product.md`、`contracts.md` 或细节目录；
+- 不压缩 `requirements/`、`.agent-loop/decisions/` 或 project memory；
+- 不把 `features/archive.md` 变成产品、需求、决策或验证事实的权威来源；
+- 不允许 Agent 手工移动目录来绕过 scan、Human Gate、post-check 或 restore。
 
-## 核心观点
+Deep Archive、Summary Only 和历史文件删除不属于本 proposal。未来如果确实需要，应单独提案和单独评估恢复风险。
 
-```text
-当前月保持 flat。
-上个月且整月全部完成后，才允许月度压缩。
-Slim With History 是默认压缩模式。
-Deep Archive / Summary Only 永远不是默认动作。
-```
+## 目录模型
 
-目录压缩解决的是 `.agent-loop/features/` 第一层过长的问题。内容压缩解决的是旧 feature 不应再让 Agent 默认深读完整施工过程的问题。
-
-这两个目标可以一起做，但默认策略必须保守：移动到月目录、生成摘要、保留历史细节。
-
-## 压缩模式
-
-| Mode | 适用对象 | 目录形态 | 内容策略 | 默认 |
-|---|---|---|---|---|
-| Full | 当前月 feature；active / paused / in-progress feature；有 open follow-up 的 feature | `.agent-loop/features/YYYY-MM-DD-<feature-slug>/` | 保留完整 `product.md`、`spec.md`、`tasks.md`、`tests.md`、`plan.md`、`notes.md`、handoffs 和复杂细节目录 | 是 |
-| Slim With History | 上个月或更早，且整月全部完成、无 open follow-up、索引已回填 | `.agent-loop/features/YYYY-MM/YYYY-MM-DD-<feature-slug>/` | `archive.md` 成为主入口；旧施工文件移入 `historical/` | 是 |
-| Deep Archive / Summary Only | 更早月份，且人类明确要求进一步深压缩 | `.agent-loop/features/YYYY-MM/YYYY-MM-DD-<feature-slug>/` | 默认只保留 `README.md` 和 `archive.md`；删除、打包或外移 `historical/` 需要强 human gate | 否 |
-
-Deep Archive 永远不是默认动作。即使 5 月及以前的 feature 已经很旧，也只是具备“可建议深压缩”的资格，不代表 Agent 可以自动删除历史细节。
-
-## 推荐目录
-
-当前月保持 flat：
+归档前：
 
 ```text
 .agent-loop/
   features/
-    2026-07-01-wallet-recharge/
+    2026-05-08-login/
+      spec.md
+      tasks.md
+      tests.md
+      plan.md
+      notes.md
+    2026-06-12-payment/
       product.md
+      spec.md
+      tasks.md
+      tests.md
+      plan.md
+      notes.md
+      contracts.md
+      contracts/
+    2026-07-10-current-feature/
       spec.md
       tasks.md
       tests.md
@@ -85,294 +90,374 @@ Deep Archive 永远不是默认动作。即使 5 月及以前的 feature 已经�
       notes.md
 ```
 
-上个月整月完成后压缩为 Slim With History：
+人类选择归档 2026-05 和 2026-06 后：
 
 ```text
 .agent-loop/
   features/
-    2026-07-01-wallet-recharge/
-    2026-07-03-token-deduction/
-    2026-06/
-      INDEX.md
-      2026-06-13-login/
-        README.md
-        archive.md
-        historical/
-          product.md
-          spec.md
-          tasks.md
-          tests.md
-          plan.md
-          notes.md
-          handoffs/
-          plans/
-          tasks/
-          tests/
-```
-
-更早月份在强确认后可进入 Deep Archive / Summary Only：
-
-```text
-.agent-loop/
-  features/
+    archive.md
     2026-05/
-      2026-05-08-upload/
-        README.md
-        archive.md
+      2026-05-08-login/
+        spec.md
+        tasks.md
+        tests.md
+        plan.md
+        notes.md
+    2026-06/
+      2026-06-12-payment/
+        product.md
+        spec.md
+        tasks.md
+        tests.md
+        plan.md
+        notes.md
+        contracts.md
+        contracts/
+    2026-07-10-current-feature/
+      spec.md
+      tasks.md
+      tests.md
+      plan.md
+      notes.md
 ```
 
-## 触发入口
+归档只增加月份目录并移动整个 feature 目录。feature 内部同目录或子目录关系保持不变；由于目录深度增加，指向 feature 外部的相对 Markdown 链接必须进入 Reference Impact Scan 并按新位置更新。
 
-人类可以这样说：
+## 稳定 Feature ID 与路径解析
+
+Feature ID 保持不变：
 
 ```text
-现在 7 月了，把 6 月份已经做完的 feature 压缩一下。
+2026-05-08-login
 ```
 
-Agent 应进入 Feature Compaction Scan，而不是直接移动文件。
+路径可以变化：
 
-## Feature Compaction Scan
+```text
+flat:     .agent-loop/features/2026-05-08-login/
+archived: .agent-loop/features/2026-05/2026-05-08-login/
+```
+
+规则：
+
+1. Feature ID 是稳定身份；目录路径只是当前位置；
+2. active / blocked / paused feature 必须位于第一层；
+3. archived feature 通过 `features/archive.md` 解析当前位置；
+4. 新增或更新的 durable relationship 应同时记录 Feature ID；
+5. 仍然保存直接路径的现有引用必须在移动时更新；
+6. resolver 不得仅依赖 `features/*/spec.md` 这种单层 glob；
+7. archived feature 的原 `spec.md` 仍然是 Feature Spec，归档不会把它替换为摘要。
+
+## `features/archive.md`
+
+`features/archive.md` 是 archive locator 和移动历史账本，不是业务事实来源。它在第一次成功归档时创建，此后由 archive / rehydrate 操作维护。
+
+推荐模板：
+
+```md
+# Feature Archive
+
+This file locates archived or rehydrated features. The feature's own spec, tests, notes, requirement sources, and accepted decisions remain authoritative.
+
+| Feature ID | Month | Current Path | Archive State | Closed At | Delivered Summary | Source Requirements | Applicable Decisions | Last Moved At |
+|---|---|---|---|---|---|---|---|---|
+| 2026-05-08-login | 2026-05 | `.agent-loop/features/2026-05/2026-05-08-login/` | archived | 2026-05-20 | 完成登录认证与失败路径验证 | `.agent-loop/requirements/2026-05-01-login/` | `.agent-loop/decisions/ADR-001-login.md` | 2026-07-14 |
+```
+
+字段规则：
+
+- `Feature ID`：稳定且唯一；
+- `Month`：来自 Feature ID 的年月，不从移动日期推导；
+- `Current Path`：当前真实目录；
+- `Archive State`：`archived | rehydrated`，它不是 feature lifecycle status；
+- `Closed At`：来自 feature Close Record；
+- `Delivered Summary`：来自已关闭 feature 的交付/关闭记录，只写一行，不创造新产品含义；
+- `Source Requirements` / `Applicable Decisions`：只保存 locator；
+- `Last Moved At`：最近一次 archive 或 rehydrate 日期。
+
+`spec.md` 仍使用正式 lifecycle：
+
+```text
+draft | active | blocked | paused | closed
+```
+
+归档资格只接受 `closed`。不要把 `implemented` 或 `archived` 写成 feature lifecycle status。
+
+## 人类触发
+
+示例：
+
+```text
+把 2026 年 5 月和 6 月已经关闭的 feature 按月份归档。
+```
+
+这条指令只授权进入 `Feature Monthly Archive Scan`。Agent 必须先展示扫描结果和精确变更范围，再请求一次 Batch Human Gate；不得收到月份后直接移动目录。
+
+## Feature Monthly Archive Scan
+
+Scan 是只读操作。
 
 输入：
 
-- 当前日期；
-- `.agent-loop/features/` 第一层 flat feature；
-- 已有 month bucket；
-- `project.md` Active Feature / Paused Features；
-- feature `spec.md`、`tasks.md`、`tests.md`、`plan.md`、`notes.md`、close 记录；
+- 人类选择的月份；
+- `.agent-loop/features/` 第一层 feature；
+- 已有月份目录；
+- `features/archive.md`（如果存在）；
+- `project.md` Active Feature / Paused Features / Current Work；
+- feature `spec.md`、`tasks.md`、`tests.md`、`plan.md`、`notes.md`、close record；
 - requirement set README 和 optional `requirements/INDEX.md`；
 - `.agent-loop/decisions/*.md`；
-- recent Feature Follow-up / Flow-back notes。
+- Follow-up / Flow-back、verification、review 和 drift evidence；
+- repository 内指向候选 feature 旧路径的文本与 Markdown 链接。
 
 输出：
 
 - Candidate Matrix；
-- blocked month / blocked feature reason；
-- proposed compaction mode；
-- affected index relationship list；
-- human confirmation request。
+- eligible 和 blocked 原因；
+- old path → new path 映射；
+- `features/archive.md` 预期新增/更新行；
+- Reference Impact List；
+- path collision、symlink/path escape 和 stale-plan 检查结果；
+- post-check 与 restore 范围；
+- Batch Human Review Summary。
 
 ## Candidate Matrix
 
-Agent 在执行压缩前必须展示类似表格：
-
-| Month | Feature | Current Path | Status | Open Follow-up | Index Backfill | Proposed Mode | Decision |
-|---|---|---|---|---|---|---|---|
-| 2026-06 | 2026-06-13-login | `.agent-loop/features/2026-06-13-login/` | closed | none | complete | Slim With History | pending-human |
-| 2026-06 | 2026-06-20-upload | `.agent-loop/features/2026-06-20-upload/` | in-progress | none | incomplete | Full | blocked |
-
-如果某个月存在 blocked feature，默认不做整月压缩。
-
-## Safety Gate
-
-整月进入 Slim With History 前，必须满足：
-
-- 该月份不是当前月；
-- 该月份所有 feature 都是 terminal 状态，例如 closed / implemented / archived；
-- 没有 active / paused / in-progress feature；
-- 没有 open follow-up、unresolved drift、未完成 verification、未处理 review blocker；
-- requirement set README 的 `Implemented By` / `Feature Mapping` 已回填；
-- optional `requirements/INDEX.md` 如存在，也已更新实现状态；
-- relevant `decisions/*.md` 的 `Implemented By` 已回填；
-- `project.md` 不再把这些 feature 作为 Active Feature 或 Paused Features；
-- archive summary 能覆盖 delivered behavior、verification evidence、drift / follow-up notes、changed files / public interfaces；
-- Agent 已列出所有需要更新的索引关系；
-- 人类明确确认。
-
-## Human Gate
-
-以下动作都必须 Human-gated：
-
-- 创建 month bucket；
-- 移动 feature workspace；
-- 生成或覆盖 `archive.md`；
-- 移动历史细节到 `historical/`；
-- 更新 requirement / decision / project memory 索引引用；
-- 执行 Partial month compaction；
-- 执行 Deep Archive / Summary Only；
-- 删除、打包、外移 `historical/`。
-
-Partial month compaction 不是默认行为。只有当人类明确要求“这个月部分完成的也先压缩已完成 feature”时，Agent 才能建议，并且必须在 `features/YYYY-MM/INDEX.md` 标记该月份为 `mixed`。
-
-## Archive Summary Template
-
-`archive.md` 应该成为旧 feature 的主入口：
-
 ```md
-# Feature Archive: <Feature Name>
-
-Status: archived
-Compaction Mode: Slim With History | Deep Archive / Summary Only
-Original Feature ID: YYYY-MM-DD-<feature-slug>
-Current Path:
-Archived At:
-Archived By:
-
-Source Requirements:
-- <requirement path>
-
-Applicable Decisions:
-- <decision path>
-
-Implements Decisions:
-- Decision:
-  - Implemented Slice:
-
-Delivered Behavior:
-- <delivered behavior>
-
-Key Design Decisions:
-- <design decision>
-
-Changed Files / Public Interfaces:
-- <file or interface>
-
-Verification Summary:
-- Evidence:
-- Commands:
-- Result:
-
-Drift / Follow-up Notes:
-- <drift or follow-up note>
-
-Known Risks:
-- <known risk>
-
-Historical Detail Location:
-- historical/
+| Month | Feature ID | Current Path | Lifecycle | Close Evidence | Open Follow-up | Reference Impact | Decision |
+|---|---|---|---|---|---|---:|---|
+| 2026-05 | 2026-05-08-login | `.agent-loop/features/2026-05-08-login/` | closed | complete | none | 4 | eligible |
+| 2026-05 | 2026-05-22-import | `.agent-loop/features/2026-05-22-import/` | paused | incomplete | none | 2 | blocked |
+| 2026-06 | 2026-06-12-payment | `.agent-loop/features/2026-06-12-payment/` | closed | complete | none | 7 | eligible |
 ```
 
-`README.md` 应很短：
+资格按 feature 判断，不要求一个月份的所有 feature 都完成。人类可以一次批准多个 selected-month 中的 eligible feature；blocked feature 保持 flat，不影响其他 eligible feature，但 Human Review Summary 必须明确显示同月存在 flat 与 archived feature。
 
-```md
-# Archived Feature
+## Eligibility And Safety Gate
 
-Read `archive.md` first.
-Historical implementation details are under `historical/` when present.
-```
+每个 candidate 必须同时满足：
 
-## 影响的索引关系
+- 人类明确选择了该月份；
+- 该月份不是当前月份；
+- feature `spec.md` lifecycle 是 `closed`；
+- Close Record 存在；
+- tasks 全部为 `done` 或经过人类确认移出范围的 `skipped`；
+- fresh verification、Feature Close Review、drift decision 和 project-memory impact 已记录；
+- 没有 open follow-up、unresolved drift、review blocker 或待恢复的失败操作；
+- `project.md` 不把它列为 Active Feature 或 Paused Feature；
+- requirement `Feature Mapping` / `Implemented By` 和相关 decision `Implemented By` 已完成关闭时回填；
+- 源目录真实存在且位于 `.agent-loop/features/` 第一层；
+- 目标月份与 Feature ID 年月一致；
+- 目标路径不存在，不发生大小写或 Unicode 归一化碰撞；
+- 源目录、目标目录和被更新引用不得通过 symlink 逃逸 workspace；
+- Reference Impact List 覆盖所有已发现旧路径引用和跨 feature 边界相对链接；
+- post-check 和 restore 所需的原路径、目标路径、内容快照与引用快照能够写入批次 transaction journal。
 
-Feature 月度压缩会改变路径和默认阅读入口，因此会影响以下索引关系。
+任何一项不满足都必须 fail closed。不要提供 `--force` 绕过资格和安全检查。
 
-| Index / Relationship | 当前用途 | 压缩影响 | 必须更新 |
-|---|---|---|---|
-| `features/INDEX.md` | 全 feature inventory、month view、状态视图 | 需要记录 feature 当前路径、month bucket、compaction mode、archive path | 是 |
-| `features/YYYY-MM/INDEX.md` | 月份内 feature 列表 | 新增月度索引，记录该月是否 fully compacted / mixed / deep archived | 是 |
-| requirement set README | `Implemented By`、`Delivery Phases`、`Feature Mapping` | feature 路径从 flat 改为 month bucket；phase 到 feature 的链接要改到 archive path 或 current path | 是 |
-| `requirements/INDEX.md` | requirement inventory、implemented view、backlog/deferred view | 如果存在，要同步 implemented feature path 和 status | 条件是已存在或本来应更新 |
-| `.agent-loop/decisions/*.md` | ADR / decision 的 `Implemented By` | feature 实现引用要改到新的 archive path；`Applicable Decisions` / `Implements Decisions` 在 archive summary 中保留 | 是 |
-| `project.md` | Active Feature、Paused Features、Current Work、recent references | Active Feature 和 Paused Features 不能指向 archived feature；旧 closed feature 可指向 archive summary | 是 |
-| feature internal links | `Source Requirements`、`Applicable Decisions`、`Implements Decisions` | `archive.md` 需要保留这些关系；historical 文件内的旧相对链接可保留为历史证据，但外部索引要更新 | 是 |
-| Feature Follow-up / Flow-back | recent / historical feature ownership scan | 扫描规则要同时支持 flat feature 和 month bucket；archived feature 先读 `archive.md`，必要时再读 `historical/` | 是 |
-| Drift Check | 关闭后行为和文档一致性 | 压缩前要确认 drift 已处理；压缩后要确认 archive summary 与 requirement/decision/project memory 一致 | 是 |
-| verification evidence | 测试、构建、E2E、review evidence | `archive.md` 必须摘要 verification evidence；完整 evidence 留在 `historical/notes.md` 或 historical detail | 是 |
-| scripts / validation glob | 查找 `features/*/spec.md`、`notes.md`、`tests.md` 的脚本 | 需要兼容 `features/YYYY-MM/<feature>/archive.md` 和 `features/YYYY-MM/<feature>/historical/spec.md` | 是 |
-| recovery / re-adopt scans | 重接管项目时识别历史 feature | 不应把 archived feature 当 active feature；应优先读 archive summary | 是 |
+## Batch Human Gate
 
-## 路径兼容规则
+一次普通归档批次只需要一个 Human Gate。确认摘要必须同时列出：
 
-第一版需要同时支持两种 feature layout：
+- selected months；
+- eligible / blocked Feature IDs；
+- 每个 old path → new path；
+- 将创建的月份目录；
+- `features/archive.md` 预期变化；
+- Requirement、ADR、Project Memory、Follow-up 和其他引用更新；
+- 不会修改或删除的 feature 内容；
+- post-check 与失败 restore 行为。
+
+人类确认这个完整批次后，Agent 可以执行其中列出的目录创建、移动、引用更新和 post-check，不为每个机械步骤重复询问。
+
+任何新增月份、Feature ID、目标路径、引用文件、删除动作或批次范围变化都使原确认失效，必须重新 Scan 和确认。
+
+## 引用更新逻辑
+
+### Feature Follow-up / Flow-back
+
+扫描顺序：
+
+1. 从 `project.md` 读取 Active / Paused feature；
+2. 扫描第一层 flat feature；
+3. 读取 `features/archive.md`；
+4. 对匹配的 archived Feature ID 读取其原有 `spec.md`、`tests.md` 和 `notes.md`；
+5. 只有摘要与路径信号不足时才继续读取复杂细节目录。
+
+归档不会改变 owning feature 判断，也不会把 archived feature 自动重开。
+
+### ADR / Decision
+
+- `Applicable Decisions` 和 `Implements Decisions` 的语义不变；
+- 直接保存 Feature Spec 路径的 ADR / decision 引用更新到 month path；
+- validator 必须同时支持 flat 和 archived Feature Spec；
+- 后续 durable mapping 应优先保存 Feature ID，并通过 resolver / `features/archive.md` 定位路径；
+- 归档不得改写 accepted decision 的含义、状态或 Human Review Evidence。
+
+### Requirement Mapping
+
+- requirement set README 的 `Feature Mapping` / `Implemented By` 保留 Feature ID；
+- 直接路径更新为当前 month path；
+- optional `requirements/INDEX.md` 如保存 feature path，也同步更新；
+- 原始 requirement source 文件保持不变。
+
+### Project Memory
+
+- Active Feature 和 Paused Features 不得指向 archived feature；
+- Current Work 不得把 archived feature 当作正在执行的 feature；
+- Recent Feature 或历史 locator 如存在，更新为 Feature ID 加当前路径；
+- 不把所有 archive rows 复制进 `project.md`，历史 inventory 由 `features/archive.md` 负责。
+
+### Internal And External Links
+
+- feature 目录内部文件和子目录保持原样；
+- 同目录和 feature 内部相对链接通常保持有效；
+- 因目录加深而受影响的 `requirements/`、`decisions/`、project docs 等跨边界相对链接必须更新；
+- workspace 内指向 old flat path 的 durable reference 必须更新；
+- 历史报告中只用于描述过去命令或过去路径的纯文本证据可以保留，但必须由 Reference Impact Scan 分类为 `historical-evidence`，不能静默忽略。
+
+## Apply、Post-Check 与失败恢复
+
+Apply 只能执行人类确认过的 Feature ID 和路径映射。开始时必须重跑关键 preflight；如果文件、状态、引用计数或目标路径与确认时不同，判定 `stale-plan` 并停止。
+
+Apply 在首次写入前创建临时 transaction journal：
 
 ```text
-.agent-loop/features/YYYY-MM-DD-<feature-slug>/
-.agent-loop/features/YYYY-MM/YYYY-MM-DD-<feature-slug>/
+.agent-loop/features/.archive-txn/<transaction-id>/
 ```
 
-扫描顺序建议：
+journal 只保存本批次操作映射、preflight 摘要，以及将被改写的 `archive.md` / Requirement / ADR / Project Memory / link 文件快照；它不复制 feature 目录。成功 post-check 后删除 journal；失败或进程中断时保留 journal，供 restore 在新的 Agent 进程中恢复。journal 是临时恢复材料，不是 feature lifecycle 或 project memory 的新权威来源。
 
-1. Active / Paused feature from `project.md`;
-2. current-month flat features;
-3. recent flat features in 30-day lookback;
-4. month bucket `archive.md`;
-5. `historical/` only when archive summary is insufficient.
-
-Feature ID 仍然是 `YYYY-MM-DD-<feature-slug>`。路径可能变化，ID 不变。索引更新必须使用当前路径。
-
-## Requirements 策略
-
-Requirements 不做内容压缩。
-
-原因：
-
-- requirement 是人类源材料；
-- 需求源材料保持原样，不应被摘要替代；
-- requirement lifecycle 和 Delivery Phases 仍由 requirement set README 负责；
-- 压缩 feature 不应改变原始需求。
-
-后续可以讨论 requirement month bucket：
+推荐执行顺序：
 
 ```text
-.agent-loop/requirements/YYYY-MM/YYYY-MM-DD-<topic>/
+revalidate confirmed scope
+→ prepare reversible operation snapshot
+→ persist transaction journal
+→ create selected month directories
+→ move whole feature directories
+→ update features/archive.md
+→ update approved durable references
+→ run post-check
+→ keep result only when every check passes
 ```
 
-但第一版只把 feature 压缩作为第一版默认能力。Requirement 的第一层过长问题优先靠 `requirements/INDEX.md` 和未来可选 bucket 解决，不做内容压缩。
+Post-check 必须确认：
 
-## 与 Feature Follow-up / Flow-back 的关系
+- 每个 source path 已不存在；
+- 每个 target path 存在且 Feature ID 与月份匹配；
+- feature 文件清单和内容哈希与移动前一致，只有已批准的跨边界链接调整除外；
+- `features/archive.md` 每个 Feature ID 恰好一行且 Current Path 存在；
+- 没有 durable reference 仍指向 old flat path；
+- Requirement、ADR、Project Memory 和 Follow-up resolver 能解析新路径；
+- blocked / unselected / current feature 没有变化；
+- 重复运行 scan 得到 `already-archived`，不会再次嵌套月份目录。
 
-Feature Follow-up / Flow-back 的默认 30 天 lookback 仍然有效，但不再假设所有 feature 都在 `.agent-loop/features/*/` 第一层。
+如果任一写入或 post-check 失败，操作必须恢复：
 
-如果 bug/change 指向 archived feature：
+- 目录移回原 flat path；
+- 从 transaction journal 恢复 `features/archive.md` 和引用文件快照；
+- 检查恢复后文件清单、哈希和旧路径；
+- 报告失败点和恢复结果；
+- restore 未完全通过时进入 Safety Stop，不得报告归档成功。
 
-1. 先读 `archive.md`；
-2. 判断 delivered behavior、changed files、public interfaces、known risks 是否匹配；
-3. 不足时再读 `historical/spec.md`、`historical/tests.md`、`historical/notes.md`；
-4. 如果确认为 owning feature，可以建议 flow-back；
-5. 如果 archived feature 已 deep archived 且缺少 historical detail，应记录 evidence limitation。
+## Rehydrate / Reopen
 
-## 与 Close / Drift Check 的关系
+当 Follow-up 确认 archived feature 是 owning feature，并且人类确认 flow-back / reopen 后：
 
-Feature Close 不直接压缩，但要让未来可压缩：
+```text
+archived feature selected
+→ read-only rehydrate scan
+→ Human Review shows month path → flat path and reference impact
+→ move the whole directory back to `.agent-loop/features/<feature-id>/`
+→ update archive row to `rehydrated` and Current Path to flat
+→ update durable references
+→ post-check
+→ normal Feature Follow-up lifecycle may set the feature active
+```
 
-- close summary 要足够支持 archive summary；
-- requirement mapping 要完整；
-- decision mapping 要完整；
-- verification evidence 要可摘要；
-- drift decision 要记录；
-- project memory update 要完成或明确 none。
+Rehydrate 只是恢复工作目录位置，不自行授权 scope change，不自行把 `closed` 改为 `active`。Feature Follow-up 的人类决定仍然控制是否重开。
 
-Feature Compaction Scan 可以视为月度 close 后维护动作。它不替代单个 feature close。
+## 跨平台脚本边界
 
-## 迁移策略
+生产脚本使用 Python 3.10+ 标准库，并复用 cross-platform runtime 的 UTF-8、BOM/CRLF、确定性排序、path confinement 和 exit-code 约定。
 
-### Phase 0: Cross-Platform Script Runtime
+建议入口：
 
-- 先批准并实现 `docs/proposal/v1.3.x/cross-platform-python-script-runtime.md`；
-- 月度压缩的发现、执行、恢复和后检脚本统一使用 Python 3 标准库；
-- 新脚本必须在原生 Windows 与 macOS 上对相同 fixture 给出一致结果；
-- Python capability 不可用时 fail closed，不得回退到 Ruby、Bash 或 Agent 手工移动；
-- Phase 0 未完成前，不进入本 proposal 的 Runtime Support 或 Compaction Command 实现。
+```text
+scripts/scan-feature-monthly-archive.py
+scripts/apply-feature-monthly-archive.py
+scripts/check-feature-monthly-archive.py
+scripts/restore-feature-monthly-archive.py
+```
 
-### Phase 1: Proposal
+契约：
 
-- 只建立规则和影响面；
-- 不改运行时规则；
-- 不移动现有 feature。
+- scan 和 check 只读；
+- apply 和 restore 只接受人类确认范围；
+- Python capability 不满足时 exit 2 并 fail closed；
+- 不回退到 Ruby、Bash、PowerShell 或 Agent 手工移动；
+- 不自动安装 Python；
+- macOS 与 Windows 对相同 fixture 给出相同候选、阻塞、路径和恢复结论。
 
-### Phase 2: Runtime Support
+## 实施顺序
 
-- 增加 feature path resolver；
-- 所有 recent / targeted / follow-up scan 支持 flat 和 month bucket；
-- 增加 `archive.md` / monthly `INDEX.md` 模板；
-- 增加 validation scenarios。
+### Phase 0: Cross-Platform Python Runtime Acceptance
 
-### Phase 3: Compaction Command
+- canonical Python checker、macOS parity 和 CI matrix 已实现；
+- 当前本地报告仍标记 `Windows-test-defined`，不得把它写成 Windows 已通过；
+- 先读取远端 Windows CI 证据并完成最终 Human Review；
+- Phase 0 未最终 accepted 前，不实现 archive apply / restore。
 
-- 人类触发 Feature Compaction Scan；
-- Agent 输出 Candidate Matrix；
-- 人类确认后执行 Slim With History；
-- 复验所有索引关系。
+### Phase 1: Proposal Revision
 
-### Phase 4: Optional Deep Archive
+- 本 proposal 收敛为整目录归档；
+- 移除内容重组、`historical/`、Deep Archive 和删除路径；
+- 明确 Feature ID、archive locator、Batch Human Gate、post-check 和 rehydrate。
 
-- 仅在更早月份、人类明确要求、historical detail 已不再需要时执行；
-- 必须单独列出将删除或外移的文件；
-- 必须保留 `archive.md` 和必要 verification summary。
+### Phase 2: Reader Compatibility
 
-## 待讨论问题
+- 增加统一 Feature Path Resolver；
+- Follow-up、Targeted Scan、Recovery / Re-Adopt 支持 flat 与 month path；
+- ADR / requirement validators 支持 archived Feature Spec；
+- 新建 active feature 仍只使用 flat path；
+- 增加 `features/archive.md` 模板和 validation scenarios；
+- 完成 reader compatibility 后仍不移动真实 feature。
 
-- `features/INDEX.md` 是否应该在第一个 month bucket 出现时自动创建？
-- old flat feature 的外部人类书签会失效，是否需要额外生成迁移报告？
-- Deep Archive 是否应该支持压缩包，而不是删除 `historical/`？
-- requirement month bucket 是否应该和 feature compaction 同期实现，还是作为独立 proposal？
-- 如果一个月份有一个 long-running paused feature，是否允许其他 closed features 做 Partial month compaction？
+### Phase 3: Scan And Post-Check
+
+- 实现只读 scan 和 check；
+- 固定 Candidate Matrix、Reference Impact List、exit code 和 deterministic output；
+- 用 fixture 证明 active / paused / blocked、open follow-up、stale path、collision、symlink escape 和 broken link 会 fail closed。
+
+### Phase 4: Apply And Restore
+
+- 实现人类确认后的整目录移动和引用更新；
+- 实现 stale-plan stop、失败恢复、幂等和 rehydrate；
+- 在 Windows 与 macOS 运行相同 fixture；
+- 通过 focused validation、full validation 和 Human Review 后才允许真实项目归档。
+
+## 验收场景
+
+至少覆盖：
+
+1. 人类选择 5 月和 6 月，多个 closed feature 被移动到各自月份；
+2. 同月 paused feature 保持 flat，eligible closed feature仍可在明确批次中归档；
+3. 当前月、active、blocked、paused、open follow-up 和 incomplete close feature 被拒绝；
+4. 整目录移动前后文件清单和哈希一致；
+5. 跨边界相对链接和 old flat path 引用被正确更新；
+6. `features/archive.md` locator 可以解析所有 archived Feature ID；
+7. ADR Feature Spec、Requirement Mapping、Project Memory 和 Follow-up 扫描能解析 month path；
+8. 路径碰撞、大小写冲突、Unicode 差异、symlink escape 和 stale-plan 被拒绝；
+9. 中途失败恢复全部目录和引用；
+10. 重复 apply 不产生 `YYYY-MM/YYYY-MM/<feature>`；
+11. rehydrate 把整个 feature 恢复到 flat path，并保持 Feature ID 与文件内容；
+12. Windows 与 macOS 对相同 fixture 输出一致；
+13. scan / check 不修改任何文件；
+14. 任何脚本都不提供删除历史内容或 `--force` 绕过路径。
+
+## Proposal Boundary
+
+本文件仍是 proposal，不是发布运行时权威。它不会自行改变 `SKILL.md`、`references/runtime.md`、`references/design.md`、Feature Follow-up、ADR validator 或目标项目目录。
+
+本实现是在 proposal 与实施计划分别获得 Human Review 授权后开始，并先完成 Phase 0、Reader Compatibility 与 RED/GREEN 契约。源码仓库中的实现与测试不会移动任何真实目标项目 feature；目标项目执行 archive 或 rehydrate 仍必须分别经过运行时 Human Gate。

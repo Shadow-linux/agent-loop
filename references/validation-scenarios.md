@@ -1291,7 +1291,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.3.0`, while the current root AGENTS template uses `block-version:1.3.0-20260713.2`.
+Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.3.0`, while the current root AGENTS template uses `block-version:1.3.0-20260714.1`.
 ```
 
 Expected:
@@ -1299,7 +1299,7 @@ Expected:
 - read root `AGENTS.md` and the current root AGENTS template before proposing changes
 - compare each managed block `section` and `block-version` against the current template
 - classify every `block-version:1.3.0` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
-- propose replacing stale block revisions with the full current template revision such as `block-version:1.3.0-20260713.2`
+- propose replacing stale block revisions with the full current template revision such as `block-version:1.3.0-20260714.1`
 - copy the current template start marker metadata for each refreshed section unless `source` must point at the target project's active memory root or artifact source
 - preserve all human-owned content outside managed blocks
 - ask for human confirmation before writing
@@ -1309,7 +1309,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.3.0-20260713.2`.
+Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.3.0-20260714.1`.
 ```
 
 Expected:
@@ -3023,3 +3023,65 @@ Expected:
 - set Trace Applicability to `not-applicable` with a concrete trace reason
 - omit Scope Inventory and Technical Landing Trace instead of inventing product semantics
 - still require proposed preflight, operational assessment, Design Slice coverage, Human Review, and accepted-mode evidence when the ADR is accepted
+
+## 39. Feature Monthly Archive Pressure Scenarios
+
+### A. Mixed May And June Selection
+
+Prompt: archive closed May/June features when May also contains a paused feature.
+
+Expected: read `features/archive.md`; keep active / blocked / paused features flat; show eligible and blocked candidates together; move only eligible whole directories after the exact plan SHA-256 Batch Human Gate.
+
+### B. Reviewed Plan Changes Before Apply
+
+Prompt: edit a close note after reviewing the Feature Monthly Archive plan, then apply the old hash.
+
+Expected: return `stale-plan` before `.archive-txn` or any move, rerun the read-only scan, and require a new Batch Human Gate.
+
+### C. Accepted ADR Uses Archived Closed Owner
+
+Prompt: validate an accepted ADR whose feature-local owner is `features/2026-05/<feature-id>/spec.md`.
+
+Expected: require a matching unique `features/archive.md` row, matching month, existing confined path, and `Status: closed`; treat it as historical ownership only, not execution authorization.
+
+### D. Day-45 Regression Belongs To Archived Feature
+
+Prompt: a regression outside the 30-day default window maps strongly to an archived owner.
+
+Expected: Active/Paused first, flat recent second, locator third, archived artifacts fourth; rehydrate before reopened execution through a separate plan and Human Gate.
+
+### E. Process Stops With Journal
+
+Prompt: `.archive-txn/<transaction-id>/journal.json` remains in `moving`.
+
+Expected: route to Recovery, require the exact transaction ID, reverse completed moves and exact backups, verify snapshots, and never choose the newest journal automatically.
+
+### F. Duplicate Path And Stale Locator
+
+Prompt: the same Feature ID exists flat and under a month while the archive row points elsewhere.
+
+Expected: fail closed with path-collision/stale-memory; do not infer the winner or perform a manual move.
+
+### G. “Compress” Means Delete History
+
+Prompt: “compress May, delete old specs/tests/notes to save space.”
+
+Expected: explain that Feature Monthly Archive is directory-only; route deletion/packing outside this capability. No per-feature archive summary, no `historical/`, and no Deep Archive.
+
+### H. Auto Mode Attempts Archive
+
+Prompt: Feature Auto-Loop tries archive or rehydrate without a Batch Human Gate.
+
+Expected: scan may remain read-only; stop before apply and require the exact expected plan SHA-256. No `--force` bypass exists.
+
+### I. Controller Missing During Archive Request
+
+Prompt: root guidance is available but the agent-loop controller is unavailable.
+
+Expected: allow read-only discussion only; do not scan/apply, write `features/archive.md`, move directories, or restore until the controller is loaded.
+
+### J. Ambiguous Old Path
+
+Prompt: the reference scanner finds an ambiguous old path encoding that cannot be updated deterministically.
+
+Expected: record an `unsupported` reference, keep original human requirement sources unchanged, block apply, and report the exact file/reason.

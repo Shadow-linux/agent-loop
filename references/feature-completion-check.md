@@ -178,3 +178,19 @@ Record the check in `notes.md`:
 ```
 
 If the feature is closed, also write the final `Close Record`.
+
+The same close update writes this deterministic Feature Monthly Archive readiness block in `notes.md`; it does not auto-archive and does not add a new Close Human Gate:
+
+```md
+## Archive Readiness
+
+Closed At: <same concrete date as Close Record>
+Delivered Summary: <one concrete line describing delivered behavior>
+Verification: complete
+Feature Close Review: complete
+Drift: resolved
+Project Memory Impact: complete | none
+Open Follow-up: none | <FU-001, FU-002>
+```
+
+Only `Open Follow-up: none` is eligible for Feature Monthly Archive. Missing blocks, placeholder summaries, non-terminal values, or listed follow-up IDs remain blocked until a human-reviewed close-note correction; the archive scan never infers or rewrites them.

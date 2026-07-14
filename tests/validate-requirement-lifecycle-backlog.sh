@@ -89,7 +89,7 @@ assert_contains "SKILL.md" "Version: 1.3.0"
 assert_contains "README.md" "**Current version:** 1.3.0"
 assert_contains "Usage.md" "**版本：** 1.3.0"
 assert_contains "plugin.json" '"version": "1.3.0"'
-assert_contains "templates/root-AGENTS.md" "block-version:1.3.0-20260713.2"
+assert_contains "templates/root-AGENTS.md" "block-version:1.3.0-20260714.1"
 assert_contains "CHANGELOG.md" "## 1.3.0 — 2026-07-11"
 assert_not_contains "templates/root-AGENTS.md" "## Agent Loop Guidance Version"
 assert_contains "AGENTS.md" 'ignore the `alpha` prefix for version records'

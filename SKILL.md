@@ -39,7 +39,7 @@ Also treat long-term memory indexes as claims that must be verified before relia
 
 ## Message Intent Guard
 
-Before project-state classification, classify the latest human message intent. `chat` means ordinary discussion, rules questions, status questions, or design talk; answer or discuss only and do not create requirement sets or feature workspaces by default. Message intent is not permanent: if chat turns into demand shaping, `proposal-doc`, implementation, operational support, follow-up, deferred work, or project-skill management, reclassify and route accordingly. If the human explicitly wants discussion without documentation, keep `chat`. `requirements-discussion` means the human is shaping product needs, business goals, capability ideas, constraints, tradeoffs, or user scenarios without authorizing implementation; use Brainstorm / Clarify to produce a human-reviewed requirement document under `.agent-loop/requirements/` before feature construction. `project-skill-management` means the human asks to turn a repeatable project workflow into a project-local skill or to update, disable, or deprecate one; load `references/project-skills.md`. If unclear, ask whether the human wants ordinary discussion, requirements documentation, feature implementation, or project-skill management.
+Before project-state classification, classify the latest human message intent. `chat` means ordinary discussion, rules questions, status questions, or design talk; answer or discuss only and do not create requirement sets or feature workspaces by default. Message intent is not permanent: if chat turns into demand shaping, `proposal-doc`, implementation, operational support, follow-up, deferred work, project-skill management, or explicit historical feature archive/rehydrate maintenance, reclassify and route accordingly. If the human explicitly wants discussion without documentation, keep `chat`. `requirements-discussion` means the human is shaping product needs, business goals, capability ideas, constraints, tradeoffs, or user scenarios without authorizing implementation; use Brainstorm / Clarify to produce a human-reviewed requirement document under `.agent-loop/requirements/` before feature construction. `project-skill-management` means the human asks to turn a repeatable project workflow into a project-local skill or to update, disable, or deprecate one; load `references/project-skills.md`. `feature-archive-maintenance` means the human explicitly requests Feature Monthly Archive or rehydrate for closed history; require reliable memory, a read-only scan, and the exact plan SHA-256 Batch Human Gate before mutation. If unclear, ask whether the human wants ordinary discussion, requirements documentation, feature implementation, project-skill management, or archive maintenance.
 
 ## Human Help And Version Questions
 
@@ -77,6 +77,7 @@ Use this skill when the user wants to:
 - reconcile `agent-loop` documents with code reality
 - execute a task/story with TDD and verification
 - submit, pause, resume, or close a feature
+- compact closed feature discovery by moving whole feature directories through Human-gated Feature Monthly Archive, or rehydrate an archived feature before follow-up execution
 
 Do not use for one-off edits when the user explicitly asks to bypass workflow and the edit does not affect feature behavior, public interfaces, data/security boundaries, project memory, submit, or close state.
 
@@ -123,6 +124,10 @@ scripts/check-root-agents-blocks.py read-only root AGENTS managed-block drift ch
 scripts/check-onboarding-core-flow-coverage.py onboarding core-flow coverage checker
 scripts/check-concept-foundation-trace.py accepted concept/model trace checker
 scripts/check-adr-requirement-model-trace.py ADR requirement-model landing checker
+scripts/scan-feature-monthly-archive.py read-only deterministic archive/rehydrate plan
+scripts/check-feature-monthly-archive.py read-only pre/post archive contract checker
+scripts/apply-feature-monthly-archive.py exact-hash Human-gated archive/rehydrate apply
+scripts/restore-feature-monthly-archive.py exact transaction-journal restore
 templates/                         copy-ready artifact templates
 examples/login-feature/            small finished feature workspace
 examples/complex-saas-project/     larger takeover + feature execution workspace
@@ -137,7 +142,7 @@ CHANGELOG.md                        version-change source of truth for "what cha
 1. Inspect `.agent-loop/`; if missing, also check legacy `agent-loop/`.
 2. Check root `AGENTS.md` / `CLAUDE.md` as the Root Agent Bootstrap Gate; if either is missing or stale, load `references/project-guidance.md` and include the guidance repair in the recommended Project Entry action unless the human has explicitly deferred it.
 2a. Canonical `scripts/check-*.py` validation requires Python 3.10+ and only the Python standard library. Run the `.py` entrypoints natively on macOS or Windows; if a required checker cannot run because Python is missing or unsupported, fail closed and report the capability gap instead of silently using an obsolete implementation.
-3. Classify the latest message intent: `chat`, `requirements-discussion`, `project-skill-management`, `feature-request`, `operational-support`, `feature-follow-up`, `deferred-requirement`, or `unknown`.
+3. Classify the latest message intent: `chat`, `requirements-discussion`, `project-skill-management`, `feature-archive-maintenance`, `feature-request`, `operational-support`, `feature-follow-up`, `deferred-requirement`, or `unknown`.
 3a. For `chat`, answer or discuss only; do not create requirement sets, feature workspaces, tasks, tests, or plans.
 3b. For `requirements-discussion`, load `references/requirement-management.md`, use Brainstorm / Clarify, produce a human-reviewed requirement document, and archive it under `.agent-loop/requirements/<archive-date>-<topic>/` after confirmation before any feature construction.
 3c. For `project-skill-management`, load `references/project-skills.md`, require reliable Project Entry/memory, and route to Project Skill Creation / Update without creating a requirement set or feature workspace.
@@ -158,6 +163,7 @@ CHANGELOG.md                        version-change source of truth for "what cha
 13a. Load `references/onboarding-knowledge-base.md` when the human asks for newcomer-facing docs, durable project understanding, guided learning paths, or onboarding-db construction. Run it only after Project Entry Scan or reliable project memory. Use Evidence Graph and Core Flow Inventory first, then accepted Onboarding Spec, Onboarding Tasks, Flow Slice Coverage for critical/important flows, evidence-linked diagrams, completeness gating, coverage scoring, and reviewed batches; module/flow docs remain single-file by default.
 13b. During Project Entry, Resume, Re-Adopt, context recovery, and controller re-entry, check `.agent-loop/skills/INDEX.md` when present. Load only `active` project skills whose current instruction-bearing and executable files match the validation manifest, according to `bootstrap` / `on-demand`; discovery and loading never satisfy the per-invocation Execution Gate.
 14. Load `references/feature-follow-up.md` when the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, screenshot issue, behavior tweak, "small tweak", test failure, or QA/user feedback that may belong to a recent feature.
+14a. For `feature-archive-maintenance`, load `references/artifact-rules.md`, `references/stage-guides.md`, `references/human-review-summary.md`, and `references/feature-follow-up.md`. Feature ID is stable while location changes and root `features/archive.md` locates archived/rehydrated history. The scan is read-only; archive/rehydrate requires the expected plan SHA-256 Batch Human Gate, transaction journal, post-check, and restore. Rehydrate before reopened execution; auto modes never authorize either operation.
 15. Load `references/large-projects.md` when the repo is large, old, unfamiliar, multi-package, or likely above 100k LOC.
 16. Load `references/complex-artifacts.md` when story/task/test/plan complexity crosses its trigger conditions.
 17. Load `references/implementation-planning.md` before writing or approving `plan.md` for a task/story.
@@ -197,6 +203,8 @@ CHANGELOG.md                        version-change source of truth for "what cha
       feedback.* optional source file when provided
       notes.* optional source file when provided
   features/
+    archive.md optional Feature ID locator maintained only by Feature Monthly Archive
+    YYYY-MM/ archived closed feature directories
     <date>-<feature-slug>/
       product.md optional product brief
       spec.md
@@ -247,6 +255,7 @@ If the local directory is only a remote-project entry point, create only thin lo
 - For focused questions about one module, flow, async task, deployment path, or problem area, answer from existing docs/code as chat or operational support unless the human explicitly authorizes feature/fix work. Do not create focused onboarding-db artifacts.
 - When local and remote project reality are split, discover the remote environment before Project Entry Scan or initializing project memory.
 - Historical execution evidence belongs in `notes.md`.
+- Feature Monthly Archive moves only eligible whole closed feature directories to `features/YYYY-MM/<feature-id>/`; active / blocked / paused features stay flat. It creates no per-feature archive summary, no `historical/`, no Deep Archive, and exposes no `--force`. Original human requirement sources remain unchanged.
 - Web E2E capability is discovered from the real project environment. Stable E2E capability belongs in `project.md`; feature-specific E2E cases belong in `tests.md` or `tests/e2e/*`.
 - Human source requirements are archived as requirement set directories, not new flat files. Each requirement set groups the human's requirement, prototype, feedback, screenshots, recordings, links, and follow-up notes for one intake event or topic.
 - `.agent-loop/requirements/` is canonical. Do not create or maintain legacy `inputs/` archives in current-version projects.
@@ -327,3 +336,4 @@ Stop when:
 - subagents are needed but not yet approved
 - submit, commit, PR, merge, release, publish, pause, or close is requested
 - the work would require first-version exclusions
+- Feature Monthly Archive or rehydrate lacks an exact reviewed plan hash, has unsupported/ambiguous references, encounters a stale plan or incomplete `.archive-txn`, or would be performed by manual directory movement

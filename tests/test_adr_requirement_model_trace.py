@@ -66,6 +66,57 @@ class AdrRequirementModelTraceTests(unittest.TestCase):
         self.assertEqual(result.returncode, 1, combined_output(result))
         self.assertIn(expected, combined_output(result))
 
+    def run_archived_feature_owner(
+        self,
+        *,
+        include_index: bool = True,
+        row_month: str = "2026-05",
+        row_state: str = "archived",
+        row_path: str | None = None,
+        planned: bool = False,
+    ):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "fixture"
+            shutil.copytree(VALID, root)
+            feature_id = "2026-05-08-login"
+            archived = root / "features" / "2026-05" / feature_id
+            archived.parent.mkdir(parents=True)
+            (root / "features" / "fixture").rename(archived)
+            spec = archived / "spec.md"
+            spec.write_text(
+                re.sub(
+                    r"^Status: .*$",
+                    "Status: closed",
+                    spec.read_text(encoding="utf-8"),
+                    flags=re.MULTILINE,
+                ),
+                encoding="utf-8",
+            )
+            owner = f"features/2026-05/{feature_id}/spec.md"
+            if planned:
+                owner = f"planned:{owner}"
+            decision = self.decision.replace("features/fixture/spec.md", owner)
+            (root / "README.md").write_text(self.readme, encoding="utf-8")
+            (root / "requirement.md").write_text(self.source, encoding="utf-8")
+            (root / "decision.md").write_text(decision, encoding="utf-8")
+            if include_index:
+                current_path = row_path or f".agent-loop/features/{row_month}/{feature_id}/"
+                (root / "features" / "archive.md").write_text(
+                    "# Feature Archive\n\n"
+                    "This file locates archived or rehydrated features. Feature specs, tests, notes, requirement sources, and accepted decisions remain authoritative.\n\n"
+                    "| Feature ID | Month | Current Path | Archive State | Closed At | Delivered Summary | Source Requirements | Applicable Decisions | Last Moved At |\n"
+                    "|---|---|---|---|---|---|---|---|---|\n"
+                    f"| {feature_id} | {row_month} | `{current_path}` | {row_state} | 2026-05-20 | completed login | none | none | 2026-07-14 |\n",
+                    encoding="utf-8",
+                )
+            return run_checker(
+                SCRIPT,
+                str(root / "README.md"),
+                str(root / "requirement.md"),
+                str(root / "decision.md"),
+                str(root),
+            )
+
     def test_accepted_and_proposed_valid_decisions_pass(self) -> None:
         self.assert_accepted(
             self.readme,
@@ -129,6 +180,34 @@ class AdrRequirementModelTraceTests(unittest.TestCase):
         self.assert_accepted(
             self.readme, self.source, delegated, "technical landing trace covers 7"
         )
+
+    def test_archived_closed_feature_spec_owner_passes_with_matching_locator(self) -> None:
+        result = self.run_archived_feature_owner()
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("technical landing trace covers 8", result.stdout)
+
+    def test_archived_feature_spec_owner_requires_archive_locator(self) -> None:
+        result = self.run_archived_feature_owner(include_index=False)
+        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertIn("archive-index", combined_output(result))
+
+    def test_archived_feature_spec_owner_rejects_mismatched_month_locator(self) -> None:
+        result = self.run_archived_feature_owner(
+            row_month="2026-06",
+            row_path=".agent-loop/features/2026-06/2026-05-08-login/",
+        )
+        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertIn("month", combined_output(result))
+
+    def test_archived_feature_spec_owner_rejects_rehydrated_month_locator(self) -> None:
+        result = self.run_archived_feature_owner(row_state="rehydrated")
+        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertIn("archive-index", combined_output(result))
+
+    def test_planned_feature_spec_owner_must_remain_flat(self) -> None:
+        result = self.run_archived_feature_owner(planned=True)
+        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertIn("planned Feature Spec path must be flat", combined_output(result))
 
     def test_adversarial_contracts_are_rejected(self) -> None:
         cases = (

@@ -40,6 +40,15 @@
 - Kept the former `.sh` / `.rb` paths as one-cycle compatibility launchers only; active tests and current guidance now call the canonical Python entrypoints directly.
 - Added fail-closed runtime guidance and native macOS/Windows invocation examples; no third-party Python package, shell emulation layer, or automatic runtime installation is required.
 
+### Feature Monthly Archive
+- Implemented directory-only monthly archival: each eligible, Human-confirmed closed feature directory moves intact into `features/YYYY-MM/`, without per-feature summaries, `historical/`, deletion, packing, or content compression.
+- Added `features/archive.md` as the stable Feature ID-to-current-path locator while keeping feature artifacts, requirement sources, and accepted decisions authoritative.
+- Added Python 3.10+ standard-library scan, check, apply, and restore commands with deterministic plan hashing, required `expected-plan-sha256`, conservative reference blocking, transaction journals, post-check, and verified failure recovery.
+- Made ADR ownership, Feature Follow-up, recovery, templates, root guidance, and Stage Map resolve both flat and month-archived closed features while active, blocked, and paused features remain flat.
+- Added a separate Human-gated rehydrate path before archived work can flow back; rehydrate moves the directory flat but does not change the closed lifecycle itself.
+- Added focused archive/restore fixtures and macOS/Windows CI definitions for eligibility, no-mutation, stale plans, exact reference edits, idempotency, interrupted recovery, and locator consistency; current local evidence is `macOS-verified / Windows-test-defined`.
+- Hardened recovery against self-consistent journal scope tampering, corrupt backups, and post-crash human edits; stranded transactions now block new scan/apply work, and inbound relative links into moving features are included in the exact reference plan.
+
 ## 1.2.4 — 2026-07-11
 
 ### Project-Local Skills

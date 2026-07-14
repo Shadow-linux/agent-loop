@@ -26,7 +26,7 @@ assert_contains "references/runtime.md" "## Routing Axes And Precedence"
 assert_contains "references/runtime.md" 'Entry Context: `new-project` / `existing-project` / `remote-entry`'
 assert_contains "references/runtime.md" 'Memory Health: `absent` / `current` / `stale` / `outside-loop`'
 assert_contains "references/runtime.md" 'Work State: `idle` / `active` / `blocked` / `completion-candidate` / `paused`'
-assert_contains "references/runtime.md" "Safety Stop -> Remote Discovery -> Memory Recovery -> Active Feature Guard -> Blocker Resolution -> Intent Routing -> Normal Stage Continuation"
+assert_contains "references/runtime.md" "Safety Stop -> Remote Discovery -> Memory Recovery -> Feature Archive Maintenance -> Active Feature Guard -> Blocker Resolution -> Intent Routing -> Normal Stage Continuation"
 
 # Single-controller memory permits exactly one active feature.
 assert_contains "references/feature-completion-check.md" "Agent Loop permits at most one Active Feature."

@@ -136,7 +136,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.3.0-20260713.2`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.3.0-20260714.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -222,7 +222,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.3.0-20260713.2`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.3.0-20260714.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -342,11 +342,27 @@ Before using an external skill or plugin inside a stage:
 - [ ] Questions must affect scope, UX, data, architecture, testing, or acceptance.
 - [ ] Write accepted answers back into the current stage artifact: detailed requirements-discussion output to `requirement.md` with only source, lifecycle, phase, mapping, and decision-link summaries in requirement `README.md`; feature output goes to `product.md`, `spec.md`, or `notes.md` through the owning stage.
 
+## Feature Monthly Archive
+
+- [ ] Classify only an explicit archive/rehydrate request as `feature-archive-maintenance` and require reliable project memory.
+- [ ] Check `features/archive.md`, flat/month uniqueness, active/paused memory, and incomplete `.archive-txn` before planning.
+- [ ] Run scan read-only with explicit operation, selected months or Feature IDs, and `--as-of`.
+- [ ] Confirm every eligible archive candidate is `closed` with concrete `Archive Readiness`, complete close/tasks/verification/review/drift/memory evidence, and `Open Follow-up: none`.
+- [ ] Keep active / blocked / paused features flat and show blocked candidates without suppressing eligible candidates in the same month.
+- [ ] Show exact moves, archive-index rows, reference edits, immutable requirement sources, historical evidence, unsupported references, and unchanged content.
+- [ ] Stop for the expected plan SHA-256 Batch Human Gate before apply; auto modes do not authorize archive or rehydrate.
+- [ ] Reject malformed/stale hashes, ambiguous references, path collisions/escapes, and any manual-move or `--force` request.
+- [ ] Create the transaction journal and backups before mutation; use exact precomputed edits only.
+- [ ] Run post-check after archive/rehydrate; on failure restore exact bytes and every confined journal move whose source/target state shows the rename occurred, including the pre-record crash window.
+- [ ] Route incomplete restore to Recovery with the exact transaction ID and keep the journal fail-closed.
+- [ ] Rehydrate before reopened execution and keep lifecycle `closed` until Feature Follow-up separately confirms flow-back.
+- [ ] Confirm scope remains directory-only: no per-feature archive summary, no `historical/`, no Deep Archive, deletion, packing, or scheduled archive.
+
 ## Feature Follow-up And Flow-back
 
 - [ ] Load `feature-follow-up.md`.
 - [ ] Trigger before creating a new feature when the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, screenshot issue, behavior tweak, "small tweak", test failure, or QA/user feedback.
-- [ ] Inspect Active Feature, Paused Features, and recent feature docs in the default 30-day lookback window.
+- [ ] Inspect Active Feature and Paused Features first, flat recent feature docs second, `features/archive.md` third, and archived artifacts fourth in the default 30-day lookback window.
 - [ ] Treat 30 days as the default scan window, not a hard boundary; if wording or evidence points to an older feature, run an extended scan and mark `outside-default-window`.
 - [ ] Inspect code/test/API/data/UI paths mentioned by the report.
 - [ ] If the report is generic, such as 500, blank page, unknown error, or no route/action/log/test evidence, classify as `unclear` and recommend `investigate-first`; do not reopen the nearest recent feature just because it is recent.
@@ -355,6 +371,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Classify the report as same-feature-bug, same-feature-adjustment, regression-from-feature, new-feature, maintenance-fix, or unclear.
 - [ ] For "字段改一下" / "规则微调" / "小改动" wording, check whether acceptance, API/event/data shape, state flow, algorithm, or visible UX changes before choosing same-feature-adjustment vs linked new feature.
 - [ ] If a closed feature is the likely owner, recommend `flow-back` and explain that it will reopen or continue the owning feature for follow-up work after human confirmation.
+- [ ] If the owner is archived, require verified Feature Monthly Archive rehydrate before lifecycle change or reopened execution.
 - [ ] If the human declines reopen/flow-back, preserve the old feature close state and require the new linked feature or maintenance-fix to record `Related Feature`, declined reason, inherited acceptance/tests/evidence, and affected paths.
 - [ ] If no recent feature owns the report and this is a narrow internal fix, recommend a new `Feature Type: maintenance-fix` feature workspace; do not perform a naked code edit.
 - [ ] If the report is durable source material, ask before archiving it under `.agent-loop/requirements/`.

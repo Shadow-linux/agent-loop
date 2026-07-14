@@ -30,6 +30,8 @@ The core constraints are:
 - future/deferred work belongs in requirement sets and optional `requirements/INDEX.md`, not in `project.md`
 - `product.md` is optional feature-level product understanding when needed
 - each feature has stable `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`; `contracts.md` is added only after human confirmation when producer-consumer boundaries need explicit handoff
+- Feature Monthly Archive is explicit closed-history maintenance: Feature ID is stable, eligible whole directories move to `features/YYYY-MM/<feature-id>/`, and root `features/archive.md` is only the locator/ledger
+- archive state is not feature lifecycle; active / blocked / paused features stay flat, and archived closed features rehydrate before reopened execution
 - feature type may be `normal`, `maintenance-fix`, or `follow-up`; all use the same feature workspace model
 - maintenance fixes are narrow feature workspaces under `.agent-loop/features/YYYY-MM-DD-fix-<slug>/`, not naked code edits and not a separate `.agent-loop/maintenance/` tree
 - stories live in `spec.md`; optional `tasks/USn/` or `tests/USn/` folders are detail grouping, not separate story workspaces
@@ -52,6 +54,7 @@ Human Goal
 → Execute / Verify
 → Drift Check
 → Feature Follow-up / Flow-back when post-close bug/change appears
+→ Feature Monthly Archive when the human explicitly asks to compact closed-history discovery
 → Project Memory Update
 → Submit / Integrate if requested
 → Resume / Pause / Close
@@ -90,6 +93,14 @@ Behavior Intent
 **Prototype**: human-provided design artifact, screenshot, wireframe, or interaction reference.
 
 **Feature**: one behavior-changing work area under `.agent-loop/features/<feature-id>/`.
+
+**Feature Monthly Archive**: An explicit, Human-gated maintenance capability that moves an eligible closed feature directory intact to `.agent-loop/features/YYYY-MM/<feature-id>/`, updates `features/archive.md` and approved references, post-checks, and restores on failure. The scan is read-only and apply requires the exact expected plan SHA-256 Batch Human Gate plus transaction journal. It creates no per-feature archive summary, no `historical/`, no Deep Archive, and no `--force`.
+
+**Feature Locator**: The root `features/archive.md` mapping from stable Feature ID to current flat or month path. It locates history but does not own product, requirement, decision, lifecycle, test, or delivery facts.
+
+**Archive State**: `archived | rehydrated`. Archive state is not feature lifecycle; lifecycle remains `draft | active | blocked | paused | closed`.
+
+**Rehydrate**: The separately Human-reviewed move from a month path back to the flat feature path. Rehydrate before reopened execution; Feature Follow-up decides any later `closed -> active` lifecycle transition.
 
 **Stories**: user-perspective slices inside a feature. They live in `spec.md`. Use labels such as `US1`, `US2` in `tasks.md`; complex artifact mode may group detail files under `tasks/USn/` or `tests/USn/` without making stories separate workspaces.
 
@@ -298,6 +309,26 @@ Inspect Active / Paused / Closed features and recent feature docs.
 Use 30 days as the default lookback, not a hard boundary.
 Present Candidate Match Matrix.
 Recommend flow-back, linked new feature, maintenance-fix, or investigate-first.
+Resolve Active/Paused first, flat recent features second, `features/archive.md` third, and archived artifacts fourth. Rehydrate a confirmed archived owner before lifecycle change or execution.
+```
+
+### Feature Monthly Archive
+
+Condition:
+
+```text
+Human explicitly requests archive or rehydrate
+Project memory and feature close evidence are reliable
+```
+
+Action:
+
+```text
+Run read-only scan and show one deterministic Batch Review.
+Wait for confirmation of the exact plan SHA-256.
+Apply only eligible moves through the transaction journal.
+Update the root locator and approved references, then post-check.
+Restore on failure; route a stranded journal to Recovery.
 ```
 
 ### Active Feature Continuation
@@ -386,6 +417,7 @@ The trace consumes accepted product semantics. Product ambiguity returns to Requ
 Project Entry
 → Remote Project Discovery if Needed
 → Re-Adopt Agent Loop Project if Needed
+→ Feature Monthly Archive If Explicitly Requested
 → Code-Guided Operational Support if Needed
 → Project Skill Creation / Update if Needed
 → Requirement Archive

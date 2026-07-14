@@ -42,4 +42,15 @@ jobs:
           tests.test_onboarding_core_flow_coverage
           tests.test_concept_foundation_trace
           tests.test_adr_requirement_model_trace
+          tests.test_feature_archive_support
+          tests.test_feature_monthly_archive_scan
+          tests.test_feature_monthly_archive_apply
+          tests.test_feature_monthly_archive_restore
           -v
+
+      - name: Check Feature Monthly Archive command entrypoints
+        run: |
+          python scripts/scan-feature-monthly-archive.py --help
+          python scripts/check-feature-monthly-archive.py --help
+          python scripts/apply-feature-monthly-archive.py --help
+          python scripts/restore-feature-monthly-archive.py --help

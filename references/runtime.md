@@ -29,6 +29,7 @@ Message intent is evaluated before project state classification. It decides what
 | `chat` | chat means ordinary discussion, rules questions, status questions, or design talk with no request to create requirements or start implementation | answer or discuss only |
 | `requirements-discussion` | requirements-discussion means the human is exploring product needs, business goals, capability ideas, constraints, tradeoffs, or user scenarios without authorizing implementation | Requirements Discussion |
 | `project-skill-management` | human asks to turn a repeatable project workflow into a project-local skill, or to update, disable, or deprecate one | Project Skill Creation / Update after reliable Project Entry/memory |
+| `feature-archive-maintenance` | human explicitly asks to archive closed feature history by month or rehydrate an archived feature | Feature Monthly Archive after reliable memory; read-only scan first |
 | `feature-request` | human explicitly asks to implement, build, change behavior, or start work from accepted requirements | Project Entry, then Design Readiness and Decision & Design / Product Brief / Feature Spec / Feature Follow-up routing |
 | `proposal-doc` | human asks to write a proposal, design note, or discussion document without implementing | write the requested proposal/doc only |
 | `deferred-requirement` | human asks to remember, defer, backlog, or do something later | Requirement Archive with Future / Deferred Requirement Intake |
@@ -41,6 +42,8 @@ If message intent is `chat`, do not create requirement sets, feature workspaces,
 If message intent is `requirements-discussion`, do not create a feature workspace or enter Work Breakdown, Plan Gate, or Execute. Route to Requirements Discussion: brainstorm/clarify, draft a human-reviewed requirement document, then archive the document under `.agent-loop/requirements/<archive-date>-<topic>/` after the human confirms the document should be recorded. For `requirements-discussion`, reviewed/recorded does not mean accepted for implementation.
 
 If message intent is `project-skill-management`, load `references/project-skills.md`. Do not create a requirement set or feature workspace. Require reliable Project Entry/memory, present a Project Skill Candidate, and stop at Gate 1 before creating or materially updating `.agent-loop/skills/`.
+
+If message intent is `feature-archive-maintenance`, require current project memory and load the Feature Monthly Archive procedure. The scan is read-only. It resolves Feature IDs through `features/archive.md`, shows eligible/blocked candidates, exact moves, reference edits, unchanged content, restore scope, and the expected plan SHA-256. Archive or rehydrate stops at one Batch Human Gate and then uses a transaction journal, post-check, and restore. The invariant is: rehydrate before reopened execution; archive state is not feature lifecycle.
 
 Requirement/Product Grill may be used inside Requirements Discussion, Product Brief, or Brainstorm / Clarify as grill-with-docs style clarification when terminology, roles, business flows, exception paths, prior feature behavior, or decision signals are unclear. It does not create a new stage. Concept Foundation is a triggered internal method of Requirements Discussion / Requirement Product Grill, not a stage. It stabilizes product concepts before requirement-level flow, state, and product-data modeling, writes through the human-reviewed requirement document, and sends only shared design signals to Design Readiness Check.
 
@@ -177,7 +180,7 @@ Work State:
 Apply this precedence exactly:
 
 ```text
-Safety Stop -> Remote Discovery -> Memory Recovery -> Active Feature Guard -> Blocker Resolution -> Intent Routing -> Normal Stage Continuation
+Safety Stop -> Remote Discovery -> Memory Recovery -> Feature Archive Maintenance -> Active Feature Guard -> Blocker Resolution -> Intent Routing -> Normal Stage Continuation
 ```
 
 Rules:
@@ -185,9 +188,10 @@ Rules:
 1. Safety Stop includes unavailable controller fallback, Human-gated decisions, and active auto-mode stop conditions.
 2. Remote Discovery runs before local existing-project handling.
 3. `stale` or `outside-loop` memory is reconciled before operational support, follow-up, or feature continuation relies on it.
-4. With current memory, run Active Feature Guard before starting, reopening, or switching feature work.
-5. Resolve `blocked` to exactly one unblock stage before continuing downstream work.
-6. Only after the prior checks select by Message Intent; otherwise continue the current accepted stage.
+4. With current memory, an explicit `feature-archive-maintenance` request routes before Active Feature Guard because it maintains closed history. Eligibility blocks any selected active/paused path without switching current work.
+5. Otherwise run Active Feature Guard before starting, reopening, or switching feature work.
+6. Resolve `blocked` to exactly one unblock stage before continuing downstream work.
+7. Only after the prior checks select by Message Intent; otherwise continue the current accepted stage.
 
 Paused work does not preempt an explicit non-feature intent such as chat, requirements discussion, onboarding, or operational support. Ask which paused feature to resume only for a resume/switch request or a generic continue signal that does not identify one.
 
@@ -215,7 +219,8 @@ Use this order:
 4. If `project.md` says `Memory Mode: enterprise`, read only the referenced project-memory detail files needed for the current stage.
 5. If `project.md` says `Status: remote-entry`, read `<memory-root>/remote.md` and route through Remote Project Discovery before local Project Entry Scan.
 6. Locate `Active Feature` and `Paused Features`.
-6a. If `.agent-loop/skills/INDEX.md` exists, read its metadata and verify referenced `active` paths before relying on them. Do not load `proposed`, `disabled`, or `deprecated` skills into normal routing.
+6a. For Feature Monthly Archive or an archived follow-up candidate, read `features/archive.md` before opening the month path. Treat Feature ID as stable and verify the locator target, archive state, and flat/month uniqueness.
+6b. If `.agent-loop/skills/INDEX.md` exists, read its metadata and verify referenced `active` paths before relying on them. Do not load `proposed`, `disabled`, or `deprecated` skills into normal routing.
 7. Read current feature `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`, and `contracts.md` if present.
 8. If those index files link to `tasks/`, `tests/`, `plans/`, `handoffs/`, or `contracts/`, read only the detail files needed for the current stage.
 9. Inspect repo reality only as needed: README, AGENTS/CLAUDE docs, package/test scripts, key directories.
@@ -301,6 +306,7 @@ Chat Entry / Requirements Discussion if Needed
 Project Entry
 Remote Project Discovery if Needed
 Re-Adopt Agent Loop Project if Needed
+Feature Monthly Archive If Explicitly Requested
 Code-Guided Operational Support if Needed
 Project Skill Creation / Update if Needed
 Requirement Archive
@@ -367,7 +373,7 @@ Feature Auto-Loop means:
 Feature Auto-Loop = give one feature a bounded release lane.
 ```
 
-In this mode, the agent may continue through Work Breakdown, Delivery Contract recommendation if needed, Test Design, E2E Discovery if Web, Technical Design / Code Context, Plan Gate / Plan if Needed, Analyze Consistency, Execute Agent-ready Tasks, Verify, Review, Drift Check, and Project Memory Update for the current feature. It must not skip Plan Gate before execution. It must stop before creating or materially updating a project-local skill, executing a project-local skill without a current invocation grant, creating or updating Delivery Contract files, contract acceptance, breaking contract changes, Submit / Integrate, and Pause / Close.
+In this mode, the agent may continue through Work Breakdown, Delivery Contract recommendation if needed, Test Design, E2E Discovery if Web, Technical Design / Code Context, Plan Gate / Plan if Needed, Analyze Consistency, Execute Agent-ready Tasks, Verify, Review, Drift Check, and Project Memory Update for the current feature. It must not skip Plan Gate before execution. It must stop before Feature Monthly Archive or rehydrate and their Batch Human Gates, creating or materially updating a project-local skill, executing a project-local skill without a current invocation grant, creating or updating Delivery Contract files, contract acceptance, breaking contract changes, Submit / Integrate, and Pause / Close.
 
 Task Auto-Run means:
 
@@ -444,6 +450,8 @@ Auto modes do not remove stop conditions. Stop and ask when:
 - directory-level `AGENTS.md` creation/update is recommended
 - Complex Artifact Mode detail directories (`tasks/`, `tests/`, `plans/`) would be created or the feature would switch from simple to complex artifact mode
 - the work would require first-version exclusions
+- Feature Monthly Archive or rehydrate is requested; scan may remain read-only, but exact plan SHA-256 confirmation is required before apply
+- an archive row target is missing, an archived directory lacks a row, a flat/month Feature ID collides, a `rehydrated` row points to a month path, an incomplete `.archive-txn` exists, or verified apply leaves an old durable path
 - TDD cannot be followed or verification repeatedly fails
 - review finds behavior/scope/architecture changes
 - subagents are needed but not yet approved

@@ -14,6 +14,8 @@ human source requirement -> requirements archive/reference -> spec Source Requir
 
 Never silently modify, rewrite, summarize over, or replace original human requirements.
 
+Feature Monthly Archive preserves the stable Feature ID when a completed implementation directory moves between flat and month archive paths. Requirement `Feature Mapping`, `Implemented By`, and lifecycle-owned README/index locators may update to the Human-reviewed current path, but original human requirement source files remain byte-stable. `features/archive.md` is only a locator and never becomes requirement or implementation authority.
+
 `.agent-loop/requirements/` is canonical. Do not create or maintain legacy `inputs/` archives in current-version projects.
 
 ## Requirement Lifecycle / Backlog

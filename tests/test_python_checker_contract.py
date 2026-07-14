@@ -20,6 +20,13 @@ CHECKERS = (
     "scripts/check-adr-requirement-model-trace.py",
 )
 
+ARCHIVE_COMMANDS = (
+    "scripts/scan-feature-monthly-archive.py",
+    "scripts/check-feature-monthly-archive.py",
+    "scripts/apply-feature-monthly-archive.py",
+    "scripts/restore-feature-monthly-archive.py",
+)
+
 WORKFLOW = ROOT / ".github/workflows/cross-platform-checkers.yml"
 
 COMPATIBILITY_ENTRIES = {
@@ -54,8 +61,13 @@ class PythonCheckerContractTests(unittest.TestCase):
             with self.subTest(relative=relative):
                 self.assertTrue((ROOT / relative).is_file(), relative)
 
+    def test_archive_command_files_exist(self) -> None:
+        for relative in ARCHIVE_COMMANDS:
+            with self.subTest(relative=relative):
+                self.assertTrue((ROOT / relative).is_file(), relative)
+
     def test_canonical_checkers_use_only_stdlib_and_local_support(self) -> None:
-        allowed_local = {"checker_support"}
+        allowed_local = {"checker_support", "feature_archive_support"}
         for relative in CHECKERS:
             path = ROOT / relative
             tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
@@ -68,8 +80,30 @@ class PythonCheckerContractTests(unittest.TestCase):
             external = imported - set(sys.stdlib_module_names) - allowed_local
             self.assertEqual(external, set(), f"{relative}: {sorted(external)}")
 
+    def test_archive_commands_use_only_stdlib_and_local_support(self) -> None:
+        allowed_local = {"checker_support", "feature_archive_support"}
+        for relative in ARCHIVE_COMMANDS:
+            path = ROOT / relative
+            self.assertTrue(path.is_file(), relative)
+            tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+            imported: set[str] = set()
+            for node in ast.walk(tree):
+                if isinstance(node, ast.Import):
+                    imported.update(alias.name.split(".", 1)[0] for alias in node.names)
+                elif isinstance(node, ast.ImportFrom) and node.module:
+                    imported.add(node.module.split(".", 1)[0])
+            external = imported - set(sys.stdlib_module_names) - allowed_local
+            self.assertEqual(external, set(), f"{relative}: {sorted(external)}")
+
     def test_missing_arguments_fail_with_usage_exit_two(self) -> None:
         for relative in CHECKERS:
+            with self.subTest(relative=relative):
+                result = run_checker(relative)
+                self.assertEqual(result.returncode, 2, combined_output(result))
+                self.assertIn("usage", combined_output(result).lower())
+
+    def test_archive_commands_missing_arguments_fail_with_usage_exit_two(self) -> None:
+        for relative in ARCHIVE_COMMANDS:
             with self.subTest(relative=relative):
                 result = run_checker(relative)
                 self.assertEqual(result.returncode, 2, combined_output(result))
@@ -98,6 +132,18 @@ class PythonCheckerContractTests(unittest.TestCase):
                 }
                 self.assertIn("require_supported_python", calls)
 
+        for relative in ARCHIVE_COMMANDS:
+            with self.subTest(relative=relative):
+                path = ROOT / relative
+                self.assertTrue(path.is_file(), relative)
+                tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+                calls = {
+                    node.func.id
+                    for node in ast.walk(tree)
+                    if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+                }
+                self.assertIn("require_supported_python", calls)
+
     def test_cross_platform_ci_runs_the_native_suite(self) -> None:
         self.assertTrue(WORKFLOW.is_file(), str(WORKFLOW))
         content = WORKFLOW.read_text(encoding="utf-8")
@@ -111,6 +157,11 @@ class PythonCheckerContractTests(unittest.TestCase):
             "tests.test_onboarding_core_flow_coverage",
             "tests.test_concept_foundation_trace",
             "tests.test_adr_requirement_model_trace",
+            "tests.test_feature_archive_support",
+            "tests.test_feature_monthly_archive_scan",
+            "tests.test_feature_monthly_archive_apply",
+            "tests.test_feature_monthly_archive_restore",
+            *ARCHIVE_COMMANDS,
         ):
             with self.subTest(required=required):
                 self.assertIn(required, content)

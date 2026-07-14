@@ -259,6 +259,33 @@ Feature Follow-up / Flow-back 默认看最近 30 天，但这不是硬限制。�
 
 低信息错误，比如 “500 / 白屏 / unknown error”，不应该随便归到最近 feature；Agent 应先建议 investigate-first。
 
+### 我想按月份归档已经关闭的 feature
+
+Feature Monthly Archive 只整理目录位置，不压缩或删除 feature 内容，也不会自动提交。一次正常交互是：
+
+```text
+Human: 把 2026 年 5 月和 6 月已经关闭的 feature 按月份归档。
+Agent: 运行只读 scan，展示 plan SHA-256、eligible/blocked 行、目录移动、引用影响、不变内容和恢复范围。
+Human: 确认这个精确批次及其 plan SHA-256。
+Agent: 执行整目录移动和精确引用更新，完成 post-check，报告 transaction evidence，不自动 commit。
+```
+
+只有 `closed` 且关闭证据、Archive Readiness、drift、project memory 和 open follow-up 检查完整的 feature 才能进入候选。`active`、`blocked`、`paused`、当前月或存在不安全引用的 feature 保持 flat 并被阻断。归档结果是 `.agent-loop/features/YYYY-MM/<feature-id>/`，根级 `.agent-loop/features/archive.md` 只负责按稳定 Feature ID 定位当前位置；原 feature 文档、需求源和 accepted decisions 仍然是事实权威。
+
+如果归档后的 feature 要重新进入 Follow-up / Flow-back，Agent 先运行只读 rehydrate scan 并展示新的 plan SHA-256；你必须通过一个独立的 rehydrate Human Gate。确认后 Agent 才把完整目录移回 `.agent-loop/features/<feature-id>/` 并复验。rehydrate 不会自行把 `spec.md` 从 `closed` 改为 `active`，后续 reopen 仍归 Feature Follow-up 管理。
+
+原生 Python 3.10+ 调用示例：
+
+```text
+# macOS：只读生成计划
+python3 scripts/scan-feature-monthly-archive.py --project-root <project> --operation archive --month 2026-05 --month 2026-06 --as-of 2026-07-14
+
+# Windows PowerShell：只读生成计划
+py -3 scripts\scan-feature-monthly-archive.py --project-root <project> --operation archive --month 2026-05 --month 2026-06 --as-of 2026-07-14
+```
+
+真正 apply 还必须提供刚刚经人类确认的 `--expected-plan-sha256`；不能使用 `--force` 绕过 stale-plan、引用阻断、transaction journal、恢复或 post-check。
+
 ### 我想同步 AGENTS.md
 
 | 你可以这样说 | Agent 应该怎么做 |

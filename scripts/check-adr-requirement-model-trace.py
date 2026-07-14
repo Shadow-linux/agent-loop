@@ -6,7 +6,7 @@ import re
 import sys
 from collections import Counter
 from datetime import date
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 from checker_support import (
     CheckFailure,
@@ -18,11 +18,15 @@ from checker_support import (
     section,
     table,
 )
+from feature_archive_support import ArchiveContractError, resolve_feature_location
 
 
 MODEL_ID_PATTERN = re.compile(r"(?:REL|PERM|CMD|EVT|FLOW|STATE|PM|EX)-[A-Z0-9-]+")
 CONCEPT_ID_PATTERN = re.compile(r"C-[A-Z0-9-]+")
 SLICE_ID_PATTERN = re.compile(r"DS-[A-Z0-9-]+")
+FEATURE_SPEC_RE = re.compile(
+    r"(?:^|/)features/(?:(?P<month>\d{4}-\d{2})/)?(?P<feature_id>[^/]+)/spec\.md$"
+)
 
 REQUIRED_GATE_ITEMS = (
     "Effective Concept Source resolves and matches the reviewed source",
@@ -152,14 +156,39 @@ def validate_decision_reference(
 def validate_feature_reference(value: str, workspace_root: Path, context: str) -> None:
     planned = normalized(value).startswith("planned:")
     relative = markdown_path(value)
-    if not relative or not re.search(r"(?:^|/)features/[^/]+/spec\.md$", relative):
+    match = FEATURE_SPEC_RE.search(relative or "")
+    if not relative or not match:
         raise TraceError(f"{context} must name a Feature Spec path")
+    month = match.group("month")
+    feature_id = match.group("feature_id")
     absolute = confined_path(workspace_root, relative)
     if planned:
+        if month is not None:
+            raise TraceError(f"{context} planned Feature Spec path must be flat")
         return
     content = read_artifact(absolute)
-    if metadata(content, "Status") not in {"proposed", "accepted"}:
-        raise TraceError(f"{context} Feature Spec must be proposed or accepted")
+    if metadata(content, "Status") not in {"proposed", "accepted", "closed"}:
+        raise TraceError(
+            f"{context} Feature Spec must be proposed, accepted, or closed"
+        )
+    if month is None:
+        return
+
+    parts = PurePosixPath(relative).parts
+    features_at = parts.index("features")
+    if features_at and parts[features_at - 1] in {".agent-loop", "agent-loop"}:
+        memory_root = workspace_root.joinpath(*parts[:features_at])
+    else:
+        memory_root = workspace_root
+    try:
+        location = resolve_feature_location(memory_root, feature_id)
+    except ArchiveContractError as error:
+        raise TraceError(str(error)) from error
+    expected = f"features/{month}/{feature_id}"
+    if location.layout != "archived" or location.relative_path != expected:
+        raise TraceError(
+            f"{context} archive-index does not locate archived Feature Spec: {relative}"
+        )
 
 
 def validate_human_review(decision: str, decision_status: str) -> None:

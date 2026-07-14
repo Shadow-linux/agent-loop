@@ -95,6 +95,9 @@ Message Intent → Chat And Requirements Discussion if needed
       feedback.*                        # optional source file when provided
       notes.*                           # optional source file when provided
   features/
+    archive.md                         # locator for archived/rehydrated Feature IDs; not product authority
+    YYYY-MM/                           # Human-gated directory archive for eligible closed features
+      YYYY-MM-DD-<feature-slug>/       # complete feature directory moved intact
     YYYY-MM-DD-<feature-slug>/
       product.md    (optional)
       spec.md
@@ -109,6 +112,8 @@ Message Intent → Chat And Requirements Discussion if needed
       handoffs/     (optional subagent briefs and returns)
       contracts/    (optional contract details)
 ```
+
+Feature Monthly Archive keeps current work flat and moves only eligible, human-confirmed closed feature directories into their matching month bucket. It is location/index compaction, not content compression or deletion: the feature directory remains intact, while `features/archive.md` records the stable Feature ID and current path. Archive and rehydrate each require a read-only deterministic plan, the exact reviewed SHA-256, a separate Human Gate, transaction recovery, and post-check.
 
 New target projects use `.agent-loop/` by default. Existing visible `agent-loop/` roots remain readable as legacy memory and should be migrated only after human confirmation.
 
