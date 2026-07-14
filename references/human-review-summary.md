@@ -17,6 +17,8 @@ risk / blocker / human decision = never hidden
 
 Use before human confirmation for:
 
+- Concept Foundation acceptance
+- Decision & Design record creation, acceptance, compatibility update, or superseding decision
 - Project Entry / Project Entry Scan
 - legacy onboarding-db reference cleanup
 - Remote Project Discovery
@@ -89,6 +91,55 @@ Use Batch Human Review for:
 High-confidence rows can be drafted, but cannot become reviewed or written as accepted long-term fact without human confirmation.
 
 ## Stage Table Patterns
+
+### Concept Foundation Approval
+
+Use after the one-question-per-turn Human Grill Contract has resolved each blocker and before changing a triggered foundation to `accepted`.
+
+| Concept ID | Recommended Definition | Identity / Lifecycle Boundary | Relationship / State Impact | Evidence | Open Conflict | Human Decision |
+|---|---|---|---|---|---|---|
+|  |  |  |  |  | none / blocking | accept / revise / keep candidate |
+
+Add:
+
+```text
+Effective Concept Source:
+Requirement Product Model derivation authorized: yes | no
+Artifacts to write/update:
+Recommended next stage: continue Requirements Discussion | Requirement Archive
+```
+
+This summary is cumulative confirmation of the current concept baseline. It does not replace the strict one-question-per-turn Grill used to resolve blocking meanings, and it does not accept implementation, create an ADR, archive files, or start a feature.
+
+### Decision & Design Approval
+
+Use before creating, accepting, superseding, or materially updating a project / cross-feature Decision & Design record.
+
+| Item | Review Content |
+|---|---|
+| Effective Requirement Source | effective source path, Concept Foundation status, Last Compatibility Check, and `current` / `review-required` |
+| Requirement Model Scope | source total / in-scope / existing-decision / feature-local / proposed-decision / not-applicable / missing |
+| Requirement Model Coverage | in-scope total / landed / existing-decision / feature-local / not-applicable / missing |
+| Chosen Technical Decision | chosen option and the main rejected alternatives |
+| Product Semantics Preserved | yes / no; list any product blocker that must return to Requirements Discussion |
+| Migration / Compatibility / Rollout | triggered / not-triggered for each concern, with reason or linked section |
+| Design Slice Ownership | planned / unassigned / deferred / out-of-scope, including affected Feature Specs |
+| Verification | proof direction for every landed row and accepted-decision dependency |
+| Human Decision | accept / revise / return to Requirements Discussion / require superseding ADR |
+
+Add:
+
+```text
+ADR path:
+Effective Concept Source:
+Upstream Compatibility: current | review-required
+Artifacts to write/update:
+Recommended next stage: Decision & Design If Needed | Feature Spec | Requirements Discussion
+```
+
+The summary must expose `not-applicable`, `feature-local`, deferred, out-of-scope, missing, and compatibility-review items. ADR acceptance still requires explicit human confirmation; the summary does not replace the complete decision record or authorize a changed accepted decision to be rewritten in place.
+
+Before showing this summary, keep the ADR `proposed` and run structural preflight. If the human accepts, record `Decision: accepted`, `Confirmed By`, `Confirmed At`, and concrete `Evidence` in the ADR Human Review Evidence section, then rerun accepted-mode validation. Never infer acceptance from a validator pass or from the summary being displayed.
 
 ### Feature Spec Approval
 
@@ -182,6 +233,24 @@ If subagent scan results conflict, include:
 
 | Conflict | Finding A | Finding B | Evidence A | Evidence B | Current Judgment | Action |
 |---|---|---|---|---|---|---|
+
+### Feature Monthly Archive Batch Human Review
+
+| Item | Summary | Evidence / Exact Value | Human Decision |
+|---|---|---|---|
+| Operation | archive / rehydrate |  | confirm / revise |
+| Plan SHA-256 | expected exact hash |  | confirm exact batch |
+| Selected Months / Feature IDs | explicit scope |  | confirm / revise |
+| Eligible | closed and complete |  | include / exclude |
+| Blocked | candidate plus blocker |  | acknowledge / resolve |
+| Moves | source -> target |  | confirm |
+| Reference Edits | path, old/new, occurrence, before/after hash |  | confirm |
+| Unchanged Content | whole feature contents and immutable requirement sources |  | acknowledge |
+| Transaction Journal / Restore | journal path, backups, reverse moves, post-check |  | acknowledge |
+| Platform evidence | macOS / Windows actual or test-defined |  | acknowledge |
+| Decision | apply exact hash / revise / stop |  | human only |
+
+The scan is read-only. The Batch Human Gate authorizes only the displayed expected plan SHA-256; a stale plan requires a new scan and review. Feature Monthly Archive maintains `features/archive.md`; rehydrate before reopened execution.
 
 ### Feature Completion Check
 

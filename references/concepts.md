@@ -35,6 +35,14 @@ First version excludes:
 
 **Feature**: One behavior-changing work area under `.agent-loop/features/<feature-id>/`. A feature can contain many stories and many tasks.
 
+**Feature Monthly Archive**: Explicit closed-history maintenance that moves an eligible whole feature directory intact to `.agent-loop/features/YYYY-MM/<feature-id>/`, maintains root `features/archive.md`, updates only approved references, and uses a deterministic plan hash, Batch Human Gate, transaction journal, post-check, and restore.
+
+**Feature Locator**: The `features/archive.md` row that maps a stable Feature ID to its current flat or archived path. It is not the authority for feature behavior or delivery evidence.
+
+**Archive State**: `archived | rehydrated`; archive state is not feature lifecycle.
+
+**Rehydrate**: Human-gated movement of an archived closed feature back to its flat path before Feature Follow-up may reopen it for execution.
+
 **Feature Type**: Feature work can be `normal`, `maintenance-fix`, or `follow-up`. The file layout stays the same for all types.
 
 **Maintenance Fix**: A narrow feature used when a bugfix or internal correction has no clear owning recent feature and does not create a new user capability. It is not a workflow bypass and not a separate directory system. It still uses `.agent-loop/features/YYYY-MM-DD-fix-<slug>/` with `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`, verification, review, drift check, project memory update when needed, and close.

@@ -6,7 +6,7 @@ The agent is responsible for steering the workflow. Do not wait for the human to
 
 Guidance language should follow this project's language preference. Keep stable artifact names, stage names, and file paths in English, such as `agent-loop`, `Requirement Archive`, `Feature Spec`, `Feature Auto-Loop`, `Task Auto-Run`, `project.md`, and `requirements/`.
 
-<!-- agent-loop:managed-start section:bootstrap source:.agent-loop/project.md block-version:1.2.4-20260711.3 -->
+<!-- agent-loop:managed-start section:bootstrap source:.agent-loop/project.md block-version:1.3.0-20260714.1 -->
 ## Bootstrap Protocol
 
 Before development work:
@@ -24,12 +24,13 @@ Before development work:
 10. If recent development bypassed `agent-loop`, route to Re-Adopt Agent Loop Project before new feature work.
 11. Operational Support Guard: if the human asks to test, run, deploy, switch account/config/model/provider, check quota/rate limits, diagnose production, arrange rollout, or use existing code to solve an operational problem, default to read-only code/process analysis. Do not create a feature, edit code, change config, deploy, or run destructive commands unless the human confirms feature implementation or an operational change. If unclear, ask whether they want feature implementation or help using current project functionality.
 12. If the human reports a bug, regression, post-close correction, field/schema/algorithm/API change, test failure, screenshot issue, QA/user feedback, or "small tweak", route to Feature Follow-up / Flow-back before creating a new feature or editing code, but only after project memory exists or Project Entry has routed through Init Project / Project Entry Scan.
+12a. If the human explicitly requests closed feature archive/rehydrate maintenance, classify `feature-archive-maintenance`, require reliable memory, and run the read-only Feature Monthly Archive scan. Stop at the exact plan SHA-256 Batch Human Gate before apply; auto modes do not authorize archive or rehydrate.
 13. Run Stage Helper Capability Scan for the current stage only after the `agent-loop` controller is active or unavailable/load-failed: inspect whether the current Agent CLI exposes Superpowers or other helper skills/plugins before using fallback stage guidance.
 14. Check for the nearest directory-level `AGENTS.md` when working in a subdirectory.
 15. Classify the current `agent-loop` stage and recommend exactly one next action.
 <!-- agent-loop:managed-end section:bootstrap -->
 
-<!-- agent-loop:managed-start section:ownership source:.agent-loop/project.md block-version:1.2.4-20260711.3 -->
+<!-- agent-loop:managed-start section:ownership source:.agent-loop/project.md block-version:1.3.0-20260714.1 -->
 ## Agent Ownership
 
 - Own workflow diagnosis, sequencing, implementation, verification, review, drift checks, and project-memory updates.
@@ -43,14 +44,15 @@ Before development work:
 - For non-trivial confirmations, present a table-first Human Review Summary before asking approval.
 <!-- agent-loop:managed-end section:ownership -->
 
-<!-- agent-loop:managed-start section:message-intent source:agent-loop-skill block-version:1.2.4-20260711.3 -->
+<!-- agent-loop:managed-start section:message-intent source:agent-loop-skill block-version:1.3.0-20260714.1 -->
 ## Message Intent Guard
 
 Before project-state routing, classify the latest human message intent.
 
 - `chat`: ordinary discussion, rule questions, status questions, or design talk. Answer or discuss only; do not create requirement sets, feature workspaces, tasks, tests, or plans.
-- `requirements-discussion`: the human is exploring product needs, business goals, capability ideas, constraints, tradeoffs, or user scenarios without authorizing implementation. Requirements discussion must shape demand through Brainstorm / Clarify into a human-reviewed requirement document under `.agent-loop/requirements/` before feature construction.
+- `requirements-discussion`: the human is exploring product needs, business goals, capability ideas, constraints, tradeoffs, or user scenarios without authorizing implementation. Requirements discussion must shape demand through Brainstorm / Clarify into a human-reviewed requirement document under `.agent-loop/requirements/` before feature construction. When product concept identity, lifecycle, relationship, state, ownership, or fact meaning can change downstream models, use the internal Concept Foundation Gate before flow/state/product-data modeling.
 - `project-skill-management`: the human asks to turn a repeatable project workflow into a project-local skill, or to update, disable, or deprecate one. Route to Project Skill Creation / Update after reliable Project Entry/memory.
+- `feature-archive-maintenance`: the human explicitly asks to archive closed feature directories by month or rehydrate archived history. Route to Feature Monthly Archive after reliable memory; scan is read-only.
 - `feature-request`: the human explicitly asks to implement, build, change behavior, or start work from accepted requirements. Route through normal agent-loop feature workflow.
 
 Message intent is not permanent. If chat turns into product demand, reclassify as requirements-discussion. If chat turns into a proposal/design-note request, reclassify as `proposal-doc`. If chat turns into implementation, operational support, follow-up, deferred work, or project-skill management, reclassify and route accordingly. If the human explicitly wants discussion without documentation, keep `chat`.
@@ -58,10 +60,10 @@ Message intent is not permanent. If chat turns into product demand, reclassify a
 If unclear whether the human wants chat or requirements discussion, ask whether to keep discussing or shape the topic into a requirements document. If unclear whether the human wants requirements discussion or implementation, ask whether to form a requirements document first or start feature construction.
 <!-- agent-loop:managed-end section:message-intent -->
 
-<!-- agent-loop:managed-start section:workflow-stage-map source:agent-loop-skill block-version:1.2.4-20260711.3 -->
+<!-- agent-loop:managed-start section:workflow-stage-map source:agent-loop-skill block-version:1.3.0-20260714.1 -->
 ## Workflow Stage Map
 
-Use this after Bootstrap Protocol and Message Intent Guard. Select exactly one next stage from the current human signal and project state. When multiple signals match, apply this first-match order: Safety Stop -> Remote Discovery -> Memory Recovery -> Active Feature Guard -> Blocker Resolution -> Intent Routing -> Normal Stage Continuation. After selecting a stage, load the matching `references/...` file from the `agent-loop` skill package before acting. This map is navigation only; do not treat root `AGENTS.md` as the detailed stage procedure.
+Use this after Bootstrap Protocol and Message Intent Guard. Select exactly one next stage from the current human signal and project state. When multiple signals match, apply this first-match order: Safety Stop -> Remote Discovery -> Memory Recovery -> Feature Archive Maintenance -> Active Feature Guard -> Blocker Resolution -> Intent Routing -> Normal Stage Continuation. After selecting a stage, load the matching `references/...` file from the `agent-loop` skill package before acting. This map is navigation only; do not treat root `AGENTS.md` as the detailed stage procedure.
 
 | Signal | Next Stage | Load From agent-loop Skill |
 |---|---|---|
@@ -69,8 +71,9 @@ Use this after Bootstrap Protocol and Message Intent Guard. Select exactly one n
 | No reliable `.agent-loop/` memory and meaningful existing code | Project Entry Scan | `references/project-entry-scan.md`, `references/project-guidance.md` |
 | Human or local evidence says the source of truth is remote, SSH, container, tunnel, or devcontainer | Remote Project Discovery | `references/remote-project-discovery.md` |
 | Existing memory conflicts with code reality, or work bypassed the loop | Re-Adopt Agent Loop Project | `references/recovery-and-backfill.md` |
+| Human explicitly requests historical closed feature archive or rehydrate | Feature Monthly Archive | `references/stage-guides.md`, `references/artifact-rules.md`, `references/feature-follow-up.md` |
 | Human asks to turn a repeatable workflow into a project-local skill, or manage an existing one | Project Skill Creation / Update | `references/project-skills.md`, `references/skill-routing.md`, `references/external-skill-adapters.md` |
-| Product need, business goal, scope, constraint, scenario, or phased delivery is still being shaped | Requirements Discussion | `references/requirement-management.md`; also `references/requirement-product-grill.md` when terminology, roles, flows, exceptions, prior behavior, or decision signals are unclear |
+| Product need, business goal, scope, constraint, scenario, concept identity/lifecycle, or phased delivery is still being shaped | Requirements Discussion | `references/requirement-management.md`; also `references/requirement-product-grill.md` for Concept Foundation, terminology, roles, flows, exceptions, prior behavior, or decision signals |
 | Human confirms recording, accepting, or deferring a requirement source | Requirement Archive | `references/requirement-management.md`, `references/stage-guides.md` |
 | Human requests durable newcomer docs after Project Entry or reliable memory exists | Evidence-Graph + DDD Onboarding | `references/onboarding-knowledge-base.md` |
 | Accepted requirement needs shared business-flow, domain, data, architecture, reliability, performance, security, or cross-feature design before feature specification | Decision & Design If Needed | `references/project-decisions.md` |
@@ -99,28 +102,32 @@ Use this after Bootstrap Protocol and Message Intent Guard. Select exactly one n
 | Ordinary question or discussion has no artifact or implementation intent | Chat Entry | `references/runtime.md` only when intent is unclear; otherwise answer without creating workflow artifacts |
 <!-- agent-loop:managed-end section:workflow-stage-map -->
 
-<!-- agent-loop:managed-start section:gates source:.agent-loop/project.md block-version:1.2.4-20260711.3 -->
+<!-- agent-loop:managed-start section:gates source:.agent-loop/project.md block-version:1.3.0-20260714.1 -->
 ## Gate Modes
 
 - Strict Mode is the default: ask before and after every stage.
 - Feature Auto-Loop is allowed only after a passed Requirement Checklist, accepted Feature Spec, and explicit human enablement. It may continue Agent-ready downstream stages through implementation, testing, fixing, review, drift, status update, and final report.
 - Task Auto-Run is allowed only after an accepted task/story plan and explicit human enablement. It runs Analyze Consistency before executing that task/story through TDD, implementation, verification, bug fixing, review, drift check, task status update, and final report.
 - Auto modes never authorize Project Skill Creation / Update or execution. Gate 1 is required before skill files; the Execution Gate is required for each invocation. A named-skill/concrete-scope request satisfies it only when the emitted execution summary adds no undisclosed action or effect.
+- Auto modes never authorize Feature Monthly Archive or rehydrate. Only the read-only scan may run before the exact plan SHA-256 Batch Human Gate.
 - If repeated confirmations slow the human down, proactively explain Feature Auto-Loop and Task Auto-Run, then ask before enabling either mode.
 <!-- agent-loop:managed-end section:gates -->
 
-<!-- agent-loop:managed-start section:required-stops source:.agent-loop/project.md block-version:1.2.4-20260711.3 -->
+<!-- agent-loop:managed-start section:required-stops source:.agent-loop/project.md block-version:1.3.0-20260714.1 -->
 ## Required Stops
 
 Stop and ask when:
 
 - scope changes or requirements are ambiguous
+- an unresolved Concept Foundation remains `candidate` / `reopened`, or a downstream product/feature artifact would redefine accepted product semantics
+- a requirement-driven ADR has an unresolved Effective Requirement Snapshot, incomplete source-wide Requirement Model Scope Inventory / Technical Landing Trace, or `Upstream Compatibility: review-required`
 - product, design, architecture, security, data, approval, or public-interface decisions are unclear
 - a stage would modify human original requirements
 - tests require unavailable infrastructure
 - drift check needs human approval
 - security/data boundaries or broad architecture would change
 - repeated verification fails
+- Feature Monthly Archive has a stale/unconfirmed plan, unsupported reference, flat/month collision, missing locator target, incomplete `.archive-txn`, or would rely on manual directory movement
 - unrelated dirty work blocks progress
 - a new dependency, migration, destructive operation, credential, external service, or long-lived boundary directory is needed
 - Complex Artifact Mode detail directories (`tasks/`, `tests/`, `plans/`) would be created or the feature would switch from simple to complex artifact mode
@@ -136,7 +143,7 @@ Stop and ask when:
 Auto modes do not bypass these stops.
 <!-- agent-loop:managed-end section:required-stops -->
 
-<!-- agent-loop:managed-start section:completion source:.agent-loop/project.md block-version:1.2.4-20260711.3 -->
+<!-- agent-loop:managed-start section:completion source:.agent-loop/project.md block-version:1.3.0-20260714.1 -->
 ## Completion Rules
 
 - Before completion claims, run fresh verification and record evidence.
@@ -146,9 +153,10 @@ Auto modes do not bypass these stops.
 - Before recommending or performing feature close, run Feature Close Review, drift check, and project memory update when long-term facts changed.
 - Feature Close Review requires feature-level Spec Review. Standards Review is required for large projects, broad diffs, boundary/security/data changes, architecture changes, or human request.
 - When a feature references accepted Decision & Design records, Feature Close Review and Feature Completion Check must verify assigned design slices and evidence; divergence returns to Decision & Design / Drift Check before close.
+- For requirement-driven ADRs, completion also requires source-wide scope accounting, current upstream compatibility, and Requirement Model Technical Landing Trace coverage for every assigned Design Slice.
 <!-- agent-loop:managed-end section:completion -->
 
-<!-- agent-loop:managed-start section:submit source:.agent-loop/project.md block-version:1.2.4-20260711.3 -->
+<!-- agent-loop:managed-start section:submit source:.agent-loop/project.md block-version:1.3.0-20260714.1 -->
 ## Submit And Commit Rules
 
 - Submit, commit, PR, merge, release, and publish require explicit human confirmation after diff, verification, review, drift, and unrelated-change checks.
@@ -160,28 +168,31 @@ Auto modes do not bypass these stops.
 - For the `agent-loop` skill repository itself, use `<type>(v<version>): <Chinese summary>` and a 3-7 bullet body for meaningful commits.
 <!-- agent-loop:managed-end section:submit -->
 
-<!-- agent-loop:managed-start section:artifacts source:.agent-loop/project.md block-version:1.2.4-20260711.3 -->
+<!-- agent-loop:managed-start section:artifacts source:.agent-loop/project.md block-version:1.3.0-20260714.1 -->
 ## Project Memory And Artifacts
 
 - Resolve project-memory and feature paths relative to the active memory root: `.agent-loop/` by default, or legacy `agent-loop/` for the current run.
 - Keep task status, execution evidence, feature notes, and project memory inside `.agent-loop/`.
 - Keep long-term project memory in `.agent-loop/project.md` or enterprise `.agent-loop/project/*.md`. Root `AGENTS.md` should only summarize startup-critical facts that every Agent CLI needs immediately.
 - Keep original human materials in requirement set directories under `.agent-loop/requirements/`, or reference original paths when the human declines copying.
+- Keep accepted Concept Foundation and Requirement Product Model detail in the effective human-reviewed requirement source named by the requirement README. After archive, preserve prior sources and record confirmed semantic changes in an append-only Concept Foundation follow-up or a new requirement set. Feature `product.md` and `spec.md` cite accepted Concept/Model IDs and `Effective Concept Source` instead of redefining product identity, lifecycle, relationships, invariants, states, or fact meaning.
+- Keep the Effective Requirement Snapshot, source-wide Requirement Model Scope Inventory, Requirement Model Technical Landing Trace, coverage evidence, compatibility judgment, Human Review Evidence, and triggered operational landing inside the existing Human-gated ADR; do not create a default mapping artifact or let ADR redefine product semantics.
 - Do not create new flat files directly under `.agent-loop/requirements/`; group requirements, prototypes, feedback, screenshots, recordings, links, and follow-up notes for the same intake/topic together.
 - For complex requirements, suggest `Delivery Phases` in the requirement set `README.md` before feature construction when the human needs to confirm staged delivery. A phase is a human-readable delivery slice, not a feature workspace, task, or plan.
 - Future/deferred work and backlog items belong in requirement sets and optional `requirements/INDEX.md`, not in `project.md`. Do not edit `requirement.md` or other source files for lifecycle/status updates.
 - Keep durable producer-consumer interface handoffs in feature `contracts.md` and optional `contracts/` details. Keep temporary subagent assignments in `handoffs/`.
+- Keep stable Feature IDs and archive location history in root `.agent-loop/features/archive.md`. Archive state is not feature lifecycle; active / blocked / paused features stay flat, and an archived owner must rehydrate before reopened execution.
 - Keep project-local reusable capabilities in `.agent-loop/skills/INDEX.md` and `.agent-loop/skills/<skill-name>/`; only active skills may load, and every invocation remains Human-gated.
 - Do not write task logs, feature progress, raw requirements, temporary plans, or test transcripts into `AGENTS.md`.
 <!-- agent-loop:managed-end section:artifacts -->
 
-<!-- agent-loop:managed-start section:architecture source:.agent-loop/project.md block-version:1.2.4-20260711.3 -->
+<!-- agent-loop:managed-start section:architecture source:.agent-loop/project.md block-version:1.3.0-20260714.1 -->
 ## Architecture Snapshot
 
 Add only startup-critical architecture boundaries that every future agent must know immediately. If the project has `ARCHITECTURE.md`, this block may use `source:ARCHITECTURE.md` instead. Keep details in `ARCHITECTURE.md`, `.agent-loop/project.md`, or enterprise `.agent-loop/project/*.md`.
 <!-- agent-loop:managed-end section:architecture -->
 
-<!-- agent-loop:managed-start section:directory-guidance source:.agent-loop/project.md block-version:1.2.4-20260711.3 -->
+<!-- agent-loop:managed-start section:directory-guidance source:.agent-loop/project.md block-version:1.3.0-20260714.1 -->
 ## Directory Guidance
 
 - Directory-level `AGENTS.md` files are for long-lived boundary rules only.
@@ -189,7 +200,7 @@ Add only startup-critical architecture boundaries that every future agent must k
 - Do not create directory-level `AGENTS.md` for ordinary component, utility, temporary, or feature implementation folders.
 <!-- agent-loop:managed-end section:directory-guidance -->
 
-<!-- agent-loop:managed-start section:commands source:.agent-loop/project.md block-version:1.2.4-20260711.3 -->
+<!-- agent-loop:managed-start section:commands source:.agent-loop/project.md block-version:1.3.0-20260714.1 -->
 ## Project Commands
 
 ```bash
@@ -199,7 +210,7 @@ Add only startup-critical architecture boundaries that every future agent must k
 ```
 <!-- agent-loop:managed-end section:commands -->
 
-<!-- agent-loop:managed-start section:hard-constraints source:.agent-loop/project.md block-version:1.2.4-20260711.3 -->
+<!-- agent-loop:managed-start section:hard-constraints source:.agent-loop/project.md block-version:1.3.0-20260714.1 -->
 ## Project-Specific Hard Constraints
 
 Add only stable constraints that every future agent must know at startup.

@@ -1,6 +1,6 @@
 # Agent Loop
 
-**Current version:** 1.2.4
+**Current version:** 1.3.0
 
 A reusable [Codex](https://github.com/openai/codex) / CLI-agent skill for single-person software development workflows—from goal intake to verified close.
 
@@ -61,6 +61,8 @@ Message Intent → Chat And Requirements Discussion if needed
 | **Project-Local Skill** | A reusable project capability under `.agent-loop/skills/<skill-name>/`. Creation or material update requires Gate 1; successful validation activates it, but every actual invocation still requires a bounded Execution Gate. |
 | **Requirement Lifecycle / Backlog** | Requirement memory for proposed, accepted, deferred, in-progress, partially implemented, implemented, superseded, rejected, or reference-only requirements without using project memory as a backlog. |
 | **Chat And Requirements Discussion** | `chat` answers or discusses without creating artifacts; `requirements-discussion → Brainstorm / Clarify → requirement document → requirements/` before any feature construction. |
+| **Concept Foundation** | Triggered internal Requirements Discussion / Requirement Product Grill method. It stabilizes requirement-local Concept IDs and product meaning before flow, state, and product-data modeling; it is not a canonical stage or top-level artifact. |
+| **Requirement Product Model** | Product-layer relationships, roles/permissions, commands/events, business flow, state, product objects/facts, invariants, and recovery derived from accepted concepts in the human-reviewed requirement document. |
 | **Decision & Design / ADR** | Requirement-landing bridge for shared business flow, domain/data rules, architecture, recovery, and non-functional goals. Design Readiness is required; `.agent-loop/decisions/*.md` is Human-gated and conditionally required only when shared design needs a durable record. |
 | **Delivery Contract** | Optional producer-consumer boundary handoff. Used only when API, event, public data, UI state/behavior, SDK/library, runtime, or explicit cross-agent/human handoff needs a stable contract. |
 
@@ -93,6 +95,9 @@ Message Intent → Chat And Requirements Discussion if needed
       feedback.*                        # optional source file when provided
       notes.*                           # optional source file when provided
   features/
+    archive.md                         # locator for archived/rehydrated Feature IDs; not product authority
+    YYYY-MM/                           # Human-gated directory archive for eligible closed features
+      YYYY-MM-DD-<feature-slug>/       # complete feature directory moved intact
     YYYY-MM-DD-<feature-slug>/
       product.md    (optional)
       spec.md
@@ -107,6 +112,8 @@ Message Intent → Chat And Requirements Discussion if needed
       handoffs/     (optional subagent briefs and returns)
       contracts/    (optional contract details)
 ```
+
+Feature Monthly Archive keeps current work flat and moves only eligible, human-confirmed closed feature directories into their matching month bucket. It is location/index compaction, not content compression or deletion: the feature directory remains intact, while `features/archive.md` records the stable Feature ID and current path. Archive and rehydrate each require a read-only deterministic plan, the exact reviewed SHA-256, a separate Human Gate, transaction recovery, and post-check.
 
 New target projects use `.agent-loop/` by default. Existing visible `agent-loop/` roots remain readable as legacy memory and should be migrated only after human confirmation.
 
@@ -148,7 +155,11 @@ For existing projects, the agent separates safe-entry memory from newcomer learn
 
 > "先帮我梳理这个需求，不要实现。"
 
-For requirement shaping, the agent should enter Requirements Discussion instead of creating a feature workspace. Requirement/Product Grill is the clarification method for fuzzy terminology, business flows, exception paths, prior feature conflicts, source-of-truth questions, and decision signals. It asks one blocking question at a time, includes a recommended answer, and checks relevant project memory, source requirements, docs, code, tests, and prior feature artifacts before asking when those sources may already answer the question.
+For requirement shaping, the agent should enter Requirements Discussion instead of creating a feature workspace. Requirement/Product Grill is the clarification method for fuzzy terminology, business flows, exception paths, prior feature conflicts, source-of-truth questions, and decision signals.
+
+When a complex requirement can change concept identity, lifecycle, relationship, state, ownership, terminal meaning, or product facts, the internal Concept Foundation method triggers. The Agent first checks project/domain evidence, extracts a Concept Candidate Inventory, presents one recommended definition with evidence and accept/reject impact, then asks exactly one blocking question. Until the human confirms the blocking concepts, detailed business flow, product state, and product data modeling stop.
+
+After acceptance, the effective requirement source derives a Requirement Product Model and traceability from stable Concept IDs. Feature `product.md` and `spec.md` record `Effective Concept Source` and reference those accepted IDs/model rows instead of redefining product semantics. If accepted meaning changes after archive, Agent Loop preserves the old source, reopens the gate, writes a human-confirmed append-only follow-up or new requirement set, and advances the requirement README pointer. Simple copy/style/config changes stay lightweight with a concrete `concept-foundation-not-needed` reason. Concept Foundation does not add a canonical stage, ADR, Design Skill, E2E Skill, or executable schema.
 
 Reviewed requirements live under `.agent-loop/requirements/<date>-<topic>/`. If the human later asks to "落到 product.md" from chat or requirements discussion, Product Brief Source Gate applies: the agent first asks whether to create/reference a requirement set or confirm feature start. Feature-level `product.md` is written only after there is a requirement source and confirmed feature context.
 
@@ -161,6 +172,12 @@ Requirement -> Design Readiness Check -> Decision & Design If Needed -> Feature 
 ```
 
 Simple work records `design-not-needed` and can continue without a decision file. Feature-local choices stay in `spec.md` Design Decisions. Review and completion verify that implementation conforms to accepted design slices rather than checking feature stories alone.
+
+For a requirement-driven ADR, the Agent first resolves an Effective Requirement Snapshot from the requirement README and accepted source. A source-wide Requirement Model Scope Inventory accounts for every stable relationship, permission, command/event, flow, state, product-model, and exception ID before the ADR selects its coherent scope. The ADR then gives every in-scope ID one Requirement Model Technical Landing Trace disposition. A `landed` row must name its concrete technical landing, preserved invariant, Design Slice, and verification target; incomplete inventory/coverage or `Upstream Compatibility: review-required` blocks ADR acceptance and dependent Feature Spec, Plan, and implementation work.
+
+The ADR remains `proposed` while structural preflight runs. A passing validator authorizes review, not acceptance. Only explicit Decision & Design human acceptance permits recorded Human Review Evidence and `Status: accepted`, followed by accepted-mode validation. A reasoned `concept-foundation-not-needed` input uses an explicit trace-not-applicable branch without fabricated models. The ADR remains a consumer of product semantics: ambiguity returns to Requirements Discussion, while an incompatible accepted technical decision is preserved and superseded after Human Review instead of being rewritten.
+
+Migration, compatibility, rollout, and rollback detail are operational landing concerns triggered only when the decision changes persistence representation, protocol/provider, runtime boundary, or rollout compatibility. Untriggered concerns keep one concrete reason and do not generate empty default design sections. This enhancement stays inside the existing ADR and adds no canonical stage, mapping artifact, lifecycle status, or executable schema.
 
 ### 4. Start a Feature
 
@@ -183,13 +200,14 @@ Evidence-Graph + DDD Onboarding is the current durable project-understanding flo
 It builds `.agent-loop/onboarding-db/` from verified code evidence into macro-to-micro handoff docs:
 
 - `08-review/evidence-graph.md` before formal docs
-- `onboarding-spec.md` for module/flow coverage, DDD mapping, file strategy, quality gates, and batch plan
+- Core Flow Inventory for business terminals, variants, owners, recovery responsibility, evidence chain, and planned/deferred selection
+- `onboarding-spec.md` for module/flow coverage, Flow Slice Plan, DDD mapping, file strategy, quality gates, and batch plan
 - `onboarding-tasks.md` for accepted batch execution
 - module playbooks under `02-modules/<module-name>.md` by default
 - flow playbooks under `03-flows/<flow-name>.md` by default
 - coverage matrix and reviewed batch records
 
-The agent must first confirm Project Entry Scan or reliable project memory, then build an Evidence Graph and present an Onboarding Spec for human review. Spec acceptance authorizes creation of Onboarding Tasks; formal onboarding docs begin only after the completed Tasks and their separate Full Execution Gate are accepted. Module and flow docs default to single long files, not many small files. Wireframe architecture flow diagrams are the preferred main way to express every module and flow process. The old Quick / Deep / Targeted onboarding modes and directory-first legacy generation flow are not used.
+The agent must first confirm Project Entry Scan or reliable project memory, then build an Evidence Graph with Core Flow Inventory and present an Onboarding Spec for human review. Spec acceptance authorizes creation of Onboarding Tasks; formal onboarding docs begin only after the completed Tasks and their separate Full Execution Gate are accepted. Critical/important flows use Flow Slice Coverage and a completeness gate before quality scoring. Timeline/sequence is the primary per-flow narrative, supported by overview/boundary and state-machine views; extra diagrams are triggered by real recovery, data, transaction, async, decision, runtime, or troubleshooting complexity. Stateless topics do not invent state diagrams. Module and flow docs default to single long files, not many small files. The old Quick / Deep / Targeted onboarding modes and directory-first legacy generation flow are not used.
 
 Existing legacy onboarding-db files may be read as evidence, but they are not trusted without checking code reality. Migration or replacement requires an accepted Onboarding Spec, Onboarding Tasks, and Full Execution Gate.
 

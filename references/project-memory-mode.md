@@ -39,6 +39,7 @@ Recommended layout:
   project.md
   requirements/
   features/
+    archive.md       optional Feature Monthly Archive locator; not project history
 ```
 
 ## Enterprise Mode
@@ -62,7 +63,10 @@ Recommended layout:
     guidance-inventory.md
   requirements/
   features/
+    archive.md       optional Feature Monthly Archive locator; not enterprise memory
 ```
+
+In both modes, `features/archive.md` locates archived or rehydrated stable Feature IDs. Do not copy historical feature bodies, archive rows, or transaction logs into `project.md`; project memory records only current work and durable facts. Active/blocked/paused work stays flat, while closed month archive paths are resolved on demand through the locator.
 
 These files are optional. Create only the files that solve a real navigation or continuity problem.
 

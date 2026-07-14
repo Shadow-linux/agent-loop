@@ -22,10 +22,16 @@ The core constraints are:
 - optional `.agent-loop/skills/` owns Human-gated project-local reusable capabilities; `INDEX.md` owns lifecycle and discovery metadata
 - stable Web E2E capability belongs in `project.md`; feature-specific E2E cases belong in feature `tests.md` or `tests/e2e/*`
 - `requirements/` stores human source material packages and requirement lifecycle/backlog records as requirement set directories: requirements, prototypes, feedback, screenshots, recordings, links, follow-up notes, status, and optional `requirements/INDEX.md`
+- Concept Foundation is an internal Requirements Discussion / Requirement Product Grill method, not a canonical stage; when triggered, it stabilizes requirement-local product concepts before business-flow, state, and product-data modeling
+- the effective human-reviewed requirement source owns accepted Concept Foundation and Requirement Product Model semantics; after archive, requirement README indexes the effective source/status without copying details, and Product Brief / Feature Spec consume those meanings by reference
+- requirement-driven ADRs freeze an Effective Requirement Snapshot, inventory every source Requirement Model ID, and trace every in-scope accepted ID to a disposition, technical landing, Design Slice, and verification without taking ownership of product semantics
+- upstream requirement changes invalidate dependency availability until compatibility review; `review-required` is not a decision lifecycle status, and incompatible accepted decisions are superseded rather than rewritten
 - requirement-set dates mean archive date only, not deadlines or feature lifecycle dates
 - future/deferred work belongs in requirement sets and optional `requirements/INDEX.md`, not in `project.md`
 - `product.md` is optional feature-level product understanding when needed
 - each feature has stable `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`; `contracts.md` is added only after human confirmation when producer-consumer boundaries need explicit handoff
+- Feature Monthly Archive is explicit closed-history maintenance: Feature ID is stable, eligible whole directories move to `features/YYYY-MM/<feature-id>/`, and root `features/archive.md` is only the locator/ledger
+- archive state is not feature lifecycle; active / blocked / paused features stay flat, and archived closed features rehydrate before reopened execution
 - feature type may be `normal`, `maintenance-fix`, or `follow-up`; all use the same feature workspace model
 - maintenance fixes are narrow feature workspaces under `.agent-loop/features/YYYY-MM-DD-fix-<slug>/`, not naked code edits and not a separate `.agent-loop/maintenance/` tree
 - stories live in `spec.md`; optional `tasks/USn/` or `tests/USn/` folders are detail grouping, not separate story workspaces
@@ -48,6 +54,7 @@ Human Goal
 → Execute / Verify
 → Drift Check
 → Feature Follow-up / Flow-back when post-close bug/change appears
+→ Feature Monthly Archive when the human explicitly asks to compact closed-history discovery
 → Project Memory Update
 → Submit / Integrate if requested
 → Resume / Pause / Close
@@ -73,9 +80,27 @@ Behavior Intent
 
 **Requirement**: human-provided need, goal, document, or natural-language request.
 
+**Concept Foundation**: a triggered method inside Requirements Discussion / Requirement Product Grill that derives requirement-local stable Concept IDs, definitions, identity, lifecycle boundaries, relationships, owners, state-bearing classification, invariants, and product fact-source questions from scenarios and evidence. It is not a stage or top-level artifact.
+
+**Requirement Product Model**: the product-layer derivation owned by the effective human-reviewed requirement source. It traces accepted concepts into relationships, roles/permissions, commands/events, business flow, product state, product data objects, invariants, and exception/recovery behavior without choosing tables, stores, protocols, or other technical representations. After archive, append-only follow-ups or a linked replacement set preserve prior sources while README indexes the effective source.
+
+**Effective Requirement Snapshot**: the read-only ADR header that resolves the requirement README's current Effective Concept Foundation pointer and records the accepted source, Concept Foundation status, accepted Concept IDs, accepted Requirement Model IDs, compatibility judgment, and last compatibility check. It does not copy or redefine product meaning.
+
+**Requirement Model Scope Inventory**: the source-wide ADR section that accounts for every stable Requirement Model ID (`REL-*`, `PERM-*`, `CMD-*`, `EVT-*`, `FLOW-*`, `STATE-*`, `PM-*`, and `EX-*`) before declaring the coherent ADR scope. It prevents silent omissions and records external, proposed, feature-local, or reasoned not-applicable ownership without becoming a separate artifact.
+
+**Requirement Model Technical Landing Trace**: the table inside an existing Decision & Design record that gives every in-scope accepted Requirement Model ID one disposition and, when landed by this ADR, connects it to a concrete technical landing, preserved invariant, Design Slice, and verification path. It is not a separate artifact or executable schema.
+
 **Prototype**: human-provided design artifact, screenshot, wireframe, or interaction reference.
 
 **Feature**: one behavior-changing work area under `.agent-loop/features/<feature-id>/`.
+
+**Feature Monthly Archive**: An explicit, Human-gated maintenance capability that moves an eligible closed feature directory intact to `.agent-loop/features/YYYY-MM/<feature-id>/`, updates `features/archive.md` and approved references, post-checks, and restores on failure. The scan is read-only and apply requires the exact expected plan SHA-256 Batch Human Gate plus transaction journal. It creates no per-feature archive summary, no `historical/`, no Deep Archive, and no `--force`.
+
+**Feature Locator**: The root `features/archive.md` mapping from stable Feature ID to current flat or month path. It locates history but does not own product, requirement, decision, lifecycle, test, or delivery facts.
+
+**Archive State**: `archived | rehydrated`. Archive state is not feature lifecycle; lifecycle remains `draft | active | blocked | paused | closed`.
+
+**Rehydrate**: The separately Human-reviewed move from a month path back to the flat feature path. Rehydrate before reopened execution; Feature Follow-up decides any later `closed -> active` lifecycle transition.
 
 **Stories**: user-perspective slices inside a feature. They live in `spec.md`. Use labels such as `US1`, `US2` in `tasks.md`; complex artifact mode may group detail files under `tasks/USn/` or `tests/USn/` without making stories separate workspaces.
 
@@ -246,6 +271,25 @@ Do not create or refresh onboarding-db through the removed legacy flow.
 
 If onboarding-db is missing but project memory or root guidance claims it should exist, route to stale-memory recovery and ask before correcting `project.md` or root guidance. Do not recreate onboarding-db through the removed legacy flow.
 
+#### Core Flow Completeness Invariant
+
+Evidence-Graph + DDD Onboarding must preserve this trace for every `critical` / `important` core flow:
+
+```text
+Core Flow Inventory
+-> accepted Core Flow selection
+-> Flow Slice Coverage
+-> Diagram + narrative + code-evidence trace
+-> Completeness Hard Gate
+-> Quality Score
+```
+
+A core flow is not closed merely because a synchronous call returned. It must trace to its business success, failure, cancellation, unknown, or manual-handling terminals and include any callback, consumer, retry, compensation, reconciliation, or job that owns a required transition, side effect, or recovery responsibility. Reclassifying those required slices as separate future topics does not remove them from the core flow.
+
+A missing critical slice cannot be averaged away by diagram presence, readability, or other topic scores. `supporting` flows remain lightweight unless they own core state, an externally visible side effect, or recovery. Stateless overview, glossary, configuration, and index topics use only diagrams that explain real semantics; they do not invent state machines to satisfy a file-wide quota.
+
+The invariant does not add a Human Gate. Onboarding has exactly two onboarding Human Gates: Onboarding Spec Acceptance, followed later by Onboarding Tasks Full Execution Gate. Completeness is an Agent quality gate inside the accepted scope.
+
 ### Feature Follow-up And Flow-back
 
 Project Entry and memory bootstrap have priority over Feature Follow-up.
@@ -265,6 +309,26 @@ Inspect Active / Paused / Closed features and recent feature docs.
 Use 30 days as the default lookback, not a hard boundary.
 Present Candidate Match Matrix.
 Recommend flow-back, linked new feature, maintenance-fix, or investigate-first.
+Resolve Active/Paused first, flat recent features second, `features/archive.md` third, and archived artifacts fourth. Rehydrate a confirmed archived owner before lifecycle change or execution.
+```
+
+### Feature Monthly Archive
+
+Condition:
+
+```text
+Human explicitly requests archive or rehydrate
+Project memory and feature close evidence are reliable
+```
+
+Action:
+
+```text
+Run read-only scan and show one deterministic Batch Review.
+Wait for confirmation of the exact plan SHA-256.
+Apply only eligible moves through the transaction journal.
+Update the root locator and approved references, then post-check.
+Restore on failure; route a stranded journal to Recovery.
 ```
 
 ### Active Feature Continuation
@@ -323,10 +387,37 @@ Require the Execution Gate for every invocation.
 
 ## Main Flow
 
+Within Requirements Discussion, triggered complex requirements use this internal semantic order before the canonical stage flow continues:
+
+```text
+Scenario / Evidence
+→ Concept Candidate Inventory
+→ Concept Foundation Human Confirmation
+→ Requirement Product Model
+→ human-reviewed Requirement Document
+```
+
+Simple requirements record `concept-foundation-not-needed` with a reason and remain lightweight. `candidate` and `reopened` are blocking; only `accepted` or a reasoned not-needed result may continue into requirement product modeling.
+
+Within Decision & Design, a requirement-driven ADR uses this internal order without adding a canonical stage or default mapping artifact:
+
+```text
+Effective Requirement Source
+→ Effective Requirement Snapshot
+→ Requirement Model Scope Inventory
+→ Requirement Model Technical Landing Trace
+→ proposed structural preflight
+→ Decision & Design Human Review
+→ accepted-mode validation and assigned Design Slices
+```
+
+The trace consumes accepted product semantics. Product ambiguity returns to Requirements Discussion; technical incompatibility with an accepted ADR creates a superseding decision after Human Review.
+
 ```text
 Project Entry
 → Remote Project Discovery if Needed
 → Re-Adopt Agent Loop Project if Needed
+→ Feature Monthly Archive If Explicitly Requested
 → Code-Guided Operational Support if Needed
 → Project Skill Creation / Update if Needed
 → Requirement Archive

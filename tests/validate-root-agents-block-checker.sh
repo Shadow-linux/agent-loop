@@ -2,7 +2,7 @@
 set -euo pipefail
 
 root=$(cd "$(dirname "$0")/.." && pwd)
-checker="$root/scripts/check-root-agents-blocks.sh"
+checker="$root/scripts/check-root-agents-blocks.py"
 template="$root/templates/root-AGENTS.md"
 tmpdir=$(mktemp -d)
 trap 'rm -rf "$tmpdir"' EXIT
@@ -40,8 +40,8 @@ remove_section() {
   ' "$source" > "$target"
 }
 
-if [ ! -x "$checker" ]; then
-  printf 'FAIL: checker script is missing or not executable: %s\n' "$checker" >&2
+if [ ! -f "$checker" ]; then
+  printf 'FAIL: checker script is missing: %s\n' "$checker" >&2
   exit 1
 fi
 
@@ -49,12 +49,12 @@ cp "$template" "$tmpdir/ok.md"
 mkdir -p "$tmpdir/.agent-loop"
 touch "$tmpdir/.agent-loop/project.md"
 
-"$checker" --template "$template" --target "$tmpdir/ok.md" > "$tmpdir/ok.out"
+python3 "$checker" --template "$template" --target "$tmpdir/ok.md" > "$tmpdir/ok.out"
 assert_contains "$tmpdir/ok.out" "PASS root AGENTS managed blocks are current"
 assert_not_contains "$tmpdir/ok.out" "FAIL root AGENTS drift found"
 
 remove_section "message-intent" "$template" "$tmpdir/missing.md"
-if "$checker" --template "$template" --target "$tmpdir/missing.md" > "$tmpdir/missing.out"; then
+if python3 "$checker" --template "$template" --target "$tmpdir/missing.md" > "$tmpdir/missing.out"; then
   printf 'FAIL: checker should fail when a template managed section is missing\n' >&2
   cat "$tmpdir/missing.out" >&2
   exit 1
@@ -63,7 +63,7 @@ assert_contains "$tmpdir/missing.out" "FAIL root AGENTS drift found"
 assert_contains "$tmpdir/missing.out" "message-intent | missing"
 
 remove_section "workflow-stage-map" "$template" "$tmpdir/missing-stage-map.md"
-if "$checker" --template "$template" --target "$tmpdir/missing-stage-map.md" > "$tmpdir/missing-stage-map.out"; then
+if python3 "$checker" --template "$template" --target "$tmpdir/missing-stage-map.md" > "$tmpdir/missing-stage-map.out"; then
   printf 'FAIL: checker should fail when Workflow Stage Map is missing\n' >&2
   cat "$tmpdir/missing-stage-map.out" >&2
   exit 1
@@ -71,20 +71,20 @@ fi
 assert_contains "$tmpdir/missing-stage-map.out" "FAIL root AGENTS drift found"
 assert_contains "$tmpdir/missing-stage-map.out" "workflow-stage-map | missing"
 
-sed 's/block-version:1\.2\.4-20260711\.3/block-version:1.2.4/' "$template" > "$tmpdir/stale.md"
-if "$checker" --template "$template" --target "$tmpdir/stale.md" > "$tmpdir/stale.out"; then
+sed 's/block-version:1\.3\.0-20260714\.1/block-version:1.3.0/' "$template" > "$tmpdir/stale.md"
+if python3 "$checker" --template "$template" --target "$tmpdir/stale.md" > "$tmpdir/stale.out"; then
   printf 'FAIL: checker should fail when block-version values are stale\n' >&2
   cat "$tmpdir/stale.out" >&2
   exit 1
 fi
 assert_contains "$tmpdir/stale.out" "message-intent | stale-block-version"
-assert_contains "$tmpdir/stale.out" "expected 1.2.4-20260711.3"
+assert_contains "$tmpdir/stale.out" "expected 1.3.0-20260714.1"
 
 awk '
   /<!-- agent-loop:managed-end section:ownership -->/ { next }
   { print }
 ' "$template" > "$tmpdir/broken.md"
-if "$checker" --template "$template" --target "$tmpdir/broken.md" > "$tmpdir/broken.out"; then
+if python3 "$checker" --template "$template" --target "$tmpdir/broken.md" > "$tmpdir/broken.out"; then
   printf 'FAIL: checker should fail when managed markers are broken\n' >&2
   cat "$tmpdir/broken.out" >&2
   exit 1
@@ -94,7 +94,7 @@ assert_contains "$tmpdir/broken.out" "ownership | broken-markers"
 awk '
   /<!-- agent-loop:managed-start section:ownership/ && inserted != 1 {
     print
-    print "<!-- agent-loop:managed-start section:nested source:.agent-loop/project.md block-version:1.2.4-20260711.3 -->"
+    print "<!-- agent-loop:managed-start section:nested source:.agent-loop/project.md block-version:1.3.0-20260714.1 -->"
     print "nested"
     print "<!-- agent-loop:managed-end section:nested -->"
     inserted = 1
@@ -102,7 +102,7 @@ awk '
   }
   { print }
 ' "$template" > "$tmpdir/nested.md"
-if "$checker" --template "$template" --target "$tmpdir/nested.md" > "$tmpdir/nested.out"; then
+if python3 "$checker" --template "$template" --target "$tmpdir/nested.md" > "$tmpdir/nested.out"; then
   printf 'FAIL: checker should fail when managed blocks are nested\n' >&2
   cat "$tmpdir/nested.out" >&2
   exit 1
@@ -112,13 +112,13 @@ assert_contains "$tmpdir/nested.out" "ownership | nested-managed-block"
 awk '
   { print }
   /<!-- agent-loop:managed-end section:ownership -->/ && inserted != 1 {
-    print "<!-- agent-loop:managed-start section:ownership source:.agent-loop/project.md block-version:1.2.4-20260711.3 -->"
+    print "<!-- agent-loop:managed-start section:ownership source:.agent-loop/project.md block-version:1.3.0-20260714.1 -->"
     print "duplicate"
     print "<!-- agent-loop:managed-end section:ownership -->"
     inserted = 1
   }
 ' "$template" > "$tmpdir/duplicate.md"
-if "$checker" --template "$template" --target "$tmpdir/duplicate.md" > "$tmpdir/duplicate.out"; then
+if python3 "$checker" --template "$template" --target "$tmpdir/duplicate.md" > "$tmpdir/duplicate.out"; then
   printf 'FAIL: checker should fail when a managed section is duplicated\n' >&2
   cat "$tmpdir/duplicate.out" >&2
   exit 1
@@ -127,11 +127,11 @@ assert_contains "$tmpdir/duplicate.out" "ownership | duplicate-section"
 
 {
   cat "$template"
-  printf '\n<!-- agent-loop:managed-start section:legacy-extra source:.agent-loop/project.md block-version:1.2.4-20260711.3 -->\n'
+  printf '\n<!-- agent-loop:managed-start section:legacy-extra source:.agent-loop/project.md block-version:1.3.0-20260714.1 -->\n'
   printf '## Legacy Extra\n\n'
   printf '<!-- agent-loop:managed-end section:legacy-extra -->\n'
 } > "$tmpdir/extra.md"
-if "$checker" --template "$template" --target "$tmpdir/extra.md" > "$tmpdir/extra.out"; then
+if python3 "$checker" --template "$template" --target "$tmpdir/extra.md" > "$tmpdir/extra.out"; then
   printf 'FAIL: checker should fail when target has an unexpected managed section\n' >&2
   cat "$tmpdir/extra.out" >&2
   exit 1
@@ -145,7 +145,7 @@ awk '
   }
   { print }
 ' "$template" > "$tmpdir/source-missing.md"
-if "$checker" --template "$template" --target "$tmpdir/source-missing.md" > "$tmpdir/source-missing.out"; then
+if python3 "$checker" --template "$template" --target "$tmpdir/source-missing.md" > "$tmpdir/source-missing.out"; then
   printf 'FAIL: checker should fail when a local managed block source is missing\n' >&2
   cat "$tmpdir/source-missing.out" >&2
   exit 1
@@ -156,7 +156,7 @@ assert_contains "$tmpdir/source-missing.out" "source-missing"
   cat "$template"
   printf '\n<!-- agent-loop:managed-start-->\n'
 } > "$tmpdir/bare-start.md"
-if "$checker" --template "$template" --target "$tmpdir/bare-start.md" > "$tmpdir/bare-start.out"; then
+if python3 "$checker" --template "$template" --target "$tmpdir/bare-start.md" > "$tmpdir/bare-start.out"; then
   printf 'FAIL: checker should fail when a bare managed-start marker is malformed\n' >&2
   cat "$tmpdir/bare-start.out" >&2
   exit 1
@@ -167,7 +167,7 @@ assert_contains "$tmpdir/bare-start.out" "malformed-marker"
   cat "$template"
   printf '\n<!-- agent-loop:managed-end -->\n'
 } > "$tmpdir/bare-end.md"
-if "$checker" --template "$template" --target "$tmpdir/bare-end.md" > "$tmpdir/bare-end.out"; then
+if python3 "$checker" --template "$template" --target "$tmpdir/bare-end.md" > "$tmpdir/bare-end.out"; then
   printf 'FAIL: checker should fail when a bare managed-end marker is malformed\n' >&2
   cat "$tmpdir/bare-end.out" >&2
   exit 1
@@ -176,9 +176,9 @@ assert_contains "$tmpdir/bare-end.out" "malformed-marker"
 
 {
   cat "$template"
-  printf '\n<!-- agent-loop:managed-start section:same-line source:.agent-loop/project.md block-version:1.2.4-20260711.3 --><!-- agent-loop:managed-end section:same-line -->\n'
+  printf '\n<!-- agent-loop:managed-start section:same-line source:.agent-loop/project.md block-version:1.3.0-20260714.1 --><!-- agent-loop:managed-end section:same-line -->\n'
 } > "$tmpdir/same-line.md"
-if "$checker" --template "$template" --target "$tmpdir/same-line.md" > "$tmpdir/same-line.out"; then
+if python3 "$checker" --template "$template" --target "$tmpdir/same-line.md" > "$tmpdir/same-line.out"; then
   printf 'FAIL: checker should fail when multiple managed markers are on the same line\n' >&2
   cat "$tmpdir/same-line.out" >&2
   exit 1

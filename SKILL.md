@@ -5,7 +5,7 @@ description: Use when starting, continuing, resuming, structuring, testing, impl
 
 # Agent Loop
 
-Version: 1.2.4
+Version: 1.3.0
 
 Run a single-human, CLI-agent development loop from goal intake to verified close. This skill is a controller: it decides the current stage, loads the right reference, produces or updates `agent-loop` artifacts, and stops at human gates.
 
@@ -39,7 +39,7 @@ Also treat long-term memory indexes as claims that must be verified before relia
 
 ## Message Intent Guard
 
-Before project-state classification, classify the latest human message intent. `chat` means ordinary discussion, rules questions, status questions, or design talk; answer or discuss only and do not create requirement sets or feature workspaces by default. Message intent is not permanent: if chat turns into demand shaping, `proposal-doc`, implementation, operational support, follow-up, deferred work, or project-skill management, reclassify and route accordingly. If the human explicitly wants discussion without documentation, keep `chat`. `requirements-discussion` means the human is shaping product needs, business goals, capability ideas, constraints, tradeoffs, or user scenarios without authorizing implementation; use Brainstorm / Clarify to produce a human-reviewed requirement document under `.agent-loop/requirements/` before feature construction. `project-skill-management` means the human asks to turn a repeatable project workflow into a project-local skill or to update, disable, or deprecate one; load `references/project-skills.md`. If unclear, ask whether the human wants ordinary discussion, requirements documentation, feature implementation, or project-skill management.
+Before project-state classification, classify the latest human message intent. `chat` means ordinary discussion, rules questions, status questions, or design talk; answer or discuss only and do not create requirement sets or feature workspaces by default. Message intent is not permanent: if chat turns into demand shaping, `proposal-doc`, implementation, operational support, follow-up, deferred work, project-skill management, or explicit historical feature archive/rehydrate maintenance, reclassify and route accordingly. If the human explicitly wants discussion without documentation, keep `chat`. `requirements-discussion` means the human is shaping product needs, business goals, capability ideas, constraints, tradeoffs, or user scenarios without authorizing implementation; use Brainstorm / Clarify to produce a human-reviewed requirement document under `.agent-loop/requirements/` before feature construction. `project-skill-management` means the human asks to turn a repeatable project workflow into a project-local skill or to update, disable, or deprecate one; load `references/project-skills.md`. `feature-archive-maintenance` means the human explicitly requests Feature Monthly Archive or rehydrate for closed history; require reliable memory, a read-only scan, and the exact plan SHA-256 Batch Human Gate before mutation. If unclear, ask whether the human wants ordinary discussion, requirements documentation, feature implementation, project-skill management, or archive maintenance.
 
 ## Human Help And Version Questions
 
@@ -77,6 +77,7 @@ Use this skill when the user wants to:
 - reconcile `agent-loop` documents with code reality
 - execute a task/story with TDD and verification
 - submit, pause, resume, or close a feature
+- compact closed feature discovery by moving whole feature directories through Human-gated Feature Monthly Archive, or rehydrate an archived feature before follow-up execution
 
 Do not use for one-off edits when the user explicitly asks to bypass workflow and the edit does not affect feature behavior, public interfaces, data/security boundaries, project memory, submit, or close state.
 
@@ -95,7 +96,7 @@ references/project-memory-mode.md  simple vs enterprise project memory rules
 references/project-architecture-init.md DDD-inspired architecture and stack adapter rules
 references/remote-project-discovery.md local entry + remote project discovery rules
 references/requirement-management.md     human source requirement archive rules
-references/requirement-product-grill.md requirement/product clarification method for ambiguous terminology, flows, prior feature conflicts, and decision signals
+references/requirement-product-grill.md requirement/product clarification plus triggered Concept Foundation and Requirement Product Model derivation
 references/project-decisions.md   Design Readiness, Decision & Design, placement, coverage, and project-level ADR rules
 references/product-brief.md        feature product brief and product consensus rules
 references/delivery-contracts.md   durable producer-consumer interface handoff rules
@@ -118,7 +119,15 @@ references/submit-and-integrate.md explicit git submit / commit / PR gate
 references/validation-scenarios.md pressure scenarios for checking this skill works
 references/document-templates.md   inline markdown templates
 references/workflow-checklists.md  checklist form for each stage
-scripts/check-root-agents-blocks.sh read-only root AGENTS managed-block drift checker
+scripts/checker_support.py          shared standard-library Markdown checker support
+scripts/check-root-agents-blocks.py read-only root AGENTS managed-block drift checker
+scripts/check-onboarding-core-flow-coverage.py onboarding core-flow coverage checker
+scripts/check-concept-foundation-trace.py accepted concept/model trace checker
+scripts/check-adr-requirement-model-trace.py ADR requirement-model landing checker
+scripts/scan-feature-monthly-archive.py read-only deterministic archive/rehydrate plan
+scripts/check-feature-monthly-archive.py read-only pre/post archive contract checker
+scripts/apply-feature-monthly-archive.py exact-hash Human-gated archive/rehydrate apply
+scripts/restore-feature-monthly-archive.py exact transaction-journal restore
 templates/                         copy-ready artifact templates
 examples/login-feature/            small finished feature workspace
 examples/complex-saas-project/     larger takeover + feature execution workspace
@@ -132,7 +141,8 @@ CHANGELOG.md                        version-change source of truth for "what cha
 
 1. Inspect `.agent-loop/`; if missing, also check legacy `agent-loop/`.
 2. Check root `AGENTS.md` / `CLAUDE.md` as the Root Agent Bootstrap Gate; if either is missing or stale, load `references/project-guidance.md` and include the guidance repair in the recommended Project Entry action unless the human has explicitly deferred it.
-3. Classify the latest message intent: `chat`, `requirements-discussion`, `project-skill-management`, `feature-request`, `operational-support`, `feature-follow-up`, `deferred-requirement`, or `unknown`.
+2a. Canonical `scripts/check-*.py` validation requires Python 3.10+ and only the Python standard library. Run the `.py` entrypoints natively on macOS or Windows; if a required checker cannot run because Python is missing or unsupported, fail closed and report the capability gap instead of silently using an obsolete implementation.
+3. Classify the latest message intent: `chat`, `requirements-discussion`, `project-skill-management`, `feature-archive-maintenance`, `feature-request`, `operational-support`, `feature-follow-up`, `deferred-requirement`, or `unknown`.
 3a. For `chat`, answer or discuss only; do not create requirement sets, feature workspaces, tasks, tests, or plans.
 3b. For `requirements-discussion`, load `references/requirement-management.md`, use Brainstorm / Clarify, produce a human-reviewed requirement document, and archive it under `.agent-loop/requirements/<archive-date>-<topic>/` after confirmation before any feature construction.
 3c. For `project-skill-management`, load `references/project-skills.md`, require reliable Project Entry/memory, and route to Project Skill Creation / Update without creating a requirement set or feature workspace.
@@ -144,15 +154,16 @@ CHANGELOG.md                        version-change source of truth for "what cha
 7. Load `references/project-architecture-init.md` during init or Project Entry Scan, when proposing project structure, when recording architecture profile, or when a task creates durable code boundaries.
 8. Load `references/remote-project-discovery.md` when the human says the project is remote, local files contain remote-entry hints, or local/remote/container execution is unclear. Do not treat an empty local directory alone as remote.
 9. Load `references/requirement-management.md` before copying, moving, renaming, indexing, or referencing human source requirements.
-9a. Load `references/requirement-product-grill.md` during Requirements Discussion, Product Brief, or Brainstorm / Clarify when requirements include ambiguous terminology, domain boundaries, business flows, exception paths, conflicting prior feature behavior, or decision signals. Grill questions clarify input only; they do not create PRDs, ADRs, project memory, `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/`.
-9b. Load `references/project-decisions.md` for Design Readiness Check and `Decision & Design If Needed`: before accepted requirements enter feature construction, when a requirement spans multiple features or needs shared business-flow/domain/data/architecture/recovery/non-functional design, when product or technical work reveals cross-feature decisions, or when drift changes durable facts. Decision Scan / Placement is an internal method. A `.agent-loop/decisions/*.md` file is globally optional, but it becomes conditionally required when shared design is required and no accepted decision already covers it; creation and acceptance remain Human-gated.
+9a. Load `references/requirement-product-grill.md` during Requirements Discussion, Product Brief, or Brainstorm / Clarify when requirements include ambiguous terminology, domain boundaries, business flows, exception paths, conflicting prior feature behavior, or decision signals. When Concept Foundation triggers, inspect evidence, extract candidate concepts, recommend one definition with impact, and ask exactly one blocking question before deriving the Requirement Product Model. Grill questions clarify input only; they do not create ADRs, project memory, `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/`.
+9b. Load `references/project-decisions.md` for Design Readiness Check and `Decision & Design If Needed`: before accepted requirements enter feature construction, when a requirement spans multiple features or needs shared business-flow/domain/data/architecture/recovery/non-functional design, when product or technical work reveals cross-feature decisions, or when drift changes durable facts. A requirement-driven ADR resolves the Effective Requirement Snapshot, records a Requirement Model Technical Landing Trace, and passes coverage/compatibility review before acceptance. Decision Scan / Placement is an internal method. A `.agent-loop/decisions/*.md` file is globally optional, but it becomes conditionally required when shared design is required and no accepted decision already covers it; creation and acceptance remain Human-gated.
 10. Load `references/product-brief.md` when a feature needs product intent, product consensus, user stories, product scope, or PRD-like synthesis.
 11. Load `references/e2e-discovery.md` before designing or executing Web E2E/browser verification.
 12. Load `references/delivery-contracts.md` when the human requests cross-boundary handoff/API/interface documentation, or when the agent detects a likely downstream consumer boundary such as frontend/backend, service, event, public data, SDK/library, UI state, or runtime behavior. Delivery Contracts are not created by default.
 13. Load `references/project-entry-scan.md` when taking over an existing project without reliable `agent-loop` memory. This is now a Project Entry Scan only: build safe project memory, guidance status, commands, boundaries, and uncertainties. Do not create `.agent-loop/onboarding-db/`, module docs, flow docs, onboarding diagrams, or old Quick / Deep / Targeted onboarding artifacts during Project Entry Scan.
-13a. Load `references/onboarding-knowledge-base.md` when the human asks for newcomer-facing docs, durable project understanding, guided learning paths, or onboarding-db construction. Run it only after Project Entry Scan or reliable project memory. Use Evidence Graph first, then accepted Onboarding Spec, Onboarding Tasks, single-file module/flow docs by default, wireframe architecture flow diagrams as the preferred flow expression, coverage scoring, and reviewed batches.
+13a. Load `references/onboarding-knowledge-base.md` when the human asks for newcomer-facing docs, durable project understanding, guided learning paths, or onboarding-db construction. Run it only after Project Entry Scan or reliable project memory. Use Evidence Graph and Core Flow Inventory first, then accepted Onboarding Spec, Onboarding Tasks, Flow Slice Coverage for critical/important flows, evidence-linked diagrams, completeness gating, coverage scoring, and reviewed batches; module/flow docs remain single-file by default.
 13b. During Project Entry, Resume, Re-Adopt, context recovery, and controller re-entry, check `.agent-loop/skills/INDEX.md` when present. Load only `active` project skills whose current instruction-bearing and executable files match the validation manifest, according to `bootstrap` / `on-demand`; discovery and loading never satisfy the per-invocation Execution Gate.
 14. Load `references/feature-follow-up.md` when the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, screenshot issue, behavior tweak, "small tweak", test failure, or QA/user feedback that may belong to a recent feature.
+14a. For `feature-archive-maintenance`, load `references/artifact-rules.md`, `references/stage-guides.md`, `references/human-review-summary.md`, and `references/feature-follow-up.md`. Feature ID is stable while location changes and root `features/archive.md` locates archived/rehydrated history. The scan is read-only; archive/rehydrate requires the expected plan SHA-256 Batch Human Gate, transaction journal, post-check, and restore. Rehydrate before reopened execution; auto modes never authorize either operation.
 15. Load `references/large-projects.md` when the repo is large, old, unfamiliar, multi-package, or likely above 100k LOC.
 16. Load `references/complex-artifacts.md` when story/task/test/plan complexity crosses its trigger conditions.
 17. Load `references/implementation-planning.md` before writing or approving `plan.md` for a task/story.
@@ -192,6 +203,8 @@ CHANGELOG.md                        version-change source of truth for "what cha
       feedback.* optional source file when provided
       notes.* optional source file when provided
   features/
+    archive.md optional Feature ID locator maintained only by Feature Monthly Archive
+    YYYY-MM/ archived closed feature directories
     <date>-<feature-slug>/
       product.md optional product brief
       spec.md
@@ -237,16 +250,22 @@ If the local directory is only a remote-project entry point, create only thin lo
 - Task Done Gate: mark a task `done` only after implementation is complete, required tests or substitute verification have run fresh, evidence is recorded in `notes.md`, lightweight Spec Review is recorded, Standards Review is recorded when triggered, drift decision is recorded, and `tasks.md` links or names the evidence.
 - During large Project Entry Scan, recommend bounded subagent scanning when available and human-confirmed; otherwise use single-agent layered scan.
 - During existing-project Project Entry Scan, create or propose only safe project memory, root guidance status, commands, boundaries, capabilities, and uncertainties. Do not create onboarding-db detail docs, module docs, flow docs, onboarding diagrams, onboarding-spec, or onboarding-tasks during Project Entry Scan.
-- During Evidence-Graph + DDD Onboarding, create or update onboarding-db only through `references/onboarding-knowledge-base.md`: build Evidence Graph, confirm Onboarding Spec, write Onboarding Tasks, then produce reviewed batches with single-file module/flow docs by default, wireframe architecture flow diagrams, coverage scoring, and no placeholder files.
+- During Evidence-Graph + DDD Onboarding, create or update onboarding-db only through `references/onboarding-knowledge-base.md`: build Evidence Graph with Core Flow Inventory, confirm Onboarding Spec, write Onboarding Tasks, then produce reviewed batches with Flow Slice Coverage for critical/important flows, evidence-linked diagrams, completeness gating, single-file module/flow docs by default, and no placeholder files.
 - When Project Entry Scan discovers stable project facts missing from project memory, propose or perform project memory backfill after human confirmation.
 - For focused questions about one module, flow, async task, deployment path, or problem area, answer from existing docs/code as chat or operational support unless the human explicitly authorizes feature/fix work. Do not create focused onboarding-db artifacts.
 - When local and remote project reality are split, discover the remote environment before Project Entry Scan or initializing project memory.
 - Historical execution evidence belongs in `notes.md`.
+- Feature Monthly Archive moves only eligible whole closed feature directories to `features/YYYY-MM/<feature-id>/`; active / blocked / paused features stay flat. It creates no per-feature archive summary, no `historical/`, no Deep Archive, and exposes no `--force`. Original human requirement sources remain unchanged.
 - Web E2E capability is discovered from the real project environment. Stable E2E capability belongs in `project.md`; feature-specific E2E cases belong in `tests.md` or `tests/e2e/*`.
 - Human source requirements are archived as requirement set directories, not new flat files. Each requirement set groups the human's requirement, prototype, feedback, screenshots, recordings, links, and follow-up notes for one intake event or topic.
 - `.agent-loop/requirements/` is canonical. Do not create or maintain legacy `inputs/` archives in current-version projects.
 - Human source requirement archive dates mean archive date only; never infer deadlines, scope duration, or lifecycle from input paths.
 - Requirements created from requirements-discussion live under `.agent-loop/requirements/`; feature `product.md` and `spec.md` only derive from and link to requirement sets, and do not own requirement lifecycle.
+- Concept Foundation is an internal Requirements Discussion / Requirement Product Grill method, never a canonical stage or `.agent-loop/concepts/` artifact. Triggered foundations stay `candidate` or `reopened` until the Human Grill Contract confirms blocking meanings; only `accepted` or a reasoned `concept-foundation-not-needed` path may continue to requirement-level flow, state, and product-data modeling.
+- The effective human-reviewed requirement source owns the accepted Concept Foundation and Requirement Product Model. After archive, requirement README indexes the effective source/status while append-only follow-ups preserve earlier sources. Product Brief and Feature Spec reference accepted Concept IDs/model rows rather than redefining product meaning; ADR work consumes accepted product semantics only through its own later Human Gate.
+- A requirement-driven ADR records an Effective Requirement Snapshot, a source-wide Requirement Model Scope Inventory, and a Requirement Model Technical Landing Trace inside the existing decision record. Inventory all stable `REL/PERM/CMD/EVT/FLOW/STATE/PM/EX` IDs before selecting scope; every in-scope accepted ID needs a disposition, and every `landed` row needs a concrete technical landing, preserved invariant, Design Slice, and verification path.
+- Keep the ADR `proposed` for structural preflight. Only explicit Decision & Design human acceptance authorizes Human Review Evidence plus `Status: accepted`, followed by accepted-mode validation. A reasoned `concept-foundation-not-needed` source uses the trace-not-applicable path instead of invented models.
+- `Upstream Compatibility: review-required` blocks new dependent Feature Spec, Plan, and implementation work. It is not an ADR lifecycle status. If changed upstream meaning invalidates an accepted technical decision, preserve history and create a Human-gated superseding ADR instead of rewriting accepted decision meaning.
 - For complex requirements, recommend requirement-level `Delivery Phases` in the requirement set `README.md` before feature construction when the human needs to confirm staged delivery. Phases express human-readable delivery slices; they are not feature workspaces, tasks, or plans.
 - A feature may implement one accepted Delivery Phase or a smaller slice inside one phase. It should not combine multiple phases unless the human first confirms a phase rewrite/merge. Feature `spec.md` must reference the requirement set and phase when phase mode is used, and requirement reconciliation should update phase status and feature mapping after human confirmation.
 - Future/deferred work, backlog items, and unimplemented planned capabilities belong in requirement set lifecycle/status records and optional `requirements/INDEX.md`, not in `project.md`. Do not edit `requirement.md` or other source files for lifecycle/status updates.
@@ -303,6 +322,7 @@ Stop when:
 - intent, scope, product, design, architecture, security, data, approval, or public-interface decisions cannot be resolved from files
 - a stage would modify human original requirements
 - spec, product scope, or acceptance criteria would change
+- a triggered Concept Foundation is still `candidate` or `reopened`, a downstream artifact would redefine an accepted Concept ID / Requirement Product Model rule, or an ADR dependency is `review-required` / missing Requirement Model coverage
 - project memory and code reality materially disagree
 - code reality conflicts with feature docs
 - a new dependency, migration, destructive operation, credential, external service, or long-lived boundary directory is needed
@@ -316,3 +336,4 @@ Stop when:
 - subagents are needed but not yet approved
 - submit, commit, PR, merge, release, publish, pause, or close is requested
 - the work would require first-version exclusions
+- Feature Monthly Archive or rehydrate lacks an exact reviewed plan hash, has unsupported/ambiguous references, encounters a stale plan or incomplete `.archive-txn`, or would be performed by manual directory movement

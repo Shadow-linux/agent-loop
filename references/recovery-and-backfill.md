@@ -28,6 +28,7 @@ Use this protocol when:
 - tests exist but `tests.md` does not know them
 - implementation behavior differs from `spec.md`
 - the human asks to continue an old project or old feature
+- Feature Monthly Archive memory is unsafe: a `features/archive.md` target is missing, an archived directory lacks a row, a Feature ID exists at both flat/month paths, a `rehydrated` row points to a month path, an incomplete `.archive-txn` remains, or verified apply leaves old durable references
 
 ## Re-Adopt Agent Loop Project
 
@@ -102,6 +103,21 @@ new human material -> requirements/<archive-date>-<topic>/
 ```
 
 Never edit original requirement files to make them match code. Add a new requirement-set file or record a conflict in `notes.md`.
+
+## Feature Monthly Archive Recovery
+
+Treat `features/archive.md`, the flat/month directories, durable references, and `.archive-txn/<transaction-id>/journal.json` as one consistency boundary. Do not repair it by manual directory movement.
+
+Classify these as stale-memory or safety conditions:
+
+- archive row target missing;
+- archived directory without row;
+- duplicate flat/month Feature ID;
+- `rehydrated` row pointing to a month path;
+- incomplete `.archive-txn` transaction journal;
+- old path durable references after verified apply.
+
+For an incomplete transaction, require the exact transaction ID and run the restore command; never choose the newest journal automatically. A successful restore verifies original snapshots before journal removal. If a collision or hash mismatch prevents restoration, keep the journal in `restoring`, report the exact path, and stop. Original human requirement sources remain unchanged. After recovery, rerun the read-only Feature Monthly Archive scan and require a new expected plan SHA-256 Batch Human Gate before any archive or rehydrate apply.
 
 ## Conflict Classes
 

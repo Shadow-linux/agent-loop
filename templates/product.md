@@ -17,6 +17,27 @@ Summary:
 
 -
 
+## Accepted Concept References
+
+Concept Foundation Status: accepted | concept-foundation-not-needed
+Source Requirement:
+Effective Concept Source:
+Not-Needed Reason:
+
+| Concept ID | Canonical Name | Product Brief Use | Source Definition / Trace |
+|---|---|---|---|
+| C-EXAMPLE |  |  | requirement.md#concept-definitions / TRACE-01 |
+
+Rules:
+- cite accepted Concept IDs; do not redefine identity, lifecycle, relationships, invariants, state, terminal meaning, or product fact ownership
+- if product semantics must change, return to the source Requirements Discussion and reopen Concept Foundation
+
+## Requirement Product Model Coverage
+
+| Requirement Model ID | Concept IDs | Feature Product Journey / Story | Coverage | Notes |
+|---|---|---|---|---|
+| PM-01 / PERM-01 / FLOW-01 / STATE-01 / EX-01 | C-EXAMPLE |  | in-scope / out-of-scope / not-applicable |  |
+
 ## Problem Statement
 
 ## Target Users / Actors
@@ -94,7 +115,8 @@ Notes:
 ## Terminology
 
 - `<term>`:
-  - Meaning in this feature:
+  - Accepted Concept ID:
+  - Feature display wording / alias:
   - Promote to project Domain Language: yes | no | pending
 
 ## Open Product Questions

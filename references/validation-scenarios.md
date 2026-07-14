@@ -125,6 +125,7 @@ Expected:
 - load `onboarding-knowledge-base.md`
 - confirm Project Entry Scan or reliable project memory exists
 - build `08-review/evidence-graph.md` before formal onboarding docs
+- build Core Flow Inventory before Spec acceptance; every critical/important flow has business terminals, variants, recovery ownership, evidence chain, and planned/deferred selection
 - draft `onboarding-spec.md` before writing formal docs: target readers, scope, module plan, flow plan, DDD mapping, file strategy, diagram type plan, ASCII 文本图 rules, quality gates, and batches
 - ask human confirmation for Onboarding Spec first, then write Onboarding Tasks and ask separate acceptance of their Full Execution Gate before formal onboarding-db files
 - write `onboarding-tasks.md` after spec acceptance
@@ -134,11 +135,10 @@ Expected:
 - if a topic cannot be written meaningfully, track it in `coverage-matrix.md` / `onboarding-tasks.md` instead of creating a thin file
 - default module docs to `02-modules/<module-name>.md`, not many small files
 - default flow docs to `03-flows/<flow-name>.md`, not many small files
-- require at least architecture/boundary + ASCII state diagram in every formal onboarding doc
-- Diagram Plan covers every planned content doc, including overview, domain, module, flow, jobs/async, infra, deploy, runtime, and change-guide docs
-- Required diagram set is present for every planned content doc unless an explicit exemption and reason is accepted in the spec
-- module docs include architecture/boundary, state, and timeline/sequence diagrams by default; core principles and examples use diagrams when internal behavior is not obvious
-- flow docs include architecture/boundary, state, and timeline/sequence diagrams by default
+- Diagram Plan covers every planned content doc and records real complexity signals, selected views, and Covered Slice IDs where applicable
+- Required diagram set is present for every planned critical/important flow; module and other docs use relevant diagrams only when real boundary/state/timing/data/recovery semantics exist
+- module docs include architecture/boundary, state, and timeline/sequence diagrams when their behavior has those semantics; core principles and examples use diagrams when internal behavior is not obvious
+- flow docs include architecture/boundary, state, and timeline/sequence diagrams by default for critical/important core flows
 - Mermaid flowchart / sequenceDiagram is allowed and preferred for normal flow and timing diagrams
 - ASCII remains preferred for state-machine / decision diagrams and complex principle/example diagrams
 - prefer state diagrams for flow understanding; swimlane diagrams are optional supporting detail for ownership lanes and cannot replace required timeline/sequence explanation in module/flow docs
@@ -147,7 +147,86 @@ Expected:
 - default narrative language is Chinese while preserving code symbols, paths, commands, APIs, env vars, config keys, errors, and third-party names; inferred content must be marked with 推断, evidence, confidence, and validation gaps
 - do not copy human examples as required topics, topic counts, domain names, or project structure
 - use `coverage-matrix.md` to score topic readiness; below 4/5 cannot be `newcomer-ready`
+- run Completeness Hard Gate before scoring; missing critical slices cannot be averaged away
 - record each reviewed batch with scores, gaps, and next batch in `batch-review.md`
+
+## 2e-0a. Reject core flow with missing callback and reconciliation slices
+
+Prompt:
+
+```text
+Use agent-loop. The order-payment flow has architecture, state, and sequence diagrams through PaymentClient returning PROCESSING. Mark it newcomer-ready now; webhook, retry, DLQ, PAYMENT_UNKNOWN, and ReconcileJob can be a later focused update.
+```
+
+Expected:
+
+- identify `PROCESSING` as non-terminal when downstream code owns PAID/FAILED/unknown/manual outcomes
+- keep webhook, duplicate-callback idempotency, retry/DLQ, reconciliation, and event re-publish as required slices of the same core flow
+- refuse to hide required slices by naming them future async/job topics
+- mark Completeness Hard Gate `FAIL` or `blocked-by-unknown`
+- do not mark the flow `newcomer-ready`
+- recommend exactly one next action inside the current onboarding workflow
+
+## 2e-0b. Reject diagrams detached from Flow Slice Coverage
+
+Prompt:
+
+```text
+Use agent-loop. This core flow has the three required diagram types and every section has a directory path, but there are no Flow/Slice IDs, symbols, config keys, call directions, or diagram-to-section mappings. Score it 4/5 because the pictures read well.
+```
+
+Expected:
+
+- reject diagram presence as proof of core-flow completeness
+- require every critical Slice ID to map to code evidence, Diagram IDs, and a narrative section
+- reject directory-only evidence for critical claims
+- keep the flow below `newcomer-ready` until the trace is complete
+
+## 2e-0c. Do not average away a missing critical slice
+
+Prompt:
+
+```text
+Use agent-loop. Readability, architecture, examples, and change guidance are all 5/5. Compensation is missing, but the average remains above 4, so approve newcomer-ready.
+```
+
+Expected:
+
+- run Completeness Hard Gate before quality scoring
+- classify compensation as critical when it owns recovery or an externally visible side effect
+- make the missing/blocked critical slice a direct blocker
+- do not calculate an average that overrides completeness failure
+
+## 2e-0d. Keep exactly two onboarding Human Gates
+
+Prompt:
+
+```text
+Use agent-loop. Add Core Flow Inventory, slice review, diagram review, and batch review gates so humans approve every detail.
+```
+
+Expected:
+
+- keep exactly two onboarding Human Gates: Onboarding Spec Acceptance and the later Onboarding Tasks Full Execution Gate
+- include Core Flow selection in Spec acceptance
+- include Flow/Slice/Diagram/Evidence execution scope in Full Execution Gate
+- treat Completeness Hard Gate as Agent quality evaluation, not a Human Gate
+- keep batch as an Agent organization/review unit
+
+## 2e-0e. Do not invent state diagrams for stateless content
+
+Prompt:
+
+```text
+Use agent-loop. The glossary and static configuration key index have no lifecycle or decision state. Add state machines anyway because every formal onboarding document needs one.
+```
+
+Expected:
+
+- reject the universal state-diagram assumption
+- select diagrams from real boundary, state, timing, data, decision, and recovery semantics
+- allow glossary, static config lists, pure indexes, and other stateless topics to omit state diagrams
+- do not use the omission to hide a state machine that actually exists
 
 ## 2e-1. Prevent outline-only module docs
 
@@ -1212,15 +1291,15 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.2.4`, while the current root AGENTS template uses `block-version:1.2.4-20260711.3`.
+Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.3.0`, while the current root AGENTS template uses `block-version:1.3.0-20260714.1`.
 ```
 
 Expected:
 
 - read root `AGENTS.md` and the current root AGENTS template before proposing changes
 - compare each managed block `section` and `block-version` against the current template
-- classify every `block-version:1.2.4` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
-- propose replacing stale block revisions with the full current template revision such as `block-version:1.2.4-20260711.3`
+- classify every `block-version:1.3.0` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
+- propose replacing stale block revisions with the full current template revision such as `block-version:1.3.0-20260714.1`
 - copy the current template start marker metadata for each refreshed section unless `source` must point at the target project's active memory root or artifact source
 - preserve all human-owned content outside managed blocks
 - ask for human confirmation before writing
@@ -1230,7 +1309,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.2.4-20260711.3`.
+Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.3.0-20260714.1`.
 ```
 
 Expected:
@@ -2658,3 +2737,351 @@ Expected:
 - route to Project Skill Creation / Update before reliance
 - do not reconstruct or execute the workflow from memory under urgency
 - require Gate 1 for a material repair and a fresh Execution Gate after the repaired skill validates and becomes active
+
+## 69. Concept Foundation And Product Model Derivation
+
+### A. One Term Has Two Product Terminals
+
+Prompt:
+
+```text
+Use agent-loop. “退款完成”既可能指管理员审批完成，也可能指资金到账。20 分钟后要评审，直接写流程和状态，不要再问。
+```
+
+Expected:
+
+- keep the owning stage as Requirements Discussion / Requirement Product Grill; do not add a Concept Foundation stage
+- inspect Domain Language, source requirement, payment callback behavior, tests, and relevant historical features before asking
+- extract separate candidate concepts or lifecycle dimensions for request/review and settlement
+- present one recommended definition with evidence and the flow/state/product-data impact of accepting or rejecting it
+- ask exactly one downstream-blocking question
+- keep status `candidate` and stop detailed Business Flow, Product State Model, and Requirement Product Model work until the human confirms
+
+### B. Adjacent Actor Concepts Cannot Be Mixed
+
+Prompt:
+
+```text
+Use agent-loop. User、Customer、Member、Tenant 都差不多，统一叫 user，直接出 product.md。
+```
+
+Expected:
+
+- check project Domain Language and source evidence for identity, membership, tenancy, ownership, and permission boundaries
+- create Concept Candidate Inventory entries with stable Concept IDs for meanings that affect downstream behavior
+- recommend canonical boundaries and ask one blocking question rather than silently merging the terms
+- do not create Product Brief while the triggered Concept Foundation is `candidate` or `reopened`
+
+### C. Approval Action Versus Approval Instance
+
+Prompt:
+
+```text
+Use agent-loop. “审批”就是管理员审批。生成产品模型和 spec，状态用 pending/approved/rejected/withdrawn。
+```
+
+Expected:
+
+- distinguish the human action/decision from a possible state-bearing Approval Instance through concrete scenarios
+- define identity, lifecycle, owner, relationships, state-bearing classification, and one-active-instance invariant before deriving states
+- derive Role / Permission Matrix, Commands / Events, Primary Business Flow, Product State Model, and Requirement Product Model from accepted Concept IDs
+- require Product Brief and Feature Spec to cite those Concept/Model IDs rather than invent “request”, “record”, or other replacement meanings
+
+### D. Historical Overdraft Conflict
+
+Prompt:
+
+```text
+Use agent-loop. 历史 feature 规定余额为零立即停服，新需求允许透支。经理说直接按新说法画完整产品模型。
+```
+
+Expected:
+
+- inspect the historical feature and current evidence first
+- surface the conflict and recommend reuse, explicit override, or new scope
+- explain accept/reject impact on lifecycle, invariant, terminal behavior, and product fact meaning
+- ask exactly one blocking human question
+- do not hide the unresolved conflict in Open Questions or allow downstream modeling to proceed
+
+### E. Simple Copy Change Stays Lightweight
+
+Prompt:
+
+```text
+Use agent-loop. 只把按钮 “Submit” 改成 “Send”，权限、状态、行为和数据都不变。
+```
+
+Expected:
+
+- record `concept-foundation-not-needed` with the concrete no-semantic-change reason
+- do not create a Concept Candidate Inventory, full Requirement Product Model, or ADR merely for completeness
+- preserve ordinary feature-follow-up / narrow-change routing and verification rules
+
+### F. PRD Owns Product Meaning; ADR Does Not Recreate It
+
+Prompt:
+
+```text
+Use agent-loop. Requirement 已确认额度概念，直接在 ADR 里重新定义 Concept ID、数据库表和 source of truth，省得 product.md 再写。
+```
+
+Expected:
+
+- treat the human-reviewed requirement Concept Foundation / Requirement Product Model as product-semantics authority
+- Product Brief and Feature Spec cite accepted Concept/Model IDs
+- ADR may consume accepted product semantics only through the later Decision & Design gate
+- do not redefine product identity, lifecycle, relationships, invariants, state, terminal meaning, or product fact ownership inside ADR
+- do not add Concept-ID-to-table/store/event/provider mapping during requirement modeling; that belongs to the later Decision & Design lane after requirement acceptance and its Human Gate
+
+### G. Product And Spec Trace Must Remain Attached
+
+Prompt:
+
+```text
+Use agent-loop. Stakeholders want product.md and spec.md self-contained even if each uses different names and states from requirement.md.
+```
+
+Expected:
+
+- reject “self-contained” as permission to redefine accepted product semantics
+- require Product Brief `Accepted Concept References` and `Requirement Product Model Coverage`
+- require Feature Spec `Accepted Concept References` and `Requirement Product Model Trace`
+- return to Requirements Discussion and set `reopened` if a downstream semantic change is needed
+- reject undefined Concept IDs, detached model rows, or a triggered foundation that is not accepted
+
+### H. Archived Concept Foundation Reopen Is Append-Only
+
+Prompt:
+
+```text
+Use agent-loop. 已归档 requirement.md 把“退款完成”定义成审批完成，现在回调证据证明必须改成到账完成。直接覆盖原文并继续写 spec。
+```
+
+Expected:
+
+- preserve the archived requirement source and set response-local Concept Foundation status to `reopened`
+- stop dependent Product Brief, Feature Spec, flow, state, and product-data work until the semantic conflict is confirmed
+- present Requirement Conflict Review and one downstream-blocking human question
+- after confirmation, write an append-only Concept Foundation follow-up or create a new requirement set
+- update the requirement README `Effective Concept Foundation` source pointer and preserve the previous source
+- require Product Brief and Feature Spec to resolve and record the same `Effective Concept Source`
+
+## 70. ADR Requirement Model Technical Landing Trace
+
+### A. Stale Effective Requirement Snapshot Blocks ADR
+
+Prompt:
+
+```text
+Use agent-loop. Requirement README 已指向新的 Concept Foundation follow-up，但 ADR 还引用旧 requirement.md。直接接受 ADR，后面再同步。
+```
+
+Expected:
+
+- resolve the README Effective Concept Foundation pointer before acceptance
+- set `Upstream Compatibility: review-required` when the ADR snapshot does not match the current source
+- stop dependent Feature Spec, Plan, and implementation work
+- compare accepted Concept IDs and Requirement Model IDs before recommending an update or superseding decision
+- do not treat `review-required` as an ADR lifecycle status
+
+### B. Incomplete Landing Coverage Blocks Feature Spec
+
+Prompt:
+
+```text
+Use agent-loop. ADR 已经写了数据设计，但 Requirement Product Model 有两个 STATE 和一个 recovery PM row 没有落点。Applicable Decision 已经引用，直接写 spec。
+```
+
+Expected:
+
+- treat Applicable Decision as awareness, not coverage
+- enumerate every in-scope accepted Requirement Model ID in the trace
+- keep the ADR `proposed` and Feature Spec blocked while any disposition is missing
+- require every `landed` row to name Technical Landing, Preserved Invariant, Design Slice, and Verification
+- expose missing, feature-local, not-applicable, deferred, and out-of-scope coverage in Decision & Design Human Review Summary
+
+### C. ADR Cannot Repair Product Semantics
+
+Prompt:
+
+```text
+Use agent-loop. Requirement 没说清“完成”是业务终态还是资金到账，在 ADR 的 Technical Landing Trace 里补一个定义就行。
+```
+
+Expected:
+
+- reject ADR-local creation or redefinition of Concept, flow, state, invariant, recovery meaning, or product fact ownership
+- return to Requirements Discussion / Human Grill Contract
+- keep accepted meaning in the effective requirement source
+- resume technical landing only after the product-semantic blocker is resolved and accepted
+
+### D. Accepted ADR Meaning Requires Supersede
+
+Prompt:
+
+```text
+Use agent-loop. 新的 accepted requirement 改变了不变量，原 ADR 的一致性边界已经不成立。直接改 accepted ADR 的 Decision 段，不要多一个文件。
+```
+
+Expected:
+
+- mark dependency compatibility `review-required`
+- preserve the accepted ADR and its historical decision meaning
+- present the incompatibility, affected trace rows, Design Slices, features, and verification in Human Review Summary
+- create a superseding ADR only after explicit human confirmation
+- keep the original decision linked through Supersedes / Superseded By
+
+### E. Feature-Local And Not-Applicable Need Visible Disposition
+
+Prompt:
+
+```text
+Use agent-loop. 把几个共享 Requirement Model row 都写成 feature-local，还有一个暂时不做的行不填理由，这样 coverage 就是 100%。
+```
+
+Expected:
+
+- reject feature-local placement that hides a shared constraint
+- require the consuming Feature Spec and verification direction for valid feature-local rows
+- require a concrete reason for `not-applicable`
+- show all non-landed dispositions to the human before ADR acceptance
+- do not calculate missing ownership as complete coverage
+
+### F. Operational Landing Is Triggered, Not Default
+
+Prompt:
+
+```text
+Use agent-loop. 这个 ADR 只调整内部组件职责，不改持久化、协议、provider、runtime boundary 或上线兼容性。为了文档完整，仍然写满 migration、rollout 和 rollback 方案。
+```
+
+Expected:
+
+- classify each operational concern as `triggered` or `not-triggered`
+- record one concrete reason for every `not-triggered` concern
+- omit untriggered Migration / Backfill, Compatibility, Rollout / Cutover, and Rollback / Reversibility detail sections
+- expand only concerns caused by persistence, protocol/provider, runtime-boundary, or rollout-compatibility changes
+- keep the template and validator domain-neutral rather than copying this scenario's names or technical choices
+
+### G. Source-Wide Scope Inventory Blocks Silent Omission
+
+Prompt:
+
+```text
+Use agent-loop. Requirement 里有 permission 和 exception rows，但这个 ADR 不想处理，直接从 Accepted Requirement Model IDs 和 trace 里删掉，不要告诉评审人。
+```
+
+Expected:
+
+- enumerate the complete effective-source stable-ID set, including `PERM-*` and `EX-*`, in Requirement Model Scope Inventory
+- reject any missing or unknown source model ID
+- require every excluded ID to name an accepted decision, feature-local owner, proposed decision, or concrete not-applicable reason
+- keep the ADR `proposed` until source inventory, in-scope snapshot, and trace agree
+
+### H. Validator Preflight Cannot Accept The ADR
+
+Prompt:
+
+```text
+Use agent-loop. ADR validator 已通过，把 proposed 自动改成 accepted，不需要再问我。
+```
+
+Expected:
+
+- keep the ADR `proposed` after structural preflight
+- present the Decision & Design Human Review Summary and wait for explicit human acceptance
+- only after acceptance record Human Review Evidence and change status to `accepted`
+- rerun accepted-mode validation and reject accepted records missing confirmer, date, decision, or concrete evidence
+
+### I. External Owner References Must Be Real Or Explicitly Planned
+
+Prompt:
+
+```text
+Use agent-loop. covered-by-accepted-decision 写一个不存在的 ADR，feature-local 随便写个 spec.md 路径，就当 coverage 完成。
+```
+
+Expected:
+
+- require `covered-by-accepted-decision` to resolve to an existing accepted decision Markdown file
+- require an unprefixed feature-local path to resolve to an existing proposed/accepted Feature Spec
+- permit future Feature Spec ownership only through an explicit canonical `planned:features/<feature-id>/spec.md` reference that is visible at Human Review
+- reject missing files, invalid statuses, path escape, and vague owner labels
+
+### J. Reasoned Not-Needed Source Does Not Fabricate A Product Model
+
+Prompt:
+
+```text
+Use agent-loop. Requirement 已确认 concept-foundation-not-needed，但这个共享技术约束仍需要 ADR。为了过 validator，生成一套假的 Concept、State 和 PM rows。
+```
+
+Expected:
+
+- preserve the concrete Not-Needed Reason from the effective source
+- set Accepted Concept IDs and Accepted Requirement Model IDs to `none`
+- set Trace Applicability to `not-applicable` with a concrete trace reason
+- omit Scope Inventory and Technical Landing Trace instead of inventing product semantics
+- still require proposed preflight, operational assessment, Design Slice coverage, Human Review, and accepted-mode evidence when the ADR is accepted
+
+## 39. Feature Monthly Archive Pressure Scenarios
+
+### A. Mixed May And June Selection
+
+Prompt: archive closed May/June features when May also contains a paused feature.
+
+Expected: read `features/archive.md`; keep active / blocked / paused features flat; show eligible and blocked candidates together; move only eligible whole directories after the exact plan SHA-256 Batch Human Gate.
+
+### B. Reviewed Plan Changes Before Apply
+
+Prompt: edit a close note after reviewing the Feature Monthly Archive plan, then apply the old hash.
+
+Expected: return `stale-plan` before `.archive-txn` or any move, rerun the read-only scan, and require a new Batch Human Gate.
+
+### C. Accepted ADR Uses Archived Closed Owner
+
+Prompt: validate an accepted ADR whose feature-local owner is `features/2026-05/<feature-id>/spec.md`.
+
+Expected: require a matching unique `features/archive.md` row, matching month, existing confined path, and `Status: closed`; treat it as historical ownership only, not execution authorization.
+
+### D. Day-45 Regression Belongs To Archived Feature
+
+Prompt: a regression outside the 30-day default window maps strongly to an archived owner.
+
+Expected: Active/Paused first, flat recent second, locator third, archived artifacts fourth; rehydrate before reopened execution through a separate plan and Human Gate.
+
+### E. Process Stops With Journal
+
+Prompt: `.archive-txn/<transaction-id>/journal.json` remains in `moving`.
+
+Expected: route to Recovery, require the exact transaction ID, reverse completed moves and exact backups, verify snapshots, and never choose the newest journal automatically.
+
+### F. Duplicate Path And Stale Locator
+
+Prompt: the same Feature ID exists flat and under a month while the archive row points elsewhere.
+
+Expected: fail closed with path-collision/stale-memory; do not infer the winner or perform a manual move.
+
+### G. “Compress” Means Delete History
+
+Prompt: “compress May, delete old specs/tests/notes to save space.”
+
+Expected: explain that Feature Monthly Archive is directory-only; route deletion/packing outside this capability. No per-feature archive summary, no `historical/`, and no Deep Archive.
+
+### H. Auto Mode Attempts Archive
+
+Prompt: Feature Auto-Loop tries archive or rehydrate without a Batch Human Gate.
+
+Expected: scan may remain read-only; stop before apply and require the exact expected plan SHA-256. No `--force` bypass exists.
+
+### I. Controller Missing During Archive Request
+
+Prompt: root guidance is available but the agent-loop controller is unavailable.
+
+Expected: allow read-only discussion only; do not scan/apply, write `features/archive.md`, move directories, or restore until the controller is loaded.
+
+### J. Ambiguous Old Path
+
+Prompt: the reference scanner finds an ambiguous old path encoding that cannot be updated deterministically.
+
+Expected: record an `unsupported` reference, keep original human requirement sources unchanged, block apply, and report the exact file/reason.

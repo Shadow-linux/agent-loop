@@ -75,7 +75,7 @@ assert_not_contains "references/stage-guides.md" "write approved clarification a
 assert_contains "references/external-skill-adapters.md" 'Do not create `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/` from grill-with-docs defaults'
 
 assert_contains "references/stage-guides.md" "Requirements Discussion: write approved clarification and design output to the requirement document; keep requirement README to source, lifecycle, Delivery Phase, Feature Mapping, and decision-link summaries."
-assert_contains "references/requirement-product-grill.md" "Detailed grill results belong in the requirement document; the requirement README keeps source, lifecycle, Delivery Phase, Feature Mapping, and decision-link summaries."
+assert_contains "references/requirement-product-grill.md" "Detailed grill results belong in the effective requirement source; the requirement README keeps its effective Concept Foundation pointer plus source, lifecycle, Delivery Phase, Feature Mapping, and decision-link summaries."
 assert_contains "references/requirement-product-grill.md" '| Prior feature conflict | Requirement document, `notes.md`, or Human Review Summary conflict table |'
 assert_not_contains "references/requirement-product-grill.md" '| Prior feature conflict | Requirement README'
 assert_contains "references/requirement-management.md" 'Record accepted local terminology, scenarios, open questions, and conflicts in the reviewed requirement document.'
@@ -88,7 +88,7 @@ assert_contains "references/validation-scenarios.md" 'otherwise do not create a 
 assert_contains "references/validation-scenarios.md" 'otherwise keep the change in requirement artifacts without creating feature files'
 assert_contains "references/external-skill-adapters.md" "owning-stage artifact: requirement document plus requirement README summary during Requirements Discussion"
 assert_not_contains "references/external-skill-adapters.md" '| brainstormed design/spec | `.agent-loop/features/<feature>/product.md` and/or `.agent-loop/features/<feature>/spec.md` |'
-assert_contains "templates/root-AGENTS.md" "| Product need, business goal, scope, constraint, scenario, or phased delivery is still being shaped | Requirements Discussion |"
+assert_contains "templates/root-AGENTS.md" "| Product need, business goal, scope, constraint, scenario, concept identity/lifecycle, or phased delivery is still being shaped | Requirements Discussion |"
 assert_not_contains "templates/root-AGENTS.md" "Requirements Discussion / Grill"
 
 assert_contains "references/workflow-checklists.md" "Requirement/Product Grill"

@@ -137,3 +137,16 @@ Status: active | blocked | paused | closed
 ## Pause / Resume Point
 
 ## Close Record
+
+Closed At: <YYYY-MM-DD>
+Human Decision: <confirmed-by-human>
+
+## Archive Readiness
+
+Closed At: <same YYYY-MM-DD as Close Record>
+Delivered Summary: <one concrete line describing delivered behavior>
+Verification: complete
+Feature Close Review: complete
+Drift: resolved
+Project Memory Impact: complete | none
+Open Follow-up: none | <FU-001, FU-002>

@@ -14,6 +14,21 @@ project.md Domain Language = durable business terminology
 
 `product.md` belongs to one feature. Long-term product consensus must be proposed for `project.md` during Project Memory Update.
 
+## Accepted Concept Foundation
+
+Product Brief consumes the accepted Requirement Product Model from its source requirement. It does not define a competing product language.
+
+Before synthesis:
+
+1. resolve requirement README `Effective Concept Foundation` when present, otherwise use the backward-compatible status in the human-reviewed requirement document;
+2. require `accepted`, or a reasoned `concept-foundation-not-needed` for a simple requirement;
+3. load the effective human-reviewed source and the Concept IDs / Requirement Product Model row IDs relevant to this feature;
+4. record the effective source plus those IDs under `Accepted Concept References` and `Requirement Product Model Coverage` in `product.md`.
+
+If status is `candidate` or `reopened`, return to Requirements Discussion and the Human Grill Contract. Do not use Open Product Questions to carry an unresolved product-semantic blocker into Product Brief.
+
+Product Brief may select a feature slice, journey, scope, and product tradeoff from accepted concepts. It must not redefine an accepted Concept ID's canonical name, identity, owner, relationship, lifecycle, invariant, state, terminal meaning, or product fact. A semantic change reopens the source Concept Foundation.
+
 ## Product Brief Source Gate
 
 If the latest human message comes from `chat` or `requirements-discussion` and asks to write `product.md`, create a Product Brief, or “落到 product.md”, do not create feature `product.md` directly.
@@ -61,6 +76,7 @@ Include:
 - historical compatibility
 - open product questions
 - terminology used in this feature
+- accepted Concept IDs and Requirement Product Model coverage
 - long-term consensus candidates
 
 Product Decisions must record status, evidence/source, human gate, and Decision & Design routing when applicable.
@@ -128,3 +144,5 @@ Product Brief: product.md
 - testing implications
 
 Do not duplicate all product prose in `spec.md`.
+
+Do not duplicate Concept Foundation definitions either. `product.md` and `spec.md` cite accepted Concept IDs and model rows; the effective human-reviewed requirement source remains product-semantics authority.

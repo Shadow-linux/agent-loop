@@ -10,6 +10,8 @@ AGENTS.md / CLAUDE.md = agent startup guidance
 .agent-loop/project/* = optional enterprise project memory details
 .agent-loop/remote.md = local entry pointer for remote projects
 .agent-loop/features/* = feature execution state
+.agent-loop/features/archive.md = Feature Monthly Archive locator for stable Feature IDs
+.agent-loop/features/YYYY-MM/* = Human-gated closed-history month archive; never an execution path
 .agent-loop/requirements/<archive-date>-<topic>/* = human source material package
 .agent-loop/skills/INDEX.md = optional project-skill lifecycle and discovery index
 .agent-loop/skills/<skill-name>/* = optional human-confirmed project-local capability
@@ -18,6 +20,8 @@ AGENTS.md / CLAUDE.md = agent startup guidance
 Default memory root is `.agent-loop/` because it is workflow metadata, not product code. If a project already has legacy `agent-loop/`, use it for the current run and ask before migration.
 
 Do not use `AGENTS.md` as a task log. Do not use `project.md` as the startup instruction file for every agent.
+
+Root guidance may navigate a user Agent to the Feature Monthly Archive procedure, but it must not teach manual directory movement. Active/blocked/paused work remains at the first level. Archive and rehydrate use the canonical Python scan/check/apply/restore commands, an exact plan SHA-256 Human Gate, transaction recovery, and post-check; execution resumes only after rehydrate restores the flat feature path.
 
 ## Root Agent Bootstrap Gate
 
@@ -34,7 +38,7 @@ Every time `agent-loop` is used inside a target project, check root guidance bef
 4. Apply the Bootstrap Protocol skill-loading step when the runtime exposes the agent-loop skill.
 5. Check whether AGENTS.md contains the required bootstrap sections.
 6. If AGENTS.md uses agent-loop managed blocks, compare each managed block `section` and `block-version` with the current root AGENTS template.
-7. If `scripts/check-root-agents-blocks.sh` is available in the local `agent-loop` skill package, run it against the current `templates/root-AGENTS.md` and target root `AGENTS.md`; use its report as the managed-block drift evidence.
+7. If `scripts/check-root-agents-blocks.py` is available in the local `agent-loop` skill package, run it with Python 3.10+ against the current `templates/root-AGENTS.md` and target root `AGENTS.md`; use its report as the managed-block drift evidence. Use `python3` on macOS or `py -3` / `python` on Windows. If Python 3.10+ is unavailable, fail closed and report the capability gap instead of using an obsolete checker implementation.
 8. If `.agent-loop/skills/INDEX.md` exists, read its metadata, verify each referenced `active` path and exact INDEX row plus instruction-bearing/executable files against the SHA-256 manifest, and exclude missing, mismatched, `proposed`, `disabled`, and `deprecated` skills from normal routing.
 9. Record or update guidance status in project.md.
 10. If missing or stale, propose a repair through Human Review Summary.
@@ -44,13 +48,13 @@ Every time `agent-loop` is used inside a target project, check root guidance bef
 
 - project uses `agent-loop`
 - Bootstrap Protocol is missing skill-loading/fallback rules: root guidance must say root `AGENTS.md` is a bootstrap cache rather than a replacement for the `agent-loop` skill, must load/use the available skill before agent-loop workflow decisions, and must say Stage Helper Capability Scan happens only after the controller is active or unavailable/load-failed
-- Message Intent Guard: distinguish `chat`, `requirements-discussion`, `project-skill-management`, and `feature-request` before project-state routing; chat answers only, requirements discussion uses Brainstorm / Clarify to produce requirement documents under `.agent-loop/requirements/`, and project-skill management routes to Project Skill Creation / Update
+- Message Intent Guard: distinguish `chat`, `requirements-discussion`, `project-skill-management`, and `feature-request` before project-state routing; chat answers only, requirements discussion uses Brainstorm / Clarify to produce requirement documents under `.agent-loop/requirements/`, applies the internal Concept Foundation Gate before downstream product modeling when triggered, and project-skill management routes to Project Skill Creation / Update
 - Workflow Stage Map: route common human/project signals to exactly one next stage and its matching detailed references; root guidance is navigation only, not the detailed stage procedure
 - Bootstrap Protocol: inspect `.agent-loop/`, classify the stage, and recommend exactly one next action
 - Agent Ownership: agents steer the loop instead of waiting for the human to name every step
 - Stage Helper Capability Scan: agents actively check available skills/plugins/helpers before fallback stage guidance
 - Gate Modes: Strict Mode, Feature Auto-Loop, Task Auto-Run, and their explicit human enablement rules
-- Required Stops: unclear scope, risky changes, Delivery Contract gates, Project Skill Gate 1, per-invocation Project Skill Execution Gate, subagent dispatch, submit, close, commit, PR, merge, release, publish
+- Required Stops: unclear scope, unresolved Concept Foundation Gate, downstream redefinition of accepted product semantics, unresolved ADR Effective Requirement Snapshot, incomplete source-wide Requirement Model Scope Inventory / Technical Landing Trace, `Upstream Compatibility: review-required`, risky changes, Delivery Contract gates, Project Skill Gate 1, per-invocation Project Skill Execution Gate, subagent dispatch, submit, close, commit, PR, merge, release, publish
 - Completion Rules: fresh verification, review, drift check, project memory update, Feature Completion Check, Feature Close Review
 - Feature Follow-up / Flow-back: bugs, regressions, screenshots, QA feedback, API mismatches, and small tweaks are checked against active/paused/closed recent features before new feature creation or code edits, but only after Project Entry has established or verified agent-loop memory
 - Submit And Commit Rules: submit/commit/PR/merge/release/publish require explicit confirmation and only intended files are included
@@ -139,7 +143,7 @@ Rules:
 - Managed block maintenance rules belong here and in refresh tooling; do not require the target root `AGENTS.md` to include a separate Managed Block Rule prose section.
 - If an existing `AGENTS.md` has no managed blocks, propose adding the minimal needed managed blocks instead of replacing the whole file.
 - If a block-version is missing or older than the current template, treat that block as stale.
-- Treat bare skill-version-only block revisions such as `block-version:1.2.4` as stale because they cannot distinguish same-version template revisions.
+- Treat bare skill-version-only block revisions such as `block-version:1.3.0` as stale because they cannot distinguish same-version template revisions.
 - If a managed block exists in the current template but is missing from root AGENTS.md, treat it as a missing managed block and propose adding it.
 - If a managed block source is missing, stale, or contradictory, classify the block as stale and propose either source correction or block refresh through Human Review Summary.
 - If marker pairs are broken, duplicated, nested, or ambiguous, stop and ask before editing.
@@ -158,7 +162,7 @@ Managed block detection checklist:
 8. Check whether each `source` path exists or is intentionally external/deferred before relying on it.
 9. If any check fails, classify root guidance as `stale-marker` and stop before editing `AGENTS.md`.
 
-If `scripts/check-root-agents-blocks.sh` is available, use it as the first read-only managed-block drift check. The script validates section presence, marker integrity, per-section `block-version`, unexpected managed sections, and local `source` paths. Its output is evidence for the Human Review Summary; it must not be treated as approval to write.
+If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as the first read-only managed-block drift check. The script validates section presence, marker integrity, per-section `block-version`, unexpected managed sections, and local `source` paths. Its output is evidence for the Human Review Summary; it must not be treated as approval to write. Missing or unsupported Python is a capability blocker for checker-backed evidence, not permission to fall back to the old Bash/Ruby rules.
 
 Managed block update flow:
 
@@ -175,7 +179,7 @@ Managed block update flow:
 Use this protocol when root `AGENTS.md` exists and the project already uses `agent-loop`.
 
 1. Read the existing root `AGENTS.md` before proposing updates.
-2. If available, run `scripts/check-root-agents-blocks.sh --template <agent-loop-skill>/templates/root-AGENTS.md --target <project>/AGENTS.md` and use the report as read-only drift evidence.
+2. If available, run `python3 scripts/check-root-agents-blocks.py --template <agent-loop-skill>/templates/root-AGENTS.md --target <project>/AGENTS.md` on macOS, or the equivalent `py -3 scripts\check-root-agents-blocks.py ...` command on Windows, and use the report as read-only drift evidence.
 3. Validate managed block markers with the managed block detection checklist.
 4. Compare each managed block `section` and `block-version` against the current root AGENTS template.
 5. Treat missing, older, bare skill-version-only, date-only, malformed, or different `block-version` values as stale; exact full template block-version match is required.
@@ -220,7 +224,7 @@ Keep it short and long-lived:
 
 - project uses `agent-loop`
 - Bootstrap Protocol skill loading: root `AGENTS.md` is bootstrap guidance, not a replacement for the `agent-loop` skill; if the runtime exposes the skill, load/use it before making workflow decisions, especially during Project Entry, Resume, Re-Adopt, stage boundaries, after context compaction, or when workflow state is uncertain; Stage Helper Capability Scan happens only after the controller is active or unavailable/load-failed; unavailable/load-failed fallback forces Strict Mode and permits only Chat/read-only entry/recovery/operational analysis while Execute, Human-gated writes, Submit, Pause, and Close remain blocked
-- Message Intent Guard: before project-state routing, distinguish `chat`, `requirements-discussion`, `project-skill-management`, and `feature-request`; chat answers/discusses only, requirements discussion shapes demand through Brainstorm / Clarify into human-reviewed requirement documents under `.agent-loop/requirements/`, project-skill management routes to Project Skill Creation / Update, and feature requests enter normal feature workflow
+- Message Intent Guard: before project-state routing, distinguish `chat`, `requirements-discussion`, `project-skill-management`, and `feature-request`; chat answers/discusses only, requirements discussion shapes demand through Brainstorm / Clarify into human-reviewed requirement documents under `.agent-loop/requirements/`, applies the Concept Foundation Gate when concept identity/lifecycle/relationship/state/ownership/fact meaning can change downstream models, project-skill management routes to Project Skill Creation / Update, and feature requests enter normal feature workflow
 - Workflow Stage Map: after intent and project-state classification, route common human/project signals to exactly one next stage and its matching detailed references; load the matching reference before acting and keep the root file as a navigation index
 - Root Agent Bootstrap: read `AGENTS.md`, inspect `.agent-loop/`, classify the current stage, and recommend exactly one next action
 - guidance language follows project language; keep stable artifact/stage names in English
@@ -236,6 +240,8 @@ Keep it short and long-lived:
 - when working in a subdirectory, check for the nearest directory-level `AGENTS.md`
 - when creating a new long-lived boundary directory, propose a directory-level `AGENTS.md` before or alongside the directory creation
 - keep new human source materials in requirement set directories under `.agent-loop/requirements/`, not flat files
+- keep accepted Concept Foundation and Requirement Product Model detail in the effective human-reviewed requirement source named by the requirement README; after archive, preserve prior sources and use an append-only Concept Foundation follow-up or a new requirement set, then update the README effective pointer; Product Brief and Feature Spec cite accepted Concept/Model IDs and `Effective Concept Source` rather than redefining product semantics
+- keep ADR technical landing inside the existing decision record: resolve the Effective Requirement Snapshot, cover every in-scope Requirement Model ID in the Requirement Model Technical Landing Trace, block `review-required` dependencies, and supersede incompatible accepted decisions instead of rewriting them
 - suggest requirement `Delivery Phases` in requirement set `README.md` when a complex requirement needs staged human delivery confirmation before feature construction
 - keep future/deferred work and backlog items in requirement sets and optional `requirements/INDEX.md`, not in `project.md`; do not edit `requirement.md` or other source files for lifecycle/status updates
 - Agent Ownership: agents steer the loop, classify the current stage, recommend exactly one next action, propose missing artifacts, and own diagnosis, sequencing, verification, drift checks, and project-memory updates
@@ -245,7 +251,7 @@ Keep it short and long-lived:
 - ask human confirmation before each agent-loop stage
 - use table-first Human Review Summary for non-trivial confirmations
 - Autonomous Execution After Approval: after explicit Feature Auto-Loop or Task Auto-Run enablement, agents may continue inside the accepted scope through implementation, testing, fixing, review, drift, status update, and final report
-- autonomous stop conditions: scope change, ambiguity, human original requirement change, unavailable infrastructure, drift needing approval, security/data boundary changes, broad architecture changes, directory guidance changes, first-version exclusions, repeated verification failure, unrelated dirty work, Delivery Contract creation/acceptance/breaking-change approval, Project Skill Gate 1, Project Skill Execution Gate, subagent dispatch without explicit approval, submit, close, commit, PR, merge, release, or publish
+- autonomous stop conditions: scope change, ambiguity, unresolved Concept Foundation Gate, downstream redefinition of accepted product semantics, unresolved ADR snapshot/coverage, `Upstream Compatibility: review-required`, human original requirement change, unavailable infrastructure, drift needing approval, security/data boundary changes, broad architecture changes, directory guidance changes, first-version exclusions, repeated verification failure, unrelated dirty work, Delivery Contract creation/acceptance/breaking-change approval, Project Skill Gate 1, Project Skill Execution Gate, subagent dispatch without explicit approval, submit, close, commit, PR, merge, release, or publish
 - submit and commit guidance: submit/commit/PR/merge/release/publish require explicit confirmation after diff, feature artifact review, requirement record review, verification, review, drift, project-memory/guidance impact, and unrelated-change checks; if no project-specific commit style exists, use `<type>: <summary>` plus a concrete bullet body
 - run fresh verification before completion claims
 - run Feature Completion Check after likely completion, before starting a new feature, or when resuming with an active feature

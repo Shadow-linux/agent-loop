@@ -29,6 +29,7 @@ Message intent is evaluated before project state classification. It decides what
 | `chat` | chat means ordinary discussion, rules questions, status questions, or design talk with no request to create requirements or start implementation | answer or discuss only |
 | `requirements-discussion` | requirements-discussion means the human is exploring product needs, business goals, capability ideas, constraints, tradeoffs, or user scenarios without authorizing implementation | Requirements Discussion |
 | `project-skill-management` | human asks to turn a repeatable project workflow into a project-local skill, or to update, disable, or deprecate one | Project Skill Creation / Update after reliable Project Entry/memory |
+| `feature-archive-maintenance` | human explicitly asks to archive closed feature history by month or rehydrate an archived feature | Feature Monthly Archive after reliable memory; read-only scan first |
 | `feature-request` | human explicitly asks to implement, build, change behavior, or start work from accepted requirements | Project Entry, then Design Readiness and Decision & Design / Product Brief / Feature Spec / Feature Follow-up routing |
 | `proposal-doc` | human asks to write a proposal, design note, or discussion document without implementing | write the requested proposal/doc only |
 | `deferred-requirement` | human asks to remember, defer, backlog, or do something later | Requirement Archive with Future / Deferred Requirement Intake |
@@ -42,7 +43,9 @@ If message intent is `requirements-discussion`, do not create a feature workspac
 
 If message intent is `project-skill-management`, load `references/project-skills.md`. Do not create a requirement set or feature workspace. Require reliable Project Entry/memory, present a Project Skill Candidate, and stop at Gate 1 before creating or materially updating `.agent-loop/skills/`.
 
-Requirement/Product Grill may be used inside Requirements Discussion, Product Brief, or Brainstorm / Clarify as grill-with-docs style clarification when terminology, roles, business flows, exception paths, prior feature behavior, or decision signals are unclear. It does not create a new stage: it clarifies input for the owning stage, writes only through that stage's artifacts and human gates, and sends shared design signals to Design Readiness Check.
+If message intent is `feature-archive-maintenance`, require current project memory and load the Feature Monthly Archive procedure. The scan is read-only. It resolves Feature IDs through `features/archive.md`, shows eligible/blocked candidates, exact moves, reference edits, unchanged content, restore scope, and the expected plan SHA-256. Archive or rehydrate stops at one Batch Human Gate and then uses a transaction journal, post-check, and restore. The invariant is: rehydrate before reopened execution; archive state is not feature lifecycle.
+
+Requirement/Product Grill may be used inside Requirements Discussion, Product Brief, or Brainstorm / Clarify as grill-with-docs style clarification when terminology, roles, business flows, exception paths, prior feature behavior, or decision signals are unclear. It does not create a new stage. Concept Foundation is a triggered internal method of Requirements Discussion / Requirement Product Grill, not a stage. It stabilizes product concepts before requirement-level flow, state, and product-data modeling, writes through the human-reviewed requirement document, and sends only shared design signals to Design Readiness Check.
 
 Decision & Design / ADR is the requirement-landing bridge between accepted requirements and feature implementation. Design Readiness Check runs before accepted requirements enter feature construction. Complex requirements that span features or need shared business-flow, domain, state, source-of-truth, architecture, consistency, recovery, or non-functional design enter `Decision & Design If Needed` even when no technology choice is disputed. Ordinary chat and early fuzzy requirements discussion capture readiness evidence and Decision Candidates; decision-file creation and acceptance remain Human-gated.
 
@@ -55,6 +58,86 @@ If the human explicitly says they only want to discuss and do not want documenta
 If unclear whether the human wants ordinary chat or requirements discussion, ask whether to keep discussing or shape the topic into a requirements document.
 
 If unclear whether the human wants requirements discussion or feature implementation, ask whether to form a requirements document first or start feature construction.
+
+## Concept Foundation Routing
+
+During Requirements Discussion, classify Concept Foundation before drafting detailed business flow, product state, or product data:
+
+```text
+candidate | accepted | reopened | concept-foundation-not-needed
+```
+
+Enter `candidate` when any current requirement signal can change downstream product meaning: one term covers multiple objects/actions/results; a business object gains or changes identity or lifecycle; multiple actors/tenants/systems participate; work spans features; ownership, balance, inventory, approval, order, task, quota, or other fact-source semantics matter; current language conflicts with project Domain Language, code, tests, or historical features.
+
+Use `concept-foundation-not-needed` only for a simple change with no product-semantic, identity, lifecycle, ownership, state, relationship, cross-role, cross-feature, or data meaning change. Record one concrete reason; do not use it to bypass ordinary ambiguity.
+
+`accepted` requires human confirmation of every blocking concept meaning. `reopened` means later requirement evidence invalidated an accepted meaning and returns to the same gate.
+
+Before archive, the requirement document draft records status directly. After archive, preserve reviewed source files: mark `reopened` response-locally, stop downstream work, run Requirement Conflict Review, and ask before writing an append-only Concept Foundation follow-up or linked replacement requirement set. The requirement README `Effective Concept Foundation` block then points to the current human-reviewed source and effective status without duplicating concept detail. Older sets without this block resolve status from their reviewed requirement document.
+
+Do not enter Business Flow, State Model, or Product Data Model while a triggered Concept Foundation is `candidate` or `reopened`.
+
+After `accepted`, derive one Requirement Product Model from accepted Concept IDs: Concept Relationships, Role / Permission Matrix, Commands / Events, Primary Business Flow, Product State Model, product-layer objects/facts/invariants, and Exception / Recovery behavior. This product model does not select tables, documents, events, ledgers, providers, transactions, or other technical representations.
+
+## Human Grill Contract
+
+When Concept Foundation is triggered, one interaction turn follows this order:
+
+1. inspect available evidence: project Domain Language, source requirements, relevant code/docs/tests, and targeted historical feature artifacts;
+2. extract candidate concepts from concrete scenarios, including nouns, actions, outcomes, constraints, synonyms, overloaded terms, and conflicts;
+3. present one recommended definition with Concept ID, evidence, identity/lifecycle boundary, downstream impact if accepted, and downstream impact if rejected;
+4. ask exactly one downstream-blocking question and wait for the human answer.
+
+Do not replace step 4 with a batch of concept questions. Generic Brainstorm / Clarify question-count flexibility does not override this contract. Non-blocking uncertainties remain recorded without delaying the one blocking decision.
+
+The Concept Foundation confirmation is the product-semantic Human Gate inside Requirements Discussion. It does not accept the requirement for implementation, authorize Requirement Archive writes, create an ADR, or start feature construction.
+
+Before setting a triggered foundation to `accepted`, load `references/human-review-summary.md` and present the Concept Foundation Human Review Summary. The summary shows every confirmed or still-blocking Concept ID, evidence, identity/lifecycle boundary, relationship/state impact, and the explicit human decision; it does not replace the one-question-per-turn Grill Contract.
+
+## ADR Requirement Model Technical Landing
+
+When Decision & Design is driven by an accepted Requirement Product Model, resolve the requirement README `Effective Concept Foundation` pointer before drafting or reusing an ADR. Older requirement sets without the pointer use the reviewed requirement document as a backward-compatible source.
+
+Record this Effective Requirement Snapshot in the existing decision record:
+
+```text
+Effective Concept Source:
+Concept Foundation Status: accepted | concept-foundation-not-needed
+Accepted Concept IDs:
+Accepted Requirement Model IDs:
+Upstream Compatibility: current | review-required
+Last Compatibility Check:
+Trace Applicability: required | not-applicable
+Trace Not-Applicable Reason:
+```
+
+Triggered Concept Foundation status must be `accepted`; `candidate` or `reopened` stops Decision & Design acceptance and returns to the Human Grill Contract. The snapshot cites accepted meanings and constraints but never copies a new definition into the ADR.
+
+Before selecting the coherent ADR scope, add a Requirement Model Scope Inventory row for every stable model ID in the effective source: `REL-*`, `PERM-*`, `CMD-*`, `EVT-*`, `FLOW-*`, `STATE-*`, `PM-*`, and `EX-*`. Use `in-scope | covered-by-accepted-decision | feature-local | proposed-decision | not-applicable`. Existing external owners must resolve to the named artifact; future owner paths must be explicit with a `planned:` prefix. `not-applicable` requires a concrete reason. The in-scope inventory IDs must exactly equal the snapshot IDs.
+
+For every in-scope accepted Requirement Model ID, add exactly one row to the Requirement Model Technical Landing Trace with one disposition:
+
+```text
+landed | covered-by-accepted-decision | feature-local | not-applicable
+```
+
+`landed` requires a concrete Technical Landing, Preserved Invariant, Design Slice, and Verification target. `covered-by-accepted-decision` names an existing accepted decision Markdown path. `feature-local` names an existing Feature Spec or explicit canonical `planned:` owner path and cannot hide a shared rule. `not-applicable` records a concrete reason and is visible at the Human Gate. The trace never creates product meaning; missing or ambiguous meaning returns to Requirements Discussion.
+
+Coverage Hard Gate blocks ADR acceptance and dependent Feature Spec work unless the effective source resolves, Upstream Compatibility is `current`, the Scope Inventory exactly covers the source ID set, every in-scope accepted Requirement Model ID has one disposition, every `landed` row has complete landing/slice/verification data, no product-semantic blocker remains, and the human has seen non-landed dispositions plus deferred/out-of-scope Design Slices. `Applicable Decisions` proves awareness only; it does not satisfy trace coverage.
+
+Run structural preflight while the ADR is `proposed`. A successful preflight permits the Agent to ask for Decision & Design approval; it does not accept the ADR. After explicit human acceptance, record Human Review Evidence, change status to `accepted`, and rerun accepted-mode validation. Accepted-mode validation requires the recorded human decision, confirmer, date, and concrete evidence.
+
+For a reasoned `concept-foundation-not-needed` source, keep Accepted Concept IDs and Accepted Requirement Model IDs as `none`, set Trace Applicability to `not-applicable`, record a concrete reason, and do not fabricate Concept Definitions, Scope Inventory, or Technical Landing Trace rows.
+
+When the README effective source changes or new accepted requirement evidence changes an upstream model, set the dependency judgment to:
+
+```text
+Upstream Compatibility: review-required
+```
+
+`review-required` is a dependency-availability judgment, not an ADR lifecycle status. Stop new dependent Feature Spec, Plan, and implementation work; compare old/new Concept and Requirement Model IDs. If product meaning changed but the technical decision still holds, update the snapshot/trace only after Decision & Design Human Review. If the accepted decision meaning or technical conclusion no longer holds, create a Human-gated superseding ADR and preserve the accepted record unchanged.
+
+Operational landing is triggered, not default. Expand Migration / Backfill, Compatibility, Rollout / Cutover, or Rollback / Reversibility detail only when the decision introduces or changes persistence representation, protocol, provider, runtime boundary, or rollout compatibility. Otherwise record one concrete `not-triggered` reason without expanding the corresponding section.
 
 ## Routing Axes And Precedence
 
@@ -97,7 +180,7 @@ Work State:
 Apply this precedence exactly:
 
 ```text
-Safety Stop -> Remote Discovery -> Memory Recovery -> Active Feature Guard -> Blocker Resolution -> Intent Routing -> Normal Stage Continuation
+Safety Stop -> Remote Discovery -> Memory Recovery -> Feature Archive Maintenance -> Active Feature Guard -> Blocker Resolution -> Intent Routing -> Normal Stage Continuation
 ```
 
 Rules:
@@ -105,9 +188,10 @@ Rules:
 1. Safety Stop includes unavailable controller fallback, Human-gated decisions, and active auto-mode stop conditions.
 2. Remote Discovery runs before local existing-project handling.
 3. `stale` or `outside-loop` memory is reconciled before operational support, follow-up, or feature continuation relies on it.
-4. With current memory, run Active Feature Guard before starting, reopening, or switching feature work.
-5. Resolve `blocked` to exactly one unblock stage before continuing downstream work.
-6. Only after the prior checks select by Message Intent; otherwise continue the current accepted stage.
+4. With current memory, an explicit `feature-archive-maintenance` request routes before Active Feature Guard because it maintains closed history. Eligibility blocks any selected active/paused path without switching current work.
+5. Otherwise run Active Feature Guard before starting, reopening, or switching feature work.
+6. Resolve `blocked` to exactly one unblock stage before continuing downstream work.
+7. Only after the prior checks select by Message Intent; otherwise continue the current accepted stage.
 
 Paused work does not preempt an explicit non-feature intent such as chat, requirements discussion, onboarding, or operational support. Ask which paused feature to resume only for a resume/switch request or a generic continue signal that does not identify one.
 
@@ -135,7 +219,8 @@ Use this order:
 4. If `project.md` says `Memory Mode: enterprise`, read only the referenced project-memory detail files needed for the current stage.
 5. If `project.md` says `Status: remote-entry`, read `<memory-root>/remote.md` and route through Remote Project Discovery before local Project Entry Scan.
 6. Locate `Active Feature` and `Paused Features`.
-6a. If `.agent-loop/skills/INDEX.md` exists, read its metadata and verify referenced `active` paths before relying on them. Do not load `proposed`, `disabled`, or `deprecated` skills into normal routing.
+6a. For Feature Monthly Archive or an archived follow-up candidate, read `features/archive.md` before opening the month path. Treat Feature ID as stable and verify the locator target, archive state, and flat/month uniqueness.
+6b. If `.agent-loop/skills/INDEX.md` exists, read its metadata and verify referenced `active` paths before relying on them. Do not load `proposed`, `disabled`, or `deprecated` skills into normal routing.
 7. Read current feature `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`, and `contracts.md` if present.
 8. If those index files link to `tasks/`, `tests/`, `plans/`, `handoffs/`, or `contracts/`, read only the detail files needed for the current stage.
 9. Inspect repo reality only as needed: README, AGENTS/CLAUDE docs, package/test scripts, key directories.
@@ -146,7 +231,9 @@ Use this order:
 
 If `project.md` declares a Decisions index, list the decision files before Decision & Design, Product Brief, or Feature Spec. Read decisions already linked by the active requirement, `product.md`, or `spec.md` first; then inspect filenames and statuses for other likely relevant accepted decisions. Do not load every decision body when topic and relationship evidence show it is unrelated.
 
-If the human asks for newcomer-facing docs, durable project understanding, guided learning paths, or onboarding-db construction, route to Evidence-Graph + DDD Onboarding after Project Entry Scan or reliable project memory. Load `references/onboarding-knowledge-base.md`. Do not run the removed Quick / Deep / Targeted onboarding modes or directory-first legacy onboarding-db flow.
+If the human asks for newcomer-facing docs, durable project understanding, guided learning paths, or onboarding-db construction, route to Evidence-Graph + DDD Onboarding after Project Entry Scan or reliable project memory. Load `references/onboarding-knowledge-base.md`. Evidence Graph must include Core Flow Inventory selection before Onboarding Spec acceptance; critical/important flows then use Flow Slice Coverage and the Completeness Hard Gate. Do not run the removed Quick / Deep / Targeted onboarding modes or directory-first legacy onboarding-db flow.
+
+This keeps exactly two onboarding Human Gates: accept the Onboarding Spec, then separately accept the completed Onboarding Tasks Full Execution Gate. Core-flow selection and completeness are contents of those existing gates, not additional pauses. Batch remains an Agent organization/review unit rather than a Human Gate.
 
 If `.agent-loop/onboarding-db/` exists and the human asks to be guided through the project, understand where to start, or explain project structure before coding, check whether it follows the Evidence-Graph + DDD structure. If it does, use it through `references/onboarding-knowledge-base.md` Guided / Focused Use. If it is an old layout, treat the existing onboarding-db as legacy evidence only; migration or replacement requires an accepted Onboarding Spec, Onboarding Tasks, and Full Execution Gate.
 
@@ -219,6 +306,7 @@ Chat Entry / Requirements Discussion if Needed
 Project Entry
 Remote Project Discovery if Needed
 Re-Adopt Agent Loop Project if Needed
+Feature Monthly Archive If Explicitly Requested
 Code-Guided Operational Support if Needed
 Project Skill Creation / Update if Needed
 Requirement Archive
@@ -285,7 +373,7 @@ Feature Auto-Loop means:
 Feature Auto-Loop = give one feature a bounded release lane.
 ```
 
-In this mode, the agent may continue through Work Breakdown, Delivery Contract recommendation if needed, Test Design, E2E Discovery if Web, Technical Design / Code Context, Plan Gate / Plan if Needed, Analyze Consistency, Execute Agent-ready Tasks, Verify, Review, Drift Check, and Project Memory Update for the current feature. It must not skip Plan Gate before execution. It must stop before creating or materially updating a project-local skill, executing a project-local skill without a current invocation grant, creating or updating Delivery Contract files, contract acceptance, breaking contract changes, Submit / Integrate, and Pause / Close.
+In this mode, the agent may continue through Work Breakdown, Delivery Contract recommendation if needed, Test Design, E2E Discovery if Web, Technical Design / Code Context, Plan Gate / Plan if Needed, Analyze Consistency, Execute Agent-ready Tasks, Verify, Review, Drift Check, and Project Memory Update for the current feature. It must not skip Plan Gate before execution. It must stop before Feature Monthly Archive or rehydrate and their Batch Human Gates, creating or materially updating a project-local skill, executing a project-local skill without a current invocation grant, creating or updating Delivery Contract files, contract acceptance, breaking contract changes, Submit / Integrate, and Pause / Close.
 
 Task Auto-Run means:
 
@@ -362,6 +450,8 @@ Auto modes do not remove stop conditions. Stop and ask when:
 - directory-level `AGENTS.md` creation/update is recommended
 - Complex Artifact Mode detail directories (`tasks/`, `tests/`, `plans/`) would be created or the feature would switch from simple to complex artifact mode
 - the work would require first-version exclusions
+- Feature Monthly Archive or rehydrate is requested; scan may remain read-only, but exact plan SHA-256 confirmation is required before apply
+- an archive row target is missing, an archived directory lacks a row, a flat/month Feature ID collides, a `rehydrated` row points to a month path, an incomplete `.archive-txn` exists, or verified apply leaves an old durable path
 - TDD cannot be followed or verification repeatedly fails
 - review finds behavior/scope/architecture changes
 - subagents are needed but not yet approved

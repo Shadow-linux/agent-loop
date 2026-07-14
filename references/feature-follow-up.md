@@ -31,10 +31,9 @@ Default recent window: **30 calendar days** from the current date.
 Inspect:
 
 - `project.md` Active Feature, Paused Features, and recent feature references
-- `.agent-loop/features/*/spec.md`
-- `.agent-loop/features/*/tasks.md`
-- `.agent-loop/features/*/tests.md`
-- `.agent-loop/features/*/notes.md`
+- flat recent `.agent-loop/features/<feature-id>/spec.md`, `tasks.md`, `tests.md`, and `notes.md`
+- root `.agent-loop/features/archive.md` after Active/Paused and flat recent candidates
+- archived `.agent-loop/features/YYYY-MM/<feature-id>/` artifacts only after the locator row resolves uniquely
 - close records, submit records, verification evidence, and drift notes
 - code paths, tests, APIs, data models, or UI routes mentioned by the bug/change
 - screenshot text, visible UI labels, error messages, stack traces, request/response samples, logs, test names, and file paths attached to the report
@@ -44,6 +43,14 @@ If the likely owning feature is older than 30 days but the evidence is strong, s
 The 30-day window is a default scan window, not a hard ownership boundary. If the report mentions "上个月", "之前那个", "上次那个", "the previous feature", an old ticket/feature name, or a code/API/test/data path that clearly overlaps an older feature, run an extended candidate scan before creating a new feature or maintenance fix. Mark the candidate `outside-default-window` and explain why it was considered.
 
 Do not use day 31 as a reason to stop flow-back analysis. If evidence is weak after the extended scan, classify as `unclear` and recommend `investigate-first` rather than guessing.
+
+## Archived Feature Owners
+
+Feature Monthly Archive changes location, not ownership. Lookup order is fixed: Active/Paused first, flat recent features second, `features/archive.md` third, archived feature artifacts fourth.
+
+When an archived closed feature is the confirmed owner, rehydrate before reopened execution. First run a read-only rehydrate scan, show the exact plan SHA-256 Batch Human Gate, then use the transaction journal, reference updates, post-check, and restore rules. Only after verified rehydrate may Feature Follow-up ask to change lifecycle from `closed` to `active` or start tasks. Archive state is not feature lifecycle.
+
+If the archive row target is missing, a month directory lacks its row, the same Feature ID exists flat and archived, a `rehydrated` row points to a month path, or `.archive-txn` is incomplete, stop and route to Recovery instead of guessing ownership.
 
 ## Low-information Reports
 

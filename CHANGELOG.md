@@ -1,6 +1,61 @@
 # Agent Loop Changelog
 
-## Unreleased
+## 1.3.0 — 2026-07-11
+
+### Version Baseline
+- Started the 1.3.0 alpha development line from the refreshed `stable-v1.2.4` baseline.
+- Updated version-bearing skill metadata and human-facing version labels to 1.3.0.
+- Updated the root AGENTS managed-block revision to `block-version:1.3.0-20260711` for the first 1.3.0 template revision.
+- Updated version-sync, root-guidance, and human-help regression expectations for the 1.3.0 development line.
+
+### Core Flow Completeness
+- Added Core Flow Inventory and Flow Slice Coverage so critical/important onboarding flows close across callbacks, consumers, retries, compensation, reconciliation, jobs, and business terminal states.
+- Made timeline/sequence the primary per-flow narrative, kept overview/boundary and ASCII state-machine views complementary, and triggered lineage, transaction, async, decision, runtime, and troubleshooting diagrams only when their semantics apply.
+- Added a Completeness Hard Gate before quality scoring, aligned coverage and batch review dimensions, and prevented missing critical slices from being averaged into `newcomer-ready`.
+- Kept exactly two onboarding Human Gates and removed the default pressure to invent state diagrams for stateless content topics.
+
+### Concept Foundation And Requirement Product Model
+- Implemented trigger-based Concept Foundation inside Requirements Discussion / Requirement Product Grill without adding a canonical stage or top-level artifact.
+- Added the Human Grill Contract: evidence inspection, Concept Candidate Inventory, one recommended definition with accept/reject impact, then exactly one downstream-blocking human question.
+- Added `candidate | accepted | reopened | concept-foundation-not-needed` routing and a hard stop before business-flow, state, and product-data modeling while blocking product meaning remains unresolved.
+- Added requirement-local Concept IDs, definitions, relationships, role/permission, commands/events, product state, Requirement Product Model, exception/recovery, and Concept-To-Product Traceability templates.
+- Made Product Brief and Feature Spec consume accepted Concept/Model references rather than redefine product semantics; clarified that ADR consumes accepted PRD meaning and kept Concept-to-technical mapping out of Phase 1/2.
+- Hardened Concept Foundation validation against unconfirmed concepts, missing candidate inventory, unresolved blockers, placeholder not-needed reasons, duplicate IDs, incomplete trace coverage, and unauthorized command actors.
+- Added cumulative Concept Foundation Human Review Summary and append-only post-archive reopen handling through the requirement README `Effective Concept Foundation` pointer.
+- Added focused regression, behavioral artifact validation, pressure scenarios, examples, and a full-validation report for Phase 1/2 while leaving Design Skill, E2E Skill, Jam Kits, and executable schemas out of scope.
+
+### ADR Requirement Model Technical Landing
+- Added Effective Requirement Snapshot resolution so requirement-driven ADRs freeze the current effective source, accepted Concept/Model IDs, compatibility judgment, and last check without copying product definitions.
+- Added a source-wide Requirement Model Scope Inventory covering stable relationship, permission, command/event, flow, state, product-model, and exception IDs so coherent ADR scope cannot silently omit upstream models.
+- Added the Requirement Model Technical Landing Trace with explicit `landed | covered-by-accepted-decision | feature-local | not-applicable` dispositions and hard coverage before ADR acceptance or dependent Feature Spec work.
+- Split validation into `proposed` structural preflight and post-human-review `accepted` validation with recorded Human Review Evidence; added a reasoned trace-not-applicable branch for `concept-foundation-not-needed` sources.
+- Added `Upstream Compatibility: review-required` as a blocking dependency judgment, not an ADR lifecycle status, and required superseding ADRs when accepted technical decisions no longer hold.
+- Added a Decision & Design Human Review Summary for source, coverage counts, preserved semantics, operational triggers, Design Slice ownership, verification, and explicit acceptance/revision routing.
+- Made Migration / Backfill, Compatibility, Rollout / Cutover, and Rollback / Reversibility operational landing conditional on concrete triggers instead of default empty sections.
+- Added a domain-neutral trace validator, adversarial bypass regression, valid/invalid fixtures, focused regression, pressure scenarios, root-guidance coordination, and full-validation evidence without changing the skill version or stage model.
+
+### Cross-Platform Python Script Runtime
+- Replaced the four checker implementations with canonical Python 3.10+ standard-library entrypoints: `scripts/check-root-agents-blocks.py`, `scripts/check-onboarding-core-flow-coverage.py`, `scripts/check-concept-foundation-trace.py`, and `scripts/check-adr-requirement-model-trace.py`.
+- Added 36 native `unittest` cases for valid, invalid, adversarial, BOM/CRLF, usage/exit-code, standard-library-only, runtime guard, compatibility-launcher, current-authority, read-only, determinism, and workspace-confinement behavior so the same suite can run on macOS and Windows.
+- Kept the former `.sh` / `.rb` paths as one-cycle compatibility launchers only; active tests and current guidance now call the canonical Python entrypoints directly.
+- Added fail-closed runtime guidance and native macOS/Windows invocation examples; no third-party Python package, shell emulation layer, or automatic runtime installation is required.
+
+### Feature Monthly Archive
+- Implemented directory-only monthly archival: each eligible, Human-confirmed closed feature directory moves intact into `features/YYYY-MM/`, without per-feature summaries, `historical/`, deletion, packing, or content compression.
+- Added `features/archive.md` as the stable Feature ID-to-current-path locator while keeping feature artifacts, requirement sources, and accepted decisions authoritative.
+- Added Python 3.10+ standard-library scan, check, apply, and restore commands with deterministic plan hashing, required `expected-plan-sha256`, conservative reference blocking, transaction journals, post-check, and verified failure recovery.
+- Made ADR ownership, Feature Follow-up, recovery, templates, root guidance, and Stage Map resolve both flat and month-archived closed features while active, blocked, and paused features remain flat.
+- Added a separate Human-gated rehydrate path before archived work can flow back; rehydrate moves the directory flat but does not change the closed lifecycle itself.
+- Added focused archive/restore fixtures and macOS/Windows CI definitions for eligibility, no-mutation, stale plans, exact reference edits, idempotency, interrupted recovery, and locator consistency; current local evidence is `macOS-verified / Windows-test-defined`.
+- Hardened recovery against self-consistent journal scope tampering, corrupt backups, and post-crash human edits; stranded transactions now block new scan/apply work, and inbound relative links into moving features are included in the exact reference plan.
+
+### Pre-Release Validation
+- Revalidated the complete `stable-v1.2.4..v1.3.0` behavior set across all six semantic audit domains, the full Python/shell suite, pressure scenarios, version synchronization, and mechanical checks.
+- Recorded successful Windows/macOS × Python 3.10/3.x GitHub Actions evidence for commit `7253461` instead of treating the configured matrix as execution proof.
+- Unified all five v1.3.0 capability proposals at the Release Human Gate and added a durable release-evidence contract so proposal, implementation, platform, report, and authorization status cannot silently drift backward.
+- Recorded Human approval for the v1.3.0 Release Gate and bound `stable-v1.3.0` creation to successful Windows/macOS CI for the exact release-evidence commit.
+
+## 1.2.4 — 2026-07-11
 
 ### Project-Local Skills
 - Added Project Skill Creation / Update for durable target-project capabilities under `.agent-loop/skills/<skill-name>/`, with INDEX-based lifecycle, `bootstrap` / `on-demand` loading, and target-path ownership that never defaults to global skill directories.
@@ -13,8 +68,6 @@
 - Added a five-domain single-feature scoring method for focused logic, Human Gate, cross-surface consistency, pressure-resistance, and evidence audits.
 - Added a feature-scoped contract test and a Project-Local Skills scoring report without making full-repository tests part of the feature score.
 - Kept single-feature scoring in maintainer guidance only; it does not replace mandatory full validation for control-surface changes.
-
-## 1.2.4 — 2026-07-11
 
 ### Version Baseline
 - Started the 1.2.4 development line from the current alpha branch so new behavior changes are recorded under 1.2.4 instead of the closed 1.2.3 section.

@@ -37,6 +37,21 @@ Before using an external skill or plugin inside a stage:
 - [ ] Keep requirement README limited to source, lifecycle, Delivery Phase, Feature Mapping, and decision-link summaries rather than duplicating the detailed requirement document.
 - [ ] If Requirement/Product Grill was used, verify the owning requirement document or product brief has structured sections for terminology, flows, exceptions, data/source of truth, historical conflicts, acceptance scenarios, and Decision Candidates where applicable.
 
+## Concept Foundation Gate
+
+- [ ] Classify `Concept Foundation Status` before detailed requirement-level Business Flow, Product State Model, or Requirement Product Model work.
+- [ ] Trigger `candidate` for overloaded terms, identity/lifecycle/state changes, multi-actor/tenant/system flows, cross-feature work, hard-to-reverse fact semantics, or conflicts with Domain Language/code/tests/history.
+- [ ] Use `concept-foundation-not-needed` only with a concrete reason showing no product-semantic, identity, lifecycle, ownership, state, relationship, cross-role, cross-feature, or data-meaning change.
+- [ ] Follow the Human Grill Contract in order: inspect evidence; extract and display candidate concepts; present one recommended definition with Concept ID, evidence, boundary, and accept/reject impact; ask exactly one downstream-blocking question.
+- [ ] Keep status `candidate` or `reopened` while any unresolved meaning can change downstream flow, state, product data, terminal behavior, or invariants.
+- [ ] Do not draft Business Flow, Product State Model, or Requirement Product Model as assumptions plus open questions while the gate is blocked.
+- [ ] Set `accepted` only after the human confirms every blocking concept definition.
+- [ ] Before `accepted`, load `human-review-summary.md` and present the Concept Foundation Human Review Summary; keep the one-question-per-turn Grill as the method for resolving blockers.
+- [ ] After acceptance, derive Concept Relationships, Role / Permission Matrix, Commands / Events, Primary Business Flow, Product State Model, Requirement Product Model, invariants, exceptions, and recovery from stable Concept IDs.
+- [ ] Record Concept-To-Product Traceability and reject any derived row whose Concept ID is undefined or unaccepted.
+- [ ] After archive, preserve reviewed source files; route `reopened` through Requirement Conflict Review, an append-only Concept Foundation follow-up or linked replacement set, and README `Effective Concept Foundation` pointer update after human confirmation.
+- [ ] Keep Concept Foundation inside Requirements Discussion / Requirement Product Grill; do not add a canonical stage, `.agent-loop/concepts/`, YAML/JSON schema, ADR, Design Skill, or E2E Skill output.
+
 ## Design Readiness Check
 
 - [ ] Run before an accepted requirement enters feature construction, and repeat when Product Brief, Technical Design, or Drift reveals new shared design needs.
@@ -59,6 +74,22 @@ Before using an external skill or plugin inside a stage:
 - [ ] If a project-level decision is required but unresolved, stop before Feature Spec or Plan Gate.
 - [ ] Verify requirement README, product.md, and spec.md decision references stay aligned.
 - [ ] Remember that `.agent-loop/decisions/` is available in simple and enterprise memory modes and does not trigger enterprise mode by itself.
+
+## ADR Requirement Model Technical Landing
+
+- [ ] Resolve the requirement README `Effective Concept Foundation` pointer and record the Effective Requirement Snapshot before technical landing.
+- [ ] Require a triggered Concept Foundation to be `accepted`; return `candidate` / `reopened` to the Human Grill Contract.
+- [ ] Declare accepted Concept IDs and in-scope Requirement Model IDs without copying or redefining product meaning.
+- [ ] Inventory every stable source model ID (`REL-*`, `PERM-*`, `CMD-*`, `EVT-*`, `FLOW-*`, `STATE-*`, `PM-*`, `EX-*`) and give every out-of-scope ID an accepted-decision, feature-local, proposed-decision, or reasoned not-applicable owner.
+- [ ] Give every in-scope accepted Requirement Model ID exactly one Requirement Model Technical Landing Trace disposition.
+- [ ] Apply the Coverage Hard Gate: every `landed` row has Technical Landing, Preserved Invariant, Design Slice, and Verification; non-landed dispositions name an owner or concrete reason.
+- [ ] Treat `Applicable Decisions` as awareness only, never as a substitute for Requirement Model coverage or Design Slice ownership.
+- [ ] Keep `Upstream Compatibility: review-required` separate from ADR lifecycle status and block dependent Feature Spec, Plan, and implementation.
+- [ ] When an accepted decision no longer holds, create a Human-gated superseding ADR instead of rewriting accepted decision meaning.
+- [ ] Assess operational landing triggers; expand Migration / Backfill, Compatibility, Rollout / Cutover, or Rollback / Reversibility only when triggered, otherwise record a concrete `not-triggered` reason.
+- [ ] Keep the ADR `proposed` for structural preflight; after it passes, present the Human Review Summary and wait for explicit acceptance before recording Human Review Evidence and rerunning accepted-mode validation.
+- [ ] For a reasoned `concept-foundation-not-needed` source, use the explicit trace-not-applicable fields and do not invent Concept or Requirement Model rows.
+- [ ] Load `human-review-summary.md` and present the Decision & Design Human Review Summary before creating, accepting, superseding, or materially updating the record.
 
 ## Message Intent
 
@@ -102,10 +133,10 @@ Before using an external skill or plugin inside a stage:
 - [ ] Confirm before code/config/deploy/destructive operations, paid-quota external calls, credential rotation, or feature/fix escalation.
 - [ ] Check root `AGENTS.md` / `CLAUDE.md` and any obvious directory-level guidance.
 - [ ] Treat root `AGENTS.md` as stale if it lacks Message Intent Guard, Workflow Stage Map, or lacks Bootstrap Protocol, Agent Ownership, Operational Support Guard, Stage Helper Capability Scan, Gate Modes, Required Stops, Completion Rules, Feature Follow-up / Flow-back, Submit And Commit Rules, root/directory guidance boundaries, or requirement archive rules.
-- [ ] If `scripts/check-root-agents-blocks.sh` is available, run it as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
+- [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.2.4-20260711.3`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.3.0-20260714.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -188,10 +219,10 @@ Before using an external skill or plugin inside a stage:
 - [ ] Inventory root and directory-level guidance files.
 - [ ] Check whether root `AGENTS.md` exists, is stale, or must be created.
 - [ ] If root `AGENTS.md` exists, verify it contains Message Intent Guard, Workflow Stage Map, Bootstrap Protocol, Agent Ownership, Gate Modes, Required Stops, and Completion Rules.
-- [ ] If `scripts/check-root-agents-blocks.sh` is available, run it as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
+- [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.2.4-20260711.3`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.3.0-20260714.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -222,7 +253,11 @@ Before using an external skill or plugin inside a stage:
 - [ ] Treat old onboarding-db files as legacy evidence unless an Onboarding Spec migration is accepted.
 - [ ] State that Markdown is source of truth and website generation is out of scope.
 - [ ] Build `08-review/evidence-graph.md` before formal onboarding docs.
+- [ ] Build Core Flow Inventory from entries, state writes, async handlers, recovery paths, tests/contracts/logs/config, and verified business outcomes.
+- [ ] Give every `critical` / `important` flow a stable Flow ID, business success/failure terminals, variants, owners, side effects, recovery responsibility, evidence chain, and planned/deferred decision.
+- [ ] Do not treat `accepted` / `pending` / `processing` as a business terminal when callback, consumer, job, or reconciler owns the final state.
 - [ ] Draft `onboarding-spec.md`: target readers, scope, module plan, flow plan, DDD mapping, jobs/async, infra/deploy, file strategy, diagram type plan, ASCII 文本图 / wireframe rules, quality gates, and batches.
+- [ ] Add Flow Slice Coverage for every planned critical/important flow; map each critical Slice ID to evidence, Diagram IDs, and a narrative section.
 - [ ] Ask human confirmation for the Onboarding Spec only.
 - [ ] Write `onboarding-tasks.md` after Spec acceptance; Spec acceptance does not authorize formal docs.
 - [ ] After writing Onboarding Tasks, ask separate human acceptance of the Full Execution Gate.
@@ -232,17 +267,19 @@ Before using an external skill or plugin inside a stage:
 - [ ] If a topic cannot be written meaningfully, track it in `coverage-matrix.md` / `onboarding-tasks.md` instead of creating a thin file.
 - [ ] Module docs default to single long files: `02-modules/<module-name>.md`.
 - [ ] Flow docs default to single long files: `03-flows/<flow-name>.md`.
-- [ ] state diagram first: every formal onboarding doc should have at least 架构/边界图 for structure plus ASCII 状态图 / 状态机图 for state/exceptions.
-- [ ] Every content-bearing onboarding-db document must include the required diagram set unless the accepted Diagram Plan records an explicit exemption and reason.
-- [ ] module docs require architecture/boundary + state + timeline/sequence diagrams by default, plus core-principle explanation and diagrammed examples when internal behavior is not obvious.
-- [ ] flow docs require architecture/boundary + state + timeline/sequence diagrams by default.
+- [ ] Critical/important flows require Core Flow Overview / Boundary, Timeline / Sequence as the primary per-flow narrative, and ASCII State Machine / Decision views.
+- [ ] Complexity-triggered diagrams cover recovery timing, data lineage, transaction/concurrency, async topology, decisions, ERD, runtime topology, or troubleshooting only when the corresponding signal exists.
+- [ ] Module and other content docs select diagrams that explain real semantics; stateless glossary, static config lists, and pure indexes do not invent state diagrams.
+- [ ] module docs use architecture/boundary, state, and timeline/sequence diagrams when real boundary/state/timing/data-movement semantics exist, plus core-principle explanation and diagrammed examples when internal behavior is not obvious.
+- [ ] critical/important flow docs require architecture/boundary + state + timeline/sequence diagrams by default; supporting flow docs stay lightweight unless they own core state, side effects, or recovery.
 - [ ] Mermaid flowchart / sequenceDiagram can be the main expression for normal flow and timing; ASCII remains preferred for state-machine / decision diagrams and complex principle/example diagrams.
 - [ ] ASCII 泳道图 is optional supporting detail for ownership lanes; do not use it to replace the required Timeline / 时序图 in module/flow docs.
 - [ ] Use Timeline Diagram when recovery/timing matters; avoid stacked box diagram as the main explanation.
 - [ ] Plain flowcharts are only supporting detail.
-- [ ] Reject outline-only onboarding: module/flow docs must include use cases, domain/data objects, information transfer, state transitions, failure modes, verification/troubleshooting, and code evidence where applicable.
+- [ ] Reject outline-only onboarding: critical/important module/flow docs must include use cases, domain/data objects, information transfer, state transitions, failure modes, verification/troubleshooting, and code evidence where applicable; supporting topics include only applicable semantics and evidence.
 - [ ] 全部正式文档默认使用中文；推断内容要标明“推断”、证据、置信度和待验证点。
 - [ ] Use coverage matrix to track topic readiness and score, not file count.
+- [ ] Run Completeness Hard Gate before quality scoring; any missing/blocked critical slice prevents `newcomer-ready` and cannot be averaged away.
 - [ ] Below 4/5 score cannot be marked `newcomer-ready`.
 - [ ] Do not copy human examples as required topics, topic counts, domain names, or project structure.
 - [ ] Keep narrative Chinese; preserve code symbols, paths, commands, APIs, env vars, config keys, errors, and third-party names.
@@ -284,6 +321,10 @@ Before using an external skill or plugin inside a stage:
 - [ ] If source requirements are too broad for one feature, recommend requirement `Delivery Phases` before writing `product.md`.
 - [ ] Inspect `project.md` Product Context and Domain Language.
 - [ ] Inspect source requirements before asking product questions.
+- [ ] Resolve README `Effective Concept Foundation` when present, then read accepted Concept Foundation and Requirement Product Model rows before synthesis.
+- [ ] If the source Concept Foundation is `candidate` or `reopened`, return to Requirements Discussion instead of writing `product.md`.
+- [ ] Add Accepted Concept References and Requirement Product Model Coverage; cite Concept/Model IDs rather than writing a feature-local replacement definition.
+- [ ] When the source records `concept-foundation-not-needed`, carry its reason instead of creating a large concept table.
 - [ ] Ask one blocking product question at a time when needed.
 - [ ] Include the recommended answer with the question.
 - [ ] Write `product.md` only after human confirmation.
@@ -301,11 +342,27 @@ Before using an external skill or plugin inside a stage:
 - [ ] Questions must affect scope, UX, data, architecture, testing, or acceptance.
 - [ ] Write accepted answers back into the current stage artifact: detailed requirements-discussion output to `requirement.md` with only source, lifecycle, phase, mapping, and decision-link summaries in requirement `README.md`; feature output goes to `product.md`, `spec.md`, or `notes.md` through the owning stage.
 
+## Feature Monthly Archive
+
+- [ ] Classify only an explicit archive/rehydrate request as `feature-archive-maintenance` and require reliable project memory.
+- [ ] Check `features/archive.md`, flat/month uniqueness, active/paused memory, and incomplete `.archive-txn` before planning.
+- [ ] Run scan read-only with explicit operation, selected months or Feature IDs, and `--as-of`.
+- [ ] Confirm every eligible archive candidate is `closed` with concrete `Archive Readiness`, complete close/tasks/verification/review/drift/memory evidence, and `Open Follow-up: none`.
+- [ ] Keep active / blocked / paused features flat and show blocked candidates without suppressing eligible candidates in the same month.
+- [ ] Show exact moves, archive-index rows, reference edits, immutable requirement sources, historical evidence, unsupported references, and unchanged content.
+- [ ] Stop for the expected plan SHA-256 Batch Human Gate before apply; auto modes do not authorize archive or rehydrate.
+- [ ] Reject malformed/stale hashes, ambiguous references, path collisions/escapes, and any manual-move or `--force` request.
+- [ ] Create the transaction journal and backups before mutation; use exact precomputed edits only.
+- [ ] Run post-check after archive/rehydrate; on failure restore exact bytes and every confined journal move whose source/target state shows the rename occurred, including the pre-record crash window.
+- [ ] Route incomplete restore to Recovery with the exact transaction ID and keep the journal fail-closed.
+- [ ] Rehydrate before reopened execution and keep lifecycle `closed` until Feature Follow-up separately confirms flow-back.
+- [ ] Confirm scope remains directory-only: no per-feature archive summary, no `historical/`, no Deep Archive, deletion, packing, or scheduled archive.
+
 ## Feature Follow-up And Flow-back
 
 - [ ] Load `feature-follow-up.md`.
 - [ ] Trigger before creating a new feature when the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, screenshot issue, behavior tweak, "small tweak", test failure, or QA/user feedback.
-- [ ] Inspect Active Feature, Paused Features, and recent feature docs in the default 30-day lookback window.
+- [ ] Inspect Active Feature and Paused Features first, flat recent feature docs second, `features/archive.md` third, and archived artifacts fourth in the default 30-day lookback window.
 - [ ] Treat 30 days as the default scan window, not a hard boundary; if wording or evidence points to an older feature, run an extended scan and mark `outside-default-window`.
 - [ ] Inspect code/test/API/data/UI paths mentioned by the report.
 - [ ] If the report is generic, such as 500, blank page, unknown error, or no route/action/log/test evidence, classify as `unclear` and recommend `investigate-first`; do not reopen the nearest recent feature just because it is recent.
@@ -314,6 +371,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Classify the report as same-feature-bug, same-feature-adjustment, regression-from-feature, new-feature, maintenance-fix, or unclear.
 - [ ] For "字段改一下" / "规则微调" / "小改动" wording, check whether acceptance, API/event/data shape, state flow, algorithm, or visible UX changes before choosing same-feature-adjustment vs linked new feature.
 - [ ] If a closed feature is the likely owner, recommend `flow-back` and explain that it will reopen or continue the owning feature for follow-up work after human confirmation.
+- [ ] If the owner is archived, require verified Feature Monthly Archive rehydrate before lifecycle change or reopened execution.
 - [ ] If the human declines reopen/flow-back, preserve the old feature close state and require the new linked feature or maintenance-fix to record `Related Feature`, declined reason, inherited acceptance/tests/evidence, and affected paths.
 - [ ] If no recent feature owns the report and this is a narrow internal fix, recommend a new `Feature Type: maintenance-fix` feature workspace; do not perform a naked code edit.
 - [ ] If the report is durable source material, ask before archiving it under `.agent-loop/requirements/`.
@@ -326,7 +384,11 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `project.md` declares a Decisions index, read decision links already named by the active requirement or Product Brief, list decision filenames and statuses, then read other likely relevant accepted decisions by domain or boundary overlap.
 - [ ] Propose missing Applicable Decision references for human confirmation; do not create a duplicate ADR because a link is missing.
 - [ ] Confirm Design Readiness is `design-not-needed` or `completed`; run Decision & Design before Feature Spec when shared design is required.
+- [ ] Resolve the effective Concept Foundation source/status, confirm it is accepted or reasoned `concept-foundation-not-needed`, and block when status is `candidate` or `reopened`.
+- [ ] Add Accepted Concept References and Requirement Product Model Trace from the source requirement and Product Brief.
+- [ ] Reject feature-local redefinition of accepted concept name, identity, owner, lifecycle, relationship, invariant, state, terminal meaning, or product fact.
 - [ ] Do not enter Feature Spec while required shared design is unresolved or any required design slice is unassigned.
+- [ ] For each applicable requirement-driven ADR, require a current Effective Requirement Snapshot, complete Requirement Model Technical Landing Trace, and `Upstream Compatibility: current`.
 - [ ] Run Stage Helper Capability Scan before fallback spec writing.
 - [ ] If a spec-writing, brainstorming, or product-discovery helper is available, use it through `external-skill-adapters.md` while writing accepted output to agent-loop `spec.md`.
 - [ ] Create or update feature workspace.
@@ -508,6 +570,7 @@ Checklist:
 - [ ] Confirm each planned implementation step maps to an accepted task/story and acceptance criterion.
 - [ ] Confirm each changed behavior has a test or explicit substitute verification path.
 - [ ] Trace every accepted Decision & Design slice assigned to this feature through `spec.md`, tasks, tests, and the active plan.
+- [ ] Confirm every applicable ADR remains compatible with the current effective requirement source and every assigned Design Slice originates from a covered Requirement Model trace row.
 - [ ] Stop when an assigned design slice has no implementation or verification path, even if each local story is independently testable.
 - [ ] Confirm no plan step changes human original requirements, product scope, acceptance criteria, public interfaces, Delivery Contracts, or project memory without a human gate.
 - [ ] Confirm file paths, commands, function signatures, parameters, return shapes, data contracts, and side effects match code reality.
@@ -606,7 +669,9 @@ Checklist:
 
 - [ ] Compare implementation against `spec.md`.
 - [ ] During Drift Check, compare assigned Design Slice IDs with implementation and verification evidence.
+- [ ] Compare each applicable ADR Effective Requirement Snapshot and Requirement Model Technical Landing Trace with the current effective source; route `review-required` to Decision & Design before close.
 - [ ] Route any divergence from an accepted Decision & Design record back to Decision & Design before close; do not accept local-story success as a substitute.
+- [ ] If accepted decision meaning or technical conclusions no longer hold, propose a superseding ADR after Human Review; never rewrite accepted meaning in place.
 - [ ] Compare completed work against `tasks.md` and `tests.md`.
 - [ ] Compare producer-consumer interfaces against `contracts.md` and linked `contracts/*` details when present.
 - [ ] List affected consumers and ask human confirmation before accepting a breaking contract change.
