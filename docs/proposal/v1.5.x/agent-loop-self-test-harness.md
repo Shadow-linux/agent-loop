@@ -1,7 +1,7 @@
 # Proposal: Agent Loop Self-Test Harness
 
 状态：讨论草案  
-目标版本：v1.3.0  
+目标版本：v1.5.x
 创建时间：2026-06-09  
 默认语言：中文
 
@@ -44,7 +44,7 @@ main_evaluator 是总控和报告者。
 | 没有统一报告 | 每次验证结论分散，后续难以回归 |
 | 没有 subagent / 单 Agent 双模式 | 不同 CLI 能力不同，不能只依赖某一种运行时 |
 
-v1.3.0 要补的是“可重复验证 agent-loop 自主闭环能力”的方法。
+v1.5.x 要补的是“可重复验证 agent-loop 自主闭环能力”的方法。
 
 ## 反目标
 
@@ -419,7 +419,7 @@ Main Evaluator 输出统一报告，不直接修改 skill。
 
 ```text
 docs/validation-reports/
-  2026-06-09-v1.3.0-self-test-smoke.md
+  2026-06-09-v1.5.x-self-test-smoke.md
 ```
 
 写报告前需要人类确认；如果只是聊天中展示结论，可以不写文件。
@@ -585,7 +585,7 @@ Scope:
 
 ## 关键压力场景
 
-v1.3.0 第一批建议新增这些 validation scenarios：
+v1.5.x 第一批建议新增这些 validation scenarios：
 
 | ID | 场景 | 防什么 |
 |---|---|---|
@@ -604,7 +604,7 @@ v1.3.0 第一批建议新增这些 validation scenarios：
 
 v1.2.0 已经有：
 
-| 已有能力 | v1.3.0 怎么使用 |
+| 已有能力 | v1.5.x 怎么使用 |
 |---|---|
 | `validation-scenarios.md` | 作为 scenario source |
 | `examples/` | 作为 fixture 初始素材 |
@@ -613,11 +613,11 @@ v1.2.0 已经有：
 | Superpowers Adapter | 作为外部 skill 压力测试点 |
 | Done Gate / Review / Drift / Close | 作为 doctor 重点检查项 |
 
-v1.3.0 不应该推翻 v1.2.0，而是给它加一层测试执行能力。
+v1.5.x 不应该推翻 v1.2.0，而是给它加一层测试执行能力。
 
 ## 需要新增的文件
 
-建议 v1.3.0 实现时新增：
+建议 v1.5.x 实现时新增：
 
 ```text
 references/
@@ -667,7 +667,7 @@ docs/
 
 ## 完成标准
 
-v1.3.0 实现完成后，应该满足：
+v1.5.x 实现完成后，应该满足：
 
 | 标准 | 说明 |
 |---|---|
@@ -684,7 +684,7 @@ v1.3.0 实现完成后，应该满足：
 | 问题 | 倾向方案 |
 |---|---|
 | 是否默认创建 `docs/validation-reports/` | 不默认，只有写报告时创建 |
-| 是否需要真实 mock_app | v1.3.0 先用 fixtures/examples，mock_app 可作为后续更重的 E2E 验证 |
+| 是否需要真实 mock_app | v1.5.x 先用 fixtures/examples，mock_app 可作为后续更重的 E2E 验证 |
 | 是否必须每次都跑 subagent | 不必须；发布前建议跑 P0 Subagent Mode |
 | 是否让 doctor 自动修 skill | 不允许；doctor 只报告，main evaluator 等人类确认后再修 |
 | 是否把 proposal 场景也纳入测试 | 未实现 proposal 只能测试设计一致性，不作为发布能力通过标准 |
