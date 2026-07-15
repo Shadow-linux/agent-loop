@@ -1,6 +1,6 @@
 # Agent Loop 使用指南
 
-**版本：** 1.3.0
+**版本：** 1.4.0
 
 这份文档是给人类看的。你不需要记住内部阶段名，只要用自然语言说出你想做什么，Agent 应该自己判断当前状态、推荐一个下一步，并在需要你确认的地方停下来。
 
@@ -45,7 +45,7 @@ Project Entry Scan 不算完成，除非 root `AGENTS.md` 已存在、已创建�
 | “重点讲清楚支付/钱包/任务调度这块。” | 先从现有代码和文档回答；如果要沉淀长期文档，再走聚焦的 onboarding-db 更新。 |
 | “这个旧 onboarding-db 还能信吗？” | 把旧文档当 evidence，先和代码现实核对；不直接按旧布局刷新。 |
 
-当前 1.3.0 使用的是 **Evidence-Graph + DDD Onboarding**，不是旧 Quick / Deep / Targeted 模式。
+当前 1.4.0 使用的是 **Evidence-Graph + DDD Onboarding**，不是旧 Quick / Deep / Targeted 模式。
 
 推荐流程：
 
@@ -95,13 +95,154 @@ Timeline / Sequence 是单个核心流程的主叙事；Core Flow Overview / Bou
 
 | 你可以这样说 | Agent 应该怎么做 |
 |---|---|
-| “1.3.0 更新了什么？” | 读取 `CHANGELOG.md` 的 1.3.0 段落，按能力分类总结，不凭记忆回答。 |
+| “1.4.0 更新了什么？” | 读取 `CHANGELOG.md` 的 1.4.0 段落，按能力分类总结，不凭记忆回答。 |
 | “和 1.2.2 比有什么变化？” | 对比 `CHANGELOG.md` 里的两个版本段落，说明新增、删除、替换和迁移影响。 |
 | “现在 agent-loop 怎么用？” | 基于 `Usage.md` 用人类语言介绍常见触发方式。 |
 | “这个功能怎么触发？” | 从 `Usage.md` 找对应说法，再说明 Agent 会进入哪个处理流。 |
 | “agent-loop 是什么，怎么安装？” | 读取 `README.md`，解释总览、安装和 quick-start。 |
 
 维护规则很简单：每个有意义版本都要更新 `CHANGELOG.md`；只有人类触发方式、使用入口或工作流口径变化时才需要更新 `Usage.md`；只有总览、安装、quick-start 变化时才需要更新 `README.md`。
+
+### 我想让 Agent 推荐分支管理方式
+
+| 你可以这样说 | Agent 应该怎么做 |
+|---|---|
+| “这个仓库的分支有点乱，给我一个方案。” | 先检查已有规则、Git 现实和目标版本，给出一个可选推荐；只有你明确接受后才记录为采用。 |
+| “我们准备 v1.0.0，登录和用户详情分开做。” | 推荐一个 `release/v1.0.0` 聚合分支和由你决定数量的版本化开发分支；不会因为方案被接受就自动创建或合并分支。 |
+| “给 acme 做基于 v1.0.0 的客户版本。” | 推荐独立客户发布线和客户开发分支，禁止把整条客户分支反向合入标准产品。 |
+| “这个项目只有 main，不需要发布线。” | 保留轻量现状并记录 `not-needed`，不强迫迁移。 |
+
+正式发布版本会 sealed；之后的修复进入新的 patch 版本，新功能进入你确认的新版本。发布聚合分支长期保留，临时开发分支只有在合并证据完整且你确认清理后才能删除。推荐或采用策略都不授权 create、switch、merge、delete、push、tag、release 或 publish。
+
+推荐 profile 的命名摘要：
+
+```text
+标准发布：release/vX.Y.Z
+客户发布：customer/<customer>/vX.Y.Z
+标准开发：feature|bugfix|hotfix/vX.Y.Z/<topic>
+客户开发：feature|bugfix|hotfix/<customer>-vX.Y.Z/<topic>
+```
+
+如果项目已有清晰规范，Agent 继续使用现有规范；如果项目只有一个受维护的主干且没有发布聚合/客户版本需求，可以经你确认记录 `not-needed`，不会为了填模板制造分支。
+
+```mermaid
+flowchart TB
+    MAIN0["main<br/>标准产品主干<br/>只保存可复用的通用能力"]
+
+    subgraph STANDARD["标准版本 v1.0.0"]
+        R0["release/v1.0.0<br/>标准发布聚合分支<br/>不带工作主题"]
+
+        SCOPE{"Human Scope Gate<br/>人类决定本版本范围<br/>以及拆成多少个开发分支"}
+
+        F1["feature/v1.0.0/user-login<br/>新功能开发分支"]
+        F2["feature/v1.0.0/user-detail<br/>新功能开发分支"]
+        B1["bugfix/v1.0.0/login-timeout<br/>普通缺陷修复分支"]
+        H1["hotfix/v1.0.0/login-security<br/>紧急缺陷修复分支"]
+        MORE["……<br/>可以继续增加任意数量的开发分支"]
+
+        R1["release/v1.0.0<br/>同一发布分支<br/>已聚合全部目标功能"]
+
+        VERIFY{"Verification + Review<br/>测试、审查、漂移检查"}
+        RELEASE_GATE{"Human Release Gate<br/>人类确认是否正式发布"}
+        STABLE["v1.0.0 正式发布快照<br/>Tag / Release 标记"]
+        KEEP_R["保留 release/v1.0.0<br/>用于追溯和版本维护"]
+        DELETE_S["删除已经合并的<br/>feature / bugfix / hotfix 分支"]
+
+        R0 --> SCOPE
+        SCOPE --> F1
+        SCOPE --> F2
+        SCOPE --> B1
+        SCOPE --> H1
+        SCOPE --> MORE
+
+        F1 -->|"合并"| R1
+        F2 -->|"合并"| R1
+        B1 -->|"合并"| R1
+        H1 -->|"合并"| R1
+        MORE -->|"合并"| R1
+
+        F1 -.-> DELETE_S
+        F2 -.-> DELETE_S
+        B1 -.-> DELETE_S
+        H1 -.-> DELETE_S
+
+        R1 --> VERIFY
+        VERIFY --> RELEASE_GATE
+        RELEASE_GATE -->|"批准"| STABLE
+        STABLE --> KEEP_R
+    end
+
+    MAIN0 -->|"从通用基线建立版本"| R0
+
+    STABLE -->|"同步已验证的通用能力"| MAIN1["main<br/>同一主干的新状态<br/>成为后续标准版本基线"]
+
+    subgraph CUSTOMER["客户版本 acme v1.0.0"]
+        C0["customer/acme/v1.0.0<br/>客户发布聚合分支<br/>不带具体工作主题"]
+
+        CSCOPE{"Customer Scope Gate<br/>人类确定客户定制范围<br/>以及拆成多少个开发分支"}
+
+        CF["feature/acme-v1.0.0/custom-login<br/>客户功能开发分支"]
+        CB["bugfix/acme-v1.0.0/custom-timeout<br/>客户缺陷修复分支"]
+        CH["hotfix/acme-v1.0.0/custom-security<br/>客户紧急修复分支"]
+        CMORE["……<br/>其他客户开发分支"]
+
+        C1["customer/acme/v1.0.0<br/>同一客户发布分支<br/>已聚合全部客户能力"]
+
+        CVERIFY{"客户版本验证与审查"}
+        CRELEASE{"Human Release Gate<br/>人类批准客户版本"}
+        CSTABLE["acme v1.0.0<br/>客户正式发布快照"]
+        KEEP_C["保留 customer/acme/v1.0.0<br/>用于客户维护和追溯"]
+        DELETE_C["删除已经合并的<br/>客户临时开发分支"]
+
+        C0 --> CSCOPE
+        CSCOPE --> CF
+        CSCOPE --> CB
+        CSCOPE --> CH
+        CSCOPE --> CMORE
+
+        CF -->|"合并"| C1
+        CB -->|"合并"| C1
+        CH -->|"合并"| C1
+        CMORE -->|"合并"| C1
+
+        CF -.-> DELETE_C
+        CB -.-> DELETE_C
+        CH -.-> DELETE_C
+
+        C1 --> CVERIFY
+        CVERIFY --> CRELEASE
+        CRELEASE -->|"批准"| CSTABLE
+        CSTABLE --> KEEP_C
+    end
+
+    STABLE -->|"以标准正式版本为基线"| C0
+
+    C1 -.->|"禁止整条客户分支反向合并"| ISOLATION["客户定制代码<br/>不得污染 main 或标准 release"]
+
+    subgraph NEXT["正式发布后的下一轮维护"]
+        WORK{"发布后出现什么工作？"}
+
+        NEW_FEATURE["新功能<br/>feature/v1.1.0/new-topic"]
+        NORMAL_BUG["普通缺陷<br/>bugfix/v1.0.1/bug-topic"]
+        URGENT_BUG["生产紧急缺陷<br/>hotfix/v1.0.1/security-topic"]
+
+        NEXT_MINOR["release/v1.1.0<br/>下一个功能版本"]
+        NEXT_PATCH["release/v1.0.1<br/>下一个补丁版本"]
+
+        WORK -->|"计划功能"| NEW_FEATURE
+        WORK -->|"普通修复"| NORMAL_BUG
+        WORK -->|"紧急修复"| URGENT_BUG
+
+        NEW_FEATURE --> NEXT_MINOR
+        NORMAL_BUG --> NEXT_PATCH
+        URGENT_BUG --> NEXT_PATCH
+    end
+
+    STABLE --> WORK
+    NEXT_PATCH -->|"客户决定是否升级基线"| CUSTOMER_NEXT["customer/acme/v1.0.1<br/>新的客户发布版本"]
+```
+
+图中虚线表示生命周期清理或禁止方向，不代表自动执行。任何 merge、branch deletion、push、tag、release 或 publish 仍然需要现有 Human Gate。
 
 ### 我想整理需求，但还不实现
 

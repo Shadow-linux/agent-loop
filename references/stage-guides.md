@@ -20,6 +20,7 @@ Entry: any use of this skill.
 Read:
 
 - `.agent-loop/project.md` if present
+- `references/branch-management.md` when branch rules are confused, Target Release Context is unclear, or customer isolation is at risk
 - enterprise `.agent-loop/project/*.md` detail files only when referenced by `project.md` and needed for the current stage
 - active feature docs if present
 - repo docs/scripts only as needed
@@ -31,6 +32,7 @@ Write:
 Exit:
 
 - one recommended next stage
+- Branch Strategy Check preserves clear existing policy or presents one optional recommendation; adoption waits for explicit human acceptance and grants no Git action
 - root `AGENTS.md` / `CLAUDE.md` status checked, or the recommended next stage explicitly includes the Root Agent Bootstrap Gate
 - if an Active Feature exists, run Feature Completion Check before recommending a new feature or broad new work
 
@@ -158,6 +160,7 @@ Load:
 - `project-guidance.md`
 - `project-memory-mode.md`
 - `project-architecture-init.md`
+- `branch-management.md` only when branch evidence triggers a recommendation
 
 Before writing:
 
@@ -341,6 +344,7 @@ Inspect:
 - AGENTS/CLAUDE/GEMINI files
 - package/test scripts
 - key directories
+- native branch/release guidance, current Git reality, target-version evidence, and customer boundaries when they affect safe continuation
 
 Use layered scan order:
 
@@ -384,6 +388,7 @@ Output before writing:
 - boundary map with evidence and confidence
 - discovered commands with evidence and confidence
 - recommended Project Memory Mode: simple or enterprise, with trigger evidence
+- Branch Strategy Check result: existing policy preserved, optional recommendation awaiting decision, or human-confirmed `accepted | declined | not-needed`; do not record an unconfirmed recommendation as accepted
 - explicitly not doing: onboarding-db generation, module docs, flow docs, onboarding diagrams, onboarding-spec, onboarding-tasks
 - Evidence-Graph + DDD onboarding proposal link when the human asks for newcomer docs
 - existing/proposed guidance files
@@ -1057,6 +1062,8 @@ Rules:
 - do not create or update contract files from Technical Design / Code Context; only the human-confirmed Delivery Contract stage may write them
 - if technical design changes shared or project-level design, repeat Design Readiness and return to Decision & Design before plan execution
 - if the effective requirement source changed or an applicable ADR is `review-required`, stop before Plan and return to Decision & Design compatibility review
+- if an adopted branch strategy applies, resolve Current Branch Context from the accepted Target Release Context and Git evidence; stop rather than inventing target kind, version, customer slug, source branch, or target branch
+- a planned branch name or target does not authorize create, switch, merge, delete, push, tag, release, or publish
 
 Exit:
 
@@ -1093,6 +1100,8 @@ Rules:
 - default scope is task
 - assume the executor has near-zero codebase context
 - include technical context, source structure decision, code context, interface contracts, data contracts when applicable, files, TDD plan, commands, expected outputs, risks
+- include `Branch Context Evidence` when an adopted strategy or versioned delivery applies: cite the complete `notes.md` Current Branch Context and repeat only Branch Strategy status/profile, Target Release Context, Target Branch, sealed/customer-isolation results, and `Git actions authorized by this plan: none`
+- reject a plan that targets a `released / sealed` version, crosses customer isolation, or assumes an unauthorized Git action
 - include actual test code for RED steps when possible
 - include exact function/class/endpoint/component signatures, parameters, return values, errors, and side effects for new or changed interfaces
 - include exact commands and expected RED/GREEN output
@@ -1183,6 +1192,8 @@ Rules:
 - do not execute a task directly after task creation; first confirm accepted plan or recorded No-Plan Decision
 - if neither accepted plan nor No-Plan Decision exists, route back to Plan Gate / Plan If Needed
 - if Analyze Consistency is missing, stale, or reports a gap, route back to Analyze Consistency and do not execute
+- when an adopted strategy applies, recheck Current Branch Context against Target Release Context and current Git evidence before execution; stop on drift, sealed target, or customer-boundary mismatch
+- do not create or switch branches as an implied Execute step; either action requires a Branch Action Gate for one exact development branch
 - Task Auto-Run requires an accepted plan for the selected task/story
 - in Feature Auto-Loop, execute only Agent-ready tasks and stop at Human-gated tasks
 - in Task Auto-Run, execute only the selected task/story and stop after evidence/review/drift updates and Task Done Gate status update
@@ -1324,6 +1335,8 @@ Check:
 - producer-consumer interfaces vs `contracts.md` and linked `contracts/*` details when present
 - human original requirements vs current implementation when relevant
 - whether long-term startup guidance changed and `AGENTS.md` should be synced
+- when an adopted Branch Strategy or versioned/customer delivery applies, compare accepted Branch Strategy and Target Release Context vs feature Current Branch Context and current Git reality
+- in that applicable context, check sealed-release immutability, customer isolation, and whether any proposed cleanup has merge evidence plus separate human authorization; a confirmed simple `not-needed` path records these branch-specific checks as `not-applicable`
 
 Write after confirmation:
 
@@ -1361,6 +1374,7 @@ Update only durable project facts:
 - domain language that future feature work should reuse
 - known constraints and long-term decisions
 - Project Entry uncertainties resolved by code reality
+- human-confirmed Branch Strategy outcome and current Target Release Context pointer; keep mutable development-branch lifecycle in feature artifacts
 
 Do not write:
 
@@ -1410,6 +1424,10 @@ Rules:
 - never commit, create final PR text, merge, release, publish, or claim submission readiness without human confirmation
 - a human saying "commit" starts Submit / Integrate but is not final commit approval; ask again after diff, verification, review, and drift summary
 - default to prepare-only if the human has not explicitly requested commit/PR/merge
+- when an adopted Branch Strategy or versioned/customer delivery applies, run Branch Strategy Check and verify Source Branch, Branch Class, Target Release Context, Target Branch, sealed state, customer isolation, and requested Git action before asking for the final submit decision
+- for a confirmed simple `not-needed` path, record branch-specific fields as `not-applicable` and do not block Submit / Integrate because Target Release Context or Target Branch is absent
+- accepted strategy, an accepted plan, and a submit request never imply authorization for create, switch, merge, delete, push, tag, release, or publish
+- temporary development-branch deletion requires merge evidence and a separate human cleanup decision; retained standard/customer aggregation branches are not cleanup candidates
 
 Write after confirmation:
 

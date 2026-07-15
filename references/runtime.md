@@ -94,6 +94,44 @@ The Concept Foundation confirmation is the product-semantic Human Gate inside Re
 
 Before setting a triggered foundation to `accepted`, load `references/human-review-summary.md` and present the Concept Foundation Human Review Summary. The summary shows every confirmed or still-blocking Concept ID, evidence, identity/lifecycle boundary, relationship/state impact, and the explicit human decision; it does not replace the one-question-per-turn Grill Contract.
 
+## Human-Guided Branch Management
+
+Branch management is an internal Branch Strategy Check, not a canonical stage. Do not force a simple project or a project with clear existing rules to migrate. During Project Entry, Project Entry Scan, Re-Adopt, versioned delivery planning, Drift Check, and Submit / Integrate, inspect evidence in this order:
+
+```text
+human-confirmed native repository policy
+-> accepted project.md Branch Strategy snapshot
+-> current local and remote Git reality
+-> Agent inference from branch names
+```
+
+Then compare the current feature notes, accepted plan, and Submit / Integrate evidence with that policy/reality chain; those volatile records do not outrank durable policy.
+
+When the evidence is coherent, preserve the existing strategy and record `Profile: existing-project` only after the human confirms the durable summary. When branch rules are confused, Target Release Context is missing, or customer isolation is at risk, load `references/branch-management.md` and recommend the optional Human-Guided profile. The Strategy Adoption Gate has these outcomes:
+
+```text
+accepted | declined | not-needed
+```
+
+`accepted` records the human-confirmed `existing-project` or `human-guided-release` profile. `declined` records `Profile: not-applicable` plus a concrete Decline Reason so a rejected recommendation cannot appear to be current policy. `not-needed` records `Profile: existing-project` and the reason the project remains lightweight.
+
+An unconfirmed recommendation is not `accepted`. Recommendation and adoption do not authorize branch creation, switching, merge, deletion, push, tag, release, or publish. A Branch Action Gate confirms creation or switching of one exact development branch; every other Git mutation keeps its existing action-specific Human Gate.
+
+The optional profile uses retained aggregation branches:
+
+```text
+standard release: release/vX.Y.Z
+customer release: customer/<customer>/vX.Y.Z
+standard development: feature|bugfix|hotfix/vX.Y.Z/<topic>
+customer development: feature|bugfix|hotfix/<customer>-vX.Y.Z/<topic>
+```
+
+`project.md` owns only the human-confirmed durable strategy and the current Target Release Context pointer. Feature `notes.md`, accepted `plan.md`, and Submit / Integrate records own mutable Current Branch Context. Do not create a default `.agent-loop/branches/` directory or mapping artifact.
+
+A formally released version is `released / sealed`. Same-version repair is blocked and must target a new patch release; a new capability requires a human-confirmed new version. A customer branch must not flow wholesale into `main` or a standard release branch. Shared fixes move through an explicitly reviewed standard development path, not reverse-merging the customer aggregation line.
+
+Apply branch-specific fail-closed conditions only when an adopted Branch Strategy or versioned/customer delivery applies. A human-confirmed simple `not-needed` path does not require Target Release Context or Target Branch and continues through the normal non-versioned workflow. Otherwise fail closed when accepted policy, Target Release Context, and Git reality disagree; when target kind/version/customer cannot be resolved; when the target is sealed; when customer isolation would be violated; or when a requested mutation lacks explicit authorization. Record the mismatch, recommend exactly one correction or human decision, and do not infer permission from an accepted strategy.
+
 ## ADR Requirement Model Technical Landing
 
 When Decision & Design is driven by an accepted Requirement Product Model, resolve the requirement README `Effective Concept Foundation` pointer before drafting or reusing an ADR. Older requirement sets without the pointer use the reviewed requirement document as a backward-compatible source.
@@ -227,6 +265,7 @@ Use this order:
 10. If local repo reality points to remote execution, or the human says this is a remote project, load `references/remote-project-discovery.md`. An empty local directory alone is not enough; if there are no remote hints, classify as `new-project`.
 11. Verify long-term memory index targets before trusting them. If `project.md`, root guidance, or current artifacts point to onboarding-db, enterprise `project/*.md`, feature docs, contracts, or guidance files, check that the referenced path exists before relying on it.
 12. Compare project memory with obvious repo reality.
+12a. Run Branch Strategy Check when branch evidence affects the current work. Compare accepted durable policy and Target Release Context with native repository guidance, current Git reality, and feature/plan/submit evidence. Recommendation is read-only; adoption and every Git mutation remain separately Human-gated.
 13. Choose the next stage.
 
 If `project.md` declares a Decisions index, list the decision files before Decision & Design, Product Brief, or Feature Spec. Read decisions already linked by the active requirement, `product.md`, or `spec.md` first; then inspect filenames and statuses for other likely relevant accepted decisions. Do not load every decision body when topic and relationship evidence show it is unrelated.
@@ -373,7 +412,7 @@ Feature Auto-Loop means:
 Feature Auto-Loop = give one feature a bounded release lane.
 ```
 
-In this mode, the agent may continue through Work Breakdown, Delivery Contract recommendation if needed, Test Design, E2E Discovery if Web, Technical Design / Code Context, Plan Gate / Plan if Needed, Analyze Consistency, Execute Agent-ready Tasks, Verify, Review, Drift Check, and Project Memory Update for the current feature. It must not skip Plan Gate before execution. It must stop before Feature Monthly Archive or rehydrate and their Batch Human Gates, creating or materially updating a project-local skill, executing a project-local skill without a current invocation grant, creating or updating Delivery Contract files, contract acceptance, breaking contract changes, Submit / Integrate, and Pause / Close.
+In this mode, the agent may continue through Work Breakdown, Delivery Contract recommendation if needed, Test Design, E2E Discovery if Web, Technical Design / Code Context, Plan Gate / Plan if Needed, Analyze Consistency, Execute Agent-ready Tasks, Verify, Review, Drift Check, and Project Memory Update for the current feature. It must not skip Plan Gate before execution. It must stop before Feature Monthly Archive or rehydrate and their Batch Human Gates, branch creation, switching, deletion, push, or tag, creating or materially updating a project-local skill, executing a project-local skill without a current invocation grant, creating or updating Delivery Contract files, contract acceptance, breaking contract changes, Submit / Integrate, and Pause / Close.
 
 Task Auto-Run means:
 
@@ -430,7 +469,7 @@ Offer auto modes proactively, without waiting for the human to know the terms:
 Recommended wording:
 
 ```text
-Strict Mode is safest and asks before each stage. If you want fewer confirmations, I can enable Feature Auto-Loop for this feature, or Task Auto-Run just for the selected task/story. Auto modes still stop for Human-gated decisions, unclear decisions, risky changes, failed verification, drift needing approval, unrelated dirty work blocking progress, human original requirement changes, first-version exclusions, Delivery Contract creation/acceptance/breaking changes, Complex Artifact Mode detail directory creation, directory guidance changes, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, and publish.
+Strict Mode is safest and asks before each stage. If you want fewer confirmations, I can enable Feature Auto-Loop for this feature, or Task Auto-Run just for the selected task/story. Auto modes still stop for Human-gated decisions, unclear decisions, risky changes, failed verification, drift needing approval, unrelated dirty work blocking progress, human original requirement changes, first-version exclusions, Delivery Contract creation/acceptance/breaking changes, Complex Artifact Mode detail directory creation, directory guidance changes, unapproved subagent dispatch, branch creation, switching, deletion, push, or tag, submit, pause, close, commit, PR, merge, release, and publish.
 ```
 
 Do not offer an auto mode as a substitute for missing clarification. If scope, acceptance, test approach, data rules, or affected boundaries are unclear, clarify first.
@@ -455,6 +494,7 @@ Auto modes do not remove stop conditions. Stop and ask when:
 - TDD cannot be followed or verification repeatedly fails
 - review finds behavior/scope/architecture changes
 - subagents are needed but not yet approved
+- branch creation, switching, deletion, push, or tag is requested
 - submit, commit, PR, merge, release, publish, pause, or close is requested
 
 Allowed replies:

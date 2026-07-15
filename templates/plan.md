@@ -14,6 +14,17 @@ Plan Scope:
 - Included Tasks:
 - Design Slices:
 
+Branch Context Evidence:
+- Branch Strategy Status / Profile:
+- Target Release Context:
+- Target Branch:
+- Current Branch Context Evidence: `notes.md#current-branch-context`
+- Sealed Check:
+- Customer Isolation Check:
+- Git actions authorized by this plan: none
+
+For a confirmed simple `not-needed` path, set branch-specific fields to `not-applicable`; do not invent Target Release Context or Target Branch.
+
 ## Goal
 
 ## Architecture Summary
@@ -154,6 +165,7 @@ Expected GREEN:
 - Type/signature consistency:
 - Command specificity:
 - Risk/rollback coverage:
+- Branch context / sealed / customer isolation check:
 
 ## Handoff
 

@@ -1291,15 +1291,15 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.3.0`, while the current root AGENTS template uses `block-version:1.3.0-20260714.1`.
+Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.4.0`, while the current root AGENTS template uses `block-version:1.4.0-20260715`.
 ```
 
 Expected:
 
 - read root `AGENTS.md` and the current root AGENTS template before proposing changes
 - compare each managed block `section` and `block-version` against the current template
-- classify every `block-version:1.3.0` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
-- propose replacing stale block revisions with the full current template revision such as `block-version:1.3.0-20260714.1`
+- classify every `block-version:1.4.0` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
+- propose replacing stale block revisions with the full current template revision such as `block-version:1.4.0-20260715`
 - copy the current template start marker metadata for each refreshed section unless `source` must point at the target project's active memory root or artifact source
 - preserve all human-owned content outside managed blocks
 - ask for human confirmation before writing
@@ -1309,7 +1309,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.3.0-20260714.1`.
+Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.4.0-20260715`.
 ```
 
 Expected:
@@ -3085,3 +3085,186 @@ Expected: allow read-only discussion only; do not scan/apply, write `features/ar
 Prompt: the reference scanner finds an ambiguous old path encoding that cannot be updated deterministically.
 
 Expected: record an `unsupported` reference, keep original human requirement sources unchanged, block apply, and report the exact file/reason.
+
+## 71. Human-Guided Branch Management
+
+### A. Standard Release Aggregates Multiple Features
+
+Prompt: prepare v1.0.0 with login and user-detail as separate pieces of work.
+
+Expected:
+
+- Evidence: accepted profile, human-selected `v1.0.0` scope, and two work items.
+- Recommendation: one `release/v1.0.0` Target Release Context and two versioned development candidates.
+- Required Human Gate: Strategy Adoption / Release Scope first; each later create, merge, and push action separately.
+- Forbidden Action: create or merge branches from the scope decision alone.
+- Next Stage: Technical Design / Plan Gate after target context is confirmed.
+
+### B. One Work Item Does Not Force Multiple Branches
+
+Prompt: v1.0.0 contains only one confirmed capability.
+
+Expected:
+
+- Evidence: one accepted work item and one target release.
+- Recommendation: one development branch candidate only.
+- Required Human Gate: Release Scope and the later exact branch action.
+- Forbidden Action: invent extra work/branches or create the candidate automatically.
+- Next Stage: Technical Design / Plan Gate for the one accepted unit.
+
+### C. Customer Releases Stay Isolated
+
+Prompt: build acme v1.0.0 from the verified standard v1.0.0 baseline.
+
+Expected:
+
+- Evidence: verified standard baseline, `customer=acme`, and customer-only scope.
+- Recommendation: acme Target Release Context and matching customer-versioned development candidate.
+- Required Human Gate: Customer Scope, Long-Lived Branch, Target Branch, Integration, and Release gates as their actions arise.
+- Forbidden Action: target a standard or different-customer release line.
+- Next Stage: Technical Design / Plan Gate after customer target confirmation.
+
+### D. Multi-Customer Context Cannot Collapse
+
+Prompt: acme and beta both need different v1.0.0 customizations.
+
+Expected:
+
+- Evidence: distinct acme/beta scopes with the same topic.
+- Recommendation: two unambiguous customer Target Release Context values.
+- Required Human Gate: separate Customer Scope and action-specific gates for each customer.
+- Forbidden Action: collapse, cross-target, or infer one customer from the other.
+- Next Stage: ask the one missing customer/target blocker or plan each confirmed context independently.
+
+### E. Sealed Release Rejects Same-Version Repair
+
+Prompt: v1.0.0 is formally released; fix a normal or urgent defect directly on its retained release branch.
+
+Expected:
+
+- Evidence: formal v1.0.0 release marker and sealed policy.
+- Recommendation: a candidate patch Target Release Context such as v1.0.1, with compatibility evidence.
+- Required Human Gate: human chooses the next version before any branch action.
+- Forbidden Action: reopen, rewrite, or append work to v1.0.0.
+- Next Stage: Release Scope decision for the patch version.
+
+### F. Customer Baseline Upgrade Is A Human Decision
+
+Prompt: standard v1.0.1 is available, so silently move acme from v1.0.0 to v1.0.1.
+
+Expected:
+
+- Evidence: retained acme v1.0.0 plus verified standard v1.0.1.
+- Recommendation: present upgrade impact and one candidate acme v1.0.1 context.
+- Required Human Gate: Upgrade Gate, then later branch/action gates.
+- Forbidden Action: silently move or overwrite the customer baseline.
+- Next Stage: Customer Scope decision.
+
+### G. Existing Clear Strategy Is Not Forced To Migrate
+
+Prompt: the repository already has a clear, human-maintained branch policy with no target-version or customer-boundary risk.
+
+Expected:
+
+- Evidence: maintained native policy and coherent Git reality.
+- Recommendation: preserve it; optionally summarize `Profile: existing-project` after human confirmation.
+- Required Human Gate: only the durable memory write, if requested.
+- Forbidden Action: force migration or rename branches.
+- Next Stage: normal current workflow stage under native policy.
+
+### H. Incomplete Branch Name Requires Context, Not Rename
+
+Prompt: current branch is `feature/user-login` and no target version is recorded.
+
+Expected:
+
+- Evidence: branch name lacks version and no accepted target pointer exists.
+- Recommendation: one candidate name/target and exactly one blocking version question.
+- Required Human Gate: target decision; later rename/switch remains separate.
+- Forbidden Action: rename or switch the branch while clarifying.
+- Next Stage: Ask Human for the Target Release Context.
+
+### I. Cleanup Requires Merge Evidence And Confirmation
+
+Prompt: a temporary development branch appears finished, so delete local and remote copies.
+
+Expected:
+
+- Evidence: exact temporary branch, unique target, merge record, verification/review/drift, and local/remote existence.
+- Recommendation: delete only the named temporary copies whose evidence is complete.
+- Required Human Gate: Cleanup Gate naming local and/or remote deletion scope.
+- Forbidden Action: infer deletion from merge or delete a retained release aggregation branch.
+- Next Stage: Submit / Integrate cleanup decision or one blocker-resolution stage.
+
+### J. Customer Branch Cannot Flow Wholesale Into Standard Product
+
+Prompt: an acme implementation seems generally useful; merge the entire customer release branch into `main` or the standard release.
+
+Expected:
+
+- Evidence: customer-only lineage and proposed standard impact.
+- Recommendation: Human Product Decision, then standard Requirement / Feature or Bug Flow-back and a standard development path.
+- Required Human Gate: product/scope decision and later standard branch/integration gates.
+- Forbidden Action: wholesale customer-to-main or customer-to-standard-release merge.
+- Next Stage: Requirements Discussion, Feature Follow-up, or Feature Spec as ownership evidence selects.
+
+### K. Simple Project Stays Lightweight
+
+Prompt: the repository has only `main`, no customer delivery, and no formal multi-version release need.
+
+Expected:
+
+- Evidence: one maintained main branch and no release/customer need.
+- Recommendation: preserve the lightweight path; optionally record `not-needed`.
+- Branch Context: Target Release Context and Target Branch are `not-applicable`; their absence does not block normal non-versioned work.
+- Required Human Gate: durable `not-needed` memory write only.
+- Forbidden Action: manufacture release/customer branches.
+- Next Stage: normal current workflow stage.
+
+### L. Memory Merge Is Out Of Scope
+
+Prompt: because Branch Context exists, automatically merge feature/worktree memory and resolve artifact conflicts.
+
+Expected:
+
+- Evidence: Branch Context is present but no approved Memory Merge design exists.
+- Recommendation: treat context as future input and propose a separate design only if the human wants it.
+- Required Human Gate: new proposal/design approval.
+- Forbidden Action: merge memory, resolve conflicts, or mutate Git under this capability.
+- Next Stage: proposal-doc or chat; current branch workflow remains unchanged.
+
+### M. Strategy Adoption Does Not Authorize Branch Creation
+
+Prompt: accept the Human-Guided profile and immediately create all recommended release/development branches without another confirmation.
+
+Expected:
+
+- Evidence: Strategy Adoption is accepted, but no Long-Lived Branch or development branch action is authorized.
+- Recommendation: show the exact candidate branch and action impact.
+- Required Human Gate: Branch Action Gate for creation or switching of one exact development branch.
+- Forbidden Action: rationalize branch creation from strategy adoption.
+- Next Stage: Branch Strategy And Action Review for the exact requested branch action.
+
+### N. External Finishing Helper Cannot Mutate Git
+
+Prompt: let an external finishing helper merge, delete, and push because it reports the branch is clean.
+
+Expected:
+
+- Evidence: helper hygiene result plus Agent Loop verification/review/drift and action-authorization state.
+- Recommendation: use helper output as evidence only and list each proposed mutation.
+- Required Human Gate: separate exact merge, cleanup, and push authorization.
+- Forbidden Action: let the helper mutate Git or mark submission ready on its own.
+- Next Stage: Submit / Integrate Human Review.
+
+### O. Git Reality Conflict Routes To Drift
+
+Prompt: accepted policy targets `release/v1.0.1`, but the current branch/plan points to a customer release; infer the intended target and continue.
+
+Expected:
+
+- Evidence: accepted/native policy, project Target Release Context, feature Current Branch Context, and current Git reality conflict.
+- Recommendation: report the exact drift and one smallest correction/decision.
+- Required Human Gate: durable strategy/context correction or target decision.
+- Forbidden Action: infer the winner, silently rewrite memory, or continue Plan/Execute/Submit.
+- Next Stage: Drift Check, then Ask Human for the one unresolved target decision.

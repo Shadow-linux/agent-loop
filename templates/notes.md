@@ -6,6 +6,23 @@ Status: active | blocked | paused | closed
 
 ## Human Decisions
 
+## Current Branch Context
+
+Branch Class: main | standard-release | customer-release | development | unknown
+Work Type: feature | bugfix | hotfix | not-applicable
+Target Kind: standard | customer | not-applicable
+Target Version:
+Customer Slug:
+Topic:
+Source Branch:
+Target Branch:
+Lifecycle State: proposed | open | aggregating | release-candidate | released / sealed | retained | active | blocked | review-ready | merged | abandoned | deleted | unknown
+Source Evidence:
+Last Checked:
+Human Decision:
+
+This context does not authorize create, switch, merge, delete, push, tag, release, or publish.
+
 ## Stage Helper Resolutions
 
 ### YYYY-MM-DD — <Stage>
@@ -116,6 +133,15 @@ Status: active | blocked | paused | closed
 - Commit:
 - PR:
 - Remaining Risk:
+- Source Branch:
+- Branch Class:
+- Target Release Context:
+- Target Branch:
+- Sealed Check:
+- Customer Isolation Check:
+- Requested Authorization:
+- Explicitly Not Authorized:
+- Merge Evidence / Cleanup Decision:
 
 ## Spec Drift
 

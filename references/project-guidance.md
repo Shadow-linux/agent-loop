@@ -143,7 +143,7 @@ Rules:
 - Managed block maintenance rules belong here and in refresh tooling; do not require the target root `AGENTS.md` to include a separate Managed Block Rule prose section.
 - If an existing `AGENTS.md` has no managed blocks, propose adding the minimal needed managed blocks instead of replacing the whole file.
 - If a block-version is missing or older than the current template, treat that block as stale.
-- Treat bare skill-version-only block revisions such as `block-version:1.3.0` as stale because they cannot distinguish same-version template revisions.
+- Treat bare skill-version-only block revisions such as `block-version:1.4.0` as stale because they cannot distinguish same-version template revisions.
 - If a managed block exists in the current template but is missing from root AGENTS.md, treat it as a missing managed block and propose adding it.
 - If a managed block source is missing, stale, or contradictory, classify the block as stale and propose either source correction or block refresh through Human Review Summary.
 - If marker pairs are broken, duplicated, nested, or ambiguous, stop and ask before editing.
@@ -242,6 +242,7 @@ Keep it short and long-lived:
 - keep new human source materials in requirement set directories under `.agent-loop/requirements/`, not flat files
 - keep accepted Concept Foundation and Requirement Product Model detail in the effective human-reviewed requirement source named by the requirement README; after archive, preserve prior sources and use an append-only Concept Foundation follow-up or a new requirement set, then update the README effective pointer; Product Brief and Feature Spec cite accepted Concept/Model IDs and `Effective Concept Source` rather than redefining product semantics
 - keep ADR technical landing inside the existing decision record: resolve the Effective Requirement Snapshot, cover every in-scope Requirement Model ID in the Requirement Model Technical Landing Trace, block `review-required` dependencies, and supersede incompatible accepted decisions instead of rewriting them
+- when existing branch rules are confused, target version is unclear, or customer boundaries are risky, load `references/branch-management.md`, recommend the optional profile, and adopt it only after explicit human acceptance; recommendation/adoption never authorizes a Git action
 - suggest requirement `Delivery Phases` in requirement set `README.md` when a complex requirement needs staged human delivery confirmation before feature construction
 - keep future/deferred work and backlog items in requirement sets and optional `requirements/INDEX.md`, not in `project.md`; do not edit `requirement.md` or other source files for lifecycle/status updates
 - Agent Ownership: agents steer the loop, classify the current stage, recommend exactly one next action, propose missing artifacts, and own diagnosis, sequencing, verification, drift checks, and project-memory updates
@@ -294,6 +295,8 @@ Use `.agent-loop/project.md` for richer memory:
 - Project Entry uncertainties
 - known constraints
 - long-term decisions
+- human-confirmed Branch Strategy with Adoption Status, Profile, patterns, sealed-release rule, customer isolation, deletion policy, confirmation, and evidence
+- current Target Release Context pointer; mutable Current Branch Context remains in feature notes/plan/submit evidence
 
 In simple mode, `project.md` may contain the long-term project memory body.
 

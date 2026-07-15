@@ -91,6 +91,21 @@ Before using an external skill or plugin inside a stage:
 - [ ] For a reasoned `concept-foundation-not-needed` source, use the explicit trace-not-applicable fields and do not invent Concept or Requirement Model rows.
 - [ ] Load `human-review-summary.md` and present the Decision & Design Human Review Summary before creating, accepting, superseding, or materially updating the record.
 
+## Human-Guided Branch Management
+
+- [ ] Run Branch Strategy Check during Project Entry, Project Entry Scan, Re-Adopt, versioned delivery planning, Drift Check, and Submit / Integrate.
+- [ ] Inspect human-confirmed policy, native repo guidance/config, current Git reality/history, and feature/plan/submit evidence in that order.
+- [ ] Preserve a simple project or clear existing strategy; do not force migration to the optional profile.
+- [ ] When rules are confused, Target Release Context is unclear, or customer isolation is risky, load `branch-management.md` and present one recommendation.
+- [ ] Record `accepted | declined | not-needed` only from an explicit human decision; an unconfirmed recommendation is not accepted.
+- [ ] Keep durable strategy and current Target Release Context pointer in `project.md`; keep mutable Current Branch Context in feature notes, plan, or Submit / Integrate evidence.
+- [ ] Block same-version work against a `released / sealed` target; repair uses a new patch version and new capability uses a human-confirmed new version.
+- [ ] Do not flow a customer release branch wholesale into `main` or a standard release line.
+- [ ] Do not treat recommendation, adoption, plan acceptance, or auto mode as permission to create, switch, merge, delete, push, tag, release, or publish.
+- [ ] Require a Branch Action Gate before creating or switching one exact development branch.
+- [ ] Require merge evidence plus separate human confirmation before deleting a temporary development branch; retain release aggregation branches.
+- [ ] Do not create a default `.agent-loop/branches/` directory.
+
 ## Message Intent
 
 - [ ] Classify the latest human message intent before project state classification.
@@ -136,7 +151,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.3.0-20260714.1`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.4.0-20260715`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -222,7 +237,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.3.0-20260714.1`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.4.0-20260715`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -498,6 +513,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Discover real scripts, configs, docs, seed/fixture files, env docs, CI, existing E2E directories, browser URLs, auth/session requirements, and safe execution constraints.
 - [ ] Classify the E2E path as `existing-framework`, `browser`, `chrome`, `computer-use`, `manual`, or `blocked`.
 - [ ] Record durable E2E capability in `project.md` and feature-specific cases in `tests.md` or `tests/e2e/*`.
+- [ ] Run Branch Strategy Check; preserve clear existing rules or recommend the optional profile only when trigger evidence exists.
 
 ## Technical Design / Code Context
 
@@ -513,6 +529,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If a durable interface is new or changed, route to Delivery Contract If Needed.
 - [ ] Stop or mark `Human-gated` if signatures, parameters, return shapes, or file paths cannot be discovered or safely defined.
 - [ ] Update task detail or plan with the discovered context.
+- [ ] When adopted branch policy applies, resolve Current Branch Context from Target Release Context and Git evidence; stop on missing version/customer/source/target facts.
 
 ## Plan Gate / Plan If Needed
 
@@ -556,6 +573,9 @@ Checklist:
 - [ ] Placeholder scan is clean: no TBD/TODO/fill-in/add proper/write tests/similar language.
 - [ ] Type/signature consistency is checked.
 - [ ] Risks or rollback notes are recorded.
+- [ ] When an adopted Branch Strategy or versioned/customer delivery applies, `Branch Context Evidence` cites the complete Current Branch Context in `notes.md` and repeats only strategy status/profile, Target Release Context, Target Branch, sealed/customer-isolation results, and `Git actions authorized by this plan: none`.
+- [ ] When that branch context applies, the plan does not target a sealed release, cross customer isolation, or assume an unauthorized Git action.
+- [ ] For a confirmed simple `not-needed` path, record branch-specific Plan and Submit checks as `not-applicable`; do not require Target Release Context or Target Branch and do not block ordinary non-versioned work.
 - [ ] Present plan approval with Human Review Summary table.
 - [ ] Human approves plan before execution.
 - [ ] After approval, ask whether to stay in Strict Mode or enable Task Auto-Run for this task/story.
@@ -683,6 +703,7 @@ Checklist:
 - [ ] Do not route directly to Close from Drift Check.
 - [ ] Next stage is Project Memory Update / Requirement Reconciliation when long-term project facts, requirement lifecycle, Delivery Phase status, or Feature Mapping changed; otherwise Feature Completion Check.
 - [ ] Present drift decisions with Human Review Summary table.
+- [ ] When an adopted Branch Strategy or versioned/customer delivery applies, compare accepted Branch Strategy and Target Release Context with Current Branch Context and Git reality; stop on sealed target, isolation violation, or unapproved cleanup/action. For a confirmed simple `not-needed` path, record this branch-specific drift check as `not-applicable`.
 
 ## Project Memory Update
 
@@ -706,6 +727,7 @@ Checklist:
 - [ ] Update requirement set README / optional requirements INDEX for lifecycle status, Delivery Phase status, and Feature Mapping only after human confirmation.
 - [ ] Ask before changing root or directory-level `AGENTS.md`.
 - [ ] Present proposed memory updates with Human Review Summary table.
+- [ ] Record durable Branch Strategy / Target Release Context only after human confirmation; do not copy mutable feature branch lifecycle into long-term policy.
 
 ## Submit / Integrate
 
@@ -722,6 +744,9 @@ Checklist:
 - [ ] Confirm fresh verification evidence exists.
 - [ ] Confirm drift check result and known drift.
 - [ ] Confirm required review has passed or record why submit must stop.
+- [ ] When an adopted Branch Strategy or versioned/customer delivery applies, verify Source Branch, Branch Class, Target Release Context, Target Branch, sealed state, customer isolation, and requested action.
+- [ ] Require merge evidence and a separate cleanup decision before deleting a temporary development branch; never treat a retained release aggregation branch as temporary cleanup.
+- [ ] Treat each create/switch/merge/delete/push/tag/release/publish action as separately Human-gated even when the strategy and plan are accepted; create/switch uses the Branch Action Gate.
 - [ ] Present submit/integrate decision with Human Review Summary table.
 - [ ] Ask human which action to take: prepare only, commit, PR text, merge note, release note, publish/release note, or skip.
 - [ ] Only commit, publish, release, merge, or create final PR text after explicit human confirmation.

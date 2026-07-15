@@ -1,6 +1,6 @@
 # Agent Loop
 
-**Current version:** 1.3.0
+**Current version:** 1.4.0
 
 A reusable [Codex](https://github.com/openai/codex) / CLI-agent skill for single-person software development workflows—from goal intake to verified close.
 
@@ -65,6 +65,12 @@ Message Intent → Chat And Requirements Discussion if needed
 | **Requirement Product Model** | Product-layer relationships, roles/permissions, commands/events, business flow, state, product objects/facts, invariants, and recovery derived from accepted concepts in the human-reviewed requirement document. |
 | **Decision & Design / ADR** | Requirement-landing bridge for shared business flow, domain/data rules, architecture, recovery, and non-functional goals. Design Readiness is required; `.agent-loop/decisions/*.md` is Human-gated and conditionally required only when shared design needs a durable record. |
 | **Delivery Contract** | Optional producer-consumer boundary handoff. Used only when API, event, public data, UI state/behavior, SDK/library, runtime, or explicit cross-agent/human handoff needs a stable contract. |
+
+### Human-Guided Branch Management
+
+When a project has confused branch rules, an unclear target version, or customer-isolation risk, Agent Loop can recommend an optional branch strategy and wait for explicit human acceptance. Clear existing conventions and simple single-branch projects are preserved.
+
+The optional profile separates retained standard/customer release aggregation branches from temporary `feature`, `bugfix`, and `hotfix` development branches. Formally released versions are sealed, customer customization stays isolated, and temporary cleanup requires merge evidence plus human confirmation. Strategy adoption does not authorize branch creation, switching, merge, deletion, push, tag, release, or publish. See the [human trigger examples and complete branch flow](Usage.md#我想让-agent-推荐分支管理方式).
 
 ## Artifact Layout
 

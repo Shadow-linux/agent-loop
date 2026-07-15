@@ -116,13 +116,13 @@ Use Superpowers when available for these stages, while applying the path and gat
 | Project Skill Creation / Update | `superpowers:writing-skills` / `writing-skills`, plus `skill-creator` when available | RED/GREEN/REFACTOR, pressure testing, concise skill authoring, scaffolding, metadata generation, structural validation | Gate 1 before files; write only to `.agent-loop/skills/<skill-name>/`; activation only after validation; Execution Gate for every invocation |
 | Product Brief If Needed | `superpowers:brainstorming` plus product/PRD skills when available | product intent, alternatives, user outcomes | write to `product.md`; long-term consensus only via Project Memory Update |
 | Feature Spec | brainstorming/spec methods | ambiguity removal, scope check, acceptance thinking | write to `spec.md`; use agent-loop Human Review Summary |
-| Plan Gate / Plan If Needed | `superpowers:writing-plans` | decide plan vs recorded No-Plan Decision; construction-grade plan, exact paths, test code, commands, expected outputs, no placeholders, self-review | write to `plan.md` or `plans/*`, or record No-Plan Decision only for trivial tasks; do not write `docs/superpowers/plans/`; execution mode remains agent-loop controlled |
+| Plan Gate / Plan If Needed | `superpowers:writing-plans` | decide plan vs recorded No-Plan Decision; construction-grade plan, exact paths, test code, commands, expected outputs, no placeholders, self-review | write to `plan.md` or `plans/*`, or record No-Plan Decision only for trivial tasks; preserve Branch Context Evidence and never let plan approval authorize Git actions; do not write `docs/superpowers/plans/`; execution mode remains agent-loop controlled |
 | Execute Task / Story | `superpowers:test-driven-development` | RED, verify RED, GREEN, verify GREEN, refactor | task status still controlled by Task Done Gate; evidence to `notes.md` |
 | Diagnose Failure | `superpowers:systematic-debugging` | reproduce, isolate, trace root cause before fixing | findings to `notes.md`; return to Execute / Verify / Review |
 | Verify | `superpowers:verification-before-completion` | evidence before completion claim | evidence to `notes.md`; completion still controlled by agent-loop |
 | Review | `superpowers:requesting-code-review` | rigorous review pass | findings to `notes.md`; task moves to `done` only after Task Done Gate |
 | Feature Completion Check | verification / finishing helpers when available | evidence discipline and close-decision support | agent-loop owns completion result, blocker routing, and close confirmation |
-| Submit / Integrate | `superpowers:finishing-a-development-branch` | completion options and branch hygiene | submit still requires agent-loop diff review, verification, drift check, and human confirmation |
+| Submit / Integrate | `superpowers:finishing-a-development-branch` | completion options and branch hygiene | submit still requires agent-loop Branch Strategy Check, sealed/customer-isolation checks, diff review, verification, drift check, and action-specific human confirmation |
 | Pause / Close | finishing / handoff helpers when available | close options, handoff structure, and completion hygiene | close still requires Feature Completion Check, Feature Close Review, drift, memory status, and explicit human confirmation |
 | Subagent execution | `superpowers:subagent-driven-development` | bounded independent execution with review | only after human confirms; briefs/returns in `handoffs/*`; main agent owns merge and status |
 
@@ -215,9 +215,10 @@ When `Submit / Integrate` starts and Superpowers is available:
 3. Inspect diff and untracked files before any integration action.
 4. Confirm fresh verification evidence, required review, drift check, and project memory update status.
 5. Separate product code changes from `agent-loop` artifact changes and unrelated dirty work.
-6. Present a Human Review Summary before commit, PR text, merge note, release note, publish/release action, or any final submission claim.
-7. Treat a human saying "commit" as permission to enter Submit / Integrate, not final commit approval.
-8. Do not let the external finishing skill commit, publish PR text, merge, release, publish, close the feature, or mark submission ready without agent-loop confirmation.
+6. Resolve Source Branch, Branch Class, Target Release Context, Target Branch, sealed state, customer isolation, and any cleanup evidence through `branch-management.md` when the optional strategy applies.
+7. Present a Branch Strategy And Action Review before commit, PR text, merge note, branch deletion, release note, publish/release action, or any final submission claim.
+8. Treat a human saying "commit" as permission to enter Submit / Integrate, not final commit approval.
+9. Do not let the external finishing skill create/switch/delete branches, commit, push, publish PR text, merge, tag, release, publish, close the feature, or mark submission ready without the matching agent-loop confirmation.
 
 ## Subagent Adapter
 

@@ -5,7 +5,7 @@ description: Use when starting, continuing, resuming, structuring, testing, impl
 
 # Agent Loop
 
-Version: 1.3.0
+Version: 1.4.0
 
 Run a single-human, CLI-agent development loop from goal intake to verified close. This skill is a controller: it decides the current stage, loads the right reference, produces or updates `agent-loop` artifacts, and stops at human gates.
 
@@ -92,6 +92,7 @@ references/runtime.md              required first; loop protocol and state machi
 references/design.md               condensed extract of the repo source design
 references/concepts.md             definitions and scope boundaries
 references/project-guidance.md     root and directory AGENTS/CLAUDE guidance rules
+references/branch-management.md    optional Human-guided branch strategy, target-release context, and Git action boundaries
 references/project-memory-mode.md  simple vs enterprise project memory rules
 references/project-architecture-init.md DDD-inspired architecture and stack adapter rules
 references/remote-project-discovery.md local entry + remote project discovery rules
@@ -162,6 +163,7 @@ CHANGELOG.md                        version-change source of truth for "what cha
 13. Load `references/project-entry-scan.md` when taking over an existing project without reliable `agent-loop` memory. This is now a Project Entry Scan only: build safe project memory, guidance status, commands, boundaries, and uncertainties. Do not create `.agent-loop/onboarding-db/`, module docs, flow docs, onboarding diagrams, or old Quick / Deep / Targeted onboarding artifacts during Project Entry Scan.
 13a. Load `references/onboarding-knowledge-base.md` when the human asks for newcomer-facing docs, durable project understanding, guided learning paths, or onboarding-db construction. Run it only after Project Entry Scan or reliable project memory. Use Evidence Graph and Core Flow Inventory first, then accepted Onboarding Spec, Onboarding Tasks, Flow Slice Coverage for critical/important flows, evidence-linked diagrams, completeness gating, coverage scoring, and reviewed batches; module/flow docs remain single-file by default.
 13b. During Project Entry, Resume, Re-Adopt, context recovery, and controller re-entry, check `.agent-loop/skills/INDEX.md` when present. Load only `active` project skills whose current instruction-bearing and executable files match the validation manifest, according to `bootstrap` / `on-demand`; discovery and loading never satisfy the per-invocation Execution Gate.
+13c. Run Branch Strategy Check during Project Entry, Project Entry Scan, Re-Adopt, planning for versioned delivery, Drift Check, and Submit / Integrate. When existing branch rules are clear and safe, preserve them. When rules are confused, the target version is unclear, or customer isolation is at risk, load `references/branch-management.md`, present one optional recommendation, and wait for explicit human acceptance before recording or following it. Recommendation or adoption never authorizes branch creation, switching, merge, deletion, push, tag, release, or publish.
 14. Load `references/feature-follow-up.md` when the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, screenshot issue, behavior tweak, "small tweak", test failure, or QA/user feedback that may belong to a recent feature.
 14a. For `feature-archive-maintenance`, load `references/artifact-rules.md`, `references/stage-guides.md`, `references/human-review-summary.md`, and `references/feature-follow-up.md`. Feature ID is stable while location changes and root `features/archive.md` locates archived/rehydrated history. The scan is read-only; archive/rehydrate requires the expected plan SHA-256 Batch Human Gate, transaction journal, post-check, and restore. Rehydrate before reopened execution; auto modes never authorize either operation.
 15. Load `references/large-projects.md` when the repo is large, old, unfamiliar, multi-package, or likely above 100k LOC.
@@ -255,6 +257,8 @@ If the local directory is only a remote-project entry point, create only thin lo
 - For focused questions about one module, flow, async task, deployment path, or problem area, answer from existing docs/code as chat or operational support unless the human explicitly authorizes feature/fix work. Do not create focused onboarding-db artifacts.
 - When local and remote project reality are split, discover the remote environment before Project Entry Scan or initializing project memory.
 - Historical execution evidence belongs in `notes.md`.
+- Human-Guided Branch Management is an internal check, not a canonical stage and not a default Git Flow migration. Persist only a human-confirmed durable strategy and current Target Release Context pointer in `project.md`; keep the selected development branch and its mutable lifecycle in feature `notes.md`, `plan.md`, or Submit / Integrate records.
+- A formally released version is sealed. Repairs target a new patch version, and new capabilities target a human-confirmed new version. Customer customization must not flow wholesale into `main` or a standard release line.
 - Feature Monthly Archive moves only eligible whole closed feature directories to `features/YYYY-MM/<feature-id>/`; active / blocked / paused features stay flat. It creates no per-feature archive summary, no `historical/`, no Deep Archive, and exposes no `--force`. Original human requirement sources remain unchanged.
 - Web E2E capability is discovered from the real project environment. Stable E2E capability belongs in `project.md`; feature-specific E2E cases belong in `tests.md` or `tests/e2e/*`.
 - Human source requirements are archived as requirement set directories, not new flat files. Each requirement set groups the human's requirement, prototype, feedback, screenshots, recordings, links, and follow-up notes for one intake event or topic.
@@ -288,7 +292,7 @@ If the local directory is only a remote-project entry point, create only thin lo
 - Feature Auto-Loop may run Agent-ready feature work after a passed Requirement Checklist, Feature Spec acceptance, and explicit human confirmation.
 - Task Auto-Run runs Analyze Consistency before executing one accepted task/story plan after explicit human confirmation.
 - If the human appears slowed down by repeated confirmations, or when starting a feature/task execution lane, proactively explain the available gate modes and recommend either Feature Auto-Loop or Task Auto-Run when safe.
-- Auto modes stop at Human-gated work, unclear decisions, risky changes, failed verification, drift needing approval, unrelated dirty work blocking progress, Delivery Contract creation/acceptance/breaking changes, directory guidance changes, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, or publish.
+- Auto modes stop at Human-gated work, unclear decisions, risky changes, failed verification, drift needing approval, unrelated dirty work blocking progress, Delivery Contract creation/acceptance/breaking changes, directory guidance changes, unapproved subagent dispatch, branch creation, switching, deletion, push, or tag, submit, pause, close, commit, PR, merge, release, or publish.
 - Human confirmations should use table-first Human Review Summary by default; full artifacts remain the source of truth. When multiple documents, facts, or long-term memory entries will change, use Batch Human Review.
 - Root `AGENTS.md` / `CLAUDE.md` guidance must tell future agents to own the workflow: classify the stage, recommend one next action, propose missing artifacts, and keep responsibility for sequencing, diagnosis, verification, drift checks, and project-memory updates.
 - Root guidance must also explain autonomous execution after approval: Feature Auto-Loop may continue Agent-ready work after Requirement Checklist passes, Feature Spec is accepted, and the mode is explicitly enabled; Task Auto-Run must run Analyze Consistency before completing one accepted task/story plan through TDD, implementation, verification, bug fixing, review, drift, status update, and final report.
@@ -324,6 +328,7 @@ Stop when:
 - spec, product scope, or acceptance criteria would change
 - a triggered Concept Foundation is still `candidate` or `reopened`, a downstream artifact would redefine an accepted Concept ID / Requirement Product Model rule, or an ADR dependency is `review-required` / missing Requirement Model coverage
 - project memory and code reality materially disagree
+- when an adopted Branch Strategy or versioned/customer delivery applies: the branch class or unique Target Branch is unknown; the adopted Branch Strategy, current Target Release Context, and Git reality disagree; the target release is sealed; customer isolation would be violated; or a branch action has not been explicitly authorized
 - code reality conflicts with feature docs
 - a new dependency, migration, destructive operation, credential, external service, or long-lived boundary directory is needed
 - directory-level `AGENTS.md` creation/update is recommended

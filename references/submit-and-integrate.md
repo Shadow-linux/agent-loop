@@ -27,6 +27,7 @@ Enter this stage only after:
 - long-term project facts are updated in `project.md`, or no long-term project facts changed
 - `tasks.md` reflects current task status
 - `plan.md` is closed, superseded, or points to the next active unit
+- Branch Strategy Check has resolved the current Source Branch, Branch Class, Target Release Context, Target Branch, sealed state, and customer boundary when branch policy applies
 
 If any item is missing, recommend the missing upstream stage first.
 
@@ -61,13 +62,19 @@ Before submit:
 7. Confirm verification evidence is fresh enough for the submit claim.
 8. Confirm required Review is complete and recorded.
 9. Confirm drift check result and remaining known drift.
-10. Ask human confirmation for the submit action.
+10. When an adopted Branch Strategy or versioned/customer delivery applies, compare accepted Branch Strategy and Target Release Context with current Git reality and feature Current Branch Context.
+11. In that applicable context, fail closed when the target is `released / sealed`, customer isolation would be violated, or the requested action/scope is ambiguous.
+12. For a confirmed simple `not-needed` path, record branch-specific checks as `not-applicable`; do not require Target Release Context or Target Branch and do not block ordinary non-versioned submit preparation.
+13. For development-branch cleanup, require merge evidence and ask separately; never delete retained standard/customer release aggregation branches as cleanup.
+14. Ask human confirmation for the exact submit action.
 
 ## Two-Stage Submit Confirmation
 
 A human request such as `commit this` or `prepare PR` authorizes entry into Submit / Integrate only. It is not final approval to commit, publish PR text, merge, release, or mark submission ready.
 
 After diff inspection, feature/requirement artifact review, verification check, review check, drift check, project-memory/guidance impact check, and unrelated-change check, present a Human Review Summary and ask again for the exact submit action.
+
+Strategy adoption and plan approval are context only. They never authorize branch creation, switching, merge, deletion, push, tag, release, or publish. List every requested action and every explicitly non-authorized action in the Branch Strategy And Action Review.
 
 ## Commit Behavior
 
@@ -107,14 +114,14 @@ feat, fix, docs, refactor, test, chore
 For the `agent-loop` skill repository:
 
 - prefer Chinese in the summary and body
-- include the current skill version scope, for example `docs(v1.3.0): 调整 Project Entry Scan 文档结构`
+- include the current skill version scope, for example `docs(v1.4.0): 调整 Project Entry Scan 文档结构`
 - use 3-7 concrete bullet lines for behavior, gate, artifact, template, reference, validation scenario, or documentation changes
 - keep version numbers unchanged unless the human explicitly approves a version bump
 
 Example:
 
 ```text
-docs(v1.3.0): 调整 Project Entry Scan 文档结构
+docs(v1.4.0): 调整 Project Entry Scan 文档结构
 
 - 移除旧 onboarding-db 生成入口
 - 统一旧项目入口为 Project Entry Scan
@@ -152,6 +159,15 @@ Append to `notes.md`:
 - Commit:
 - PR:
 - Remaining Risk:
+- Source Branch:
+- Branch Class:
+- Target Release Context:
+- Target Branch:
+- Sealed Check:
+- Customer Isolation Check:
+- Requested Authorization:
+- Explicitly Not Authorized:
+- Merge Evidence / Cleanup Decision:
 ```
 
 ## Ordered Exit Decision

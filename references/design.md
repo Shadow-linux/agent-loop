@@ -19,6 +19,12 @@ The core constraints are:
 - `project.md` is project-level long-term memory
 - Project Memory Mode is `simple` by default; in `enterprise`, `project.md` becomes an index and long-term details move to optional `.agent-loop/project/*.md`
 - `project.md` owns cross-feature Product Context and Domain Language
+- Human-Guided Branch Management is an optional internal Branch Strategy Check, not a canonical stage and not a mandatory Git Flow migration
+- a durable Branch Strategy is recorded in `project.md` only after explicit human acceptance; `declined` uses `Profile: not-applicable` plus a concrete reason, not-needed keeps the lightweight existing-project profile, and an unconfirmed recommendation is never `accepted`
+- a Branch Action Gate confirms creation or switching of one exact development branch; strategy adoption, plan acceptance, and auto modes never satisfy it
+- `project.md` owns the accepted long-term strategy and current Target Release Context pointer; mutable per-feature branch state belongs in feature notes, plan, or Submit / Integrate evidence
+- standard and customer release aggregation branches are retained; formally released versions are sealed; customer customization cannot flow wholesale into the standard product line
+- branch-specific Target Release Context and Target Branch stops apply only to an adopted strategy or versioned/customer delivery; a confirmed simple `not-needed` path continues without those fields
 - optional `.agent-loop/skills/` owns Human-gated project-local reusable capabilities; `INDEX.md` owns lifecycle and discovery metadata
 - stable Web E2E capability belongs in `project.md`; feature-specific E2E cases belong in feature `tests.md` or `tests/e2e/*`
 - `requirements/` stores human source material packages and requirement lifecycle/backlog records as requirement set directories: requirements, prototypes, feedback, screenshots, recordings, links, follow-up notes, status, and optional `requirements/INDEX.md`
@@ -47,6 +53,7 @@ The core constraints are:
 
 ```text
 Human Goal
+→ [internal] Branch Strategy Check when branch rules, target version, or customer isolation affect safe delivery
 → Operational Support when the goal is to use/run/test/deploy current project behavior without confirmed implementation
 → Project Skill Creation / Update when a repeatable project workflow should become a durable local capability
 → Feature Workspace
@@ -89,6 +96,22 @@ Behavior Intent
 **Requirement Model Scope Inventory**: the source-wide ADR section that accounts for every stable Requirement Model ID (`REL-*`, `PERM-*`, `CMD-*`, `EVT-*`, `FLOW-*`, `STATE-*`, `PM-*`, and `EX-*`) before declaring the coherent ADR scope. It prevents silent omissions and records external, proposed, feature-local, or reasoned not-applicable ownership without becoming a separate artifact.
 
 **Requirement Model Technical Landing Trace**: the table inside an existing Decision & Design record that gives every in-scope accepted Requirement Model ID one disposition and, when landed by this ADR, connects it to a concrete technical landing, preserved invariant, Design Slice, and verification path. It is not a separate artifact or executable schema.
+
+**Branch Strategy**: a human-confirmed durable policy describing the project profile, main branch, release and development naming patterns, sealed-release rule, customer isolation, and cleanup policy. Accepted profiles are `existing-project | human-guided-release`; a declined recommendation records `Profile: not-applicable` plus its reason. It is optional guidance and does not itself authorize a Git mutation.
+
+**Branch Strategy Check**: an internal method used at Project Entry, planning, drift, and submit boundaries. It preserves a clear existing strategy, recommends the optional Human-Guided profile only when rules are confused, target release is unclear, or customer boundaries are risky, and stops before adoption until the human decides. Branch-specific target-context stops do not apply to a human-confirmed simple `not-needed` path.
+
+**Branch Action Gate**: the action-specific Human Gate for creating or switching one exact development branch. Strategy adoption, target selection, plan acceptance, and auto modes do not authorize it.
+
+**Current Branch Context**: the volatile feature-level evidence for branch class, work type, target kind/version/customer/topic, source/target, lifecycle, and last human decision. It does not replace Requirement, Feature, Task, ADR, verification, or lifecycle authority.
+
+**Release Aggregation Branch**: a retained `release/vX.Y.Z` standard line or `customer/<customer>/vX.Y.Z` customer line that receives reviewed work for one target version. Retention is policy; creation, merge, push, and release remain separately Human-gated actions.
+
+**Development Branch**: temporary feature, bugfix, or hotfix work named `feature|bugfix|hotfix/vX.Y.Z/<topic>` for standard delivery or `feature|bugfix|hotfix/<customer>-vX.Y.Z/<topic>` for customer delivery. It may be deleted only after merge evidence and human confirmation.
+
+**Target Release Context**: the current standard or customer release pointer needed to plan a feature safely. It names the target kind/version/customer and expected release branch without authorizing that branch to be created or changed.
+
+**Sealed Release**: a formally released version that is immutable. A repair moves to a new patch version and a new capability moves to a human-confirmed new version.
 
 **Prototype**: human-provided design artifact, screenshot, wireframe, or interaction reference.
 

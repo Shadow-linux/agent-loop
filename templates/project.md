@@ -89,10 +89,32 @@ Proposed / Disabled / Deprecated:
 - `<skill-name>` | none
 Execution Rule: loading never authorizes execution; each invocation requires the Project Skill Execution Gate. A named-skill/concrete-scope request counts only after the execution summary shows no undisclosed action or effect.
 
+## Branch Strategy
+
+Adoption Status: accepted | declined | not-needed
+Profile: existing-project | human-guided-release | not-applicable
+Decline Reason: required when Adoption Status is declined | not-applicable
+Main Branch:
+Standard Release Pattern:
+Customer Release Pattern:
+Development Pattern:
+Release Immutability:
+Customer Isolation:
+Deletion Policy:
+Human Confirmed:
+Evidence:
+
+Recording Rules:
+- An unanswered recommendation is not `accepted`.
+- `declined` records `Profile: not-applicable` and a concrete Decline Reason without copying the proposed profile as current policy.
+- `not-needed` records why a simple or existing project remains lightweight.
+- Changing durable strategy requires Drift Check and a Human Gate.
+
 ## Current Work
 
 Active Feature: one feature path | none
 Paused Features:
+Target Release Context: <standard-or-customer-release pointer> | none
 Next Suggested Action:
 Gate Mode: Strict Mode | Feature Auto-Loop | Task Auto-Run
 Gate Mode Scope:

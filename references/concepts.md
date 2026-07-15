@@ -31,6 +31,20 @@ First version excludes:
 
 **Requirement**: Human-provided textual or conversational need.
 
+**Branch Strategy**: Optional, human-confirmed durable branch policy. It records profile, main/release/development patterns, sealed-release behavior, customer isolation, and deletion policy without authorizing Git actions.
+
+**Branch Strategy Check**: Internal check at entry, planning, drift, and submit boundaries. Preserve clear existing policy; otherwise recommend one Human-Guided option and wait for explicit acceptance before adoption.
+
+**Current Branch Context**: Volatile, evidence-backed identity for the current execution unit: branch class, work type, target kind/version/customer/topic, source/target branch, lifecycle state, last check, and human decision. It belongs in feature notes/plan/submit evidence and never replaces Requirement, Feature, Task, ADR, verification, or lifecycle authority.
+
+**Target Release Context**: Current standard/customer release pointer used by feature planning. Its volatile development-branch detail stays in feature notes, plan, or Submit / Integrate evidence.
+
+**Release Aggregation Branch**: Retained standard `release/vX.Y.Z` or customer `customer/<customer>/vX.Y.Z` branch for a target version.
+
+**Development Branch**: Temporary `feature|bugfix|hotfix` branch for a standard or customer target. Deletion requires merge evidence and human confirmation.
+
+**Sealed Release**: Formally released immutable version. Repairs use a new patch version; new capabilities use a human-confirmed new version.
+
 **Prototype**: Human-provided design artifact, screenshot, diagram, or interaction reference.
 
 **Feature**: One behavior-changing work area under `.agent-loop/features/<feature-id>/`. A feature can contain many stories and many tasks.

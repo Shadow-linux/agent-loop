@@ -517,10 +517,32 @@ Confidence: high | medium | low
 
 ## Testing Rules
 
+## Branch Strategy
+
+Adoption Status: accepted | declined | not-needed
+Profile: existing-project | human-guided-release | not-applicable
+Decline Reason: required when Adoption Status is declined | not-applicable
+Main Branch:
+Standard Release Pattern:
+Customer Release Pattern:
+Development Pattern:
+Release Immutability:
+Customer Isolation:
+Deletion Policy:
+Human Confirmed:
+Evidence:
+
+Recording Rules:
+- An unanswered recommendation is not `accepted`.
+- `declined` records `Profile: not-applicable` and a concrete Decline Reason without copying the proposed profile as current policy.
+- `not-needed` records why a simple or existing project remains lightweight.
+- Changing durable strategy requires Drift Check and a Human Gate.
+
 ## Current Work
 
 Active Feature:
 Paused Features:
+Target Release Context: <standard-or-customer-release pointer> | none
 Next Suggested Action:
 Gate Mode: Strict Mode | Feature Auto-Loop | Task Auto-Run
 Gate Mode Scope:
@@ -938,6 +960,17 @@ Plan Scope:
 - Included Tasks:
 - Design Slices:
 
+Branch Context Evidence:
+- Branch Strategy Status / Profile:
+- Target Release Context:
+- Target Branch:
+- Current Branch Context Evidence: `notes.md#current-branch-context`
+- Sealed Check:
+- Customer Isolation Check:
+- Git actions authorized by this plan: none
+
+For a confirmed simple `not-needed` path, set branch-specific fields to `not-applicable`; do not invent Target Release Context or Target Branch.
+
 Plan Detail:
 - Path: plans/YYYY-MM-DD-TNNN-<slug>.md
 
@@ -1081,6 +1114,7 @@ Expected GREEN:
 - Type/signature consistency:
 - Command specificity:
 - Risk/rollback coverage:
+- Branch context / sealed / customer isolation check:
 
 ## Handoff
 
@@ -1113,6 +1147,23 @@ Updated: YYYY-MM-DD
 Status: active
 
 ## Human Decisions
+
+## Current Branch Context
+
+Branch Class: main | standard-release | customer-release | development | unknown
+Work Type: feature | bugfix | hotfix | not-applicable
+Target Kind: standard | customer | not-applicable
+Target Version:
+Customer Slug:
+Topic:
+Source Branch:
+Target Branch:
+Lifecycle State: proposed | open | aggregating | release-candidate | released / sealed | retained | active | blocked | review-ready | merged | abandoned | deleted | unknown
+Source Evidence:
+Last Checked:
+Human Decision:
+
+This context does not authorize create, switch, merge, delete, push, tag, release, or publish.
 
 ## Follow-up Intake
 
@@ -1180,6 +1231,16 @@ Status: active
 - Accepted fixes:
 
 ## Submit / Integrate
+
+- Source Branch:
+- Branch Class:
+- Target Release Context:
+- Target Branch:
+- Sealed Check:
+- Customer Isolation Check:
+- Requested Authorization:
+- Explicitly Not Authorized:
+- Merge Evidence / Cleanup Decision:
 
 ## Spec Drift
 

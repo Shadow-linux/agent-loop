@@ -34,7 +34,7 @@ New human source material should be archived inside a requirement set directory.
 | File | Owns | Does Not Own |
 |---|---|---|
 | `remote.md` | how to find, verify, and access a remote project from a local entry directory | feature logs or project capabilities |
-| `project.md` | long-term project facts in simple mode; memory index and current state in enterprise mode | task logs, backlog lists, deferred requirements |
+| `project.md` | long-term project facts in simple mode; memory index/current state in enterprise mode; human-confirmed durable Branch Strategy and current Target Release Context pointer | task logs, backlog lists, deferred requirements, mutable development-branch lifecycle |
 | `project/*.md` | enterprise long-term project memory details | feature execution logs |
 | `decisions/*.md` | Human-gated project / cross-feature decision reasons, trade-offs, architecture design, consequences, and verification closure | ordinary execution logs, feature-local preferences, unresolved fuzzy requirement notes |
 | `onboarding-db/*` | Evidence-Graph + DDD human-readable project understanding docs when created through `onboarding-knowledge-base.md`; old layouts are legacy evidence | current task status, feature execution logs, raw test output, human original requirements, project memory replacement |
@@ -43,8 +43,8 @@ New human source material should be archived inside a requirement set directory.
 | `spec.md` | intended feature behavior | execution logs |
 | `tasks.md` | work breakdown, status, and links to task details | full test evidence |
 | `tests.md` | test design, matrix, and links to test details | raw test output |
-| `plan.md` | active execution plan pointer or compact plan | historical execution record |
-| `notes.md` | decisions, follow-up intake, evidence, drift, pause/close | original requirements |
+| `plan.md` | active execution plan pointer or compact plan, including Branch Context Evidence when applicable | historical execution record or Git action authorization |
+| `notes.md` | decisions, follow-up intake, Current Branch Context, evidence, drift, submit, pause/close | original requirements or durable branch policy |
 | `contracts.md` | optional confirmed delivery contract index, compact contracts, status, and verification links | temporary subagent assignments |
 | `tasks/*` | detailed task instructions when complex mode is triggered | feature-wide ledger |
 | `tests/*` | detailed test cases when complex mode is triggered | raw test output |
@@ -111,6 +111,18 @@ Strict Mode
 Feature Auto-Loop
 Task Auto-Run
 ```
+
+Branch Strategy adoption status:
+
+```text
+accepted
+declined
+not-needed
+```
+
+An unconfirmed recommendation has no accepted status. The optional strategy uses `existing-project | human-guided-release | not-applicable` profile values; `not-applicable` is reserved for a human-confirmed `declined` outcome with a concrete reason. Release lifecycle distinguishes `open | released / sealed`; sealed is immutable. These values describe evidence and policy only, never Git action authorization.
+
+Do not create a default `.agent-loop/branches/` directory. Durable policy and Target Release Context live in `project.md`; feature branch state lives in `notes.md`, `plan.md`, or Submit / Integrate evidence.
 
 ## Feature Monthly Archive Layout
 
@@ -270,6 +282,8 @@ task set/order changed -> update tasks.md
 test strategy changed -> update tests.md
 active execution changed -> update plan.md
 actual execution/evidence changed -> update notes.md
+durable branch strategy or Target Release Context changed -> update project.md after human confirmation
+feature Current Branch Context or branch-action evidence changed -> update notes.md / plan.md / Submit / Integrate record
 confirmed producer-consumer API/event/public-data/UI-state/SDK-library/runtime interface changed -> update contracts.md and matching contracts/* detail after human confirmation; list affected consumers; ask human confirmation before accepting a breaking change
 long-term project fact changed -> update project.md in simple mode, or matching project/*.md in enterprise mode
 submission/integration happened -> update notes.md Submit / Integrate

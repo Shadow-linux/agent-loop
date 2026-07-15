@@ -20,6 +20,7 @@ Use before human confirmation for:
 - Concept Foundation acceptance
 - Decision & Design record creation, acceptance, compatibility update, or superseding decision
 - Project Entry / Project Entry Scan
+- Branch Strategy recommendation/adoption and every requested Git action
 - legacy onboarding-db reference cleanup
 - Remote Project Discovery
 - Requirement Archive
@@ -224,6 +225,18 @@ For breaking changes, list every affected consumer, scan evidence, compatibility
 | Explicit Non-Goals | no onboarding-db / no deep dives / no onboarding diagrams |  |  | approve / revise |
 | Write Plan | project memory / guidance |  |  | approve / revise |
 
+### Branch Strategy Adoption
+
+| Item | Current Evidence | Recommended Value | Risk / Reason | Human Decision |
+|---|---|---|---|---|
+| Adoption Status | unconfirmed | accepted / declined / not-needed | recommendation is not adoption | human only |
+| Profile | existing-project / unclear / not-applicable | existing-project / human-guided-release / not-applicable | declined requires not-applicable plus a concrete reason | human only |
+| Main / Release / Development Patterns |  |  | naming and release boundary | human only |
+| Release Immutability |  | released / sealed | repairs require a new patch | human only |
+| Customer Isolation |  | no wholesale reverse merge | protects standard product line | human only |
+| Deletion Policy |  | temporary branch only after merge evidence | release branches retained | human only |
+| Target Release Context |  | standard / customer pointer | no Git action authorization | human only |
+
 ### Legacy Onboarding-DB Reference Cleanup
 
 | File / Item | Action | Change Summary | Source Evidence | Confidence | Affects Long-Term Memory | Suggested Action |
@@ -279,6 +292,25 @@ Human Decision:
 | Diff Review | clean / issues |  |
 | Unrelated Changes | none / present |  |
 | Action | prepare / commit / PR text / skip | human decision needed |
+
+### Branch Strategy And Action Review
+
+| Item | Status / Value | Evidence | Human Decision |
+|---|---|---|---|
+| Observed Policy / Git Evidence | coherent / conflicting / incomplete | native policy + Git evidence | acknowledge / investigate |
+| Adoption Status / Profile |  | `project.md` | acknowledge / revise |
+| Source Branch / Branch Class |  | Git + feature evidence | acknowledge / revise |
+| Target Release Context / Target Branch |  | accepted policy + plan | acknowledge / revise |
+| Sealed Check | open / released / sealed / unknown | release evidence | proceed / stop |
+| Customer Isolation | pass / fail / unknown | branch ancestry and policy | proceed / stop |
+| Verification / Review / Drift | pass / fail / missing | current feature evidence | proceed / stop |
+| Merge Evidence / Deletion Policy | complete / missing / not-applicable | merge/submit evidence | delete / retain / stop |
+| Requested Authorization | prepare / create / switch / commit / push / merge / delete / tag / release / publish | latest human request | human only |
+| Explicitly Not Authorized | every action outside the request | review summary | acknowledge |
+| Remaining Risk / Blocker | none / exact blocker | evidence and impact | accept / resolve / stop |
+| Human Decision | exact bounded action or no action | current review | human only |
+
+An accepted Branch Strategy, Target Release Context, plan, or auto mode is never action authorization. Creation or switching of one exact development branch uses the Branch Action Gate. Ask for the exact mutation after current evidence is shown; a cleanup decision must name the temporary branch and its merge evidence.
 
 ## Rules
 

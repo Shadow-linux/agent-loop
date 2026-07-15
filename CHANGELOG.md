@@ -1,5 +1,19 @@
 # Agent Loop Changelog
 
+## 1.4.0 — 2026-07-15
+
+### Human-Guided Branch Management
+- Added an optional Branch Strategy Check that preserves clear existing conventions and recommends a Human-Guided profile only for confused rules, unclear target releases, or customer-isolation risk.
+- Added human-confirmed durable strategy and Target Release Context fields in `project.md`, with volatile Current Branch Context kept in feature notes, plans, and Submit / Integrate evidence.
+- Standardized retained `release/vX.Y.Z` and `customer/<customer>/vX.Y.Z` aggregation branches plus versioned `feature | bugfix | hotfix` development naming without adding a canonical stage or default `.agent-loop/branches/` artifact.
+- Sealed formally released versions, routed later repairs to new patch versions, prevented wholesale customer-to-standard reverse merges, and required merge evidence plus human confirmation for temporary branch cleanup.
+- Preserved separate Human Gates for strategy adoption and every create, switch, merge, delete, push, tag, release, or publish action; external finishing helpers cannot widen those grants.
+- Scoped branch-specific fail-closed behavior to adopted, versioned, or customer delivery contexts so `not-needed` simple projects remain usable, and defined one exact Branch Action Gate for development-branch creation or switching.
+- Made declined recommendations non-authoritative through `Profile: not-applicable` plus a required decline reason, and replaced the root managed reminder with a canonical English one-line router that projects may localize.
+- Refreshed all root managed blocks to `block-version:1.4.0-20260715` and added RED/GREEN coverage for Auto Mode Git stops, optionality, declined memory, and root-language ownership.
+- Coordinated runtime/design, stage/checklist/planning/submit rules, project-memory ownership, templates, root routing guidance, human docs, pressure scenarios, and regression coverage while aligning all version-bearing surfaces to `1.4.0` after explicit human approval.
+- Added a focused RED/GREEN contract, fifteen branch-specific pressure scenarios, and a fresh six-domain full-validation report; validation performed no real branch, commit, push, tag, PR, merge, release, or publish action.
+
 ## 1.3.0 — 2026-07-11
 
 ### Version Baseline

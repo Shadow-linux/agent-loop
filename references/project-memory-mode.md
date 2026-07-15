@@ -21,6 +21,8 @@ If a hard trigger applies and the human declines or defers enterprise mode, reco
 
 Project memory must not be used as a backlog. Do not write future feature ideas, temporary TODOs, deferred requirements, unimplemented planned capability details, or backlog lists into `project.md` or enterprise project memory. Put future/deferred requirement memory in `.agent-loop/requirements/` and optional `requirements/INDEX.md`; `project.md` may only point to a requirement set when needed for the current resume action.
 
+Human-confirmed Branch Strategy is durable project memory in both modes. Keep the compact policy and current Target Release Context pointer in `project.md` so entry and submit routing do not require loading an optional enterprise detail file. Keep development-branch selection, lifecycle, merge evidence, and cleanup decisions in the owning feature notes/plan/submit record. Never record an unconfirmed recommendation as `accepted`, and do not create `.agent-loop/branches/`.
+
 ## Simple Mode
 
 `project.md` is the main long-term project memory body.
@@ -179,6 +181,8 @@ In enterprise mode:
 | remote/local/container/CI/runtime fact | `project/environments.md` |
 | root or directory guidance status | `project/guidance-inventory.md` |
 
+Branch Strategy and Target Release Context remain in root `project.md` even in enterprise mode because they are current routing state, not a large knowledge inventory.
+
 Every write still needs the usual human gate unless an accepted auto mode explicitly covers that project-memory update and no stop condition applies.
 
 ## `project.md` Enterprise Index
@@ -189,6 +193,8 @@ In enterprise mode, `project.md` should stay short:
 Project Summary
 Memory Mode: enterprise
 Current Work
+Branch Strategy
+Target Release Context
 Next Suggested Action
 Project Memory Index
 Recent Project Memory Updates

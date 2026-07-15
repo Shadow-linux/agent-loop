@@ -48,6 +48,7 @@ Before writing `plan.md`, inspect enough code to avoid speculative plans:
 - existing naming and error-handling patterns
 - existing function signatures and return shapes
 - relevant root or directory `AGENTS.md`
+- accepted Branch Strategy and Target Release Context plus current Git evidence when versioned or customer delivery applies
 
 If the needed signature, parameter, return shape, or dependency is unknown after a reasonable scan, stop and ask or mark the task `Human-gated`. Do not write `TBD`.
 
@@ -66,6 +67,9 @@ Every `plan.md` with implementation content must include:
 - exact commands and expected RED/GREEN output
 - risks and rollback
 - self-review checklist
+- `Branch Context Evidence` when applicable, citing the complete Current Branch Context in `notes.md` and repeating only Branch Strategy status/profile, Target Release Context, Target Branch, sealed/customer-isolation results, and `Git actions authorized by this plan: none`
+
+Branch context is evidence, not permission. A plan must stop when the target release is `released / sealed`, when accepted policy and Git reality disagree, or when customer isolation would be crossed. Plan approval never authorizes branch creation, switching, merge, deletion, push, tag, release, or publish.
 
 ## No Placeholders
 
@@ -169,3 +173,4 @@ Before asking the human to approve the plan, verify:
 - tests fail before implementation and pass after implementation
 - commands are exact and scoped
 - risky operations have rollback notes
+- branch context is resolved, compatible with the accepted policy, not sealed, and contains no implied Git action authorization when applicable
