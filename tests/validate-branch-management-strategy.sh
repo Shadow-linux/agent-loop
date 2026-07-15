@@ -60,7 +60,7 @@ assert_contains "$reference" 'A simple `not-needed` path does not require Target
 assert_contains "$reference" 'When an adopted Branch Strategy or versioned/customer delivery applies, if Target Release Context or the unique Target Branch is unclear'
 assert_contains "$reference" 'Technical Design / Plan Gate: when an adopted Branch Strategy or versioned/customer delivery applies'
 assert_contains "$reference" 'Stop dependent integration/release work only when an adopted Branch Strategy or versioned/customer delivery applies and:'
-assert_contains "$reference" 'does not implement Bug Management'
+assert_contains "$reference" 'Bug Management owns Bug identity, lifecycle, and Resolution Path. Branch Management consumes only the Human-confirmed Fix Feature and Target Release Context.'
 assert_contains "$reference" 'does not implement worktree / branch memory merge'
 assert_contains "$reference" 'Do not create a default `.agent-loop/branches/` directory.'
 
@@ -128,7 +128,7 @@ content = File.read(ARGV.fetch(0))
 blocks = content.scan(/<!-- agent-loop:managed-start section:([^ ]+) .*?block-version:([^ ]+) -->/)
 abort 'FAIL: root AGENTS managed blocks missing' if blocks.empty?
 blocks.each do |section, revision|
-  expected = '1.4.0-20260715'
+  expected = '1.4.0-20260715.1'
   abort "FAIL: #{section} expected #{expected}, found #{revision}" unless revision == expected
 end
 RUBY

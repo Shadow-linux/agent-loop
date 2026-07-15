@@ -56,7 +56,8 @@ Message Intent → Chat And Requirements Discussion if needed
 | **Plan** | Construction-grade execution plan for the active task/story |
 | **Evidence** | Fresh proof: test output, build output, API results, E2E checks, logs |
 | **Drift** | Mismatch between docs, code reality, or human decisions |
-| **Feature Follow-up / Flow-back** | Bug/change intake that checks recent features before creating a new feature. Default lookback is 30 days. |
+| **Human-Guided Bug Management** | Stable Bug identity, evidence, deduplication, lifecycle, Human-confirmed Resolution Path, and a separate close decision inside Feature Follow-up / Flow-back. |
+| **Feature Follow-up / Flow-back** | Repair ownership routing that scans Feature metadata for 90 days by default, extends on evidence, and sends every code fix through a Feature workflow. |
 | **Operational Support** | Read-only code-guided help for testing, running, deploying, switching accounts/config/models/providers, quota checks, rollout, and production diagnosis before deciding whether feature work is needed. |
 | **Project-Local Skill** | A reusable project capability under `.agent-loop/skills/<skill-name>/`. Creation or material update requires Gate 1; successful validation activates it, but every actual invocation still requires a bounded Execution Gate. |
 | **Requirement Lifecycle / Backlog** | Requirement memory for proposed, accepted, deferred, in-progress, partially implemented, implemented, superseded, rejected, or reference-only requirements without using project memory as a backlog. |
@@ -100,6 +101,11 @@ The optional profile separates retained standard/customer release aggregation br
       prototype.*                       # optional source file when provided
       feedback.*                        # optional source file when provided
       notes.*                           # optional source file when provided
+  bugs/
+    INDEX.md                           # Bug inventory, lifecycle summary, and stable locator
+    YYYY-MM-DD-<bug-slug>/
+      README.md                        # Bug facts, evidence links, lifecycle, Resolution Path, and close history
+      evidence/                        # optional screenshots, logs, traces, and reproduction evidence
   features/
     archive.md                         # locator for archived/rehydrated Feature IDs; not product authority
     YYYY-MM/                           # Human-gated directory archive for eligible closed features
@@ -229,7 +235,7 @@ The agent reads `.agent-loop/project.md`, finds the active feature, and resumes 
 
 > "测试发现上次做的上传功能有 bug."
 
-The agent does not immediately create a new feature. It first checks recent features, using a 30-day default lookback window, then presents candidate matches with evidence. After human confirmation it either flows the work back to the owning feature, creates a linked new feature, creates a `Feature Type: maintenance-fix` feature, or investigates first.
+The agent does not immediately create a new feature. It first checks the full Bug Index for duplicate/reopen identity, then scans Feature metadata using a 90-day default ownership window and evidence-driven extension. After human confirmation it either flows the work back to the owning feature, creates a linked new feature, creates a `Feature Type: maintenance-fix` feature, routes product ambiguity to Requirements Discussion, or investigates first.
 
 If a closed feature is reopened for follow-up, the original close record remains intact. The follow-up gets its own `notes.md` intake record, updated tasks/tests/plan as needed, fresh verification, review, drift check, and a new close confirmation.
 

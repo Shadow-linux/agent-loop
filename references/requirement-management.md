@@ -16,6 +16,10 @@ Never silently modify, rewrite, summarize over, or replace original human requir
 
 Feature Monthly Archive preserves the stable Feature ID when a completed implementation directory moves between flat and month archive paths. Requirement `Feature Mapping`, `Implemented By`, and lifecycle-owned README/index locators may update to the Human-reviewed current path, but original human requirement source files remain byte-stable. `features/archive.md` is only a locator and never becomes requirement or implementation authority.
 
+Bug relationships are optional `0..N`. Requirement artifacts continue to own product goals and Expected Behavior; Bug Records only link accepted evidence and record `Requirement Impact: none | violates-accepted-behavior | ambiguity-found | change-required`. A Bug link never rewrites a Requirement source or automatically changes Requirement or Delivery Phase lifecycle.
+
+Run Requirement Reconciliation only when current Bug/Feature verification proves the recorded delivery truth is inaccurate. Present the affected Requirement/Phase, current lifecycle evidence, proposed legal state transition, and human decision. Until the human confirms, preserve the current status. Product semantic changes use an append-only follow-up or a new/superseding Requirement Set, never an in-place source rewrite.
+
 `.agent-loop/requirements/` is canonical. Do not create or maintain legacy `inputs/` archives in current-version projects.
 
 ## Requirement Lifecycle / Backlog
@@ -321,6 +325,11 @@ Lifecycle:
 Summary:
 - One-line summary:
 
+Bug Relationships:
+- Related Bugs:
+- Requirement Impact: none | violates-accepted-behavior | ambiguity-found | change-required
+- Lifecycle Reconciliation: not-needed | proposed | human-confirmed
+
 Delivery Phases:
 - Use only when the requirement needs staged delivery.
 
@@ -486,5 +495,6 @@ Ask before:
 - changing requirement lifecycle status
 - marking a requirement `implemented`, `superseded`, or `rejected`
 - rebuilding a requirement set because follow-up conflicts with original requirements
+- changing Requirement or Delivery Phase lifecycle because Bug evidence invalidated recorded delivery truth
 
 After archiving during an already-confirmed feature, update an existing `spec.md` `Source Requirements` with exact paths. Requirements Discussion and Requirement Archive do not create a feature workspace or `spec.md` merely to hold the link.

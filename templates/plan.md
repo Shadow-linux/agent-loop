@@ -7,6 +7,11 @@ Active Since: YYYY-MM-DD
 Status: active
 Supersedes:
 
+Bug Context Evidence: none | .agent-loop/bugs/YYYY-MM-DD-<bug-slug>/README.md
+Related Bug IDs: none | BUG-...
+
+Bug context is evidence only. This Feature plan does not own Bug lifecycle and authorizes no Bug close, Feature creation/reopen, Requirement change, or Git action.
+
 Plan Scope:
 - Type: task | story
 - ID:

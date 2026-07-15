@@ -2,6 +2,15 @@
 
 ## 1.4.0 — 2026-07-15
 
+### Human-Guided Bug Management
+- Added stable Bug identity, report provenance, deduplication, evidence, lifecycle, Resolution Path, reopen history, and Human-confirmed close records under `.agent-loop/bugs/` without adding a canonical stage or message intent.
+- Kept Requirement authority limited to product goals and expected behavior, made Bug-to-Requirement links optional many-to-many, and prevented Bug handling from automatically changing Requirement lifecycle.
+- Kept all code repair in existing Feature workflows while adding Bug links and Bug-specific verification evidence to Feature spec, tests, plan, notes, completion, submit, and Human Review surfaces.
+- Changed Feature ownership discovery to a default 90-calendar-day metadata scan with evidence-driven extension, stable archive lookup, and rehydrate only after confirmed flow-back and before repair execution.
+- Standardized Bug records on `bugs/YYYY-MM-DD-<bug-slug>/`, fixed intake order as Bug Index identity scan → Feature ownership scan → Bug create/update/reopen, and reserved `in-progress` for a Human-confirmed Feature repair target on `flow-back | linked-feature | maintenance-fix`.
+- Preserved Report Origin as provenance rather than Owner, Assignee, permissions, or workload, and kept Bug close separate from Feature tests, Feature close, commit, push, branch, and release authorization.
+- Refreshed all 13 root managed blocks to `block-version:1.4.0-20260715.1` and coordinated runtime/design, templates, checklists, archive/branch boundaries, human docs, pressure scenarios, and focused/full validation evidence.
+
 ### Human-Guided Branch Management
 - Added an optional Branch Strategy Check that preserves clear existing conventions and recommends a Human-Guided profile only for confused rules, unclear target releases, or customer-isolation risk.
 - Added human-confirmed durable strategy and Target Release Context fields in `project.md`, with volatile Current Branch Context kept in feature notes, plans, and Submit / Integrate evidence.

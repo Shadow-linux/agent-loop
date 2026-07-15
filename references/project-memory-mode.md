@@ -21,6 +21,8 @@ If a hard trigger applies and the human declines or defers enterprise mode, reco
 
 Project memory must not be used as a backlog. Do not write future feature ideas, temporary TODOs, deferred requirements, unimplemented planned capability details, or backlog lists into `project.md` or enterprise project memory. Put future/deferred requirement memory in `.agent-loop/requirements/` and optional `requirements/INDEX.md`; `project.md` may only point to a requirement set when needed for the current resume action.
 
+Bug inventory is also not project memory. In both modes, `.agent-loop/bugs/INDEX.md` owns open, deferred, verifying, and closed Bug inventory plus locator rows; Bug README files own details. `project.md` may store only the configurable `Feature Follow-up Lookback` and current Feature pointers. Do not add Open Bugs, Deferred Bugs, Bug assignees, reproduction logs, or Bug backlog rows to simple or enterprise project memory.
+
 Human-confirmed Branch Strategy is durable project memory in both modes. Keep the compact policy and current Target Release Context pointer in `project.md` so entry and submit routing do not require loading an optional enterprise detail file. Keep development-branch selection, lifecycle, merge evidence, and cleanup decisions in the owning feature notes/plan/submit record. Never record an unconfirmed recommendation as `accepted`, and do not create `.agent-loop/branches/`.
 
 ## Simple Mode
@@ -40,6 +42,8 @@ Recommended layout:
 .agent-loop/
   project.md
   requirements/
+  bugs/
+    INDEX.md        optional Bug inventory/backlog/locator
   features/
     archive.md       optional Feature Monthly Archive locator; not project history
 ```
@@ -64,11 +68,13 @@ Recommended layout:
     environments.md
     guidance-inventory.md
   requirements/
+  bugs/
+    INDEX.md        optional Bug inventory/backlog/locator; not enterprise memory
   features/
     archive.md       optional Feature Monthly Archive locator; not enterprise memory
 ```
 
-In both modes, `features/archive.md` locates archived or rehydrated stable Feature IDs. Do not copy historical feature bodies, archive rows, or transaction logs into `project.md`; project memory records only current work and durable facts. Active/blocked/paused work stays flat, while closed month archive paths are resolved on demand through the locator.
+In both modes, `features/archive.md` locates archived or rehydrated stable Feature IDs and `bugs/INDEX.md` locates Bug records. Do not copy historical Feature bodies, archive rows, transaction logs, Bug backlog, Bug evidence, or triage state into `project.md`; project memory records only current work and durable facts. Active/blocked/paused work stays flat, while closed month archive paths are resolved on demand through the locator.
 
 These files are optional. Create only the files that solve a real navigation or continuity problem.
 
@@ -182,6 +188,8 @@ In enterprise mode:
 | root or directory guidance status | `project/guidance-inventory.md` |
 
 Branch Strategy and Target Release Context remain in root `project.md` even in enterprise mode because they are current routing state, not a large knowledge inventory.
+
+Bug inventory remains in `bugs/INDEX.md` even in enterprise mode. Only durable product/domain behavior changed through accepted Requirement/Decision/Feature evidence is eligible for Project Memory Update.
 
 Every write still needs the usual human gate unless an accepted auto mode explicitly covers that project-memory update and no stop condition applies.
 

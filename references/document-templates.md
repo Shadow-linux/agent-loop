@@ -31,6 +31,11 @@ CLAUDE.md -> AGENTS.md
       feedback.md
       design-link.md
     INDEX.md  optional for many requirement sets
+  bugs/ optional; create after explicit bug record/manage/investigate/fix intent
+    INDEX.md
+    <date>-<bug-slug>/
+      README.md
+      evidence/ optional bounded evidence
   features/
     <date>-<feature-slug>/
       product.md optional
@@ -98,6 +103,94 @@ Preferred requirement-set layout:
 ```
 
 Use `templates/requirement-set-README.md` for the set README.
+
+## Bug Management Rules And Templates
+
+Use `templates/bug-index.md` and `templates/bug-README.md` after explicit bug record/manage/investigate/fix intent. Ordinary chat does not create this directory. `bugs/INDEX.md` is inventory/backlog/locator; each README is the Bug detail source of truth. Bug artifacts never own Feature tasks, tests, plans, or code execution, and `project.md` never stores Bug backlog rows.
+
+Bug Index:
+
+```md
+# Bug Index
+
+This is an inventory, backlog, and locator. Each Bug README is the detail source of truth. Do not store Bug backlog rows in `project.md`.
+
+| Bug ID | Title | Status | Resolution | Severity | Priority | Resolution Path | Target | Last Updated |
+|---|---|---|---|---|---|---|---|---|
+```
+
+Bug README normative fields:
+
+```md
+# Bug: <title>
+
+Bug ID:
+Created:
+Last Updated:
+Status: reported | triaging | confirmed | in-progress | verifying | deferred | closed
+Resolution: unresolved | fixed | duplicate | not-a-bug | cannot-reproduce | accepted-risk | superseded
+
+## Summary
+
+## Report Origin
+- Origin Type: person | customer | group | qa | monitoring | automated-test | agent | external-ticket | other | unknown
+- Origin Reference:
+- Intake Channel: chat | issue | ticket | test-run | alert | api | other | unknown
+- Source Link:
+
+## Observed Behavior
+
+## Expected Behavior
+- Expected Behavior:
+- Expected Behavior Evidence:
+
+## Impact And Triage
+- Affected Users / Scope:
+- Environment:
+- Severity: unknown | low | medium | high | critical
+- Priority: unset | low | medium | high | urgent
+- Reproduction Status: not-attempted | reproducible | intermittent | cannot-reproduce
+
+## Relationships
+- Related Bugs:
+- Duplicate Of:
+- Related Requirements:
+- Requirement Impact: none | violates-accepted-behavior | ambiguity-found | change-required
+- Affected Delivery Phase:
+- Related Features:
+- Related Decisions / ADRs:
+- Related Contracts:
+
+## Resolution Path
+- Path: investigate-first | flow-back | linked-feature | maintenance-fix | requirement | no-fix
+- Target:
+- Human Decision:
+- Decision Evidence:
+- Target Release Context:
+
+## Evidence
+
+## Verification And Close
+- Fix Feature:
+- Fix Revision / Commit:
+- Verification Evidence:
+- Review Evidence:
+- Drift Result:
+- Resolution:
+- Close Decision:
+
+## Status History
+| Time | From | To | Resolution | Reason | Evidence | Human Decision |
+|---|---|---|---|---|---|---|
+
+## Reopen History
+| Time | Prior Close | Trigger Report | New Evidence | Return Status | Human Decision |
+|---|---|---|---|---|---|
+```
+
+Keep Report Origin optional and provenance-only. Requirement relationships are optional `0..N`; the Bug does not rewrite Requirement sources or auto-change lifecycle. Passing Feature tests moves a repair Bug only to `verifying`; Bug Close and Feature Close remain separate Human decisions. Reopen history is append-only and restores `Resolution: unresolved`.
+
+An `in-progress` Bug requires `flow-back | linked-feature | maintenance-fix` plus one Human-confirmed Fix Feature Target. `investigate-first`, `requirement`, and `no-fix` must use another valid Status.
 
 ## Project Decision Rules
 
@@ -713,9 +806,14 @@ Source Requirements:
 - Delivery Phase / Phase Slice:
 - Phase Note:
 
+Related Bugs:
+Bug Resolution Path: none | flow-back | linked-feature | maintenance-fix
+
 Product Brief: product.md | none
 Related Feature:
 Flow-back Decision: none | flow-back | linked-new-feature | maintenance-fix | investigate-first | declined-reopen | defer
+
+Bug references point to the owning Bug README and do not copy full Report Origin, reproduction, or evidence into this Feature Spec. Feature acceptance does not authorize Bug close.
 
 Summary:
 - 
@@ -894,6 +992,13 @@ Status: active
 |---|---|---|---|
 | DS-00 |  |  | planned / verified / blocked |
 
+## Bug Verification Matrix
+
+Use only when this Feature resolves one or more Bug Records.
+
+| Bug ID | Expected Behavior Evidence | Original Reproduction | Regression / Safety Verification | Result | Evidence Link |
+|---|---|---|---|---|---|
+
 ## Functional Test Cases
 
 - TC001 [US1] <case title>
@@ -952,6 +1057,11 @@ Updated: YYYY-MM-DD
 Active Since: YYYY-MM-DD
 Status: active
 Supersedes:
+
+Bug Context Evidence: none | .agent-loop/bugs/YYYY-MM-DD-<bug-slug>/README.md
+Related Bug IDs: none | BUG-...
+
+Bug context is evidence only. This Feature plan does not own Bug lifecycle and authorizes no Bug close, Feature creation/reopen, Requirement change, or Git action.
 
 Plan Scope:
 - Type: task | story
@@ -1171,8 +1281,11 @@ This context does not authorize create, switch, merge, delete, push, tag, releas
 - Source: human report | test failure | E2E | API verification | production/QA feedback | other
 - Report:
 - Candidate Features:
+- Related Bugs:
+- Bug Status At Start:
+- Bug Resolution Path:
 - Classification: same-feature-bug | same-feature-adjustment | regression-from-feature | new-feature | maintenance-fix | unclear
-- Lookback Window: 30 days | outside-default-window
+- Lookback Window: 90 days | outside-default-window
 - Match Evidence:
 - Related Feature:
 - Flow-back Decision: flow-back | linked-new-feature | maintenance-fix | investigate-first | declined-reopen | defer
@@ -1204,6 +1317,19 @@ This context does not authorize create, switch, merge, delete, push, tag, releas
 ## TDD Cycles
 
 ## Verification Evidence
+
+## Bug Verification / Close Linkage
+
+- Related Bugs:
+- Bug Status After Feature Verification: verifying | in-progress | triaging | not-applicable
+- Original Reproduction / Substitute Evidence:
+- Regression / Safety Evidence:
+- Candidate Bug Resolution:
+- Bug Close Decision: pending | confirm | revise | keep-verifying
+- Feature Close Decision: pending | confirm | continue | pause | revise-scope
+- Evidence Links:
+
+Feature verification does not close a Bug automatically. Bug Close and Feature Close remain separately named Human decisions.
 
 ## Diagnosis
 

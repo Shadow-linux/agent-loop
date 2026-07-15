@@ -9,10 +9,15 @@ Source Requirements:
 - Requirement:
 - Prototype:
 
+Related Bugs:
+Bug Resolution Path: none | flow-back | linked-feature | maintenance-fix
+
 Product Brief: product.md | none
 
 Related Feature:
 Flow-back Decision: none | flow-back | linked-new-feature | maintenance-fix | investigate-first | declined-reopen | defer
+
+Bug references point to the owning Bug README and do not copy full Report Origin, reproduction, or evidence into this Feature Spec. Feature acceptance does not authorize Bug close.
 
 Summary:
 - 

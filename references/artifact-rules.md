@@ -39,6 +39,9 @@ New human source material should be archived inside a requirement set directory.
 | `decisions/*.md` | Human-gated project / cross-feature decision reasons, trade-offs, architecture design, consequences, and verification closure | ordinary execution logs, feature-local preferences, unresolved fuzzy requirement notes |
 | `onboarding-db/*` | Evidence-Graph + DDD human-readable project understanding docs when created through `onboarding-knowledge-base.md`; old layouts are legacy evidence | current task status, feature execution logs, raw test output, human original requirements, project memory replacement |
 | `requirements/<archive-date>-<topic>/*` | original human material package and lifecycle record: requirements, prototypes, feedback, screenshots, recordings, links, references, status, backlog/deferred state | edited specs, task plans |
+| `bugs/INDEX.md` | Bug inventory, backlog, locator, and current summary row for every Bug ID | full reproduction, logs, discussion, Feature tasks, or project memory |
+| `bugs/YYYY-MM-DD-<bug-slug>/README.md` | stable Bug identity, Report Origin, observed/expected evidence, Status, Resolution, relationships, Resolution Path, verification, close, and reopen history | product meaning, Requirement lifecycle, Feature tasks/tests/plan, personnel assignment, or Git authorization |
+| `bugs/YYYY-MM-DD-<bug-slug>/evidence/*` | optional bounded screenshots, redacted logs, failed tests, reproduction, and verification evidence | secrets, complete production payloads, implementation plans, or executable state database |
 | `product.md` | feature-level product intent, users, stories, product scope | engineering execution plan |
 | `spec.md` | intended feature behavior | execution logs |
 | `tasks.md` | work breakdown, status, and links to task details | full test evidence |
@@ -124,6 +127,18 @@ An unconfirmed recommendation has no accepted status. The optional strategy uses
 
 Do not create a default `.agent-loop/branches/` directory. Durable policy and Target Release Context live in `project.md`; feature branch state lives in `notes.md`, `plan.md`, or Submit / Integrate evidence.
 
+Bug Status and Resolution are independent:
+
+```text
+Bug Status: reported | triaging | confirmed | in-progress | verifying | deferred | closed
+Bug Resolution: unresolved | fixed | duplicate | not-a-bug | cannot-reproduce | accepted-risk | superseded
+Bug Resolution Path: investigate-first | flow-back | linked-feature | maintenance-fix | requirement | no-fix
+```
+
+`closed` cannot use `unresolved`; `deferred` is not closed; reopen is append-only and restores `unresolved`. `bugs/INDEX.md` owns the Bug backlog. Do not copy Open Bugs, Deferred Bugs, assignees, or reproduction logs into `project.md`.
+
+An `in-progress` Bug requires `flow-back | linked-feature | maintenance-fix` plus one Human-confirmed Fix Feature Target. `investigate-first`, `requirement`, and `no-fix` must not use `Status: in-progress`.
+
 ## Feature Monthly Archive Layout
 
 Feature ID is stable while its location may be flat or archived:
@@ -204,6 +219,14 @@ Requirement set directory:
 
 The date is the archive date only. It is not a deadline, feature duration, implementation start date, or implementation end date.
 
+Bug directory:
+
+```text
+.agent-loop/bugs/YYYY-MM-DD-<bug-slug>/
+```
+
+Create `bugs/` only after explicit bug-record, manage, investigate, or fix intent. Do not create an empty Bug directory during Project Entry. Bug directories may contain `README.md` and optional `evidence/`; explicitly forbid `.agent-loop/bugs/<bug>/tasks.md`, `.agent-loop/bugs/<bug>/tests.md`, `.agent-loop/bugs/<bug>/plan.md`, and any Bug implementation subtree. Every code repair remains in a normal, follow-up, or maintenance-fix Feature workspace.
+
 Onboarding-db directory:
 
 ```text
@@ -282,6 +305,9 @@ task set/order changed -> update tasks.md
 test strategy changed -> update tests.md
 active execution changed -> update plan.md
 actual execution/evidence changed -> update notes.md
+Bug identity, evidence, Status, Resolution, Resolution Path, close, or reopen changed -> update the Bug README and its single matching bugs/INDEX.md row; keep history append-only
+Feature repair evidence changed -> update Feature notes/tests plus the related Bug verification links; Feature tests do not auto-close the Bug
+Requirement delivery truth changed because of Bug evidence -> run Human-gated Requirement Reconciliation; never rewrite the Requirement source or auto-change lifecycle
 durable branch strategy or Target Release Context changed -> update project.md after human confirmation
 feature Current Branch Context or branch-action evidence changed -> update notes.md / plan.md / Submit / Integrate record
 confirmed producer-consumer API/event/public-data/UI-state/SDK-library/runtime interface changed -> update contracts.md and matching contracts/* detail after human confirmation; list affected consumers; ask human confirmation before accepting a breaking change

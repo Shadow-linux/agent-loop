@@ -52,7 +52,7 @@ Write to the current `agent-loop` artifact instead.
 | brainstormed requirement/product/design/spec | owning-stage artifact: requirement document plus requirement README summary during Requirements Discussion; `.agent-loop/features/<feature>/product.md` during Product Brief; `.agent-loop/features/<feature>/spec.md` or `notes.md` during Feature Spec |
 | implementation plan | `.agent-loop/features/<feature>/plan.md` or `.agent-loop/features/<feature>/plans/*` |
 | test strategy | `.agent-loop/features/<feature>/tests.md` or `.agent-loop/features/<feature>/tests/*` |
-| debugging notes | `.agent-loop/features/<feature>/notes.md` |
+| debugging notes | `.agent-loop/features/<feature>/notes.md`; link bounded reproduction/root-cause evidence from the Bug README when Bug Management applies |
 | verification evidence | `.agent-loop/features/<feature>/notes.md` |
 | review findings | `.agent-loop/features/<feature>/notes.md` |
 | subagent brief / return | `.agent-loop/features/<feature>/handoffs/*` |
@@ -203,8 +203,9 @@ When verification fails or unexpected behavior appears:
 
 1. Use `superpowers:systematic-debugging` as the preferred method.
 2. Reproduce and identify root cause before proposing fixes.
-3. Record root cause, evidence, fix decision, and follow-up verification in `notes.md`.
-4. Return to Execute / Verify / Review under `agent-loop`.
+3. Record root cause, evidence, fix decision, and follow-up verification in Feature `notes.md`; Bug Management may link the evidence in the Bug README.
+4. The helper must not create, merge, close, reopen, or change Bug Records; select a Resolution Path; create a Requirement/Feature; mutate lifecycle; or widen Git authority.
+5. Return to Execute / Verify / Review under `agent-loop`.
 
 ## Submit / Integrate Adapter
 
@@ -218,7 +219,8 @@ When `Submit / Integrate` starts and Superpowers is available:
 6. Resolve Source Branch, Branch Class, Target Release Context, Target Branch, sealed state, customer isolation, and any cleanup evidence through `branch-management.md` when the optional strategy applies.
 7. Present a Branch Strategy And Action Review before commit, PR text, merge note, branch deletion, release note, publish/release action, or any final submission claim.
 8. Treat a human saying "commit" as permission to enter Submit / Integrate, not final commit approval.
-9. Do not let the external finishing skill create/switch/delete branches, commit, push, publish PR text, merge, tag, release, publish, close the feature, or mark submission ready without the matching agent-loop confirmation.
+9. When the Feature resolves Bugs, show Bug IDs, current Status, verification evidence, and unresolved Bug Close Decisions; finishing evidence cannot close/reopen a Bug or satisfy a Feature/Requirement/Bug Human Gate.
+10. Do not let the external finishing skill create/switch/delete branches, commit, push, publish PR text, merge, tag, release, publish, close the Feature, close/reopen a Bug, or mark submission ready without the matching agent-loop confirmation.
 
 ## Subagent Adapter
 

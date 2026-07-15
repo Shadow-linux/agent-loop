@@ -392,13 +392,34 @@ Project Skill 只写入使用 Agent Loop 的目标项目：
 
 | 你可以这样说 | Agent 应该怎么做 |
 |---|---|
-| “测试发现上次那个功能有 bug。” | 先查最近 feature，判断是否回流旧 feature、创建 linked feature、maintenance-fix，或先调查。 |
-| “这个字段/算法/API 要调整。” | 先判断是否影响最近 feature 的验收、API、数据、状态流、算法或可见 UX。 |
-| “这个只是个窄修复。” | 如果没有归属 feature，创建 `Feature Type: maintenance-fix`，仍然要 spec/tasks/tests/plan/notes。 |
+| “测试发现上次那个功能有 bug。” | 先检查 Bug Index、保存报告证据并去重；再确认预期行为和 Feature 归属，不直接改代码。 |
+| “QA、客户群和监控报的是同一个问题。” | 把多个 Report Origin 关联到一个稳定 Bug Record；来源只表示 provenance，不产生 Owner、Assignee 或权限。 |
+| “这个和 BUG-014 重复。” | 给出 deduplication 证据并经人类确认后，将当前 Bug 以 `Resolution: duplicate` 关闭并链接 canonical Bug。 |
+| “已关闭的 BUG-014 又出现了。” | 追加 Reopen History 和新证据，恢复处理状态；不覆盖原关闭结论或历史。 |
+| “预期行为本身不清楚。” | 将 `Resolution Path` 路由到 Requirements Discussion；Bug 与 Requirement 可 0..N 关联，但不自动回滚 Requirement 生命周期。 |
+| “这个只是个窄修复。” | 经 Resolution Path Human Gate 后使用 `maintenance-fix` Feature；修复仍由 Feature 的 spec/tasks/tests/plan/notes、TDD 和验证负责。 |
+| “这是两个月前那个功能的问题。” | 60 天仍在默认 90 天 Feature metadata scan 内；90 天不是硬边界，有明确证据时继续扩展扫描。 |
+| “归档的旧 Feature 可能负责这个 Bug。” | 通过 `features/archive.md` 和归档 Feature 文档只读发现归属；确认 flow-back 后、执行修复前才单独 rehydrate。 |
 
-Feature Follow-up / Flow-back 默认看最近 30 天，但这不是硬限制。如果你明确说“上次/之前/某个旧 feature”，或证据明显重叠，Agent 应该扩展扫描。
+Bug Management 是 Feature Follow-up / Flow-back 的内部方法，不是新的 stage，也没有自己的任务或代码执行系统。Bug Record 管身份、事实、证据、生命周期、Resolution Path 和关闭记录；Requirement 管产品目标与预期行为；所有代码修复仍由 Feature 工作流完成。Bug Close Gate 与 Feature 测试、Feature Close、commit/push 等授权相互独立，不能互相复用。
 
-低信息错误，比如 “500 / 白屏 / unknown error”，不应该随便归到最近 feature；Agent 应先建议 investigate-first。
+```mermaid
+flowchart LR
+    REPORT["Bug Report"] --> RECORD["Bug Record<br/>identity + evidence"]
+    RECORD --> TRIAGE["Triage + deduplicate<br/>expected behavior + ownership"]
+    TRIAGE --> PATH{"Resolution Path<br/>Human Gate"}
+    PATH -->|"product meaning unclear"| REQ["Requirements Discussion"]
+    PATH -->|"repair confirmed"| FEATURE["Feature repair workflow"]
+    PATH -->|"no code fix"| NOFIX["Evidence-backed resolution"]
+    FEATURE --> VERIFY["Bug-specific verification"]
+    REQ --> REVIEW["Human Review"]
+    NOFIX --> REVIEW
+    VERIFY --> REVIEW
+    REVIEW -->|"Bug Close Gate"| CLOSED["Closed Bug Record"]
+    CLOSED -->|"new recurrence evidence"| RECORD
+```
+
+低信息错误，比如 “500 / 白屏 / unknown error”，不应该随便归到最近 Feature；Agent 应先建议 `investigate-first`。Bug identity 的去重扫描没有时间截止，Feature 归属默认扫描最近 90 个日历日的 metadata，并在明确旧 Feature、归档 locator、路径/符号、验收或回归证据重叠时继续扩展。
 
 ### 我想按月份归档已经关闭的 feature
 

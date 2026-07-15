@@ -28,6 +28,7 @@ Enter this stage only after:
 - `tasks.md` reflects current task status
 - `plan.md` is closed, superseded, or points to the next active unit
 - Branch Strategy Check has resolved the current Source Branch, Branch Class, Target Release Context, Target Branch, sealed state, and customer boundary when branch policy applies
+- when the Feature resolves Bugs, every related Bug expected to be fixed has fresh Bug-specific verification and is `verifying`; any unresolved Bug Close Decision is explicitly shown rather than rationalized as complete
 
 If any item is missing, recommend the missing upstream stage first.
 
@@ -66,7 +67,8 @@ Before submit:
 11. In that applicable context, fail closed when the target is `released / sealed`, customer isolation would be violated, or the requested action/scope is ambiguous.
 12. For a confirmed simple `not-needed` path, record branch-specific checks as `not-applicable`; do not require Target Release Context or Target Branch and do not block ordinary non-versioned submit preparation.
 13. For development-branch cleanup, require merge evidence and ask separately; never delete retained standard/customer release aggregation branches as cleanup.
-14. Ask human confirmation for the exact submit action.
+14. When the Feature resolves Bugs, review Bug IDs, current Status, candidate Resolution, Fix Feature, reproduction/substitute evidence, regression/safety evidence, unresolved Bug Close Decisions, Target Release Context, and branch isolation.
+15. Ask human confirmation for the exact submit action.
 
 ## Two-Stage Submit Confirmation
 
@@ -75,6 +77,8 @@ A human request such as `commit this` or `prepare PR` authorizes entry into Subm
 After diff inspection, feature/requirement artifact review, verification check, review check, drift check, project-memory/guidance impact check, and unrelated-change check, present a Human Review Summary and ask again for the exact submit action.
 
 Strategy adoption and plan approval are context only. They never authorize branch creation, switching, merge, deletion, push, tag, release, or publish. List every requested action and every explicitly non-authorized action in the Branch Strategy And Action Review.
+
+Bug confirmation, Resolution Path, successful tests, Feature close, and Bug Close decisions are also context only. Submit/commit/push approval must not be reused as Bug close, and Bug Close approval must not authorize Submit / Integrate or any Git mutation.
 
 ## Commit Behavior
 
@@ -168,6 +172,9 @@ Append to `notes.md`:
 - Requested Authorization:
 - Explicitly Not Authorized:
 - Merge Evidence / Cleanup Decision:
+- Related Bugs / Current Status:
+- Bug Verification Evidence:
+- Unresolved Bug Close Decisions:
 ```
 
 ## Ordered Exit Decision

@@ -372,7 +372,9 @@ Report the conflict, evidence, and one smallest next action. Never bypass by for
 
 ## Scope Exclusions
 
-This capability does not implement Bug Management. `bugfix` and `hotfix` express branch work type only; Feature Follow-up / Flow-back still decides product/work ownership.
+Bug Management owns Bug identity, lifecycle, and Resolution Path. Branch Management consumes only the Human-confirmed Fix Feature and Target Release Context.
+
+`bugfix` and `hotfix` express branch work type only. Severity, Priority, Report Origin, Bug confirmation, accepted Requirement, Resolution Path, plan acceptance, and Auto Mode do not select a work type, create a patch context, or authorize a Git mutation. A sealed release remains immutable; any repair uses a separately human-confirmed new patch Target Release Context. Customer Origin does not infer a customer repair line; customer isolation is decided from confirmed scope and release context.
 
 This capability does not implement worktree / branch memory merge. It provides Source Branch, Target Branch, Target Release Context, Customer Boundary, lifecycle, and allowed direction as future inputs only.
 

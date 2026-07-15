@@ -28,6 +28,14 @@ The core constraints are:
 - optional `.agent-loop/skills/` owns Human-gated project-local reusable capabilities; `INDEX.md` owns lifecycle and discovery metadata
 - stable Web E2E capability belongs in `project.md`; feature-specific E2E cases belong in feature `tests.md` or `tests/e2e/*`
 - `requirements/` stores human source material packages and requirement lifecycle/backlog records as requirement set directories: requirements, prototypes, feedback, screenshots, recordings, links, follow-up notes, status, and optional `requirements/INDEX.md`
+- Human-Guided Bug Management is an internal method of `Feature Follow-up / Flow-back`, not a canonical stage or message intent
+- `bugs/INDEX.md` owns Bug inventory/backlog/locator state, while each Bug README owns stable identity, facts, evidence, lifecycle, Resolution Path, verification, close, and reopen history
+- Bug Report, Bug Record, Report Origin, Expected Behavior Evidence, Status, Resolution, and Reopen are distinct; Bug Status and Resolution form independent axes
+- Requirement owns product meaning, Bug Record owns defect coordination, and Feature owns every code repair; Bug-to-Requirement links are optional `0..N` and never auto-change Requirement lifecycle
+- Bug identity scans all Bug Index metadata without a cutoff; Feature ownership defaults to a 90-day metadata scan, evidence-ranked deep reads, and evidence-driven extension beyond 90 days
+- Bug intake order is complete Bug Index metadata scan -> 90-day Feature metadata scan -> evidence-ranked deep read / evidence-driven extended scan -> create/update/reopen Bug Record
+- archive changes Feature location, not identity or ownership; discovery and Human Review read archived evidence without rehydrate, while confirmed flow-back rehydrates before reopened execution
+- Report Origin introduces no Owner, Assignee, personnel permission, staffing, workload, or automatic Priority system
 - Concept Foundation is an internal Requirements Discussion / Requirement Product Grill method, not a canonical stage; when triggered, it stabilizes requirement-local product concepts before business-flow, state, and product-data modeling
 - the effective human-reviewed requirement source owns accepted Concept Foundation and Requirement Product Model semantics; after archive, requirement README indexes the effective source/status without copying details, and Product Brief / Feature Spec consume those meanings by reference
 - requirement-driven ADRs freeze an Effective Requirement Snapshot, inventory every source Requirement Model ID, and trace every in-scope accepted ID to a disposition, technical landing, Design Slice, and verification without taking ownership of product semantics
@@ -60,7 +68,7 @@ Human Goal
 → Task / Test / Plan
 → Execute / Verify
 → Drift Check
-→ Feature Follow-up / Flow-back when post-close bug/change appears
+→ Feature Follow-up / Flow-back with internal Bug Management when explicit defect management appears
 → Feature Monthly Archive when the human explicitly asks to compact closed-history discovery
 → Project Memory Update
 → Submit / Integrate if requested
@@ -86,6 +94,40 @@ Behavior Intent
 **Local Shadow Mode**: fallback when remote project memory cannot be written remotely. Agent-loop artifacts stay local, but every code fact must cite remote evidence.
 
 **Requirement**: human-provided need, goal, document, or natural-language request.
+
+**Bug Report**: one source event describing a suspected defect. It is intake evidence and does not automatically create a distinct stable identity.
+
+**Bug Record**: stable deduplicated entity for an expected-versus-observed mismatch. It owns provenance, observations, evidence, Status, Resolution, Resolution Path, relationships, verification, close, and reopen history. It does not own product meaning or implementation.
+
+**Report Origin**: optional provenance using `person | customer | group | qa | monitoring | automated-test | agent | external-ticket | other | unknown`. It never becomes Owner, Assignee, permission, Priority, branch, or responsibility evidence.
+
+**Bug Evidence**: bounded reproduction, impact, environment, investigation, failure, and verification evidence that excludes secrets and unnecessary production payloads.
+
+**Expected Behavior Evidence**: accepted Requirement, Decision / ADR, Delivery Contract, Feature Spec/test, stable product rule, prior verified behavior, or explicit human clarification used to judge the Bug claim.
+
+**Resolution Path**: one current Bug workflow relationship: `investigate-first | flow-back | linked-feature | maintenance-fix | requirement | no-fix`. It is Human-gated before creating/reopening a Feature or changing a Requirement.
+
+**Bug Status**: `reported | triaging | confirmed | in-progress | verifying | deferred | closed` processing state. An `in-progress` Bug requires `flow-back | linked-feature | maintenance-fix` plus one Human-confirmed Fix Feature Target. `investigate-first`, `requirement`, and `no-fix` are not Feature repair execution states.
+
+**Bug Resolution**: independent conclusion `unresolved | fixed | duplicate | not-a-bug | cannot-reproduce | accepted-risk | superseded`.
+
+**Reopen Record**: append-only event that preserves the prior Close Record, records recurrence/new evidence and human decision, returns the Bug to `triaging` or `confirmed`, and resets Resolution to `unresolved`.
+
+**Bug Ownership Lookback**: unbounded Bug Index metadata identity scan followed by a default 90-day Feature metadata scan, evidence-ranked deep reads, and evidence-driven extended scan.
+
+Bug relationships are:
+
+```text
+Bug Report 1..N -> 1 Bug Record
+Bug Record 0..N -> Requirement
+Bug Record 0..N -> Related Feature / Decision / Contract
+Bug Record 1 -> current Resolution Path
+Bug Record 0..1 -> Fix Feature while repair is active
+Feature 0..N -> Bug Record
+Bug Record 0..1 -> Duplicate Of canonical Bug Record
+```
+
+One coherent Feature may resolve several Bugs. Each Bug retains independent identity, verification, Resolution, close, and reopen evidence. There is no Bug Owner/Assignee model, and Bug artifacts never own tasks, tests, plans, or code execution.
 
 **Concept Foundation**: a triggered method inside Requirements Discussion / Requirement Product Grill that derives requirement-local stable Concept IDs, definitions, identity, lifecycle boundaries, relationships, owners, state-bearing classification, invariants, and product fact-source questions from scenarios and evidence. It is not a stage or top-level artifact.
 
@@ -327,12 +369,12 @@ Human reports bug, regression, post-close correction, field/schema/algorithm/API
 Action:
 
 ```text
-Load feature-follow-up.md.
-Inspect Active / Paused / Closed features and recent feature docs.
-Use 30 days as the default lookback, not a hard boundary.
-Present Candidate Match Matrix.
-Recommend flow-back, linked new feature, maintenance-fix, or investigate-first.
-Resolve Active/Paused first, flat recent features second, `features/archive.md` third, and archived artifacts fourth. Rehydrate a confirmed archived owner before lifecycle change or execution.
+Load bug-management.md for explicit Bug management and feature-follow-up.md for ownership routing.
+Scan all Bug Index metadata for duplicate/reopen identity before Feature candidates.
+Inspect Active / Paused / Closed Feature metadata in the default 90-day window, then deep-read evidence-ranked candidates and extend beyond 90 days when evidence points there.
+Resolve archived candidates through `features/archive.md`; discovery and Human Review are read-only and do not require rehydrate.
+Create/update/reopen the Bug Record, verify Expected Behavior, and recommend exactly one Resolution Path.
+Wait for the Resolution Path Gate and separate Feature create/reopen gate. Rehydrate a confirmed archived owner only before reopened execution.
 ```
 
 ### Feature Monthly Archive

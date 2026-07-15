@@ -24,6 +24,11 @@ Exit Condition:
 
 One-line summary:
 
+Related Bugs:
+Requirement Impact: none | violates-accepted-behavior | ambiguity-found | change-required
+
+Bug relationships are optional `0..N`. They do not rewrite Requirement sources or automatically change Requirement/Delivery Phase lifecycle; only Human-gated Requirement Reconciliation may update delivery truth.
+
 ## Effective Concept Foundation
 
 Status: not-recorded | candidate | accepted | reopened | concept-foundation-not-needed

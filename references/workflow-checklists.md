@@ -151,7 +151,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.4.0-20260715`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.4.0-20260715.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -237,7 +237,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.4.0-20260715`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.4.0-20260715.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -376,23 +376,32 @@ Before using an external skill or plugin inside a stage:
 ## Feature Follow-up And Flow-back
 
 - [ ] Load `feature-follow-up.md`.
+- [ ] For explicit bug-record/manage/investigate/fix intent, load `bug-management.md`; keep Bug Management internal to Feature Follow-up and do not add a canonical stage/message intent.
 - [ ] Trigger before creating a new feature when the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, screenshot issue, behavior tweak, "small tweak", test failure, or QA/user feedback.
-- [ ] Inspect Active Feature and Paused Features first, flat recent feature docs second, `features/archive.md` third, and archived artifacts fourth in the default 30-day lookback window.
-- [ ] Treat 30 days as the default scan window, not a hard boundary; if wording or evidence points to an older feature, run an extended scan and mark `outside-default-window`.
+- [ ] Ordinary Chat/read-only error explanation does not create a Bug artifact; missing reliable memory preserves intake and routes through Project Entry first.
+- [ ] Scan complete Bug Index metadata for duplicate/reopen identity before creating a Bug or scanning Feature ownership; Bug identity has no time cutoff.
+- [ ] Inspect Active/Paused pointers and Feature metadata/summaries in the default 90-day window, then deep-read evidence-ranked candidates and run `outside-default-window` extended scan when evidence points beyond 90 days.
+- [ ] Calculate Feature age from `Last Updated / Closed`, not archive month, directory mtime, or archive operation time.
 - [ ] Inspect code/test/API/data/UI paths mentioned by the report.
-- [ ] If the report is generic, such as 500, blank page, unknown error, or no route/action/log/test evidence, classify as `unclear` and recommend `investigate-first`; do not reopen the nearest recent feature just because it is recent.
+- [ ] If the report/title is generic, keep the Bug `triaging` and recommend `investigate-first`; do not merge/reopen the nearest record or Feature by recency/title alone.
 - [ ] Present a Candidate Match Matrix with match evidence and match strength.
 - [ ] When multiple candidates have medium/high match because evidence is incomplete, recommend `investigate-first`; ask the human only when evidence is sufficient and the remaining choice is product/ownership.
 - [ ] Classify the report as same-feature-bug, same-feature-adjustment, regression-from-feature, new-feature, maintenance-fix, or unclear.
+- [ ] Resolve Expected Behavior evidence. Ambiguity/conflict routes to Requirements Discussion / Requirement Reconciliation / Decision & Design instead of a guessed repair.
+- [ ] Validate Status/Resolution independently; stop on `closed+unresolved`, `deferred=closed`, duplicate cycles, expired-only evidence, or `in-progress` without one valid Resolution Path/Target.
+- [ ] An `in-progress` Bug requires `flow-back | linked-feature | maintenance-fix` plus one Human-confirmed Fix Feature Target. Reject `investigate-first | requirement | no-fix` with `Status: in-progress`.
+- [ ] Recommend exactly one `investigate-first | flow-back | linked-feature | maintenance-fix | requirement | no-fix` path and request the Resolution Path Gate.
 - [ ] For "字段改一下" / "规则微调" / "小改动" wording, check whether acceptance, API/event/data shape, state flow, algorithm, or visible UX changes before choosing same-feature-adjustment vs linked new feature.
-- [ ] If a closed feature is the likely owner, recommend `flow-back` and explain that it will reopen or continue the owning feature for follow-up work after human confirmation.
-- [ ] If the owner is archived, require verified Feature Monthly Archive rehydrate before lifecycle change or reopened execution.
+- [ ] If a closed Feature is the likely owner, recommend `flow-back`; Feature reopen remains a separate Human Gate.
+- [ ] Resolve/read an archived owner through `features/archive.md` without rehydrate during discovery/Human Review; after confirmed flow-back, require verified Human-gated rehydrate before lifecycle change or execution.
 - [ ] If the human declines reopen/flow-back, preserve the old feature close state and require the new linked feature or maintenance-fix to record `Related Feature`, declined reason, inherited acceptance/tests/evidence, and affected paths.
-- [ ] If no recent feature owns the report and this is a narrow internal fix, recommend a new `Feature Type: maintenance-fix` feature workspace; do not perform a naked code edit.
+- [ ] If no Feature owns the report and this is a narrow internal fix, recommend a new `Feature Type: maintenance-fix` Feature workspace; do not perform a naked code edit.
 - [ ] If the report is durable source material, ask before archiving it under `.agent-loop/requirements/`.
-- [ ] Ask before changing feature status, scope, acceptance, tasks, tests, Delivery Contracts, or project memory.
+- [ ] Keep Bug-to-Requirement links optional `0..N`; do not rewrite source or auto-change lifecycle.
+- [ ] Ask separately before Feature create/reopen, Requirement create/reconciliation, Bug close/reopen, Delivery Contract action, archive apply, or any Git action; one approval cannot be reused.
+- [ ] Write Bug identity/evidence/lifecycle to Bug README + Index; write all repair spec/tasks/tests/plan/code to Feature artifacts.
 - [ ] Record Follow-up Intake in `notes.md`.
-- [ ] Route to the next exact stage: Requirement Archive, Feature Spec update, Work Breakdown, Test Design, Targeted Feature Scan, Plan Gate, or Diagnose Failure.
+- [ ] Route to exactly one next stage: Requirements Discussion/Archive/Reconciliation, Feature Spec update, Work Breakdown, Test Design, Targeted Feature Scan, Plan Gate, Diagnose Failure, Verify, or Recovery.
 
 ## Feature Spec
 
@@ -657,6 +666,9 @@ Checklist:
 - [ ] Run it fresh.
 - [ ] Read full output and exit status.
 - [ ] Record evidence in `notes.md`.
+- [ ] When Bugs are related, execute the Bug Verification Matrix against original reproduction/substitute and regression/safety paths; update the Bug README and Index row.
+- [ ] Feature evidence may move `in-progress -> verifying`; do not set `closed` without the Bug Close Gate.
+- [ ] Failed Bug-specific verification returns to `in-progress` or `triaging` with append-only evidence.
 - [ ] Do not claim completion without evidence.
 
 ## Review
@@ -699,6 +711,7 @@ Checklist:
 - [ ] If long-term project facts changed, load `project-memory-mode.md` and route updates to `project.md` or enterprise `project/*.md`.
 - [ ] Do not rewrite original human requirements.
 - [ ] If the feature references a Delivery Phase, propose phase status / Feature Mapping updates for human confirmation.
+- [ ] Compare related Bug Expected Behavior, Resolution Path, Fix Feature, Status/Resolution, and close evidence; route semantic conflicts to Requirements Discussion / Reconciliation / Decision & Design.
 - [ ] Record drift decisions in `notes.md`.
 - [ ] Do not route directly to Close from Drift Check.
 - [ ] Next stage is Project Memory Update / Requirement Reconciliation when long-term project facts, requirement lifecycle, Delivery Phase status, or Feature Mapping changed; otherwise Feature Completion Check.
@@ -712,6 +725,7 @@ Checklist:
 - [ ] If hard or soft enterprise triggers apply, recommend a mode switch before adding lots of detail to `project.md`.
 - [ ] Confirm the change affects future work, not only current task history.
 - [ ] Do not write future TODO, backlog, deferred requirements, or unimplemented planned capability details into `project.md`.
+- [ ] Do not write Bug backlog, triage/evidence, Status/Resolution rows, or assignment-like data into project memory; use `bugs/INDEX.md` and Bug README files.
 - [ ] Update Current Work and Next Suggested Action.
 - [ ] In simple mode, update the matching `project.md` section.
 - [ ] In enterprise mode, keep `project.md` as index/current state and update the matching `project/*.md` detail file.
@@ -722,6 +736,7 @@ Checklist:
 - [ ] Update Domain Language, Product Context, Known Constraints, or Long-Term Decisions if future agents need them.
 - [ ] Resolve or add Project Entry Uncertainties when confidence changes.
 - [ ] Run Requirement Reconciliation when the feature references or creates requirement sets.
+- [ ] A Bug link alone does not change Requirement lifecycle; reconcile only when current evidence invalidates delivery truth and the human confirms the transition.
 - [ ] Apply Delivery Phase Status Roll-up; do not mark a multi-phase requirement `implemented` from one completed feature while unimplemented phases remain.
 - [ ] Do not edit `requirement.md` or other source files for lifecycle/status updates.
 - [ ] Update requirement set README / optional requirements INDEX for lifecycle status, Delivery Phase status, and Feature Mapping only after human confirmation.
@@ -744,6 +759,8 @@ Checklist:
 - [ ] Confirm fresh verification evidence exists.
 - [ ] Confirm drift check result and known drift.
 - [ ] Confirm required review has passed or record why submit must stop.
+- [ ] When the Feature resolves Bugs, show Bug IDs, current Status, Bug-specific evidence, unresolved Bug Close Decisions, Target Release Context, and isolation.
+- [ ] Do not reuse submit/commit/push approval as Bug close, or Bug close as submit authorization.
 - [ ] When an adopted Branch Strategy or versioned/customer delivery applies, verify Source Branch, Branch Class, Target Release Context, Target Branch, sealed state, customer isolation, and requested action.
 - [ ] Require merge evidence and a separate cleanup decision before deleting a temporary development branch; never treat a retained release aggregation branch as temporary cleanup.
 - [ ] Treat each create/switch/merge/delete/push/tag/release/publish action as separately Human-gated even when the strategy and plan are accepted; create/switch uses the Branch Action Gate.
@@ -772,6 +789,8 @@ Checklist:
 - [ ] Confirm accepted Delivery Contracts match producer code/tests and have no unapproved breaking changes.
 - [ ] Confirm long-term facts are reflected in `project.md`.
 - [ ] Confirm submit/integration status is recorded if requested.
+- [ ] Confirm every related Bug expected to be fixed is `verifying` with fresh evidence; passing Feature tests do not auto-close it.
+- [ ] Present `Bug Close Decision: confirm | revise | keep-verifying` separately from `Feature Close Decision: confirm | continue | pause | revise-scope`.
 - [ ] Record the check in `notes.md`.
 - [ ] If blockers prevent completion, record Result: blocked and recommend exactly one unblock stage.
 - [ ] Recommend Close, Continue, Pause before new feature, or Scope Update.

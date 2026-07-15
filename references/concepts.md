@@ -31,6 +31,26 @@ First version excludes:
 
 **Requirement**: Human-provided textual or conversational need.
 
+**Bug Report**: One intake event and its source evidence. Several reports may be attached to one stable Bug Record; one report does not automatically create a new Bug identity.
+
+**Bug Record**: Stable, deduplicated identity for an expected-versus-observed behavior mismatch. It owns facts, evidence, lifecycle, Resolution Path, relationships, verification, close, and reopen history, but not product meaning or repair execution.
+
+**Report Origin**: Optional provenance for a Bug Report: person, customer, group, QA, monitoring, automated test, agent, external ticket, other, or unknown. It is not Owner, Assignee, permission, Priority, or responsibility evidence.
+
+**Bug Evidence**: Bounded reproduction, environment, log, screenshot, failed-test, impact, investigation, and verification evidence attached to a Bug Record without copying secrets or unnecessary production payloads.
+
+**Expected Behavior Evidence**: Accepted product or behavior authority used to decide whether observed behavior is a Bug. Code reality can prove the observation but cannot alone define the intended product behavior.
+
+**Resolution Path**: The Bug's single current workflow relationship: `investigate-first | flow-back | linked-feature | maintenance-fix | requirement | no-fix`. It is not a personnel assignment or implementation authority.
+
+**Bug Status**: Processing state `reported | triaging | confirmed | in-progress | verifying | deferred | closed`; it is independent from the final Resolution. `in-progress` is reserved for a Human-confirmed `flow-back | linked-feature | maintenance-fix` Feature target.
+
+**Bug Resolution**: Conclusion `unresolved | fixed | duplicate | not-a-bug | cannot-reproduce | accepted-risk | superseded`; a closed Bug cannot remain unresolved.
+
+**Reopen Record**: Append-only history event that preserves prior close evidence, records the recurrence/new evidence and human decision, returns a closed Bug to `triaging` or `confirmed`, and restores `Resolution: unresolved`.
+
+**Bug Ownership Lookback**: Two-layer discovery rule: all Bug Index metadata participates in duplicate/reopen identity checks without a time cutoff, while Feature ownership uses a default 90-day metadata scan plus evidence-ranked deep read and evidence-driven extension beyond the window.
+
 **Branch Strategy**: Optional, human-confirmed durable branch policy. It records profile, main/release/development patterns, sealed-release behavior, customer isolation, and deletion policy without authorizing Git actions.
 
 **Branch Strategy Check**: Internal check at entry, planning, drift, and submit boundaries. Preserve clear existing policy; otherwise recommend one Human-Guided option and wait for explicit acceptance before adoption.
@@ -81,7 +101,7 @@ First version excludes:
 
 **Drift**: Mismatch between docs, code reality, or human decisions.
 
-**Feature Follow-up / Flow-back**: Bug/change intake path that checks whether a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, screenshot issue, behavior tweak, "small tweak", test failure, or QA/user feedback belongs to a recent feature before creating a new feature. Default lookback is 30 calendar days.
+**Feature Follow-up / Flow-back**: Bug/change intake path that owns the Bug Management internal method and checks whether a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, screenshot issue, behavior tweak, "small tweak", test failure, or QA/user feedback belongs to an existing Feature before creating a new Feature. Bug identity scans all Bug Index metadata; Feature ownership defaults to 90 calendar days and remains evidence-extendable.
 
 **Code-Guided Operational Support**: Read-only support lane for using current project functionality to test, run, deploy, switch account/config/model/provider, check quota/rate limits, arrange rollout, diagnose production, or produce a runbook/checklist. It does not create a feature workspace or edit code/config by default; feature/fix escalation requires human confirmation.
 
@@ -113,6 +133,8 @@ project.md = long-term project facts in simple mode; memory index and current st
 project/   = optional enterprise long-term project memory details
 decisions/ = Human-gated project / cross-feature Decision & Design records; globally optional and conditionally required when shared design has no accepted source
 requirements/ = original human material packages, references, and requirement lifecycle/backlog records, grouped by archive-date requirement set directory
+bugs/INDEX.md = Bug inventory, backlog, and locator
+bugs/YYYY-MM-DD-<bug-slug>/README.md = stable Bug identity, facts, evidence, lifecycle, Resolution Path, verification, close, and reopen history
 product.md = optional feature product intent and product scope
 spec.md    = intended feature behavior
 tasks.md   = work breakdown and order

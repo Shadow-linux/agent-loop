@@ -747,51 +747,78 @@ Scope: no per-feature archive summary, no `historical/`, no Deep Archive, no del
 
 ## Feature Follow-up And Flow-back
 
-Entry: human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, test failure, QA/user feedback, or any change that may belong to recent feature work.
+Entry: human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, test failure, QA/user feedback, or any change that may belong to existing Feature work.
 
 Do not enter Feature Follow-up before Project Entry has established or verified agent-loop memory. If `.agent-loop/` or legacy `agent-loop/` is missing, preserve the report as intake context and route to Project Entry Scan or Init Project first.
 
 Load:
 
 - `feature-follow-up.md`
+- `bug-management.md` for explicit bug-record, manage, investigate, or fix intent
+- `human-review-summary.md` before Resolution Path, Bug close/reopen, Feature action, or Requirement action confirmation
 
 Inspect:
 
-- `project.md` Active Feature, Paused Features, and recent feature references
-- recent `.agent-loop/features/*/spec.md`, `tasks.md`, `tests.md`, and `notes.md`
+- complete `bugs/INDEX.md` metadata and evidence-overlapping Bug README files before creating a Bug or scanning Feature ownership
+- `project.md` Active Feature, Paused Features, configured `Feature Follow-up Lookback`, and Feature references
+- Feature metadata/summary inside the default 90-day window before deep-reading evidence-ranked `spec.md`, `tasks.md`, `tests.md`, and `notes.md`
+- `features/archive.md` locator and read-only archived Feature evidence when ownership points to a month path
 - close records, submit records, verification evidence, and drift notes
 - code paths, tests, APIs, data models, routes, jobs, UI pages, or contracts mentioned by the report
 
+Bug Management internal sequence:
+
+```text
+complete Bug Index metadata scan
+-> 90-day Feature metadata scan
+-> evidence-ranked deep read / evidence-driven extended scan
+-> create/update/reopen Bug Record
+-> Expected Behavior check
+-> Status/Resolution validation
+-> one Resolution Path recommendation
+-> Human Gate
+```
+
 Rules:
 
-- default lookback window is 30 calendar days
-- 30 days is not a hard boundary; if human wording, paths, APIs, tests, models, or UI evidence point to an older feature, run an extended scan and mark the candidate `outside-default-window`
+- Bug Management is internal to this stage; do not add a canonical stage or message intent
+- ordinary Chat or read-only error explanation does not create a Bug artifact
+- Bug identity / duplicate / reopen scans all Bug Index metadata without a time cutoff
+- default Feature ownership is a 90-calendar-day metadata/summary scan; deep-read only evidence-overlapping candidates and extend beyond 90 days with `outside-default-window` evidence
+- calculate age from Feature `Last Updated / Closed`, not archive month, directory mtime, or archive operation time
 - code reality is current fact base for defect evidence
 - original human requirements remain immutable
-- do not default to creating a new feature until candidate recent features are checked
-- do not infer ownership from generic 500/blank-page/unknown-error reports alone; if evidence is too generic, classify as `unclear` and recommend `investigate-first`
+- do not default to creating a new Feature until Bug identity and candidate Feature ownership are checked
+- do not infer identity/ownership from similar titles or generic 500/blank-page/unknown-error reports; keep `triaging` and recommend `investigate-first`
 - present a Candidate Match Matrix before changing feature docs
+- confirm Expected Behavior from accepted evidence; ambiguity/conflict returns to Requirements Discussion / Requirement Reconciliation / Decision & Design
+- validate `Status` and `Resolution` separately; `closed+unresolved`, `deferred=closed`, duplicate cycles, or `in-progress` without one valid Resolution Path/Target stop in Recovery
+- An `in-progress` Bug requires `flow-back | linked-feature | maintenance-fix` plus one Human-confirmed Fix Feature Target. `investigate-first`, `requirement`, and `no-fix` must not use `Status: in-progress`
 - classify "字段改一下", "规则微调", "小改动", and similar wording by checking whether acceptance, API/event/data shape, state flow, algorithm result, or visible UX changes
-- if a closed feature is the likely owner, recommend `flow-back` and explain that it will reopen or continue the owning feature for follow-up work after confirmation
+- recommend exactly one `investigate-first | flow-back | linked-feature | maintenance-fix | requirement | no-fix` path with evidence and one Target when required
+- Resolution Path confirmation does not create/reopen a Feature, change a Requirement, or authorize Bug close/Git action; request those named gates separately
+- if a closed Feature is the likely owner, recommend `flow-back` and explain the separate Feature reopen gate
+- for an archived owner, resolve/read evidence without rehydrate; only after confirmed `flow-back` and before reopened execution run the exact-hash Human-gated rehydrate
 - if the human declines reopen or flow-back, preserve old close state and require the new linked feature or maintenance-fix to keep `Related Feature`, declined reason, inherited acceptance/tests/evidence, and affected paths
 - if scope is new or ownership is weak, recommend a linked new feature or investigate-first path
-- if no recent feature owns the report and the work is a narrow internal fix, recommend a new `Feature Type: maintenance-fix` workspace instead of a naked code edit
+- if no owning Feature exists and the work is a narrow internal fix, recommend a new `Feature Type: maintenance-fix` workspace instead of a naked code edit
 - if multiple candidates have medium/high match because evidence is incomplete, recommend investigate-first and route to Targeted Feature Scan or Diagnose Failure
 - ask the human only after evidence is sufficient and the remaining ambiguity is a product or ownership decision
 
 Write after confirmation:
 
+- `bugs/INDEX.md` plus Bug README for explicit Bug management; preserve Status/Reopen history append-only
 - Follow-up Intake record in the owning feature `notes.md`, or in the new feature `notes.md` if a new feature is chosen
 - new `.agent-loop/features/YYYY-MM-DD-fix-<slug>/` workspace with `Feature Type: maintenance-fix` when maintenance fix is confirmed
 - updated `spec.md`, `tasks.md`, `tests.md`, and `plan.md` only as needed
-- requirement archive entry when the human report is durable source material
+- requirement archive/update only when product expectation is missing/changing or durable source material is separately confirmed; Bug links alone do not change lifecycle
 - `project.md` Current Work when a closed feature is reopened or a new feature is created
 - Delivery Contract updates only through the normal Delivery Contract gate
 
 Exit:
 
-- human confirms flow-back, linked-new-feature, maintenance-fix, or investigate-first decision
-- next stage: Requirement Archive, Feature Spec update, Work Breakdown, Test Design, Targeted Feature Scan, Plan Gate, or Diagnose Failure
+- Human confirms the named Resolution Path and any separate Feature/Requirement action, or the Bug remains `triaging`/`deferred`
+- next stage: Requirements Discussion, Requirement Archive/Reconciliation, Feature Spec update, Work Breakdown, Test Design, Targeted Feature Scan, Plan Gate, Diagnose Failure, Verify, or Recovery
 
 ## Feature Spec
 
@@ -814,6 +841,7 @@ Write:
 Include:
 
 - feature type: normal, maintenance-fix, or follow-up
+- `Related Bugs` and the Human-confirmed Bug Resolution Path source when this Feature repairs Bugs; do not copy full Bug report/evidence
 - problem/goal
 - product brief reference when `product.md` exists
 - requirement Delivery Phase reference when the feature implements a phase or phase slice
@@ -838,6 +866,7 @@ Rules:
 - use Decision & Design before Feature Spec if the requirement needs shared business-flow, domain, data, architecture, recovery, or non-functional design
 - do not enter Feature Spec when shared design is unresolved or any required design slice is unassigned
 - do not treat `Applicable Decisions` alone as coverage; block when an in-scope Requirement Model ID lacks disposition, technical ownership, or verification
+- a Bug relationship does not replace the accepted Requirement/Expected Behavior source and does not authorize Feature creation, Requirement change, or Bug close
 
 Exit:
 
@@ -991,6 +1020,7 @@ Include:
 - manual verification
 - commands
 - detail test-case files under `tests/` only when test details need splitting after Complex Artifact confirmation
+- Bug Verification Matrix when the Feature resolves Bug Records: Bug ID, Expected Behavior Evidence, original reproduction or accepted substitute, regression/safety verification, result, and evidence link
 
 Rules:
 
@@ -998,6 +1028,7 @@ Rules:
 - if web-visible behavior exists, run E2E Discovery first
 - if a task changes HTTP/API behavior, service-to-service behavior, events, background jobs, auth, persistence, or integration boundaries, API/integration verification is applicable unless a human approves a substitute verification
 - if a task changes user-visible Web behavior, E2E/browser/manual verification is applicable unless a human approves a substitute verification
+- Feature-wide tests do not automatically satisfy Bug-specific acceptance or the Bug Close Gate
 - substitute verification requires a recorded reason, risk, missing capability, and human decision; it cannot silently replace required API/E2E coverage
 - record stable E2E capability in `project.md`
 - record feature-specific E2E cases in `tests.md` or `tests/e2e/*`
@@ -1101,6 +1132,9 @@ Rules:
 - assume the executor has near-zero codebase context
 - include technical context, source structure decision, code context, interface contracts, data contracts when applicable, files, TDD plan, commands, expected outputs, risks
 - include `Branch Context Evidence` when an adopted strategy or versioned delivery applies: cite the complete `notes.md` Current Branch Context and repeat only Branch Strategy status/profile, Target Release Context, Target Branch, sealed/customer-isolation results, and `Git actions authorized by this plan: none`
+- when repair work applies, cite `Bug Context Evidence` and Related Bug IDs; do not repeat Bug lifecycle or move tasks/tests/implementation into the Bug directory
+- unresolved Bug identity, Expected Behavior, Resolution Path/Target, or archived Feature locator blocks Plan acceptance and returns to Bug Management / Recovery
+- Plan approval never authorizes Bug close/reopen, Feature creation/reopen, or Requirement change
 - reject a plan that targets a `released / sealed` version, crosses customer isolation, or assumes an unauthorized Git action
 - include actual test code for RED steps when possible
 - include exact function/class/endpoint/component signatures, parameters, return values, errors, and side effects for new or changed interfaces
@@ -1262,10 +1296,14 @@ Rules:
 - run fresh verification
 - read output
 - record evidence
+- when the Feature resolves Bugs, execute the Bug Verification Matrix against the original reproduction or accepted substitute and regression/safety paths
+- after Feature evidence exists, move a related repair Bug from `in-progress` to `verifying`; do not set `closed`
+- failed Bug-specific verification returns the Bug to `in-progress` when the repair remains valid or `triaging` when Expected Behavior/diagnosis was invalidated; append the failure evidence
 
 Write:
 
 - `notes.md` verification evidence
+- related Bug README verification evidence and Status History, plus the matching `bugs/INDEX.md` row
 
 Exit:
 
@@ -1337,6 +1375,7 @@ Check:
 - whether long-term startup guidance changed and `AGENTS.md` should be synced
 - when an adopted Branch Strategy or versioned/customer delivery applies, compare accepted Branch Strategy and Target Release Context vs feature Current Branch Context and current Git reality
 - in that applicable context, check sealed-release immutability, customer isolation, and whether any proposed cleanup has merge evidence plus separate human authorization; a confirmed simple `not-needed` path records these branch-specific checks as `not-applicable`
+- related Bug Expected Behavior, Resolution Path, Fix Feature, Status/Resolution, and verification/close evidence against Feature and Requirement/ADR/Contract authorities
 
 Write after confirmation:
 
@@ -1348,11 +1387,13 @@ Write after confirmation:
 - `notes.md` drift record
 - `contracts.md` and matching `contracts/*` details for interface drift; ask before accepting breaking changes
 - `AGENTS.md` / `CLAUDE.md` only for long-term guidance changes
+- Bug README/Index links and evidence when facts changed; Expected Behavior conflicts route to Requirements Discussion / Requirement Reconciliation / Decision & Design instead of silently redefining the Bug or Requirement
 
 Exit:
 
 - docs and code reality aligned enough for the next lifecycle gate
 - Drift Check does not route directly to Close
+- when Bug Expected Behavior or its accepted product/design authority changed, route first to Requirements Discussion / Requirement Reconciliation / Decision & Design as applicable
 - next stage: Project Memory Update / Requirement Reconciliation when long-term project facts, requirement lifecycle, Delivery Phase status, or Feature Mapping changed; otherwise Feature Completion Check
 
 ## Project Memory Update
@@ -1383,6 +1424,7 @@ Do not write:
 - temporary implementation notes
 - original human requirements or prototypes
 - future TODO, backlog, deferred requirements, or unimplemented planned capability details
+- Bug backlog, Bug evidence, triage state, Status/Resolution rows, or assignment-like data; these belong in `bugs/INDEX.md` and Bug README files
 
 Requirement Reconciliation:
 
@@ -1393,6 +1435,7 @@ Requirement Reconciliation:
 - Write requirement lifecycle/status, Delivery Phase status, and Feature Mapping changes to requirement set `README.md` and optional `requirements/INDEX.md` after human confirmation.
 - Write implemented capabilities to `project.md` only when they are durable project facts.
 - Write deferred or future work to requirements, not project memory.
+- A Bug relationship alone does not trigger lifecycle change. Reconcile only when current evidence shows delivery truth is inaccurate, and wait for the named Human Gate.
 
 Write after confirmation:
 
@@ -1428,6 +1471,8 @@ Rules:
 - for a confirmed simple `not-needed` path, record branch-specific fields as `not-applicable` and do not block Submit / Integrate because Target Release Context or Target Branch is absent
 - accepted strategy, an accepted plan, and a submit request never imply authorization for create, switch, merge, delete, push, tag, release, or publish
 - temporary development-branch deletion requires merge evidence and a separate human cleanup decision; retained standard/customer aggregation branches are not cleanup candidates
+- when the Feature resolves Bugs, show Bug IDs, current Status, Bug-specific verification evidence, unresolved Bug Close Decisions, Target Release Context, and branch isolation
+- Submit/commit/push approval never closes a Bug, and Bug Close approval never authorizes Submit / Integrate
 
 Write after confirmation:
 
@@ -1461,6 +1506,7 @@ Read:
 - active feature `plan.md`
 - active feature `notes.md`
 - accepted Decision & Design records linked by the active feature
+- related Bug README files and `bugs/INDEX.md` rows when the Feature resolves Bugs
 
 Check:
 
@@ -1477,11 +1523,13 @@ Check:
 - long-term memory updated
 - submit/integration status recorded when requested
 - no unresolved Human-gated decisions or blockers
+- every related Bug expected to be fixed is `verifying` with fresh Bug-specific evidence; no Bug is auto-closed from Feature tests
 
 Write:
 
 - `notes.md` Feature Completion Check record
 - `project.md` Current Work / Next Suggested Action update after confirmation if state changes
+- a combined review may present `Bug Close Decision: confirm | revise | keep-verifying` and `Feature Close Decision: confirm | continue | pause | revise-scope`, but each authorization remains separate
 
 Exit:
 

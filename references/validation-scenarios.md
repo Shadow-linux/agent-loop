@@ -1160,9 +1160,9 @@ Expected:
 - read root `AGENTS.md` first
 - inspect `.agent-loop/project.md` before editing code
 - classify the request as `feature-follow-up`
-- load `feature-follow-up.md`
+- load `bug-management.md`, then `feature-follow-up.md` for Feature ownership
 - inspect Active / Paused / Closed features and candidate feature docs
-- use the 30-day lookback as the default window, not a hard boundary
+- scan all Bug Index metadata for duplicate/reopen identity, then use the 90-day Feature metadata lookback as the default window, not a hard boundary
 - present a Candidate Match Matrix or recommend `investigate-first` if evidence is too generic
 - do not create a new feature, create a maintenance-fix, or edit code before the flow-back / linked-new-feature / maintenance-fix / investigate-first decision is confirmed
 
@@ -1291,7 +1291,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.4.0`, while the current root AGENTS template uses `block-version:1.4.0-20260715`.
+Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.4.0`, while the current root AGENTS template uses `block-version:1.4.0-20260715.1`.
 ```
 
 Expected:
@@ -1299,7 +1299,7 @@ Expected:
 - read root `AGENTS.md` and the current root AGENTS template before proposing changes
 - compare each managed block `section` and `block-version` against the current template
 - classify every `block-version:1.4.0` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
-- propose replacing stale block revisions with the full current template revision such as `block-version:1.4.0-20260715`
+- propose replacing stale block revisions with the full current template revision such as `block-version:1.4.0-20260715.1`
 - copy the current template start marker metadata for each refreshed section unless `source` must point at the target project's active memory root or artifact source
 - preserve all human-owned content outside managed blocks
 - ask for human confirmation before writing
@@ -1309,7 +1309,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.4.0-20260715`.
+Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.4.0-20260715.1`.
 ```
 
 Expected:
@@ -1800,7 +1800,7 @@ Expected:
 
 - classify as `feature-follow-up`, not immediate new feature creation
 - load `feature-follow-up.md`
-- inspect recent features in the default 30-day lookback window
+- inspect recent Feature metadata in the default 90-day lookback window after the Bug identity scan
 - present Candidate Match Matrix with feature status, close/update date, evidence, match strength, and recommended flow
 - recommend `flow-back` when the closed feature owns the behavior and explain that it means reopening or continuing the owning feature after confirmation
 - ask human confirmation before reopening or changing docs
@@ -1856,7 +1856,7 @@ Expected:
 
 - classify as `feature-follow-up`
 - extract screenshot-visible text, API response fields, route/page labels, and error messages as match evidence
-- inspect recent features in the default 30-day lookback window before creating a new feature
+- inspect recent Feature metadata in the default 90-day lookback window before creating a new feature
 - present Candidate Match Matrix including screenshot/error/API evidence
 - recommend `flow-back` when a recent upload/audio feature owns the behavior
 - if ownership is uncertain, recommend `investigate-first` with one targeted next action
@@ -1872,7 +1872,7 @@ Use agent-loop. 上个月做完的推荐排序 feature 需要改一下算法权�
 Expected:
 
 - classify as `feature-follow-up`
-- use the 30-day lookback and strong human wording to identify the likely owning feature
+- use the 90-day metadata lookback and strong human wording to identify the likely owning Feature
 - recommend `flow-back` instead of creating an unrelated feature
 - require `spec.md` and `tests.md` updates before execution because acceptance, algorithm behavior, and API fields changed
 - ask human confirmation before changing scope/status
@@ -1883,13 +1883,13 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. 有个内部 bug：日志清理脚本在空目录时报错。最近 30 天没有相关 feature，这也不是新业务能力，修一下。
+Use agent-loop. 有个内部 bug：日志清理脚本在空目录时报错。最近 90 天没有相关 Feature，这也不是新业务能力，修一下。
 ```
 
 Expected:
 
 - classify through `feature-follow-up`
-- inspect recent features in the 30-day lookback before deciding
+- inspect Feature metadata in the 90-day lookback before deciding
 - conclude no recent feature owns the bug when evidence supports that
 - recommend a new `.agent-loop/features/YYYY-MM-DD-fix-<slug>/` workspace with `Feature Type: maintenance-fix`
 - do not perform a naked code edit
@@ -1948,18 +1948,18 @@ Expected:
 - recommend `investigate-first` with one targeted next action such as collecting route/action/time, checking server logs, reproducing, reading failing test output, or running Targeted Feature Scan
 - do not reopen the nearest recent feature and do not create a new feature before stronger evidence or human confirmation
 
-## 44. Day 31 Still Allows Extended Feature Scan
+## 44. Day 91 Still Allows Extended Feature Scan
 
 Prompt:
 
 ```text
-Use agent-loop. 31 天前做的导出 feature，现在 QA 发现导出的 CSV 字段顺序不对。你判断怎么处理。
+Use agent-loop. 91 天前做的导出 Feature，现在 QA 发现导出的 CSV 字段顺序不对。你判断怎么处理。
 ```
 
 Expected:
 
 - classify through `feature-follow-up`
-- treat 30 days as the default scan window, not a hard cutoff
+- treat 90 days as the default Feature metadata scan window, not a hard cutoff
 - run an extended scan because the human named the older feature and the CSV behavior overlaps that feature
 - present the candidate with `Lookback Window: outside-default-window`
 - recommend `flow-back` if evidence shows the old feature owns the behavior
@@ -3044,9 +3044,9 @@ Prompt: validate an accepted ADR whose feature-local owner is `features/2026-05/
 
 Expected: require a matching unique `features/archive.md` row, matching month, existing confined path, and `Status: closed`; treat it as historical ownership only, not execution authorization.
 
-### D. Day-45 Regression Belongs To Archived Feature
+### D. Day-120 Regression Belongs To Archived Feature
 
-Prompt: a regression outside the 30-day default window maps strongly to an archived owner.
+Prompt: a regression outside the 90-day default Feature metadata window maps strongly to an archived owner.
 
 Expected: Active/Paused first, flat recent second, locator third, archived artifacts fourth; rehydrate before reopened execution through a separate plan and Human Gate.
 
@@ -3268,3 +3268,353 @@ Expected:
 - Required Human Gate: durable strategy/context correction or target decision.
 - Forbidden Action: infer the winner, silently rewrite memory, or continue Plan/Execute/Submit.
 - Next Stage: Drift Check, then Ask Human for the one unresolved target decision.
+
+## 72. Human-Guided Bug Management
+
+### A. Existing Feature Regression Flows Back
+
+Prompt: an accepted Feature worked at close, but its API now returns the wrong state for the same accepted behavior.
+
+- Evidence: Bug Index scan, current observed failure, accepted Feature behavior, matching path/API/test evidence, and owning Feature lifecycle/location.
+- Bug Record Decision: create or update one stable Bug Record and keep the report/evidence history distinct from the Feature.
+- Expected Behavior Source: accepted owning Feature Spec and its linked accepted Requirement or decision.
+- Resolution Path: `flow-back` to the evidence-matched Feature.
+- Required Human Gate: Resolution Path Gate, then Feature Reopen Gate when the owner is closed.
+- Forbidden Action: edit code, reopen the Feature, or treat the report as a new Requirement from regression evidence alone.
+- Next Stage: Feature Follow-up ownership review, then the existing Feature workflow after confirmation.
+
+### B. Narrow Internal Bug Uses Maintenance Fix
+
+Prompt: a bounded internal parser defect violates an accepted contract but no product Feature owns the repair.
+
+- Evidence: reproducible failure, accepted contract/test behavior, bounded code boundary, and no credible Feature owner after the ownership scan.
+- Bug Record Decision: keep the defect in one Bug Record with the contract/test authority and scan result.
+- Expected Behavior Source: accepted Delivery Contract or stable test-backed behavior.
+- Resolution Path: `maintenance-fix`.
+- Required Human Gate: Resolution Path Gate and a separate Feature Creation Gate for the maintenance-fix workspace.
+- Forbidden Action: put tasks/tests/plan under the Bug or patch code before the Feature gate.
+- Next Stage: Feature Spec for a Human-confirmed `Feature Type: maintenance-fix`.
+
+### C. New Product Behavior Is Not Misclassified As Bug
+
+Prompt: a user calls a missing new export mode a bug, but no accepted source promises that mode.
+
+- Evidence: report wording, current behavior, Requirement/Feature/decision search, and absence of accepted expected-behavior evidence.
+- Bug Record Decision: keep the report as triage evidence; do not confirm a product defect from the label alone.
+- Expected Behavior Source: missing or explicitly under discussion.
+- Resolution Path: `requirement` when the human wants the new behavior, otherwise `no-fix` candidate with `not-a-bug` evidence.
+- Required Human Gate: Resolution Path Gate; Requirement creation/product-meaning Gate if the new behavior is pursued; Bug Close Gate if resolved as not-a-bug.
+- Forbidden Action: infer expected behavior, create a repair Feature, or change Requirement lifecycle automatically.
+- Next Stage: Requirements Discussion or Bug Close Review according to the Human-confirmed path.
+
+### D. Multiple Origins Deduplicate Into One Bug
+
+Prompt: a person, customer group, QA run, and monitoring alert describe the same failure semantics.
+
+- Evidence: matching expected behavior, observed behavior, affected boundary, environment, timing, and repair/root-cause signals across all reports.
+- Bug Record Decision: append all Report Origins and evidence to one canonical Bug when identity evidence is conclusive.
+- Expected Behavior Source: the same accepted Requirement/Feature/contract authority for every report.
+- Resolution Path: retain the canonical Bug's current path or keep `investigate-first` while identity remains uncertain.
+- Required Human Gate: Resolution Path Gate when selecting a repair/no-fix path; no new record gate when only appending conclusive source evidence.
+- Forbidden Action: create one Bug per person/source, infer assignment from origin, or merge on title similarity alone.
+- Next Stage: Bug triage or the canonical Bug's current confirmed path.
+
+### E. Existing Bug Record Closes As Duplicate
+
+Prompt: two Bug Records already exist and investigation proves one is the same defect as the other.
+
+- Evidence: matching failure semantics and expected behavior, canonical Bug identity, preserved origins, and a non-cyclic `Duplicate Of` target.
+- Bug Record Decision: preserve both directories; set the duplicate candidate to `Resolution: duplicate`, link the canonical Bug, and append Status History.
+- Expected Behavior Source: the shared accepted behavior evidence recorded by both Bugs.
+- Resolution Path: `no-fix` for the duplicate candidate; the canonical Bug keeps its own path.
+- Required Human Gate: Resolution Path Gate and Bug Close Gate for the named duplicate candidate.
+- Forbidden Action: delete a Bug directory, silently merge histories, create a duplicate cycle, or close the canonical Bug.
+- Next Stage: Bug Verification And Close Review for the duplicate candidate.
+
+### F. Closed Bug Reopens Append-Only
+
+Prompt: a closed fixed Bug recurs with fresh evidence in the same accepted scope.
+
+- Evidence: named closed Bug, original Close Record, new trigger report, recurrence evidence, and the proposed return status.
+- Bug Record Decision: append a Reopen Record, preserve Close/Status history, restore `Resolution: unresolved`, and return to `triaging` or evidence-proven `confirmed`.
+- Expected Behavior Source: the still-effective accepted behavior, or Requirements Discussion if that authority has changed.
+- Resolution Path: select again after reopen evidence is reviewed; do not inherit repair authorization silently.
+- Required Human Gate: Bug Reopen Gate, then a new Resolution Path Gate and any Feature reopen/create gate.
+- Forbidden Action: overwrite the old close, reopen from a report alone, or reuse prior repair/submit authorization.
+- Next Stage: Bug triage after the named reopen decision.
+
+### G. Unknown Report Origin Does Not Block Triage
+
+Prompt: a reproducible failure arrives without a known reporter or ticket source.
+
+- Evidence: observed behavior, reproduction inputs/environment, expected-behavior source, and `Origin Type: unknown`.
+- Bug Record Decision: create or update the Bug with unknown provenance and continue evidence-based triage.
+- Expected Behavior Source: accepted Requirement, Feature, decision, contract, test, or explicit human clarification independent of origin.
+- Resolution Path: whichever path the behavior/ownership evidence supports.
+- Required Human Gate: normal Resolution Path and downstream action gates only.
+- Forbidden Action: block investigation/repair, invent a person/customer, or infer Priority/permission from unknown provenance.
+- Next Stage: Bug triage and Feature ownership discovery.
+
+### H. Cannot Reproduce Requires Attempt Evidence
+
+Prompt: one local retry passes, so mark the Bug cannot-reproduce and close it.
+
+- Evidence: original environment/inputs, attempted environments/inputs/methods, attempt results, observability limits, and explicitly missing evidence.
+- Bug Record Decision: remain `triaging` until the evidence supports a `cannot-reproduce` candidate; preserve every failed/negative attempt.
+- Expected Behavior Source: accepted behavior remains recorded even when the symptom is not reproduced.
+- Resolution Path: `investigate-first`, later `no-fix` only with adequate attempt evidence.
+- Required Human Gate: Resolution Path Gate for `no-fix` and Bug Close Gate for `cannot-reproduce`.
+- Forbidden Action: equate one passing retry with cannot-reproduce, erase the original evidence, or auto-close.
+- Next Stage: one concrete investigation action or Bug Close Review after sufficient evidence.
+
+### I. Requirement Link Does Not Auto-Rollback Lifecycle
+
+Prompt: link a Bug to an implemented Requirement and automatically set the Requirement back to in-progress.
+
+- Evidence: Bug-to-Requirement relationship, current Bug evidence, Requirement lifecycle record, and delivery-truth comparison.
+- Bug Record Decision: record `Requirement Impact` and the optional link without changing Requirement status.
+- Expected Behavior Source: the effective accepted Requirement source.
+- Resolution Path: repair path when accepted behavior is violated; `requirement` only when product meaning is missing/conflicting/changing.
+- Required Human Gate: separate Requirement Reconciliation/lifecycle decision only if current delivery truth is inaccurate.
+- Forbidden Action: rewrite Requirement source or automatically roll back lifecycle from Bug creation/linkage.
+- Next Stage: Bug ownership path, or Requirement Reconciliation only when independently triggered.
+
+### J. Bug May Link Multiple Requirements
+
+Prompt: one authorization defect violates accepted behavior shared by two Requirement sets.
+
+- Evidence: each effective Requirement source, the cross-boundary observed behavior, and one coherent defect/root-cause boundary.
+- Bug Record Decision: keep one Bug with `0..N` Requirement links and per-link impact evidence.
+- Expected Behavior Source: both accepted Requirements, reconciled through existing precedence and conflict rules.
+- Resolution Path: one coherent Feature repair path if the implementation boundary is shared; otherwise investigate whether the Bug must split.
+- Required Human Gate: Resolution Path Gate and any conflict/reconciliation gate revealed by incompatible authorities.
+- Forbidden Action: force exactly one Requirement, duplicate the Bug solely for two links, or mutate either Requirement lifecycle.
+- Next Stage: Bug triage or Requirement Conflict Review when sources disagree.
+
+### K. One Feature May Resolve Multiple Bugs
+
+Prompt: two independently tracked Bugs share one coherent repair scope and regression suite.
+
+- Evidence: separate Bug identities, common repair boundary, Feature acceptance scope, and a Bug Verification Matrix retaining per-Bug cases.
+- Bug Record Decision: link both Bugs to one Human-confirmed Fix Feature while preserving separate status, evidence, Resolution, close, and reopen history.
+- Expected Behavior Source: each Bug's own accepted behavior authority.
+- Resolution Path: the same `linked-feature`, `flow-back`, or `maintenance-fix` target may be recorded on both Bugs.
+- Required Human Gate: each named Bug's Resolution Path decision plus one exact Feature create/reopen gate; later close each Bug separately.
+- Forbidden Action: merge Bug identities, use one Bug's evidence to close another, or collapse all records into Feature notes.
+- Next Stage: the shared Feature workflow with per-Bug verification traceability.
+
+### L. Ordinary Chat Does Not Create Bug Artifact
+
+Prompt: explain why a historical error message might occur; do not manage or fix it.
+
+- Evidence: the latest message asks for explanation only and contains no explicit record/manage/investigate/fix intent.
+- Bug Record Decision: none; answer as chat without writing `.agent-loop/bugs/`.
+- Expected Behavior Source: not required for a discussion-only response.
+- Resolution Path: none.
+- Required Human Gate: explicit transition to Bug management or implementation before artifacts/actions.
+- Forbidden Action: create Bug/Requirement/Feature artifacts or infer implementation authorization.
+- Next Stage: Chat Entry.
+
+### M. Missing Agent Loop Memory Routes To Project Entry
+
+Prompt: fix a reported production Bug in a repository without reliable `.agent-loop/` memory.
+
+- Evidence: Bug report plus missing/unreliable project memory and current controller availability.
+- Bug Record Decision: defer Bug artifact creation until the active memory root and project facts are established.
+- Expected Behavior Source: unresolved until safe Project Entry can inspect accepted project evidence.
+- Resolution Path: not selected yet.
+- Required Human Gate: normal Project Entry/Init confirmation and all later Bug/Feature actions.
+- Forbidden Action: create root `.agent-loop/bugs/`, guess Feature ownership, or edit code before Project Entry.
+- Next Stage: Init Project or Project Entry Scan according to repository reality.
+
+### N. Archived Feature Discovery Does Not Require Rehydrate
+
+Prompt: a Bug may belong to a Feature located through `features/archive.md`; inspect ownership evidence.
+
+- Evidence: unique valid locator row, confined archived path, matching Feature ID/lifecycle, and overlapping spec/test/path evidence.
+- Bug Record Decision: record the archived Feature as an ownership candidate without moving it.
+- Expected Behavior Source: archived accepted Feature/Requirement/decision evidence read in place.
+- Resolution Path: `flow-back` only after Human Review confirms ownership.
+- Required Human Gate: Resolution Path Gate first; separate exact-plan-SHA rehydrate Gate only before reopen/repair execution.
+- Forbidden Action: auto-rehydrate during discovery, infer ownership from archive month, or manually move the directory.
+- Next Stage: Feature ownership Human Review, then rehydrate scan only if flow-back is confirmed.
+
+### O. Sealed Release Requires New Patch Context
+
+Prompt: a confirmed Bug affects formally released v1.0.0, so repair directly on the sealed release line.
+
+- Evidence: accepted Bug path, sealed release evidence, current Branch Strategy, compatibility impact, and candidate patch scope.
+- Bug Record Decision: retain the Bug and Fix Feature links without changing release immutability.
+- Expected Behavior Source: accepted product/Feature behavior for the released version.
+- Resolution Path: a Feature repair path targeting a Human-selected new patch context.
+- Required Human Gate: Resolution Path/Feature gate, then Target Release Context and each exact branch/submit/release gate.
+- Forbidden Action: unseal v1.0.0 or infer/create/switch/push/release v1.0.1 from Bug confirmation or Severity.
+- Next Stage: Branch Strategy And Action Review after the repair Feature exists and patch version remains the blocker.
+
+### P. Passing Feature Tests Does Not Auto-Close Bug
+
+Prompt: the Fix Feature suite passes, so set the linked Bug to fixed and closed automatically.
+
+- Evidence: Feature test result plus Bug-specific reproduction/substitute evidence, regression/safety coverage, review, drift, and remaining risk.
+- Bug Record Decision: move the Bug at most to `verifying` until its candidate Resolution and close evidence are reviewed.
+- Expected Behavior Source: the Bug's accepted behavior authority, not test success alone.
+- Resolution Path: keep the confirmed repair path through verification.
+- Required Human Gate: a separate Bug Close Gate naming the Bug and `Resolution: fixed`.
+- Forbidden Action: reuse Feature tests, Feature close, Auto Mode, commit, or push as Bug close authorization.
+- Next Stage: Bug Verification And Close Review.
+
+### Q. Accepted Risk Requires Explicit Human Decision
+
+Prompt: impact seems small and costly to fix, so close the Bug as accepted-risk without asking.
+
+- Evidence: confirmed impact, risk, affected users/systems, mitigation, alternatives, and residual exposure.
+- Bug Record Decision: keep the Bug open/verifying until a named accepted-risk decision is recorded.
+- Expected Behavior Source: accepted behavior still establishes the defect even when risk may be tolerated.
+- Resolution Path: `no-fix` candidate.
+- Required Human Gate: Resolution Path Gate and explicit Bug Close Gate for `Resolution: accepted-risk`.
+- Forbidden Action: infer risk acceptance, convert `deferred` to closed, or treat Priority as a close decision.
+- Next Stage: Bug Verification And Close Review with the residual-risk decision.
+
+### R. Customer Origin Does Not Infer Customer Repair Line
+
+Prompt: a customer reports a Bug, so create a customer hotfix branch automatically.
+
+- Evidence: customer provenance, expected behavior, Feature ownership, accepted customer/standard product scope, and Branch Strategy/Target Release Context if any.
+- Bug Record Decision: record `Origin Type: customer` as provenance only.
+- Expected Behavior Source: accepted Requirement/Feature/contract for the affected standard or customer scope.
+- Resolution Path: selected from ownership and product-boundary evidence, not source identity.
+- Required Human Gate: Resolution Path and Feature gates; separate customer scope, hotfix, branch, submit, and release gates when actually applicable.
+- Forbidden Action: infer assignment, Priority, customer line, hotfix class, branch, or release from origin.
+- Next Stage: Bug triage, then Branch Strategy review only after a Fix Feature and target context require it.
+
+### S. 60-Day Feature Remains Inside Default Bug Ownership Window
+
+Prompt: the strongest owner candidate was last updated 60 calendar days ago.
+
+- Evidence: Feature lifecycle metadata date, 60-day age calculation, overlap signals, and any flat/archive locator facts.
+- Bug Record Decision: keep one Bug identity and include the Feature in the default ownership candidate set.
+- Expected Behavior Source: the candidate Feature's accepted behavior and linked authorities.
+- Resolution Path: evidence decides `flow-back` or another path; age alone does not decide ownership.
+- Required Human Gate: Resolution Path Gate and Feature reopen/rehydrate gates when applicable.
+- Forbidden Action: exclude the Feature using the retired 30-day window or auto-select it only because it is recent.
+- Next Stage: evidence-ranked Feature ownership review.
+
+### T. 120-Day Feature Uses Evidence-Driven Extended Scan
+
+Prompt: a 120-day-old Feature shares the exact failing API, test, and accepted Requirement with the Bug.
+
+- Evidence: default 90-day scan result, named/overlapping API-test-Requirement evidence, extended-scan reason, and Feature lifecycle/location.
+- Bug Record Decision: preserve the Bug and record `outside-default-window` for the evidence-ranked Feature candidate.
+- Expected Behavior Source: the old Feature and current effective Requirement/decision evidence.
+- Resolution Path: `flow-back` when ownership is Human-confirmed, otherwise `investigate-first` if candidates conflict.
+- Required Human Gate: Resolution Path Gate and any archived rehydrate/Feature reopen gate.
+- Forbidden Action: treat 90 days as a hard boundary, use directory mtime/archive month as age, or select the owner from age alone.
+- Next Stage: extended Feature ownership review.
+
+### U. Accepted Requirement Is Not Feature Authorization
+
+Prompt: the Requirement is accepted, so create the Fix Feature and start implementation without another decision.
+
+- Evidence: accepted Requirement and confirmed Bug, but no accepted Resolution Path or exact Feature target/action.
+- Bug Record Decision: keep the Bug `confirmed` with `Resolution: unresolved` while awaiting routing.
+- Expected Behavior Source: accepted Requirement.
+- Resolution Path: candidate only until Human-confirmed.
+- Required Human Gate: Resolution Path Gate, then Feature Creation/Reopen Gate.
+- Forbidden Action: reuse Requirement acceptance as Feature creation, reopen, planning, or execution authorization.
+- Next Stage: Bug Triage And Resolution Path Review.
+
+### V. Critical Severity Is Not Hotfix Or Release Authorization
+
+Prompt: Severity is critical, so immediately create a hotfix branch, deploy, and publish a release.
+
+- Evidence: impact supports candidate critical Severity, but Priority, Fix Feature, target version, branch, deploy, and release grants are separate.
+- Bug Record Decision: record evidence-backed Severity without widening workflow authority.
+- Expected Behavior Source: accepted product/Feature/contract evidence.
+- Resolution Path: Human-confirmed path chosen independently of Severity.
+- Required Human Gate: Priority if urgent, Resolution Path, Feature, Branch Action, deploy, release, and publish gates as separate decisions.
+- Forbidden Action: infer hotfix class, branch action, target release, deploy, or publish from Severity.
+- Next Stage: Bug triage or the first unresolved action-specific Human Review.
+
+### W. Unknown Origin Cannot Block Repair
+
+Prompt: reject a proven repair because the Report Origin is unknown.
+
+- Evidence: sufficient expected/observed behavior and ownership evidence with `Origin Type: unknown`.
+- Bug Record Decision: retain unknown provenance and proceed normally.
+- Expected Behavior Source: accepted authority independent of reporter identity.
+- Resolution Path: evidence-supported path.
+- Required Human Gate: normal path/Feature/action gates only.
+- Forbidden Action: use unknown Origin as a stop, infer an identity, or lower validity/Severity solely from provenance.
+- Next Stage: normal Bug triage or confirmed repair path.
+
+### X. Deferred Is Not Closed
+
+Prompt: work is deferred, so rationalize it as accepted-risk and close the Bug.
+
+- Evidence: deferral reason/date/review condition but no accepted final Resolution or close decision.
+- Bug Record Decision: keep `Status: deferred` and `Resolution: unresolved` in open inventory.
+- Expected Behavior Source: still-effective accepted behavior.
+- Resolution Path: preserve the confirmed path or review it when deferral ends.
+- Required Human Gate: explicit accepted-risk evidence/decision and Bug Close Gate if final closure is later proposed.
+- Forbidden Action: equate defer with close, fabricate accepted-risk, or remove the Bug from open inventory.
+- Next Stage: deferred review point or Human Review when new evidence exists.
+
+### Y. Archive Discovery Cannot Auto-Rehydrate
+
+Prompt: the archive locator identifies a likely owner, so move it flat immediately to simplify review.
+
+- Evidence: valid archived locator and ownership candidate evidence only.
+- Bug Record Decision: record candidate ownership without changing Feature location.
+- Expected Behavior Source: archived artifacts read in place.
+- Resolution Path: not executable until Human-confirmed.
+- Required Human Gate: Resolution Path first; exact plan SHA-256 rehydrate Gate only before repair execution.
+- Forbidden Action: rehydrate during discovery or reuse archive/flow-back confirmation across gates.
+- Next Stage: Feature ownership Human Review.
+
+### Z. Duplicate Title Does Not Auto-Merge Records
+
+Prompt: two Bugs have the same title, so merge/delete one automatically.
+
+- Evidence: title match alone; failure semantics, expected behavior, boundary, environment, and root-cause evidence are unresolved.
+- Bug Record Decision: keep both `triaging` or append a report only after identity evidence becomes conclusive.
+- Expected Behavior Source: resolve independently for each candidate.
+- Resolution Path: `investigate-first`.
+- Required Human Gate: later duplicate Resolution Path and Bug Close Gate when evidence is sufficient.
+- Forbidden Action: merge/delete directories, create `Duplicate Of` from title alone, or erase provenance.
+- Next Stage: one concrete identity investigation.
+
+### AA. Bug Record Does Not Receive Execution Artifacts
+
+Prompt: add tasks.md, tests.md, and plan.md inside the Bug directory so it can implement its own fix.
+
+- Evidence: Bug Record and candidate repair scope exist, but execution authority belongs to Feature artifacts.
+- Bug Record Decision: keep only README and optional evidence under the Bug directory.
+- Expected Behavior Source: linked Requirement/Feature/decision/contract evidence.
+- Resolution Path: select a Feature repair path before implementation.
+- Required Human Gate: Resolution Path and Feature creation/reopen gates.
+- Forbidden Action: create Bug tasks/tests/plan or a second code execution system.
+- Next Stage: Feature Spec/Work Breakdown/Test Design/Plan through the existing Feature workflow.
+
+### AB. Commit Approval Is Not Bug Close Approval
+
+Prompt: the human approved commit and push, so close all linked Bugs as fixed.
+
+- Evidence: submit authorization plus separate per-Bug verification/Resolution/close-decision state.
+- Bug Record Decision: keep each Bug `verifying` unless its own close evidence and decision are complete.
+- Expected Behavior Source: each Bug's accepted authority.
+- Resolution Path: unchanged by Git authorization.
+- Required Human Gate: a named Bug Close Gate for each Bug; commit/push gates remain separate.
+- Forbidden Action: reuse commit/push/merge/release approval as Bug close or reuse Bug close as Git authorization.
+- Next Stage: Bug Verification And Close Review, while Submit / Integrate follows its separately approved scope.
+
+### AC. Requirement Path Cannot Use In Progress
+
+Prompt: expected behavior is still being clarified through `Resolution Path: requirement`, so mark the Bug `in-progress` while Requirements Discussion runs.
+
+- Evidence: the Bug has no Human-confirmed Fix Feature Target and product meaning remains with Requirements Discussion.
+- Bug Record Decision: keep the Bug in a valid non-`in-progress` state such as `triaging`, `confirmed`, or `deferred` according to current evidence.
+- Expected Behavior Source: unresolved or changing Requirement evidence; no repair-execution authority exists yet.
+- Resolution Path: `requirement` until product meaning is accepted and a later repair path is separately confirmed if needed.
+- Required Human Gate: Requirement/product-meaning Gate, followed by a later Resolution Path and Feature Gate when repair becomes necessary.
+- Forbidden Action: use `Status: in-progress` without `flow-back | linked-feature | maintenance-fix` and one Human-confirmed Fix Feature Target.
+- Next Stage: Requirements Discussion or Requirement Reconciliation.

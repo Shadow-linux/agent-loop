@@ -59,6 +59,38 @@ If unclear whether the human wants ordinary chat or requirements discussion, ask
 
 If unclear whether the human wants requirements discussion or feature implementation, ask whether to form a requirements document first or start feature construction.
 
+## Human-Guided Bug Management
+
+Bug Management is an internal method of `Feature Follow-up / Flow-back`; it does not add a canonical stage or message-intent value. Ordinary chat and read-only error explanation do not create Bug artifacts. With explicit bug-report, record, manage, investigate, or fix intent, use this sequence:
+
+```text
+explicit bug intent
+-> reliable memory or Project Entry
+-> complete Bug Index metadata duplicate/reopen scan
+-> 90-day Feature metadata scan
+-> evidence-ranked deep read / evidence-driven extended scan
+-> create/update/reopen Bug Record as reported/triaging
+-> resolve Expected Behavior evidence
+-> confirmed or non-fix disposition candidate
+-> recommend one Resolution Path
+-> Resolution Path Human Gate
+-> existing Requirement / Feature / Verify / Close stages
+```
+
+Bug Status is exactly `reported | triaging | confirmed | in-progress | verifying | deferred | closed`. Bug Resolution is exactly `unresolved | fixed | duplicate | not-a-bug | cannot-reproduce | accepted-risk | superseded`. Status and Resolution are independent: `closed` cannot use `unresolved`, `deferred` is not closed, and reopen appends history and restores `unresolved`.
+
+An `in-progress` Bug requires `flow-back | linked-feature | maintenance-fix` plus one Human-confirmed Fix Feature Target. `investigate-first`, `requirement`, and `no-fix` do not represent Feature repair execution and must not use `Status: in-progress`.
+
+The Bug Record owns identity, facts, Report Origin, evidence, lifecycle, Resolution Path, verification, close, and reopen history. Requirement owns product meaning; links are optional `0..N` and do not automatically mutate lifecycle. Feature owns all repair tasks, tests, plans, code execution, verification, Review, and Drift. A Bug has one current Resolution Path; one coherent Feature may resolve multiple Bugs.
+
+Scan all Bug Index metadata without a time cutoff for duplicate/reopen identity. Feature ownership uses the project-configured default 90-day metadata/summary scan, evidence-ranked candidate deep read, and evidence-triggered extended scan beyond 90 days. Calculate age from Feature `Last Updated` / `Closed`, not archive month, directory mtime, or archive operation time.
+
+Archive changes Feature location, not identity or ownership. Resolve archived candidates through the unique valid `features/archive.md` locator. Discovery and Human Review are read-only and do not require rehydrate. After flow-back is confirmed and before reopened execution, use the existing exact-hash Human-gated rehydrate transaction and post-check.
+
+Fail closed on Index/README mismatch, ambiguous or cyclic duplicate target, invalid Status/Resolution pairing, missing Resolution Target for `flow-back | linked-feature | maintenance-fix | requirement`, Requirement/Feature/ADR/Contract Expected Behavior conflict, archive locator inconsistency, expired-only verification evidence, or any Bug/Feature/Requirement/Git action without its named Human Gate. Record the evidence and recommend exactly one investigation, Recovery, or human decision.
+
+Bug confirmation, Severity/Priority, accepted Requirement, Feature plan, successful tests, Auto Mode, Bug close, submit, commit, or push approval never authorizes a different gate. Passing repair tests may move a Bug to `verifying`; only complete Bug-specific evidence and the Bug Close Gate permit `closed`.
+
 ## Concept Foundation Routing
 
 During Requirements Discussion, classify Concept Foundation before drafting detailed business flow, product state, or product data:
@@ -259,6 +291,7 @@ Use this order:
 6. Locate `Active Feature` and `Paused Features`.
 6a. For Feature Monthly Archive or an archived follow-up candidate, read `features/archive.md` before opening the month path. Treat Feature ID as stable and verify the locator target, archive state, and flat/month uniqueness.
 6b. If `.agent-loop/skills/INDEX.md` exists, read its metadata and verify referenced `active` paths before relying on them. Do not load `proposed`, `disabled`, or `deprecated` skills into normal routing.
+6c. For explicit Bug management, read `bugs/INDEX.md` metadata before creating a Bug or scanning Feature ownership. Resolve current Bug README, duplicate/reopen pointers, and related flat/archived Feature locators before relying on lifecycle or target claims.
 7. Read current feature `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`, and `contracts.md` if present.
 8. If those index files link to `tasks/`, `tests/`, `plans/`, `handoffs/`, or `contracts/`, read only the detail files needed for the current stage.
 9. Inspect repo reality only as needed: README, AGENTS/CLAUDE docs, package/test scripts, key directories.
@@ -292,7 +325,7 @@ If `project.md` claims a legacy onboarding layout, lists onboarding-db files, or
 
 Project Entry has priority over feature-follow-up. If no .agent-loop/ or legacy agent-loop/ memory exists, do not classify directly as feature-follow-up; classify as `existing-project` or `new-project` first, preserve the bug/change report as intake context, and establish or confirm project memory before running Feature Follow-up.
 
-If the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, screenshot issue, behavior tweak, "small tweak", test failure, or QA/user feedback and reliable agent-loop memory exists, classify as `feature-follow-up` before deciding to create a new feature. Load `references/feature-follow-up.md`, inspect recent feature candidates using the default 30-day lookback window, and recommend exactly one of: flow back to an owning feature, create a linked new feature, create a `Feature Type: maintenance-fix` feature, or investigate first.
+If the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, screenshot issue, behavior tweak, "small tweak", test failure, or QA/user feedback and reliable agent-loop memory exists, classify as `feature-follow-up` before deciding to create a new Feature. For explicit Bug management, load `references/bug-management.md` and `references/feature-follow-up.md`; scan complete Bug Index metadata for duplicate/reopen identity first, then inspect Feature metadata using the project-configured 90-day default plus evidence-driven extended scan. Create/update/reopen the Bug Record, resolve Expected Behavior, and recommend exactly one of `investigate-first | flow-back | linked-feature | maintenance-fix | requirement | no-fix`. Wait for the Resolution Path Gate and any separate Feature/Requirement action gate.
 
 `maintenance-fix` is not a bypass. It uses the standard feature workspace under `.agent-loop/features/YYYY-MM-DD-fix-<slug>/` and must still pass spec, tasks, tests, plan, verification, review, drift, project memory update when needed, Feature Completion Check, and close.
 
@@ -412,7 +445,7 @@ Feature Auto-Loop means:
 Feature Auto-Loop = give one feature a bounded release lane.
 ```
 
-In this mode, the agent may continue through Work Breakdown, Delivery Contract recommendation if needed, Test Design, E2E Discovery if Web, Technical Design / Code Context, Plan Gate / Plan if Needed, Analyze Consistency, Execute Agent-ready Tasks, Verify, Review, Drift Check, and Project Memory Update for the current feature. It must not skip Plan Gate before execution. It must stop before Feature Monthly Archive or rehydrate and their Batch Human Gates, branch creation, switching, deletion, push, or tag, creating or materially updating a project-local skill, executing a project-local skill without a current invocation grant, creating or updating Delivery Contract files, contract acceptance, breaking contract changes, Submit / Integrate, and Pause / Close.
+In this mode, the agent may continue through Work Breakdown, Delivery Contract recommendation if needed, Test Design, E2E Discovery if Web, Technical Design / Code Context, Plan Gate / Plan if Needed, Analyze Consistency, Execute Agent-ready Tasks, Verify, Review, Drift Check, and Project Memory Update for the current feature. It must not skip Plan Gate before execution. It must stop before Bug Resolution Path decisions, Bug close/reopen, Feature creation/reopen, Requirement creation/lifecycle reconciliation, Feature Monthly Archive or rehydrate and their Batch Human Gates, branch creation, switching, deletion, push, or tag, creating or materially updating a project-local skill, executing a project-local skill without a current invocation grant, creating or updating Delivery Contract files, contract acceptance, breaking contract changes, Submit / Integrate, and Pause / Close.
 
 Task Auto-Run means:
 
@@ -490,6 +523,8 @@ Auto modes do not remove stop conditions. Stop and ask when:
 - Complex Artifact Mode detail directories (`tasks/`, `tests/`, `plans/`) would be created or the feature would switch from simple to complex artifact mode
 - the work would require first-version exclusions
 - Feature Monthly Archive or rehydrate is requested; scan may remain read-only, but exact plan SHA-256 confirmation is required before apply
+- a Bug needs Resolution Path confirmation, close/reopen, Feature creation/reopen, Requirement creation/reconciliation, or another action-specific Human Gate
+- Bug Index/README, duplicate/reopen, Status/Resolution, Resolution Target, Expected Behavior authority, or Fix Feature locator evidence is invalid or contradictory
 - an archive row target is missing, an archived directory lacks a row, a flat/month Feature ID collides, a `rehydrated` row points to a month path, an incomplete `.archive-txn` exists, or verified apply leaves an old durable path
 - TDD cannot be followed or verification repeatedly fails
 - review finds behavior/scope/architecture changes
@@ -537,6 +572,8 @@ First version does not require `state.json`. State lives in markdown:
 - feature `plan.md` -> active execution unit
 - feature `notes.md` -> checkpoints, evidence, decisions, drift
 - feature `contracts.md` -> producer-consumer delivery contracts when present
+- `bugs/INDEX.md` -> Bug inventory, backlog, and locator
+- Bug `README.md` -> stable Bug identity, facts, evidence, Status/Resolution, Resolution Path, verification, close, and reopen history
 - `.agent-loop/skills/INDEX.md` -> project-local skill lifecycle, load policy, triggers, and validation evidence
 - `.agent-loop/skills/<skill-name>/validation.md` -> RED/GREEN/REFACTOR and activation evidence
 

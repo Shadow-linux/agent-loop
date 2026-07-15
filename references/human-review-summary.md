@@ -265,6 +265,42 @@ If subagent scan results conflict, include:
 
 The scan is read-only. The Batch Human Gate authorizes only the displayed expected plan SHA-256; a stale plan requires a new scan and review. Feature Monthly Archive maintains `features/archive.md`; rehydrate before reopened execution.
 
+### Bug Triage And Resolution Path Review
+
+| Item | Status / Value | Evidence | Human Decision |
+|---|---|---|---|
+| Bug Identity | new / existing / duplicate-candidate / reopen-candidate / unclear | Bug Index + README + overlap evidence | confirm / investigate |
+| Report Origin | person / customer / group / qa / monitoring / automated-test / agent / external-ticket / other / unknown | source reference or `unknown` | acknowledge |
+| Observed Behavior | concise failure fact | reproduction/log/test/runtime evidence | acknowledge / revise |
+| Expected Behavior | accepted / ambiguous / conflicting | Requirement / ADR / Contract / Feature / explicit human evidence | confirm / requirements discussion |
+| Duplicate / Reopen | none / candidate / confirmed | canonical Bug or prior Close/Reopen evidence | confirm / investigate |
+| Severity / Priority | evidence-backed / human-decided / unknown | impact + explicit priority evidence | confirm / revise |
+| Requirement Impact | none / violates-accepted-behavior / ambiguity-found / change-required | related Requirement evidence | no change / reconcile / discuss |
+| Recommended Resolution Path | investigate-first / flow-back / linked-feature / maintenance-fix / requirement / no-fix | Candidate Match Matrix + rationale | confirm / revise / stop |
+| Target | exact Feature / Requirement / investigation / candidate Resolution | resolved locator/source | confirm / revise |
+| Requested Authorization | exact Resolution Path only, plus separately named Feature/Requirement action if requested | current review | human only |
+| Explicitly Not Authorized | Bug close/reopen, other Feature/Requirement actions, archive apply, branch, submit, commit, push, tag, release, publish unless separately named | gate inventory | acknowledge |
+| Human Decision | exact bounded decision | current review | human only |
+
+Unknown Origin does not block progress. Similar titles do not prove duplicate identity. Resolution Path approval cannot be reused as Feature creation/reopen, Requirement change, Bug close, or Git authorization.
+
+### Bug Verification And Close Review
+
+| Item | Status / Value | Evidence | Human Decision |
+|---|---|---|---|
+| Bug ID / Current Status | `verifying` / other | Bug README + Index | acknowledge / investigate |
+| Candidate Resolution | fixed / duplicate / not-a-bug / cannot-reproduce / accepted-risk / superseded | required Resolution evidence | confirm / revise / keep-verifying |
+| Fix Feature | exact Feature or no-fix | Feature Spec/notes and locator | acknowledge / revise |
+| Original Reproduction / Substitute | pass / fail / incomplete | Bug Verification Matrix | accept / rerun |
+| Regression / Safety Evidence | pass / fail / incomplete | fresh commands/results | accept / revise |
+| Review / Drift | complete / missing / conflict | current records | proceed / stop |
+| Remaining Risk | none / concrete risk | evidence and impact | accept / resolve |
+| Bug Close Decision | confirm / revise / keep-verifying | Bug-specific closure evidence | human only |
+| Feature Close Decision | confirm / continue / pause / revise-scope | Feature Completion Check | human only |
+| Explicitly Not Authorized | Feature close, submit, branch, commit, push, tag, release, publish unless separately confirmed | gate inventory | acknowledge |
+
+Bug Close and Feature Close may appear in one summary but remain separate decisions. Passing Feature tests is not the Bug Close Gate, and commit/push approval is not a close decision.
+
 ### Feature Completion Check
 
 | Check | Status | Evidence | Issue |

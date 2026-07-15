@@ -19,6 +19,7 @@ Mode: simple | enterprise
 
 - Decisions: `.agent-loop/decisions/` | none
 - Project Skills: `.agent-loop/skills/INDEX.md` | none
+- Bug Inventory: `.agent-loop/bugs/INDEX.md` | none
 
 If simple:
 - This file is the main long-term project memory body.
@@ -119,10 +120,12 @@ Next Suggested Action:
 Gate Mode: Strict Mode | Feature Auto-Loop | Task Auto-Run
 Gate Mode Scope:
 Gate Mode Stop Conditions:
-Feature Follow-up Lookback: 30 days
+Feature Follow-up Lookback: 90 days
 Recent Feature Flow-back Policy:
-- When bugs, regressions, post-close corrections, field/schema changes, algorithm changes, API mismatches, test failures, or QA/user feedback appear, inspect recent features before creating a new feature.
-- Flow back to the owning feature when evidence shows the change repairs, adjusts, or completes that feature.
+- For explicit Bug management, scan all Bug Index metadata for duplicate/reopen identity, then scan Feature metadata in the configured window and extend beyond it when evidence points to an older owner.
+- Resolve archived owners through `features/archive.md`; discovery/Human Review is read-only, while confirmed flow-back rehydrates before reopened execution.
+- Flow back to the owning Feature only after the Bug Resolution Path and any Feature reopen/create gate are confirmed.
+- Keep Bug backlog, evidence, Status/Resolution, and assignment-like data out of `project.md`; `bugs/INDEX.md` and Bug README files own them.
 
 ## Remote Entry
 

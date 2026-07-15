@@ -1,10 +1,10 @@
 # Feature Follow-up And Flow-back
 
-Use this when a human reports a bug, regression, test failure, algorithm change, field/schema change, behavior tweak, or post-close correction that may relate to recent feature work.
+Use this when a human reports a bug, regression, test failure, algorithm change, field/schema change, behavior tweak, or post-close correction that may relate to existing Feature work. For explicit bug-record, manage, investigate, or fix intent, load `references/bug-management.md`; Bug Management is the internal intake/triage method and this reference owns Feature relationship routing.
 
 ## Purpose
 
-Closed features are not dead history. If a bug or change clearly belongs to a recently delivered feature, the agent should actively propose flowing the work back to that feature so the original spec, tasks, tests, evidence, and project memory stay coherent.
+Closed Features are not dead history. If a Bug or change clearly belongs to an existing delivered Feature, the agent should actively propose flowing the work back to that Feature so the original spec, tasks, tests, evidence, and project memory stay coherent.
 
 The human does not need to know whether to say "reopen feature", "new feature", or "drift". The agent owns the classification and recommends one next action.
 
@@ -26,29 +26,34 @@ Also route here after Verify, Review, Drift Check, or Submit reveals a defect li
 
 ## Lookback Window
 
-Default recent window: **30 calendar days** from the current date.
+Bug Index metadata has no time cutoff. Scan the complete Bug inventory for duplicate and reopen identity before comparing Feature ownership.
+
+Default recent window: **90 calendar days** from the current date.
 
 Inspect:
 
 - `project.md` Active Feature, Paused Features, and recent feature references
-- flat recent `.agent-loop/features/<feature-id>/spec.md`, `tasks.md`, `tests.md`, and `notes.md`
+- complete `bugs/INDEX.md` metadata plus the current README for evidence-overlapping Bug candidates
+- flat recent `.agent-loop/features/<feature-id>/` metadata and scope summary before deep-reading `spec.md`, `tasks.md`, `tests.md`, and `notes.md`
 - root `.agent-loop/features/archive.md` after Active/Paused and flat recent candidates
 - archived `.agent-loop/features/YYYY-MM/<feature-id>/` artifacts only after the locator row resolves uniquely
 - close records, submit records, verification evidence, and drift notes
 - code paths, tests, APIs, data models, or UI routes mentioned by the bug/change
 - screenshot text, visible UI labels, error messages, stack traces, request/response samples, logs, test names, and file paths attached to the report
 
-If the likely owning feature is older than 30 days but the evidence is strong, still recommend a flow-back candidate and mark it `outside-default-window`.
+Calculate Feature age from `Last Updated / Closed`, not archive month, directory mtime, or archive operation time. Deep-read only candidates whose scope, path, API, model, UI, job, test, Requirement, ADR, Contract, or verification evidence overlaps the Bug.
 
-The 30-day window is a default scan window, not a hard ownership boundary. If the report mentions "上个月", "之前那个", "上次那个", "the previous feature", an old ticket/feature name, or a code/API/test/data path that clearly overlaps an older feature, run an extended candidate scan before creating a new feature or maintenance fix. Mark the candidate `outside-default-window` and explain why it was considered.
+The 90-day window is a default metadata scan, not a hard ownership boundary. If the report names an older Feature or its path/API/model/UI/job/test/Requirement/ADR evidence, run an extended scan before creating a new Feature or maintenance fix. Mark the candidate `outside-default-window` and explain the evidence trigger.
 
-Do not use day 31 as a reason to stop flow-back analysis. If evidence is weak after the extended scan, classify as `unclear` and recommend `investigate-first` rather than guessing.
+Do not use day 91 as a reason to stop ownership analysis. If evidence is weak after the extended scan, keep the Bug `triaging`, classify ownership as `unclear`, and recommend `investigate-first` rather than guessing. Multiple medium/high candidates also remain `investigate-first`.
 
 ## Archived Feature Owners
 
-Feature Monthly Archive changes location, not ownership. Lookup order is fixed: Active/Paused first, flat recent features second, `features/archive.md` third, archived feature artifacts fourth.
+Feature Monthly Archive changes location, not Feature identity or ownership. Lookup order is fixed: complete Bug Index identity scan, Active/Paused pointers, flat Feature metadata in the 90-day window, `features/archive.md`, evidence-ranked archived artifacts, then evidence-driven extended candidates.
 
-When an archived closed feature is the confirmed owner, rehydrate before reopened execution. First run a read-only rehydrate scan, show the exact plan SHA-256 Batch Human Gate, then use the transaction journal, reference updates, post-check, and restore rules. Only after verified rehydrate may Feature Follow-up ask to change lifecycle from `closed` to `active` or start tasks. Archive state is not feature lifecycle.
+Resolve the locator uniquely, then read archived `spec.md`, `tests.md`, `notes.md`, close evidence, and verification evidence without mutation. Discovery, duplicate/reopen analysis, ownership classification, and Human Review do not require rehydrate.
+
+When an archived closed Feature is the Human-confirmed `flow-back` owner and repair execution is about to start, the invariant remains: rehydrate before reopened execution. First run a read-only rehydrate scan, show the exact plan SHA-256 Batch Human Gate, then use the transaction journal, reference updates, post-check, and restore rules. Only after verified rehydrate may Feature Follow-up ask to change lifecycle from `closed` to `active` or start tasks. Archive state is not Feature lifecycle.
 
 If the archive row target is missing, a month directory lacks its row, the same Feature ID exists flat and archived, a `rehydrated` row points to a month path, or `.archive-txn` is incomplete, stop and route to Recovery instead of guessing ownership.
 
@@ -82,6 +87,8 @@ Use this table:
 | `new-feature` | new capability, new user goal, or broad scope not covered by recent feature | create a new feature and optionally link related old feature |
 | `maintenance-fix` | internal fix with no meaningful product feature ownership | create a narrow `Feature Type: maintenance-fix` feature after human confirmation |
 | `unclear` | insufficient evidence | ask one focused question or run Targeted Feature Scan |
+
+For an explicit Bug, this Feature classification feeds one Bug Resolution Path recommendation: `investigate-first | flow-back | linked-feature | maintenance-fix | requirement | no-fix`. Do not create/reopen a Feature or change a Requirement until the named Resolution Path and subsequent action gate are confirmed.
 
 ## Requirement-change Ambiguity
 
@@ -205,6 +212,7 @@ Use these targets:
 
 ```text
 new human bug/change material -> requirements/<archive-date>-<topic>/ or notes.md, depending on source durability
+explicit Bug identity/evidence/lifecycle -> bugs/INDEX.md plus bugs/YYYY-MM-DD-<bug-slug>/README.md
 bug/change classification -> feature notes.md
 changed acceptance or behavior -> spec.md
 new repair/regression work -> tasks.md or tasks/<story>/<task>.md
@@ -228,8 +236,11 @@ Add this to `notes.md`:
 - Source: human report | test failure | E2E | API verification | production/QA feedback | other
 - Report:
 - Candidate Features:
+- Related Bugs:
+- Bug Status At Start:
+- Bug Resolution Path:
 - Classification: same-feature-bug | same-feature-adjustment | regression-from-feature | new-feature | maintenance-fix | unclear
-- Lookback Window: 30 days | outside-default-window
+- Lookback Window: 90 days | outside-default-window
 - Match Evidence:
 - Related Feature:
 - Flow-back Decision: flow-back | linked-new-feature | maintenance-fix | investigate-first | declined-reopen | defer
@@ -243,6 +254,8 @@ Add this to `notes.md`:
 
 Always ask before:
 
+- confirming a Bug Resolution Path
+- closing or reopening a Bug Record
 - reopening a closed feature
 - changing feature scope or acceptance criteria
 - creating a new feature instead of flowing back
@@ -256,6 +269,7 @@ Feature Auto-Loop may continue only after the human confirms the flow-back decis
 
 A follow-up is complete only when:
 
+- related Bug Records expected to be fixed are `verifying` with fresh Bug-specific evidence; Bug Close remains a separate Human Gate
 - bug/change is represented in spec/tasks/tests/notes
 - required tests or substitute verification are fresh and recorded
 - review and drift checks are recorded
