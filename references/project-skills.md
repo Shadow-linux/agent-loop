@@ -179,6 +179,48 @@ Load Policy values:
 
 “Bootstrap” means always discoverable at bootstrap, not permanently authorized for action. Re-reading is unnecessary within the same uncompacted context when the file is unchanged, but Execution Gate still applies to every invocation.
 
+## Discovery Guard And Fallback Precedence
+
+After the Agent Loop controller and reliable memory root are established, run Project Skill Discovery Guard for each new actionable intent and explicit Project Skill availability question before a stage-specific helper, generic Operational Support method, built-in fallback, command, tool call, temporary resource, or environment action. Ordinary chat with no workflow or execution intent stays response-only and does not require a Project Skill body scan.
+
+Use progressive discovery:
+
+1. Inspect `.agent-loop/skills/INDEX.md` metadata when present.
+2. Match only `active` rows by the current intent, stage, task context, Triggers, and Scope.
+3. For a matched candidate, verify the exact INDEX row, target path, validation evidence, instruction-bearing/executable files, and SHA-256 Validated Content Manifest.
+4. Load only the matched Skill body and the resources needed for the current invocation summary.
+5. Do not load every Skill body when no active row matches.
+
+Response-local results are:
+
+| Result | Meaning | Route |
+|---|---|---|
+| `matched-active` | one valid active row matches current work | load it read-only, disclose invocation scope, then apply Execution Gate |
+| `index-absent` | reliable memory root has no Project Skill INDEX | generic method may continue; do not create an empty directory |
+| `no-active-match` | INDEX exists but no active row matches | generic method may continue; exclude inactive rows and avoid body scans |
+| `project-skill-drift` | target, exact row, manifest, path boundary, symlink, or owner is invalid/ambiguous | fail closed and recommend Recovery or Project Skill Creation / Update |
+
+These results are not lifecycle states, INDEX fields, project-memory fields, or persistent cache entries.
+
+runtime/global Skill inventory does not prove that no Project Skill exists. Only `index-absent` or `no-active-match` permits generic fallback. `project-skill-drift` fails closed and cannot be bypassed through an equivalent generic operation.
+
+Before saying “no relevant Skill,” “the project has no dedicated Skill,” or an equivalent negative discovery claim, report whether the current project result is `index-absent` or `no-active-match`. A runtime-native Skill list or UI chip list is a separate source and cannot replace project INDEX evidence.
+
+If runtime/global and project-local candidates have the same name, report both owners and paths. Do not silently select, merge, overwrite, or treat the collision as no match. Unresolved or inconsistent ownership is `project-skill-drift`.
+
+Within one uncompacted reliable context and continuous stage, unchanged INDEX metadata may be reused instead of reread before every command. Re-read after context compaction, long-running-session uncertainty, controller re-entry, stage-boundary uncertainty, INDEX change, or manifest change. The guard creates no persistent discovery cache or default log artifact.
+
+Project Skill precedence remains:
+
+```text
+Agent Loop controller and Human Gates
+-> valid active project-local skill match
+-> runtime/global helper skill where applicable
+-> Agent Loop built-in or generic Operational Support fallback
+```
+
+Project Skill discovery does not replace mandatory stage-helper resolution when both apply. The controller preserves stage contract, artifact ownership, and Human Gates. A valid match still requires the existing per-invocation Execution Gate before workflow steps or side effects.
+
 ## Execution Gate
 
 Discovery, INDEX reading, `SKILL.md` loading, trigger matching, and read-only inspection do not require confirmation.

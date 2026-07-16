@@ -373,6 +373,7 @@ Operational landing 不是每份 ADR 的默认大章节。只有持久化表示�
 | “把刚才成功的操作沉淀成 skill。” | 复用刚才的新鲜成功证据，但仍要补 RED 基线、GREEN/REFACTOR、结构验证和前向执行测试；成功后自动从 `proposed` 变为 `active`。 |
 | “以后这种复杂操作你可以主动建议做成技能。” | Agent 可在当前授权阶段完成且验证成功后主动提出 Candidate；主动建议不等于获准创建。 |
 | “使用 deploy-check 技能检查测试环境。” | 如果技能和范围都已明确，Agent 仍先展示执行摘要；计划没有新增未披露动作或影响时，这句话可作为本次调用的 Execution Gate，无需再问一次。扩大范围、换任务或下次调用都要重新确认。 |
+| “我没点名 Skill，但项目里已经有处理这个操作的 Skill 吗？” | Agent 先只读检查 `.agent-loop/skills/INDEX.md`，匹配 active Skill 的 trigger/scope，并在进入通用 fallback 前报告匹配结果；发现不等于执行授权。 |
 
 Project Skill 只写入使用 Agent Loop 的目标项目：
 
@@ -387,6 +388,8 @@ Project Skill 只写入使用 Agent Loop 的目标项目：
 创建或实质更新只有一个文件写入门禁：Gate 1。验证通过后会自动激活，不再增加 activation gate；验证失败则保持 `proposed`，不能进入正常路由。
 
 执行是独立门禁。读取 INDEX、匹配触发条件、加载 `SKILL.md` 都可以只读完成；但真正按照技能步骤运行命令、调用工具、修改文件、访问外部系统或产生副作用前，必须为这一次有边界的调用获得 Execution Gate。`active`、`bootstrap`、Feature Auto-Loop、Task Auto-Run、以前执行成功或以前确认过都不能复用为下一次授权。
+
+项目 Skill 不一定显示在运行时原生 Skill 列表中；Agent Loop 会在声称没有相关能力或进入通用执行 fallback 前检查 `.agent-loop/skills/INDEX.md`，只加载匹配的 active Skill，并继续保留本次 Execution Gate。INDEX 缺失或没有 active match 时才进入通用方法；路径、owner 或 manifest 漂移时停止并报告，不能用通用动作绕过。
 
 ### 关闭后发现 bug 或要小改
 

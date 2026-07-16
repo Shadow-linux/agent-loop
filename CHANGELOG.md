@@ -2,6 +2,12 @@
 
 ## 1.4.0 — 2026-07-15
 
+### Project Skill Discovery Guard
+- Required reliable projects to inspect `.agent-loop/skills/INDEX.md` before negative Project Skill claims or generic Operational Support/fallback actions.
+- Kept discovery progressive by matching active INDEX metadata first and loading/verifying only the matched Skill, while preserving the per-invocation Execution Gate.
+- Made `project-skill-drift` fail closed so missing paths, invalid manifests, unsafe owners, or conflicting Skill sources cannot be bypassed through equivalent generic actions.
+- Refreshed all 13 root managed blocks to `block-version:1.4.0-20260716` and added ordering-aware focused regression without changing Skill version `1.4.0`.
+
 ### Human-Guided Bug Management
 - Added stable Bug identity, report provenance, deduplication, evidence, lifecycle, Resolution Path, reopen history, and Human-confirmed close records under `.agent-loop/bugs/` without adding a canonical stage or message intent.
 - Kept Requirement authority limited to product goals and expected behavior, made Bug-to-Requirement links optional many-to-many, and prevented Bug handling from automatically changing Requirement lifecycle.

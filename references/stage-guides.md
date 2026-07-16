@@ -42,6 +42,17 @@ Entry: the human asks to test, run, deploy, switch account/config/model/provider
 
 Default action is read-only code/process analysis. This stage helps the human use current project functionality safely; it is not a default feature implementation lane.
 
+Run Project Skill Discovery Guard before any stage-specific helper, generic fallback, command, tool call, temporary resource, or environment action.
+
+With reliable project memory:
+
+- inspect `.agent-loop/skills/INDEX.md` metadata and match only active `bootstrap` / `on-demand` rows against the current operational intent;
+- for `matched-active`, verify the exact row, target path, instruction-bearing/executable files, and manifest, load only that Skill, and stop at the existing Execution Gate before its workflow or any side effect;
+- for `index-absent | no-active-match`, continue the read-only Operational Support method without creating an empty Skill directory or scanning every Skill body;
+- for `project-skill-drift`, fail closed and recommend Recovery or Project Skill Creation / Update rather than creating a temporary resource or performing an equivalent action through the generic path.
+
+The guard is read-only and writes no artifact by default. If project memory is absent, stale, or outside-loop, complete Project Entry or Memory Recovery before trusting Project Skill claims.
+
 Read as needed:
 
 - `AGENTS.md`, `CLAUDE.md`, `.agent-loop/project.md`, and active run/deploy/testing notes

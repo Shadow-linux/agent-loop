@@ -128,7 +128,7 @@ content = File.read(ARGV.fetch(0))
 blocks = content.scan(/<!-- agent-loop:managed-start section:([^ ]+) .*?block-version:([^ ]+) -->/)
 abort 'FAIL: root AGENTS managed blocks missing' if blocks.empty?
 blocks.each do |section, revision|
-  expected = '1.4.0-20260715.1'
+  expected = '1.4.0-20260716'
   abort "FAIL: #{section} expected #{expected}, found #{revision}" unless revision == expected
 end
 RUBY

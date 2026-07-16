@@ -128,12 +128,26 @@ Before using an external skill or plugin inside a stage:
 - [ ] Load the matching `agent-loop` reference before taking stage actions; root `AGENTS.md` is a navigation index, not the detailed procedure.
 - [ ] Reclassify and select a new stage only when the latest human intent or project evidence changes.
 
+## Project Skill Discovery Guard
+
+- [ ] Run only after the Agent Loop controller and reliable memory root are established.
+- [ ] Before a new actionable intent uses a generic helper, Operational Support method, or built-in fallback, inspect `.agent-loop/skills/INDEX.md` metadata when present.
+- [ ] Match only `active` bootstrap/on-demand rows by current intent, stage, task context, Triggers, and Scope.
+- [ ] Verify only the matched exact INDEX row, path, instruction-bearing/executable files, and manifest before reliance.
+- [ ] Load only the matched Skill body; do not scan all Project Skill bodies when no row matches.
+- [ ] Treat runtime/global Skill inventory as a separate source that cannot prove no Project Skill exists.
+- [ ] Permit generic fallback only for `index-absent | no-active-match`.
+- [ ] Treat missing target, invalid row/manifest, unsafe path/symlink, or conflicting owner as `project-skill-drift` and fail closed.
+- [ ] Emit the existing Execution Gate summary before following the matched workflow or causing side effects.
+- [ ] Keep ordinary chat response-only and do not create a discovery cache, Feature, Requirement, or log artifact.
+
 ## Project Entry
 
 - [ ] Inspect whether `.agent-loop/` exists.
 - [ ] If `.agent-loop/` is missing, inspect whether legacy `agent-loop/` exists.
 - [ ] If `.agent-loop/` or legacy `agent-loop/` is present, read `project.md`.
 - [ ] If `.agent-loop/skills/INDEX.md` exists, read its metadata, verify referenced active paths and SHA-256 manifests, and exclude missing/mismatched/proposed/disabled/deprecated entries from normal routing.
+- [ ] For each applicable actionable intent after entry, use Project Skill Discovery Guard before a generic helper, Operational Support method, built-in fallback, command, tool call, temporary resource, or environment action.
 - [ ] If legacy `agent-loop/` is present, use it for the current run and ask before migration or renaming.
 - [ ] If `project.md` says `Memory Mode: enterprise`, read only the needed linked project-memory detail files.
 - [ ] Locate active or paused feature.
@@ -151,7 +165,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.4.0-20260715.1`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.4.0-20260716`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -237,7 +251,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.4.0-20260715.1`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.4.0-20260716`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.

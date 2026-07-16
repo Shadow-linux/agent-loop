@@ -26,6 +26,7 @@ The core constraints are:
 - standard and customer release aggregation branches are retained; formally released versions are sealed; customer customization cannot flow wholesale into the standard product line
 - branch-specific Target Release Context and Target Branch stops apply only to an adopted strategy or versioned/customer delivery; a confirmed simple `not-needed` path continues without those fields
 - optional `.agent-loop/skills/` owns Human-gated project-local reusable capabilities; `INDEX.md` owns lifecycle and discovery metadata
+- Project Skill Discovery Guard checks active INDEX metadata before negative Project Skill claims or generic executable fallback, loads only a matched body, and fails closed on drift without adding a stage, status, cache, or execution grant
 - stable Web E2E capability belongs in `project.md`; feature-specific E2E cases belong in feature `tests.md` or `tests/e2e/*`
 - `requirements/` stores human source material packages and requirement lifecycle/backlog records as requirement set directories: requirements, prototypes, feedback, screenshots, recordings, links, follow-up notes, status, and optional `requirements/INDEX.md`
 - Human-Guided Bug Management is an internal method of `Feature Follow-up / Flow-back`, not a canonical stage or message intent
@@ -192,6 +193,16 @@ If plan.md exists, it must be construction-grade: exact paths, code context, int
 **Drift**: mismatch between implementation, code reality, human decision, and existing `agent-loop` documents.
 
 **Project Skill**: a reusable project-specific capability under `.agent-loop/skills/<skill-name>/`. The index uses `proposed | active | disabled | deprecated` lifecycle and `bootstrap | on-demand` load policy. Active trust is bound to a validated content manifest. Loading is read-only preparation; every actual invocation requires the Execution Gate, with a named-skill/concrete-scope request accepted only when the disclosed plan stays fully inside that scope.
+
+## Project Skill Discovery Guard
+
+Project Skill Discovery Guard is an internal read-only controller invariant, not a canonical stage or message intent. After reliable memory/intent routing and before a stage-specific helper or generic executable fallback, the Agent inspects INDEX metadata, matches only active `bootstrap | on-demand` candidates, verifies the matched exact INDEX row/path/manifest, and loads only the matched body.
+
+The response-local outcomes are `matched-active | index-absent | no-active-match | project-skill-drift`; they are not Project Skill lifecycle values and are not persisted in a cache or new artifact. `matched-active` continues to the existing per-invocation Execution Gate. Ordinary chat remains response-only and does not require all Project Skill bodies to load.
+
+runtime/global Skill inventory does not prove that no Project Skill exists. Only `index-absent` or `no-active-match` permits generic fallback. `project-skill-drift` fails closed and cannot be bypassed through an equivalent generic operation.
+
+Context may reuse unchanged INDEX metadata within one uncompacted reliable stage, but context compaction, controller re-entry, long-session uncertainty, stage-boundary uncertainty, INDEX change, or manifest change requires rediscovery. Project-local matches remain below Agent Loop controller/Human Gates and above runtime/global helpers and built-in fallback.
 
 ## Entry Scenarios
 

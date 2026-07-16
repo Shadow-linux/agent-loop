@@ -290,7 +290,7 @@ Use this order:
 5. If `project.md` says `Status: remote-entry`, read `<memory-root>/remote.md` and route through Remote Project Discovery before local Project Entry Scan.
 6. Locate `Active Feature` and `Paused Features`.
 6a. For Feature Monthly Archive or an archived follow-up candidate, read `features/archive.md` before opening the month path. Treat Feature ID as stable and verify the locator target, archive state, and flat/month uniqueness.
-6b. If `.agent-loop/skills/INDEX.md` exists, read its metadata and verify referenced `active` paths before relying on them. Do not load `proposed`, `disabled`, or `deprecated` skills into normal routing.
+6b. If `.agent-loop/skills/INDEX.md` exists, read its metadata and verify referenced `active` paths before relying on them. Re-match active `bootstrap` / `on-demand` rows for each applicable actionable intent before stage-specific helper or fallback action; load and verify only the matched body. Do not load `proposed`, `disabled`, or `deprecated` skills into normal routing.
 6c. For explicit Bug management, read `bugs/INDEX.md` metadata before creating a Bug or scanning Feature ownership. Resolve current Bug README, duplicate/reopen pointers, and related flat/archived Feature locators before relying on lifecycle or target claims.
 7. Read current feature `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`, and `contracts.md` if present.
 8. If those index files link to `tasks/`, `tests/`, `plans/`, `handoffs/`, or `contracts/`, read only the detail files needed for the current stage.
@@ -311,13 +311,13 @@ If `.agent-loop/onboarding-db/` exists and the human asks to be guided through t
 
 If the human asks for guided onboarding but onboarding-db is missing, do not create onboarding-db from the removed legacy flow. Route through Project Entry Scan if project memory is missing/stale; otherwise load `references/onboarding-knowledge-base.md`, build Evidence Graph, and propose an Onboarding Spec before writing formal docs. If root guidance or `project.md` claims onboarding-db should exist but the path is missing, classify as `stale-memory` and reconcile the missing memory reference first.
 
-If the human asks to test, run, deploy, switch account/config/model/provider, check quota/rate limits, arrange rollout, diagnose production, or use existing code to solve an operational problem, default to read-only operational support. Route to Code-Guided Operational Support before Feature Spec, Plan Gate, Execute Task / Story, or code edits. If the request could mean either existing operational use or new implementation, ask whether the human wants help using current project functionality or feature implementation.
+If the human asks to test, run, deploy, switch account/config/model/provider, check quota/rate limits, arrange rollout, diagnose production, or use existing code to solve an operational problem, default to read-only operational support. Route to Code-Guided Operational Support before Feature Spec, Plan Gate, Execute Task / Story, or code edits. With reliable project memory, run Project Skill Discovery Guard before the first stage-specific helper, fallback, command, tool call, temporary resource, or environment action. If the request could mean either existing operational use or new implementation, ask whether the human wants help using current project functionality or feature implementation.
 
 If the human asks to "先记一下", do something later, defer work, add a backlog item, or keep a future requirement outside the current feature, route to Requirement Archive with Future / Deferred Requirement Intake. Do not put future TODO, backlog, deferred requirements, or unimplemented planned capability details into `project.md`; use a requirement set and optional `requirements/INDEX.md` after human confirmation.
 
 If the human asks to make a successful workflow into a skill, or asks to update/disable/deprecate a project skill, classify `project-skill-management` and route to Project Skill Creation / Update. If the agent notices a reusable skill opportunity after a complex verified workflow, finish the current stage first and propose a Project Skill Candidate at a safe boundary; do not change intent or create files until the human passes Gate 1.
 
-When an `active` project skill matches current work, discovery and read-only loading may proceed only after its current instruction-bearing and executable files match the SHA-256 validation manifest. Before following its workflow or causing side effects, require the Execution Gate for the current invocation. A human message that explicitly names the skill and concrete scope may satisfy the gate only after the agent emits the execution summary and verifies the plan adds no undisclosed action, effect, environment, or bound. Auto mode, previous success, prior confirmation, `active`, or `bootstrap` may not. One combined confirmation may cover other applicable operational/risk gates only when the summary explicitly includes every gate fact.
+When an `active` project skill matches current work, Project Skill Discovery Guard resolves it before generic fallback. Discovery and read-only loading may proceed only after its current instruction-bearing and executable files match the SHA-256 validation manifest. Before following its workflow or causing side effects, require the Execution Gate for the current invocation. A human message that explicitly names the skill and concrete scope may satisfy the gate only after the agent emits the execution summary and verifies the plan adds no undisclosed action, effect, environment, or bound. Auto mode, previous success, prior confirmation, `active`, or `bootstrap` may not. One combined confirmation may cover other applicable operational/risk gates only when the summary explicitly includes every gate fact.
 
 If recent work bypassed the loop, set Memory Health to `outside-loop` and route to Re-Adopt / Recovery Backfill. Otherwise, if code reality and the memory root disagree or long-term memory indexes point to missing artifacts, set Memory Health to `stale` and route to Reconcile Project Context / Recovery Backfill. Treat code as the current fact base for agent-maintained docs and preserve human requirements as original intent in both routes.
 
@@ -338,6 +338,45 @@ When the human wants newcomer-friendly project understanding, a guided takeover,
 For local entry directories that point to a remote project, load `references/remote-project-discovery.md` before Init Project or Project Entry Scan. Do not treat the local empty directory as the code reality.
 
 During Project Entry, Project Entry Scan, Re-Adopt, Drift Check, and Project Memory Update, load `references/project-memory-mode.md` when long-term project memory is being created, repaired, or likely too large for one readable `project.md`.
+
+## Project Skill Discovery Guard
+
+Run this read-only guard after the Agent Loop controller and reliable memory root are established, after the latest intent/current stage can be classified, and before a stage-specific helper, generic Operational Support method, built-in fallback, command, tool call, temporary resource, or environment action. Ordinary chat with no workflow or execution intent remains response-only and does not require a full Project Skill body scan.
+
+Canonical matched sequence:
+
+```text
+latest actionable intent / current stage
+-> inspect Project Skill INDEX metadata
+-> match active bootstrap / on-demand candidates
+-> verify exact INDEX row, path, and manifest
+-> read-only load the matched Project Skill
+-> Execution Gate
+-> stage action
+
+index-absent | no-active-match
+-> runtime/global helper if applicable
+-> generic Operational Support or Agent Loop fallback
+
+project-skill-drift
+-> fail closed
+-> Recovery or Project Skill Creation / Update
+```
+
+Guard results are response-local routing judgments, not persistent lifecycle values or artifact fields:
+
+- `matched-active`: the current intent/stage matches an `active` row; verify the exact row, target path, current instruction-bearing/executable files, and validation manifest, then load only that Skill body as needed.
+- `index-absent`: the reliable memory root has no `.agent-loop/skills/INDEX.md`; generic method selection may continue without creating an empty skills directory.
+- `no-active-match`: INDEX exists but no valid active row matches current intent, stage, task context, Triggers, and Scope; do not load all bodies or route `proposed | disabled | deprecated` rows.
+- `project-skill-drift`: a target is missing, active evidence/manifest is invalid, a current row/file mismatches its manifest, a path/symlink escapes the project boundary, or owners conflict; stop before reliance or equivalent generic effects.
+
+Only `index-absent` or `no-active-match` permits generic fallback. `project-skill-drift` fails closed and never authorizes an equivalent generic action. runtime/global Skill inventory does not prove that no Project Skill exists.
+
+The agent may make a negative Project Skill claim only after reporting `index-absent` or `no-active-match` evidence from the current project INDEX. Runtime/global inventory and native Skill chips are separate discovery sources. Same-name runtime/global and project-local candidates require explicit owner/path disclosure; unresolved ownership is drift.
+
+Within one uncompacted, reliable context and continuous stage, unchanged INDEX metadata may be reused rather than reread before every command. Re-read after context compaction, long-running-session uncertainty, controller re-entry, stage-boundary uncertainty, INDEX change, or manifest change. No persistent discovery cache is created.
+
+The guard never grants execution. A `matched-active` result must still emit the existing bounded Execution Gate summary before the first skill-directed workflow step or side effect.
 
 ## Response Frame
 

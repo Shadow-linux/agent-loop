@@ -6,7 +6,7 @@ The agent is responsible for steering the workflow. Do not wait for the human to
 
 Guidance language should follow this project's language preference. Keep stable artifact names, stage names, and file paths in English, such as `agent-loop`, `Requirement Archive`, `Feature Spec`, `Feature Auto-Loop`, `Task Auto-Run`, `project.md`, and `requirements/`.
 
-<!-- agent-loop:managed-start section:bootstrap source:.agent-loop/project.md block-version:1.4.0-20260715.1 -->
+<!-- agent-loop:managed-start section:bootstrap source:.agent-loop/project.md block-version:1.4.0-20260716 -->
 ## Bootstrap Protocol
 
 Before development work:
@@ -21,6 +21,7 @@ Before development work:
 8. If `project.md` says `Status: remote-entry`, read `.agent-loop/remote.md`, verify the remote project, and continue from the remote project memory or local-shadow memory.
 9. If `Memory Mode: enterprise`, read only the linked `.agent-loop/project/*.md` detail files needed for the current stage.
 9a. If `.agent-loop/skills/INDEX.md` exists, read its metadata, verify referenced `active` paths and validated-content manifests, and load only current active project skills according to `bootstrap` / `on-demand`. Discovery and loading do not authorize execution.
+9b. Before claiming no relevant project skill or entering a generic execution fallback, check `.agent-loop/skills/INDEX.md`; if an active skill matches, load it read-only and keep the per-invocation Execution Gate.
 10. If recent development bypassed `agent-loop`, route to Re-Adopt Agent Loop Project before new feature work.
 11. Operational Support Guard: if the human asks to test, run, deploy, switch account/config/model/provider, check quota/rate limits, diagnose production, arrange rollout, or use existing code to solve an operational problem, default to read-only code/process analysis. Do not create a feature, edit code, change config, deploy, or run destructive commands unless the human confirms feature implementation or an operational change. If unclear, ask whether they want feature implementation or help using current project functionality.
 12. If the human reports a bug, regression, post-close correction, field/schema/algorithm/API change, test failure, screenshot issue, QA/user feedback, or "small tweak", route through Bug Management inside Feature Follow-up / Flow-back before creating a new feature or editing code, but only after project memory exists or Project Entry has routed through Init Project / Project Entry Scan.
@@ -30,7 +31,7 @@ Before development work:
 15. Classify the current `agent-loop` stage and recommend exactly one next action.
 <!-- agent-loop:managed-end section:bootstrap -->
 
-<!-- agent-loop:managed-start section:ownership source:.agent-loop/project.md block-version:1.4.0-20260715.1 -->
+<!-- agent-loop:managed-start section:ownership source:.agent-loop/project.md block-version:1.4.0-20260716 -->
 ## Agent Ownership
 
 When existing branch rules are confused, the target version is unclear, or customer isolation is at risk, load `references/branch-management.md`, recommend one optional strategy, and adopt it only after explicit human acceptance.
@@ -46,7 +47,7 @@ When existing branch rules are confused, the target version is unclear, or custo
 - For non-trivial confirmations, present a table-first Human Review Summary before asking approval.
 <!-- agent-loop:managed-end section:ownership -->
 
-<!-- agent-loop:managed-start section:message-intent source:agent-loop-skill block-version:1.4.0-20260715.1 -->
+<!-- agent-loop:managed-start section:message-intent source:agent-loop-skill block-version:1.4.0-20260716 -->
 ## Message Intent Guard
 
 Before project-state routing, classify the latest human message intent.
@@ -62,7 +63,7 @@ Message intent is not permanent. If chat turns into product demand, reclassify a
 If unclear whether the human wants chat or requirements discussion, ask whether to keep discussing or shape the topic into a requirements document. If unclear whether the human wants requirements discussion or implementation, ask whether to form a requirements document first or start feature construction.
 <!-- agent-loop:managed-end section:message-intent -->
 
-<!-- agent-loop:managed-start section:workflow-stage-map source:agent-loop-skill block-version:1.4.0-20260715.1 -->
+<!-- agent-loop:managed-start section:workflow-stage-map source:agent-loop-skill block-version:1.4.0-20260716 -->
 ## Workflow Stage Map
 
 Use this after Bootstrap Protocol and Message Intent Guard. Select exactly one next stage from the current human signal and project state. When multiple signals match, apply this first-match order: Safety Stop -> Remote Discovery -> Memory Recovery -> Feature Archive Maintenance -> Active Feature Guard -> Blocker Resolution -> Intent Routing -> Normal Stage Continuation. After selecting a stage, load the matching `references/...` file from the `agent-loop` skill package before acting. This map is navigation only; do not treat root `AGENTS.md` as the detailed stage procedure.
@@ -104,7 +105,7 @@ Use this after Bootstrap Protocol and Message Intent Guard. Select exactly one n
 | Ordinary question or discussion has no artifact or implementation intent | Chat Entry | `references/runtime.md` only when intent is unclear; otherwise answer without creating workflow artifacts |
 <!-- agent-loop:managed-end section:workflow-stage-map -->
 
-<!-- agent-loop:managed-start section:gates source:.agent-loop/project.md block-version:1.4.0-20260715.1 -->
+<!-- agent-loop:managed-start section:gates source:.agent-loop/project.md block-version:1.4.0-20260716 -->
 ## Gate Modes
 
 - Strict Mode is the default: ask before and after every stage.
@@ -115,7 +116,7 @@ Use this after Bootstrap Protocol and Message Intent Guard. Select exactly one n
 - If repeated confirmations slow the human down, proactively explain Feature Auto-Loop and Task Auto-Run, then ask before enabling either mode.
 <!-- agent-loop:managed-end section:gates -->
 
-<!-- agent-loop:managed-start section:required-stops source:.agent-loop/project.md block-version:1.4.0-20260715.1 -->
+<!-- agent-loop:managed-start section:required-stops source:.agent-loop/project.md block-version:1.4.0-20260716 -->
 ## Required Stops
 
 Stop and ask when:
@@ -145,7 +146,7 @@ Stop and ask when:
 Auto modes do not bypass these stops.
 <!-- agent-loop:managed-end section:required-stops -->
 
-<!-- agent-loop:managed-start section:completion source:.agent-loop/project.md block-version:1.4.0-20260715.1 -->
+<!-- agent-loop:managed-start section:completion source:.agent-loop/project.md block-version:1.4.0-20260716 -->
 ## Completion Rules
 
 - Before completion claims, run fresh verification and record evidence.
@@ -158,7 +159,7 @@ Auto modes do not bypass these stops.
 - For requirement-driven ADRs, completion also requires source-wide scope accounting, current upstream compatibility, and Requirement Model Technical Landing Trace coverage for every assigned Design Slice.
 <!-- agent-loop:managed-end section:completion -->
 
-<!-- agent-loop:managed-start section:submit source:.agent-loop/project.md block-version:1.4.0-20260715.1 -->
+<!-- agent-loop:managed-start section:submit source:.agent-loop/project.md block-version:1.4.0-20260716 -->
 ## Submit And Commit Rules
 
 - Submit, commit, PR, merge, release, and publish require explicit human confirmation after diff, verification, review, drift, and unrelated-change checks.
@@ -170,7 +171,7 @@ Auto modes do not bypass these stops.
 - For the `agent-loop` skill repository itself, use `<type>(v<version>): <Chinese summary>` and a 3-7 bullet body for meaningful commits.
 <!-- agent-loop:managed-end section:submit -->
 
-<!-- agent-loop:managed-start section:artifacts source:.agent-loop/project.md block-version:1.4.0-20260715.1 -->
+<!-- agent-loop:managed-start section:artifacts source:.agent-loop/project.md block-version:1.4.0-20260716 -->
 ## Project Memory And Artifacts
 
 - Resolve project-memory and feature paths relative to the active memory root: `.agent-loop/` by default, or legacy `agent-loop/` for the current run.
@@ -188,13 +189,13 @@ Auto modes do not bypass these stops.
 - Do not write task logs, feature progress, raw requirements, temporary plans, or test transcripts into `AGENTS.md`.
 <!-- agent-loop:managed-end section:artifacts -->
 
-<!-- agent-loop:managed-start section:architecture source:.agent-loop/project.md block-version:1.4.0-20260715.1 -->
+<!-- agent-loop:managed-start section:architecture source:.agent-loop/project.md block-version:1.4.0-20260716 -->
 ## Architecture Snapshot
 
 Add only startup-critical architecture boundaries that every future agent must know immediately. If the project has `ARCHITECTURE.md`, this block may use `source:ARCHITECTURE.md` instead. Keep details in `ARCHITECTURE.md`, `.agent-loop/project.md`, or enterprise `.agent-loop/project/*.md`.
 <!-- agent-loop:managed-end section:architecture -->
 
-<!-- agent-loop:managed-start section:directory-guidance source:.agent-loop/project.md block-version:1.4.0-20260715.1 -->
+<!-- agent-loop:managed-start section:directory-guidance source:.agent-loop/project.md block-version:1.4.0-20260716 -->
 ## Directory Guidance
 
 - Directory-level `AGENTS.md` files are for long-lived boundary rules only.
@@ -202,7 +203,7 @@ Add only startup-critical architecture boundaries that every future agent must k
 - Do not create directory-level `AGENTS.md` for ordinary component, utility, temporary, or feature implementation folders.
 <!-- agent-loop:managed-end section:directory-guidance -->
 
-<!-- agent-loop:managed-start section:commands source:.agent-loop/project.md block-version:1.4.0-20260715.1 -->
+<!-- agent-loop:managed-start section:commands source:.agent-loop/project.md block-version:1.4.0-20260716 -->
 ## Project Commands
 
 ```bash
@@ -212,7 +213,7 @@ Add only startup-critical architecture boundaries that every future agent must k
 ```
 <!-- agent-loop:managed-end section:commands -->
 
-<!-- agent-loop:managed-start section:hard-constraints source:.agent-loop/project.md block-version:1.4.0-20260715.1 -->
+<!-- agent-loop:managed-start section:hard-constraints source:.agent-loop/project.md block-version:1.4.0-20260716 -->
 ## Project-Specific Hard Constraints
 
 Add only stable constraints that every future agent must know at startup.

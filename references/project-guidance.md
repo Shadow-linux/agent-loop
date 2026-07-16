@@ -40,8 +40,9 @@ Every time `agent-loop` is used inside a target project, check root guidance bef
 6. If AGENTS.md uses agent-loop managed blocks, compare each managed block `section` and `block-version` with the current root AGENTS template.
 7. If `scripts/check-root-agents-blocks.py` is available in the local `agent-loop` skill package, run it with Python 3.10+ against the current `templates/root-AGENTS.md` and target root `AGENTS.md`; use its report as the managed-block drift evidence. Use `python3` on macOS or `py -3` / `python` on Windows. If Python 3.10+ is unavailable, fail closed and report the capability gap instead of using an obsolete checker implementation.
 8. If `.agent-loop/skills/INDEX.md` exists, read its metadata, verify each referenced `active` path and exact INDEX row plus instruction-bearing/executable files against the SHA-256 manifest, and exclude missing, mismatched, `proposed`, `disabled`, and `deprecated` skills from normal routing.
-9. Record or update guidance status in project.md.
-10. If missing or stale, propose a repair through Human Review Summary.
+9. Before claiming no relevant project skill or entering a generic execution fallback, check `.agent-loop/skills/INDEX.md`; if an active skill matches, load it read-only and keep the per-invocation Execution Gate.
+10. Record or update guidance status in project.md.
+11. If missing or stale, propose a repair through Human Review Summary.
 ```
 
 `AGENTS.md` is stale when any of these are missing or contradicted:
@@ -51,6 +52,7 @@ Every time `agent-loop` is used inside a target project, check root guidance bef
 - Message Intent Guard: distinguish `chat`, `requirements-discussion`, `project-skill-management`, and `feature-request` before project-state routing; chat answers only, requirements discussion uses Brainstorm / Clarify to produce requirement documents under `.agent-loop/requirements/`, applies the internal Concept Foundation Gate before downstream product modeling when triggered, and project-skill management routes to Project Skill Creation / Update
 - Workflow Stage Map: route common human/project signals to exactly one next stage and its matching detailed references; root guidance is navigation only, not the detailed stage procedure
 - Bootstrap Protocol: inspect `.agent-loop/`, classify the stage, and recommend exactly one next action
+- Bootstrap Protocol lacks the concise Project Skill discovery-before-fallback reminder; detailed result names, drift handling, manifest procedure, and precedence remain in `references/runtime.md` and `references/project-skills.md`, not root guidance
 - Agent Ownership: agents steer the loop instead of waiting for the human to name every step
 - Stage Helper Capability Scan: agents actively check available skills/plugins/helpers before fallback stage guidance
 - Gate Modes: Strict Mode, Feature Auto-Loop, Task Auto-Run, and their explicit human enablement rules
@@ -232,6 +234,7 @@ Keep it short and long-lived:
 - if missing, initialize it
 - if present, read `.agent-loop/project.md` and active feature docs
 - if `.agent-loop/skills/INDEX.md` exists, read INDEX metadata, verify each referenced `active` path and exact INDEX row plus instruction-bearing/executable files against the SHA-256 manifest, and load only matching `bootstrap` or `on-demand` project skills; discovery and loading do not authorize execution
+- before claiming no relevant project skill or entering a generic execution fallback, check `.agent-loop/skills/INDEX.md`; if an active skill matches, load it read-only and keep the per-invocation Execution Gate
 - if `project.md` says `Status: remote-entry`, read `.agent-loop/remote.md` and verify the remote project before acting
 - if the project used `agent-loop` before but recent development bypassed it, route to Re-Adopt Agent Loop Project before new feature work
 - Operational Support Guard: if the human asks to test, run, deploy, switch account/config/model/provider, check quota/rate limits, diagnose production, arrange rollout, or use existing code to solve an operational problem, default to read-only operational support; do not create a feature, edit code, change config, deploy, or run destructive commands unless the human confirms feature implementation or an operational change

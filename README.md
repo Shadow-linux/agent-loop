@@ -259,6 +259,8 @@ Say “把这个流程做成技能” or “把刚才成功的操作沉淀成 sk
 
 Project skills are stored only in the target project under `.agent-loop/skills/`. New or updated skills use RED/GREEN/REFACTOR and remain `proposed` until validation passes; passing validation records a SHA-256 content manifest and automatically changes them to `active`, while failure or later content mismatch leaves them unavailable for normal routing.
 
+The runtime/global Skill inventory does not replace `.agent-loop/skills/INDEX.md`. Project Skills may not appear as runtime-native Skill chips, so Agent Loop checks active INDEX metadata before a negative Project Skill claim or generic fallback, then verifies and loads only the matched Skill.
+
 Discovery and loading are read-only. Before an active project skill follows its workflow, runs commands, calls tools, changes files, accesses external systems, or causes side effects, the agent must obtain an Execution Gate confirmation for one bounded invocation. `active`, `bootstrap`, Feature Auto-Loop, Task Auto-Run, or a prior invocation never grants reusable execution authority.
 
 ## External Skill Adapters
