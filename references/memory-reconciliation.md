@@ -190,6 +190,8 @@ The ready plan uses schema version `1` and records report identity, Merge Contex
 
 Each operation has one ledger owner and one safe relative file path. It records sequence, action, exact preimage SHA-256 or absence, exact postimage SHA-256 or absence, output mode, and a bounded content source. Content is either validated inline base64 (2 MiB per file, 8 MiB total) or a file blob from one recorded snapshot SHA. It cannot be a command, hook, URL fetch, shell expression, or arbitrary filesystem copy.
 
+CLI JSON, PASS, and error output is UTF-8 regardless of the host console code page. On filesystems with POSIX executable bits, `100644` and `100755` remain distinct and are verified exactly. Native Windows cannot represent that executable-bit distinction in the worktree, so those two modes are equivalent only while checking the mode of an already-proven regular file; bytes, SHA-256, path, file kind, Git source mode, operation identity, and every other transaction invariant remain exact. `120000`, `160000`, directories, and other kinds never become mode-equivalent.
+
 The normalized Plan Hash is SHA-256 over canonical UTF-8 JSON excluding only `plan_sha256`. The checker recomputes it. Every changed row that needs bytes has exactly one operation, every operation has exactly one row, expected unchanged paths are hashed, and no ready plan contains unresolved red items, blockers, unclassified content, or `暂不处理`.
 
 ## Human Review

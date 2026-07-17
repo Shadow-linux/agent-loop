@@ -31,6 +31,7 @@ The core constraints are:
 - the Agent derives one Desired Target Memory Snapshot from immutable human sources, accepted authorities, valid history, merged reality, Target-appropriate current state, and rebuilt indexes
 - one full Merged Code SHA owns one durable Memory Merge Report and at most one successful Apply; sibling report identities and completed replay fail closed
 - Chinese action labels are executable plan semantics: import starts absent, rewrite starts from the exact regular-file preimage, recalculate may rebuild an absent derived file or replace its exact preimage, stale removal ends absent, and immutable human/accepted imports copy only a same-path recorded regular Git blob
+- Memory Reconciliation CLI output is deterministic UTF-8; POSIX worktrees enforce `100644` versus `100755` exactly, while native Windows treats only those two regular-file worktree modes as equivalent because it cannot represent the executable bit, without relaxing bytes, kind, source, path, identity, or transaction checks
 - optional `.agent-loop/skills/` owns Human-gated project-local reusable capabilities; `INDEX.md` owns lifecycle and discovery metadata
 - Project Skill Discovery Guard checks active INDEX metadata before negative Project Skill claims or generic executable fallback, loads only a matched body, and fails closed on drift without adding a stage, status, cache, or execution grant
 - stable Web E2E capability belongs in `project.md`; feature-specific E2E cases belong in feature `tests.md` or `tests/e2e/*`

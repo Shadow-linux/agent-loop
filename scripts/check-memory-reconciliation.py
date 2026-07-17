@@ -5,7 +5,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from checker_support import require_supported_python
+from checker_support import configure_utf8_stdio, require_supported_python
 from memory_reconciliation_support import (
     MemoryReconciliationError,
     validate_post_apply,
@@ -28,6 +28,7 @@ def parser() -> argparse.ArgumentParser:
 
 
 def main() -> int:
+    configure_utf8_stdio()
     require_supported_python()
     arguments = parser().parse_args()
     project_root = Path(arguments.project_root).resolve()

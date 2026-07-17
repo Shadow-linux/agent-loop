@@ -115,7 +115,8 @@ class MemoryReconciliationRestoreTests(unittest.TestCase):
             restored = run_restore(workspace, report, journal.parent.name)
             self.assertEqual(restored.returncode, 0, restored.stderr)
             self.assertEqual((workspace.memory_root / "project.md").read_bytes(), b"executable original\n")
-            self.assertTrue((workspace.memory_root / "project.md").stat().st_mode & 0o100)
+            if os.name != "nt":
+                self.assertTrue((workspace.memory_root / "project.md").stat().st_mode & 0o100)
 
     def test_restore_rejects_tampered_backup_before_mutation(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

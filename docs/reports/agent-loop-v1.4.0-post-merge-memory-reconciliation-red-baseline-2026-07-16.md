@@ -91,3 +91,13 @@ FAIL: missing required file: references/memory-reconciliation.md
 - 最终停在 Human Review。
 
 本 RED 报告只保存两个修复周期的失败证据；不以自身声称当前 GREEN、focused 或 full validation 已通过。
+
+## Release Gate Windows CI RED（2026-07-17）
+
+精确 release-candidate commit `6222f3e1aca1d6df91ca477742e96eefade0f3b2` 的 GitHub Actions run `29565218056` 在 macOS 3.10/3.x 成功，在 Windows 3.10/3.x 真实失败。两个 Windows job 都报告同三项失败：
+
+- 中文动作 `暂不处理` 经默认 Windows stderr code page 输出为字面量 `\\u6682...`；
+- `test_apply_writes_inline_utf8_bytes_and_mode_exactly` 把 native Windows 无法表达的 POSIX executable bit 当成 postimage failure；
+- `test_restore_restores_deleted_file_and_mode` 直接断言 Windows 必须恢复 `0o100`。
+
+发布在 branch/tag 创建前停止。随后新增本地 RED `test_pre_check_emits_utf8_errors_under_ascii_host_stdio` 与 `test_regular_file_mode_matching_is_platform_aware`，分别稳定复现 UTF-8 输出缺口和缺少平台感知 regular-file mode matcher；不以重跑 workflow 或跳过测试掩盖失败。

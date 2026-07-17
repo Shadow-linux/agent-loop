@@ -120,6 +120,8 @@ def run_check(
     report: Path,
     plan_hash: str,
     phase: str = "pre-apply",
+    *,
+    env: dict[str, str] | None = None,
 ):
     return run_memory_command(
         "check-memory-reconciliation.py",
@@ -131,6 +133,7 @@ def run_check(
         phase,
         "--expected-plan-sha256",
         plan_hash,
+        env=env,
     )
 
 
@@ -180,6 +183,21 @@ class MemoryReconciliationCheckTests(unittest.TestCase):
             result = run_check(workspace, workspace.render_report(plan), str(plan["plan_sha256"]))
             self.assertEqual(result.returncode, 1)
             self.assertIn("暂不处理", result.stderr)
+
+    def test_pre_check_emits_utf8_errors_under_ascii_host_stdio(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace, plan = self.make_workspace(temp)
+            find_file_row(plan)["action"] = "暂不处理"
+            plan["plan_sha256"] = canonical_plan_hash(plan)
+            result = run_check(
+                workspace,
+                workspace.render_report(plan),
+                str(plan["plan_sha256"]),
+                env={"PYTHONIOENCODING": "ascii:backslashreplace"},
+            )
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("暂不处理", result.stderr)
+            self.assertNotIn("\\u6682", result.stderr)
 
     def test_pre_check_rejects_human_source_rewrite(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

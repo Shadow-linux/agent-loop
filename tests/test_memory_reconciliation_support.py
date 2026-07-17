@@ -11,6 +11,7 @@ SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
+import memory_reconciliation_support as support  # noqa: E402
 from memory_reconciliation_support import (  # noqa: E402
     MemoryReconciliationError,
     canonical_plan_hash,
@@ -28,6 +29,13 @@ from tests.memory_reconciliation_test_support import (  # noqa: E402
 
 
 class MemoryReconciliationSupportTests(unittest.TestCase):
+    def test_regular_file_mode_matching_is_platform_aware(self) -> None:
+        matcher = getattr(support, "regular_file_modes_match", None)
+        self.assertTrue(callable(matcher), "missing portable regular-file mode matcher")
+        self.assertTrue(matcher("100644", "100755", supports_executable_bits=False))
+        self.assertFalse(matcher("100644", "100755", supports_executable_bits=True))
+        self.assertFalse(matcher("120000", "100755", supports_executable_bits=False))
+
     def test_resolve_memory_root_accepts_dot_agent_loop(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

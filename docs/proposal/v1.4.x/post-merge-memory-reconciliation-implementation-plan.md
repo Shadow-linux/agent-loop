@@ -79,8 +79,9 @@ The implementation Agent must re-run and record the live baseline. These counts 
 19. Memory Reconciliation must finish before push, release/publish, Source branch cleanup, or a claim that integration is complete.
 20. The capability supports the accepted active memory root: `.agent-loop/` by default or existing legacy `agent-loop/`; simultaneous roots or implicit root migration fail closed.
 21. Python code is standard-library-only, uses POSIX-normalized relative plan paths, rejects path/case/Unicode collisions, does not follow symlink parents, and runs natively on macOS and Windows.
-22. Proposal/report artifacts never become runtime authority. Published runtime/design/reference/template/test surfaces must agree before completion.
-23. No Memory Reconciliation script executes a command, hook, validator, or code fragment stored in a report or memory artifact. The Agent runs semantic checks through the normal runtime/tooling boundary and records bounded evidence; scripts validate that evidence and deterministic filesystem/Git facts only.
+22. CLI output is deterministic UTF-8. POSIX worktrees verify `100644` versus `100755` exactly; native Windows may treat only those two regular-file worktree modes as equivalent while keeping bytes, kind, Git source, path, identity, and transaction checks exact.
+23. Proposal/report artifacts never become runtime authority. Published runtime/design/reference/template/test surfaces must agree before completion.
+24. No Memory Reconciliation script executes a command, hook, validator, or code fragment stored in a report or memory artifact. The Agent runs semantic checks through the normal runtime/tooling boundary and records bounded evidence; scripts validate that evidence and deterministic filesystem/Git facts only.
 
 ## File Responsibility Map
 
@@ -1045,6 +1046,8 @@ test_restore_rejects_post_crash_unrelated_drift
 test_incomplete_restore_keeps_journal_and_blocks_reapply
 test_successful_restore_updates_report_to_restored
 test_restore_resumes_after_restored_journal_before_or_after_status_update
+test_regular_file_mode_matching_is_platform_aware
+test_pre_check_emits_utf8_errors_under_ascii_host_stdio
 ```
 
 - [x] **Step 5: Implement standalone restore.**
@@ -1497,8 +1500,8 @@ Do not commit, push, tag, release, publish, or sync installed skills until the h
 | 5 | exact plan/check/post-check TDD GREEN。 |
 | 6 | apply/finalize/restore TDD GREEN，包含跨进程恢复、tamper、replay、path safety 与 exact bytes/modes。 |
 | 7–8 | Branch/Submit/Recovery/domain owners/root routing/human docs/changelog 协调；root revision `1.4.0-20260716.1` 为 `13/13`。 |
-| 9 | 31 个 Proposal 场景映射到 `A–AC`，legacy/path-safety 为 `AD–AE`，Human Review 修复压力为 `AF–AJ`；最终 focused `102/102` Python、`9/9` shell，feature score `99/100 · STRONG`。 |
-| 10 | 首轮 full mechanical baseline `164/164` Python、`38/38` shell；Task 10 六域审计新增 7 个 RED，Human Review 补充审计再发现 7 类漏洞并用 8 个 RED/兼容性 RED 修复；最终 `180/180` Python、`38/38` shell、全部机械检查 PASS，full score `98/100 · STRONG`。 |
+| 9 | 31 个 Proposal 场景映射到 `A–AC`，legacy/path-safety 为 `AD–AE`，Human Review 修复压力为 `AF–AJ`；Windows CI 修复后 focused `104/104` Python、`9/9` shell，feature score `99/100 · STRONG`。 |
+| 10 | 首轮 full mechanical baseline `164/164` Python、`38/38` shell；Task 10 六域审计新增 7 个 RED，Human Review 补充审计再发现 7 类漏洞并用 8 个 RED/兼容性 RED 修复；Release Gate Windows CI 又以 2 个本地 RED 修复 UTF-8/mode 契约；最终 `182/182` Python、`38/38` shell、全部机械检查 PASS，full score `98/100 · STRONG`。 |
 | 11 | placeholder、type/interface、spec-to-plan、36 场景、complete diff、unrelated boundary 和 authorization self-review 完成；修复后重新停在 Human Review。 |
 
 Task 8 计划示例中的 root checker 缺少当前 CLI 必填的 `--target`，因此按当前已验证接口运行等价 self-check：

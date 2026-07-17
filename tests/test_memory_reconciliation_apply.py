@@ -56,6 +56,7 @@ def run_apply(
         check=False,
         capture_output=True,
         text=True,
+        encoding="utf-8",
         env={**os.environ, **(env or {})},
     )
 
@@ -163,7 +164,8 @@ class MemoryReconciliationApplyTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             path = workspace.memory_root / "project.md"
             self.assertEqual(path.read_bytes(), content)
-            self.assertTrue(path.stat().st_mode & 0o100)
+            if os.name != "nt":
+                self.assertTrue(path.stat().st_mode & 0o100)
             journal = json.loads(pending_transaction(report).read_text(encoding="utf-8"))
             self.assertEqual(journal["state"], "checking")
 

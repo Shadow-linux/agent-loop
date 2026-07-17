@@ -57,6 +57,8 @@ assert_contains references/memory-reconciliation.md 'Memory Reconciliation scrip
 assert_contains references/memory-reconciliation.md 'a second report directory for the same full SHA fails closed before Apply'
 assert_contains references/memory-reconciliation.md 'same-path `100644 | 100755` Git blob byte-for-byte'
 assert_contains references/memory-reconciliation.md 'idempotently finishes only those remaining steps'
+assert_contains references/memory-reconciliation.md 'Native Windows cannot represent that executable-bit distinction'
+assert_contains references/memory-reconciliation.md 'CLI JSON, PASS, and error output is UTF-8'
 
 for scenario in \
   'Source-only Requirement/Feature' \

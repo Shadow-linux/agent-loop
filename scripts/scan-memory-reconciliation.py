@@ -9,7 +9,12 @@ import sys
 from dataclasses import asdict
 from pathlib import Path
 
-from checker_support import canonical_json_bytes, require_supported_python, sha256_bytes
+from checker_support import (
+    canonical_json_bytes,
+    configure_utf8_stdio,
+    require_supported_python,
+    sha256_bytes,
+)
 from memory_reconciliation_support import (
     MemoryReconciliationError,
     absent_entry,
@@ -21,6 +26,7 @@ from memory_reconciliation_support import (
     resolve_memory_root,
     safe_relative_path,
     snapshot_entry_payload,
+    regular_file_modes_match,
     union_inventories,
     validate_merge_context_text,
 )
@@ -143,7 +149,7 @@ def _zero_change(
         if post_mode == "absent":
             if current_mode != "absent" or expected is not None:
                 return False
-        elif current_mode != post_mode or current_hash != expected:
+        elif not regular_file_modes_match(current_mode, post_mode) or current_hash != expected:
             return False
     for path, expected in unchanged.items():
         if not isinstance(path, str) or not isinstance(expected, str):
@@ -307,6 +313,7 @@ def run(arguments: argparse.Namespace) -> dict[str, object]:
 
 
 def main() -> int:
+    configure_utf8_stdio()
     require_supported_python()
     arguments = parser().parse_args()
     try:

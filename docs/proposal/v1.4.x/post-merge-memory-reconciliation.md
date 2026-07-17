@@ -1098,6 +1098,8 @@ Source 合入 `customer/acme/v1.4.0`。Agent 使用该 customer Target 的 canon
 19. focused validation、full validation、Markdown/YAML/JSON/脚本语法、cross-platform checker tests 和 `git diff --check` 全部通过。
 20. 中文验证报告区分代码合并事实、记忆重写、真实 Git side effects 和未获授权动作。
 
+跨平台 mode 语义：POSIX worktree 精确验证 `100644` / `100755`；native Windows 因无法表达 executable bit，只允许这两个已证明为普通文件的 worktree mode 互相等价，字节、哈希、kind、Git source mode、路径和事务身份仍必须完全一致。所有 CLI 输出固定为 UTF-8。
+
 ## Implementation Evidence
 
 本节只刷新实施证据，不改变已批准语义。正式 runtime authority 位于 `SKILL.md`、`references/`、`templates/` 和 `scripts/`；本 Proposal 仍是设计来源。
@@ -1109,7 +1111,7 @@ Source 合入 `customer/acme/v1.4.0`。Agent 使用该 customer Target 的 canon
 | Desired Target、semantic roles、中文动作、attention、authority（6–10） | canonical reference、report template、human review summary | checker negative matrix、scenario A–O |
 | 报告状态、Plan Hash、Apply 范围、post-check、restore、one-success（11–16） | report template、check/apply/restore commands | check/apply/restore tests，包括 Task 10 新增安全 RED |
 | Git Gate 分离与 owner compatibility（17–18） | runtime、Submit / Integrate、Recovery、Branch、Requirement、ADR、Contract、Bug、Archive、Project Skill、onboarding references | focused owner/root regressions |
-| 验证与报告（19–20） | focused/full reports、cross-platform CI contract | `102/102` focused Python、`9/9` affected shell、`180/180` full Python、`38/38` full shell |
+| 验证与报告（19–20） | focused/full reports、cross-platform CI contract | Windows CI 修复后 `104/104` focused Python、`9/9` affected shell、`182/182` full Python、`38/38` full shell；精确 release commit 的四矩阵 CI 仍是 tag 前置条件 |
 
 Proposal 原始压力场景与 `references/validation-scenarios.md` 第 73 节映射如下：
 

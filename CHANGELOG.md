@@ -7,6 +7,7 @@
 - Added the on-demand Memory Merge Report with Start and exact Plan Hash Human Gates, three attention levels, Chinese actions, independent Memory Commit/Push/Release/Cleanup gates, and single-success replay protection.
 - Added Python 3.10+ standard-library scan/check/apply/restore commands with exact inline or Git-blob bytes, bounded payloads, safe paths, transaction journals, atomic writes, zero-change post-check, crash-resumable finalize, and fail-closed exact restore.
 - Hardened action/preimage/post-state binding, immutable same-path regular-blob imports, non-empty merge context, one-report-per-full-SHA enforcement, Source-only parent-directory convergence, and idempotent cleanup after a restored-journal crash window.
+- Made CLI output deterministic UTF-8 on Windows code pages and kept `100644`/`100755` worktree checks portable: exact on POSIX, regular-file-mode equivalent only on native Windows, with bytes, kind, Git source, and transaction identity still exact.
 - Preserved Requirement, ADR, Delivery Contract, Bug, Feature Archive, Project Skill, onboarding, customer-isolation, and original-source ownership without adding a canonical stage, message intent, automatic Git action, or default empty directory.
 - Refreshed all 13 root managed blocks to `block-version:1.4.0-20260716.1` with one concise post-integration routing reminder and added focused pressure/transaction/full-validation coverage without changing Skill version `1.4.0`.
 

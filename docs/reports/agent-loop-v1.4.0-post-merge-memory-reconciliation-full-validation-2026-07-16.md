@@ -19,7 +19,7 @@
 | root managed block | `1.4.0-20260716.1`，`13/13` |
 | 最终 Python inventory | `180` tests |
 | 最终 Shell inventory | `38` files under `tests/*.sh` |
-| 平台结论 | `macOS-verified / Windows-test-defined` |
+| 平台结论 | `macOS-verified / Windows-CI-RED-repaired-locally / exact-release-CI-pending` |
 
 本次保持 Skill source repository maintainer perspective；没有在仓库创建目标项目 `.agent-loop/`，没有创建或切换 worktree/branch，没有派发 subagent，没有同步已安装 Skill。
 
@@ -32,10 +32,10 @@
 | Project Entry / Evidence Graph + DDD Onboarding | 15% | 98 | PASS | 能力只在可靠 memory 与已验证 code integration 后进入；onboarding-db 只按 evidence overlap 定向更新，不替代 project memory。 |
 | Development / Test Workflow | 20% | 99 | PASS | 保存两个修复周期的 RED，scan/check/apply/finalize/restore 使用 TDD；102 个 focused Python、9 个 affected shell、180 个 full Python、38 个 full shell 全通过。 |
 | Memory | 15% | 99 | PASS | Target spine 只是 traversal/output baseline；四快照全路径 ledger、immutable/accepted/append-only/derived/package owner、retained post-state 和 restore 前置验证完整。 |
-| Recommendation | 15% | 97 | PASS | missing evidence、unresolved red、stale plan、apply failure、restore failure 均有唯一 Recovery/Review 下一步；扣分仅来自未取得远程 Windows runner 实跑结果。 |
+| Recommendation | 15% | 97 | PASS | missing evidence、unresolved red、stale plan、apply failure、restore failure 均有唯一 Recovery/Review 下一步；扣分仅来自 Windows 修复尚需由精确 release commit 的远程 runner 复验。 |
 | **加权总分** | **100%** | **98/100** | **STRONG** | 当前 `Critical 0 / High 0 / Medium 0 / Low 1`。 |
 
-Low 风险是本次没有远程 Windows runner 的执行证据。CI 已把 macOS/Windows、Python 3.10/3.x、5 个 memory test modules 和 4 个 CLI entrypoints 固化；不得把 `Windows-test-defined` 表述成 Windows 已实跑通过。
+Low 风险是首个 release-candidate Windows runner 已真实失败并完成本地 RED/GREEN 修复，但修复后的精确 release commit 尚未取得远程成功证据。CI 已把 macOS/Windows、Python 3.10/3.x、5 个 memory test modules 和 4 个 CLI entrypoints 固化；不得把本地 GREEN 表述成 Windows 已复验通过。
 
 ## RED → GREEN → REFACTOR
 
@@ -90,12 +90,18 @@ FAIL: missing required file: references/memory-reconciliation.md
 
 补充 RED 全部在生产修复前或语义收窄前实际失败，之后逐项 GREEN；旧的 STRONG 分数没有直接沿用。
 
+### Release Gate Windows CI RED
+
+release-candidate commit `6222f3e1aca1d6df91ca477742e96eefade0f3b2` 的 run `29565218056` 中，macOS 3.10/3.x 成功，Windows 3.10/3.x 均在 native checker contract 失败。日志证明不是 workflow 配置问题，而是三个真实跨平台契约缺口：默认 Windows stderr 把中文 action 变成 `\\uXXXX`，Apply 把不可表达的 executable bit 当成 postimage drift，两个 mode 测试把 POSIX 断言错误设为 Windows 必需。
+
+新增 `test_pre_check_emits_utf8_errors_under_ascii_host_stdio` 与 `test_regular_file_mode_matching_is_platform_aware` 后先得到 `2/2 RED`，再将 CLI 输出固定为 UTF-8，并把 `100644/100755` 等价严格限制在 native Windows 的已证明普通文件 worktree mode；POSIX、bytes、hash、kind、Git source、path、identity 和 transaction checks 未放松。本地定向 `4/4`、focused `104/104`、full `182/182` 与 shell `38/38` 已 GREEN；tag 仍等待修复 commit 的四矩阵远程 CI。
+
 ### 最终 GREEN
 
 ```text
-focused Python: 102/102 PASS, 89.283s
+focused Python: 104/104 PASS, 83.886s
 focused affected Shell: 9/9 PASS
-full Python: 180/180 PASS, 106.792s
+full Python: 182/182 PASS, 99.974s
 full Shell: 38/38 PASS
 ```
 
@@ -183,7 +189,7 @@ git diff --check: PASS
 repository-local __pycache__: cleaned and absent
 ```
 
-`.github/workflows/cross-platform-checkers.yml` 已在 `macos-latest`、`windows-latest` 与 Python `3.10` / `3.x` matrix 中运行 native suite，并检查四个 memory command 的 `--help`。本地实际运行平台为 macOS；Windows 仅为 test-defined。
+`.github/workflows/cross-platform-checkers.yml` 已在 `macos-latest`、`windows-latest` 与 Python `3.10` / `3.x` matrix 中运行 native suite，并检查四个 memory command 的 `--help`。本地实际运行平台为 macOS；首个 Windows run 的真实失败与修复已保存，修复 commit 的远程复验仍为发布前置条件。
 
 ## 通过的不变量
 
@@ -205,11 +211,11 @@ repository-local __pycache__: cleaned and absent
 - 未让 scripts 判断产品意义、环境真相、customer policy 或 accepted decision：这些仍由 Agent + owning Human Gate 处理。
 - 未将 Memory completion 视为 commit/push/release/cleanup 授权。
 - 未增加 YAML/JSON executable project schema、第三方包、数据库、daemon 或 merge driver。
-- 未声称远程 Windows runner 已通过；仅报告 CI contract 已定义。
+- 未声称修复后的远程 Windows runner 已通过；只报告首个 CI RED、本地修复 GREEN 和仍待满足的精确提交复验条件。
 
 ## 剩余风险与范围漂移
 
-- Low：没有本次远程 Windows runner 的执行结果；后续 PR/CI 可补充 live evidence。
+- Low：Windows CI RED 已修复并本地 GREEN，但精确修复 commit 的远程成功结果仍待取得；未满足前不创建正式 branch/tag。
 - 报告中的 domain/semantic verification 由 Agent 运行并记录实际 evidence，Python 只能验证 bounded PASS record 与结构/bytes，不能证明产品语义本身。
 - 没有在真实业务项目执行 memory rewrite；所有 mutation/recovery 证据来自隔离临时 Git fixtures，符合源码仓库维护边界。
 - `.github/workflows/cross-platform-checkers.yml` 最初未列入 Implementation Plan file map；现已补正为已实现 cross-platform contract 的明确范围。除此之外没有新增 stage、intent、lifecycle、owner、默认目录或 Git authority；没有版本升级、installed Skill sync 或外部 side effect，当前无未解决范围漂移。

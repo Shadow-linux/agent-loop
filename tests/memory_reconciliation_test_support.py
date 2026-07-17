@@ -132,12 +132,16 @@ def create_four_snapshot_workspace(root: Path) -> MemoryMergeWorkspace:
     )
 
 
-def run_memory_command(script: str, *args: str) -> subprocess.CompletedProcess[str]:
+def run_memory_command(
+    script: str, *args: str, env: dict[str, str] | None = None
+) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
         [sys.executable, str(ROOT / "scripts" / script), *args],
         check=False,
         capture_output=True,
         text=True,
+        encoding="utf-8",
+        env={**os.environ, **(env or {})},
     )
 
 

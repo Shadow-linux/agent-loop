@@ -27,11 +27,11 @@ Post-Merge Memory Reconciliation 在已批准范围内达到 `99/100 · STRONG`�
 | Requirement And Scope Fidelity | 15/15 | Proposal 的角色、动作、状态、四 SHA、Target baseline、领域 authority 与非目标均有 owning source 和回归约束。 |
 | Logic, State, And Human Gates | 30/30 | Start Gate、exact Plan Hash Gate、Memory Commit/Push/Release/Cleanup 独立；stale plan、replay、脏状态、失败恢复和 restore blocker 均 fail closed。 |
 | Cross-Surface Consistency | 20/20 | `SKILL.md`、runtime/design、owners、templates、root routing、README/Usage、scenario 和 tests 已协调；没有新增 stage 或 intent。 |
-| Pressure Resistance | 24/25 | 36 个显式压力场景与 79 个 memory command/support 单测覆盖关键组合；macOS 本地通过，Windows 由 CI matrix 定义但本次未取得远程运行结果。 |
-| Evidence And Maintainability | 10/10 | 有保存的原始 RED、各命令 TDD RED/GREEN、Task 10 与 Human Review 语义审计的补充 RED、102 个专项 Python、9 个 shell 和跨平台 CI contract。 |
+| Pressure Resistance | 24/25 | 36 个显式压力场景与 81 个 memory command/support 单测覆盖关键组合；macOS 本地通过，首次 Windows release-candidate CI 发现并修复 UTF-8/mode 缺口，精确修复 commit 的远程复验仍是 tag 前置条件。 |
+| Evidence And Maintainability | 10/10 | 有保存的原始 RED、各命令 TDD RED/GREEN、Task 10、Human Review 与 Release Gate Windows CI 补充 RED、104 个专项 Python、9 个 shell 和跨平台 CI contract。 |
 | **总分** | **99/100** | **STRONG** |
 
-Severity：`Critical 0 / High 0 / Medium 0 / Low 1`。Low 为本次没有远程 Windows runner 的实际执行证据；它不影响本地逻辑闭环，但不得宣称 Windows 已实跑通过。
+Severity：`Critical 0 / High 0 / Medium 0 / Low 1`。Low 为首个 Windows release-candidate runner 已真实失败并完成本地修复，但精确修复 commit 尚待远程复验；未满足前不得创建正式 branch/tag。
 
 ## RED → GREEN → REFACTOR 证据
 
@@ -52,7 +52,7 @@ FAIL: missing required file: references/memory-reconciliation.md
 ### GREEN
 
 - focused contract：`PASS: Post-Merge Memory Reconciliation contract is complete`。
-- feature-scoped Python：`102/102 PASS`，耗时 `89.283s`。
+- feature-scoped Python：`104/104 PASS`，耗时 `83.886s`。
 - affected shell：`9/9 PASS`。
 - cross-platform CI contract：`1/1 PASS`；CI matrix 已包含 macOS/Windows、Python 3.10/3.x、5 个测试模块和 4 个命令 `--help`。
 - YAML、JSON、focused shell syntax、feature Python syntax、Markdown fence、`git diff --check`：全部 PASS。
@@ -107,7 +107,7 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPYCACHEPREFIX=/tmp/agent-loop-memory-focused-pyc
     tests.test_memory_reconciliation_restore \
     tests.test_python_checker_contract \
     tests.test_root_agents_blocks -v
-# Ran 102 tests in 89.283s ... OK
+# Ran 104 tests in 83.886s ... OK
 
 # Implementation Plan 指定的 9 个 affected shell tests
 # focused shell tests passed: 9
@@ -117,8 +117,8 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPYCACHEPREFIX=/tmp/agent-loop-memory-focused-pyc
 
 ## 独立全量验证与剩余风险
 
-- 独立 full validation 已完成 `180/180` Python、`38/38` shell、六域语义审计和机械检查；详见 `docs/reports/agent-loop-v1.4.0-post-merge-memory-reconciliation-full-validation-2026-07-16.md`。这些结果用于整体验收证据，但 `not part of feature score`。
-- 本机 macOS 已执行；Windows 兼容性通过 stdlib/path-safe 设计和 GitHub Actions matrix 固化，但本次没有远程 Windows runner 结果。因此当前证据为 `macOS-verified / Windows-test-defined`。
+- Windows CI 修复后，独立 full validation 已完成 `182/182` Python、`38/38` shell、六域语义审计和机械检查；详见 `docs/reports/agent-loop-v1.4.0-post-merge-memory-reconciliation-full-validation-2026-07-16.md`。这些结果用于整体验收证据，但 `not part of feature score`。
+- 本机 macOS 已执行；Windows run `29565218056` 的真实 UTF-8/mode RED 已保存并完成本地 `104/104` focused GREEN。当前证据为 `macOS-verified / Windows-CI-RED-repaired-locally / exact-release-CI-pending`，最终 tag 仍绑定修复 commit 的 Windows/macOS 四矩阵成功结果。
 - 没有真实目标项目 `.agent-loop/`、真实 merge、push 或 release；测试全部使用隔离临时仓库和 synthetic fixtures，符合源码仓库维护边界。
 
 ## 权限与提交判断

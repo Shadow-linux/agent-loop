@@ -150,6 +150,27 @@ def absent_entry() -> SnapshotEntry:
     )
 
 
+def regular_file_modes_match(
+    actual: str | None,
+    expected: str | None,
+    supports_executable_bits: bool | None = None,
+) -> bool:
+    if actual == expected:
+        return True
+    supports = os.name != "nt" if supports_executable_bits is None else supports_executable_bits
+    return not supports and {actual, expected} <= {"100644", "100755"}
+
+
+def _snapshot_entries_match(actual: SnapshotEntry, expected: SnapshotEntry) -> bool:
+    return (
+        actual.state == expected.state
+        and actual.kind == expected.kind
+        and regular_file_modes_match(actual.git_mode, expected.git_mode)
+        and actual.git_oid == expected.git_oid
+        and actual.sha256 == expected.sha256
+    )
+
+
 def validate_merge_context_text(values: Mapping[str, str]) -> None:
     for field in (
         "source_branch",
@@ -946,7 +967,9 @@ def _validate_postimages(memory_root: Path, plan: ReconciliationPlan) -> None:
         if operation.post_mode == "absent":
             if entry.state != "absent":
                 raise MemoryReconciliationError("postimage mismatch", operation.path)
-        elif entry.sha256 != operation.postimage_sha256 or entry.git_mode != operation.post_mode:
+        elif entry.sha256 != operation.postimage_sha256 or not regular_file_modes_match(
+            entry.git_mode, operation.post_mode
+        ):
             raise MemoryReconciliationError("postimage mismatch", operation.path)
     _validate_retained_postimages(current, plan, after_apply=True)
     for path, digest in plan.expected_unchanged_paths.items():
@@ -986,7 +1009,7 @@ def _validate_retained_postimages(
         allowed = (desired_entry,)
         if allow_transitional_directories and creates_directory:
             allowed = (result_entry, desired_entry)
-        if entry not in allowed:
+        if not any(_snapshot_entries_match(entry, candidate) for candidate in allowed):
             raise MemoryReconciliationError("retained postimage mismatch", row.path)
 
 
@@ -1341,7 +1364,10 @@ def apply_reconciliation(
             expected_post_state = "absent" if operation.post_mode == "absent" else "present"
             if (
                 post_state != expected_post_state
-                or post_mode != (None if operation.post_mode == "absent" else operation.post_mode)
+                or not regular_file_modes_match(
+                    post_mode,
+                    None if operation.post_mode == "absent" else operation.post_mode,
+                )
                 or post_hash != operation.postimage_sha256
             ):
                 raise MemoryReconciliationError("postimage verification", operation.path)
@@ -1562,14 +1588,14 @@ def restore_transaction(
         current_state, current_mode, current_hash = _current_state(target)
         matches_original = (
             current_state == original_state
-            and current_mode == original_mode
+            and regular_file_modes_match(current_mode, original_mode)
             and current_hash == original_hash
         )
         expected_post_state = "absent" if post_mode == "absent" else "present"
         expected_post_mode = None if post_mode == "absent" else post_mode
         matches_post = (
             current_state == expected_post_state
-            and current_mode == expected_post_mode
+            and regular_file_modes_match(current_mode, expected_post_mode)
             and current_hash == post_hash
         )
         if not matches_original and not matches_post:
@@ -1587,7 +1613,7 @@ def restore_transaction(
         current_state, current_mode, current_hash = _current_state(target)
         if (
             current_state == original_state
-            and current_mode == raw["original_mode"]
+            and regular_file_modes_match(current_mode, raw["original_mode"])
             and current_hash == raw["original_sha256"]
         ):
             continue
@@ -1613,7 +1639,7 @@ def restore_transaction(
         state, mode, digest = _current_state(target)
         if (
             state != raw["original_state"]
-            or mode != raw["original_mode"]
+            or not regular_file_modes_match(mode, raw["original_mode"])
             or digest != raw["original_sha256"]
         ):
             raise MemoryReconciliationError("restore verification", str(raw["path"]))

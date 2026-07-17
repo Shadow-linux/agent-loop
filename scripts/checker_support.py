@@ -19,6 +19,14 @@ class CheckFailure(Exception):
         return f"{self.category}: {self.detail}"
 
 
+def configure_utf8_stdio() -> None:
+    """Make CLI output deterministic on hosts with a non-UTF-8 console code page."""
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if callable(reconfigure):
+            reconfigure(encoding="utf-8", errors="strict")
+
+
 def require_supported_python(version: tuple[int, int] | None = None) -> None:
     current = version or sys.version_info[:2]
     if current < (3, 10):
