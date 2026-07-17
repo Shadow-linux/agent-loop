@@ -244,6 +244,38 @@ flowchart TB
 
 图中虚线表示生命周期清理或禁止方向，不代表自动执行。任何 merge、branch deletion、push、tag、release 或 publish 仍然需要现有 Human Gate。
 
+### 代码合并后我想校准 Agent Loop 记忆
+
+你可以这样说：
+
+| 触发语句 | Agent 应该怎么做 |
+|---|---|
+| “代码已经合并，帮我合并 .agent-loop 记忆。” | 先确认稳定且已验证的 Merged Code SHA，再展示 Start Review；未确认前不创建报告。 |
+| “校准 Source 和 Target 的项目记忆。” | 用 Target 记忆骨架做扫描顺序，仍覆盖 Base、Source、Target-before、Result 的全部路径，并按不同事实 owner 核对。 |
+| “生成记忆合并报告，先不要 Apply。” | 只生成 Human-reviewed 候选、路径账本、预期 diff 和 Plan Hash；停在 Apply Gate。 |
+| “继续已确认的 Memory Rewrite Plan。” | 只接受你确认的 exact Plan Hash，执行 pre-check、事务化 Apply 和 post-check。 |
+| “恢复失败的 Memory Reconciliation。” | 使用指定 transaction ID 恢复本轮记忆修改；不会回滚已合并代码或 Git refs。 |
+
+Agent 会先消化证据，再把注意力压缩成三层：`🔴 必须决定`、`🟡 建议复核`、`🟢 普通变更汇总`。完整计划会列出每个新增、更新、移除和 expected-unchanged 路径；人类确认的是一个确定的 Plan Hash，不是模糊的“按建议处理”。
+
+```mermaid
+flowchart LR
+    M["Code Merge Complete"] --> S["Scan four snapshots"]
+    S --> F["Fact Reconciliation"]
+    F --> D["Desired Target Memory"]
+    D --> P["Exact Rewrite Plan"]
+    P --> H{"Human Review<br/>exact Plan Hash"}
+    H -->|"确认"| A["Transactional Apply"]
+    H -->|"修改或停止"| P
+    A --> C{"Post-check<br/>semantic evidence + zero-change"}
+    C -->|"通过"| DONE["报告：已完成"]
+    C -->|"失败"| R["Restore this memory transaction"]
+    R --> RESTORED["报告：已恢复<br/>回到新计划或 Recovery"]
+    DONE --> NEXT["另行确认 Memory Commit / Push / Release / Cleanup"]
+```
+
+代码合并授权、Memory Start、Plan Hash、Memory Commit、Push、Release 和 Source cleanup 是相互独立的 Gate。报告为 `待确认`、`已恢复` 或存在未恢复事务时，后续 Git/发布动作被阻断；`已完成` 也只允许进入下一个单独确认。
+
 ### 我想整理需求，但还不实现
 
 | 你可以这样说 | Agent 应该怎么做 |

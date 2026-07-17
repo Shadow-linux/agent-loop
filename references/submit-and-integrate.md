@@ -80,6 +80,33 @@ Strategy adoption and plan approval are context only. They never authorize branc
 
 Bug confirmation, Resolution Path, successful tests, Feature close, and Bug Close decisions are also context only. Submit/commit/push approval must not be reused as Bug close, and Bug Close approval must not authorize Submit / Integrate or any Git mutation.
 
+## Post-Merge Memory Reconciliation Ordering
+
+After a Human-gated code merge produces one stable verified Merged Code SHA, inspect whether Source and Target Agent Loop memory changed or may differ. Memory Reconciliation must complete before push, release, publish, or Source branch cleanup.
+
+Use this fail-closed order:
+
+```text
+Code Merge Gate
+-> Post-Merge Memory Reconciliation Start Gate
+-> Exact Plan Hash Gate
+-> Apply / Post-check / Restore if needed
+-> Memory Commit Gate
+-> Push Gate
+-> Release Gate
+-> Source Branch Cleanup Gate
+```
+
+| Observed state | Submit / Integrate action |
+|---|---|
+| no report and Source/Target memory changed or cannot be proven equal | recommend Start review; do not create the report yet |
+| report `待确认` | block Memory Commit, push, release/publish, and cleanup; continue reconciliation or Recovery |
+| report `已恢复` | block later gates; create a new reviewed plan or enter Recovery |
+| unresolved `.memory-reconciliation-txn/` | Recovery only with the exact transaction ID |
+| report `已完成` | offer only the next separately confirmed Memory Commit or later action gate |
+
+The code commit/merge authorization cannot be reused as Memory Start, exact Plan Hash, Memory Commit, Push, Release, publish, or Cleanup authorization. A Memory Merge Report does not authorize code integration or any Git mutation. Record the report locator/status/blocker in Current Work and the exact independently requested action in Submit evidence.
+
 ## Commit Behavior
 
 Only create a commit when the human explicitly confirms.
@@ -175,6 +202,8 @@ Append to `notes.md`:
 - Related Bugs / Current Status:
 - Bug Verification Evidence:
 - Unresolved Bug Close Decisions:
+- Memory Merge Report / Status / Blocker:
+- Memory Commit Gate Decision:
 ```
 
 ## Ordered Exit Decision

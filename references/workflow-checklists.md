@@ -165,7 +165,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.4.0-20260716`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.4.0-20260716.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -251,7 +251,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.4.0-20260716`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.4.0-20260716.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -775,6 +775,12 @@ Checklist:
 - [ ] Confirm required review has passed or record why submit must stop.
 - [ ] When the Feature resolves Bugs, show Bug IDs, current Status, Bug-specific evidence, unresolved Bug Close Decisions, Target Release Context, and isolation.
 - [ ] Do not reuse submit/commit/push approval as Bug close, or Bug close as submit authorization.
+- [ ] After code integration yields a stable verified Merged Code SHA, determine whether Source/Target Agent Loop memory changed or may differ; when it does, load `memory-reconciliation.md` and run Post-Merge Memory Reconciliation before later Git gates.
+- [ ] Obtain Start approval before report creation; build the Target Canonical Memory Spine, complete Path Accounting Ledger, question-specific fact reconciliation, and Desired Target Memory Snapshot.
+- [ ] Present 🔴 decisions, grouped 🟡 review, 🟢 summary, every changed/unchanged path, restore scope, and exact Plan Hash; Apply only the human-confirmed hash.
+- [ ] Require exact pre-check, report-local transaction journal, postimages, semantic evidence, zero-change rescan, and finalize; on failure restore only this memory transaction.
+- [ ] Treat `待确认`, `已恢复`, stale evidence, or an unresolved transaction as a blocker for Memory Commit, push, release/publish, and Source cleanup; route the exact blocker to Recovery.
+- [ ] Treat `已完成` only as permission to offer the next independent Memory Commit / Push / Release / Cleanup Human Gate; never inherit code-merge or submit authorization.
 - [ ] When an adopted Branch Strategy or versioned/customer delivery applies, verify Source Branch, Branch Class, Target Release Context, Target Branch, sealed state, customer isolation, and requested action.
 - [ ] Require merge evidence and a separate cleanup decision before deleting a temporary development branch; never treat a retained release aggregation branch as temporary cleanup.
 - [ ] Treat each create/switch/merge/delete/push/tag/release/publish action as separately Human-gated even when the strategy and plan are accepted; create/switch uses the Branch Action Gate.

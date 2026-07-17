@@ -20,6 +20,8 @@ Bug relationships are optional `0..N`. Requirement artifacts continue to own pro
 
 Run Requirement Reconciliation only when current Bug/Feature verification proves the recorded delivery truth is inaccurate. Present the affected Requirement/Phase, current lifecycle evidence, proposed legal state transition, and human decision. Until the human confirms, preserve the current status. Product semantic changes use an append-only follow-up or a new/superseding Requirement Set, never an in-place source rewrite.
 
+Post-Merge Memory Reconciliation consumes Requirement sources and accepted product meaning as question-specific authority. It may preserve or introduce original source bytes and rebuild mappings, but it cannot rewrite original material, redefine product meaning, or change Requirement lifecycle without the existing Requirement Reconciliation Human Gate.
+
 `.agent-loop/requirements/` is canonical. Do not create or maintain legacy `inputs/` archives in current-version projects.
 
 ## Requirement Lifecycle / Backlog

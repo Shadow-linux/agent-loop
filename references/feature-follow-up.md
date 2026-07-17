@@ -57,6 +57,8 @@ When an archived closed Feature is the Human-confirmed `flow-back` owner and rep
 
 If the archive row target is missing, a month directory lacks its row, the same Feature ID exists flat and archived, a `rehydrated` row points to a month path, or `.archive-txn` is incomplete, stop and route to Recovery instead of guessing ownership.
 
+Post-Merge Memory Reconciliation may rebuild `features/archive.md` as a derived locator when facts require it, but it never archives, rehydrates, or moves a Feature to resolve a semantic conflict. Preserve Source/Target archived evidence until reconciliation completes; confirmed flow-back still uses the independent rehydrate gate before execution.
+
 ## Low-information Reports
 
 Some reports are too generic to identify feature ownership by themselves:

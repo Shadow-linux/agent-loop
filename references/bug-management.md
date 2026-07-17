@@ -168,6 +168,8 @@ A Bug may cite multiple Requirements when the evidence crosses product boundarie
 
 Requirement artifacts continue to own product meaning. A Bug does not rewrite immutable Requirement sources and does not automatically change Requirement lifecycle. Only current evidence showing that delivery truth is inaccurate may trigger Human-gated Requirement Reconciliation. Product meaning changes use an append-only follow-up or a new Requirement Set.
 
+Post-Merge Memory Reconciliation preserves Bug identity, Status/Resolution separation, verification/close evidence, and append-only status/reopen history. Merged Feature tests or a completed Memory Merge Report do not close/reopen a Bug or satisfy its existing Human Gates.
+
 ## Resolution Path And Feature Repair
 
 The exact Resolution Path values are:

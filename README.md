@@ -66,12 +66,19 @@ Message Intent → Chat And Requirements Discussion if needed
 | **Requirement Product Model** | Product-layer relationships, roles/permissions, commands/events, business flow, state, product objects/facts, invariants, and recovery derived from accepted concepts in the human-reviewed requirement document. |
 | **Decision & Design / ADR** | Requirement-landing bridge for shared business flow, domain/data rules, architecture, recovery, and non-functional goals. Design Readiness is required; `.agent-loop/decisions/*.md` is Human-gated and conditionally required only when shared design needs a durable record. |
 | **Delivery Contract** | Optional producer-consumer boundary handoff. Used only when API, event, public data, UI state/behavior, SDK/library, runtime, or explicit cross-agent/human handoff needs a stable contract. |
+| **Post-Merge Memory Reconciliation** | After code is merged and verified, reconciles Base/Source/Target/Result Agent Loop claims into one Human-reviewed Desired Target Memory, with exact Apply, post-check, and restore. |
 
 ### Human-Guided Branch Management
 
 When a project has confused branch rules, an unclear target version, or customer-isolation risk, Agent Loop can recommend an optional branch strategy and wait for explicit human acceptance. Clear existing conventions and simple single-branch projects are preserved.
 
 The optional profile separates retained standard/customer release aggregation branches from temporary `feature`, `bugfix`, and `hotfix` development branches. Formally released versions are sealed, customer customization stays isolated, and temporary cleanup requires merge evidence plus human confirmation. Strategy adoption does not authorize branch creation, switching, merge, deletion, push, tag, release, or publish. See the [human trigger examples and complete branch flow](Usage.md#我想让-agent-推荐分支管理方式).
+
+### Post-Merge Memory Reconciliation
+
+Code merge happens first. When Source and Target branches have changed Agent Loop memory, the Agent then inventories all four snapshots, checks each claim against the authority for that question, and proposes one Desired Target Memory instead of trusting a text merge or choosing one side globally.
+
+A Memory Merge Report is created only after a Start Human Gate. Apply requires the exact reviewed Plan Hash, uses a confined transaction journal, and completes only after machine plus semantic post-check and a zero-change rescan. Failure restores only that memory transaction. Completion still does not authorize a memory commit, push, release, publish, or Source branch cleanup. See [usage and trigger examples](Usage.md#代码合并后我想校准-agent-loop-记忆).
 
 ## Artifact Layout
 
@@ -106,6 +113,9 @@ The optional profile separates retained standard/customer release aggregation br
     YYYY-MM-DD-<bug-slug>/
       README.md                        # Bug facts, evidence links, lifecycle, Resolution Path, and close history
       evidence/                        # optional screenshots, logs, traces, and reproduction evidence
+  memory-merges/                       # optional; created only for a Human-approved real reconciliation
+    MM-<merged-code-short-sha>/
+      README.md                        # exact plan, decisions, Apply/post-check/restore audit
   features/
     archive.md                         # locator for archived/rehydrated Feature IDs; not product authority
     YYYY-MM/                           # Human-gated directory archive for eligible closed features

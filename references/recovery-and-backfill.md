@@ -29,6 +29,13 @@ Use this protocol when:
 - implementation behavior differs from `spec.md`
 - the human asks to continue an old project or old feature
 - Feature Monthly Archive memory is unsafe: a `features/archive.md` target is missing, an archived directory lacks a row, a Feature ID exists at both flat/month paths, a `rehydrated` row points to a month path, an incomplete `.archive-txn` remains, or verified apply leaves old durable references
+- a known Post-Merge Memory Reconciliation lacks one of its four SHAs, has a stale/invalid Plan Hash, an unresolved `.memory-reconciliation-txn/`, a failed post-check, or a restore that cannot prove exact recovery
+
+## Post-Merge Memory Reconciliation Recovery
+
+Ordinary stale-memory recovery starts from current code reality plus protected human intent and asks before backfill. A known post-code-merge reconciliation is different: it must recover the exact Merge Base, Source, Target-before, and Merged Code full SHAs, Source/Target branch context, current Memory Merge Report, reviewed Plan Hash, and exact transaction ID when present.
+
+Do not fabricate missing SHAs, infer a deleted Source snapshot from the Result, pick the newest transaction, or silently fall back to ordinary stale-memory repair. Recover evidence from Git/reflog/retained branch or preserved report context when possible; otherwise report the missing evidence and stop. Restore changes only the recorded memory transaction, never merged code or Git refs. A restored report remains blocking until a new exact plan is reviewed or the human chooses another safe Recovery path.
 
 ## Re-Adopt Agent Loop Project
 

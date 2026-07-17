@@ -405,6 +405,20 @@ Human gate:
 
 Do not end an action report with only "done". Always include the next recommended stage or a concrete stop reason.
 
+## Memory After Code Integration
+
+```text
+Code Merge Gate -> Post-Merge Memory Reconciliation -> Memory Commit Gate -> Push Gate -> Release Gate -> Source Branch Cleanup Gate
+```
+
+Post-Merge Memory Reconciliation is an internal Submit / Integrate method, not a canonical stage or message intent. Route to `references/memory-reconciliation.md` only after code integration has one stable full Merged Code SHA and fresh code-verification evidence, and when Base, Source, Target-before, Result, non-empty Source/Target Branch, Target Release Context, Customer Boundary, and the accepted memory root can be identified.
+
+Before creating `.agent-loop/memory-merges/` or a report, present the Start Human Review and obtain explicit authorization for that one reconciliation. Scan is then read-only. The Agent accounts for every path through the Target Canonical Memory Spine and Path Accounting Ledger, resolves question-specific fact authority, and derives the Desired Target Memory Snapshot.
+
+Before Apply, present every add/update/remove path, expected unchanged path, attention item, Human Decision, post-check, restore scope, and normalized Plan Hash. Apply is authorized only for that exact hash. Changed evidence, stale plan/scan, unexpected dirty memory, unresolved 🔴 or `暂不处理`, unsafe/unclassified paths, completed replay, or missing snapshot evidence fails closed and routes to Recovery rather than guessing.
+
+While the report is `待确认` or `已恢复`, or while any transaction is unresolved, block memory commit, push, release/publish, and Source branch cleanup. `已完成` permits only presentation of the next independent Human Gate; it does not authorize commit, push, tag, release, publish, merge, branch deletion, or cleanup.
+
 ## Stage Order
 
 Default order applies after Message Intent Classification. For `requirements-discussion`, use Requirements Discussion before Project Entry-driven feature stages.

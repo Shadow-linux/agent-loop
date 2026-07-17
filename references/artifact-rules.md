@@ -55,6 +55,7 @@ New human source material should be archived inside a requirement set directory.
 | `handoffs/*` | subagent briefs and returned summaries when subagent mode is triggered | authoritative task status |
 | `contracts/*` | optional confirmed durable producer-consumer contract details when interface detail is needed | temporary task logs |
 | `features/archive.md` | Feature Monthly Archive locator and move ledger: stable Feature ID, current path, archive state, close date, one-line delivery locator, source/decision locators, last move | feature lifecycle, product meaning, requirement meaning, decision content, verification evidence |
+| `memory-merges/MM-<collision-safe-short-sha>/README.md` | one full Merged Code SHA's Merge Context, complete Path Accounting Ledger, Human Decisions, exact Plan Hash, Apply, post-check, restore, and remaining-risk evidence | code merge, project encyclopedia, product/ADR meaning, Feature execution, or authorization for later Git actions |
 
 ## Status Values
 
@@ -156,6 +157,22 @@ Feature Monthly Archive moves the complete eligible directory without content co
 Scope boundaries are explicit: no per-feature archive summary, no historical/ directory, no Deep Archive, no deletion/packing/scheduled archive, and No `--force`. A closed archived feature must rehydrate before reopened execution.
 
 Record the active gate mode in `project.md` Current Work or the active feature `notes.md` checkpoint. If scope changes, switch back to Strict Mode unless the human renews the auto-mode grant.
+
+## Post-Merge Memory Reconciliation Layout
+
+Create a report only after verified code integration and the Start Human Gate:
+
+```text
+.agent-loop/memory-merges/MM-<merged-code-short-sha>/README.md            default-root example
+<memory-root>/memory-merges/MM-<collision-safe-short-sha>/README.md
+<memory-root>/memory-merges/MM-<collision-safe-short-sha>/.memory-reconciliation-txn/  temporary only
+```
+
+One full Merged Code SHA owns exactly one durable report. Start the ID with 12 lowercase SHA characters and extend it only to avoid a collision with a different full SHA. Do not create `memory-merges/` during Init Project or Project Entry, and do not create a global transaction directory.
+
+The current report directory may contain `.memory-reconciliation-txn/` only while Apply, post-check, or Restore is active. A successful finalize or proven restore removes transaction payloads after exact verification. A failed or unproven restore retains its journal and blocks later Apply and Git actions.
+
+The report is an audit artifact, not a copy of canonical owners. Original human source, accepted Requirement/ADR/Human Decision meaning, append-only history, Feature/Bug state, enterprise project facts, and derived indexes remain owned by their existing artifacts.
 
 Slice type:
 

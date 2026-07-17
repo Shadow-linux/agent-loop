@@ -720,6 +720,7 @@ Focused Update is available only when the existing onboarding-db already follows
 - Do not write temporary TODO, future backlog, or unconfirmed requirements into `project.md`.
 - If onboarding discovers stable project facts missing from project memory, recommend Project Memory Update.
 - If code changes stale onboarding docs, mark coverage `stale` or `needs-refresh`.
+- Post-Merge Memory Reconciliation rewrites onboarding-db only when the Path Accounting Ledger and evidence overlap identify affected claims. It does not run a whole onboarding rewrite, invent missing evidence, or use onboarding-db as a substitute for project memory.
 
 ## Completion Gate
 

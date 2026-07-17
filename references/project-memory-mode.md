@@ -25,6 +25,8 @@ Bug inventory is also not project memory. In both modes, `.agent-loop/bugs/INDEX
 
 Human-confirmed Branch Strategy is durable project memory in both modes. Keep the compact policy and current Target Release Context pointer in `project.md` so entry and submit routing do not require loading an optional enterprise detail file. Keep development-branch selection, lifecycle, merge evidence, and cleanup decisions in the owning feature notes/plan/submit record. Never record an unconfirmed recommendation as `accepted`, and do not create `.agent-loop/branches/`.
 
+Post-Merge Memory Reconciliation does not turn its report into project memory. While a reconciliation is current, `project.md` Current Work may store only the report locator, report status, and exact blocker. Do not copy the Path Accounting Ledger, Human Decisions, diffs, Plan JSON, hash inventory, or transaction details into `project.md` or enterprise detail files. Existing enterprise files remain fact owners and are rewritten only when their durable facts are actually affected by the Desired Target Memory Snapshot.
+
 ## Simple Mode
 
 `project.md` is the main long-term project memory body.
@@ -46,6 +48,7 @@ Recommended layout:
     INDEX.md        optional Bug inventory/backlog/locator
   features/
     archive.md       optional Feature Monthly Archive locator; not project history
+  memory-merges/     optional; created only after the reconciliation Start gate
 ```
 
 ## Enterprise Mode
@@ -72,6 +75,7 @@ Recommended layout:
     INDEX.md        optional Bug inventory/backlog/locator; not enterprise memory
   features/
     archive.md       optional Feature Monthly Archive locator; not enterprise memory
+  memory-merges/     optional; created only after the reconciliation Start gate
 ```
 
 In both modes, `features/archive.md` locates archived or rehydrated stable Feature IDs and `bugs/INDEX.md` locates Bug records. Do not copy historical Feature bodies, archive rows, transaction logs, Bug backlog, Bug evidence, or triage state into `project.md`; project memory records only current work and durable facts. Active/blocked/paused work stays flat, while closed month archive paths are resolved on demand through the locator.

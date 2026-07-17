@@ -36,6 +36,9 @@ CLAUDE.md -> AGENTS.md
     <date>-<bug-slug>/
       README.md
       evidence/ optional bounded evidence
+  memory-merges/ optional; create only after Start approval for a real post-merge reconciliation
+    MM-<collision-safe-short-sha>/
+      README.md
   features/
     <date>-<feature-slug>/
       product.md optional
@@ -77,6 +80,8 @@ Omit `Source Requirements` when not relevant.
 ## Human Review Summary
 
 Use `references/human-review-summary.md` before asking the human to approve non-trivial stage output.
+
+For Post-Merge Memory Reconciliation, use `templates/memory-merge-report.md` only after its Start Human Gate. One full Merged Code SHA owns one report under `<memory-root>/memory-merges/MM-<collision-safe-short-sha>/README.md`. The template owns the exact plan block; do not copy its ledger, decisions, diffs, Plan JSON, or transaction details into `project.md`.
 
 Rules:
 
@@ -640,6 +645,10 @@ Next Suggested Action:
 Gate Mode: Strict Mode | Feature Auto-Loop | Task Auto-Run
 Gate Mode Scope:
 Gate Mode Stop Conditions:
+Current Memory Merge Report: `<memory-root>/memory-merges/MM-<short-sha>/README.md` | none
+Current Memory Merge Status: 待确认 | 已完成 | 已恢复 | none
+Current Memory Merge Blocker: `<exact blocker>` | none
+Memory Merge Pointer Rule: keep only locator/status/blocker here; the report owns its ledger, decisions, diffs, plan, Apply, post-check, restore, and transaction evidence.
 
 ## Remote Entry
 

@@ -15,6 +15,7 @@ AGENTS.md / CLAUDE.md = agent startup guidance
 .agent-loop/requirements/<archive-date>-<topic>/* = human source material package
 .agent-loop/skills/INDEX.md = optional project-skill lifecycle and discovery index
 .agent-loop/skills/<skill-name>/* = optional human-confirmed project-local capability
+.agent-loop/memory-merges/MM-<short-sha>/README.md = on-demand post-code-merge memory audit; never a default empty directory
 ```
 
 Default memory root is `.agent-loop/` because it is workflow metadata, not product code. If a project already has legacy `agent-loop/`, use it for the current run and ask before migration.
@@ -22,6 +23,8 @@ Default memory root is `.agent-loop/` because it is workflow metadata, not produ
 Do not use `AGENTS.md` as a task log. Do not use `project.md` as the startup instruction file for every agent.
 
 Root guidance may navigate a user Agent to the Feature Monthly Archive procedure, but it must not teach manual directory movement. Active/blocked/paused work remains at the first level. Archive and rehydrate use the canonical Python scan/check/apply/restore commands, an exact plan SHA-256 Human Gate, transaction recovery, and post-check; execution resumes only after rehydrate restores the flat feature path.
+
+Root guidance may also route a post-code-integration memory check, but the detailed Target spine, four snapshots, report states, Plan Hash, scripts, and recovery algorithm stay in `memory-reconciliation.md`. Refresh the root submit managed block when this concise route is absent or its full template block revision is stale; do not copy the detailed procedure into the target root file.
 
 ## Root Agent Bootstrap Gate
 
@@ -60,6 +63,7 @@ Every time `agent-loop` is used inside a target project, check root guidance bef
 - Completion Rules: fresh verification, review, drift check, project memory update, Feature Completion Check, Feature Close Review
 - Feature Follow-up / Flow-back: bugs, regressions, screenshots, QA feedback, API mismatches, and small tweaks are checked against active/paused/closed recent features before new feature creation or code edits, but only after Project Entry has established or verified agent-loop memory
 - Submit And Commit Rules: submit/commit/PR/merge/release/publish require explicit confirmation and only intended files are included
+- Submit And Commit Rules lack the concise post-code-integration reminder to reconcile changed Agent Loop memory before push/release/Source cleanup
 - root/directory guidance boundaries and requirement archive rules
 - managed block markers are missing for `agent-loop` maintained sections, unless the file is intentionally fully human-owned and the human has deferred managed block adoption
 - a managed block from the current root AGENTS template is missing, has no `block-version`, or has an older `block-version` than the current template

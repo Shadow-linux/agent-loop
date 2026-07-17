@@ -376,6 +376,6 @@ Bug Management owns Bug identity, lifecycle, and Resolution Path. Branch Managem
 
 `bugfix` and `hotfix` express branch work type only. Severity, Priority, Report Origin, Bug confirmation, accepted Requirement, Resolution Path, plan acceptance, and Auto Mode do not select a work type, create a patch context, or authorize a Git mutation. A sealed release remains immutable; any repair uses a separately human-confirmed new patch Target Release Context. Customer Origin does not infer a customer repair line; customer isolation is decided from confirmed scope and release context.
 
-This capability does not implement worktree / branch memory merge. It provides Source Branch, Target Branch, Target Release Context, Customer Boundary, lifecycle, and allowed direction as future inputs only.
+This capability does not implement Post-Merge Memory Reconciliation. It provides Source Branch, Target Branch, Target Release Context, Customer Boundary, lifecycle, and allowed direction to `memory-reconciliation.md`. Memory Reconciliation completion is evidence for later independent Git gates; it does not adopt a strategy, perform a Git action, authorize Source cleanup, or permit customer-specific memory/code to leak into `main` or a standard release.
 
 It also does not add a branch database, executable YAML/JSON schema, branch-protection configuration, CODEOWNERS, automatic scheduling, or any automatic Git mutation.

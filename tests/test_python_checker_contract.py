@@ -27,6 +27,13 @@ ARCHIVE_COMMANDS = (
     "scripts/restore-feature-monthly-archive.py",
 )
 
+MEMORY_RECONCILIATION_COMMANDS = (
+    "scripts/scan-memory-reconciliation.py",
+    "scripts/check-memory-reconciliation.py",
+    "scripts/apply-memory-reconciliation.py",
+    "scripts/restore-memory-reconciliation.py",
+)
+
 WORKFLOW = ROOT / ".github/workflows/cross-platform-checkers.yml"
 
 COMPATIBILITY_ENTRIES = {
@@ -66,6 +73,11 @@ class PythonCheckerContractTests(unittest.TestCase):
             with self.subTest(relative=relative):
                 self.assertTrue((ROOT / relative).is_file(), relative)
 
+    def test_memory_reconciliation_command_files_exist(self) -> None:
+        for relative in MEMORY_RECONCILIATION_COMMANDS:
+            with self.subTest(relative=relative):
+                self.assertTrue((ROOT / relative).is_file(), relative)
+
     def test_canonical_checkers_use_only_stdlib_and_local_support(self) -> None:
         allowed_local = {"checker_support", "feature_archive_support"}
         for relative in CHECKERS:
@@ -95,6 +107,20 @@ class PythonCheckerContractTests(unittest.TestCase):
             external = imported - set(sys.stdlib_module_names) - allowed_local
             self.assertEqual(external, set(), f"{relative}: {sorted(external)}")
 
+    def test_memory_reconciliation_commands_use_only_stdlib_and_local_support(self) -> None:
+        allowed_local = {"checker_support", "memory_reconciliation_support"}
+        for relative in MEMORY_RECONCILIATION_COMMANDS:
+            path = ROOT / relative
+            tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+            imported: set[str] = set()
+            for node in ast.walk(tree):
+                if isinstance(node, ast.Import):
+                    imported.update(alias.name.split(".", 1)[0] for alias in node.names)
+                elif isinstance(node, ast.ImportFrom) and node.module:
+                    imported.add(node.module.split(".", 1)[0])
+            external = imported - set(sys.stdlib_module_names) - allowed_local
+            self.assertEqual(external, set(), f"{relative}: {sorted(external)}")
+
     def test_missing_arguments_fail_with_usage_exit_two(self) -> None:
         for relative in CHECKERS:
             with self.subTest(relative=relative):
@@ -104,6 +130,13 @@ class PythonCheckerContractTests(unittest.TestCase):
 
     def test_archive_commands_missing_arguments_fail_with_usage_exit_two(self) -> None:
         for relative in ARCHIVE_COMMANDS:
+            with self.subTest(relative=relative):
+                result = run_checker(relative)
+                self.assertEqual(result.returncode, 2, combined_output(result))
+                self.assertIn("usage", combined_output(result).lower())
+
+    def test_memory_reconciliation_commands_missing_arguments_fail_with_usage_exit_two(self) -> None:
+        for relative in MEMORY_RECONCILIATION_COMMANDS:
             with self.subTest(relative=relative):
                 result = run_checker(relative)
                 self.assertEqual(result.returncode, 2, combined_output(result))
@@ -144,6 +177,17 @@ class PythonCheckerContractTests(unittest.TestCase):
                 }
                 self.assertIn("require_supported_python", calls)
 
+        for relative in MEMORY_RECONCILIATION_COMMANDS:
+            with self.subTest(relative=relative):
+                path = ROOT / relative
+                tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+                calls = {
+                    node.func.id
+                    for node in ast.walk(tree)
+                    if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+                }
+                self.assertIn("require_supported_python", calls)
+
     def test_cross_platform_ci_runs_the_native_suite(self) -> None:
         self.assertTrue(WORKFLOW.is_file(), str(WORKFLOW))
         content = WORKFLOW.read_text(encoding="utf-8")
@@ -161,7 +205,13 @@ class PythonCheckerContractTests(unittest.TestCase):
             "tests.test_feature_monthly_archive_scan",
             "tests.test_feature_monthly_archive_apply",
             "tests.test_feature_monthly_archive_restore",
+            "tests.test_memory_reconciliation_support",
+            "tests.test_memory_reconciliation_scan",
+            "tests.test_memory_reconciliation_check",
+            "tests.test_memory_reconciliation_apply",
+            "tests.test_memory_reconciliation_restore",
             *ARCHIVE_COMMANDS,
+            *MEMORY_RECONCILIATION_COMMANDS,
         ):
             with self.subTest(required=required):
                 self.assertIn(required, content)

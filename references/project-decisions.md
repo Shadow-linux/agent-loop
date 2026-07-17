@@ -231,6 +231,8 @@ Re-run compatibility review when the requirement README effective source changes
 
 Compatibility review may add references or current evidence to an accepted record only when repository policy permits append-only metadata. It must not use a metadata update to disguise a changed decision.
 
+Post-Merge Memory Reconciliation preserves accepted ADR technical meaning and supersession history. Code/result drift is evidence for Human Review, not permission to rewrite an accepted decision in place; any incompatible meaning still requires the existing Human-gated superseding ADR path.
+
 ## Triggered Operational Landing
 
 Operational landing detail is conditional. Assess these concerns before the ADR Human Gate:

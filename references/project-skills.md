@@ -161,6 +161,8 @@ Each entry records:
 
 Do not trust a skill directory that is absent from INDEX, an INDEX target that is missing, an `active` claim without validation evidence, or a current INDEX row/instruction-bearing/executable file that does not match the SHA-256 Validated Content Manifest. Classify it as project-skill drift and route to Project Skill Creation / Update before reliance.
 
+During Post-Merge Memory Reconciliation, treat each active Project Skill row, instruction-bearing/executable members, validation evidence, and SHA-256 Validated Content Manifest as one validated package. A manifest conflict is Human-visible and fail-closed; memory merge never silently selects one body, revalidates/activates a Skill, or satisfies its per-invocation Execution Gate.
+
 ## Discovery And Loading
 
 During Project Entry, Resume, Re-Adopt, context-compaction recovery, long-running-session recovery, and controller re-entry:

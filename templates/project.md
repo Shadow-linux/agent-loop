@@ -121,6 +121,10 @@ Gate Mode: Strict Mode | Feature Auto-Loop | Task Auto-Run
 Gate Mode Scope:
 Gate Mode Stop Conditions:
 Feature Follow-up Lookback: 90 days
+Current Memory Merge Report: `<memory-root>/memory-merges/MM-<short-sha>/README.md` | none
+Current Memory Merge Status: 待确认 | 已完成 | 已恢复 | none
+Current Memory Merge Blocker: `<exact blocker>` | none
+Memory Merge Pointer Rule: keep only locator/status/blocker here; the report owns its ledger, decisions, diffs, plan, Apply, post-check, restore, and transaction evidence.
 Recent Feature Flow-back Policy:
 - For explicit Bug management, scan all Bug Index metadata for duplicate/reopen identity, then scan Feature metadata in the configured window and extend beyond it when evidence points to an older owner.
 - Resolve archived owners through `features/archive.md`; discovery/Human Review is read-only, while confirmed flow-back rehydrates before reopened execution.

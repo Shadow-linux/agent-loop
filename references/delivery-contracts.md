@@ -94,6 +94,8 @@ draft -> accepted -> implemented -> verified -> superseded
 - Creating a new `draft` or superseding contract cannot bypass the breaking-change gate when existing consumers would observe changed behavior.
 - Auto modes never silently accept a contract or approve a breaking change.
 
+Post-Merge Memory Reconciliation may preserve or introduce accepted Delivery Contract artifacts and surface implementation drift, but it cannot accept a contract, redefine an interface, or approve a breaking change. Contract acceptance and breaking-change Human Gates remain independently required after memory completion.
+
 Minimum affected-consumer scan:
 
 - named consumers in the contract

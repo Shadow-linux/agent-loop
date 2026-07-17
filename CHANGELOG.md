@@ -1,6 +1,14 @@
 # Agent Loop Changelog
 
-## 1.4.0 — 2026-07-15
+## 1.4.0 — 2026-07-17
+
+### Post-Merge Memory Reconciliation
+- Added Target-spine-led four-snapshot scanning, complete path accounting, semantic artifact roles, question-specific fact authority, and Desired Target Memory derivation after verified code integration.
+- Added the on-demand Memory Merge Report with Start and exact Plan Hash Human Gates, three attention levels, Chinese actions, independent Memory Commit/Push/Release/Cleanup gates, and single-success replay protection.
+- Added Python 3.10+ standard-library scan/check/apply/restore commands with exact inline or Git-blob bytes, bounded payloads, safe paths, transaction journals, atomic writes, zero-change post-check, crash-resumable finalize, and fail-closed exact restore.
+- Hardened action/preimage/post-state binding, immutable same-path regular-blob imports, non-empty merge context, one-report-per-full-SHA enforcement, Source-only parent-directory convergence, and idempotent cleanup after a restored-journal crash window.
+- Preserved Requirement, ADR, Delivery Contract, Bug, Feature Archive, Project Skill, onboarding, customer-isolation, and original-source ownership without adding a canonical stage, message intent, automatic Git action, or default empty directory.
+- Refreshed all 13 root managed blocks to `block-version:1.4.0-20260716.1` with one concise post-integration routing reminder and added focused pressure/transaction/full-validation coverage without changing Skill version `1.4.0`.
 
 ### Project Skill Discovery Guard
 - Required reliable projects to inspect `.agent-loop/skills/INDEX.md` before negative Project Skill claims or generic Operational Support/fallback actions.
@@ -28,6 +36,11 @@
 - Refreshed all root managed blocks to `block-version:1.4.0-20260715` and added RED/GREEN coverage for Auto Mode Git stops, optionality, declined memory, and root-language ownership.
 - Coordinated runtime/design, stage/checklist/planning/submit rules, project-memory ownership, templates, root routing guidance, human docs, pressure scenarios, and regression coverage while aligning all version-bearing surfaces to `1.4.0` after explicit human approval.
 - Added a focused RED/GREEN contract, fifteen branch-specific pressure scenarios, and a fresh six-domain full-validation report; validation performed no real branch, commit, push, tag, PR, merge, release, or publish action.
+
+### Release Validation
+- Revalidated the complete `stable-v1.3.0..alpha/v1.4.0` behavior set across the full Python/shell suite, focused Post-Merge Memory Reconciliation boundary, six-domain semantic audit, version synchronization, and mechanical checks.
+- Recorded Human approval for the v1.4.0 Release Gate: commit and dual-push the release candidate, then create and dual-push branch `v1.4.0` and tag `stable-v1.4.0` only after the exact release commit passes the configured macOS/Windows × Python 3.10/3.x CI matrix.
+- Kept GitHub Release publication and installed-Skill synchronization outside this authorization.
 
 ## 1.3.0 — 2026-07-11
 

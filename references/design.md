@@ -25,6 +25,12 @@ The core constraints are:
 - `project.md` owns the accepted long-term strategy and current Target Release Context pointer; mutable per-feature branch state belongs in feature notes, plan, or Submit / Integrate evidence
 - standard and customer release aggregation branches are retained; formally released versions are sealed; customer customization cannot flow wholesale into the standard product line
 - branch-specific Target Release Context and Target Branch stops apply only to an adopted strategy or versioned/customer delivery; a confirmed simple `not-needed` path continues without those fields
+- Post-Merge Memory Reconciliation is an internal Submit / Integrate method after verified code integration, not a canonical stage or message intent; it never performs code merge or authorizes a later Git action
+- the Target Canonical Memory Spine supplies output structure and scan order, not fact priority or a path allowlist; the Path Accounting Ledger covers every Base, Source, Target-before, and Result path
+- every discovered memory record is classified by semantic role, then checked against the authority for its specific question; no single snapshot or code reality is globally authoritative
+- the Agent derives one Desired Target Memory Snapshot from immutable human sources, accepted authorities, valid history, merged reality, Target-appropriate current state, and rebuilt indexes
+- one full Merged Code SHA owns one durable Memory Merge Report and at most one successful Apply; sibling report identities and completed replay fail closed
+- Chinese action labels are executable plan semantics: import starts absent, rewrite starts from the exact regular-file preimage, recalculate may rebuild an absent derived file or replace its exact preimage, stale removal ends absent, and immutable human/accepted imports copy only a same-path recorded regular Git blob
 - optional `.agent-loop/skills/` owns Human-gated project-local reusable capabilities; `INDEX.md` owns lifecycle and discovery metadata
 - Project Skill Discovery Guard checks active INDEX metadata before negative Project Skill claims or generic executable fallback, loads only a matched body, and fails closed on drift without adding a stage, status, cache, or execution grant
 - stable Web E2E capability belongs in `project.md`; feature-specific E2E cases belong in feature `tests.md` or `tests/e2e/*`
@@ -73,8 +79,17 @@ Human Goal
 → Feature Monthly Archive when the human explicitly asks to compact closed-history discovery
 → Project Memory Update
 → Submit / Integrate if requested
+  → [internal] Post-Merge Memory Reconciliation after verified code integration and before later Git gates when branch memories may differ
 → Resume / Pause / Close
 ```
+
+## Post-Merge Memory Reconciliation Invariant
+
+After code integration, use the **Target Canonical Memory Spine** as the traversal and output-structure baseline, then account for all paths across Base, Source, Target-before, and Result in a **Path Accounting Ledger**. Classify each record as human source, accepted authority, append-only evidence, current semantic state, derived index, validated package, transaction temporary, or unclassified before selecting an action.
+
+Derive a **Desired Target Memory Snapshot** by question-specific fact authority. Code proves implementation reality but does not overwrite accepted product or technical meaning. Preserve original human sources, accepted decisions, and append-only history; rebuild derived indexes; expose semantic conflicts to the human.
+
+The method has a Start gate before report creation and an exact Plan Hash gate before Apply. One Merged Code SHA has one report and one successful Apply. Apply, post-check, restore, memory commit, push, release, and Source branch cleanup remain distinct boundaries. See `memory-reconciliation.md` for the detailed contract.
 
 Abstract model:
 
