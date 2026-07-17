@@ -5,7 +5,7 @@ description: Use when starting, continuing, resuming, structuring, testing, impl
 
 # Agent Loop
 
-Version: 1.4.0
+Version: 1.5.0
 
 Run a single-human, CLI-agent development loop from goal intake to verified close. This skill is a controller: it decides the current stage, loads the right reference, produces or updates `agent-loop` artifacts, and stops at human gates.
 
@@ -72,6 +72,7 @@ Use this skill when the user wants to:
 - shape product needs through requirements-discussion into requirement documents under `.agent-loop/requirements/`
 - turn requirements or prototypes into feature specs, tasks, tests, plans, and implementation
 - use existing project code, configuration, scripts, or deployment docs to support operational testing, rollout, account/config/model switching, production diagnosis, or runbook/checklist creation without defaulting to code changes
+- use Lightweight Change Lane for a bounded ordinary non-Bug change through an adaptive response-local Plan, targeted verification, diff review, and rollback without creating an unnecessary Feature workspace
 - create or update a Human-gated project-local skill from a repeatable workflow, or propose one after a complex verified operation
 - continue a paused feature or recover project context
 - reconcile `agent-loop` documents with code reality
@@ -80,7 +81,7 @@ Use this skill when the user wants to:
 - submit, pause, resume, or close a feature
 - compact closed feature discovery by moving whole feature directories through Human-gated Feature Monthly Archive, or rehydrate an archived feature before follow-up execution
 
-Do not use for one-off edits when the user explicitly asks to bypass workflow and the edit does not affect feature behavior, public interfaces, data/security boundaries, project memory, submit, or close state.
+An explicit request for a safe one-off edit is one input to Lightweight Change Assessment, not a separate undocumented bypass. Ordinary non-Bug changes still require a response-local card, Plan, fresh targeted verification, diff review, rollback, and gate review when eligible.
 
 First version excludes: multiplayer workflow, roadmap graph, roadmap adapter, tdd-guard, complex ADR system, global skill installation, automatic directory-level `AGENTS.md` generation without human confirmation, and automatic commit/PR/merge/release/publish without human confirmation.
 
@@ -92,6 +93,7 @@ Read only what the current stage needs.
 references/runtime.md              required first; loop protocol and state machine
 references/design.md               condensed extract of the repo source design
 references/concepts.md             definitions and scope boundaries
+references/lightweight-change-lane.md bounded ordinary non-Bug assessment, response-local card, adaptive verification, and scope-expansion rules
 references/project-guidance.md     root and directory AGENTS/CLAUDE guidance rules
 references/branch-management.md    optional Human-guided branch strategy, target-release context, and Git action boundaries
 references/memory-reconciliation.md post-code-merge Target memory fact reconciliation, exact plan, Apply, post-check, and restore rules
@@ -123,6 +125,7 @@ references/submit-and-integrate.md explicit git submit / commit / PR gate
 references/validation-scenarios.md pressure scenarios for checking this skill works
 references/document-templates.md   inline markdown templates
 references/workflow-checklists.md  checklist form for each stage
+templates/lightweight-execution-card.md response-only Lightweight Execution Card; not copied into target project memory by default
 scripts/checker_support.py          shared standard-library Markdown checker support
 scripts/check-root-agents-blocks.py read-only root AGENTS managed-block drift checker
 scripts/check-onboarding-core-flow-coverage.py onboarding core-flow coverage checker
@@ -151,6 +154,7 @@ CHANGELOG.md                        version-change source of truth for "what cha
 3b. For `requirements-discussion`, load `references/requirement-management.md`, use Brainstorm / Clarify, produce a human-reviewed requirement document, and archive it under `.agent-loop/requirements/<archive-date>-<topic>/` after confirmation before any feature construction.
 3c. For `project-skill-management`, load `references/project-skills.md`, require reliable Project Entry/memory, and route to Project Skill Creation / Update without creating a requirement set or feature workspace.
 3d. Classify the entry scenario.
+3e. For an actionable non-Bug change that may be bounded, run Lightweight Change Assessment before Feature construction. When clearly eligible, emit a response-local Lightweight Execution Card and continue within its disclosed local scope. When a Feature trigger applies, use the existing Feature path. When uncertain, stop and ask the human with options, one Agent recommendation, evidence, and zero writes before the answer.
 4. Load the stage guide for the current scenario.
 4a. Run Stage Helper Capability Scan for the current stage. For a mandatory helper-backed stage, load `references/skill-routing.md` and `references/external-skill-adapters.md`, resolve canonical and alias names, load the complete helper before stage actions when found, and record the resolution. Use fallback only after recording `unavailable` or `load-failed`.
 5. Load `references/project-guidance.md` during project init, Project Entry Scan, or re-adoption, when root guidance is missing/stale, or when long-term agent instructions may need sync.
@@ -169,8 +173,9 @@ CHANGELOG.md                        version-change source of truth for "what cha
 13c. Before a new actionable intent uses a generic helper, Code-Guided Operational Support fallback, or built-in stage method, run Project Skill Discovery Guard against the reliable memory root. Read INDEX metadata, match `active` `bootstrap` / `on-demand` candidates, and verify/load only the matched row, path, manifest, and required body. Runtime/global Skill inventory alone cannot support a negative Project Skill claim. Only `index-absent` or `no-active-match` permits generic fallback; `project-skill-drift` stops before equivalent side effects. Discovery and loading still do not satisfy the per-invocation Execution Gate.
 13d. Run Branch Strategy Check during Project Entry, Project Entry Scan, Re-Adopt, planning for versioned delivery, Drift Check, and Submit / Integrate. When existing branch rules are clear and safe, preserve them. When rules are confused, the target version is unclear, or customer isolation is at risk, load `references/branch-management.md`, present one optional recommendation, and wait for explicit human acceptance before recording or following it. Recommendation or adoption never authorizes branch creation, switching, merge, deletion, push, tag, release, or publish.
 13e. After verified code integration, when Source and Target Agent Loop memory may differ, load `references/memory-reconciliation.md` before any memory commit, push, release, publish, or Source branch cleanup. Use the Target Canonical Memory Spine to build the all-path Path Accounting Ledger, derive one Desired Target Memory Snapshot by question-specific authority, and stop at the Start and exact Plan Hash Human Gates. Post-Merge Memory Reconciliation never performs code merge or grants a later Git action.
-14. Load `references/feature-follow-up.md` when the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, screenshot issue, behavior tweak, "small tweak", test failure, or QA/user feedback that may belong to a recent feature. When explicit bug-report, manage, investigate, or fix intent exists, also load `references/bug-management.md` and run Bug Management inside Feature Follow-up / Flow-back. Scan complete Bug Index metadata for duplicate/reopen first, then use the project-configured 90-day Feature ownership metadata window and evidence-driven extended scan. Bug confirmation never authorizes Feature, Requirement, branch, submit, or close actions.
+14. Load `references/feature-follow-up.md` when explicit defect/regression/QA evidence or clear Feature ownership indicates follow-up work. Generic “small tweak”, “改一下”, “修一下”, or `fix` wording alone does not prove Bug or Feature Follow-up. When explicit Bug management intent exists, also load `references/bug-management.md` and run Bug Management inside Feature Follow-up / Flow-back. Scan complete Bug Index metadata for duplicate/reopen first, then use the project-configured 90-day Feature ownership metadata window and evidence-driven extended scan. Bug confirmation never authorizes Feature, Requirement, branch, submit, or close actions.
 14a. For `feature-archive-maintenance`, load `references/artifact-rules.md`, `references/stage-guides.md`, `references/human-review-summary.md`, and `references/feature-follow-up.md`. Feature ID is stable while location changes and root `features/archive.md` locates archived/rehydrated history. The scan is read-only; archive/rehydrate requires the expected plan SHA-256 Batch Human Gate, transaction journal, post-check, and restore. Rehydrate before reopened execution; auto modes never authorize either operation.
+14b. Load `references/lightweight-change-lane.md` for an actionable ordinary non-Bug local change that may be bounded. Explicit Bug Management and active Feature ownership take precedence. The lane is an internal route, creates no canonical stage or persistent target-project artifact, always uses a response-local Plan, and stops before writes when uncertain or before broader edits on scope expansion.
 15. Load `references/large-projects.md` when the repo is large, old, unfamiliar, multi-package, or likely above 100k LOC.
 16. Load `references/complex-artifacts.md` when story/task/test/plan complexity crosses its trigger conditions.
 17. Load `references/implementation-planning.md` before writing or approving `plan.md` for a task/story.
@@ -239,6 +244,8 @@ If the local directory is only a remote-project entry point, create only thin lo
 ## Execution Defaults
 
 - Default execution unit: one task.
+- Before Feature construction for a bounded ordinary non-Bug change, run Lightweight Change Assessment. Clearly eligible work uses the response-local card; Feature hard triggers use Feature construction; uncertainty performs zero writes and returns one recommended human choice.
+- The card Plan is always required but adaptive. Fact/config/path/domain/docs changes use targeted verification; isolated behavior logic uses the smallest meaningful RED/GREEN. Card execution never grants Git, release, production, external, or Bug lifecycle authority.
 - Story execution requires explicit human choice.
 - Whole-feature execution requires explicit human confirmation and only fits tiny features.
 - A feature may contain many stories and many tasks; `tasks.md` is the feature task ledger.
@@ -357,3 +364,5 @@ Stop when:
 - the work would require first-version exclusions
 - Feature Monthly Archive or rehydrate lacks an exact reviewed plan hash, has unsupported/ambiguous references, encounters a stale plan or incomplete `.archive-txn`, or would be performed by manual directory movement
 - Bug Index and README disagree; a duplicate target is missing/cyclic; Status/Resolution is invalid; an `in-progress` Bug does not use `flow-back | linked-feature | maintenance-fix` or lacks one Human-confirmed Fix Feature Target; Expected Behavior authorities conflict; an archived Fix Feature cannot be resolved safely; or a Bug/Feature/Requirement/Git action lacks its specific Human Gate
+- Lightweight / Feature / Bug routing remains uncertain after available evidence is inspected; stop with few real options, one Agent recommendation, and zero writes before the human answer
+- a Lightweight Execution Card encounters scope expansion, loses exact verification or rollback, reveals a Feature hard trigger, or needs cross-session/handoff/subagent tracking; stop before broader edits and return to Human Review

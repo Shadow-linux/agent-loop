@@ -1,5 +1,18 @@
 # Agent Loop Changelog
 
+## 1.5.0 — 2026-07-17
+
+### Lightweight Change Lane
+- Added Agent-owned Lightweight Change Assessment before Feature construction for bounded ordinary non-Bug changes, while preserving explicit Bug Management and active Feature ownership precedence.
+- Added a response-local Lightweight Execution Card with required background, goal/completion criteria, scope, rationale, risk, adaptive Plan, progress, targeted verification, rollback, Human Gates, and result/residuals.
+- Made Plan depth and verification risk-driven: fact/config/path/domain/docs changes use syntax, parse, reference, residual, and bounded dry-run evidence; isolated behavior logic uses the smallest meaningful RED/GREEN.
+- Added all-of eligibility, any-of Feature hard triggers, zero-write Human Choice with one Agent recommendation when uncertain, and scope-expansion stop before broader edits.
+- Kept the lane out of canonical stages, message intents, Feature Types, Bug Resolution Paths, lifecycle/status models, Auto Modes, and default target-project directories/backlogs.
+- Preserved Project Skill discovery/execution order plus production, external, paid-call, configuration-write, branch, submit, commit, push, PR, merge, tag, release, publish, Feature-close, and Bug lifecycle Human Gates.
+- Added sixteen focused positive/negative pressure scenarios, a cross-surface RED/GREEN contract, coordinated runtime/design/root/human guidance, and fresh full-validation evidence.
+- Hardened derived Feature Follow-up rules and focused negative assertions so generic adjustment wording cannot bypass Lightweight Change Assessment or create a Bug Record without explicit Bug management intent.
+- Refreshed all 13 root managed blocks to `block-version:1.5.0-20260717` and synchronized every current version surface after explicit v1.5.0 approval.
+
 ## 1.4.0 — 2026-07-17
 
 ### Post-Merge Memory Reconciliation

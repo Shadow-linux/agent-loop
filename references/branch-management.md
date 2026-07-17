@@ -10,6 +10,10 @@ Use the profile only after evidence review and explicit human adoption. If a pro
 
 Do not force a project to rename existing branches, create release branches, or migrate its workflow merely because this reference is available.
 
+A Lightweight Execution Card authorizes no branch action.
+
+When the lane applies, still check an adopted strategy, Target Release Context, sealed-release state, customer isolation, and current Git reality as needed. The card cannot create, switch, merge, delete, push, or tag a branch and cannot satisfy Branch Action or Cleanup Gate.
+
 ## Evidence And Fact Precedence
 
 Resolve branch policy in this order:

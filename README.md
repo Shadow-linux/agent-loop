@@ -1,6 +1,6 @@
 # Agent Loop
 
-**Current version:** 1.4.0
+**Current version:** 1.5.0
 
 A reusable [Codex](https://github.com/openai/codex) / CLI-agent skill for single-person software development workflows—from goal intake to verified close.
 
@@ -32,7 +32,9 @@ Message Intent → Chat And Requirements Discussion if needed
 → Re-Adopt Agent Loop Project if needed
 → Project Entry Scan if needed
 → Project Skill Creation / Update if requested
-→ Operational Support if needed → Requirement Archive
+→ Operational Support if needed
+→ [internal] Lightweight Change Assessment for ordinary non-Bug changes
+→ Requirement Archive
 → Decision & Design If Needed → Product Brief if needed
 → Brainstorm / Clarify if needed
 → Feature Follow-up / Flow-back if needed
@@ -56,6 +58,7 @@ Message Intent → Chat And Requirements Discussion if needed
 | **Plan** | Construction-grade execution plan for the active task/story |
 | **Evidence** | Fresh proof: test output, build output, API results, E2E checks, logs |
 | **Drift** | Mismatch between docs, code reality, or human decisions |
+| **Lightweight Change Lane** | Internal route for bounded ordinary non-Bug changes: response-local card, adaptive Plan, progress, targeted verification, diff review, rollback, and no default target-project artifact. |
 | **Human-Guided Bug Management** | Stable Bug identity, evidence, deduplication, lifecycle, Human-confirmed Resolution Path, and a separate close decision inside Feature Follow-up / Flow-back. |
 | **Feature Follow-up / Flow-back** | Repair ownership routing that scans Feature metadata for 90 days by default, extends on evidence, and sends every code fix through a Feature workflow. |
 | **Operational Support** | Read-only code-guided help for testing, running, deploying, switching accounts/config/models/providers, quota checks, rollout, and production diagnosis before deciding whether feature work is needed. |
@@ -67,6 +70,12 @@ Message Intent → Chat And Requirements Discussion if needed
 | **Decision & Design / ADR** | Requirement-landing bridge for shared business flow, domain/data rules, architecture, recovery, and non-functional goals. Design Readiness is required; `.agent-loop/decisions/*.md` is Human-gated and conditionally required only when shared design needs a durable record. |
 | **Delivery Contract** | Optional producer-consumer boundary handoff. Used only when API, event, public data, UI state/behavior, SDK/library, runtime, or explicit cross-agent/human handoff needs a stable contract. |
 | **Post-Merge Memory Reconciliation** | After code is merged and verified, reconciles Base/Source/Target/Result Agent Loop claims into one Human-reviewed Desired Target Memory, with exact Apply, post-check, and restore. |
+
+### Lightweight Change Lane
+
+Bounded ordinary non-Bug changes use a response-local card with Background, adaptive Plan, progress, targeted verification, rollback, and result. Explicit Bugs keep Bug Management; public/data/state/security/architecture/unknown-impact changes use Feature. If the Agent is unsure, it asks the human with a recommendation before writing.
+
+The lane is not a canonical stage, Feature Type, Bug Resolution Path, persistent backlog, or default `.agent-loop/changes/` directory. It does not lower production, external-service, paid-call, configuration-write, Git, submit, release, publish, Feature-close, or Bug lifecycle Human Gates.
 
 ### Human-Guided Branch Management
 

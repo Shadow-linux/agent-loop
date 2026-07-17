@@ -2,6 +2,10 @@
 
 Use this file when a selected task/story needs `plan.md` or a dated plan cycle under `plans/`.
 
+A Lightweight Execution Card is not a Feature `plan.md` and does not enter Plan Gate.
+
+Its Plan is response-local, bounded to the disclosed change, and exact enough to expose progress, targeted verification, diff review, memory impact, and rollback. Construction-grade zero-context planning remains mandatory for Feature tasks under the existing triggers. No-Plan Decision is Feature-task-only and is never used by Lightweight Change Lane.
+
 ## Planning Model
 
 ```text

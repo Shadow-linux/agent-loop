@@ -16,7 +16,7 @@ Bootstrap skill loading: AGENTS.md is bootstrap guidance, not a replacement for 
 
 Agent ownership is mandatory. The agent must not wait for the human to name the next internal stage. For every human goal, bug report, project-understanding question, vague product idea, or "what next" request, the agent classifies the current state and recommends exactly one next action with a reason. If required artifacts are missing, recommend creating or repairing them. If work appears ready, recommend the next stage. If work appears complete, run Feature Completion Check and recommend close, pause, or continue.
 
-Explicit bypass is allowed only for narrow one-off edits that do not create or change feature behavior, public interfaces, data/security boundaries, project memory, formal onboarding docs, submit state, or close state. Record the bypass reason in the response or `notes.md` when a feature exists.
+An explicit safe one-off request is compatibility input to Lightweight Change Assessment, not a separate execution bypass. A bounded ordinary non-Bug edit may use the response-local Lightweight Execution Card only after eligibility, scope, verification, rollback, memory, branch, and gate checks pass.
 
 These checks cannot be bypassed inside `agent-loop`: Project Entry classification, re-adoption minimum reconciliation, human source requirement preservation, Onboarding Spec acceptance and the later Full Execution Gate, Task Done Gate, Delivery Contract acceptance or breaking-change gate, fresh verification before completion claims, submit confirmation, and close confirmation.
 
@@ -34,7 +34,7 @@ Message intent is evaluated before project state classification. It decides what
 | `proposal-doc` | human asks to write a proposal, design note, or discussion document without implementing | write the requested proposal/doc only |
 | `deferred-requirement` | human asks to remember, defer, backlog, or do something later | Requirement Archive with Future / Deferred Requirement Intake |
 | `operational-support` | human asks to use current project code/processes to test, run, deploy, switch config/account/model/provider, diagnose, roll out, or create a runbook | Code-Guided Operational Support |
-| `feature-follow-up` | human reports bug, QA feedback, screenshot issue, regression, small tweak, or post-close correction that may relate to recent feature work | Feature Follow-up / Flow-back after project memory is available |
+| `feature-follow-up` | explicit defect/regression/QA/post-close evidence or clear Feature ownership indicates follow-up work; generic “small tweak” alone is insufficient | Feature Follow-up / Flow-back after project memory is available |
 | `unknown` | message could reasonably mean chat, requirements discussion, feature work, follow-up, or operational support | ask a clarifying question |
 
 If message intent is `chat`, do not create requirement sets, feature workspaces, tasks, tests, or plans. Answer, explain, or discuss. If the chat turns into demand shaping, reclassify as `requirements-discussion`.
@@ -90,6 +90,39 @@ Archive changes Feature location, not identity or ownership. Resolve archived ca
 Fail closed on Index/README mismatch, ambiguous or cyclic duplicate target, invalid Status/Resolution pairing, missing Resolution Target for `flow-back | linked-feature | maintenance-fix | requirement`, Requirement/Feature/ADR/Contract Expected Behavior conflict, archive locator inconsistency, expired-only verification evidence, or any Bug/Feature/Requirement/Git action without its named Human Gate. Record the evidence and recommend exactly one investigation, Recovery, or human decision.
 
 Bug confirmation, Severity/Priority, accepted Requirement, Feature plan, successful tests, Auto Mode, Bug close, submit, commit, or push approval never authorizes a different gate. Passing repair tests may move a Bug to `verifying`; only complete Bug-specific evidence and the Bug Close Gate permit `closed`.
+
+## Lightweight Change Lane
+
+Lightweight Change Lane is an internal route before Feature construction, not a canonical stage, message-intent value, Feature Type, Bug Resolution Path, task status, lifecycle, or Auto Mode. Load `references/lightweight-change-lane.md` for the detailed authority.
+
+Apply this sequence exactly:
+
+```text
+explicit Bug management intent
+-> Human-Guided Bug Management
+
+actionable non-Bug change
+-> Lightweight Change Assessment
+   -> clearly eligible -> Lightweight Execution Card
+   -> Feature trigger -> Feature Construction
+   -> uncertain -> Human Choice with Agent Recommendation
+```
+
+Explicit Bug Management wins before assessment. An active Feature that clearly owns the change also blocks lane escape. Generic `fix`, “修一下”, “改一下”, “small tweak”, line count, file count, or step count does not decide eligibility.
+
+After Project Entry classification, perform only the minimum root-guidance, Git/dirty-state, target-scope, nearby-reference, safety, verification-entry, active-Feature, branch, sealed-release, and relied-on-memory checks needed for the route. Do not initialize or repair `.agent-loop/` solely to create a response-local card. A stale or conflicting memory claim that the route relies on stops for Recovery, Feature Construction, or Human Choice.
+
+`clearly eligible` requires a clear goal and completion criteria, enumerable scope, no new product/technical decision, no public/data/state/permission/security/dependency/migration/architecture boundary, exact targeted verification, concrete rollback, no Bug/Feature long-term tracking need, no cross-session/handoff/subagent need, and sufficient current evidence. Any missing condition produces `Feature trigger` or `uncertain`.
+
+Before the first write, render the complete `templates/lightweight-execution-card.md` response-locally. A Plan is always required but its depth is adaptive. Fact/config/path/domain/docs changes use failure-matched parsing, reference, residual, syntax, or bounded dry-run checks; isolated behavior logic uses the smallest meaningful RED/GREEN and focused regression. The lane does not enter mandatory Plan Gate / Plan or Execute Task / Story helper stages.
+
+When reliable project memory exists, Project Skill Discovery Guard still runs before generic action or helper fallback. A matched active Project Skill keeps manifest validation and its per-invocation Execution Gate; it cannot widen the card.
+
+When route evidence is uncertain, stop with few real options, one Agent recommendation, concrete evidence/unknowns, and zero writes before the human answer. Human choice cannot override a Feature hard trigger, sealed release, customer isolation, or action-specific gate.
+
+Scope expansion stops the lane before broader edits. Preserve the current investigation, diff, and verification evidence; name the trigger; recommend exactly one Bug Management, Requirements Discussion, or Feature Construction route; and ask before keeping, reverting, or extending partial edits.
+
+Completion requires executed-or-explained Plan steps, fresh targeted verification, diff/scope review, valid rollback, durable-memory impact review, and Result / Residuals. Card completion grants no Feature/Bug lifecycle, branch, submit, commit, push, PR, merge, tag, release, publish, production, paid-call, configuration-write, deployment, destructive, or external action.
 
 ## Concept Foundation Routing
 
@@ -325,7 +358,7 @@ If `project.md` claims a legacy onboarding layout, lists onboarding-db files, or
 
 Project Entry has priority over feature-follow-up. If no .agent-loop/ or legacy agent-loop/ memory exists, do not classify directly as feature-follow-up; classify as `existing-project` or `new-project` first, preserve the bug/change report as intake context, and establish or confirm project memory before running Feature Follow-up.
 
-If the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, screenshot issue, behavior tweak, "small tweak", test failure, or QA/user feedback and reliable agent-loop memory exists, classify as `feature-follow-up` before deciding to create a new Feature. For explicit Bug management, load `references/bug-management.md` and `references/feature-follow-up.md`; scan complete Bug Index metadata for duplicate/reopen identity first, then inspect Feature metadata using the project-configured 90-day default plus evidence-driven extended scan. Create/update/reopen the Bug Record, resolve Expected Behavior, and recommend exactly one of `investigate-first | flow-back | linked-feature | maintenance-fix | requirement | no-fix`. Wait for the Resolution Path Gate and any separate Feature/Requirement action gate.
+If explicit defect/regression/QA/post-close evidence or clear recent Feature ownership exists and reliable agent-loop memory is available, classify as `feature-follow-up` before deciding to create a new Feature. For explicit Bug management, load `references/bug-management.md` and `references/feature-follow-up.md`; scan complete Bug Index metadata for duplicate/reopen identity first, then inspect Feature metadata using the project-configured 90-day default plus evidence-driven extended scan. Create/update/reopen the Bug Record, resolve Expected Behavior, and recommend exactly one of `investigate-first | flow-back | linked-feature | maintenance-fix | requirement | no-fix`. Wait for the Resolution Path Gate and any separate Feature/Requirement action gate. Generic “small tweak”, `fix`, “修一下”, or “改一下” wording alone routes an actionable non-Bug change through Lightweight Change Assessment before Feature construction.
 
 `maintenance-fix` is not a bypass. It uses the standard feature workspace under `.agent-loop/features/YYYY-MM-DD-fix-<slug>/` and must still pass spec, tasks, tests, plan, verification, review, drift, project memory update when needed, Feature Completion Check, and close.
 
@@ -433,6 +466,7 @@ Remote Project Discovery if Needed
 Re-Adopt Agent Loop Project if Needed
 Feature Monthly Archive If Explicitly Requested
 Code-Guided Operational Support if Needed
+[internal] Lightweight Change Assessment for eligible ordinary non-Bug changes
 Project Skill Creation / Update if Needed
 Requirement Archive
 Decision & Design If Needed

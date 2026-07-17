@@ -21,6 +21,10 @@ External skill default paths are advisory only. If a preferred skill says to wri
 
 The mandatory helper-backed stages are Brainstorm / Clarify, Project Skill Creation / Update, Plan Gate / Plan, Execute Task / Story, Diagnose Failure, Verify, Review / Feature Close Review, and approved Subagent Execution.
 
+Lightweight Change Lane does not enter mandatory Plan Gate / Plan or Execute Task / Story helper resolution.
+
+The controller writes the response-local card Plan and selects failure-matched targeted verification or the smallest meaningful RED/GREEN. Do not add Lightweight Change Lane to the mandatory stage table. If scope promotion creates or reopens a Feature, normal `writing-plans` and `test-driven-development` helper resolution resumes before Feature execution.
+
 For each mandatory stage:
 
 1. Identify the required helper from the table below.

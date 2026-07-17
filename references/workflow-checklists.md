@@ -128,6 +128,22 @@ Before using an external skill or plugin inside a stage:
 - [ ] Load the matching `agent-loop` reference before taking stage actions; root `AGENTS.md` is a navigation index, not the detailed procedure.
 - [ ] Reclassify and select a new stage only when the latest human intent or project evidence changes.
 
+## Lightweight Change Lane
+
+- [ ] Confirm Project Entry classification and perform only the minimum root-guidance, Git/dirty-state, scope, nearby-reference, safety, branch/sealed, and verification-entry checks needed for the route.
+- [ ] Check explicit Bug Management and active Feature ownership before lightweight eligibility.
+- [ ] Require every eligibility condition; treat any Feature hard trigger as decisive.
+- [ ] If uncertain, stop with few real options, evidence, one Agent recommendation, and zero writes before the human answer.
+- [ ] Emit the complete response-local card before the first write: Background, Goal / Completion Criteria, Scope, Lane Rationale, Impact / Risk, Plan, Current Progress, Verification, Rollback, Human Gates, Result / Residuals.
+- [ ] Keep a Plan in every card and adapt depth to risk; never use No-Plan Decision.
+- [ ] When a reliable memory root exists, run Project Skill Discovery Guard and preserve the matched Project Skill Execution Gate.
+- [ ] Record why the change uses targeted verification or the smallest meaningful RED/GREEN.
+- [ ] Stop before broader edits on scope expansion and recommend exactly one Bug Management, Requirements Discussion, or Feature Construction route.
+- [ ] Before completion, run fresh targeted verification and review diff, disclosed scope, durable-memory impact, and rollback.
+- [ ] Confirm branch, submit, production, external, paid, configuration-write, destructive, Feature/Bug lifecycle, and Git gates remain separate.
+- [ ] Report completed/cancelled Plan steps, result, residuals, verification, rollback, and any route promotion.
+- [ ] Do not create `.agent-loop/changes/`, `.agent-loop/quick-fixes/`, another lightweight backlog, or a Feature substitute.
+
 ## Project Skill Discovery Guard
 
 - [ ] Run only after the Agent Loop controller and reliable memory root are established.
@@ -165,7 +181,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.4.0-20260716.1`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.0-20260717`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -251,7 +267,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.4.0-20260716.1`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.0-20260717`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -391,13 +407,13 @@ Before using an external skill or plugin inside a stage:
 
 - [ ] Load `feature-follow-up.md`.
 - [ ] For explicit bug-record/manage/investigate/fix intent, load `bug-management.md`; keep Bug Management internal to Feature Follow-up and do not add a canonical stage/message intent.
-- [ ] Trigger before creating a new feature when the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, screenshot issue, behavior tweak, "small tweak", test failure, or QA/user feedback.
+- [ ] Treat generic adjustment wording as assessment input only; require explicit Bug/defect evidence, changed accepted behavior, or clear Feature ownership before entering Feature Follow-up.
 - [ ] Ordinary Chat/read-only error explanation does not create a Bug artifact; missing reliable memory preserves intake and routes through Project Entry first.
-- [ ] Scan complete Bug Index metadata for duplicate/reopen identity before creating a Bug or scanning Feature ownership; Bug identity has no time cutoff.
+- [ ] Scan complete Bug Index metadata for duplicate/reopen identity before creating an explicit Bug or scanning Feature ownership; Bug identity has no time cutoff, but non-Bug Follow-up does not create or update a Bug Record.
 - [ ] Inspect Active/Paused pointers and Feature metadata/summaries in the default 90-day window, then deep-read evidence-ranked candidates and run `outside-default-window` extended scan when evidence points beyond 90 days.
 - [ ] Calculate Feature age from `Last Updated / Closed`, not archive month, directory mtime, or archive operation time.
 - [ ] Inspect code/test/API/data/UI paths mentioned by the report.
-- [ ] If the report/title is generic, keep the Bug `triaging` and recommend `investigate-first`; do not merge/reopen the nearest record or Feature by recency/title alone.
+- [ ] If an explicit Bug report/title is generic, keep the Bug `triaging` and recommend `investigate-first`; do not merge/reopen the nearest record or Feature by recency/title alone.
 - [ ] Present a Candidate Match Matrix with match evidence and match strength.
 - [ ] When multiple candidates have medium/high match because evidence is incomplete, recommend `investigate-first`; ask the human only when evidence is sufficient and the remaining choice is product/ownership.
 - [ ] Classify the report as same-feature-bug, same-feature-adjustment, regression-from-feature, new-feature, maintenance-fix, or unclear.

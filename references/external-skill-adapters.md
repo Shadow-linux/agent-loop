@@ -41,6 +41,8 @@ This ownership is invariant even when a helper is mandatory. A helper may impose
 
 Do not copy an external skill's full workflow into `agent-loop`. Borrow the method, then translate the result into the current `agent-loop` artifact.
 
+For Lightweight Change Lane, the response-local card remains controller-owned and does not enter a mandatory helper-backed stage. Do not expand a Lightweight Execution Card into `docs/superpowers/`, a Feature workspace, or a construction-grade plan. An external helper may advise a method only when already appropriate; it cannot introduce a helper-specific path, artifact, mode, gate, or scope expansion. Promotion to Feature restores the normal helper protocol.
+
 ## Path Override Rule
 
 If an external skill says to write an artifact under its own default directory, treat that path as advisory: agent-loop artifact paths always override external skill default paths.

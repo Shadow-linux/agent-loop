@@ -33,6 +33,7 @@ New human source material should be archived inside a requirement set directory.
 
 | File | Owns | Does Not Own |
 |---|---|---|
+| Lightweight Execution Card | response-local execution control | target-project backlog, Feature replacement, Bug lifecycle, or Git authorization |
 | `remote.md` | how to find, verify, and access a remote project from a local entry directory | feature logs or project capabilities |
 | `project.md` | long-term project facts in simple mode; memory index/current state in enterprise mode; human-confirmed durable Branch Strategy and current Target Release Context pointer | task logs, backlog lists, deferred requirements, mutable development-branch lifecycle |
 | `project/*.md` | enterprise long-term project memory details | feature execution logs |
@@ -56,6 +57,8 @@ New human source material should be archived inside a requirement set directory.
 | `contracts/*` | optional confirmed durable producer-consumer contract details when interface detail is needed | temporary task logs |
 | `features/archive.md` | Feature Monthly Archive locator and move ledger: stable Feature ID, current path, archive state, close date, one-line delivery locator, source/decision locators, last move | feature lifecycle, product meaning, requirement meaning, decision content, verification evidence |
 | `memory-merges/MM-<collision-safe-short-sha>/README.md` | one full Merged Code SHA's Merge Context, complete Path Accounting Ledger, Human Decisions, exact Plan Hash, Apply, post-check, restore, and remaining-risk evidence | code merge, project encyclopedia, product/ADR meaning, Feature execution, or authorization for later Git actions |
+
+The Lightweight Execution Card is rendered in the current response/task context and is not copied into project memory by default. Do not create `.agent-loop/changes/`, `.agent-loop/quick-fixes/`, or another default lightweight directory/backlog in v1.5.0. If work needs durable artifacts, pause/resume, handoff, subagent execution, or long-term tracking, use Feature construction.
 
 ## Status Values
 

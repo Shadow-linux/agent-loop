@@ -1,6 +1,6 @@
 # Feature Follow-up And Flow-back
 
-Use this when a human reports a bug, regression, test failure, algorithm change, field/schema change, behavior tweak, or post-close correction that may relate to existing Feature work. For explicit bug-record, manage, investigate, or fix intent, load `references/bug-management.md`; Bug Management is the internal intake/triage method and this reference owns Feature relationship routing.
+Use this when explicit defect/regression/QA evidence, a post-close correction, or clear Feature ownership may require Flow-back. For explicit Bug record/manage/investigate/fix intent, load `references/bug-management.md`; Bug Management is the internal intake/triage method and this reference owns Feature relationship routing. An ordinary actionable non-Bug change enters Lightweight Change Assessment before candidate Feature scans unless ownership or a Feature hard trigger is already decisive.
 
 ## Purpose
 
@@ -12,12 +12,16 @@ Feature Follow-up requires existing agent-loop memory. If `.agent-loop/` or lega
 
 ## Trigger Phrases
 
+Generic “small tweak” wording does not by itself enter Bug Management or Feature Follow-up.
+
+The isolated words `fix`, “修一下”, “改一下”, “small tweak”, “quick tweak”, or “minor adjustment” require semantic assessment. If they describe a bounded ordinary non-Bug synchronization with no Feature hard trigger, route to Lightweight Change Assessment. If evidence shows expected-versus-observed defect management, regression/QA failure, accepted-behavior change, or active/closed Feature ownership, continue here.
+
 Route here when the human says or implies:
 
 - "测试发现 bug", "有个 bug", "回归了", "之前做完的功能有问题"
 - "这个字段要改", "算法要改", "接口返回要调整", "规则微调", "不是新功能"
 - "行为要调一下", "需要改一下", "小改一下", "这个体验/文案/逻辑微调一下", "验收标准要改"
-- "behavior tweak", "small tweak", "quick tweak", "minor adjustment", "change the requirement", "update the acceptance criteria"
+- "behavior tweak", "change the requirement", "update the acceptance criteria" when behavior/acceptance or Feature ownership evidence is present
 - "上次那个功能", "最近做的功能", "关闭后发现"
 - "线上/联调/验收发现问题"
 - error screenshots, browser screenshots, logs, stack traces, failing tests, API mismatch, E2E failure, or user feedback tied to active, paused, closed, or recent feature work
@@ -78,6 +82,8 @@ Rules:
 - Only upgrade the match after concrete evidence links the failure to a feature's files, API, data model, UI route, job, test, acceptance criteria, or verification notes.
 
 ## Classification
+
+Before building the Candidate Match Matrix, exclude a clearly bounded ordinary non-Bug local change through Lightweight Change Assessment. Do not use this exclusion when an active/closed Feature owns the work, product behavior changes, explicit Bug management intent exists, or another Feature hard trigger applies.
 
 Use this table:
 

@@ -26,6 +26,14 @@ Root guidance may navigate a user Agent to the Feature Monthly Archive procedure
 
 Root guidance may also route a post-code-integration memory check, but the detailed Target spine, four snapshots, report states, Plan Hash, scripts, and recovery algorithm stay in `memory-reconciliation.md`. Refresh the root submit managed block when this concise route is absent or its full template block revision is stale; do not copy the detailed procedure into the target root file.
 
+Root guidance must include this concise Lightweight Change reminder exactly once:
+
+```text
+Before creating a Feature for a bounded non-Bug change, let Agent Loop assess the Lightweight Change Lane; if impact is unclear, stop and ask the human with a recommendation.
+```
+
+The Workflow Stage Map also contains one navigation row for `Lightweight Change Assessment (internal route)` pointing to `references/lightweight-change-lane.md`. Eligibility, Feature hard triggers, card fields, Adaptive Plan/TDD, scope expansion, completion, and gate details belong in that reference, not root `AGENTS.md`.
+
 ## Root Agent Bootstrap Gate
 
 Root `AGENTS.md` is the bootstrap node that teaches future agents how to enter `agent-loop`. It is not optional project decoration.
@@ -54,6 +62,7 @@ Every time `agent-loop` is used inside a target project, check root guidance bef
 - Bootstrap Protocol is missing skill-loading/fallback rules: root guidance must say root `AGENTS.md` is a bootstrap cache rather than a replacement for the `agent-loop` skill, must load/use the available skill before agent-loop workflow decisions, and must say Stage Helper Capability Scan happens only after the controller is active or unavailable/load-failed
 - Message Intent Guard: distinguish `chat`, `requirements-discussion`, `project-skill-management`, and `feature-request` before project-state routing; chat answers only, requirements discussion uses Brainstorm / Clarify to produce requirement documents under `.agent-loop/requirements/`, applies the internal Concept Foundation Gate before downstream product modeling when triggered, and project-skill management routes to Project Skill Creation / Update
 - Workflow Stage Map: route common human/project signals to exactly one next stage and its matching detailed references; root guidance is navigation only, not the detailed stage procedure
+- Lightweight Change reminder and Stage Map signal: route bounded ordinary non-Bug work to `references/lightweight-change-lane.md` before Feature construction without copying the eligibility matrix or card into root guidance
 - Bootstrap Protocol: inspect `.agent-loop/`, classify the stage, and recommend exactly one next action
 - Bootstrap Protocol lacks the concise Project Skill discovery-before-fallback reminder; detailed result names, drift handling, manifest procedure, and precedence remain in `references/runtime.md` and `references/project-skills.md`, not root guidance
 - Agent Ownership: agents steer the loop instead of waiting for the human to name every step
@@ -61,7 +70,7 @@ Every time `agent-loop` is used inside a target project, check root guidance bef
 - Gate Modes: Strict Mode, Feature Auto-Loop, Task Auto-Run, and their explicit human enablement rules
 - Required Stops: unclear scope, unresolved Concept Foundation Gate, downstream redefinition of accepted product semantics, unresolved ADR Effective Requirement Snapshot, incomplete source-wide Requirement Model Scope Inventory / Technical Landing Trace, `Upstream Compatibility: review-required`, risky changes, Delivery Contract gates, Project Skill Gate 1, per-invocation Project Skill Execution Gate, subagent dispatch, submit, close, commit, PR, merge, release, publish
 - Completion Rules: fresh verification, review, drift check, project memory update, Feature Completion Check, Feature Close Review
-- Feature Follow-up / Flow-back: bugs, regressions, screenshots, QA feedback, API mismatches, and small tweaks are checked against active/paused/closed recent features before new feature creation or code edits, but only after Project Entry has established or verified agent-loop memory
+- Feature Follow-up / Flow-back: explicit Bug intent, regressions, screenshots, QA feedback, API mismatches, and evidence-backed Feature ownership are checked against active/paused/closed recent features before new feature creation or code edits, but only after Project Entry has established or verified agent-loop memory; generic “small tweak” wording alone uses Lightweight Change Assessment first
 - Submit And Commit Rules: submit/commit/PR/merge/release/publish require explicit confirmation and only intended files are included
 - Submit And Commit Rules lack the concise post-code-integration reminder to reconcile changed Agent Loop memory before push/release/Source cleanup
 - root/directory guidance boundaries and requirement archive rules
@@ -149,7 +158,7 @@ Rules:
 - Managed block maintenance rules belong here and in refresh tooling; do not require the target root `AGENTS.md` to include a separate Managed Block Rule prose section.
 - If an existing `AGENTS.md` has no managed blocks, propose adding the minimal needed managed blocks instead of replacing the whole file.
 - If a block-version is missing or older than the current template, treat that block as stale.
-- Treat bare skill-version-only block revisions such as `block-version:1.4.0` as stale because they cannot distinguish same-version template revisions.
+- Treat bare skill-version-only block revisions such as `block-version:1.5.0` as stale because they cannot distinguish same-version template revisions.
 - If a managed block exists in the current template but is missing from root AGENTS.md, treat it as a missing managed block and propose adding it.
 - If a managed block source is missing, stale, or contradictory, classify the block as stale and propose either source correction or block refresh through Human Review Summary.
 - If marker pairs are broken, duplicated, nested, or ambiguous, stop and ask before editing.

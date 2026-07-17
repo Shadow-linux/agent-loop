@@ -67,7 +67,7 @@ Rules:
 - Prefer safe read-only commands and source inspection. For commands that contact external services, mutate state, consume paid quota, or touch production/staging, ask before running.
 - Produce a concise runbook/checklist: current understanding, files inspected, required inputs, test steps, rollout steps, verification, rollback, risks, and open questions.
 - If the request is ambiguous, ask whether the human wants feature implementation or help using current project functionality.
-- If code changes are required, stop and recommend Feature Follow-up, maintenance-fix, or Feature Spec as the next stage after human confirmation.
+- If code or configuration changes are required, run Lightweight Change Assessment before defaulting to Feature construction, unless explicit Bug intent or a Feature hard trigger already decides the route.
 - If durable runbook or project memory would help future agents, propose where to save it and ask before writing.
 
 Write:
@@ -78,6 +78,51 @@ Write:
 Exit:
 
 - operational checklist delivered, blocker/question identified, or human confirms escalation into feature/fix workflow
+
+## Lightweight Change Lane
+
+This is an internal route before Feature construction, not a canonical stage, message intent, Feature Type, Bug Resolution Path, lifecycle, status, or Auto Mode. Load `references/lightweight-change-lane.md` and render `templates/lightweight-execution-card.md` before the first write.
+
+Entry: an actionable ordinary non-Bug local change may be bounded, reversible, and exactly verifiable.
+
+Run in this order:
+
+```text
+Project Entry classification plus minimum guidance, dirty-work, scope and safety checks
+-> explicit Bug / active Feature precedence
+-> enumerate goal, acceptance, scope, risk, verification, rollback
+-> decide clearly eligible | Feature trigger | uncertain
+-> emit the complete card before first write
+-> Project Skill Discovery Guard before generic action fallback
+-> bounded edit
+-> targeted verification
+-> diff/scope/memory/rollback review
+-> result or scope-expansion stop
+```
+
+Rules:
+
+- A concrete bounded change request authorizes only the local scope disclosed in the card; it adds no separate Lightweight Mode gate.
+- Explicit Bug Management and an active owning Feature take precedence. Generic `fix`, “修一下”, “改一下”, or “small tweak” wording alone decides neither route nor eligibility.
+- Eligibility is all-of and Feature hard triggers are any-of. A missing fact becomes `Feature trigger` or `uncertain`, never an optimistic lane assumption.
+- When uncertain, present few real options, one Agent recommendation, evidence/unknowns, and perform zero writes before the human answer.
+- The response-local Plan always exists and never uses No-Plan Decision. Adapt its detail to risk without turning it into Feature `plan.md`.
+- Fact/config/path/domain/docs changes use targeted syntax/parse/reference/residual/dry-run evidence. A small isolatable behavior branch uses the smallest meaningful RED/GREEN plus focused regression.
+- If reliable memory exists, run Project Skill Discovery Guard before generic action fallback and preserve the matched Project Skill Execution Gate.
+- Scope expansion stops before broader edits. Preserve current evidence, recommend exactly one Bug/Requirement/Feature route, and ask before keeping, reverting, or extending partial edits.
+- Completion requires fresh verification, diff and disclosed-scope review, rollback, durable-memory impact review, and Result / Residuals.
+- The card grants no branch, submit, commit, push, PR, merge, tag, release, publish, production, external, paid-call, configuration-write, destructive, Feature close, or Bug lifecycle action.
+
+Write:
+
+- one complete response-local Lightweight Execution Card;
+- no target-project `.agent-loop/changes/`, `.agent-loop/quick-fixes/`, Feature workspace, or lightweight backlog.
+
+Exit:
+
+- verified bounded result and Human Review summary; or
+- zero-write uncertain-route Human Choice; or
+- scope-expansion stop with one recommended owning route.
 
 ## Project Skill Creation / Update
 

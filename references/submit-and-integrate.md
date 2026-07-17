@@ -16,6 +16,10 @@ Close ends the feature in agent-loop.
 
 Never commit, open a PR, merge, release, publish, or claim submission readiness without human confirmation.
 
+A completed Lightweight Execution Card authorizes no submit or integration action.
+
+At Submit / Integrate, re-read its fresh verification, diff, scope, memory-impact, and rollback evidence as input only. Card execution approval cannot become commit, push, PR, merge, tag, release, or publish approval; every requested action keeps the existing two-stage confirmation and Branch Strategy checks.
+
 ## Entry Conditions
 
 Enter this stage only after:
@@ -145,14 +149,14 @@ feat, fix, docs, refactor, test, chore
 For the `agent-loop` skill repository:
 
 - prefer Chinese in the summary and body
-- include the current skill version scope, for example `docs(v1.4.0): 调整 Project Entry Scan 文档结构`
+- include the current skill version scope, for example `docs(v1.5.0): 调整 Project Entry Scan 文档结构`
 - use 3-7 concrete bullet lines for behavior, gate, artifact, template, reference, validation scenario, or documentation changes
 - keep version numbers unchanged unless the human explicitly approves a version bump
 
 Example:
 
 ```text
-docs(v1.4.0): 调整 Project Entry Scan 文档结构
+docs(v1.5.0): 调整 Project Entry Scan 文档结构
 
 - 移除旧 onboarding-db 生成入口
 - 统一旧项目入口为 Project Entry Scan

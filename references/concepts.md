@@ -31,6 +31,12 @@ First version excludes:
 
 **Requirement**: Human-provided textual or conversational need.
 
+**Lightweight Change Lane**: Bounded non-Bug execution route before Feature construction. It requires all eligibility evidence, yields to explicit Bug Management and active Feature ownership, and stops for Human Choice when uncertain.
+
+**Lightweight Execution Card**: Response-local background, scope, adaptive Plan, progress, targeted verification, rollback, Human Gate, and result control. It is not a Feature artifact, persistent backlog, or later-action authorization.
+
+**Adaptive Depth**: Risk-based detail selection for the card, Plan, and targeted test/verification method. It never reduces scope control, fresh evidence, rollback, memory impact review, or an existing Human Gate.
+
 **Bug Report**: One intake event and its source evidence. Several reports may be attached to one stable Bug Record; one report does not automatically create a new Bug identity.
 
 **Bug Record**: Stable, deduplicated identity for an expected-versus-observed behavior mismatch. It owns facts, evidence, lifecycle, Resolution Path, relationships, verification, close, and reopen history, but not product meaning or repair execution.
@@ -101,7 +107,7 @@ First version excludes:
 
 **Drift**: Mismatch between docs, code reality, or human decisions.
 
-**Feature Follow-up / Flow-back**: Bug/change intake path that owns the Bug Management internal method and checks whether a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, screenshot issue, behavior tweak, "small tweak", test failure, or QA/user feedback belongs to an existing Feature before creating a new Feature. Bug identity scans all Bug Index metadata; Feature ownership defaults to 90 calendar days and remains evidence-extendable.
+**Feature Follow-up / Flow-back**: Feature-ownership route for explicit Bug management, defect/regression/QA/post-close evidence, changed accepted behavior, or clear active/closed Feature ownership. Generic adjustment wording alone routes an actionable ordinary non-Bug change through Lightweight Change Assessment before ownership scanning. When Follow-up applies, Bug identity scans all Bug Index metadata and Feature ownership defaults to 90 calendar days with evidence-driven extension; only explicit Bug management creates or updates a Bug Record.
 
 **Code-Guided Operational Support**: Read-only support lane for using current project functionality to test, run, deploy, switch account/config/model/provider, check quota/rate limits, arrange rollout, diagnose production, or produce a runbook/checklist. It does not create a feature workspace or edit code/config by default; feature/fix escalation requires human confirmation.
 
@@ -154,6 +160,7 @@ notes.md   = what actually happened
 handoffs/  = optional subagent briefs and returns
 contracts.md = optional delivery contract index or compact contract
 contracts/ = optional durable producer-consumer contract details
+Lightweight Execution Card = response-local execution control; no default target-project file or directory
 ```
 
 `AGENTS.md` / `CLAUDE.md` live outside `.agent-loop/` and tell future agents how to enter the workflow. They do not own task state.

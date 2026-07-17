@@ -77,6 +77,12 @@ Summary:
 
 Omit `Source Requirements` when not relevant.
 
+## Lightweight Execution Card
+
+Use `templates/lightweight-execution-card.md` for a clearly eligible Lightweight Change Lane request. Render it in the response/current task context before the first write. It is response-local execution control, not a target-project artifact, and must not be copied into `.agent-loop/` by default.
+
+Do not duplicate the full card here or create `.agent-loop/changes/`, `.agent-loop/quick-fixes/`, a Feature substitute, or a lightweight backlog. If durable recovery or tracking is required, promote the work to Feature construction.
+
 ## Human Review Summary
 
 Use `references/human-review-summary.md` before asking the human to approve non-trivial stage output.

@@ -21,6 +21,10 @@ If a hard trigger applies and the human declines or defers enterprise mode, reco
 
 Project memory must not be used as a backlog. Do not write future feature ideas, temporary TODOs, deferred requirements, unimplemented planned capability details, or backlog lists into `project.md` or enterprise project memory. Put future/deferred requirement memory in `.agent-loop/requirements/` and optional `requirements/INDEX.md`; `project.md` may only point to a requirement set when needed for the current resume action.
 
+Do not store Lightweight Execution Card history or a lightweight backlog in `project.md`.
+
+A card may mechanically synchronize an already human-confirmed durable fact only when the exact memory path is listed in Scope and the change introduces no new product, architecture, environment, or release decision. New durable facts leave Lightweight Change Lane for their owning workflow.
+
 Bug inventory is also not project memory. In both modes, `.agent-loop/bugs/INDEX.md` owns open, deferred, verifying, and closed Bug inventory plus locator rows; Bug README files own details. `project.md` may store only the configurable `Feature Follow-up Lookback` and current Feature pointers. Do not add Open Bugs, Deferred Bugs, Bug assignees, reproduction logs, or Bug backlog rows to simple or enterprise project memory.
 
 Human-confirmed Branch Strategy is durable project memory in both modes. Keep the compact policy and current Target Release Context pointer in `project.md` so entry and submit routing do not require loading an optional enterprise detail file. Keep development-branch selection, lifecycle, merge evidence, and cleanup decisions in the owning feature notes/plan/submit record. Never record an unconfirmed recommendation as `accepted`, and do not create `.agent-loop/branches/`.

@@ -1,6 +1,6 @@
 # Agent Loop 使用指南
 
-**版本：** 1.4.0
+**版本：** 1.5.0
 
 这份文档是给人类看的。你不需要记住内部阶段名，只要用自然语言说出你想做什么，Agent 应该自己判断当前状态、推荐一个下一步，并在需要你确认的地方停下来。
 
@@ -45,7 +45,7 @@ Project Entry Scan 不算完成，除非 root `AGENTS.md` 已存在、已创建�
 | “重点讲清楚支付/钱包/任务调度这块。” | 先从现有代码和文档回答；如果要沉淀长期文档，再走聚焦的 onboarding-db 更新。 |
 | “这个旧 onboarding-db 还能信吗？” | 把旧文档当 evidence，先和代码现实核对；不直接按旧布局刷新。 |
 
-当前 1.4.0 使用的是 **Evidence-Graph + DDD Onboarding**，不是旧 Quick / Deep / Targeted 模式。
+当前 1.5.0 使用的是 **Evidence-Graph + DDD Onboarding**，不是旧 Quick / Deep / Targeted 模式。
 
 推荐流程：
 
@@ -95,7 +95,7 @@ Timeline / Sequence 是单个核心流程的主叙事；Core Flow Overview / Bou
 
 | 你可以这样说 | Agent 应该怎么做 |
 |---|---|
-| “1.4.0 更新了什么？” | 读取 `CHANGELOG.md` 的 1.4.0 段落，按能力分类总结，不凭记忆回答。 |
+| “1.5.0 更新了什么？” | 读取 `CHANGELOG.md` 的 1.5.0 段落，按能力分类总结，不凭记忆回答。 |
 | “和 1.2.2 比有什么变化？” | 对比 `CHANGELOG.md` 里的两个版本段落，说明新增、删除、替换和迁移影响。 |
 | “现在 agent-loop 怎么用？” | 基于 `Usage.md` 用人类语言介绍常见触发方式。 |
 | “这个功能怎么触发？” | 从 `Usage.md` 找对应说法，再说明 Agent 会进入哪个处理流。 |
@@ -338,6 +338,22 @@ Operational landing 不是每份 ADR 的默认大章节。只有持久化表示�
 ```
 
 当你确认实现某个 phase 后，Agent 再创建 feature，并在 `spec.md` 里引用这个 requirement set 和 phase。
+
+### 我想做一个边界明确的小修改
+
+| 你可以这样说 | Agent 应该怎么做 |
+|---|---|
+| “把生产脚本里已经确认的旧域名换成新域名。” | 先确认这是内部机械同步且没有外部调用方变化，再给出 response-local Lightweight Execution Card；扫描引用、限定替换、做语法/解析/非生产 dry-run、检查旧值残留、diff 和回滚。真实生产调用仍需单独确认。 |
+| “迁移正式生产域名，并处理 DNS、证书和调用方。” | 进入 Feature / Decision 路径，不使用轻量旁路；公共调用、灰度、回滚和发布边界需要完整设计与验证。 |
+| “修正这个内部脚本条件，预期行为已经明确。” | 在边界、消费者和回滚明确时使用执行卡，并先写一个最小有意义失败用例，完成 RED/GREEN 和相关 focused regression。 |
+| “这是 Bug，请登记并修复。” | 明确 Bug Management 优先，先建立或匹配 Bug Record、确认 Expected Behavior 和 Resolution Path，再由 Feature 工作流修复，绝不降级为轻量卡。 |
+| “不确定有没有外部调用方。” | 在写入前停止，整理 Lightweight / Feature 的少量真实选项，给出 Agent 推荐和证据，等你选择；回答前零修改。 |
+
+你不需要说“启用轻量模式”。Agent 先根据产品语义、边界影响、范围、不确定性、验证和回滚自主判断。轻量卡仍然必须有背景、目标与完成标准、范围、旁路理由、风险、Plan、当前进度、验证、回滚、Human Gates 和结果。
+
+事实、路径、域名、配置或文档同步优先使用语法、解析、引用、旧值残留和限定 dry-run 等针对性验证，不为字符串替换制造无意义单元测试。可隔离的行为逻辑仍使用最小 RED/GREEN。发现 API、数据、状态、权限、安全、依赖、迁移、未知消费者、跨会话或范围扩张时，Agent 必须停止并推荐升级到 Feature/Requirement/Bug 的唯一合适路径。
+
+执行卡只授权其中披露的本地修改与本地验证，不授权生产/外部调用、付费操作、配置写入、branch、commit、push、PR、merge、tag、release 或 publish。
 
 ### 我想开始做一个功能
 

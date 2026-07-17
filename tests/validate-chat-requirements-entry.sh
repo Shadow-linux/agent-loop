@@ -33,7 +33,8 @@ assert_contains "references/runtime.md" "If the human explicitly says they only 
 assert_contains "references/runtime.md" "For \`requirements-discussion\`, reviewed/recorded does not mean accepted for implementation"
 assert_contains "references/runtime.md" "Default order applies after Message Intent Classification"
 assert_contains "references/runtime.md" "Chat Entry / Requirements Discussion if Needed"
-assert_contains "references/runtime.md" "\`feature-follow-up\` | human reports bug, QA feedback, screenshot issue, regression, small tweak, or post-close correction that may relate to recent feature work"
+assert_contains "references/runtime.md" "\`feature-follow-up\` | explicit defect/regression/QA/post-close evidence or clear Feature ownership indicates follow-up work; generic “small tweak” alone is insufficient"
+assert_not_contains "references/runtime.md" "\`feature-follow-up\` | human reports bug, QA feedback, screenshot issue, regression, small tweak, or post-close correction that may relate to recent feature work"
 assert_contains "references/runtime.md" "If unclear whether the human wants ordinary chat or requirements discussion, ask whether to keep discussing or shape the topic into a requirements document"
 assert_contains "references/runtime.md" "If unclear whether the human wants requirements discussion or feature implementation, ask whether to form a requirements document first or start feature construction"
 

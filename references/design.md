@@ -37,6 +37,9 @@ The core constraints are:
 - stable Web E2E capability belongs in `project.md`; feature-specific E2E cases belong in feature `tests.md` or `tests/e2e/*`
 - `requirements/` stores human source material packages and requirement lifecycle/backlog records as requirement set directories: requirements, prototypes, feedback, screenshots, recordings, links, follow-up notes, status, and optional `requirements/INDEX.md`
 - Human-Guided Bug Management is an internal method of `Feature Follow-up / Flow-back`, not a canonical stage or message intent
+- Lightweight Change Lane is an internal route before Feature construction for bounded ordinary non-Bug changes; it is not a canonical stage, message intent, Feature Type, Bug Resolution Path, lifecycle, status, or Auto Mode
+- Lightweight Execution Card is response-local execution control with required background, adaptive Plan, progress, targeted verification, rollback, gate, and result fields; it creates no default target-project artifact or backlog
+- Adaptive Depth lets the Agent vary Plan and test detail by real risk while fresh verification, diff review, rollback, scope control, memory impact, and Human Gates stay fixed
 - `bugs/INDEX.md` owns Bug inventory/backlog/locator state, while each Bug README owns stable identity, facts, evidence, lifecycle, Resolution Path, verification, close, and reopen history
 - Bug Report, Bug Record, Report Origin, Expected Behavior Evidence, Status, Resolution, and Reopen are distinct; Bug Status and Resolution form independent axes
 - Requirement owns product meaning, Bug Record owns defect coordination, and Feature owns every code repair; Bug-to-Requirement links are optional `0..N` and never auto-change Requirement lifecycle
@@ -71,6 +74,7 @@ The core constraints are:
 Human Goal
 → [internal] Branch Strategy Check when branch rules, target version, or customer isolation affect safe delivery
 → Operational Support when the goal is to use/run/test/deploy current project behavior without confirmed implementation
+→ [internal] Lightweight Change Assessment for bounded ordinary non-Bug local changes before Feature construction
 → Project Skill Creation / Update when a repeatable project workflow should become a durable local capability
 → Feature Workspace
 → Task / Test / Plan
@@ -111,6 +115,12 @@ Behavior Intent
 **Local Shadow Mode**: fallback when remote project memory cannot be written remotely. Agent-loop artifacts stay local, but every code fact must cite remote evidence.
 
 **Requirement**: human-provided need, goal, document, or natural-language request.
+
+**Lightweight Change Lane**: bounded non-Bug execution route before Feature construction. Explicit Bug Management and active Feature ownership take precedence; hard triggers use Feature, and uncertain impact returns to Human Choice before writes.
+
+**Lightweight Execution Card**: response-local background, goal, scope, rationale, risk, Plan, progress, verification, rollback, Human Gate, and result control. It is not a Feature `plan.md`, persistent task, or authorization for later actions.
+
+**Adaptive Depth**: Agent-owned risk-based selection of card detail, Plan steps, targeted verification, and the smallest meaningful RED/GREEN for isolated behavior. It never reduces safety, scope, rollback, evidence, memory, or action-specific gate invariants.
 
 **Bug Report**: one source event describing a suspected defect. It is intake evidence and does not automatically create a distinct stable identity.
 
@@ -389,7 +399,8 @@ Project Entry and memory bootstrap have priority over Feature Follow-up.
 Condition:
 
 ```text
-Human reports bug, regression, post-close correction, field/schema/algorithm/API change, test failure, screenshot issue, QA/user feedback, or small tweak
+Explicit Bug management intent, defect/regression/QA/post-close evidence, changed accepted behavior, or clear Feature ownership indicates follow-up
+Generic adjustment wording alone does not enter Feature Follow-up; route an actionable ordinary non-Bug change through Lightweight Change Assessment first.
 .agent-loop/ or legacy agent-loop/ memory exists
 ```
 
@@ -397,11 +408,11 @@ Action:
 
 ```text
 Load bug-management.md for explicit Bug management and feature-follow-up.md for ownership routing.
-Scan all Bug Index metadata for duplicate/reopen identity before Feature candidates.
+Scan all Bug Index metadata for duplicate/reopen identity before Feature candidates; without explicit Bug management intent, do not create or update a Bug Record.
 Inspect Active / Paused / Closed Feature metadata in the default 90-day window, then deep-read evidence-ranked candidates and extend beyond 90 days when evidence points there.
 Resolve archived candidates through `features/archive.md`; discovery and Human Review are read-only and do not require rehydrate.
-Create/update/reopen the Bug Record, verify Expected Behavior, and recommend exactly one Resolution Path.
-Wait for the Resolution Path Gate and separate Feature create/reopen gate. Rehydrate a confirmed archived owner only before reopened execution.
+For explicit Bug management, create/update/reopen the Bug Record, verify Expected Behavior, and recommend exactly one Resolution Path.
+Wait for the Resolution Path Gate only for explicit Bug management; every Feature create/reopen action keeps its separate gate. Rehydrate a confirmed archived owner only before reopened execution.
 ```
 
 ### Feature Monthly Archive
@@ -491,6 +502,18 @@ Scenario / Evidence
 
 Simple requirements record `concept-foundation-not-needed` with a reason and remain lightweight. `candidate` and `reopened` are blocking; only `accepted` or a reasoned not-needed result may continue into requirement product modeling.
 
+For an actionable ordinary non-Bug local change before Feature construction, use this internal route:
+
+```text
+Explicit Bug Management / active Feature ownership first
+→ Lightweight Change Assessment
+  → clearly eligible: response-local card, bounded edit, targeted verification, diff/rollback/memory review
+  → Feature trigger: normal Feature construction
+  → uncertain: Human Choice with one Agent recommendation and zero writes
+```
+
+Eligibility is all-of; Feature hard triggers are any-of. Fact/config/path/domain/docs changes use failure-matched targeted verification, while isolated behavior logic uses the smallest meaningful RED/GREEN. Scope expansion stops before broader edits and returns to Human Review. This route creates no `.agent-loop/changes/`, quick-fix backlog, state enum, or helper-native document tree.
+
 Within Decision & Design, a requirement-driven ADR uses this internal order without adding a canonical stage or default mapping artifact:
 
 ```text
@@ -511,6 +534,7 @@ Project Entry
 → Re-Adopt Agent Loop Project if Needed
 → Feature Monthly Archive If Explicitly Requested
 → Code-Guided Operational Support if Needed
+→ [internal] Lightweight Change Assessment for eligible ordinary non-Bug changes
 → Project Skill Creation / Update if Needed
 → Requirement Archive
 → Decision & Design If Needed
