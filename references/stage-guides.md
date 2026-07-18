@@ -81,7 +81,7 @@ Exit:
 
 ## Lightweight Change Lane
 
-This is an internal route before Feature construction, not a canonical stage, message intent, Feature Type, Bug Resolution Path, lifecycle, status, or Auto Mode. Load `references/lightweight-change-lane.md` and render `templates/lightweight-execution-card.md` before the first write.
+This is an internal route before Feature construction, not a canonical stage, message intent, Feature Type, Bug Resolution Path, lifecycle, status, or Auto Mode. Load `references/lightweight-change-lane.md` and persist `templates/lightweight-execution-card.md` after clearly-eligible routing and before the first target write.
 
 Entry: an actionable ordinary non-Bug local change may be bounded, reversible, and exactly verifiable.
 
@@ -92,11 +92,13 @@ Project Entry classification plus minimum guidance, dirty-work, scope and safety
 -> explicit Bug / active Feature precedence
 -> enumerate goal, acceptance, scope, risk, verification, rollback
 -> decide clearly eligible | Feature trigger | uncertain
--> emit the complete card before first write
+-> select the one accepted memory root or changes-only default
+-> create the parser-valid monthly card before first target write
 -> Project Skill Discovery Guard before generic action fallback
 -> bounded edit
 -> targeted verification
--> diff/scope/memory/rollback review
+-> diff/scope/memory/rollback/sensitive-evidence review
+-> read-only pending-memory scan
 -> result or scope-expansion stop
 ```
 
@@ -106,17 +108,20 @@ Rules:
 - Explicit Bug Management and an active owning Feature take precedence. Generic `fix`, “修一下”, “改一下”, or “small tweak” wording alone decides neither route nor eligibility.
 - Eligibility is all-of and Feature hard triggers are any-of. A missing fact becomes `Feature trigger` or `uncertain`, never an optimistic lane assumption.
 - When uncertain, present few real options, one Agent recommendation, evidence/unknowns, and perform zero writes before the human answer.
-- The response-local Plan always exists and never uses No-Plan Decision. Adapt its detail to risk without turning it into Feature `plan.md`.
+- The persisted card Plan always exists and never uses No-Plan Decision. Adapt its detail to risk without turning it into Feature `plan.md`.
 - Fact/config/path/domain/docs changes use targeted syntax/parse/reference/residual/dry-run evidence. A small isolatable behavior branch uses the smallest meaningful RED/GREEN plus focused regression.
 - If reliable memory exists, run Project Skill Discovery Guard before generic action fallback and preserve the matched Project Skill Execution Gate.
 - Scope expansion stops before broader edits. Preserve current evidence, recommend exactly one Bug/Requirement/Feature route, and ask before keeping, reverting, or extending partial edits.
 - Completion requires fresh verification, diff and disclosed-scope review, rollback, durable-memory impact review, and Result / Residuals.
+- A changes-only root does not prove initialization. Reuse one legacy root, fail closed on dual roots, keep the creation month stable, use a collision suffix without overwrite, and run the read-only scanner after completion.
+- Resume accidental interruption only after branch/full-HEAD/dirty-diff/Scope/Plan/eligibility/verification/rollback revalidation. Planned durable continuation remains Feature work.
+- Three pending or an oldest pending age greater than seven days triggers Agent semantic consolidation; high-evidence sync requires an existing reliable owner and exact pre-write disclosure, while uncertain meaning remains visible for Human Review.
 - The card grants no branch, submit, commit, push, PR, merge, tag, release, publish, production, external, paid-call, configuration-write, destructive, Feature close, or Bug lifecycle action.
 
 Write:
 
-- one complete response-local Lightweight Execution Card;
-- no target-project `.agent-loop/changes/`, `.agent-loop/quick-fixes/`, Feature workspace, or lightweight backlog.
+- one complete persistent Lightweight Execution Card under `<memory-root>/changes/YYYY-MM/YYYY-MM-DD-<topic>.md`;
+- no Change README/INDEX/archive/move/rehydrate/restore lifecycle, shared backlog, Feature workspace, or helper-native tree.
 
 Exit:
 

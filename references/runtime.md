@@ -16,7 +16,7 @@ Bootstrap skill loading: AGENTS.md is bootstrap guidance, not a replacement for 
 
 Agent ownership is mandatory. The agent must not wait for the human to name the next internal stage. For every human goal, bug report, project-understanding question, vague product idea, or "what next" request, the agent classifies the current state and recommends exactly one next action with a reason. If required artifacts are missing, recommend creating or repairing them. If work appears ready, recommend the next stage. If work appears complete, run Feature Completion Check and recommend close, pause, or continue.
 
-An explicit safe one-off request is compatibility input to Lightweight Change Assessment, not a separate execution bypass. A bounded ordinary non-Bug edit may use the response-local Lightweight Execution Card only after eligibility, scope, verification, rollback, memory, branch, and gate checks pass.
+An explicit safe one-off request is compatibility input to Lightweight Change Assessment, not a separate execution bypass. A bounded ordinary non-Bug edit may use the persistent Lightweight Execution Card only after eligibility, scope, verification, rollback, memory, branch, and gate checks pass.
 
 These checks cannot be bypassed inside `agent-loop`: Project Entry classification, re-adoption minimum reconciliation, human source requirement preservation, Onboarding Spec acceptance and the later Full Execution Gate, Task Done Gate, Delivery Contract acceptance or breaking-change gate, fresh verification before completion claims, submit confirmation, and close confirmation.
 
@@ -110,11 +110,17 @@ actionable non-Bug change
 
 Explicit Bug Management wins before assessment. An active Feature that clearly owns the change also blocks lane escape. Generic `fix`, “修一下”, “改一下”, “small tweak”, line count, file count, or step count does not decide eligibility.
 
-After Project Entry classification, perform only the minimum root-guidance, Git/dirty-state, target-scope, nearby-reference, safety, verification-entry, active-Feature, branch, sealed-release, and relied-on-memory checks needed for the route. Do not initialize or repair `.agent-loop/` solely to create a response-local card. A stale or conflicting memory claim that the route relies on stops for Recovery, Feature Construction, or Human Choice.
+After Project Entry classification, perform only the minimum root-guidance, Git/dirty-state, target-scope, nearby-reference, safety, verification-entry, active-Feature, branch, sealed-release, and relied-on-memory checks needed for the route. A stale or conflicting memory claim that the route relies on stops for Recovery, Feature Construction, or Human Choice.
 
-`clearly eligible` requires a clear goal and completion criteria, enumerable scope, no new product/technical decision, no public/data/state/permission/security/dependency/migration/architecture boundary, exact targeted verification, concrete rollback, no Bug/Feature long-term tracking need, no cross-session/handoff/subagent need, and sufficient current evidence. Any missing condition produces `Feature trigger` or `uncertain`.
+Discover the accepted memory root before card creation. Reuse exactly one real `.agent-loop/` or legacy `agent-loop/` root. Dual roots, root files, or root symlinks fail closed. When neither exists, the first clearly eligible Change may create only `.agent-loop/changes/YYYY-MM/`; a changes-only root is not reliable project initialization and must not create `project.md`, enterprise memory, root guidance, or a Feature workspace by implication.
 
-Before the first write, render the complete `templates/lightweight-execution-card.md` response-locally. A Plan is always required but its depth is adaptive. Fact/config/path/domain/docs changes use failure-matched parsing, reference, residual, syntax, or bounded dry-run checks; isolated behavior logic uses the smallest meaningful RED/GREEN and focused regression. The lane does not enter mandatory Plan Gate / Plan or Execute Task / Story helper stages.
+`clearly eligible` requires a clear goal and completion criteria, enumerable scope, no new product/technical decision, no public/data/state/permission/security/dependency/migration/architecture boundary, exact targeted verification, concrete rollback, no Bug/Feature long-term tracking need, no planned multi-session/handoff/subagent/long-observation need, and sufficient current evidence. Any missing condition produces `Feature trigger` or `uncertain`.
+
+After `clearly eligible` routing and before the first target code/configuration/documentation write, create one parser-valid card at `<memory-root>/changes/YYYY-MM/YYYY-MM-DD-<topic>.md`. The card file is the execution source of truth; response summaries are derived views. The month, filename date, H1 topic, and `Created At` must agree. Existing paths use the first unused `-2`, `-3`, or later suffix and are never overwritten. A Plan is always required but its depth is adaptive. Fact/config/path/domain/docs changes use failure-matched parsing, reference, residual, syntax, or bounded dry-run checks; isolated behavior logic uses the smallest meaningful RED/GREEN and focused regression. The lane does not enter mandatory Plan Gate / Plan or Execute Task / Story helper stages.
+
+The monthly partition is stable and is not Archive. Status is exactly `in-progress | completed | stopped`; Memory Review and Memory Result are separate axes. Completion requires Plan closure/explanation, fresh targeted verification, diff/scope review, concrete rollback, Result / Residuals, and valid actual Memory Evidence/Target. Do not add Change README/INDEX/archive/move/rehydrate/restore lifecycle, scheduler, shared counter, new stage, message intent, Feature Type, Bug path, or Auto Mode.
+
+One accidentally interrupted `in-progress` card may resume only after revalidating current branch, full HEAD, dirty work, target files/consumers, persisted Scope/Plan/progress, eligibility, verification, and rollback. Any divergence stops for Human Choice. Planned multi-session work, pause/resume lifecycle, handoff, Subagent execution, long observation, and complex evidence remain Feature hard triggers.
 
 When reliable project memory exists, Project Skill Discovery Guard still runs before generic action or helper fallback. A matched active Project Skill keeps manifest validation and its per-invocation Execution Gate; it cannot widen the card.
 
@@ -122,7 +128,13 @@ When route evidence is uncertain, stop with few real options, one Agent recommen
 
 Scope expansion stops the lane before broader edits. Preserve the current investigation, diff, and verification evidence; name the trigger; recommend exactly one Bug Management, Requirements Discussion, or Feature Construction route; and ask before keeping, reverting, or extending partial edits.
 
-Completion requires executed-or-explained Plan steps, fresh targeted verification, diff/scope review, valid rollback, durable-memory impact review, and Result / Residuals. Card completion grants no Feature/Bug lifecycle, branch, submit, commit, push, PR, merge, tag, release, publish, production, paid-call, configuration-write, deployment, destructive, or external action.
+Completion requires executed-or-explained Plan steps, fresh targeted verification, diff/scope review, valid rollback, durable-memory impact review, and Result / Residuals. After completion, run `scripts/scan-lightweight-changes.py` and keep pending/human-review results visible. Card completion grants no Feature/Bug lifecycle, branch, submit, commit, push, PR, merge, tag, release, publish, production, paid-call, configuration-write, deployment, destructive, or external action.
+
+Run the read-only Python 3.10+ standard-library scanner at Project Entry when Changes exist, after every Change completion, and before release or memory reconciliation. Use `python3 <skill-root>/scripts/scan-lightweight-changes.py --project-root <target-project-root> --as-of <current-local-date>` on macOS/POSIX and `py -3 <skill-root>\scripts\scan-lightweight-changes.py --project-root <target-project-root> --as-of <current-local-date>` on Windows. Scanner `pending-count` or `pending-age` starts proactive Change Memory Consolidation; exactly seven days does not trigger. Known memory drift, pre-release pending/human-review, and verified post-merge entry are controller fact events, not scanner flags.
+
+The scanner validates and inventories only. The Agent owns semantic grouping and may directly sync a Change-derived fact only when the source has fresh verification, the fact is implemented and stable, one existing reliable memory target owns it, authorities do not conflict, no new decision is created, branch/release/customer scope is clear, exact target/fact/evidence/impact/rollback is disclosed before write, post-check is possible, and rollback touches only the Agent's edit. A changes-only root cannot create `project.md`, enterprise memory, or switch modes. Uncertain candidates become visible `human-review`; project memory never copies card history, pending backlog, or command logs.
+
+Consolidation validates, groups by fact, changes only owning memory files, post-checks format/reference/fact/residual consistency, restores only its own memory writes on failure, leaves source Changes pending after failure, updates their Memory fields only after success, and never creates a recursive Change. Code merge completes before Target memory reconciliation; Change files enter Base/Source/Target-before/Result inventories as evidence, and Source `synced` claims are rechecked against Merged Code and Target context.
 
 ## Concept Foundation Routing
 
@@ -318,13 +330,14 @@ Use this order:
 
 1. Apply Bootstrap skill loading. After context compaction, long-running sessions, or stage-boundary uncertainty, do not continue from memory alone.
 2. Check `.agent-loop/`; if missing, check legacy `agent-loop/`.
-3. If present, read `<memory-root>/project.md`.
+3. If the accepted root contains `project.md`, read it. If it contains only `changes/`, treat project memory as absent/unreliable, run the Change scanner, and do not manufacture `project.md`.
 4. If `project.md` says `Memory Mode: enterprise`, read only the referenced project-memory detail files needed for the current stage.
 5. If `project.md` says `Status: remote-entry`, read `<memory-root>/remote.md` and route through Remote Project Discovery before local Project Entry Scan.
 6. Locate `Active Feature` and `Paused Features`.
 6a. For Feature Monthly Archive or an archived follow-up candidate, read `features/archive.md` before opening the month path. Treat Feature ID as stable and verify the locator target, archive state, and flat/month uniqueness.
 6b. If `.agent-loop/skills/INDEX.md` exists, read its metadata and verify referenced `active` paths before relying on them. Re-match active `bootstrap` / `on-demand` rows for each applicable actionable intent before stage-specific helper or fallback action; load and verify only the matched body. Do not load `proposed`, `disabled`, or `deprecated` skills into normal routing.
 6c. For explicit Bug management, read `bugs/INDEX.md` metadata before creating a Bug or scanning Feature ownership. Resolve current Bug README, duplicate/reopen pointers, and related flat/archived Feature locators before relying on lifecycle or target claims.
+6d. When `<memory-root>/changes/` exists, run the read-only Lightweight Change scanner across every month before relying on Change status, pending thresholds, or human-review inventory. A changes-only root does not prove reliable `project.md` or completed Project Entry.
 7. Read current feature `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`, and `contracts.md` if present.
 8. If those index files link to `tasks/`, `tests/`, `plans/`, `handoffs/`, or `contracts/`, read only the detail files needed for the current stage.
 9. Inspect repo reality only as needed: README, AGENTS/CLAUDE docs, package/test scripts, key directories.
@@ -663,6 +676,7 @@ First version does not require `state.json`. State lives in markdown:
 - Bug `README.md` -> stable Bug identity, facts, evidence, Status/Resolution, Resolution Path, verification, close, and reopen history
 - `.agent-loop/skills/INDEX.md` -> project-local skill lifecycle, load policy, triggers, and validation evidence
 - `.agent-loop/skills/<skill-name>/validation.md` -> RED/GREEN/REFACTOR and activation evidence
+- `<memory-root>/changes/YYYY-MM/YYYY-MM-DD-<topic>.md` -> one persistent Lightweight Change's execution facts and Memory Review; never a shared backlog or project-memory replacement
 
 When resuming, reconstruct state from those files using the inspection order above.
 

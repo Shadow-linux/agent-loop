@@ -29,7 +29,7 @@ Root guidance may also route a post-code-integration memory check, but the detai
 Root guidance must include this concise Lightweight Change reminder exactly once:
 
 ```text
-Before creating a Feature for a bounded non-Bug change, let Agent Loop assess the Lightweight Change Lane; if impact is unclear, stop and ask the human with a recommendation.
+Before creating a Feature for a bounded non-Bug change, assess Lightweight Change Lane; clearly eligible work persists one card under the active memory root at changes/YYYY-MM/YYYY-MM-DD-topic.md and the Agent checks pending memory consolidation, while unclear impact stops for a recommended human choice.
 ```
 
 The Workflow Stage Map also contains one navigation row for `Lightweight Change Assessment (internal route)` pointing to `references/lightweight-change-lane.md`. Eligibility, Feature hard triggers, card fields, Adaptive Plan/TDD, scope expansion, completion, and gate details belong in that reference, not root `AGENTS.md`.

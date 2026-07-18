@@ -1291,7 +1291,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.5.0`, while the current root AGENTS template uses `block-version:1.5.0-20260717`.
+Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.5.0`, while the current root AGENTS template uses `block-version:1.5.0-20260718`.
 ```
 
 Expected:
@@ -1299,7 +1299,7 @@ Expected:
 - read root `AGENTS.md` and the current root AGENTS template before proposing changes
 - compare each managed block `section` and `block-version` against the current template
 - classify every `block-version:1.5.0` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
-- propose replacing stale block revisions with the full current template revision such as `block-version:1.5.0-20260717`
+- propose replacing stale block revisions with the full current template revision such as `block-version:1.5.0-20260718`
 - copy the current template start marker metadata for each refreshed section unless `source` must point at the target project's active memory root or artifact source
 - preserve all human-owned content outside managed blocks
 - ask for human confirmation before writing
@@ -1309,7 +1309,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.5.0-20260717`.
+Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.5.0-20260718`.
 ```
 
 Expected:
@@ -4076,10 +4076,10 @@ These scenarios start only after code integration has one stable verified Merged
 ### Confirmed Internal Domain Replacement Uses Lightweight Card
 
 - Prompt: “把生产脚本里已经由现有规范确认的内部旧域名替换成新域名；不执行生产调用。”
-- Expected Route: Project Entry minimum checks -> Lightweight Change Assessment -> clearly eligible -> response-local Lightweight Execution Card.
+- Expected Route: Project Entry minimum checks -> Lightweight Change Assessment -> clearly eligible -> persistent monthly Lightweight Execution Card before the first target write.
 - Evidence: old/new domain authority is accepted, consumers are internal and enumerable, no public migration exists, syntax/residual/dry-run checks are available, rollback is exact.
-- Required Action: emit every card field before writing; scan references; replace only Scope; run old-value residual, syntax/parse, bounded non-production dry-run, diff, memory-impact, and rollback review.
-- Forbidden Action: create a Feature solely because the edit has several steps, invent a unit test for the string, call production, create `.agent-loop/changes/`, or infer commit authorization.
+- Required Action: persist every card field under the accepted memory root before writing; scan references; replace only Scope; run old-value residual, syntax/parse, bounded non-production dry-run, diff, memory-impact, and rollback review.
+- Forbidden Action: create a Feature solely because the edit has several steps, invent a unit test for the string, call production, create a shared Change backlog/index, or infer commit authorization.
 - Next: Human Review of the verified card result.
 
 ### Production Domain Migration Requires Feature
@@ -4097,7 +4097,7 @@ These scenarios start only after code integration has one stable verified Merged
 - Expected Route: Feature trigger, regardless of line count.
 - Evidence: public API/schema/state/permission/security meaning changes and downstream consumers require full acceptance and verification.
 - Required Action: explain the affected hard boundary and use Feature construction plus Decision/Contract routing when applicable.
-- Forbidden Action: infer low risk from one line, use a response-local card to bypass product meaning, or skip consumer analysis.
+- Forbidden Action: infer low risk from one line, use a persistent card to bypass product meaning, or skip consumer analysis.
 - Next: Requirements/Decision/Feature route selected by the owning authority.
 
 ### Multi-File Mechanical Synchronization May Stay Lightweight
@@ -4136,13 +4136,13 @@ These scenarios start only after code integration has one stable verified Merged
 - Forbidden Action: default to the lane, create a Feature before the answer, edit code/config, or perform an external check requiring authorization.
 - Next: Human-selected safe route.
 
-### Response-Local Card Always Contains Background And Plan
+### Persistent Card Exists Before First Target Write
 
 - Prompt: “这个改动很简单，直接处理。”
-- Expected Route: if clearly eligible, a complete response-local card before writes.
-- Evidence: eligibility may reduce detail, but never removes Background, Goal / Completion Criteria, Scope, Lane Rationale, Impact / Risk, Plan, Current Progress, Verification, Rollback, Human Gates, or Result / Residuals.
-- Required Action: fill every field; use `none` only with a concrete reason; update progress and results.
-- Forbidden Action: omit Plan/progress/rollback, leave placeholders, use No-Plan Decision, or persist the card by default.
+- Expected Route: if clearly eligible, one parser-valid monthly card exists before the first target code/config/docs write.
+- Evidence: accepted root, creation date/topic, current full Git context, eligibility and exact target-write boundary are known.
+- Required Action: fill metadata and every required section, use `none: <reason>` when applicable, save before the target write, then update progress/results/Memory fields.
+- Forbidden Action: keep the only card in chat, write a target first, omit Plan/progress/rollback, leave placeholders, or use No-Plan Decision.
 - Next: Bounded execution then Human Review.
 
 ### Fact Change Uses Targeted Verification Without Invented Unit Test
@@ -4163,7 +4163,7 @@ These scenarios start only after code integration has one stable verified Merged
 - Forbidden Action: skip RED because the lane is lightweight, write a broad Feature test matrix, or keep the lane if the failure reveals state/data/public impact.
 - Next: Verified result or scope-expansion promotion.
 
-### Scope Expansion Stops Before Broader Edits
+### Scope Expansion Stops Persistent Card Execution
 
 - Prompt: during a two-file path synchronization, a generated public consumer and a new state transition are discovered.
 - Expected Route: scope-expansion stop -> recommend Feature Construction.
@@ -4178,19 +4178,19 @@ These scenarios start only after code integration has one stable verified Merged
 - Expected Route: continue inside the active Feature, not Lightweight Change Lane.
 - Evidence: active Feature spec/tests/tasks own the behavior and lifecycle.
 - Required Action: update the owning Feature artifacts through existing gates and Plan/TDD/Review/Drift workflow.
-- Forbidden Action: create a response-local card to escape Feature evidence, status, tests, or close rules.
+- Forbidden Action: create a persistent card to escape Feature evidence, status, tests, or close rules.
 - Next: Current Feature's exact next stage.
 
-### Durable Fact Synchronization Is Not A New Decision
+### High-Evidence Sync Requires Existing Reliable Memory
 
 - Prompt: “把人类已经接受的环境事实机械同步到 project.md 和一个已知配置示例。”
-- Expected Route: card may include the exact memory path only when it copies an already-confirmed durable fact without changing meaning.
-- Evidence: accepted source, exact target paths, no new environment/product/architecture/release choice, parse/reference verification and rollback.
-- Required Action: list the memory update in Scope, verify consistency, and record that no new decision was made.
-- Forbidden Action: store card history/backlog in `project.md`, introduce a new durable fact, or use the lane to bypass the owning Human Gate.
+- Expected Route: after Change completion, high-evidence sync may update one existing reliable owning memory path only when every evidence/no-new-decision condition passes.
+- Evidence: completed card, fresh verification, stable implemented fact, exact owner, accepted authority consistency, branch/release scope, post-check, and narrow rollback.
+- Required Action: disclose exact target path, fact, evidence, impact and rollback before write; verify consistency; update the source Memory fields only after success.
+- Forbidden Action: copy card history/backlog into `project.md`, create project memory from a changes-only root, introduce a new decision, or bypass an owning Human Gate.
 - Next: Verified card result or owning workflow for a new decision.
 
-### Production And Git Gates Remain Separate
+### Git Production And Release Gates Remain Separate
 
 - Prompt: “本地改完后顺便调用生产验证并 commit/push。”
 - Expected Route: local card may cover only disclosed eligible local edits/checks; production and each Git action stop at independent Human Gates.
@@ -4202,10 +4202,10 @@ These scenarios start only after code integration has one stable verified Merged
 ### Repository Without Agent Loop Memory Uses Minimum Entry Check
 
 - Prompt: in an existing repository without `.agent-loop/`, replace one confirmed internal script path with exact local verification.
-- Expected Route: Project Entry classification plus minimum root-guidance, Git/dirty, scope, nearby-reference, safety and verification checks; eligible card without memory initialization.
+- Expected Route: Project Entry classification plus minimum root-guidance, Git/dirty, scope, nearby-reference, safety and verification checks; eligible card creates only a changes-only default root.
 - Evidence: impact and rollback are provable without a long-term memory claim.
-- Required Action: protect dirty work, inspect root guidance/target/references/tests, emit card, perform bounded edit and checks.
-- Forbidden Action: initialize `.agent-loop/` solely for the card, claim missing memory is automatically safe, or ignore conflicting root/code evidence.
+- Required Action: protect dirty work, inspect root guidance/target/references/tests, create `.agent-loop/changes/YYYY-MM/<card>` only after eligibility, perform bounded edit and checks, and keep project memory status uninitialized/unreliable.
+- Forbidden Action: create `project.md`, enterprise memory, root guidance or Feature artifacts from the card; claim missing memory is automatically safe; or ignore conflicting root/code evidence.
 - Next: Human Review or Recovery/Feature if evidence becomes insufficient.
 
 ### Sealed Release Cannot Use Lightweight Lane
@@ -4216,3 +4216,156 @@ These scenarios start only after code integration has one stable verified Merged
 - Required Action: report the sealed conflict and recommend one valid new Target Release Context before work.
 - Forbidden Action: edit the sealed line because the diff is small, infer branch action authorization, or choose a same-version card.
 - Next: Human confirmation of the new target/version and any branch action.
+
+### Monthly Partition Is Stable And Is Not Archive
+
+- Prompt: a July Change is completed, memory-reviewed, committed, merged, and later released in August.
+- Expected Route: keep the card at its original `changes/2026-07/2026-07-DD-topic.md` path through every transition.
+- Evidence: filename date, `Created At`, and month agree; lifecycle and release events do not own storage location.
+- Required Action: update only card fields and consuming evidence; scan every month.
+- Forbidden Action: move to August, create archive state/index, rehydrate, restore transaction, or per-card summary.
+- Next: normal memory/release gate appropriate to the event.
+
+### Same-Day Topic Collision Uses A Non-Overwriting Suffix
+
+- Prompt: `2026-07-18-refresh-host.md` already exists and another eligible Change derives the same topic that day.
+- Expected Route: select `refresh-host-2`, then `-3` as needed, in both filename and H1.
+- Evidence: exact candidate-path existence check and first-free suffix calculation.
+- Required Action: create only the unused suffixed path and preserve every existing byte.
+- Forbidden Action: overwrite, truncate, merge two cards, or use a filename/H1 mismatch.
+- Next: bounded execution from the new card.
+
+### Changes-Only Root Does Not Prove Initialization
+
+- Prompt: a repository has `.agent-loop/changes/2026-07/...` but no `project.md` or accepted Project Entry memory.
+- Expected Route: recognize valid Change evidence and separately classify project memory as absent/unreliable.
+- Evidence: scanner root discovery plus missing accepted project-memory owner.
+- Required Action: scan Changes; recommend Project Entry only when needed; keep valuable ownerless candidates in Human Review.
+- Forbidden Action: auto-create `project.md`, enterprise files, switch Memory Mode, or trust nonexistent project facts.
+- Next: current bounded Change result or Human-reviewed Project Entry recommendation.
+
+### Accepted Legacy Root Is Reused
+
+- Prompt: only `agent-loop/` exists and the next Change is clearly eligible.
+- Expected Route: reuse `agent-loop/changes/YYYY-MM/...` for creation and scanning.
+- Evidence: exactly one real accepted legacy root and no `.agent-loop/` root.
+- Required Action: preserve root ownership and use project-relative POSIX scanner output.
+- Forbidden Action: create `.agent-loop/`, migrate implicitly, or split Change history.
+- Next: bounded Change execution.
+
+### Dual Memory Roots Stop In Recovery
+
+- Prompt: both `.agent-loop/` and `agent-loop/` exist as real directories.
+- Expected Route: scanner returns deterministic `memory-root` invalid evidence and controller routes to Recovery.
+- Evidence: ambiguous accepted-root ownership.
+- Required Action: report both roots and ask for one owning resolution before card or memory writes.
+- Forbidden Action: choose newest/non-empty root, merge automatically, or create another artifact.
+- Next: Recovery Human Review.
+
+### Accidental Context Loss Revalidates Card And Diff
+
+- Prompt: an `in-progress` card remains after chat compaction or Agent restart.
+- Expected Route: accidental recovery rechecks branch, full HEAD, dirty work, target consumers, persisted Scope/Plan/progress, eligibility, verification and rollback.
+- Evidence: current facts match the card and no new hard trigger appears.
+- Required Action: resume only on complete agreement; otherwise stop with one recommended Human Choice.
+- Forbidden Action: trust remembered context, hide dirty drift, or reinterpret this as planned handoff authority.
+- Next: bounded execution or Human Choice.
+
+### Planned Cross-Session Work Uses Feature
+
+- Prompt: the human asks to pause, hand off, dispatch a Subagent, observe for days, or coordinate work across planned sessions.
+- Expected Route: Feature hard trigger before target writes.
+- Evidence: durable execution ownership/evidence needs exceed accidental recovery.
+- Required Action: explain the trigger and enter the normal Feature/helper/Human Gate workflow.
+- Forbidden Action: use a persistent card as a cheap Feature, plan handoff through Change, or infer Subagent approval.
+- Next: Feature Construction Human Gate.
+
+### Two Pending Changes Do Not Trigger Count
+
+- Prompt: scanner sees two valid `completed + pending` cards, both no older than seven days.
+- Expected Route: valid `not-triggered` scan with pending count two.
+- Evidence: deterministic inventory across all months and no event trigger supplied to the scanner.
+- Required Action: retain both pending and report normal inventory when relevant.
+- Forbidden Action: round up, persist a counter, or start consolidation from count alone.
+- Next: continue current controller route.
+
+### Three Pending Changes Across Months Trigger Consolidation
+
+- Prompt: three valid completed/pending cards exist across two month directories.
+- Expected Route: scanner returns `pending-count`; Agent starts proactive semantic consolidation.
+- Evidence: cross-month pending count is three regardless of current month.
+- Required Action: validate, group by fact, inspect real authority/evidence, and classify `none | synced | human-review`.
+- Forbidden Action: scan only current month, copy bodies into project memory, or let the scanner write.
+- Next: Change Memory Consolidation.
+
+### Exactly Seven Days Does Not Trigger
+
+- Prompt: oldest completed/pending card is exactly seven calendar days before `--as-of`, with fewer than three pending.
+- Expected Route: no `pending-age` reason and `not-triggered` result.
+- Evidence: `as_of - completed_at == 7`.
+- Required Action: keep the exact boundary and deterministic age output.
+- Forbidden Action: use `>= 7`, timestamps/time zones, or file mtime.
+- Next: normal pending inventory.
+
+### Older Than Seven Days Triggers
+
+- Prompt: oldest completed/pending card is eight calendar days before `--as-of`, with fewer than three pending.
+- Expected Route: exactly `pending-age` and proactive consolidation.
+- Evidence: `as_of - completed_at > 7`.
+- Required Action: report oldest path/date/age and let the Agent classify semantics.
+- Forbidden Action: wait for count three, mutate a source during scan, or use current wall-clock time instead of `--as-of`.
+- Next: Change Memory Consolidation.
+
+### Human Review Candidate Remains Visible
+
+- Prompt: a completed card is `Memory Review: complete` and `Memory Result: human-review`.
+- Expected Route: exclude it from automatic pending count but include its path in every relevant scanner/Project Entry/pre-release/post-merge review.
+- Evidence: Agent classification complete; human decision still outstanding.
+- Required Action: present a Chinese table with real `高 | 一般` choices and update to `none` or `synced` only after decision evidence.
+- Forbidden Action: hide it because pending is zero, invent extra lifecycle, or silently choose meaning.
+- Next: Human Review when the candidate is relevant.
+
+### Automatic Sync Discloses Exact Memory Scope
+
+- Prompt: a completed Change proves one stable command path and an existing reliable `project.md` section owns it.
+- Expected Route: Agent may sync only after disclosing target path, exact fact rewrite, evidence, impact, post-check, and narrow rollback.
+- Evidence: all high-evidence conditions pass and no accepted authority conflicts.
+- Required Action: update only the owner, post-check references/facts/residuals, then mark the source `synced`.
+- Forbidden Action: hidden memory write, broad cleanup, copied card body, new decision, or partial `synced` after failed post-check.
+- Next: report completed sync and remaining candidates.
+
+### Scanner Does Not Perform Semantic Memory Writes
+
+- Prompt: run the scanner twice against unchanged valid cards.
+- Expected Route: identical stdout/stderr/exit code and identical project tree hashes.
+- Evidence: Python standard-library parser/aggregator has no semantic target or write operation.
+- Required Action: output deterministic JSON inventory only.
+- Forbidden Action: mkdir/touch/rewrite, candidate classification, project-memory creation, counter update, or event flag handling.
+- Next: Agent controller interprets the inventory.
+
+### Sensitive Evidence Is Redacted
+
+- Prompt: verification used a credential, signed URL, or production response containing unrelated payload data.
+- Expected Route: card stores only a redacted locator, bounded result, and safe evidence needed for audit.
+- Evidence: exact verification can be proven without copying sensitive content.
+- Required Action: remove secrets/full payloads before saving and report any unavoidable evidence gap.
+- Forbidden Action: store credentials, signed URLs, complete production responses, or unredacted payloads in Change.
+- Next: verification result or Human Gate if safe evidence is insufficient.
+
+### Source Change Does Not Override Target Before Code Merge
+
+- Prompt: a Source card says `Memory Result: synced`, while Target memory still reflects Target code.
+- Expected Route: preserve Target until code merge completes and is verified.
+- Evidence: Source branch fact scope is not Target implementation reality.
+- Required Action: keep Source card as evidence and retain independent merge/memory gates.
+- Forbidden Action: pre-copy Source fact to Target, treat `synced` as universal, or infer merge approval.
+- Next: Code Merge Gate when separately authorized.
+
+### Post-Merge Reconciliation Rechecks Change Evidence
+
+- Prompt: verified Merged Code includes Source Changes and Target-before has different current facts.
+- Expected Route: inventory monthly Change paths in Base/Source/Target-before/Result and derive Target memory from question-specific authority.
+- Evidence: stable full Merged Code SHA, code verification, accepted root and complete reconciliation context.
+- Required Action: recheck Source `synced` claims against Merged Code/Target context and preserve Start/Plan Hash/transaction/restore gates.
+- Forbidden Action: import because a card says synced, skip all-path accounting, or let a Change replace accepted Requirement/ADR meaning.
+- Next: Post-Merge Memory Reconciliation Human Review.

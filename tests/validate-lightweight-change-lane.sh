@@ -49,31 +49,59 @@ done
 
 for text in \
   'Explicit Bug Management wins before this assessment.' \
-  'The card is response-local by default.' \
-  'Project Entry classification is required; creating or repairing long-term Agent Loop memory is not required solely to run this lane.' \
+  'The card file is the execution source of truth.' \
+  '<memory-root>/changes/YYYY-MM/YYYY-MM-DD-<topic>.md' \
+  'pending_count >= 3' \
+  'as_of_date - oldest_completed_at > 7 days' \
+  'exactly 7 days does not trigger' \
+  'monthly partition is not archive' \
+  'code merge completes before Target memory reconciliation' \
   'A Plan is always required, but its depth is adaptive.' \
-  'Do not create `.agent-loop/changes/`, `.agent-loop/quick-fixes/`, or another lightweight backlog.' \
   'Scope expansion stops the lane before broader edits.' \
   'Card completion authorizes no Git, release, publish, production, or Bug lifecycle action.'; do
   assert_contains references/lightweight-change-lane.md "$text"
 done
 
 for text in \
-  'Background:' \
-  'Goal / Completion Criteria:' \
-  'Scope:' \
-  'Lane Rationale:' \
-  'Impact / Risk:' \
-  'Plan:' \
-  'Current Progress:' \
-  'Verification:' \
-  'Rollback:' \
-  'Human Gates:' \
-  'Result / Residuals:' \
-  'Response-local by default.' \
-  'Do not copy this template into a target project by default.'; do
+  'Record Version: 1' \
+  'Status: in-progress' \
+  'Created At:' \
+  'Updated At:' \
+  'Completed At: none' \
+  'Git Context:' \
+  '## Background' \
+  '## Goal / Completion Criteria' \
+  '## Scope' \
+  '## Lane Rationale' \
+  '## Impact / Risk' \
+  '## Plan' \
+  '## Current Progress' \
+  '## Verification' \
+  '## Rollback' \
+  '## Human Gates' \
+  '## Result / Residuals' \
+  '## Memory' \
+  'Memory Review: pending' \
+  'Memory Result: pending' \
+  'Memory Evidence: pending: verification not complete' \
+  'Memory Target: pending: classify at completion'; do
   assert_contains templates/lightweight-execution-card.md "$text"
 done
+
+for stale in \
+  'The card is response-local by default.' \
+  'Do not create `.agent-loop/changes/`' \
+  'no default `.agent-loop/changes/` directory' \
+  'creates no persistent target-project artifact'; do
+  for file in references/lightweight-change-lane.md references/runtime.md references/design.md references/artifact-rules.md templates/lightweight-execution-card.md; do
+    assert_not_contains "$file" "$stale"
+  done
+done
+
+assert_file scripts/lightweight_change_support.py
+assert_file scripts/scan-lightweight-changes.py
+assert_file tests/lightweight_change_test_support.py
+assert_file tests/test_lightweight_change_scan.py
 
 ruby - "$root/references/runtime.md" <<'RUBY'
 content = File.read(ARGV.fetch(0))
@@ -126,12 +154,16 @@ assert_contains references/project-guidance.md 'but only after Project Entry has
 assert_contains references/implementation-planning.md 'A Lightweight Execution Card is not a Feature `plan.md` and does not enter Plan Gate.'
 assert_contains references/skill-routing.md 'Lightweight Change Lane does not enter mandatory Plan Gate / Plan or Execute Task / Story helper resolution.'
 assert_contains references/external-skill-adapters.md 'Do not expand a Lightweight Execution Card into `docs/superpowers/`, a Feature workspace, or a construction-grade plan.'
-assert_contains references/artifact-rules.md 'Lightweight Execution Card | response-local execution control'
-assert_contains references/project-memory-mode.md 'Do not store Lightweight Execution Card history or a lightweight backlog in `project.md`.'
+assert_contains references/artifact-rules.md 'Memory Review: pending | complete'
+assert_contains references/artifact-rules.md 'Memory Result: pending | none | synced | human-review'
+assert_contains references/project-memory-mode.md 'A changes-only root does not prove that project memory is initialized or reliable.'
 assert_contains references/branch-management.md 'A Lightweight Execution Card authorizes no branch action.'
 assert_contains references/submit-and-integrate.md 'A completed Lightweight Execution Card authorizes no submit or integration action.'
+assert_contains references/memory-reconciliation.md 'Change files are evidence only after code merge is complete and verified.'
+assert_contains references/runtime.md 'scripts/scan-lightweight-changes.py'
+assert_contains references/design.md 'The lane reduces ceremony and document depth, not accuracy, scope control, verification strength, rollback, fact review, or Human Gates.'
 
-reminder='Before creating a Feature for a bounded non-Bug change, let Agent Loop assess the Lightweight Change Lane; if impact is unclear, stop and ask the human with a recommendation.'
+reminder='Before creating a Feature for a bounded non-Bug change, assess Lightweight Change Lane; clearly eligible work persists one card under the active memory root at changes/YYYY-MM/YYYY-MM-DD-topic.md and the Agent checks pending memory consolidation, while unclear impact stops for a recommended human choice.'
 count=$(grep -Fo -- "$reminder" "$root/templates/root-AGENTS.md" | wc -l | tr -d ' ')
 [ "$count" -eq 1 ] || fail "root AGENTS must contain the concise Lightweight Change reminder exactly once; found $count"
 assert_contains templates/root-AGENTS.md '| Ordinary non-Bug change appears bounded, reversible, and exactly verifiable | Lightweight Change Assessment (internal route) | `references/lightweight-change-lane.md` |'
@@ -147,15 +179,32 @@ for scenario in \
   'Explicit Bug Intent Wins Before Lightweight Assessment' \
   'Generic Fix Wording Does Not Automatically Create Bug' \
   'Uncertain Impact Stops For Human Choice' \
-  'Response-Local Card Always Contains Background And Plan' \
   'Fact Change Uses Targeted Verification Without Invented Unit Test' \
   'Small Isolated Logic Change Uses Minimal RED GREEN' \
-  'Scope Expansion Stops Before Broader Edits' \
   'Active Feature Ownership Blocks Lane Escape' \
-  'Durable Fact Synchronization Is Not A New Decision' \
-  'Production And Git Gates Remain Separate' \
   'Repository Without Agent Loop Memory Uses Minimum Entry Check' \
-  'Sealed Release Cannot Use Lightweight Lane'; do
+  'Sealed Release Cannot Use Lightweight Lane' \
+  'Persistent Card Exists Before First Target Write' \
+  'Monthly Partition Is Stable And Is Not Archive' \
+  'Same-Day Topic Collision Uses A Non-Overwriting Suffix' \
+  'Changes-Only Root Does Not Prove Initialization' \
+  'Accepted Legacy Root Is Reused' \
+  'Dual Memory Roots Stop In Recovery' \
+  'Accidental Context Loss Revalidates Card And Diff' \
+  'Planned Cross-Session Work Uses Feature' \
+  'Two Pending Changes Do Not Trigger Count' \
+  'Three Pending Changes Across Months Trigger Consolidation' \
+  'Exactly Seven Days Does Not Trigger' \
+  'Older Than Seven Days Triggers' \
+  'Human Review Candidate Remains Visible' \
+  'High-Evidence Sync Requires Existing Reliable Memory' \
+  'Automatic Sync Discloses Exact Memory Scope' \
+  'Scanner Does Not Perform Semantic Memory Writes' \
+  'Sensitive Evidence Is Redacted' \
+  'Source Change Does Not Override Target Before Code Merge' \
+  'Post-Merge Reconciliation Rechecks Change Evidence' \
+  'Scope Expansion Stops Persistent Card Execution' \
+  'Git Production And Release Gates Remain Separate'; do
   assert_contains references/validation-scenarios.md "### $scenario"
 done
 
@@ -171,7 +220,7 @@ blocks = content.scan(/<!-- agent-loop:managed-start section:([^ ]+) .*?block-ve
 abort 'FAIL: root AGENTS managed blocks missing' if blocks.empty?
 abort "FAIL: expected 13 managed blocks, found #{blocks.length}" unless blocks.length == 13
 blocks.each do |section, revision|
-  expected = '1.5.0-20260717'
+  expected = '1.5.0-20260718'
   abort "FAIL: #{section} expected #{expected}, found #{revision}" unless revision == expected
 end
 RUBY

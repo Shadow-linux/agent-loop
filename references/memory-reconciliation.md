@@ -20,6 +20,8 @@ Code Merge Complete
 
 Memory Reconciliation does not perform the code merge.
 
+Change files are evidence only after code merge is complete and verified. Their source-branch Memory Result, including `synced`, never instructs Target memory to overwrite itself.
+
 It does not create, switch, merge, delete, push, or tag branches; create commits or PRs; release or publish; modify production; or authorize a later Git action. It changes only the accepted Target memory root after its own Human Gates.
 
 ## Entry Preconditions
@@ -69,6 +71,8 @@ The **Path Accounting Ledger** covers every memory-root-relative path found in a
 - expected post-state and blocker details.
 
 Paths must be relative POSIX text. Reject absolute paths, `.` or `..` components, backslashes, NUL, drive prefixes, symlink traversal, and casefold or Unicode-normalization collisions. Directory rows support accounting but never receive file rewrite operations. An unclassified path is visible and blocking until the Agent resolves its role or the human accepts a bounded `暂不处理` during review; a ready Apply plan cannot contain `暂不处理`.
+
+Inventory `<memory-root>/changes/YYYY-MM/YYYY-MM-DD-<topic>.md` paths across Base, Source, Target-before, and Result like every other memory-root path. Classify each by its actual content and authority. A completed card is execution evidence/current evidence; it is not an accepted Requirement, ADR, project-memory fact owner, Target overwrite instruction, or automatic import request.
 
 ## Semantic Artifact Roles
 
@@ -170,6 +174,8 @@ The read-only scanner:
 7. performs no writes.
 
 The Agent then deep-reads changed or affected records plus the canonical owners and references necessary to decide their meaning. Scan output is mechanical evidence, not the semantic decision.
+
+When Change paths are present, re-run the dedicated read-only Lightweight Change scanner for the Result root, include pending and human-review inventory in the reconciliation evidence, and re-check every Source `synced` fact against Merged Code, Target context, accepted authorities, and the Target Canonical Memory Spine. Do not change the existing reconciliation report identity, Start gate, exact Plan Hash, transaction, Apply, post-check, restore, Memory Commit, Push, Release, or cleanup sequence.
 
 ## Fact Reconciliation
 

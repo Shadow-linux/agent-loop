@@ -23,7 +23,7 @@ The mandatory helper-backed stages are Brainstorm / Clarify, Project Skill Creat
 
 Lightweight Change Lane does not enter mandatory Plan Gate / Plan or Execute Task / Story helper resolution.
 
-The controller writes the response-local card Plan and selects failure-matched targeted verification or the smallest meaningful RED/GREEN. Do not add Lightweight Change Lane to the mandatory stage table. If scope promotion creates or reopens a Feature, normal `writing-plans` and `test-driven-development` helper resolution resumes before Feature execution.
+The controller writes the persisted monthly card Plan and selects failure-matched targeted verification or the smallest meaningful RED/GREEN. Card persistence does not enter Plan Gate or make `writing-plans` mandatory. Do not add Lightweight Change Lane to the mandatory stage table. If scope promotion creates or reopens a Feature, normal `writing-plans` and `test-driven-development` helper resolution resumes before Feature execution.
 
 For each mandatory stage:
 

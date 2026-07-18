@@ -12,7 +12,9 @@ Do not force a project to rename existing branches, create release branches, or 
 
 A Lightweight Execution Card authorizes no branch action.
 
-When the lane applies, still check an adopted strategy, Target Release Context, sealed-release state, customer isolation, and current Git reality as needed. The card cannot create, switch, merge, delete, push, or tag a branch and cannot satisfy Branch Action or Cleanup Gate.
+When the lane applies, still check an adopted strategy, Target Release Context, sealed-release state, customer isolation, and current Git reality as needed. The card's `Git Context` is evidence for its current branch and full HEAD only; it never proves another branch or release has the fact. The card cannot create, switch, merge, delete, push, or tag a branch and cannot satisfy Branch Action or Cleanup Gate.
+
+An accidentally interrupted card may resume only after its branch, full HEAD, and dirty diff are revalidated with Scope/Plan/progress. Planned branch-to-branch continuation, worktree handoff, Subagent execution, or durable cross-session coordination remains Feature work.
 
 ## Evidence And Fact Precedence
 

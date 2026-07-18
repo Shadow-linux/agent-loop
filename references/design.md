@@ -38,7 +38,7 @@ The core constraints are:
 - `requirements/` stores human source material packages and requirement lifecycle/backlog records as requirement set directories: requirements, prototypes, feedback, screenshots, recordings, links, follow-up notes, status, and optional `requirements/INDEX.md`
 - Human-Guided Bug Management is an internal method of `Feature Follow-up / Flow-back`, not a canonical stage or message intent
 - Lightweight Change Lane is an internal route before Feature construction for bounded ordinary non-Bug changes; it is not a canonical stage, message intent, Feature Type, Bug Resolution Path, lifecycle, status, or Auto Mode
-- Lightweight Execution Card is response-local execution control with required background, adaptive Plan, progress, targeted verification, rollback, gate, and result fields; it creates no default target-project artifact or backlog
+- Lightweight Execution Card is one persistent per-change execution source under `<memory-root>/changes/YYYY-MM/YYYY-MM-DD-<topic>.md`, with required background, adaptive Plan, progress, targeted verification, rollback, gate, result, and Memory Review fields; it creates no shared backlog or Archive lifecycle
 - Adaptive Depth lets the Agent vary Plan and test detail by real risk while fresh verification, diff review, rollback, scope control, memory impact, and Human Gates stay fixed
 - `bugs/INDEX.md` owns Bug inventory/backlog/locator state, while each Bug README owns stable identity, facts, evidence, lifecycle, Resolution Path, verification, close, and reopen history
 - Bug Report, Bug Record, Report Origin, Expected Behavior Evidence, Status, Resolution, and Reopen are distinct; Bug Status and Resolution form independent axes
@@ -74,7 +74,7 @@ The core constraints are:
 Human Goal
 → [internal] Branch Strategy Check when branch rules, target version, or customer isolation affect safe delivery
 → Operational Support when the goal is to use/run/test/deploy current project behavior without confirmed implementation
-→ [internal] Lightweight Change Assessment for bounded ordinary non-Bug local changes before Feature construction
+→ [internal] Lightweight Change Assessment and persistent monthly card for bounded ordinary non-Bug local changes before Feature construction
 → Project Skill Creation / Update when a repeatable project workflow should become a durable local capability
 → Feature Workspace
 → Task / Test / Plan
@@ -118,9 +118,11 @@ Behavior Intent
 
 **Lightweight Change Lane**: bounded non-Bug execution route before Feature construction. Explicit Bug Management and active Feature ownership take precedence; hard triggers use Feature, and uncertain impact returns to Human Choice before writes.
 
-**Lightweight Execution Card**: response-local background, goal, scope, rationale, risk, Plan, progress, verification, rollback, Human Gate, and result control. It is not a Feature `plan.md`, persistent task, or authorization for later actions.
+**Lightweight Execution Card**: persistent per-change background, goal, scope, rationale, risk, Plan, progress, verification, rollback, Human Gate, result, and Memory Review control under the active memory root's `changes/YYYY-MM/YYYY-MM-DD-<topic>.md`. The card file is the execution source of truth; it is not a Feature `plan.md`, shared backlog, long-term project-memory owner, or authorization for later actions.
 
 **Adaptive Depth**: Agent-owned risk-based selection of card detail, Plan steps, targeted verification, and the smallest meaningful RED/GREEN for isolated behavior. It never reduces safety, scope, rollback, evidence, memory, or action-specific gate invariants.
+
+**Change Memory Consolidation**: internal Agent semantic review triggered by `completed + pending >= 3`, the oldest pending age being greater than seven full calendar days, known memory drift, pre-release review, or verified post-merge entry. The cross-platform scanner validates and inventories only; it never chooses meaning or writes memory.
 
 **Bug Report**: one source event describing a suspected defect. It is intake evidence and does not automatically create a distinct stable identity.
 
@@ -507,12 +509,20 @@ For an actionable ordinary non-Bug local change before Feature construction, use
 ```text
 Explicit Bug Management / active Feature ownership first
 → Lightweight Change Assessment
-  → clearly eligible: response-local card, bounded edit, targeted verification, diff/rollback/memory review
+  → clearly eligible: persistent monthly card before target writes, bounded edit, targeted verification, diff/rollback/memory review
   → Feature trigger: normal Feature construction
   → uncertain: Human Choice with one Agent recommendation and zero writes
 ```
 
-Eligibility is all-of; Feature hard triggers are any-of. Fact/config/path/domain/docs changes use failure-matched targeted verification, while isolated behavior logic uses the smallest meaningful RED/GREEN. Scope expansion stops before broader edits and returns to Human Review. This route creates no `.agent-loop/changes/`, quick-fix backlog, state enum, or helper-native document tree.
+Eligibility is all-of; Feature hard triggers are any-of. The lane reduces ceremony and document depth, not accuracy, scope control, verification strength, rollback, fact review, or Human Gates. Fact/config/path/domain/docs changes use failure-matched targeted verification, while isolated behavior logic uses the smallest meaningful RED/GREEN. Scope expansion stops before broader edits and returns to Human Review.
+
+The card is created under the one accepted memory root at `changes/YYYY-MM/YYYY-MM-DD-<topic>.md` before the first target write. A changes-only root does not prove initialization; a unique legacy root is reused; dual roots fail closed. The creation month is stable and not Archive. Same-day collisions use the first unused numeric topic suffix without overwrite. There is no Change README, INDEX, archive, move, rehydrate, restore transaction, scheduler, shared counter, new canonical stage, or helper-native document tree.
+
+Accidental interruption may resume one `in-progress` card only after full branch, HEAD, dirty-work, Scope/Plan/progress, eligibility, verification, and rollback revalidation. Planned multi-session work, pause/resume, handoff, Subagent execution, long observation, and complex evidence remain Feature hard triggers.
+
+The read-only standard-library scanner computes `pending_count >= 3` and `as_of_date - oldest_completed_at > 7 days`; exactly seven days does not trigger. It reports completed human-review candidates separately. Agent-owned semantic consolidation may sync only stable high-evidence facts to an existing reliable owning memory location after exact scope disclosure and post-check. A changes-only root cannot grow `project.md` or enterprise memory automatically. Uncertain facts remain visible for human review.
+
+Code integration precedes Target memory rewriting. Post-Merge Memory Reconciliation consumes monthly Change files as evidence across all snapshots and rechecks Source `synced` claims against Merged Code and Target context; no Change is a Target overwrite instruction or Git authorization.
 
 Within Decision & Design, a requirement-driven ADR uses this internal order without adding a canonical stage or default mapping artifact:
 

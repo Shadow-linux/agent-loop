@@ -134,15 +134,19 @@ Before using an external skill or plugin inside a stage:
 - [ ] Check explicit Bug Management and active Feature ownership before lightweight eligibility.
 - [ ] Require every eligibility condition; treat any Feature hard trigger as decisive.
 - [ ] If uncertain, stop with few real options, evidence, one Agent recommendation, and zero writes before the human answer.
-- [ ] Emit the complete response-local card before the first write: Background, Goal / Completion Criteria, Scope, Lane Rationale, Impact / Risk, Plan, Current Progress, Verification, Rollback, Human Gates, Result / Residuals.
+- [ ] After clearly-eligible routing and before the first target write, create one parser-valid card at `<memory-root>/changes/YYYY-MM/YYYY-MM-DD-<topic>.md` with all metadata, required sections, and initial Memory fields.
+- [ ] Reuse the one accepted root, fail closed on dual roots, treat changes-only as not initialized, and allocate the first unused same-day topic suffix without overwrite.
 - [ ] Keep a Plan in every card and adapt depth to risk; never use No-Plan Decision.
 - [ ] When a reliable memory root exists, run Project Skill Discovery Guard and preserve the matched Project Skill Execution Gate.
 - [ ] Record why the change uses targeted verification or the smallest meaningful RED/GREEN.
 - [ ] Stop before broader edits on scope expansion and recommend exactly one Bug Management, Requirements Discussion, or Feature Construction route.
-- [ ] Before completion, run fresh targeted verification and review diff, disclosed scope, durable-memory impact, and rollback.
+- [ ] Before completion, close/explain Plan items, replace initial Memory markers, run fresh targeted verification, and review diff, disclosed scope, durable-memory impact, sensitive evidence, and rollback.
+- [ ] After completion, run `scripts/scan-lightweight-changes.py`; keep `human-review` visible and start Agent semantic consolidation for three pending or oldest age greater than seven days.
+- [ ] Allow accidental resume only after branch/full-HEAD/dirty-diff/Scope/Plan/eligibility/verification/rollback revalidation; route planned cross-session/handoff/Subagent/long-observation work to Feature.
+- [ ] Before high-evidence memory sync, require an existing reliable owner and disclose exact target path, fact, evidence, impact, and rollback; restore only this Agent's memory edit on failure.
 - [ ] Confirm branch, submit, production, external, paid, configuration-write, destructive, Feature/Bug lifecycle, and Git gates remain separate.
 - [ ] Report completed/cancelled Plan steps, result, residuals, verification, rollback, and any route promotion.
-- [ ] Do not create `.agent-loop/changes/`, `.agent-loop/quick-fixes/`, another lightweight backlog, or a Feature substitute.
+- [ ] Do not create Change README/INDEX/archive/move/rehydrate/restore lifecycle, shared counter, recursive consolidation Change, another lightweight backlog, or a Feature substitute.
 
 ## Project Skill Discovery Guard
 
@@ -181,7 +185,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.0-20260717`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.0-20260718`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -267,7 +271,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.0-20260717`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.0-20260718`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.

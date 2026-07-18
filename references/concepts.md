@@ -33,7 +33,9 @@ First version excludes:
 
 **Lightweight Change Lane**: Bounded non-Bug execution route before Feature construction. It requires all eligibility evidence, yields to explicit Bug Management and active Feature ownership, and stops for Human Choice when uncertain.
 
-**Lightweight Execution Card**: Response-local background, scope, adaptive Plan, progress, targeted verification, rollback, Human Gate, and result control. It is not a Feature artifact, persistent backlog, or later-action authorization.
+**Lightweight Execution Card**: Persistent per-change background, scope, adaptive Plan, progress, targeted verification, rollback, Human Gate, result, and Memory Review control under `<memory-root>/changes/YYYY-MM/YYYY-MM-DD-<topic>.md`. The card file is the execution source of truth; it is not a Feature workspace, shared backlog, long-term project-memory fact, or later-action authorization.
+
+**Change Memory Consolidation**: Agent-owned semantic review of completed Lightweight Change evidence. A read-only scanner validates and counts records, while the Agent alone classifies stable facts as `none | synced | human-review`, discloses exact memory scope before writes, and preserves every existing Human Gate.
 
 **Adaptive Depth**: Risk-based detail selection for the card, Plan, and targeted test/verification method. It never reduces scope control, fresh evidence, rollback, memory impact review, or an existing Human Gate.
 
@@ -160,7 +162,7 @@ notes.md   = what actually happened
 handoffs/  = optional subagent briefs and returns
 contracts.md = optional delivery contract index or compact contract
 contracts/ = optional durable producer-consumer contract details
-Lightweight Execution Card = response-local execution control; no default target-project file or directory
+Lightweight Execution Card = persistent per-change execution control under changes/YYYY-MM/YYYY-MM-DD-topic.md; no shared backlog, Archive lifecycle, or Git authorization
 ```
 
 `AGENTS.md` / `CLAUDE.md` live outside `.agent-loop/` and tell future agents how to enter the workflow. They do not own task state.

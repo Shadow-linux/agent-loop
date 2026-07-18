@@ -79,9 +79,9 @@ Omit `Source Requirements` when not relevant.
 
 ## Lightweight Execution Card
 
-Use `templates/lightweight-execution-card.md` for a clearly eligible Lightweight Change Lane request. Render it in the response/current task context before the first write. It is response-local execution control, not a target-project artifact, and must not be copied into `.agent-loop/` by default.
+Use `templates/lightweight-execution-card.md` for a clearly eligible Lightweight Change Lane request. Persist one fully authored, parser-valid card under the active memory root at `changes/YYYY-MM/YYYY-MM-DD-<topic>.md` before the first target write. The card file is the execution source of truth and remains in its creation month.
 
-Do not duplicate the full card here or create `.agent-loop/changes/`, `.agent-loop/quick-fixes/`, a Feature substitute, or a lightweight backlog. If durable recovery or tracking is required, promote the work to Feature construction.
+Do not duplicate the full card here or add Change README/INDEX/archive/move/rehydrate/restore artifacts, a shared counter/backlog, a Feature substitute, or a helper-native path. If planned durable recovery, handoff, Subagent execution, long observation, or complex tracking is required, promote the work to Feature construction.
 
 ## Human Review Summary
 

@@ -343,15 +343,21 @@ Operational landing 不是每份 ADR 的默认大章节。只有持久化表示�
 
 | 你可以这样说 | Agent 应该怎么做 |
 |---|---|
-| “把生产脚本里已经确认的旧域名换成新域名。” | 先确认这是内部机械同步且没有外部调用方变化，再给出 response-local Lightweight Execution Card；扫描引用、限定替换、做语法/解析/非生产 dry-run、检查旧值残留、diff 和回滚。真实生产调用仍需单独确认。 |
+| “把生产脚本里已经确认的旧域名换成新域名。” | 先确认这是内部机械同步且没有外部调用方变化，再在 active memory root 的 `changes/YYYY-MM/YYYY-MM-DD-topic.md` 持久化 Lightweight Execution Card；扫描引用、限定替换、做语法/解析/非生产 dry-run、检查旧值残留、diff 和回滚。真实生产调用仍需单独确认。 |
 | “迁移正式生产域名，并处理 DNS、证书和调用方。” | 进入 Feature / Decision 路径，不使用轻量旁路；公共调用、灰度、回滚和发布边界需要完整设计与验证。 |
 | “修正这个内部脚本条件，预期行为已经明确。” | 在边界、消费者和回滚明确时使用执行卡，并先写一个最小有意义失败用例，完成 RED/GREEN 和相关 focused regression。 |
 | “这是 Bug，请登记并修复。” | 明确 Bug Management 优先，先建立或匹配 Bug Record、确认 Expected Behavior 和 Resolution Path，再由 Feature 工作流修复，绝不降级为轻量卡。 |
 | “不确定有没有外部调用方。” | 在写入前停止，整理 Lightweight / Feature 的少量真实选项，给出 Agent 推荐和证据，等你选择；回答前零修改。 |
 
-你不需要说“启用轻量模式”。Agent 先根据产品语义、边界影响、范围、不确定性、验证和回滚自主判断。轻量卡仍然必须有背景、目标与完成标准、范围、旁路理由、风险、Plan、当前进度、验证、回滚、Human Gates 和结果。
+你不需要说“启用轻量模式”。Agent 先根据产品语义、边界影响、范围、不确定性、验证和回滚自主判断。明确合格后，Agent 必须在第一次目标写入前创建持久卡；月份是创建分区而不是 Archive，后续完成、记忆整理、commit 或 release 都不移动它。同日同 topic 冲突使用首个未占用的 `-2`、`-3` 后缀，不能覆盖旧卡。
+
+轻量卡仍然必须有背景、目标与完成标准、范围、旁路理由、风险、Plan、当前进度、验证、回滚、Human Gates、结果和 Memory Review。意外上下文丢失可以在重新核对 branch、完整 HEAD、dirty diff、Scope、Plan、验证和回滚后继续；计划性跨会话、handoff、Subagent、长期观察或复杂证据仍进入 Feature。
 
 事实、路径、域名、配置或文档同步优先使用语法、解析、引用、旧值残留和限定 dry-run 等针对性验证，不为字符串替换制造无意义单元测试。可隔离的行为逻辑仍使用最小 RED/GREEN。发现 API、数据、状态、权限、安全、依赖、迁移、未知消费者、跨会话或范围扩张时，Agent 必须停止并推荐升级到 Feature/Requirement/Bug 的唯一合适路径。
+
+完成 Change 后，Agent 使用只读 scanner 跨月份检查 pending：macOS/POSIX 使用 `python3 <skill-root>/scripts/scan-lightweight-changes.py --project-root <project> --as-of YYYY-MM-DD`；Windows 使用 `py -3 <skill-root>\scripts\scan-lightweight-changes.py ...`，也可使用明确指向 Python 3.10+ 的 `python`。累计 3 个 pending 或最早 pending 超过 7 个完整日历日会触发 Agent 主动整理；恰好 7 天不触发。
+
+稳定、高证据、无冲突且有现成可靠记忆 owner 的事实，可以在 Agent 披露精确目标路径、事实、证据、影响和 rollback 后同步；语义、权威或目标位置不确定时继续显示给人类确认。只有 `changes/` 的 root 不代表项目已初始化，也不能自动创建 `project.md` 或 enterprise memory。代码先合并并验证，Target memory 后校准。
 
 执行卡只授权其中披露的本地修改与本地验证，不授权生产/外部调用、付费操作、配置写入、branch、commit、push、PR、merge、tag、release 或 publish。
 

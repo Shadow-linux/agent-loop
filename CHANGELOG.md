@@ -13,6 +13,14 @@
 - Hardened derived Feature Follow-up rules and focused negative assertions so generic adjustment wording cannot bypass Lightweight Change Assessment or create a Bug Record without explicit Bug management intent.
 - Refreshed all 13 root managed blocks to `block-version:1.5.0-20260717` and synchronized every current version surface after explicit v1.5.0 approval.
 
+### Persistent Lightweight Change Records
+- Superseded response-local-only execution control for new eligible work with one parser-valid card under `<memory-root>/changes/YYYY-MM/YYYY-MM-DD-<topic>.md` before target writes; creation month is stable, collisions use non-overwriting suffixes, and no Change archive/index lifecycle was added.
+- Added `in-progress | completed | stopped` plus separate Memory Review/Result invariants, accidental recovery revalidation, sensitive-evidence limits, and Feature promotion for planned durable execution.
+- Added a Python 3.10+ standard-library read-only scanner for unique/default/legacy/dual roots, exact monthly/card validation, deterministic pending/human-review inventory, and the three-pending / older-than-seven-days thresholds on macOS and Windows.
+- Hardened scanner acceptance so filesystem enumeration failures return relative-path contract JSON, generated authoring markers cannot enter runtime cards, fenced Markdown evidence cannot create false headings/metadata, and valid branch names containing `@` remain parseable through the final SHA separator.
+- Added Agent-owned high-evidence memory consolidation with exact pre-write disclosure, narrow rollback, changes-only-root protection, persistent human-review visibility, and code-first post-merge reconciliation.
+- Refreshed all 13 current root managed blocks and live revision consumers to `block-version:1.5.0-20260718` without changing Skill version `1.5.0` or weakening any Git, production, external, release, Feature, or Bug Human Gate.
+
 ## 1.4.0 — 2026-07-17
 
 ### Post-Merge Memory Reconciliation

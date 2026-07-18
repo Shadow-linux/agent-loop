@@ -18,7 +18,9 @@ Never commit, open a PR, merge, release, publish, or claim submission readiness 
 
 A completed Lightweight Execution Card authorizes no submit or integration action.
 
-At Submit / Integrate, re-read its fresh verification, diff, scope, memory-impact, and rollback evidence as input only. Card execution approval cannot become commit, push, PR, merge, tag, release, or publish approval; every requested action keeps the existing two-stage confirmation and Branch Strategy checks.
+At Submit / Integrate, re-read the persisted card's fresh verification, diff, scope, memory result, sensitive-evidence review, and rollback evidence as input only. Run the read-only Change scanner and surface pending or `human-review` memory candidates before a release recommendation. Card execution approval cannot become commit, push, PR, merge, tag, release, or publish approval; every requested action keeps the existing two-stage confirmation and Branch Strategy checks.
+
+Code integration completes and is verified before Target memory reconciliation consumes Change evidence. Source-branch cards, including `Memory Result: synced`, cannot update Target memory or authorize a later Git action by themselves.
 
 ## Entry Conditions
 

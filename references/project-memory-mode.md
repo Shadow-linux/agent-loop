@@ -21,9 +21,15 @@ If a hard trigger applies and the human declines or defers enterprise mode, reco
 
 Project memory must not be used as a backlog. Do not write future feature ideas, temporary TODOs, deferred requirements, unimplemented planned capability details, or backlog lists into `project.md` or enterprise project memory. Put future/deferred requirement memory in `.agent-loop/requirements/` and optional `requirements/INDEX.md`; `project.md` may only point to a requirement set when needed for the current resume action.
 
-Do not store Lightweight Execution Card history or a lightweight backlog in `project.md`.
+Do not store Lightweight Execution Card history, pending inventory, command logs, or a lightweight backlog in `project.md`. Persistent cards remain under `<memory-root>/changes/YYYY-MM/`; project memory stores only refined current facts.
 
-A card may mechanically synchronize an already human-confirmed durable fact only when the exact memory path is listed in Scope and the change introduces no new product, architecture, environment, or release decision. New durable facts leave Lightweight Change Lane for their owning workflow.
+A changes-only root does not prove that project memory is initialized or reliable. When only `changes/` exists, do not create `project.md`, create enterprise `project/*.md`, or switch Memory Mode automatically. Classify no-value candidates as `none`; route a valuable candidate without a reliable owner to `human-review` and recommend Project Entry / Project Memory Init.
+
+Run the read-only Lightweight Change scanner at Project Entry when Changes exist, after Change completion, and before release or post-merge memory work. `completed + pending >= 3` or oldest pending age greater than seven full calendar days starts proactive semantic consolidation; exactly seven days does not. Known drift, pre-release context, and verified post-merge entry are Agent/controller fact triggers rather than scanner flags.
+
+The Agent may directly synchronize a Change-derived fact only when all conditions hold: the Change is completed with fresh verification; the candidate is an implemented stable fact rather than a plan; code/config/test or authorized-environment evidence proves it; it has durable future value; exactly one existing reliable memory path owns it; Requirement/Decision/Feature/Bug/root guidance and current memory do not conflict; no new product, architecture, security, data, permission, environment, Branch Strategy, or release decision is created; human original requirements remain unchanged; branch/release/customer scope is explicit; exact target path/fact/evidence/impact/rollback is disclosed before write; post-check can verify it; and rollback touches only this Agent's edit.
+
+Consolidation groups candidates by fact rather than copying card bodies, updates only owning memory files, runs format/reference/fact/residual checks, restores only its own edits on failure, leaves sources pending on failure, and updates source Memory fields after success. It never creates another Change to log consolidation. `human-review` remains visible until a human decision changes the source result to `none` or `synced` with evidence, target, and decision locator.
 
 Bug inventory is also not project memory. In both modes, `.agent-loop/bugs/INDEX.md` owns open, deferred, verifying, and closed Bug inventory plus locator rows; Bug README files own details. `project.md` may store only the configurable `Feature Follow-up Lookback` and current Feature pointers. Do not add Open Bugs, Deferred Bugs, Bug assignees, reproduction logs, or Bug backlog rows to simple or enterprise project memory.
 
@@ -47,6 +53,7 @@ Recommended layout:
 ```text
 .agent-loop/
   project.md
+  changes/            optional persistent Lightweight Change evidence; a changes-only root is not initialized project memory
   requirements/
   bugs/
     INDEX.md        optional Bug inventory/backlog/locator
@@ -64,6 +71,7 @@ Recommended layout:
 ```text
 .agent-loop/
   project.md
+  changes/            optional persistent Lightweight Change evidence; not enterprise project memory
   project/
     architecture.md
     boundaries.md

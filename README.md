@@ -58,7 +58,7 @@ Message Intent → Chat And Requirements Discussion if needed
 | **Plan** | Construction-grade execution plan for the active task/story |
 | **Evidence** | Fresh proof: test output, build output, API results, E2E checks, logs |
 | **Drift** | Mismatch between docs, code reality, or human decisions |
-| **Lightweight Change Lane** | Internal route for bounded ordinary non-Bug changes: response-local card, adaptive Plan, progress, targeted verification, diff review, rollback, and no default target-project artifact. |
+| **Lightweight Change Lane** | Internal route for bounded ordinary non-Bug changes: one persistent monthly card before target writes, adaptive Plan, targeted verification, diff review, rollback, Memory Review, and no unnecessary Feature workspace. |
 | **Human-Guided Bug Management** | Stable Bug identity, evidence, deduplication, lifecycle, Human-confirmed Resolution Path, and a separate close decision inside Feature Follow-up / Flow-back. |
 | **Feature Follow-up / Flow-back** | Repair ownership routing that scans Feature metadata for 90 days by default, extends on evidence, and sends every code fix through a Feature workflow. |
 | **Operational Support** | Read-only code-guided help for testing, running, deploying, switching accounts/config/models/providers, quota checks, rollout, and production diagnosis before deciding whether feature work is needed. |
@@ -73,9 +73,13 @@ Message Intent → Chat And Requirements Discussion if needed
 
 ### Lightweight Change Lane
 
-Bounded ordinary non-Bug changes use a response-local card with Background, adaptive Plan, progress, targeted verification, rollback, and result. Explicit Bugs keep Bug Management; public/data/state/security/architecture/unknown-impact changes use Feature. If the Agent is unsure, it asks the human with a recommendation before writing.
+Bounded ordinary non-Bug changes persist one card under the active memory root at `changes/YYYY-MM/YYYY-MM-DD-<topic>.md` after clearly-eligible routing and before target writes. The creation month remains stable and is not Archive. Explicit Bugs keep Bug Management; public/data/state/security/architecture/unknown-impact changes use Feature. If the Agent is unsure, it asks the human with a recommendation before writing.
 
-The lane is not a canonical stage, Feature Type, Bug Resolution Path, persistent backlog, or default `.agent-loop/changes/` directory. It does not lower production, external-service, paid-call, configuration-write, Git, submit, release, publish, Feature-close, or Bug lifecycle Human Gates.
+The card keeps Background, adaptive Plan, progress, targeted verification, rollback, result, and Memory Review across accidental context loss. Planned cross-session work, handoff, Subagent execution, long observation, and complex evidence still use Feature. A changes-only root does not mean the project is initialized.
+
+Use `python3 <skill-root>/scripts/scan-lightweight-changes.py --project-root <project> --as-of YYYY-MM-DD` on macOS/POSIX, or `py -3 <skill-root>\scripts\scan-lightweight-changes.py ...` (`python` is also valid when it resolves Python 3.10+) on Windows. The read-only scanner validates all months. Three pending Changes or an oldest pending older than seven full calendar days triggers Agent-owned memory consolidation; high-evidence stable facts may sync to an existing reliable owner after exact scope disclosure, while uncertain meaning stays visible for human review.
+
+The lane is not a canonical stage, Feature Type, Bug Resolution Path, shared backlog, Archive lifecycle, or Auto Mode. It does not lower production, external-service, paid-call, configuration-write, Git, submit, release, publish, Feature-close, or Bug lifecycle Human Gates.
 
 ### Human-Guided Branch Management
 
