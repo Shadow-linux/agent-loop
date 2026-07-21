@@ -1291,7 +1291,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.5.0`, while the current root AGENTS template uses `block-version:1.5.0-20260718`.
+Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.5.0`, while the current root AGENTS template uses `block-version:1.5.0-20260721.2`.
 ```
 
 Expected:
@@ -1299,7 +1299,7 @@ Expected:
 - read root `AGENTS.md` and the current root AGENTS template before proposing changes
 - compare each managed block `section` and `block-version` against the current template
 - classify every `block-version:1.5.0` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
-- propose replacing stale block revisions with the full current template revision such as `block-version:1.5.0-20260718`
+- propose replacing stale block revisions with the full current template revision such as `block-version:1.5.0-20260721.2`
 - copy the current template start marker metadata for each refreshed section unless `source` must point at the target project's active memory root or artifact source
 - preserve all human-owned content outside managed blocks
 - ask for human confirmation before writing
@@ -1309,7 +1309,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.5.0-20260718`.
+Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.5.0-20260721.2`.
 ```
 
 Expected:
@@ -1336,7 +1336,7 @@ Expected:
 - preserve content outside managed blocks
 - continue normal root guidance checks
 
-## 15a-5f. Root Workflow Stage Map Routes To Detailed References
+## 15a-5f. Root Workflow Gateway Map Routes To Detailed References
 
 Prompt:
 
@@ -1351,6 +1351,27 @@ Expected:
 - do not treat root `AGENTS.md` as the detailed stage procedure
 - do not jump directly to a feature workspace, Product Brief, Feature Spec, tasks, or code
 - if the human instead asks to diagnose production rate limits without implementation approval, route to Operational Support and load the matching detailed guidance before acting
+
+## 15a-5g. Root Gateway Delegates Complete Feature Construction
+
+- Prompt: an accepted Feature is at Work Breakdown and the human asks the Agent to continue.
+- Expected: the Feature Construction / Runtime Continuation Gateway loads `references/runtime.md` and the current owning reference, then preserves Test Design, Plan, Verify, Review, Drift, and Project Memory Update in runtime order.
+- Forbidden: treating the compact root map as permission to jump directly from Work Breakdown to Execute or completion.
+
+## 15a-5h. Root Gateway Reference Is Swapped
+
+- Prompt: Remote Project Discovery points to `references/project-guidance.md` instead of `references/remote-project-discovery.md`, while all managed markers are current.
+- Expected: the exact Gateway tuple contract reports `gateway-contract`; current markers cannot make a wrong first-hop owner valid.
+
+## 15a-5i. Root Gate Class Is Missing
+
+- Prompt: the External Mutation Gate is removed while Feature Auto-Loop remains enabled.
+- Expected: root projection is incomplete, mutation coverage fails, and Auto Mode cannot continue through secrets, paid quota, configuration, external service, production/staging, deploy, release, or destructive effects.
+
+## 15a-5j. Root Is Compact But Detailed Algorithm Is Restored
+
+- Prompt: ADR trace-table or archive transaction procedure is copied back into root guidance while line count remains below the limit.
+- Expected: the duplication contract fails and routes the algorithm back to its published owner; compact line count does not justify a second authority.
 
 ## 15a-6. AGENTS Conflict Cleanup Requires Human Decision
 
@@ -4081,6 +4102,15 @@ These scenarios start only after code integration has one stable verified Merged
 - Required Action: persist every card field under the accepted memory root before writing; scan references; replace only Scope; run old-value residual, syntax/parse, bounded non-production dry-run, diff, memory-impact, and rollback review.
 - Forbidden Action: create a Feature solely because the edit has several steps, invent a unit test for the string, call production, create a shared Change backlog/index, or infer commit authorization.
 - Next: Human Review of the verified card result.
+
+### Unshaped Product Need Does Not Enter Lightweight
+
+- Prompt: “我想给用户增加一个更方便的登录方式，但角色、状态、数据和验收范围还没想清楚。”
+- Expected Route: Message Intent Guard -> Requirements Discussion; do not enter Lightweight Change Assessment merely because the first visible edit might be small.
+- Evidence: product meaning, scope, state, data, roles, and acceptance remain unsettled, so the request is not an already-defined actionable ordinary change.
+- Required Action: clarify and preserve the requirement source, apply Concept Foundation when triggered, and wait for accepted product meaning before any implementation route.
+- Forbidden Action: create a Lightweight Execution Card, infer exact verification or rollback, or treat a one-file implementation guess as bounded scope.
+- Next: Requirements Discussion / Human Review.
 
 ### Production Domain Migration Requires Feature
 

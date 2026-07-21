@@ -83,9 +83,10 @@ required.each do |text|
 end
 RUBY
 
-reminder='Before claiming no relevant project skill or entering a generic execution fallback, check `.agent-loop/skills/INDEX.md`; if an active skill matches, load it read-only and keep the per-invocation Execution Gate.'
+reminder='7. Check Project Skill metadata before generic executable fallback; verify and load only a matched active skill, while preserving its per-invocation Execution Gate because loading never authorizes execution.'
 count=$(grep -Fo -- "$reminder" "$root/templates/root-AGENTS.md" | wc -l | tr -d ' ')
 [ "$count" -eq 1 ] || fail "root AGENTS must contain the concise discovery reminder exactly once; found $count"
+assert_contains templates/root-AGENTS.md '| Create or manage a reusable project workflow | Project Skill Creation / Update | `references/project-skills.md`, `references/skill-routing.md`, `references/external-skill-adapters.md` |'
 
 for forbidden in matched-active index-absent no-active-match project-skill-drift; do
   assert_not_contains templates/root-AGENTS.md "$forbidden"
@@ -97,7 +98,7 @@ blocks = content.scan(/<!-- agent-loop:managed-start section:([^ ]+) .*?block-ve
 abort 'FAIL: root managed blocks missing' if blocks.empty?
 abort "FAIL: expected 13 managed blocks, found #{blocks.length}" unless blocks.length == 13
 blocks.each do |section, revision|
-  expected = '1.5.0-20260718'
+  expected = '1.5.0-20260721.2'
   abort "FAIL: #{section} expected #{expected}, found #{revision}" unless revision == expected
 end
 RUBY

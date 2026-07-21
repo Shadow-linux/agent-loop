@@ -25,7 +25,8 @@ assert_not_contains() {
 assert_contains "README.md" "## Published Sources"
 assert_contains "README.md" '`references/design.md` owns the core model and constraints; `references/runtime.md` owns executable routing, stage order, gates, and state transitions.'
 assert_not_contains "README.md" "If a reference conflicts with either design source, the design source wins."
-assert_contains "templates/root-AGENTS.md" "When multiple signals match, apply this first-match order: Safety Stop -> Remote Discovery -> Memory Recovery -> Feature Archive Maintenance -> Active Feature Guard -> Blocker Resolution -> Intent Routing -> Normal Stage Continuation."
+assert_contains "templates/root-AGENTS.md" "Apply: Safety Stop -> Remote Discovery -> Memory Recovery -> Feature Archive Maintenance -> Active Feature Guard -> Blocker Resolution -> Intent Routing -> Normal Stage Continuation."
+assert_contains "references/runtime.md" "Safety Stop -> Remote Discovery -> Memory Recovery -> Feature Archive Maintenance -> Active Feature Guard -> Blocker Resolution -> Intent Routing -> Normal Stage Continuation"
 
 # Blocked routing has an explicit first-match order.
 assert_contains "references/runtime.md" "Apply the blocked routing matrix in order and choose the first matching row:"

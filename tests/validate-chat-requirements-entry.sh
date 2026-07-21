@@ -74,12 +74,12 @@ assert_contains "references/workflow-checklists.md" "If message intent is \`requ
 assert_contains "references/workflow-checklists.md" "During requirements discussion, use Brainstorm / Clarify and produce a human-reviewed requirement document before archiving"
 
 assert_contains "templates/root-AGENTS.md" "Message Intent Guard"
-assert_contains "templates/root-AGENTS.md" "chat"
-assert_contains "templates/root-AGENTS.md" "requirements-discussion"
-assert_contains "templates/root-AGENTS.md" "Requirements discussion must shape demand through Brainstorm / Clarify into a human-reviewed requirement document under \`.agent-loop/requirements/\` before feature construction"
-assert_contains "templates/root-AGENTS.md" "Message intent is not permanent"
-assert_contains "templates/root-AGENTS.md" "If chat turns into a proposal/design-note request, reclassify as \`proposal-doc\`"
-assert_contains "templates/root-AGENTS.md" "If the human explicitly wants discussion without documentation, keep \`chat\`"
+assert_contains "templates/root-AGENTS.md" "Chat answers or discusses without creating workflow artifacts."
+assert_contains "templates/root-AGENTS.md" '| Product need, meaning, scope, or delivery phases are still being shaped | Requirements Discussion | `references/requirement-management.md`, `references/requirement-product-grill.md` |'
+assert_contains "templates/root-AGENTS.md" '| Ordinary question or discussion has no artifact or action intent | Chat | `references/runtime.md` |'
+assert_contains "templates/root-AGENTS.md" "Semantic Gate"
+assert_contains "references/runtime.md" "Message intent is not permanent"
+assert_contains "references/runtime.md" "Chat defaults to answer-only, but it may convert to \`requirements-discussion\`, \`proposal-doc\`"
 
 assert_contains "SKILL.md" "Message Intent Guard"
 assert_contains "SKILL.md" "requirements-discussion"

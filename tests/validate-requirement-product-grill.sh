@@ -88,7 +88,8 @@ assert_contains "references/validation-scenarios.md" 'otherwise do not create a 
 assert_contains "references/validation-scenarios.md" 'otherwise keep the change in requirement artifacts without creating feature files'
 assert_contains "references/external-skill-adapters.md" "owning-stage artifact: requirement document plus requirement README summary during Requirements Discussion"
 assert_not_contains "references/external-skill-adapters.md" '| brainstormed design/spec | `.agent-loop/features/<feature>/product.md` and/or `.agent-loop/features/<feature>/spec.md` |'
-assert_contains "templates/root-AGENTS.md" "| Product need, business goal, scope, constraint, scenario, concept identity/lifecycle, or phased delivery is still being shaped | Requirements Discussion |"
+assert_contains "templates/root-AGENTS.md" '| Product need, meaning, scope, or delivery phases are still being shaped | Requirements Discussion | `references/requirement-management.md`, `references/requirement-product-grill.md` |'
+assert_contains "templates/root-AGENTS.md" "Semantic Gate"
 assert_not_contains "templates/root-AGENTS.md" "Requirements Discussion / Grill"
 
 assert_contains "references/workflow-checklists.md" "Requirement/Product Grill"

@@ -28,8 +28,9 @@ assert_contains "references/runtime.md" "If no .agent-loop/ or legacy agent-loop
 assert_contains "references/feature-follow-up.md" "Feature Follow-up requires existing agent-loop memory"
 assert_contains "references/design.md" "Project Entry and memory bootstrap have priority over Feature Follow-up"
 assert_contains "references/stage-guides.md" "Do not enter Feature Follow-up before Project Entry has established or verified agent-loop memory"
-assert_contains "references/project-guidance.md" "only after Project Entry has established or verified agent-loop memory"
-assert_contains "templates/root-AGENTS.md" "only after project memory exists or Project Entry has routed through Init Project / Project Entry Scan"
+assert_contains "references/project-guidance.md" "if reliable memory is missing, route to Project Entry / Init"
+assert_contains "templates/root-AGENTS.md" '| No reliable memory | Project Entry / Init | `references/project-entry-scan.md`, `references/project-guidance.md`, `references/stage-guides.md` |'
+assert_contains "templates/root-AGENTS.md" "Evidence Gate"
 assert_contains "references/validation-scenarios.md" "Bug Report Without Agent-Loop Memory Runs Project Entry Scan First"
 
 echo "PASS: v1.2.3 routing fixes contract is complete"

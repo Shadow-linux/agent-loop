@@ -121,11 +121,12 @@ Before using an external skill or plugin inside a stage:
 - [ ] If unclear whether this is chat or requirements discussion, ask whether to keep discussing or shape the topic into a requirements document.
 - [ ] If unclear whether this is requirements discussion or feature implementation, ask whether to form a requirements document first or start feature construction.
 
-## Workflow Stage Routing
+## Workflow Gateway Routing
 
 - [ ] After Message Intent and project-state classification, select exactly one next stage.
-- [ ] Workflow Stage Map routes the current signal to exactly one stage and matching detailed references.
-- [ ] Load the matching `agent-loop` reference before taking stage actions; root `AGENTS.md` is a navigation index, not the detailed procedure.
+- [ ] Workflow Gateway Map routes the current signal to exactly one first hop and the exact published reference set.
+- [ ] Confirm every Gateway reference exists in the installed package and load the owning reference before action.
+- [ ] Use `references/runtime.md` for routing precedence and complete leaf-stage order; a Gateway never removes or reorders downstream stages.
 - [ ] Reclassify and select a new stage only when the latest human intent or project evidence changes.
 
 ## Lightweight Change Lane
@@ -181,11 +182,11 @@ Before using an external skill or plugin inside a stage:
 - [ ] Default to read-only code/process analysis and checklist/runbook output.
 - [ ] Confirm before code/config/deploy/destructive operations, paid-quota external calls, credential rotation, or feature/fix escalation.
 - [ ] Check root `AGENTS.md` / `CLAUDE.md` and any obvious directory-level guidance.
-- [ ] Treat root `AGENTS.md` as stale if it lacks Message Intent Guard, Workflow Stage Map, or lacks Bootstrap Protocol, Agent Ownership, Operational Support Guard, Stage Helper Capability Scan, Gate Modes, Required Stops, Completion Rules, Feature Follow-up / Flow-back, Submit And Commit Rules, root/directory guidance boundaries, or requirement archive rules.
+- [ ] Treat root `AGENTS.md` as stale if it lacks Bootstrap Protocol, project-outcome Agent Ownership, Message Intent Guard, Workflow Gateway Map, Gate Modes, all six Required Stop classes with Auto Mode non-bypass, Completion Rules, Submit And Commit Rules, Artifact Authority, root/directory guidance boundaries, or exact published-reference first hops.
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.0-20260718`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.0-20260721.2`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -267,11 +268,11 @@ Before using an external skill or plugin inside a stage:
 - [ ] Build boundary map from durable directories.
 - [ ] Inventory root and directory-level guidance files.
 - [ ] Check whether root `AGENTS.md` exists, is stale, or must be created.
-- [ ] If root `AGENTS.md` exists, verify it contains Message Intent Guard, Workflow Stage Map, Bootstrap Protocol, Agent Ownership, Gate Modes, Required Stops, and Completion Rules.
+- [ ] If root `AGENTS.md` exists, verify it contains Bootstrap Protocol, project-outcome Agent Ownership, Message Intent Guard, Workflow Gateway Map, Gate Modes, all six Required Stop classes with Auto Mode non-bypass, Completion Rules, Submit And Commit Rules, and Artifact Authority.
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.0-20260718`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.0-20260721.2`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.

@@ -94,7 +94,8 @@ assert_contains "references/product-brief.md" "Do not enter Feature Spec while r
 assert_contains "references/workflow-checklists.md" "Propose missing Applicable Decision references for human confirmation before writing \`product.md\`; do not create a duplicate ADR because a link is missing."
 assert_contains "references/workflow-checklists.md" "Confirm Design Readiness is \`design-not-needed\` or \`completed\`; run Decision & Design before Feature Spec when shared design is required."
 
-assert_contains "templates/root-AGENTS.md" "| Accepted requirement needs shared business-flow, domain, data, architecture, reliability, performance, security, or cross-feature design before feature specification | Decision & Design If Needed | \`references/project-decisions.md\` |"
+assert_contains "templates/root-AGENTS.md" "| Accepted requirement needs shared technical landing before feature specification | Decision & Design If Needed | \`references/project-decisions.md\` |"
+assert_contains "templates/root-AGENTS.md" "Semantic Gate"
 assert_not_contains "templates/root-AGENTS.md" "Decision / ADR |"
 assert_contains "README.md" "→ Decision & Design If Needed"
 

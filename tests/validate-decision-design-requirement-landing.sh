@@ -30,8 +30,9 @@ assert_contains "references/project-decisions.md" "## Design Readiness Check"
 assert_contains "references/project-decisions.md" "## Design Slice Coverage"
 assert_contains "references/project-decisions.md" 'No required design slice may remain `unassigned` before Feature Spec.'
 
-assert_contains "templates/root-AGENTS.md" "| Accepted requirement needs shared business-flow, domain, data, architecture, reliability, performance, security, or cross-feature design before feature specification | Decision & Design If Needed | \`references/project-decisions.md\` |"
-assert_contains "templates/root-AGENTS.md" "When a feature references accepted Decision & Design records, Feature Close Review and Feature Completion Check must verify assigned design slices and evidence"
+assert_contains "templates/root-AGENTS.md" "| Accepted requirement needs shared technical landing before feature specification | Decision & Design If Needed | \`references/project-decisions.md\` |"
+assert_contains "templates/root-AGENTS.md" "Semantic Gate"
+assert_contains "references/feature-completion-check.md" "Feature close is blocked until all assigned design slices have implementation and verification evidence"
 assert_not_contains "templates/root-AGENTS.md" "| Accepted complex requirement has cross-feature business-flow, architecture, data, security, performance, or long-term tradeoffs | Decision Scan / Placement If Needed |"
 assert_contains "references/runtime.md" "Decision & Design If Needed"
 assert_contains "references/stage-guides.md" "## Decision & Design If Needed"

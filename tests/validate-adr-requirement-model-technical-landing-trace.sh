@@ -55,9 +55,9 @@ assert_contains "references/stage-guides.md" "Effective Requirement Snapshot"
 assert_contains "references/workflow-checklists.md" "Requirement Model Technical Landing Trace"
 assert_contains "references/workflow-checklists.md" "Upstream Compatibility"
 assert_contains "references/workflow-checklists.md" "Coverage Hard Gate"
-assert_contains "templates/root-AGENTS.md" "Upstream Compatibility"
-assert_contains "templates/root-AGENTS.md" "Requirement Model Technical Landing Trace"
-assert_contains "references/project-guidance.md" "Requirement Model Technical Landing Trace"
+assert_contains "templates/root-AGENTS.md" '| Accepted requirement needs shared technical landing before feature specification | Decision & Design If Needed | `references/project-decisions.md` |'
+assert_contains "templates/root-AGENTS.md" "Semantic Gate"
+assert_contains "references/project-guidance.md" "Decision, Feature Construction"
 
 # Human review and generic ADR template.
 assert_contains "references/human-review-summary.md" "### Decision & Design Approval"

@@ -16,6 +16,7 @@ The core constraints are:
 - `.agent-loop/` is the default workflow memory root; legacy `agent-loop/` may be read and migrated only after confirmation
 - local remote-entry directories use thin local `.agent-loop/remote.md` and `project.md`; full memory should live with the remote source of truth when possible
 - root `AGENTS.md` / `CLAUDE.md` are startup guidance artifacts that teach agents to use `agent-loop`
+- root `AGENTS.md` is a compact startup contract and first-hop Gateway projection; `runtime.md` owns the complete executable Stage Order and owning references hold detailed algorithms
 - `project.md` is project-level long-term memory
 - Project Memory Mode is `simple` by default; in `enterprise`, `project.md` becomes an index and long-term details move to optional `.agent-loop/project/*.md`
 - `project.md` owns cross-feature Product Context and Domain Language

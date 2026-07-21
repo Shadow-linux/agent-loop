@@ -2,6 +2,17 @@
 
 ## 1.5.0 — 2026-07-17
 
+### Root AGENTS Lossless Slimming
+- Reduced the canonical root `AGENTS.md` template from 224 to 170 lines while retaining all 13 managed blocks and the startup-critical project-outcome ownership, Gate, completion, submit, and artifact-authority contracts.
+- Replaced duplicated leaf-stage rows with an exact 16-row first-hop Workflow Gateway Map while keeping the complete Stage Order and routing precedence authoritative in `references/runtime.md`.
+- Added exact Gateway tuple/reference/runtime-leaf coverage, line/CJK limits, and four mutation pressure checks; migrated live consumers to `block-version:1.5.0-20260721.2` without changing Skill version `1.5.0`.
+
+### Root Routing And Ownership Clarification
+- Clarified the root Stage Map signal so Lightweight Change Assessment is entered only for a human-requested, already-defined, actionable ordinary non-Bug change.
+- Kept product meaning that is still being shaped in Requirements Discussion while preserving the existing Bug, active Feature, Lightweight eligibility, Human Choice, and Feature hard-trigger precedence.
+- Made downstream Agents own the project outcome as well as workflow mechanics: investigate safely available evidence before asking and continue authorized work until verified completion or a concrete Human Gate.
+- Added focused regression and pressure coverage for the Requirements Discussion and Agent Ownership boundaries, then refreshed all 13 root managed blocks to `block-version:1.5.0-20260721.1` without changing Skill version `1.5.0`.
+
 ### Lightweight Change Lane
 - Added Agent-owned Lightweight Change Assessment before Feature construction for bounded ordinary non-Bug changes, while preserving explicit Bug Management and active Feature ownership precedence.
 - Added a response-local Lightweight Execution Card with required background, goal/completion criteria, scope, rationale, risk, adaptive Plan, progress, targeted verification, rollback, Human Gates, and result/residuals.

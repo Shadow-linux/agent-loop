@@ -92,8 +92,10 @@ assert_contains "templates/spec.md" "## Requirement Product Model Trace"
 assert_contains "references/project-decisions.md" "PRD / Requirement Product Model owns product meaning"
 assert_contains "references/project-decisions.md" "ADR consumes accepted product semantics"
 
-# Root navigation and stop behavior remain coordinated without a new stage.
-assert_contains "templates/root-AGENTS.md" "unresolved Concept Foundation"
+# Root owns the Requirements first hop and Semantic Gate; the detailed method stays in its reference.
+assert_contains "templates/root-AGENTS.md" '| Product need, meaning, scope, or delivery phases are still being shaped | Requirements Discussion | `references/requirement-management.md`, `references/requirement-product-grill.md` |'
+assert_contains "templates/root-AGENTS.md" "Semantic Gate"
+assert_contains "references/requirement-product-grill.md" "## Concept Foundation"
 assert_contains "references/project-guidance.md" "Concept Foundation Gate"
 assert_contains "README.md" "Concept Foundation"
 assert_contains "Usage.md" "一次只确认一个真正阻塞后续模型的问题"

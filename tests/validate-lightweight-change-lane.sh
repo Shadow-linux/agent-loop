@@ -150,7 +150,8 @@ assert_not_contains references/concepts.md 'behavior tweak, "small tweak", test 
 assert_contains references/concepts.md 'Generic adjustment wording alone routes an actionable ordinary non-Bug change through Lightweight Change Assessment before ownership scanning.'
 assert_not_contains references/workflow-checklists.md 'behavior tweak, "small tweak", test failure, or QA/user feedback.'
 assert_contains references/workflow-checklists.md 'Treat generic adjustment wording as assessment input only; require explicit Bug/defect evidence, changed accepted behavior, or clear Feature ownership before entering Feature Follow-up.'
-assert_contains references/project-guidance.md 'but only after Project Entry has established or verified agent-loop memory; generic “small tweak” wording alone uses Lightweight Change Assessment first'
+assert_contains references/project-guidance.md 'The Workflow Gateway Map contains one exact first-hop row for an already-defined actionable ordinary non-Bug change, pointing to `Lightweight Change Assessment` and `references/lightweight-change-lane.md`.'
+assert_contains references/project-guidance.md 'Lightweight Change Gateway: route only already-defined actionable bounded non-Bug work to `references/lightweight-change-lane.md`; unresolved product meaning remains in Requirements Discussion'
 assert_contains references/implementation-planning.md 'A Lightweight Execution Card is not a Feature `plan.md` and does not enter Plan Gate.'
 assert_contains references/skill-routing.md 'Lightweight Change Lane does not enter mandatory Plan Gate / Plan or Execute Task / Story helper resolution.'
 assert_contains references/external-skill-adapters.md 'Do not expand a Lightweight Execution Card into `docs/superpowers/`, a Feature workspace, or a construction-grade plan.'
@@ -163,16 +164,16 @@ assert_contains references/memory-reconciliation.md 'Change files are evidence o
 assert_contains references/runtime.md 'scripts/scan-lightweight-changes.py'
 assert_contains references/design.md 'The lane reduces ceremony and document depth, not accuracy, scope control, verification strength, rollback, fact review, or Human Gates.'
 
-reminder='Before creating a Feature for a bounded non-Bug change, assess Lightweight Change Lane; clearly eligible work persists one card under the active memory root at changes/YYYY-MM/YYYY-MM-DD-topic.md and the Agent checks pending memory consolidation, while unclear impact stops for a recommended human choice.'
-count=$(grep -Fo -- "$reminder" "$root/templates/root-AGENTS.md" | wc -l | tr -d ' ')
-[ "$count" -eq 1 ] || fail "root AGENTS must contain the concise Lightweight Change reminder exactly once; found $count"
-assert_contains templates/root-AGENTS.md '| Ordinary non-Bug change appears bounded, reversible, and exactly verifiable | Lightweight Change Assessment (internal route) | `references/lightweight-change-lane.md` |'
+assert_contains templates/root-AGENTS.md '| Already-defined actionable ordinary non-Bug change that appears bounded, reversible, and exactly verifiable | Lightweight Change Assessment | `references/lightweight-change-lane.md` |'
+assert_contains templates/root-AGENTS.md 'Scope And Risk Gate'
+assert_not_contains templates/root-AGENTS.md '| Ordinary non-Bug change appears bounded, reversible, and exactly verifiable | Lightweight Change Assessment (internal route) |'
 assert_not_contains templates/root-AGENTS.md 'Lane Rationale:'
 assert_not_contains templates/root-AGENTS.md 'Result / Residuals:'
 assert_not_contains templates/root-AGENTS.md 'Feature Hard Triggers'
 
 for scenario in \
   'Confirmed Internal Domain Replacement Uses Lightweight Card' \
+  'Unshaped Product Need Does Not Enter Lightweight' \
   'Production Domain Migration Requires Feature' \
   'One-Line Public Contract Change Requires Feature' \
   'Multi-File Mechanical Synchronization May Stay Lightweight' \
@@ -220,7 +221,7 @@ blocks = content.scan(/<!-- agent-loop:managed-start section:([^ ]+) .*?block-ve
 abort 'FAIL: root AGENTS managed blocks missing' if blocks.empty?
 abort "FAIL: expected 13 managed blocks, found #{blocks.length}" unless blocks.length == 13
 blocks.each do |section, revision|
-  expected = '1.5.0-20260718'
+  expected = '1.5.0-20260721.2'
   abort "FAIL: #{section} expected #{expected}, found #{revision}" unless revision == expected
 end
 RUBY
