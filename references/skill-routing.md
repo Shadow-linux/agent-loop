@@ -79,10 +79,10 @@ Do not ask the human whether to use a helper just because it exists. Announce or
 
 | Stage | Preferred Skill Type | Fallback |
 |---|---|---|
-| Requirements Discussion | brainstorming / product discovery, grill-with-docs style helpers | Use `requirement-management.md` and `requirement-product-grill.md`; write details to the requirement document and only source, lifecycle, mapping, and decision-link summaries to requirement README |
+| Requirements Discussion | brainstorming / product discovery, PRD/product helpers, grill-with-docs style helpers | Use `requirement-management.md`, `product-definition.md`, and `requirement-product-grill.md`; translate helper output into a response-local Requirement `product.md` draft and write it only through Product Human Review plus Requirement Record / Archive |
 | Brainstorm / Clarify if Needed | brainstorming / product discovery | Ask 1-5 high-impact questions from `stage-guides.md` |
 | Project Skill Creation / Update | `writing-skills` plus `skill-creator` when available | Use `project-skills.md` and `templates/project-skills/*`; keep all output under `.agent-loop/skills/<skill-name>/` |
-| Product Brief If Needed | PRD/product synthesis, grill-with-docs style helpers | Use `templates/product.md` after Product Brief Source Gate |
+| Legacy Product Brief compatibility | no new writer helper | Read an existing Feature `product.md` only for Resume, Follow-up, Review, Close, or Recovery |
 | Feature Spec | spec writing | Use `templates/spec.md` |
 | Human Review Summary | approval summary / decision table | Use `human-review-summary.md` |
 | Work Breakdown | issue/task splitter | Use `templates/tasks.md` |
@@ -104,10 +104,10 @@ Do not ask the human whether to use a helper just because it exists. Announce or
 If Superpowers is available, these map cleanly:
 
 - `using-superpowers`: reminder that relevant skills should be loaded before acting.
-- `brainstorming`: Brainstorm / Clarify if Needed; Requirements Discussion writes approved details to the requirement document and only source, lifecycle, mapping, and decision-link summaries to requirement README, Product Brief writes to `product.md`, and Feature Spec writes to `spec.md` / `notes.md`; never default to `docs/superpowers/specs/`.
+- `brainstorming`: Brainstorm / Clarify if Needed; Requirements Discussion produces the Requirement `product.md` draft, Requirement README keeps pointer/lifecycle/mapping summaries, and Feature Spec writes Product Slice to `spec.md` / `notes.md`; never default to `docs/superpowers/specs/`.
 - `writing-skills`: Project Skill Creation / Update; governs RED/GREEN/REFACTOR, pressure scenarios, trigger-focused descriptions, and loophole closure. When `skill-creator` is also available, use its scaffolding and validation tools without letting it replace writing-skills discipline.
-- PRD/product skills such as mattpocock `to-prd`: Product Brief If Needed, translated into local `product.md` only after Product Brief Source Gate passes.
-- Requirement/Product Grill and mattpocock `grill-with-docs`: clarification inside Requirements Discussion, Product Brief, and Brainstorm / Clarify; translate detailed requirement output to the requirement document, keep requirement README to index/lifecycle/mapping summaries, write feature output to `product.md`, `spec.md`, or `notes.md`, and route Decision Candidates without creating native `CONTEXT.md` or `docs/adr/`.
+- PRD/product skills such as `prd-writer` or mattpocock `to-prd`: methods inside Requirements Discussion; map helper Feature List output to Product Capability Scope and translate output into the Requirement `product.md` draft. Do not create native `feature_list.md`, `PRD.md`, prototype deployment, helper-owned trees, or Feature `product.md`.
+- Requirement/Product Grill and mattpocock `grill-with-docs`: clarification inside Requirements Discussion and Feature-local Brainstorm / Clarify; translate accepted product meaning to the Requirement `product.md`, keep Requirement README to pointer/lifecycle/mapping summaries, write Feature-local output to `spec.md` or `notes.md`, and route Decision Candidates without creating native `CONTEXT.md` or `docs/adr/`.
 - `writing-plans`: Plan Gate / Plan If Needed; translate into construction-grade `plan.md` or `plans/*`, or record a justified No-Plan Decision for a trivial task, not `docs/superpowers/plans/`.
 - `test-driven-development`: Execute Task / Story; evidence still goes to `notes.md` and task status still follows Task Done Gate.
 - `systematic-debugging`: Diagnose Failure; root cause and fix evidence go to `notes.md`.

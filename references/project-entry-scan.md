@@ -17,7 +17,7 @@ Outputs are limited to:
 - `.agent-loop/project.md` proposal or update
 - root `AGENTS.md` / `CLAUDE.md` status and repair proposal
 - stable command, boundary, capability, and uncertainty facts
-- recommended next stage, such as Decision & Design If Needed, Product Brief If Needed, Feature Spec, Code-Guided Operational Support, Requirement Archive, Re-Adopt Agent Loop Project, or Targeted Feature Scan
+- recommended next stage, such as Requirements Discussion / Product Definition, Decision & Design If Needed, Feature Spec with Product Slice, Code-Guided Operational Support, Requirement Record / Archive, Re-Adopt Agent Loop Project, or Targeted Feature Scan
 
 Do not create:
 

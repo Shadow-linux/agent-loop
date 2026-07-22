@@ -12,13 +12,14 @@ AGENTS.md / CLAUDE.md = agent startup guidance
 .agent-loop/features/* = feature execution state
 .agent-loop/features/archive.md = Feature Monthly Archive locator for stable Feature IDs
 .agent-loop/features/YYYY-MM/* = Human-gated closed-history month archive; never an execution path
-.agent-loop/requirements/<archive-date>-<topic>/* = human source material package
+.agent-loop/requirements/<record-date>-<topic>/product.md = Agent-authored Human-reviewed Product Definition
+.agent-loop/requirements/<record-date>-<topic>/sources/* = preserved human source material when a new package needs a sources directory
 .agent-loop/skills/INDEX.md = optional project-skill lifecycle and discovery index
 .agent-loop/skills/<skill-name>/* = optional human-confirmed project-local capability
 .agent-loop/memory-merges/MM-<short-sha>/README.md = on-demand post-code-merge memory audit; never a default empty directory
 ```
 
-Default memory root is `.agent-loop/` because it is workflow metadata, not product code. If a project already has legacy `agent-loop/`, use it for the current run and ask before migration.
+Default memory root is `.agent-loop/` because it is workflow metadata, not product code. Reuse legacy `agent-loop/` only when it is the single real accepted root, and ask before migration. If both `.agent-loop/` and legacy `agent-loop/` exist, fail closed and route to Recovery.
 
 Do not use `AGENTS.md` as a task log. Do not use `project.md` as the startup instruction file for every agent.
 
@@ -233,7 +234,7 @@ Keep it short and long-lived:
 
 - project uses `agent-loop`
 - Bootstrap Protocol skill loading: root `AGENTS.md` is bootstrap guidance, not a replacement for the `agent-loop` skill; if the runtime exposes the skill, load/use it before making workflow decisions, especially during Project Entry, Resume, Re-Adopt, stage boundaries, after context compaction, or when workflow state is uncertain; Stage Helper Capability Scan happens only after the controller is active or unavailable/load-failed; unavailable/load-failed fallback forces Strict Mode and permits only Chat/read-only entry/recovery/operational analysis while Execute, Human-gated writes, Submit, Pause, and Close remain blocked
-- Message Intent Guard: before project-state routing, distinguish `chat`, `requirements-discussion`, `project-skill-management`, and `feature-request`; chat answers/discusses only, requirements discussion shapes demand through Brainstorm / Clarify into human-reviewed requirement documents under `.agent-loop/requirements/`, applies the Concept Foundation Gate when concept identity/lifecycle/relationship/state/ownership/fact meaning can change downstream models, project-skill management routes to Project Skill Creation / Update, and feature requests enter normal feature workflow
+- Message Intent Guard: before project-state routing, distinguish Chat, Requirements Discussion, already-defined ordinary non-Bug change, explicit Bug/follow-up, Feature Request, Operational Support, Project Skill, Archive/Rehydrate, Memory Reconciliation, proposal/deferred, and lifecycle requests; keep eligibility, internal methods, lifecycle algorithms, and artifact-writing rules in the exact Gateway owners
 - Workflow Gateway Map: after intent and project-state classification, route the 16 startup signal families to exactly one first hop and its exact published reference set; load the matching owner before acting, while `references/runtime.md` retains the complete leaf-stage order
 - Root Agent Bootstrap: read `AGENTS.md`, inspect `.agent-loop/`, classify the current stage, and recommend exactly one next action
 - guidance language follows project language; keep stable artifact/stage names in English
@@ -248,8 +249,6 @@ Keep it short and long-lived:
 - when creating a new long-lived boundary directory, propose a directory-level `AGENTS.md` before or alongside the directory creation
 - keep human source/product meaning, accepted technical landing, implementation, defect identity/lifecycle, bounded Change evidence, and durable current facts in their distinct owning artifacts
 - when existing branch rules are confused, target version is unclear, or customer boundaries are risky, load `references/branch-management.md`, recommend the optional profile, and adopt it only after explicit human acceptance; recommendation/adoption never authorizes a Git action
-- suggest requirement `Delivery Phases` in requirement set `README.md` when a complex requirement needs staged human delivery confirmation before feature construction
-- keep future/deferred work and backlog items in requirement sets and optional `requirements/INDEX.md`, not in `project.md`; do not edit `requirement.md` or other source files for lifecycle/status updates
 - Agent Ownership: agents own the project outcome as well as the loop, inspect safely available evidence before asking, classify the current stage, recommend exactly one next action, propose missing artifacts, and continue through authorized scope until verified completion or a concrete Human Gate
 - Stage Helper Capability Scan: before every helper-friendly stage listed in `skill-routing.md`, inspect the current runtime for available helper skills/plugins such as Superpowers; use matching helpers as methods while keeping agent-loop control
 - ask human confirmation before each agent-loop stage

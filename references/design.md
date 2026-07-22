@@ -12,8 +12,9 @@ The core constraints are:
 
 - single-person + CLI agent first
 - human controls goals, source requirements, and stage gates
+- A new Effective Product Definition cannot bypass Product Human Review confirmation. That confirmation remains separate from Requirement lifecycle, ADR, Feature start, implementation, and Git authorization.
 - agent controls workflow mechanics, artifacts, implementation, verification, and backfill
-- `.agent-loop/` is the default workflow memory root; legacy `agent-loop/` may be read and migrated only after confirmation
+- `.agent-loop/` is the default workflow memory root; legacy `agent-loop/` may be read and migrated only after confirmation. If both `.agent-loop/` and legacy `agent-loop/` exist, fail closed and route to Recovery.
 - local remote-entry directories use thin local `.agent-loop/remote.md` and `project.md`; full memory should live with the remote source of truth when possible
 - root `AGENTS.md` / `CLAUDE.md` are startup guidance artifacts that teach agents to use `agent-loop`
 - root `AGENTS.md` is a compact startup contract and first-hop Gateway projection; `runtime.md` owns the complete executable Stage Order and owning references hold detailed algorithms
@@ -48,13 +49,16 @@ The core constraints are:
 - Bug intake order is complete Bug Index metadata scan -> 90-day Feature metadata scan -> evidence-ranked deep read / evidence-driven extended scan -> create/update/reopen Bug Record
 - archive changes Feature location, not identity or ownership; discovery and Human Review read archived evidence without rehydrate, while confirmed flow-back rehydrates before reopened execution
 - Report Origin introduces no Owner, Assignee, personnel permission, staffing, workload, or automatic Priority system
-- Concept Foundation is an internal Requirements Discussion / Requirement Product Grill method, not a canonical stage; when triggered, it stabilizes requirement-local product concepts before business-flow, state, and product-data modeling
-- the effective human-reviewed requirement source owns accepted Concept Foundation and Requirement Product Model semantics; after archive, requirement README indexes the effective source/status without copying details, and Product Brief / Feature Spec consume those meanings by reference
+- Adaptive Product Definition belongs inside Requirements Discussion and has only `brief | standard` depth; it is not a lifecycle or new canonical stage
+- Product Definition Depth Scan, Product Completeness Scan, Concept Foundation, Requirement Product Model, and derived visuals are internal Requirements Discussion methods; when triggered they stabilize product meaning before Design Readiness
+- Concept Foundation is an internal Requirements Discussion / Requirement Product Grill method, not a canonical stage.
+- the effective human-reviewed Requirement `product.md` owns new product semantics; README indexes `Effective Product Definition`, ADR consumes it for technical landing, and Feature Spec consumes it through Product Slice
+- original human materials remain byte-stable sources; confirmed Product Definition changes are append-only, while legacy `requirement.md`, `Effective Concept Foundation`, and Feature `product.md` remain readable without bulk migration
 - requirement-driven ADRs freeze an Effective Requirement Snapshot, inventory every source Requirement Model ID, and trace every in-scope accepted ID to a disposition, technical landing, Design Slice, and verification without taking ownership of product semantics
 - upstream requirement changes invalidate dependency availability until compatibility review; `review-required` is not a decision lifecycle status, and incompatible accepted decisions are superseded rather than rewritten
-- requirement-set dates mean archive date only, not deadlines or feature lifecycle dates
+- the canonical `<record-date>` in a Requirement Set name is the date that the set was recorded/archived, not a deadline or Feature lifecycle date; existing legacy `<archive-date>` names remain readable without rename
 - future/deferred work belongs in requirement sets and optional `requirements/INDEX.md`, not in `project.md`
-- `product.md` is optional feature-level product understanding when needed
+- new `product.md` is Requirement-level Brief/Standard product definition; Feature-level `product.md` is legacy reader-only compatibility
 - each feature has stable `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`; `contracts.md` is added only after human confirmation when producer-consumer boundaries need explicit handoff
 - Feature Monthly Archive is explicit closed-history maintenance: Feature ID is stable, eligible whole directories move to `features/YYYY-MM/<feature-id>/`, and root `features/archive.md` is only the locator/ledger
 - archive state is not feature lifecycle; active / blocked / paused features stay flat, and archived closed features rehydrate before reopened execution
@@ -159,11 +163,13 @@ Bug Record 0..1 -> Duplicate Of canonical Bug Record
 
 One coherent Feature may resolve several Bugs. Each Bug retains independent identity, verification, Resolution, close, and reopen evidence. There is no Bug Owner/Assignee model, and Bug artifacts never own tasks, tests, plans, or code execution.
 
-**Concept Foundation**: a triggered method inside Requirements Discussion / Requirement Product Grill that derives requirement-local stable Concept IDs, definitions, identity, lifecycle boundaries, relationships, owners, state-bearing classification, invariants, and product fact-source questions from scenarios and evidence. It is not a stage or top-level artifact.
+**Adaptive Product Definition**: the Requirements Discussion method that chooses `brief | standard`, drafts one Requirement `product.md` from preserved evidence, runs Product Completeness/Human Grill as needed, and stops at Product Human Review plus Requirement Record / Archive. Profile is depth only.
 
-**Requirement Product Model**: the product-layer derivation owned by the effective human-reviewed requirement source. It traces accepted concepts into relationships, roles/permissions, commands/events, business flow, product state, product data objects, invariants, and exception/recovery behavior without choosing tables, stores, protocols, or other technical representations. After archive, append-only follow-ups or a linked replacement set preserve prior sources while README indexes the effective source.
+**Concept Foundation**: a triggered internal Standard Product Definition method inside Requirements Discussion / Requirement Product Grill that derives requirement-local stable Concept IDs, definitions, identity, lifecycle boundaries, relationships, owners, state-bearing classification, invariants, and product fact-source questions from scenarios and evidence. It is not a stage or top-level artifact.
 
-**Effective Requirement Snapshot**: the read-only ADR header that resolves the requirement README's current Effective Concept Foundation pointer and records the accepted source, Concept Foundation status, accepted Concept IDs, accepted Requirement Model IDs, compatibility judgment, and last compatibility check. It does not copy or redefine product meaning.
+**Requirement Product Model**: the applicable product-layer views owned inside a Standard effective Product Definition. It traces accepted concepts into relationships, roles/permissions, commands/events, business flow, product state, product facts, invariants, and exception/recovery behavior without choosing tables, stores, protocols, or technical representations. Product View Applicability prevents empty placeholder models.
+
+**Effective Requirement Snapshot**: the read-only ADR header that resolves Requirement README `Effective Product Definition` or the legacy `Effective Concept Foundation`, records Profile/review or legacy status, accepted Concept/Model IDs, Product Rule references, compatibility judgment, and last check. It does not copy or redefine product meaning.
 
 **Requirement Model Scope Inventory**: the source-wide ADR section that accounts for every stable Requirement Model ID (`REL-*`, `PERM-*`, `CMD-*`, `EVT-*`, `FLOW-*`, `STATE-*`, `PM-*`, and `EX-*`) before declaring the coherent ADR scope. It prevents silent omissions and records external, proposed, feature-local, or reasoned not-applicable ownership without becoming a separate artifact.
 
@@ -493,17 +499,20 @@ Require the Execution Gate for every invocation.
 
 ## Main Flow
 
-Within Requirements Discussion, triggered complex requirements use this internal semantic order before the canonical stage flow continues:
+Within Requirements Discussion, Adaptive Product Definition uses this internal semantic order before the canonical stage flow continues:
 
 ```text
-Scenario / Evidence
-→ Concept Candidate Inventory
-→ Concept Foundation Human Confirmation
-→ Requirement Product Model
-→ human-reviewed Requirement Document
+Source / Scenario Evidence
+→ Product Definition Depth Scan (`brief | standard`)
+→ Brief draft, or Standard Product Completeness Scan
+→ triggered Concept Candidate Inventory / one-blocker Human Grill
+→ applicable Requirement Product Model views
+→ optional Human-confirmed derived visuals
+→ cumulative Product Human Review
+→ Requirement Record / Archive with Effective Product Definition
 ```
 
-Simple requirements record `concept-foundation-not-needed` with a reason and remain lightweight. `candidate` and `reopened` are blocking; only `accepted` or a reasoned not-needed result may continue into requirement product modeling.
+Brief remains lightweight without fabricated model tables. For Standard, internal `candidate` and `reopened` are blocking; only accepted meanings continue into applicable product modeling. Product Review and Requirement lifecycle are independent and authorize no Feature/Git action.
 
 For an actionable ordinary non-Bug local change before Feature construction, use this internal route:
 
@@ -547,13 +556,12 @@ Project Entry
 → Code-Guided Operational Support if Needed
 → [internal] Lightweight Change Assessment for eligible ordinary non-Bug changes
 → Project Skill Creation / Update if Needed
-→ Requirement Archive
-→ Decision & Design If Needed
-→ Product Brief if Needed
-→ Brainstorm / Clarify if Needed
+→ Requirement Archive [Requirement Record / Archive]
+→ Design Readiness / Decision & Design If Needed
+→ Brainstorm / Clarify if Needed for Feature-local implementation uncertainty
 → Feature Follow-up And Flow-back if Needed
 → Targeted Feature Scan if Needed
-→ Feature Spec
+→ Feature Spec with Product Slice
 → Requirement Checklist
 → Work Breakdown
 → Delivery Contract if Needed

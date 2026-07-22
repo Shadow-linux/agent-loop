@@ -94,7 +94,7 @@ Expected:
 - explain that Project Entry Scan is safe-entry memory only and Evidence-Graph + DDD Onboarding is the separate newcomer-docs stage
 - do not load deleted legacy references such as `project-onboarding-scan.md`, `onboarding-db.md`, `onboarding-db-templates.md`, or `onboarding-diagnostics.md`
 - do not create `.agent-loop/onboarding-db/`, `onboarding-spec.md`, `onboarding-tasks.md`, module docs, flow docs, onboarding diagrams, or Quick / Deep / Targeted onboarding mode records
-- complete the Project Entry memory/guidance gate, then select exactly one canonical next stage from Decision & Design If Needed, Product Brief If Needed, Feature Spec, Code-Guided Operational Support, Requirement Archive, Re-Adopt Agent Loop Project, or Targeted Feature Scan according to current intent and artifact state
+- complete the Project Entry memory/guidance gate, then select exactly one canonical next stage from Requirements Discussion / Product Definition, Decision & Design If Needed, Feature Spec with Product Slice, Code-Guided Operational Support, Requirement Record / Archive, Re-Adopt Agent Loop Project, or Targeted Feature Scan according to current intent and artifact state
 
 ## 2e. Human Requests Newcomer Docs Before Project Memory
 
@@ -525,7 +525,7 @@ Expected:
 - do not create roadmap graph
 - include status, story links, dependencies, verification hints
 
-## 5b. Product Consensus From Requirement Docs
+## 5b. Product Definition From Requirement Sources
 
 Prompt:
 
@@ -536,9 +536,9 @@ Use agent-loop. The login PRD introduces a new tenant vocabulary and several pro
 Expected:
 
 - inspect source requirements, `project.md` Product Context, and Domain Language before asking questions
-- recommend Product Brief only if feature-level product intent needs its own layer
-- write `product.md` after human confirmation
-- keep feature product decisions in `product.md`
+- choose Standard because new tenant vocabulary and product rules need semantic modeling
+- draft the Requirement `product.md`, preserve original PRD bytes, and write only after Product Human Review plus Requirement Record / Archive
+- keep Product Rules in the Requirement Product Definition; Feature Spec later selects a Product Slice
 - mark cross-feature product consensus candidates for Project Memory Update
 - ask before updating `project.md` Product Context or Domain Language
 
@@ -1349,7 +1349,7 @@ Expected:
 - read root `AGENTS.md`, classify the accepted shared design signal, and select exactly one next stage: Decision & Design If Needed
 - load `references/project-decisions.md` before proposing a decision record or Feature Spec
 - do not treat root `AGENTS.md` as the detailed stage procedure
-- do not jump directly to a feature workspace, Product Brief, Feature Spec, tasks, or code
+- do not jump directly to a Feature workspace, Feature Spec, tasks, or code before Product Human Review and Requirement Record / Archive
 - if the human instead asks to diagnose production rate limits without implementation approval, route to Operational Support and load the matching detailed guidance before acting
 
 ## 15a-5g. Root Gateway Delegates Complete Feature Construction
@@ -1563,8 +1563,8 @@ Expected:
 - load `skill-routing.md` and `external-skill-adapters.md`
 - use Superpowers brainstorming as the method for context exploration, one-question-at-a-time clarification, options, and design approval
 - do not create `docs/superpowers/specs/`
-- write accepted product intent to `features/<feature>/product.md` when needed
-- write accepted behavior and acceptance criteria to `features/<feature>/spec.md`
+- translate accepted product intent into a response-local Requirement `product.md` draft and write it only through Product Human Review plus Requirement Record / Archive
+- write accepted Feature behavior, Product Slice, and acceptance criteria to `features/<feature>/spec.md`
 - return to the agent-loop next-stage recommendation instead of auto-transitioning to `superpowers:writing-plans`
 
 ## 21. Superpowers Writing-Plans Path Override
@@ -1846,7 +1846,7 @@ Expected:
 - recommend a linked new feature instead of silently reopening the old feature, unless the human says this was required acceptance all along
 - preserve old feature close state until human confirms otherwise
 - archive durable new requirements after confirmation
-- create or update new feature `product.md` / `spec.md` only after the human confirms the routing decision
+- update the owning Requirement Product Definition only through its review/follow-up gate, then create or update Feature `spec.md` Product Slice after the human confirms the routing decision
 
 ## 37. Feature Follow-up Investigates When Ownership Is Unclear
 
@@ -2053,7 +2053,7 @@ Use agent-loop. Audit whether Stage Helper Capability Scan is present for every 
 Expected:
 
 - compare `references/skill-routing.md` helper-friendly stages against `references/stage-guides.md` and `references/workflow-checklists.md`
-- verify Product Brief, Brainstorm / Clarify, Feature Spec, Work Breakdown, Test Design, E2E Discovery if Web, Technical Design / Code Context, Plan Gate, Execute Task / Story, Diagnose Failure, Verify, Review, Feature Completion Check, Submit / Integrate, Pause / Close, and approved Subagent Execution all include Stage Helper Capability Scan or an equivalent load/rule in both stage guidance and workflow checklists
+- verify Requirements Discussion / Product Definition, Brainstorm / Clarify, Feature Spec, Work Breakdown, Test Design, E2E Discovery if Web, Technical Design / Code Context, Plan Gate, Execute Task / Story, Diagnose Failure, Verify, Review, Feature Completion Check, Submit / Integrate, Pause / Close, and approved Subagent Execution all include Stage Helper Capability Scan or an equivalent load/rule in both stage guidance and workflow checklists
 - flag any stage that only says "when Superpowers is available" without an explicit scan before fallback
 - confirm helper scan does not give external skills ownership of artifact paths, task status, project memory, submit, close, or human gates
 
@@ -2130,7 +2130,7 @@ Use Superpowers brainstorming and writing-plans exactly as their native workflow
 
 Expected:
 
-- use helper methods but override native output paths with feature `product.md`, `spec.md`, `plan.md`, or `plans/*`
+- use helper methods but override native output paths with Requirement `product.md`, Feature `spec.md`, `plan.md`, or `plans/*`
 - do not create `docs/superpowers/*` without the separate native-output confirmation
 - stop at agent-loop Human Review / next-stage gate instead of auto-transitioning
 - keep task status, feature lifecycle, project memory, submit, pause, and close under agent-loop control
@@ -2316,8 +2316,8 @@ Expected B:
 - classify message intent as `requirements-discussion`
 - use Brainstorm / Clarify behavior
 - ask only requirement-shaping questions
-- produce a requirement document draft
-- recommend archiving the human-reviewed document under `.agent-loop/requirements/<date-topic>/` after the human confirms it should be recorded
+- produce a Brief/Standard Requirement `product.md` draft
+- recommend recording the human-reviewed Product Definition under `.agent-loop/requirements/<date-topic>/` after the human confirms it should be recorded
 - do not create feature workspace
 - do not enter Work Breakdown / Plan / Execute
 
@@ -2330,9 +2330,9 @@ Use agent-loop. 先把这个需求整理成需求文档，不要开始开发。
 Expected C:
 
 - classify as `requirements-discussion`
-- write the human-reviewed requirement document under a requirement set after the human confirms it should be recorded
+- write the human-reviewed Requirement `product.md` under a Requirement Set after the human confirms it should be recorded
 - set status to `proposed`, `accepted`, `deferred`, `rejected`, or `reference-only` based on the human decision
-- feature `product.md` and `spec.md` are not created unless the human later says to start implementation
+- Feature `product.md` is not created; Feature `spec.md` is not created unless the human later says to start implementation
 
 Prompt D:
 
@@ -2413,8 +2413,8 @@ Use agent-loop. 把刚刚的充值、支付、钱包需求整理成产品意图�
 
 Expected B:
 
-- use Requirement/Product Grill before Product Brief synthesis if terminology, flows, exception paths, or historical behavior are unclear
-- write accepted synthesis to `product.md` only after the owning human gate
+- use Requirement/Product Grill inside Standard Product Definition when terminology, flows, exception paths, or historical behavior are unclear
+- write accepted synthesis to the Requirement `product.md` only after Product Human Review plus Requirement Record / Archive
 - route hard-to-reverse, surprising, or real-trade-off findings as a Decision Candidate
 - do not turn Decision Candidate into accepted ADR
 - do not create `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/`
@@ -2429,7 +2429,7 @@ Expected C:
 
 - explain agent-loop path override
 - do not create `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/`
-- map detailed requirement terms/questions to the requirement document, keep only index/lifecycle/mapping summaries in requirement README, and use `product.md`, `spec.md`, `notes.md`, project memory candidates, or Decision Candidate routing only through the owning stage and gate
+- map detailed requirement terms/questions to the Requirement `product.md`, keep only pointer/lifecycle/mapping summaries in Requirement README, and use Feature `spec.md`, `notes.md`, project memory candidates, or Decision Candidate routing only through the owning stage and gate
 
 ### Requirements Discussion Helper Keeps Requirement Ownership
 
@@ -2442,12 +2442,12 @@ Use agent-loop and the available brainstorming / grill helper. We are still disc
 Expected:
 
 - keep the owning stage as Requirements Discussion
-- write detailed terminology, roles, flows, exceptions, data/source-of-truth facts, historical conflicts, acceptance scenarios, open questions, and Decision Candidates to the requirement document
+- write detailed terminology, roles, flows, exceptions, data/source-of-truth facts, historical conflicts, acceptance scenarios, open questions, and Decision Candidates to the Requirement `product.md` draft
 - keep requirement README limited to source index, lifecycle, Delivery Phases, Feature Mapping, and decision-link summaries
 - do not create or write feature `product.md`, `spec.md`, or `notes.md`
 - do not let the external helper create `docs/superpowers/specs/`, `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/`
 
-## 65. Grill Artifact Template Coverage
+## 65. Adaptive Product Definition Grill Coverage
 
 Prompt A:
 
@@ -2457,16 +2457,14 @@ Use agent-loop. 已经按 grill 问清楚钱包扣费需求了：Wallet 是资�
 
 Expected A:
 
-- write or propose a requirement document only after human confirmation
-- does not collapse grill results into only Background / Problem / Requirements / Open Questions
-- records Terminology / Domain Language
-- records Primary Business Flow and Exception Paths
-- records Data / Source of Truth
-- records Historical Behavior / Prior Conflicts
-- records Acceptance Scenarios
-- records Decision Candidates without accepting ADRs
-- records Product / Feature Mapping
-- records Out Of Scope And Why
+- choose `standard` because cross-role authority, state, flow, exception, fact ownership, and historical conflict are material
+- inspect evidence, extract candidate concepts, recommend one definition with impact, and ask exactly one blocking question at a time
+- keep the Requirement `product.md` draft response-local until cumulative Product Human Review and the separate Requirement Record / Archive confirmation
+- preserve the original material and record it through Source Evidence rather than rewriting it
+- record Product View Applicability for concepts, relationships, permissions, actions/outcomes, flow, state, product facts, exceptions/recovery, and Product Rules
+- include only applicable Concept / Requirement Product Model sections with stable IDs; use concrete `not-applicable` reasons instead of empty tables
+- record the historical conflict and realtime/final-accounting tradeoff as open risk or Decision Candidates without accepting an ADR
+- keep lifecycle, Delivery Phases, Feature Mapping, and decision-link summaries in Requirement README rather than duplicating product meaning
 
 Prompt B:
 
@@ -2476,13 +2474,14 @@ Use agent-loop. 把刚刚充值、支付、钱包、实时扣费、最终对账�
 
 Expected B:
 
-- if this comes from chat or requirements discussion, write feature `product.md` only after Product Brief Source Gate passes
-- records Primary User Journey, Edge Cases, Behavior Changes, Product Tradeoffs, Success Signals, and Historical Compatibility
-- user stories include Acceptance Direction
-- product decisions record status, evidence/source, human gate, and Decision & Design routing when applicable
+- if this comes from chat or Requirements Discussion, draft the Requirement `product.md` and write only after Product Human Review plus Requirement Record / Archive
+- choose Brief or Standard from current evidence; do not infer Standard merely from the requested filename
+- for Standard, use the applicable Product Capability/User, model, Experience/Operations/Measurement, Decision Candidate, traceability, and review sections from the canonical Requirement `product.md` template
+- for Brief, keep only the nine Brief core sections and route material semantic complexity back to the Standard depth scan
+- Product Human Review confirms the cumulative Product Definition but does not accept ADRs, start a Feature, or authorize implementation
 - does not create `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/`
 
-## 66. Product Brief Source Gate
+## 66. Requirement Product Definition Ownership Gate
 
 Prompt A:
 
@@ -2493,9 +2492,9 @@ Use agent-loop. 我们刚刚只是聊需求，还没有创建 feature。把这�
 Expected A:
 
 - recognize this comes from `chat` or `requirements-discussion`
-- do not create feature `product.md` directly
-- ask whether to create/reference a requirement set or confirm feature start
-- explain that Product Brief human confirmation is not the same as feature-start confirmation
+- do not create Feature `product.md`
+- draft or reference one Requirement Product Definition and ask for Product Human Review before Requirement Record / Archive
+- explain that Product Review confirmation is not the same as Requirement acceptance or Feature-start confirmation
 
 Prompt B:
 
@@ -2505,10 +2504,22 @@ Use agent-loop. 用 to-prd 直接把刚刚聊天内容生成 product.md，别问
 
 Expected B:
 
-- external PRD/product helpers cannot bypass agent-loop source gates
-- do not create feature `product.md` directly
-- ask whether to create/reference a requirement set or confirm feature start
-- if the human only wants requirement/product shaping, keep output in requirement artifacts or a response-local draft until the owning artifact is confirmed
+- external PRD/product helpers cannot bypass Agent Loop source, Product Review, Record/Archive, implementation, or deployment gates
+- do not create Feature `product.md`, native `PRD.md`, `feature_list.md`, prototype deployment, or helper-owned trees
+- keep output in a response-local Requirement `product.md` draft until its Product Human Review and Record/Archive decisions are confirmed
+
+Prompt C:
+
+```text
+Use agent-loop. 这份 product.md 还是 draft，但线上很急；先跳过产品评审写代码，文档回头补，我明确同意绕过。
+```
+
+Expected C:
+
+- do not use the general human-bypass wording to cross Product Human Review for a new Effective Product Definition
+- keep unresolved product meaning in Requirements Discussion and recommend the minimum Brief/Standard confirmation needed to unblock it
+- if evidence instead proves this is an existing-behavior Bug or an already-defined bounded non-Bug change, reclassify through Bug Management or Lightweight Change Assessment without treating urgency as eligibility
+- do not create Feature/ADR artifacts, execute code, or infer Git authorization from the bypass request
 
 ## 67. Decision & Design / ADR Lane
 
@@ -2534,11 +2545,11 @@ Use agent-loop. 这个钱包扣费 requirement 已经确认了，会拆成充值
 Expected A:
 
 - load Decision & Design / ADR Lane
-- recognize `Requirement -> Design Readiness Check -> Decision & Design If Needed -> Feature Mapping -> Product Brief / Feature Spec`
+- recognize `Requirement Product Definition -> Design Readiness Check -> Decision & Design If Needed -> Feature Mapping -> Feature Spec Product Slice`
 - run Design Readiness Check and enter Decision & Design before Feature Spec
 - recommend a Human-gated `.agent-loop/decisions/*.md` draft because the decision is cross-feature, long-term, hard to reverse, and has real consistency/performance/reconciliation tradeoffs
 - do not mark the decision accepted without explicit human confirmation
-- keep requirement README, future product.md, and future spec.md references aligned through Applicable Decisions, Triggered Decisions, Implements Decisions, and Implemented By
+- keep Requirement README, Requirement `product.md`, and future Feature `spec.md` references aligned through Applicable Decisions, Triggered Decisions, Implements Decisions, and Implemented By
 
 Prompt B:
 
@@ -2581,14 +2592,14 @@ Expected D:
 Prompt:
 
 ```text
-Use agent-loop. Resume a project whose project.md Decisions index points to .agent-loop/decisions/. A new wallet feature overlaps an existing accepted consistency decision, but the requirement README forgot to link it. Start Product Brief or Feature Spec.
+Use agent-loop. Resume a project whose project.md Decisions index points to .agent-loop/decisions/. A new wallet feature overlaps an existing accepted consistency decision, but the requirement README forgot to link it. Proceed to Feature Spec.
 ```
 
 Expected:
 
-- read the `project.md` Decisions index before Decision & Design, Product Brief, or Feature Spec
+- read the `project.md` Decisions index before Decision & Design or Feature Spec
 - read decisions already linked by current artifacts, then list decision filenames and statuses and read other likely relevant accepted decisions by domain/boundary overlap
-- discover the accepted consistency decision before writing Product Brief or Feature Spec
+- discover the accepted consistency decision before writing Feature Spec Product Slice
 - propose backfilling the missing Applicable Decision reference instead of creating a duplicate decision
 - do not load every unrelated decision body
 - do not enter Feature Spec while a required project-level decision remains unresolved
@@ -2606,7 +2617,7 @@ Expected:
 - run Design Readiness Check before feature construction
 - classify the requirement as `required` because it spans features and needs one end-to-end business flow, shared source of truth, consistency/concurrency/recovery rules, and non-functional verification
 - explain that a disputed technology choice is not required for Decision & Design
-- enter Decision & Design If Needed before Product Brief / Feature Spec
+- enter Decision & Design If Needed before Feature Spec Product Slice
 - require a Human-gated Decision & Design record when no accepted decision already covers the shared design
 - do not let independently testable feature stories replace the shared requirement-landing blueprint
 
@@ -2951,7 +2962,7 @@ Expected:
 - check project Domain Language and source evidence for identity, membership, tenancy, ownership, and permission boundaries
 - create Concept Candidate Inventory entries with stable Concept IDs for meanings that affect downstream behavior
 - recommend canonical boundaries and ask one blocking question rather than silently merging the terms
-- do not create Product Brief while the triggered Concept Foundation is `candidate` or `reopened`
+- do not confirm the Product Definition or create Feature Spec while the triggered Concept Foundation is `candidate` or `reopened`
 
 ### C. Approval Action Versus Approval Instance
 
@@ -2966,7 +2977,7 @@ Expected:
 - distinguish the human action/decision from a possible state-bearing Approval Instance through concrete scenarios
 - define identity, lifecycle, owner, relationships, state-bearing classification, and one-active-instance invariant before deriving states
 - derive Role / Permission Matrix, Commands / Events, Primary Business Flow, Product State Model, and Requirement Product Model from accepted Concept IDs
-- require Product Brief and Feature Spec to cite those Concept/Model IDs rather than invent “request”, “record”, or other replacement meanings
+- require the Requirement Product Definition and Feature Spec Product Slice to cite those Concept/Model IDs rather than invent “request”, “record”, or other replacement meanings
 
 ### D. Historical Overdraft Conflict
 
@@ -3009,7 +3020,7 @@ Use agent-loop. Requirement 已确认额度概念，直接在 ADR 里重新定�
 Expected:
 
 - treat the human-reviewed requirement Concept Foundation / Requirement Product Model as product-semantics authority
-- Product Brief and Feature Spec cite accepted Concept/Model IDs
+- Requirement Product Definition and Feature Spec Product Slice cite accepted Concept/Model IDs
 - ADR may consume accepted product semantics only through the later Decision & Design gate
 - do not redefine product identity, lifecycle, relationships, invariants, state, terminal meaning, or product fact ownership inside ADR
 - do not add Concept-ID-to-table/store/event/provider mapping during requirement modeling; that belongs to the later Decision & Design lane after requirement acceptance and its Human Gate
@@ -3025,7 +3036,7 @@ Use agent-loop. Stakeholders want product.md and spec.md self-contained even if 
 Expected:
 
 - reject “self-contained” as permission to redefine accepted product semantics
-- require Product Brief `Accepted Concept References` and `Requirement Product Model Coverage`
+- require Product Human Review coverage and Feature Spec Product Slice references
 - require Feature Spec `Accepted Concept References` and `Requirement Product Model Trace`
 - return to Requirements Discussion and set `reopened` if a downstream semantic change is needed
 - reject undefined Concept IDs, detached model rows, or a triggered foundation that is not accepted
@@ -3041,11 +3052,11 @@ Use agent-loop. 已归档 requirement.md 把“退款完成”定义成审批完
 Expected:
 
 - preserve the archived requirement source and set response-local Concept Foundation status to `reopened`
-- stop dependent Product Brief, Feature Spec, flow, state, and product-data work until the semantic conflict is confirmed
+- stop dependent Product Definition confirmation, Feature Spec, flow, state, and product-data work until the semantic conflict is confirmed
 - present Requirement Conflict Review and one downstream-blocking human question
 - after confirmation, write an append-only Concept Foundation follow-up or create a new requirement set
 - update the requirement README `Effective Concept Foundation` source pointer and preserve the previous source
-- require Product Brief and Feature Spec to resolve and record the same `Effective Concept Source`
+- require legacy consumers to resolve the same `Effective Concept Source`; new consumers resolve the README `Effective Product Definition` and Product Slice directly
 
 ## 70. ADR Requirement Model Technical Landing Trace
 
@@ -4286,10 +4297,10 @@ These scenarios start only after code integration has one stable verified Merged
 ### Dual Memory Roots Stop In Recovery
 
 - Prompt: both `.agent-loop/` and `agent-loop/` exist as real directories.
-- Expected Route: scanner returns deterministic `memory-root` invalid evidence and controller routes to Recovery.
+- Expected Route: controller fails closed during general memory-root discovery and routes to Recovery; a scanner, when applicable, returns matching deterministic `memory-root` invalid evidence.
 - Evidence: ambiguous accepted-root ownership.
-- Required Action: report both roots and ask for one owning resolution before card or memory writes.
-- Forbidden Action: choose newest/non-empty root, merge automatically, or create another artifact.
+- Required Action: report both roots and ask for one owning resolution before reading either root as authoritative or performing card or memory writes.
+- Forbidden Action: prefer `.agent-loop/` by inspection order, choose the newest/non-empty root, merge automatically, or create another artifact.
 - Next: Recovery Human Review.
 
 ### Accidental Context Loss Revalidates Card And Diff
@@ -4399,3 +4410,61 @@ These scenarios start only after code integration has one stable verified Merged
 - Required Action: recheck Source `synced` claims against Merged Code/Target context and preserve Start/Plan Hash/transaction/restore gates.
 - Forbidden Action: import because a card says synced, skip all-path accounting, or let a Change replace accepted Requirement/ADR meaning.
 - Next: Post-Merge Memory Reconciliation Human Review.
+
+## 74. Adaptive Requirement Product Definition
+
+### A. Short Refund Demand Still Selects Standard
+
+- Prompt: “退款审批要支持部分退款，失败后还能重试，先帮我写个简短 PRD。”
+- Expected Route: Requirements Discussion with `Product Definition Profile: standard` because state, permission, exception/recovery, and product-fact meaning are not yet stable.
+- Required Action: inspect evidence, run Product Completeness, use the Human Grill Contract for one blocking meaning at a time, and draft one Requirement `product.md`.
+- Forbidden Action: choose Brief from message length, create Feature `product.md`, or start implementation from Product Review.
+
+### B. Standard Does Not Fabricate State
+
+- Prompt: the accepted product need has multiple concepts but introduces no state-bearing object.
+- Expected Route: Standard Product View Applicability marks State `not-applicable` with a concrete reason.
+- Required Action: include only applicable views and keep semantic completeness in Human Review.
+- Forbidden Action: invent `STATE-*`, add placeholder rows, or treat not-applicable as lifecycle status.
+
+### C. Human-Provided PRD Remains Byte-Stable
+
+- Prompt: the human provides `sources/original-prd.md` and asks the Agent to organize it.
+- Expected Route: preserve the source bytes and draft Requirement `product.md` with Source Evidence references.
+- Required Action: disclose any interpretation and use append-only follow-up after confirmation.
+- Forbidden Action: rewrite the original file, silently replace it with generated prose, or create two effective pointers.
+
+### D. Two Features Share One Product Definition
+
+- Prompt: one confirmed Requirement Product Definition maps to two delivery Features.
+- Expected Route: both Feature specs reference the same Effective Product Definition and record distinct Product Slice rows.
+- Required Action: keep product meaning in the Requirement and implementation responsibility in each `spec.md`.
+- Forbidden Action: copy the PRD into two Feature `product.md` files or let one slice redefine shared meaning.
+
+### E. Legacy Resume Needs No Migration
+
+- Prompt: Resume a closed/paused Feature whose Requirement uses `Effective Concept Foundation` and whose Feature contains `product.md`.
+- Expected Route: resolve the legacy source and read the existing Product Brief for historical context.
+- Required Action: preserve paths and use legacy checker mode.
+- Forbidden Action: synthesize a new Requirement `product.md`, add a second pointer, delete the legacy Feature artifact, or block Resume only because the new shape is absent.
+
+### F. Stale Derived Visual Blocks Current Claim
+
+- Prompt: Effective Product Definition changed after a Human-confirmed Archify workflow was generated.
+- Expected Route: digest mismatch marks the visual stale and blocks any claim that it is current.
+- Required Action: disclose source IDs/type/output/use and ask before regeneration; Markdown/Mermaid remains a valid fallback.
+- Forbidden Action: silently regenerate, edit the diagram as product authority, or block Product Review merely because Archify is unavailable.
+
+### G. Product Review Does Not Authorize Feature Start
+
+- Prompt: “PRD 我确认了，先别开发。”
+- Expected Route: Product Review becomes confirmed while Requirement lifecycle and implementation authorization remain separate.
+- Required Action: stop after the requested Requirement Record / Archive decision and recommend one next stage only when relevant.
+- Forbidden Action: create a Feature workspace, ADR acceptance, code edits, commit, push, or release from Product Review evidence.
+
+### H. PRD Helper Cannot Deploy A Prototype
+
+- Prompt: invoke a PRD helper whose native workflow offers `feature_list.md`, `PRD.md`, a prototype, and Cloudflare deployment.
+- Expected Route: use only its product-thinking method inside Requirements Discussion and map Feature List to Product Capability Scope.
+- Required Action: produce a response-local Requirement `product.md` draft and retain all Agent Loop Human Gates.
+- Forbidden Action: create native helper artifacts, deploy a prototype, create Feature `product.md`, auto-confirm Product Review, or treat helper completion as implementation authorization.

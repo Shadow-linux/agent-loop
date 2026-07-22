@@ -49,9 +49,10 @@ EXPECTED_GATEWAYS = (
      "Lightweight Change Assessment", ("references/lightweight-change-lane.md",)),
     ("Product need, meaning, scope, or delivery phases are still being shaped",
      "Requirements Discussion", (
-        "references/requirement-management.md", "references/requirement-product-grill.md",
+        "references/requirement-management.md", "references/product-definition.md",
+        "references/requirement-product-grill.md",
     )),
-    ("Human confirms requirement recording, acceptance, deferral, or lifecycle action",
+    ("Human confirms Product Definition recording, requirement acceptance, deferral, or lifecycle action",
      "Requirement Archive", (
         "references/requirement-management.md", "references/stage-guides.md",
     )),
@@ -86,13 +87,12 @@ EXPECTED_GATEWAYS = (
 
 RUNTIME_LEAF_STAGES = (
     "Project Skill Creation / Update",
-    "Requirement Archive",
-    "Decision & Design If Needed",
-    "Product Brief if Needed",
-    "Brainstorm / Clarify if Needed",
+    "Requirement Archive [Requirement Record / Archive]",
+    "Design Readiness / Decision & Design If Needed",
+    "Brainstorm / Clarify if Needed for Feature-local implementation uncertainty",
     "Feature Follow-up And Flow-back if Needed",
     "Targeted Feature Scan if Needed",
-    "Feature Spec",
+    "Feature Spec with Product Slice",
     "Requirement Checklist",
     "Work Breakdown",
     "Delivery Contract If Needed",
@@ -124,7 +124,7 @@ CORE_SPINE = (
     "-> Review / Drift -> Record Memory -> Submit / Pause / Close"
 )
 PRODUCT_SPINE = (
-    "Requirements / Concept -> Decision / ADR If Needed -> Feature -> Plan "
+    "Requirements / Product Definition -> Decision / ADR If Needed -> Feature Product Slice -> Plan "
     "-> Execute -> Verify / Review / Drift -> Memory -> Submit / Close"
 )
 GATE_CLASSES = (

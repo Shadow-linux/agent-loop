@@ -65,7 +65,7 @@ assert_contains "references/stage-guides.md" "human-reviewed and recorded"
 assert_not_contains "references/stage-guides.md" "requirement document accepted and archived"
 
 # Every Feature Spec has a requirement-owned Design Readiness record.
-assert_contains "references/stage-guides.md" "Every feature start must reference an accepted requirement set."
-assert_contains "references/stage-guides.md" "For a narrow direct feature request, create and accept the minimum requirement set before Feature Spec."
+assert_contains "references/stage-guides.md" "Every Feature start must reference an accepted Requirement Set with a confirmed Effective Product Definition, or an explicitly supported legacy effective source."
+assert_contains "references/stage-guides.md" "For a narrow direct Feature request, create/review the minimum Brief before Feature Spec."
 
 printf 'PASS: v1.2.4 routing and lifecycle repairs are enforced\n'

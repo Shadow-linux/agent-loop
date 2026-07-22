@@ -22,8 +22,8 @@ assert_not_contains() {
 }
 
 assert_contains "references/project-decisions.md" "# Decision & Design / ADR Lane"
-assert_contains "references/project-decisions.md" "Design Readiness Check is a required method at Requirement Archive, Product Brief, and Feature Spec boundaries; it is not a standalone stage."
-assert_contains "references/project-decisions.md" "Requirement -> Design Readiness Check -> Decision & Design If Needed -> Feature Mapping -> Product Brief / Feature Spec"
+assert_contains "references/project-decisions.md" "Design Readiness Check is a required method at Requirement Record / Archive and Feature Spec boundaries; it is not a standalone stage."
+assert_contains "references/project-decisions.md" "Requirement Product Definition -> Design Readiness Check -> Decision & Design If Needed -> Feature Mapping -> Feature Spec Product Slice"
 assert_contains "references/project-decisions.md" "A disputed technology choice is not required."
 assert_contains "references/project-decisions.md" "A decision file remains globally optional but becomes conditionally required when shared design is required and no accepted decision already covers it."
 assert_contains "references/project-decisions.md" "## Design Readiness Check"
@@ -62,7 +62,7 @@ assert_contains "references/validation-scenarios.md" "Accepted Design Conformanc
 assert_contains "docs/proposal/v1.2.x/project-decisions-adr-lane.md" "Requirement -> Design Readiness Check -> Decision & Design If Needed -> Feature Mapping -> Product Brief / Feature Spec"
 assert_contains "README.md" "Decision & Design / ADR"
 assert_contains "Usage.md" "这个需求会拆成多个 feature，先检查整体设计是否完整。"
-assert_contains "references/runtime.md" "Project Entry, then Design Readiness and Decision & Design / Product Brief / Feature Spec / Feature Follow-up routing"
+assert_contains "references/runtime.md" "Project Entry, then Effective Product Definition, Design Readiness, Decision & Design / Feature Spec / Feature Follow-up routing"
 assert_contains "references/stage-guides.md" 'conditionally required `.agent-loop/decisions/000N-<slug>.md`'
 
 printf 'PASS: Decision & Design requirement landing contract is complete\n'

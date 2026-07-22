@@ -1,5 +1,7 @@
 # Agent Loop v1.5.0 Root AGENTS Lossless Slimming 全量验证报告
 
+> 2026-07-22 复核说明：本报告保存初次 GREEN 证据与当时评分。后续补充审计在 `docs/reports/agent-loop-1.5.0-full-validation-2026-07-21.md` 发现 Root 撰写指南漂移；关闭结果与当前组合工作区全量证据见 `docs/reports/agent-loop-v1.5.0-root-guidance-consistency-full-validation-2026-07-22.md`。请勿把本报告的 `99.8` 当作后续工作区当前评分。
+
 - 日期：2026-07-21
 - 分支：`alpha/v1.5.0`
 - Skill version：`1.5.0`（未升级）

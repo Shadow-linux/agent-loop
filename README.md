@@ -27,18 +27,19 @@ Without a structured loop, agents tend to:
 Agent Loop fixes this with a repeatable, inspectable workflow:
 
 ```
-Message Intent → Chat And Requirements Discussion if needed
+Message Intent Classification → Chat only when no workflow artifact/action is requested
 → Project Entry → Remote Project Discovery if needed
 → Re-Adopt Agent Loop Project if needed
 → Project Entry Scan if needed
 → Project Skill Creation / Update if requested
 → Operational Support if needed
 → [internal] Lightweight Change Assessment for ordinary non-Bug changes
-→ Requirement Archive
-→ Decision & Design If Needed → Product Brief if needed
-→ Brainstorm / Clarify if needed
+→ Requirements Discussion [internal Brief/Standard Product Definition]
+→ Requirement Record / Archive
+→ Design Readiness / Decision & Design If Needed
+→ Brainstorm / Clarify if needed for Feature-local implementation uncertainty
 → Feature Follow-up / Flow-back if needed
-→ Targeted Feature Scan if needed → Feature Spec → Requirement Checklist
+→ Targeted Feature Scan if needed → Feature Spec with Product Slice → Requirement Checklist
 → Work Breakdown → Delivery Contract if needed → Test Design
 → E2E Discovery if Web → Technical Design / Code Context
 → Plan Gate / Plan if needed → Analyze Consistency
@@ -64,9 +65,10 @@ Message Intent → Chat And Requirements Discussion if needed
 | **Operational Support** | Read-only code-guided help for testing, running, deploying, switching accounts/config/models/providers, quota checks, rollout, and production diagnosis before deciding whether feature work is needed. |
 | **Project-Local Skill** | A reusable project capability under `.agent-loop/skills/<skill-name>/`. Creation or material update requires Gate 1; successful validation activates it, but every actual invocation still requires a bounded Execution Gate. |
 | **Requirement Lifecycle / Backlog** | Requirement memory for proposed, accepted, deferred, in-progress, partially implemented, implemented, superseded, rejected, or reference-only requirements without using project memory as a backlog. |
-| **Chat And Requirements Discussion** | `chat` answers or discusses without creating artifacts; `requirements-discussion → Brainstorm / Clarify → requirement document → requirements/` before any feature construction. |
+| **Chat And Requirements Discussion** | `chat` answers or discusses without creating artifacts; `requirements-discussion` chooses Brief or Standard depth, drafts one Requirement `product.md`, and records it only after Product Human Review plus Requirement Record / Archive. |
+| **Adaptive Product Definition** | Requirement-owned PRD with only `brief | standard` depth. Product Completeness, Concept Foundation, Requirement Product Model, and derived visuals are internal methods, not stages. |
 | **Concept Foundation** | Triggered internal Requirements Discussion / Requirement Product Grill method. It stabilizes requirement-local Concept IDs and product meaning before flow, state, and product-data modeling; it is not a canonical stage or top-level artifact. |
-| **Requirement Product Model** | Product-layer relationships, roles/permissions, commands/events, business flow, state, product objects/facts, invariants, and recovery derived from accepted concepts in the human-reviewed requirement document. |
+| **Requirement Product Model** | Standard Product Definition views for applicable relationships, roles/permissions, commands/events, business flow, state, product objects/facts, invariants, and recovery; non-applicable views need a concrete reason rather than fake tables. |
 | **Decision & Design / ADR** | Requirement-landing bridge for shared business flow, domain/data rules, architecture, recovery, and non-functional goals. Design Readiness is required; `.agent-loop/decisions/*.md` is Human-gated and conditionally required only when shared design needs a durable record. |
 | **Delivery Contract** | Optional producer-consumer boundary handoff. Used only when API, event, public data, UI state/behavior, SDK/library, runtime, or explicit cross-agent/human handoff needs a stable contract. |
 | **Post-Merge Memory Reconciliation** | After code is merged and verified, reconciles Base/Source/Target/Result Agent Loop claims into one Human-reviewed Desired Target Memory, with exact Apply, post-check, and restore. |
@@ -117,10 +119,10 @@ A Memory Merge Report is created only after a Start Human Gate. Apply requires t
     INDEX.md                           # optional inventory and backlog/deferred view
     YYYY-MM-DD-<topic>/
       README.md                        # requirement set lifecycle and source index
-      requirement.*                     # optional source file when provided
-      prototype.*                       # optional source file when provided
-      feedback.*                        # optional source file when provided
-      notes.*                           # optional source file when provided
+      product.md                       # Agent-authored Human-reviewed Brief/Standard PRD
+      sources/                         # optional preserved human originals for new packages
+      requirement.*                   # legacy or human-provided source; never rewritten automatically
+      visuals/                         # optional Human-confirmed derived views
   bugs/
     INDEX.md                           # Bug inventory, lifecycle summary, and stable locator
     YYYY-MM-DD-<bug-slug>/
@@ -134,8 +136,7 @@ A Memory Merge Report is created only after a Start Human Gate. Apply requires t
     YYYY-MM/                           # Human-gated directory archive for eligible closed features
       YYYY-MM-DD-<feature-slug>/       # complete feature directory moved intact
     YYYY-MM-DD-<feature-slug>/
-      product.md    (optional)
-      spec.md
+      spec.md                           # includes Product Requirement Source + Product Slice
       tasks.md
       tests.md
       plan.md
@@ -190,20 +191,24 @@ For existing projects, the agent separates safe-entry memory from newcomer learn
 
 > "先帮我梳理这个需求，不要实现。"
 
-For requirement shaping, the agent should enter Requirements Discussion instead of creating a feature workspace. Requirement/Product Grill is the clarification method for fuzzy terminology, business flows, exception paths, prior feature conflicts, source-of-truth questions, and decision signals.
+For requirement shaping, the agent enters Requirements Discussion instead of creating a Feature workspace. It inspects human sources and project evidence, chooses `brief` only when every lightweight condition is clear, otherwise chooses `standard`, and drafts one Requirement-owned `product.md`. The Agent writes the draft only after Product Human Review plus Requirement Record / Archive; the human confirms product meaning, while Product Review alone does not authorize Feature start or implementation.
 
 When a complex requirement can change concept identity, lifecycle, relationship, state, ownership, terminal meaning, or product facts, the internal Concept Foundation method triggers. The Agent first checks project/domain evidence, extracts a Concept Candidate Inventory, presents one recommended definition with evidence and accept/reject impact, then asks exactly one blocking question. Until the human confirms the blocking concepts, detailed business flow, product state, and product data modeling stop.
 
-After acceptance, the effective requirement source derives a Requirement Product Model and traceability from stable Concept IDs. Feature `product.md` and `spec.md` record `Effective Concept Source` and reference those accepted IDs/model rows instead of redefining product semantics. If accepted meaning changes after archive, Agent Loop preserves the old source, reopens the gate, writes a human-confirmed append-only follow-up or new requirement set, and advances the requirement README pointer. Simple copy/style/config changes stay lightweight with a concrete `concept-foundation-not-needed` reason. Concept Foundation does not add a canonical stage, ADR, Design Skill, E2E Skill, or executable schema.
+In Standard depth, Product Completeness may trigger Requirement/Product Grill, Concept Foundation, and applicable Requirement Product Model views. The Agent first checks evidence, extracts candidates, recommends one definition and its impact, then asks one blocking question at a time. Applicability, stable IDs, Product Rules, and optional derived visuals stay inside the same `product.md`; they are not new stages. Brief does not fabricate large model tables. If confirmed meaning changes later, Agent Loop preserves old bytes, writes a human-confirmed append-only follow-up or linked replacement, and advances the README pointer after review.
 
-Reviewed requirements live under `.agent-loop/requirements/<date>-<topic>/`. If the human later asks to "落到 product.md" from chat or requirements discussion, Product Brief Source Gate applies: the agent first asks whether to create/reference a requirement set or confirm feature start. Feature-level `product.md` is written only after there is a requirement source and confirmed feature context.
+New PRDs live only under `.agent-loop/requirements/<date>-<topic>/product.md`. Human-provided PRDs, conversations, images, and prototypes remain byte-stable sources; the Agent translates their evidence into the reviewed Product Definition rather than rewriting originals. PRD helpers are optional Requirements Discussion methods: their Feature List becomes Product Capability Scope, and native `PRD.md`, `feature_list.md`, prototype deployment, or helper-owned output trees are not used.
+
+Archify remains an optional Standard-PRD review aid. Before generating a workflow, lifecycle, sequence, exception, or relationship view, the Agent discloses source IDs, type, output, and review purpose and waits for Human confirmation. Generated views bind to source IDs and a semantic digest; stale views cannot be claimed current. Without Archify, Markdown/Mermaid or another Human-confirmed equivalent remains sufficient.
+
+Existing legacy `requirement.md`, README `Effective Concept Foundation`, and Feature `product.md` stay readable during Resume, Follow-up, Review, Close, and Recovery. They are not bulk-migrated. New Feature work creates no Feature `product.md`; `spec.md` carries a Product Requirement Source block and a bounded Product Slice referencing the effective Requirement Product Definition.
 
 During requirements discussion, the agent records Design Readiness evidence and Decision Candidates without creating ADR files. Before an accepted requirement enters feature construction, Design Readiness Check determines whether shared Decision & Design is required.
 
 When the accepted requirement spans features or needs shared business-flow, domain, state, source-of-truth, architecture, recovery, or non-functional design, it enters Decision & Design even when no technology choice is disputed. A decision file is created only after human confirmation. The record assigns every required Design Slice to planned features before Feature Spec:
 
 ```text
-Requirement -> Design Readiness Check -> Decision & Design If Needed -> Feature Mapping -> Product Brief / Feature Spec
+Requirement Product Definition -> Design Readiness Check -> Decision & Design If Needed -> Feature Mapping -> Feature Spec Product Slice
 ```
 
 Simple work records `design-not-needed` and can continue without a decision file. Feature-local choices stay in `spec.md` Design Decisions. Review and completion verify that implementation conforms to accepted design slices rather than checking feature stories alone.
@@ -221,7 +226,7 @@ Migration, compatibility, rollout, and rollback detail are operational landing c
 After project init / Project Entry Scan is accepted, the agent will:
 
 - Archive your requirement
-- Write `spec.md` with stories and acceptance criteria
+- Write `spec.md` with Product Requirement Source, Product Slice, stories, and acceptance criteria
 - Break down `tasks.md`
 - Design `tests.md`
 - Execute tasks with TDD

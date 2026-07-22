@@ -246,7 +246,7 @@ Exit:
 - project memory drafted and accepted
 - root `AGENTS.md` status is `present`, `created`, or `human-deferred`
 - root `CLAUDE.md` status is `points-to-AGENTS`, `created-pointer`, or `human-deferred`
-- next stage: Requirement Archive when the human supplied requirements/prototypes in chat or files; otherwise Brainstorm / Clarify, Product Brief if Needed, or Feature Spec when intent is already stable
+- next stage: Requirements Discussion / Requirement Record when product meaning or sources need review; otherwise Feature Spec only from a confirmed Effective Product Definition
 
 ## Chat Entry
 
@@ -283,12 +283,13 @@ Entry: message intent is `requirements-discussion`: the human is exploring produ
 Default path:
 
 ```text
-requirements-discussion -> Brainstorm / Clarify -> Requirement Document Draft -> Human Review -> Requirement Archive
+requirements-discussion -> evidence / Brainstorm -> Product Definition Depth Scan -> Brief or Standard product.md draft -> Product Human Review -> Requirement Record / Archive
 ```
 
 Use:
 
 - `requirement-management.md`
+- `product-definition.md` for Profile, completeness, Product Review, helper, visual, and Product Slice rules
 - `requirement-product-grill.md` when terminology, business rules, flows, boundaries, exception paths, prior feature behavior, or decision signals are unclear
 - `project-decisions.md` when hard-to-reverse, surprising, cross-feature, or real-trade-off decisions appear
 - `document-templates.md`
@@ -297,43 +298,50 @@ Use:
 
 Rules:
 
-- use Brainstorm / Clarify to shape the demand before writing the requirement document
+- use Brainstorm / Clarify to shape the demand before drafting the Product Definition
+- inspect human original sources and project evidence, then recommend exactly `brief` or `standard`; Profile is documentation depth, not lifecycle or authorization
+- keep the draft response-local until Product Human Review and Requirement Record / Archive disclosure
 - use Requirement/Product Grill before asking humans when terminology, roles, business objects, flows, exception paths, or historical behavior are unclear
 - run targeted lookup of relevant prior feature `product.md`, `spec.md`, `tests.md`, and `notes.md` before asking a grill question
-- classify Concept Foundation before detailed requirement-level Business Flow, Product State Model, or Requirement Product Model work
+- for Standard, classify Concept Foundation as an internal method before detailed Business Flow, Product State Model, or Requirement Product Model work
 - when Concept Foundation triggers, follow the Human Grill Contract in order: inspect evidence, extract Concept Candidate Inventory, present one recommended definition with evidence and accept/reject impact, then ask exactly one downstream-blocking question
 - keep the Concept Foundation Gate blocked while status is `candidate` or `reopened`; do not draft downstream flow/state/product-data sections as assumptions plus open questions
 - use `concept-foundation-not-needed` only with a concrete no-semantic-change reason
-- before setting a triggered foundation to `accepted`, load `human-review-summary.md` and present the Concept Foundation Human Review Summary after the one-question-per-turn Grill has resolved each blocker
-- after status becomes `accepted`, derive relationships, roles/permissions, commands/events, flow, state, product data, invariants, exceptions, and recovery from stable Concept IDs and write Concept-To-Product Traceability
+- before confirming the Product Definition, load `human-review-summary.md` and present cumulative Product Definition Approval after the one-question-per-turn Grill has resolved each blocker
+- after internal status becomes `accepted`, derive only applicable relationships, roles/permissions, commands/events, flow, state, product facts, invariants, exceptions, and recovery from stable Concept IDs
+- for Standard, record exactly one `included | not-applicable` Product View Applicability row for every defined view; do not create empty model sections or fake IDs
+- run Product Completeness Scan before Product Human Review; structure validation never substitutes for product-semantic judgment
 - record shared design signals as Design Readiness evidence and Decision Candidates; do not create accepted ADRs from Requirements Discussion
 - keep early ADR signals as Decision Candidates until the requirement is human-reviewed and the owning gate is clear
 - ask only questions that affect requirement clarity, scope, users/operators, constraints, non-goals, or acceptance direction
-- When Requirement/Product Grill was used, the requirement document draft must include the grill-enriched sections from `document-templates.md`; use `Not applicable` plus a short reason instead of empty headings.
+- when Requirement/Product Grill was used, carry the accepted results into the same Requirement `product.md` draft; do not create a separate Concept artifact or stage
 - run a lightweight Phase Scan when the demand looks larger than one feature, has MVP/later scope, contains multiple journeys or roles, crosses multiple technical boundaries, or the human uses staged-delivery language such as "先做核心闭环" or "后面再补"
 - when Phase Scan triggers, propose a `Delivery Phases` table for human review before feature construction
-- write a requirement document draft only after the intent is clear enough for human review
-- The human-reviewed requirement document is stored under `.agent-loop/requirements/<archive-date>-<topic>/` after the human confirms the document should be recorded
-- Reviewed/recorded does not mean accepted for implementation
+- draft `product.md` only after the intent is clear enough for Human Review
+- store the reviewed definition under `.agent-loop/requirements/<record-date>-<topic>/product.md` only after the human confirms the Requirement Record / Archive disclosure
+- preserve every human original byte; create `sources/` or `visuals/` only when needed and confirmed, never as empty placeholders
+- Product Review/recorded does not mean Requirement accepted for implementation and does not authorize Feature, ADR, code, or Git actions
 - do not create a feature workspace during requirements discussion unless the human explicitly says to start implementation
 - do not enter Work Breakdown, Plan Gate, or Execute
-- Feature `product.md` and `spec.md` are derived implementation views; they do not own requirement lifecycle
-- if the human wants to implement after requirement acceptance, create a feature that references the requirement set in Source Requirements
+- new Feature work does not create `product.md`; Feature `spec.md` references the Effective Product Definition and records Product Slice
+- if the human wants to implement after Requirement acceptance, run Design Readiness and then create a Feature that references the Requirement Set
 
 Write after confirmation:
 
-- `.agent-loop/requirements/<archive-date>-<topic>/README.md`
-- `.agent-loop/requirements/<archive-date>-<topic>/requirement.md`
-- optional append-only `.agent-loop/requirements/<archive-date>-<topic>/YYYY-MM-DD-concept-foundation-<slug>.md` after a later semantic reopen, Requirement Conflict Review, and human confirmation
+- `.agent-loop/requirements/<record-date>-<topic>/README.md`
+- `.agent-loop/requirements/<record-date>-<topic>/product.md`
+- optional copied human originals under `sources/` without editing their bytes
+- optional Human-confirmed derived views under `visuals/`
+- optional append-only `.agent-loop/requirements/<record-date>-<topic>/YYYY-MM-DD-product-follow-up-<slug>.md` after later semantic reopen, Requirement Conflict Review, and Human Review
 - optional `notes.phase-<n>-<slug>.md` when a phase has detailed human decisions or reference direction
 - optional `.agent-loop/requirements/INDEX.md` only when it already exists, index triggers apply, or the human asks for an inventory/backlog view
 
 Exit:
 
-- requirement document human-reviewed and recorded
+- Product Definition human-reviewed and recorded
 - requirement discussion remains open with next clarification question
 - human chooses to start feature implementation from the accepted requirement set
-- a triggered Concept Foundation never exits to downstream modeling while `candidate` or `reopened`
+- a triggered internal Concept Foundation never exits to downstream modeling while `candidate` or `reopened`
 
 ## Remote Project Discovery
 
@@ -477,7 +485,7 @@ Exit:
 - root guidance status is `present`, `created`, or `human-deferred` for `AGENTS.md`
 - `CLAUDE.md` status is `points-to-AGENTS`, `created-pointer`, or `human-deferred`
 - next stage: Evidence-Graph + DDD Onboarding when newcomer-facing or durable project-understanding docs are the current intent
-- next stage: Decision & Design If Needed, Product Brief If Needed, Feature Spec, Code-Guided Operational Support, Requirement Archive, Re-Adopt Agent Loop Project, or Targeted Feature Scan, selected from current intent and artifact state
+- next stage: Requirements Discussion / Product Definition, Decision & Design If Needed, Feature Spec, Code-Guided Operational Support, Requirement Archive, Re-Adopt Agent Loop Project, or Targeted Feature Scan, selected from current intent and artifact state
 
 ## Evidence-Graph + DDD Onboarding Knowledge Base
 
@@ -568,7 +576,7 @@ Exit:
 
 - memory and code reality are close enough to continue
 
-## Requirement Archive
+## Requirement Archive (Requirement Record / Archive)
 
 Entry: human provides requirement/prototype, points to existing material, or asks to remember future/deferred work.
 
@@ -579,19 +587,19 @@ Load:
 Rules:
 
 - Ask before copying, moving, or renaming human files.
-- Never silently modify original requirements.
-- Do not edit `requirement.md` or other source files for lifecycle/status updates.
+- Never silently modify original requirements; Human original source materials remain byte-stable.
+- Do not edit `requirement.md`, external PRDs, prototypes, or other human source files for Product Definition, lifecycle, or implementation updates.
 - Normalize names only after confirmation.
 - Requirement archive dates are archive dates only, not deadlines or feature lifecycle dates.
 - Use a requirement set directory with `README.md`; do not create new flat files directly under `.agent-loop/requirements/`.
-- Group all materials from the same intake/topic together: requirement documents, prototypes, screenshots, feedback, recordings, links, and follow-up notes.
+- Group all materials from the same intake/topic together: README, reviewed Product Definition, human originals/references, prototypes, screenshots, feedback, recordings, links, and follow-up notes.
 - Do not overwrite old requirement materials when requirements change.
 - Old requirement set README files remain valid; do not require migration only because `Lifecycle`, `Summary`, or `Status History` is missing.
 - Run Phase Scan for complex requirement archives. Recommend `Delivery Phases` in the requirement set `README.md` when the requirement will likely become multiple features, has MVP/later scope, crosses multiple boundaries, or needs staged human delivery confirmation.
 - Do not create a feature merely because a phase exists. A phase becomes feature work only after the human chooses to start that accepted phase or phase slice.
 - Before an accepted requirement enters feature construction, run Design Readiness Check from `project-decisions.md` and record the result in the requirement README.
-- Before an accepted requirement enters feature construction, verify its requirement document records either `Concept Foundation Status: accepted` or a reasoned `concept-foundation-not-needed` when the method applies. Archival or requirement lifecycle acceptance does not bypass the Concept Foundation Gate.
-- For archived sets, resolve README `Effective Concept Foundation` first and read the referenced human-reviewed source. If later evidence reopens semantics, stop response-locally, preserve old sources, run Requirement Conflict Review, and ask before an append-only follow-up / linked replacement plus README pointer update.
+- Before an accepted Requirement enters Feature construction, require one confirmed Effective Product Definition and no unresolved internal Concept/Product Model blocker. Product Review and lifecycle acceptance do not authorize one another.
+- For new sets, resolve README `Effective Product Definition` first. For legacy sets, resolve `Effective Concept Foundation` or the reviewed legacy source. If later evidence reopens semantics, stop response-locally, preserve old sources, run Requirement Conflict Review, and ask before `YYYY-MM-DD-product-follow-up-<slug>.md` / linked replacement plus pointer update.
 - Route to Decision & Design If Needed when the requirement spans features or needs shared business-flow, domain, state, source-of-truth, architecture, consistency, recovery, or non-functional design. A disputed technology choice is not required.
 
 ### Future / Deferred Requirement Intake
@@ -616,10 +624,12 @@ Ask human confirmation before creating the new set or changing lifecycle status.
 
 Write:
 
-- `.agent-loop/requirements/<archive-date>-<topic>/README.md`
-- `.agent-loop/requirements/<archive-date>-<topic>/requirement.*` only when source material is provided or the human confirms creating a source record
-- optional `.agent-loop/requirements/<archive-date>-<topic>/notes.phase-<n>-<slug>.md` when a phase needs a separate accepted note
-- `.agent-loop/requirements/<archive-date>-<topic>/prototype.*` only when source material is provided or copied after confirmation
+- `.agent-loop/requirements/<record-date>-<topic>/README.md`
+- `.agent-loop/requirements/<record-date>-<topic>/product.md` only after Product Human Review and exact Record / Archive disclosure
+- `.agent-loop/requirements/<record-date>-<topic>/sources/*` only when human originals are copied after confirmation; never rewrite or create an empty directory
+- legacy/root `.agent-loop/requirements/<record-date>-<topic>/requirement.*` only when source material is provided or already exists
+- optional `.agent-loop/requirements/<record-date>-<topic>/notes.phase-<n>-<slug>.md` when a phase needs a separate accepted note
+- `.agent-loop/requirements/<record-date>-<topic>/prototype.*` only when source material is provided or copied after confirmation
 - optional feedback, screenshot, recording, design-link, meeting-note, and other source files inside the same requirement set
 - optional change-request files inside the same requirement set
 - optional `.agent-loop/requirements/INDEX.md` only when trigger conditions apply
@@ -629,62 +639,21 @@ Exit:
 
 - requirements archived or original paths recorded
 
-## Product Brief If Needed
+## Legacy Feature Product Brief Compatibility (Non-stage)
 
-Entry: accepted or referenced source requirements need feature-level product/PRD-style synthesis before engineering specification, and feature context is confirmed.
+Entry: Resume, Follow-up, Review, Close, or Recovery encounters an existing Feature `product.md`.
 
-Product Brief Source Gate:
+Load `product-brief.md`. Read the legacy Product Brief after the effective Requirement source and before relying on its Feature-local paraphrase. Do not create, refresh, or migrate Feature `product.md` for new work.
 
-If the human asks from `chat` or `requirements-discussion` to write `product.md`, first ask whether to create/reference a requirement set or confirm feature start.
+If the legacy Feature Product Brief conflicts with `Effective Product Definition` or its legacy Requirement authority, stop for Requirement Conflict / Recovery. Preserve both sources until the human confirms the owning correction. Absence of Feature `product.md` in new work is expected and never blocks Feature Spec.
 
-Do not enter Product Brief If Needed directly from requirements discussion without a requirement source or confirmed feature context.
+Write: none by default. Any Requirement follow-up or Feature Spec update uses its own Human Review / lifecycle gate.
 
-Load:
-
-- `product-brief.md`
-- `requirement-product-grill.md` when product terminology, flows, boundaries, exception paths, or prior feature behavior need clarification before synthesis
-- `project-decisions.md` when product tradeoffs or product decisions may affect multiple features or long-term project direction
-- `skill-routing.md` for Stage Helper Capability Scan
-- `external-skill-adapters.md` when Stage Helper Capability Scan finds Superpowers, PRD/product synthesis, or grill-with-docs style helpers
-
-Trigger examples:
-
-- meaningful user journey or UI/interaction flow
-- prototype, product document, PRD, long requirement text, or design notes
-- multiple actors, roles, permissions, tenants, or business objects
-- likely 3 or more user stories
-- scope and out-of-scope need product confirmation
-- ambiguous business terminology
-
-Rules:
-
-- before fallback product synthesis, run Stage Helper Capability Scan; when a product/PRD helper is available, use it as the method quality bar while writing accepted output to `product.md` and `notes.md`
-- confirm the source requirement and feature context before writing feature `product.md`; product-shaping confirmation alone is not feature-start confirmation
-- resolve enough Requirement/Product Grill questions before synthesizing `product.md`
-- resolve the accepted Concept Foundation and Requirement Product Model from README `Effective Concept Foundation` when present, otherwise from the backward-compatible source requirement; Product Brief consumes accepted Concept IDs/model rows and must not redefine their names, identity, relationships, lifecycle, invariants, or product fact meaning
-- if the source foundation is `candidate` or `reopened`, return to Requirements Discussion instead of writing Product Brief
-- record Accepted Concept References and Requirement Product Model Coverage in `product.md`; use `not-applicable` only when the source requirement has a reasoned `concept-foundation-not-needed`
-- When Requirement/Product Grill was used before Product Brief, write the enriched `templates/product.md` sections that apply; use `Not applicable` plus a short reason instead of empty headings.
-- create `product.md` only when useful; skip for narrow bugfixes or clear technical tasks
-- if source requirements are still too broad for one feature, recommend returning to requirement `Delivery Phases` before writing `product.md`
-- inspect `project.md` Product Context and Domain Language before asking product questions
-- ask one blocking product question at a time
-- include the agent's recommended answer when asking
-- record long-term consensus candidates for Project Memory Update
-- repeat Design Readiness Check for new product signals and route shared design needs through Decision & Design before Feature Spec
-
-Write after confirmation:
-
-- `product.md`
-- `notes.md` human decisions if needed
-
-Exit:
-
-- product intent is stable enough for Feature Spec
+Exit: legacy evidence is compatible and current Feature work continues through Feature Spec Product Slice, or conflict is routed to Requirements Discussion / Recovery.
 
 ## Decision & Design If Needed
 
-Entry: Design Readiness is `required`, or accepted/referenced requirements, product.md, PRD-like synthesis, Requirement/Product Grill output, Technical Design / Code Context, or Drift Check reveals shared business-flow, domain, data, architecture, recovery, non-functional, cross-feature, or long-term design needs.
+Entry: Design Readiness is `required`, or an accepted Effective Product Definition, legacy reviewed Requirement source, Technical Design / Code Context, or Drift Check reveals shared business-flow, domain, data, architecture, recovery, non-functional, cross-feature, or long-term design needs.
 
 Load:
 
@@ -695,7 +664,7 @@ Load:
 Position:
 
 ```text
-Requirement -> Design Readiness Check -> Decision & Design If Needed -> Feature Mapping -> Product Brief / Feature Spec
+Confirmed Product Definition -> Requirement lifecycle -> Design Readiness Check -> Decision & Design If Needed -> Feature Mapping -> Feature Spec with Product Slice
 ```
 
 Rules:
@@ -705,13 +674,13 @@ Rules:
 - do not bypass Decision & Design merely because no technology choice is disputed
 - use Decision Scan / Placement inside this stage to place product-only, feature-local, testing, and project-level decisions
 - do not create ADR files from ordinary chat or early fuzzy requirements discussion
-- treat PRD / Requirement Product Model as the product-semantics authority; Decision & Design may consume accepted Concept IDs but must not redefine product identity, lifecycle, relationship, invariant, or terminal meaning
-- resolve the requirement README effective-source pointer and record an Effective Requirement Snapshot before technical landing; a triggered Concept Foundation must be `accepted`
+- treat Effective Product Definition / legacy Requirement Product Model as product-semantics authority; Decision & Design consumes accepted Concept IDs, model IDs, and Product Rule anchors but must not redefine product identity, lifecycle, relationship, invariant, permission, fact ownership, or terminal meaning
+- resolve README `Effective Product Definition` or legacy `Effective Concept Foundation` and record an Effective Requirement Snapshot before technical landing; new sources require Profile plus Product Review `confirmed`
 - inventory every stable source Requirement Model ID (`REL-*`, `PERM-*`, `CMD-*`, `EVT-*`, `FLOW-*`, `STATE-*`, `PM-*`, `EX-*`) before selecting the coherent ADR scope; every out-of-scope ID needs an explicit owner or reason
 - record one Requirement Model Technical Landing Trace disposition for every accepted Requirement Model ID declared inside the ADR scope; `landed` rows require Technical Landing, Preserved Invariant, Design Slice, and Verification
 - keep `Upstream Compatibility: review-required` as a blocking dependency judgment, not a decision lifecycle status; stop dependent Feature Spec, Plan, and implementation until compatibility review returns it to `current`
 - requirement modeling does not add Concept-to-technical-representation mapping; technical landing remains inside the existing Human-gated Decision & Design record
-- place product-only decisions in `product.md`
+- place product-only meaning in Requirement `product.md`
 - place feature-local decisions in `spec.md` Design Decisions
 - place testing decisions in `tests.md` unless they verify a long-term design goal
 - recommend `.agent-loop/decisions/*.md` only for project / cross-feature, long-term, hard-to-reverse, surprising, or real-trade-off decisions
@@ -722,16 +691,16 @@ Rules:
 - do not enter Feature Spec when required shared design is unresolved or design-slice coverage is incomplete
 - do not accept an ADR while its Effective Requirement Snapshot is unresolved, its Requirement Model coverage is incomplete, or its compatibility is `review-required`
 - run structural preflight while the draft remains `proposed`; only explicit human acceptance authorizes Human Review Evidence plus `Status: accepted`, followed by accepted-mode validation
-- allow a reasoned `concept-foundation-not-needed` ADR to use the explicit trace-not-applicable path without inventing product models
+- allow a confirmed Brief with no stable model IDs/Product Rule references, or a reasoned legacy `concept-foundation-not-needed` source, to use the explicit trace-not-applicable path without inventing product models
 - when upstream accepted meaning invalidates an accepted technical decision, preserve history and propose a superseding ADR; do not rewrite accepted decision meaning in place
 - assess Migration / Backfill, Compatibility, Rollout / Cutover, and Rollback / Reversibility, but expand operational landing only for triggered concerns
-- update requirement README, product.md, and spec.md decision references after human confirmation
+- update Requirement README/Product Definition and Feature `spec.md` decision references after human confirmation
 
 Write after confirmation:
 
 - conditionally required `.agent-loop/decisions/000N-<slug>.md` from `templates/decision.md` when shared design is required and no accepted decision covers it; otherwise no new file is needed
 - requirement README `Applicable Decisions`, `Triggered Decisions`, and `Implemented By`
-- feature `product.md` / `spec.md` `Applicable Decisions`
+- Feature `spec.md` `Applicable Decisions`; preserve legacy Feature `product.md` history without new writes
 - feature `spec.md` `Implements Decisions`
 - decision record `Design Slice Coverage` with stable slice IDs, planned owning features, verification, and coverage status
 - decision record `Effective Requirement Snapshot`, source-wide `Requirement Model Scope Inventory`, `Requirement Model Technical Landing Trace`, Coverage Hard Gate evidence, Human Review Evidence after acceptance, and operational trigger assessment
@@ -758,7 +727,7 @@ Load:
 
 Rules:
 
-- after mandatory helper resolution, use the loaded Brainstorming Adapter; use fallback only for recorded `unavailable` or `load-failed`, while writing accepted output to the current stage artifact. Requirements Discussion writes detailed output to `requirements/<set>/requirement.md` and summary links or lifecycle state to `README.md`; Product Brief writes `product.md`; Feature Spec writes `spec.md` and `notes.md`.
+- after mandatory helper resolution, use the loaded Brainstorming Adapter; use fallback only for recorded `unavailable` or `load-failed`. Requirements Discussion keeps the Requirement `product.md` draft response-local until Product Human Review/Record, Requirement README owns pointer/lifecycle, and Feature-local clarification writes `spec.md` / `notes.md`.
 - Ask 1-5 high-impact questions.
 - Default to one question at a time.
 - Questions must affect scope, UX, data, architecture, testing, or acceptance.
@@ -770,14 +739,14 @@ Rules:
 
 Write:
 
-- Requirements Discussion: write approved clarification and design output to the requirement document; keep requirement README to source, lifecycle, Delivery Phase, Feature Mapping, and decision-link summaries.
-- Product Brief: write accepted product clarifications into `product.md`.
+- Requirements Discussion: write approved product clarification into the Requirement `product.md` only through its Record / Archive Gate; keep README to source pointer, lifecycle, Delivery Phase, Feature Mapping, and decision-link summaries.
+- Legacy Feature Product Brief: read-only compatibility; no new write.
 - Feature Spec: write accepted engineering clarifications into `spec.md` and human decisions into `notes.md`.
 
 Exit:
 
-- Requirements Discussion: requirement document draft is ready for Human Review and Requirement Archive.
-- Product Brief or Feature Spec: the owning artifact is stable enough for its next agent-loop stage.
+- Requirements Discussion: Product Definition draft is ready for Product Human Review and Requirement Record / Archive.
+- Feature Spec: the owning artifact is stable enough for its next Agent Loop stage.
 
 ## Feature Monthly Archive If Explicitly Requested
 
@@ -885,7 +854,7 @@ Exit:
 
 Entry: goal and source requirements are clear enough.
 
-Every feature start must reference an accepted requirement set. For a narrow direct feature request, create and accept the minimum requirement set before Feature Spec. This keeps Design Readiness, lifecycle, and Feature Mapping in one requirement-owned location without forcing a large PRD.
+Every Feature start must reference an accepted Requirement Set with a confirmed Effective Product Definition, or an explicitly supported legacy effective source. For a narrow direct Feature request, create/review the minimum Brief before Feature Spec. This keeps product meaning, Design Readiness, lifecycle, and Feature Mapping in one Requirement-owned location without forcing Standard modeling.
 
 Load:
 
@@ -904,7 +873,8 @@ Include:
 - feature type: normal, maintenance-fix, or follow-up
 - `Related Bugs` and the Human-confirmed Bug Resolution Path source when this Feature repairs Bugs; do not copy full Bug report/evidence
 - problem/goal
-- product brief reference when `product.md` exists
+- Product Requirement Source: Requirement Set, Effective Product Definition, Profile, Product Review Evidence, and Applicable Decisions
+- Product Slice rows mapping source sections/IDs/rules to Feature responsibility, acceptance, and `in-scope | out-of-scope | not-applicable` coverage
 - requirement Delivery Phase reference when the feature implements a phase or phase slice
 - scope
 - stories
@@ -917,10 +887,12 @@ Include:
 Rules:
 
 - before fallback spec writing, run Stage Helper Capability Scan; when a spec/brainstorming helper is available, use it for ambiguity removal, scope checks, and acceptance thinking while writing to `spec.md`
-- inspect Source Requirements, product.md, and Applicable Decisions before writing behavior and acceptance
-- resolve and inspect the effective accepted Concept Foundation and Requirement Product Model before writing behavior and acceptance; add Effective Concept Source, Accepted Concept References, and Requirement Product Model Trace to `spec.md`
+- inspect the Effective Product Definition, original source links as needed, and Applicable Decisions before writing behavior and acceptance
+- use the dual reader: new `Effective Product Definition` requires Profile/Product Review `confirmed`; legacy `Effective Concept Foundation` / reviewed Requirement remains valid without migration
+- add Product Requirement Source and Product Slice to `spec.md`; do not require or create Feature `product.md`
+- Product Slice references source Concept/Model IDs and `product.md#<rule-anchor>`; it may narrow scope but cannot redefine accepted product meaning
 - do not let Feature Spec introduce a new meaning, state, invariant, role boundary, relationship, or product object for an accepted Concept ID; return to Requirements Discussion when product semantics must change
-- block Feature Spec when a triggered source foundation is `candidate` or `reopened`
+- block Feature Spec when Product Review is pending, the effective pointer is ambiguous/stale, or a triggered internal/legacy foundation is `candidate` or `reopened`
 - confirm Design Readiness is `design-not-needed` or `completed` before writing the Feature Spec
 - for each applicable requirement-driven ADR, confirm its Effective Requirement Snapshot still resolves, `Upstream Compatibility` is `current`, and Requirement Model Technical Landing Trace coverage is complete
 - include `Applicable Decisions`, assigned Design Slice IDs in `Implements Decisions`, and feature-local `Design Decisions`

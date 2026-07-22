@@ -10,10 +10,10 @@ If Superpowers is available, prefer these helpers:
 
 | Stage | Preferred Superpowers helper |
 |---|---|
-| Requirements Discussion | `superpowers:brainstorming` plus grill-with-docs style helpers when available |
+| Requirements Discussion | `superpowers:brainstorming` plus PRD/product and grill-with-docs style helpers when available |
 | Brainstorm / Clarify | `superpowers:brainstorming` |
 | Project Skill Creation / Update | `superpowers:writing-skills` / `writing-skills`; also `skill-creator` when available |
-| Product Brief If Needed | `superpowers:brainstorming` plus product/PRD helpers when available |
+| Legacy Product Brief compatibility | no writer helper; reader-only compatibility |
 | Feature Spec | `superpowers:brainstorming` plus spec helpers when available |
 | Plan Gate / Plan If Needed | `superpowers:writing-plans` |
 | Execute Task / Story | `superpowers:test-driven-development` |
@@ -51,7 +51,7 @@ Write to the current `agent-loop` artifact instead.
 
 | External output | Agent-loop destination |
 |---|---|
-| brainstormed requirement/product/design/spec | owning-stage artifact: requirement document plus requirement README summary during Requirements Discussion; `.agent-loop/features/<feature>/product.md` during Product Brief; `.agent-loop/features/<feature>/spec.md` or `notes.md` during Feature Spec |
+| brainstormed requirement/product/design/spec | response-local Requirement `product.md` draft during Requirements Discussion, then `.agent-loop/requirements/<record-date>-<topic>/product.md` only through Product Human Review plus Requirement Record / Archive; `.agent-loop/features/<feature>/spec.md` or `notes.md` during Feature Spec |
 | implementation plan | `.agent-loop/features/<feature>/plan.md` or `.agent-loop/features/<feature>/plans/*` |
 | test strategy | `.agent-loop/features/<feature>/tests.md` or `.agent-loop/features/<feature>/tests/*` |
 | debugging notes | `.agent-loop/features/<feature>/notes.md`; link bounded reproduction/root-cause evidence from the Bug README when Bug Management applies |
@@ -113,10 +113,10 @@ Use Superpowers when available for these stages, while applying the path and gat
 
 | Agent-loop stage | Superpowers adapter | Borrow | Override |
 |---|---|---|---|
-| Requirements Discussion | `superpowers:brainstorming` plus grill-with-docs style helpers when available | context exploration, one-question-at-a-time, terminology, flows, exceptions, prior-feature conflicts | write approved details to the requirement document and only index/lifecycle/mapping summaries to requirement README; do not create feature artifacts |
+| Requirements Discussion | `superpowers:brainstorming` plus PRD/product and grill-with-docs style helpers when available | context exploration, adaptive Brief/Standard synthesis, one-question-at-a-time, terminology, flows, exceptions, prior-feature conflicts | produce one response-local Requirement `product.md` draft; write it only through Product Human Review plus Requirement Record / Archive; do not create Feature artifacts |
 | Brainstorm / Clarify if Needed | `superpowers:brainstorming` | context exploration, one-question-at-a-time, options, design approval | write to the owning stage artifact; do not write `docs/superpowers/specs/`; do not auto-transition to `writing-plans` |
 | Project Skill Creation / Update | `superpowers:writing-skills` / `writing-skills`, plus `skill-creator` when available | RED/GREEN/REFACTOR, pressure testing, concise skill authoring, scaffolding, metadata generation, structural validation | Gate 1 before files; write only to `.agent-loop/skills/<skill-name>/`; activation only after validation; Execution Gate for every invocation |
-| Product Brief If Needed | `superpowers:brainstorming` plus product/PRD skills when available | product intent, alternatives, user outcomes | write to `product.md`; long-term consensus only via Project Memory Update |
+| Legacy Product Brief compatibility | no writer helper | historical product intent from an existing Feature artifact | read only; route semantic conflict to Requirements Discussion / Recovery |
 | Feature Spec | brainstorming/spec methods | ambiguity removal, scope check, acceptance thinking | write to `spec.md`; use agent-loop Human Review Summary |
 | Plan Gate / Plan If Needed | `superpowers:writing-plans` | decide plan vs recorded No-Plan Decision; construction-grade plan, exact paths, test code, commands, expected outputs, no placeholders, self-review | write to `plan.md` or `plans/*`, or record No-Plan Decision only for trivial tasks; preserve Branch Context Evidence and never let plan approval authorize Git actions; do not write `docs/superpowers/plans/`; execution mode remains agent-loop controlled |
 | Execute Task / Story | `superpowers:test-driven-development` | RED, verify RED, GREEN, verify GREEN, refactor | task status still controlled by Task Done Gate; evidence to `notes.md` |
@@ -132,32 +132,32 @@ Use Superpowers when available for these stages, while applying the path and gat
 
 When `Brainstorm / Clarify if Needed` starts and Superpowers is available:
 
-Requirements Discussion writes approved details to the requirement document and only source, lifecycle, Delivery Phase, Feature Mapping, and decision-link summaries to requirement README; Product Brief writes to `product.md`; Feature Spec writes to `spec.md` and `notes.md`.
+Requirements Discussion drafts the Requirement `product.md`; after Product Human Review plus Requirement Record / Archive, the Requirement README records only the effective pointer, lifecycle, Delivery Phase, Feature Mapping, and decision-link summaries. Feature Spec writes Product Slice to `spec.md` and evidence to `notes.md`. Existing Feature Product Briefs remain reader-only.
 
 1. Use `superpowers:brainstorming` as the preferred method.
 2. Inspect project context first.
 3. Ask one high-impact question at a time.
 4. Offer 2-3 approaches when meaningful.
 5. Present a design summary for human approval.
-6. Write approved content to the owning stage artifact: requirement document plus requirement README summary during Requirements Discussion, `product.md` during Product Brief, or `spec.md` / `notes.md` during Feature Spec.
+6. Write approved content to the owning stage artifact: Requirement `product.md` only after Product Human Review plus Requirement Record / Archive, or Feature `spec.md` / `notes.md` during Feature Spec.
 7. Do not create `docs/superpowers/specs/*` unless the human explicitly requests native Superpowers docs and confirms the external directory after path-override explanation.
 8. Do not automatically transition to `superpowers:writing-plans`; recommend the next `agent-loop` stage.
 
-## Product Brief Source Gate
+## Requirement Product Definition Adapter
 
-External PRD/product helpers cannot turn chat or requirements discussion directly into feature `product.md`.
+External PRD/product helpers cannot turn chat or Requirements Discussion directly into Feature `product.md`, a native PRD tree, an implementation authorization, or a deployment.
 
-If an external helper produces product-shaped content before requirement source and feature context are confirmed, keep detailed output in the owning Requirements Discussion requirement document, keep only index/lifecycle/mapping summaries in requirement README, or use a response-local draft. Ask whether to create/reference a requirement set or confirm feature start before writing feature `product.md`.
+Map a helper Feature List to Product Capability Scope, translate its product content into a response-local Requirement `product.md` draft, and preserve human originals under the Requirement Set source policy. Do not create native `feature_list.md`, `PRD.md`, Feature `product.md`, prototype deployment, or helper-owned output trees. Only Product Human Review plus Requirement Record / Archive may write the draft; Product Review does not authorize Feature start.
 
 ## Grill-With-Docs Adapter
 
 When a grill-with-docs style helper is available:
 
-1. Use it as a clarification method inside Requirements Discussion, Product Brief, or Brainstorm / Clarify.
+1. Use it as a clarification method inside Requirements Discussion or Feature-local Brainstorm / Clarify.
 2. Load `requirement-product-grill.md` and keep agent-loop as the controller.
 3. Inspect project memory, source requirements, code/docs/tests, and targeted prior feature artifacts before asking questions when relevant.
 4. Ask one blocking question at a time and include the agent's recommended answer.
-5. Write accepted output to the owning artifact: detailed Requirements Discussion output to the requirement document with only index/lifecycle/mapping summaries in requirement README; Product Brief output to `product.md`; Feature Spec output to `spec.md` or `notes.md`.
+5. Write accepted product meaning to the Requirement `product.md` through its Human Review/Record Gate; keep Requirement README to pointer/lifecycle/mapping summaries; write Feature-local output to `spec.md` or `notes.md`.
 6. Do not create `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/` from grill-with-docs defaults.
 7. Cross-feature, shared design, hard-to-reverse, surprising, or real-trade-off findings are Design Readiness evidence and Decision Candidates for Decision & Design; they are not accepted ADRs.
 

@@ -23,13 +23,13 @@ CLAUDE.md -> AGENTS.md
   decisions/
     0001-<decision-slug>.md
   requirements/
-    <archive-date>-<topic>/
+    <record-date>-<topic>/
       README.md
-      requirement.md
-      YYYY-MM-DD-concept-foundation-<slug>.md optional append-only semantic follow-up
-      prototype.png
-      feedback.md
-      design-link.md
+      product.md Agent-authored reviewed Product Definition
+      YYYY-MM-DD-product-follow-up-<slug>.md optional append-only reviewed replacement
+      sources/ optional copied human originals; do not create empty
+      visuals/ optional Human-confirmed derived views; do not create empty
+      requirement.md legacy or human original when present; never rewrite
     INDEX.md  optional for many requirement sets
   bugs/ optional; create after explicit bug record/manage/investigate/fix intent
     INDEX.md
@@ -41,7 +41,6 @@ CLAUDE.md -> AGENTS.md
       README.md
   features/
     <date>-<feature-slug>/
-      product.md optional
       spec.md
       tasks.md
       tests.md
@@ -207,7 +206,7 @@ An `in-progress` Bug requires `flow-back | linked-feature | maintenance-fix` plu
 
 Use `.agent-loop/decisions/` for Human-gated project / cross-feature Decision And Design Records. Creating this directory does not require or enable enterprise memory mode.
 
-Use `templates/decision.md` when the human explicitly confirms drafting a project / cross-feature decision file. A new draft starts as `Status: proposed`; `accepted` status still requires explicit human acceptance of the decision itself. Requirement README files may list `Applicable Decisions` and `Triggered Decisions`; feature `product.md` and `spec.md` may list `Applicable Decisions`; feature `spec.md` may also list `Implements Decisions` and feature-local `Design Decisions`.
+Use `templates/decision.md` when the human explicitly confirms drafting a project / cross-feature decision file. A new draft starts as `Status: proposed`; `accepted` status still requires explicit human acceptance of the decision itself. Requirement README and `product.md` may list Decision Candidates / Applicable Decisions; Feature `spec.md` lists Applicable Decisions and Feature-local design decisions. Legacy Feature `product.md` remains readable but receives no new writes.
 
 Do not create ADR files from ordinary chat, early fuzzy requirements discussion, or feature-local implementation preferences. Keep early signals as Design Readiness evidence and Decision Candidates until Decision & Design, its Decision Scan / Placement method, and human confirmation decide the destination.
 
@@ -215,11 +214,11 @@ New requirements should be grouped by requirement set directory. Do not create f
 
 Never silently modify original human requirements. If the human declines normalization, reference the original path in feature docs.
 
-Requirement source files such as `requirement.md` are immutable by default. Lifecycle/status updates belong in requirement set `README.md` and optional `requirements/INDEX.md`.
+Human original source files such as `requirement.md` are byte-stable. Lifecycle/status updates belong in Requirement Set `README.md` and optional `requirements/INDEX.md`. A confirmed Product Definition is replaced only by an append-only follow-up after Human Review.
 
 When requirements change, add a new file to the requirement set or create a new requirement set. Do not overwrite the old source requirement material.
 
-After archive, requirement set README `Effective Concept Foundation` points to the current human-reviewed semantic source. It may record effective status, source, previous source, confirmation date, and reopen trigger, but it must not duplicate definitions or the Requirement Product Model. Later semantic changes use an append-only Concept Foundation follow-up or a linked/superseding requirement set after Requirement Conflict Review and human confirmation.
+After record/archive, Requirement Set README `Effective Product Definition` points to the current human-reviewed `product.md` or append-only follow-up. It records Profile, Product Review, previous source, confirmation date, and reopen trigger without duplicating product meaning. Legacy `Effective Concept Foundation` remains a reader-only compatibility form and must not coexist with the new pointer.
 
 Future/deferred work and backlog items belong in requirement sets and optional `requirements/INDEX.md`, not in `project.md`.
 
@@ -236,10 +235,11 @@ Use `Delivery Phases` in requirement set `README.md` when the requirement is too
 Before an accepted requirement enters feature construction, add or update this requirement README summary:
 
 ```md
-## Effective Concept Foundation
+## Effective Product Definition
 
-Status: not-recorded | candidate | accepted | reopened | concept-foundation-not-needed
-Effective Source: requirement.md | YYYY-MM-DD-concept-foundation-<slug>.md | none
+Source: product.md | YYYY-MM-DD-product-follow-up-<slug>.md | none
+Profile: brief | standard | none
+Product Review: pending | confirmed | none
 Previous Source: none
 Last Confirmed: YYYY-MM-DD | none
 Reason / Reopen Trigger:
@@ -251,7 +251,7 @@ Signals:
 -
 Shared Design Needs:
 -
-Recommended Next Stage: Decision & Design If Needed | Product Brief If Needed | Feature Spec
+Recommended Next Stage: Product Human Review | Decision & Design If Needed | Feature Spec with Product Slice
 Decision Records:
 -
 Coverage Status: not-applicable | unassigned | planned | complete
@@ -265,9 +265,9 @@ notes.phase-<n>-<slug>.md
 
 Recommend `templates/requirements-index.md` only when there are more than 10 requirement sets, many external paths, shared source requirements, frequent supersession, or the human asks for an inventory/backlog view.
 
-## Requirement Document
+## Legacy Requirement Document Compatibility
 
-Use this shape when requirements discussion and Brainstorm / Clarify produce a human-reviewed requirement document:
+Read this historical shape when resuming older Requirement Sets. New Requirements Discussion uses `templates/product.md` and the Adaptive Product Definition rules. Do not bulk-migrate this legacy source or create a second effective pointer.
 
 ```md
 # Requirement: <topic>
@@ -391,9 +391,9 @@ Record product fact ownership or a Decision Candidate. Do not select a table/sto
 
 ## Concept-To-Product Traceability
 
-Every derived row must cite accepted Concept IDs. Product Brief and Feature Spec consume these IDs instead of creating replacement definitions.
+Every derived row in this legacy shape cites accepted Concept IDs. Legacy Product Brief and Feature Spec consume these IDs instead of creating replacement definitions.
 
-| Trace ID | Accepted Concept IDs | Derived Model IDs / Sections | Product Rule / Meaning | Downstream Product Brief / Feature Spec Use |
+| Trace ID | Accepted Concept IDs | Derived Model IDs / Sections | Product Rule / Meaning | Downstream Legacy Product Brief / Feature Spec Use |
 |---|---|---|---|---|
 | TRACE-01 | C-EXAMPLE | REL-01 / PERM-01 / CMD-01 / FLOW-01 / STATE-01 / PM-01 / EX-01 |  |  |
 
@@ -456,7 +456,7 @@ Use only when staged delivery has been discussed and human-reviewed. If used, mi
 
 When Requirement/Product Grill was used, do not leave these sections as empty headings. Fill the applicable sections with concrete concepts, relationships, roles, actions/events, flows, states, product-model facts, exceptions, trace rows, historical conflicts, scenarios, and candidates; for non-applicable sections, write `Not applicable` plus a short reason. A triggered Concept Foundation must be `accepted` before derived product sections are written. A simple requirement uses `concept-foundation-not-needed` and a concrete reason instead of a large empty model.
 
-Write the human-reviewed document as `.agent-loop/requirements/<archive-date>-<topic>/requirement.md` after the human confirms the document should be recorded. Do not write it directly into a feature workspace. Feature `product.md` and `spec.md` derive from this source and link back to the requirement set.
+This inline document remains a legacy reader shape. For new work, draft `templates/product.md`, write it as `.agent-loop/requirements/<record-date>-<topic>/product.md` only after Product Human Review plus Requirement Record / Archive disclosure, and have Feature `spec.md` consume a Product Slice. Do not create a new Feature `product.md`.
 
 ## Phase Note
 
@@ -793,17 +793,18 @@ Confidence:
 ## Long-Term Decisions
 ```
 
-## `product.md`
+## Requirement `product.md`
 
-Use `templates/product.md` when product intent needs its own layer.
+Use `templates/product.md` inside Requirements Discussion to draft the one effective Requirement Product Definition. Keep it response-local until Product Human Review and Requirement Record / Archive disclosure pass.
 
 Purpose:
 
-- summarize feature-level product understanding
-- preserve user stories, product scope, out of scope, and product decisions
-- identify product questions and long-term consensus candidates
+- choose and record `brief | standard` depth
+- preserve source evidence, product outcome, scope, non-goals, acceptance direction, and Human Review
+- adaptively model applicable concepts, rules, flows, state, permissions, facts, exceptions, and Decision Candidates
+- provide one source for ADR and Feature Product Slice
 
-Do not use `product.md` as the engineering execution plan.
+Do not use Requirement `product.md` as an engineering execution plan, technical schema, Feature task list, Git authorization, or replacement for human original bytes. Do not create Feature `product.md` for new work.
 
 ## `spec.md`
 
@@ -821,10 +822,25 @@ Source Requirements:
 - Delivery Phase / Phase Slice:
 - Phase Note:
 
+## Product Requirement Source
+
+- Requirement Set:
+- Effective Product Definition:
+- Product Definition Profile:
+- Product Review Evidence:
+- Applicable Decisions:
+
+## Product Slice
+
+| Source Section / Model ID | Feature Responsibility | Acceptance Mapping | Coverage |
+|---|---|---|---|
+| FLOW-... / STATE-... / product.md#... |  |  | in-scope / out-of-scope / not-applicable |
+
+The Product Slice narrows Feature responsibility without redefining Requirement product meaning. Legacy Feature `product.md` remains reader-only when already present.
+
 Related Bugs:
 Bug Resolution Path: none | flow-back | linked-feature | maintenance-fix
 
-Product Brief: product.md | none
 Related Feature:
 Flow-back Decision: none | flow-back | linked-new-feature | maintenance-fix | investigate-first | declined-reopen | defer
 

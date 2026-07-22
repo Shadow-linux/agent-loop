@@ -17,14 +17,13 @@ risk / blocker / human decision = never hidden
 
 Use before human confirmation for:
 
-- Concept Foundation acceptance
+- Product Definition / Product Human Review, including cumulative internal Concept Foundation coverage when triggered
 - Decision & Design record creation, acceptance, compatibility update, or superseding decision
 - Project Entry / Project Entry Scan
 - Branch Strategy recommendation/adoption and every requested Git action
 - legacy onboarding-db reference cleanup
 - Remote Project Discovery
 - Requirement Archive
-- Product Brief
 - Feature Spec
 - Work Breakdown / Tasks
 - Delivery Contract acceptance or breaking change
@@ -93,24 +92,34 @@ High-confidence rows can be drafted, but cannot become reviewed or written as ac
 
 ## Stage Table Patterns
 
-### Concept Foundation Approval
+### Product Definition Approval
 
-Use after the one-question-per-turn Human Grill Contract has resolved each blocker and before changing a triggered foundation to `accepted`.
+Use after Product Definition Depth Scan and, for Standard, after the one-question-per-turn Human Grill Contract has resolved each blocker. This is the cumulative Product Human Review surface; internal Concept Foundation / Requirement Product Model methods do not add another approval stage.
 
-| Concept ID | Recommended Definition | Identity / Lifecycle Boundary | Relationship / State Impact | Evidence | Open Conflict | Human Decision |
-|---|---|---|---|---|---|---|
-|  |  |  |  |  | none / blocking | accept / revise / keep candidate |
+| Review Item | Agent Recommendation | Source Evidence | Included / Not-Applicable Detail | Open Blocker / Risk | Human Decision |
+|---|---|---|---|---|---|
+| Profile | brief / standard with trigger |  |  | none / blocking | confirm / revise |
+| Product Value / Scope | problem, outcome, in/out scope |  |  | none / blocking | confirm / revise |
+| Concepts / Rules | cumulative accepted meanings |  | Concept IDs / rule anchors / not-applicable reason | none / blocking | confirm / revise |
+| Relationships / Permissions | accepted boundaries |  | IDs / not-applicable reason | none / blocking | confirm / revise |
+| Actions / Flow / State | accepted journey and terminals |  | IDs / not-applicable reason | none / blocking | confirm / revise |
+| Product Facts / Exceptions | fact ownership and recovery |  | IDs / not-applicable reason | none / blocking | confirm / revise |
+| Derived Visuals | current / stale / absent | source IDs + semantic digest | output or fallback | none / blocking | confirm / regenerate / omit |
+| Design Readiness | none / candidate / required |  | candidate links | non-blocking / blocking | acknowledge / revise |
 
 Add:
 
 ```text
-Effective Concept Source:
-Requirement Product Model derivation authorized: yes | no
+Requirement Set path:
+Effective Product Definition draft/source:
+Product Definition Profile: brief | standard
+Product Review decision: confirm | revise
+Requirement lifecycle decision: separate / unchanged / explicitly <status>
 Artifacts to write/update:
-Recommended next stage: continue Requirements Discussion | Requirement Archive
+Recommended next stage: continue Requirements Discussion | Requirement Record / Archive | Design Readiness
 ```
 
-This summary is cumulative confirmation of the current concept baseline. It does not replace the strict one-question-per-turn Grill used to resolve blocking meanings, and it does not accept implementation, create an ADR, archive files, or start a feature.
+This summary is cumulative confirmation of the current product baseline. It does not replace the strict one-question-per-turn Grill used to resolve blocking meanings. Product Human Review confirmation is non-bypassable for a new Effective Product Definition: `revise` or an unresolved row remains in Requirements Discussion. Product Review confirmation does not authorize Requirement acceptance, Feature start, ADR acceptance, code execution, or Git actions. Requirement Record / Archive still requires disclosure of exact files and byte-stable human sources.
 
 ### Decision & Design Approval
 
@@ -118,7 +127,7 @@ Use before creating, accepting, superseding, or materially updating a project / 
 
 | Item | Review Content |
 |---|---|
-| Effective Requirement Source | effective source path, Concept Foundation status, Last Compatibility Check, and `current` / `review-required` |
+| Effective Requirement Source | Effective Product Definition path/Profile/Product Review, or legacy Effective Concept Foundation status, plus Last Compatibility Check and `current` / `review-required` |
 | Requirement Model Scope | source total / in-scope / existing-decision / feature-local / proposed-decision / not-applicable / missing |
 | Requirement Model Coverage | in-scope total / landed / existing-decision / feature-local / not-applicable / missing |
 | Chosen Technical Decision | chosen option and the main rejected alternatives |
@@ -132,7 +141,7 @@ Add:
 
 ```text
 ADR path:
-Effective Concept Source:
+Effective Product Source or legacy Effective Concept Source:
 Upstream Compatibility: current | review-required
 Artifacts to write/update:
 Recommended next stage: Decision & Design If Needed | Feature Spec | Requirements Discussion

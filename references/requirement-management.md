@@ -4,15 +4,19 @@ Use this file before copying, moving, renaming, indexing, or referencing human-p
 
 ## Core Rule
 
-`.agent-loop/requirements/` stores original human source material or references to it, grouped into requirement set directories.
+`.agent-loop/requirements/` stores original human source material or references to it, the Agent-authored reviewed Product Definition, and lifecycle/index facts grouped into Requirement Set directories.
 
-It is not a working spec, PRD, task plan, or edited summary.
+It is not a Feature working spec, task plan, engineering design, or execution log. `requirements/<record-date>-<topic>/product.md` is the one new-work PRD/Product Definition owner; human originals remain separate sources.
 
 ```text
-human source requirement -> requirements archive/reference -> spec Source Requirements -> tasks/tests/plan
+human source requirement -> adaptive Requirement product.md -> Product Human Review -> Requirement Record / Archive -> ADR if needed -> Feature spec Product Slice
 ```
 
 Never silently modify, rewrite, summarize over, or replace original human requirements.
+
+Requirement source files are immutable by default. Do not overwrite, rewrite, summarize over, or edit `requirement.md` or any other human-owned source for lifecycle, Product Review, or follow-up changes.
+
+Human original source materials remain byte-stable. Agent-authored `product.md` may normalize and trace their confirmed meaning, but it never overwrites an original file.
 
 Feature Monthly Archive preserves the stable Feature ID when a completed implementation directory moves between flat and month archive paths. Requirement `Feature Mapping`, `Implemented By`, and lifecycle-owned README/index locators may update to the Human-reviewed current path, but original human requirement source files remain byte-stable. `features/archive.md` is only a locator and never becomes requirement or implementation authority.
 
@@ -64,25 +68,26 @@ Use requirements discussion intake when the human is exploring product needs, bu
 
 Default behavior:
 
-1. Use Brainstorm / Clarify before writing a requirement document.
-2. Draft a human-reviewed requirement document only after the demand is clear enough to review.
-3. Archive the human-reviewed requirement document after the human confirms the document should be recorded.
-4. Set status to `proposed`, `accepted`, `deferred`, `rejected`, or `reference-only` based on the human decision.
-5. Do not create a feature workspace unless the human explicitly says to start implementation.
+1. Use Brainstorm / Clarify and inspect available evidence before drafting.
+2. Load `product-definition.md`, run Product Definition Depth Scan, and recommend `brief` or `standard`.
+3. Keep the Agent-authored `product.md` draft response-local until Product Human Review and the Requirement Record / Archive Gate.
+4. At that gate, disclose original sources, the generated Product Definition, README pointer, and unchanged-source boundary.
+5. Set Requirement lifecycle to `proposed`, `accepted`, `deferred`, `rejected`, or `reference-only` only from the separate human lifecycle decision.
+6. Do not create a feature workspace unless the human separately authorizes Feature construction.
 
-Before drafting detailed flow, state, or product-data sections, classify `Concept Foundation Status`. Triggered complex requirements must pass the Concept Foundation Human Gate inside Requirement/Product Grill. Simple requirements record `concept-foundation-not-needed` with a concrete reason.
+Before drafting detailed flow, state, or product-data sections in Standard, classify the internal Concept Foundation route. Triggered meanings must pass the Human Grill Contract inside Requirement/Product Grill. A Brief does not create empty Concept/Product Model placeholders.
 
-A requirement document produced from brainstorming is requirement source material after human review.
+The reviewed Agent draft becomes the effective Product Definition only after the Requirement Record / Archive Gate. Human-provided PRDs, prototypes, screenshots, recordings, and notes remain original sources, even when the Agent uses them to normalize `product.md`.
 
 Reviewed/recorded does not mean accepted for implementation.
 
-Do not move the requirement source into a feature workspace when implementation starts. features reference requirement sets; requirements own source and lifecycle.
+Do not move the requirement source or Product Definition into a feature workspace when implementation starts. Features reference Requirement Sets; Requirements own sources, product meaning, and lifecycle.
 
-Feature `product.md` and `spec.md` may be derived from accepted requirements, but they are implementation views. They do not replace the requirement set and do not own requirement lifecycle.
+New Feature work does not create `product.md`. Feature `spec.md` records one Product Slice derived from the Effective Product Definition. Existing Feature `product.md` remains legacy-compatible and does not replace Requirement ownership.
 
-## Concept Foundation Status
+## Internal Concept Foundation Status And Legacy Compatibility
 
-The human-reviewed requirement document records one of:
+When Standard product semantics require it, the response-local Product Definition draft tracks one internal method state:
 
 ```text
 candidate | accepted | reopened | concept-foundation-not-needed
@@ -93,7 +98,7 @@ candidate | accepted | reopened | concept-foundation-not-needed
 - `reopened`: later requirement evidence invalidated accepted product meaning; stop downstream synthesis and return to the Human Grill Contract.
 - `concept-foundation-not-needed`: a simple change has no product-semantic impact; record the specific reason.
 
-Before the first human-reviewed archive, status belongs in the requirement document draft. After archive, the requirement set README owns only the `Effective Concept Foundation` status/source pointer; complete definitions and the Requirement Product Model remain in the referenced immutable source file. Archiving a document does not convert `candidate` to `accepted`, and requirement acceptance for implementation does not repair an unresolved Concept Foundation.
+Before the first Human Review, status belongs inside the Requirements Discussion method. For new work, accepted concepts and Product Model rows are sections of the effective `product.md`; README points to `Effective Product Definition`. Product Review does not convert Requirement lifecycle, and Requirement acceptance does not repair an unresolved internal Concept Foundation.
 
 For a triggered foundation, preserve this order:
 
@@ -103,33 +108,37 @@ evidence and scenarios
 -> one recommended blocking definition
 -> Human Confirmation
 -> Requirement Product Model derivation
--> downstream Product Brief / Feature Spec references
+-> cumulative Product Human Review
+-> downstream ADR / Feature Product Slice references
 ```
 
-Do not edit original human source files to manufacture the Concept Foundation. When the human-reviewed `requirement.md` was Agent-created from discussion, it becomes immutable source material after review under the existing source-file rules.
+Do not edit original human source files to manufacture Concept Foundation evidence. Write accepted definitions only into the Agent-authored Product Definition after Human Review.
 
-### Effective Concept Foundation And Reopen
+### Effective Product Definition And Reopen
 
-For a newly archived requirement set, record this pointer in README after human confirmation:
+For a new Requirement Set, record this pointer in README after human confirmation:
 
 ```text
-Effective Concept Foundation:
-  Status: accepted | concept-foundation-not-needed
-  Effective Source: requirement.md
+Effective Product Definition:
+  Source: product.md
+  Profile: brief | standard
+  Product Review: confirmed
+  Last Confirmed: YYYY-MM-DD
+  Previous Source: none
 ```
 
 When later evidence invalidates accepted product meaning:
 
-1. classify `reopened` response-locally and stop Product Brief, Feature Spec, and other downstream synthesis immediately;
-2. preserve the previous requirement source unchanged;
+1. classify the affected internal concept/product meaning as `reopened` response-locally and stop ADR, Feature Spec, and other downstream synthesis immediately;
+2. preserve the previous effective Product Definition and all original human sources unchanged;
 3. run Requirement Conflict Review to choose append-to-existing-set or a linked/superseding requirement set;
-4. after human confirmation, write an append-only Concept Foundation follow-up such as `YYYY-MM-DD-concept-foundation-<slug>.md`, or create the confirmed replacement requirement set for a material conflict;
-5. update README `Effective Concept Foundation` to `reopened` or the newly `accepted` effective source, preserving `Previous Source` and `Last Confirmed`;
+4. after human confirmation, write an append-only Product Definition follow-up such as `YYYY-MM-DD-product-follow-up-<slug>.md`, or create the confirmed replacement Requirement Set for a material conflict;
+5. advance README `Effective Product Definition` to the newly confirmed source, preserving `Previous Source` and `Last Confirmed`;
 6. require downstream artifacts to resolve the README pointer and cite the effective human-reviewed source.
 
-The README pointer is an index and safety-routing fact, not a second copy of Concept Foundation. If an older requirement set has no pointer, read status from its human-reviewed requirement document and do not bulk-migrate it.
+The README pointer is an index and safety-routing fact, not a second copy of product meaning. An older Requirement Set may keep `Effective Concept Foundation`; read it through the legacy path and do not add a second pointer or bulk-migrate it.
 
-An append-only Concept Foundation follow-up may clarify or supersede product semantics inside the same requirement set only when Requirement Conflict Review says the original user goal and scope remain recognizable. A changed goal, reversed core business rule, or substantially invalid acceptance requires a new linked requirement set under the existing conflict rules.
+An append-only Product Definition follow-up may clarify or supersede product semantics inside the same Requirement Set only when Requirement Conflict Review says the original user goal and scope remain recognizable. A changed goal, reversed core business rule, or substantially invalid acceptance requires a new linked Requirement Set under the existing conflict rules.
 
 ## Requirement/Product Grill
 
@@ -140,11 +149,11 @@ Rules:
 - Load `requirement-product-grill.md` before asking grill-style questions.
 - Ask one blocking question at a time and include the recommended answer.
 - Inspect project memory, source requirements, code/docs/tests, and targeted prior feature artifacts before asking when those sources may already answer the question.
-- Record accepted local terminology, scenarios, open questions, and conflicts in the reviewed requirement document. Keep the requirement set `README.md` to source, lifecycle, Delivery Phase, Feature Mapping, and decision-link summaries.
+- Record accepted local terminology, scenarios, open questions, and conflicts in the Product Definition draft. Keep Requirement README to source pointer, lifecycle, Delivery Phase, Feature Mapping, and decision-link summaries.
 - When Concept Foundation triggers, follow the Human Grill Contract: evidence first, candidate inventory, one recommended definition with impact, then exactly one downstream-blocking question.
 - Do not write detailed Business Flow, Product State Model, or Requirement Product Model while status is `candidate` or `reopened`.
-- After `accepted`, derive relationships, roles/permissions, commands/events, business flow, state, product data, invariants, exceptions, and recovery from stable Concept IDs and keep a traceability matrix in the requirement document.
-- Do not promote grill output to project memory, product.md, spec.md, or decisions without the owning human gate.
+- After internal `accepted`, derive only applicable relationships, roles/permissions, commands/events, business flow, state, product facts, invariants, exceptions, and recovery from stable Concept IDs inside Standard `product.md`.
+- Do not persist grill output to `product.md`, project memory, Feature `spec.md`, or decisions without the owning Human Review / Record gate.
 - Record cross-feature, shared design, hard-to-reverse, surprising, or real-trade-off signals as Design Readiness evidence and Decision Candidates, not accepted ADRs.
 - Do not create `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/`.
 
@@ -236,7 +245,7 @@ When no Delivery Phases exist, use the ordinary requirement lifecycle table. Rec
 
 ## Design Readiness
 
-Before an accepted requirement enters Product Brief or Feature Spec construction, load `project-decisions.md` and run Design Readiness Check.
+Before an accepted Requirement with a confirmed Effective Product Definition enters Feature Spec construction, load `project-decisions.md` and run Design Readiness Check.
 
 Record the result in requirement README `Design Readiness`. Multiple features, end-to-end business closure, shared domain/state/source-of-truth rules, consistency/concurrency/recovery needs, measurable non-functional goals, or cross-system/durable boundaries route to `Decision & Design If Needed` even when no technology choice is disputed.
 
@@ -248,13 +257,13 @@ Ask before creating, reordering, accepting, deferring, rejecting, superseding, o
 
 ## Source File Immutability
 
-Requirement source files are immutable by default.
+Human original source files and confirmed Product Definition history are immutable by default.
 
-Do not overwrite, rewrite, summarize over, or edit `requirement.md` or other source files to reflect lifecycle status, implementation status, or current code reality.
+Do not overwrite, rewrite, summarize over, or edit a human original such as `requirement.md`, an external PRD, screenshot, prototype, recording, or feedback file. Do not edit confirmed `product.md` in place for a material semantic change.
 
-Write lifecycle and status updates to requirement set `README.md` and optional `requirements/INDEX.md`. Append new follow-up, feedback, or change material as a new free-form source file in the same requirement set, or create a new requirement set when the follow-up materially conflicts with the original requirement.
+Write lifecycle and status updates to Requirement Set `README.md` and optional `requirements/INDEX.md`. Append new human material as a new source file. Append a reviewed product-semantic change as `YYYY-MM-DD-product-follow-up-<slug>.md` and advance the Effective Product Definition pointer, or create a new Requirement Set when the follow-up materially conflicts with the original goal.
 
-If an agent created `requirement.md` from requirements discussion, still treat it as source material after human review. Editing it requires explicit human confirmation.
+Legacy Agent-authored `requirement.md` remains immutable after review and stays readable. Do not copy it into a new `product.md` merely to modernize the layout.
 
 ## Date Meaning
 
@@ -287,17 +296,22 @@ It does not mean the login feature must finish on that date.
 
 For new archives, use requirement set directories. Do not create new flat files directly under `.agent-loop/requirements/`.
 
-A requirement set is one human intake package: requirement documents, prototypes, screenshots, design links, feedback, recordings, meeting notes, and follow-up notes that belong to the same topic or intake moment.
+A Requirement Set is one human intake package plus one Agent-authored effective Product Definition: human requirements, prototypes, screenshots, design links, feedback, recordings, meeting notes, and follow-up evidence remain distinct from `product.md`.
 
 ```text
 .agent-loop/requirements/
   2026-05-26-login/
     README.md
-    requirement.md
-    prototype.png
-    feedback.md
-    design-link.md
+    product.md
+    sources/                    optional; create only when files must be copied
+      requirement.md
+      prototype.png
+      feedback.md
+    visuals/                    optional; create only after scoped confirmation
+      login-workflow.html
 ```
+
+Existing source files at Requirement Set root remain valid. Do not move them automatically and do not create empty `sources/` or `visuals/` directories.
 
 ## Requirement Set README
 
@@ -340,8 +354,9 @@ Delivery Phases:
 | Phase 1: <name> |  |  |  |  | proposed | none | none |
 
 Source Files:
-- Requirement: requirement.md
-- Concept Foundation Follow-ups:
+- Product Definition: product.md
+- Product Definition Follow-ups:
+- Human Original Requirements:
 - Prototype: prototype.png
 - Feedback:
 - Screenshots:
@@ -388,13 +403,15 @@ Do not mutate the original external file.
 
 Do not overwrite earlier requirement materials when requirements change.
 
-For small follow-up changes on the same topic or intake package, append a new file to the same requirement set:
+For small source-material follow-ups on the same topic, append a new source file. For a confirmed product-semantic follow-up, append a new Product Definition file and advance the README pointer:
 
 ```text
 .agent-loop/requirements/2026-05-26-login/
-  requirement.md
-  prototype.png
+  README.md
+  product.md
+  sources/prototype.png
   2026-05-29-change-request.md
+  2026-05-30-product-follow-up-recovery.md
 ```
 
 For a major new direction or separate feature, create a new requirement set:
@@ -403,7 +420,7 @@ For a major new direction or separate feature, create a new requirement set:
 .agent-loop/requirements/2026-06-04-login-sso/
 ```
 
-The feature `spec.md` must reference all source requirements that shaped the current scope.
+The Feature `spec.md` must reference the Effective Product Definition and all source evidence that materially shapes the Product Slice.
 
 ## Requirement Conflict Review
 
@@ -493,6 +510,8 @@ Ask before:
 - moving source files
 - renaming source files
 - creating a requirement set
+- recording a reviewed `product.md` and its Effective Product Definition pointer
+- advancing the pointer to `YYYY-MM-DD-product-follow-up-<slug>.md`
 - creating or updating `requirements/INDEX.md`
 - changing requirement lifecycle status
 - marking a requirement `implemented`, `superseded`, or `rejected`

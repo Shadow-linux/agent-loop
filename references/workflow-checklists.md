@@ -27,15 +27,15 @@ Before using an external skill or plugin inside a stage:
 
 ## Requirement/Product Grill Method
 
-- [ ] Load `requirement-product-grill.md` when Requirements Discussion, Product Brief, or Brainstorm / Clarify has ambiguous terminology, business rules, flows, boundaries, exception paths, historical feature behavior, or decision signals.
-- [ ] Before asking a grill question, inspect project memory, requirement source, product.md, code/docs/tests, and targeted prior feature artifacts when relevant.
+- [ ] Load `requirement-product-grill.md` when Requirements Discussion or its Brainstorm / Clarify work has ambiguous terminology, business rules, flows, boundaries, exception paths, historical Feature behavior, or decision signals.
+- [ ] Before asking a grill question, inspect project memory, human sources, current Effective Product Definition, code/docs/tests, and targeted prior Feature artifacts when relevant.
 - [ ] Ask one blocking question at a time and include the agent's recommended answer.
 - [ ] If prior feature artifacts conflict with the current statement, state the conflict and ask whether to reuse, override, or treat it as new scope.
 - [ ] Do not turn a grill design signal into an accepted ADR; record Design Readiness evidence and route required shared design to Decision & Design.
 - [ ] Do not create external `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/` paths.
-- [ ] Keep the owning stage explicit: Requirements Discussion writes detailed output to the requirement document, Product Brief writes to `product.md`, and Feature Spec writes to `spec.md` / `notes.md`.
-- [ ] Keep requirement README limited to source, lifecycle, Delivery Phase, Feature Mapping, and decision-link summaries rather than duplicating the detailed requirement document.
-- [ ] If Requirement/Product Grill was used, verify the owning requirement document or product brief has structured sections for terminology, flows, exceptions, data/source of truth, historical conflicts, acceptance scenarios, and Decision Candidates where applicable.
+- [ ] Keep ownership explicit: Requirements Discussion drafts Requirement `product.md`; README owns pointer/lifecycle/phase/mapping; Feature Spec owns Product Slice/implementation behavior; legacy Feature Product Brief is read-only.
+- [ ] Keep Requirement README limited to source pointer, lifecycle, Delivery Phase, Feature Mapping, and decision-link summaries rather than duplicating Product Definition.
+- [ ] If Requirement/Product Grill was used, verify Standard `product.md` carries the applicable terminology, flows, exceptions, fact ownership, historical conflicts, acceptance direction, and Decision Candidates.
 
 ## Concept Foundation Gate
 
@@ -46,19 +46,19 @@ Before using an external skill or plugin inside a stage:
 - [ ] Keep status `candidate` or `reopened` while any unresolved meaning can change downstream flow, state, product data, terminal behavior, or invariants.
 - [ ] Do not draft Business Flow, Product State Model, or Requirement Product Model as assumptions plus open questions while the gate is blocked.
 - [ ] Set `accepted` only after the human confirms every blocking concept definition.
-- [ ] Before `accepted`, load `human-review-summary.md` and present the Concept Foundation Human Review Summary; keep the one-question-per-turn Grill as the method for resolving blockers.
-- [ ] After acceptance, derive Concept Relationships, Role / Permission Matrix, Commands / Events, Primary Business Flow, Product State Model, Requirement Product Model, invariants, exceptions, and recovery from stable Concept IDs.
+- [ ] Before Product Review confirmation, load `human-review-summary.md` and present cumulative Product Definition Approval; keep the one-question-per-turn Grill as the method for resolving blockers.
+- [ ] After internal acceptance, derive only applicable Concept Relationships, Role / Permission Matrix, Commands / Events, Primary Business Flow, Product State Model, Requirement Product Model, invariants, exceptions, and recovery from stable Concept IDs.
 - [ ] Record Concept-To-Product Traceability and reject any derived row whose Concept ID is undefined or unaccepted.
-- [ ] After archive, preserve reviewed source files; route `reopened` through Requirement Conflict Review, an append-only Concept Foundation follow-up or linked replacement set, and README `Effective Concept Foundation` pointer update after human confirmation.
+- [ ] After record/archive, preserve human sources and prior Product Definitions; route `reopened` through Requirement Conflict Review, `YYYY-MM-DD-product-follow-up-<slug>.md` or a linked replacement set, and README `Effective Product Definition` update after Human Review.
 - [ ] Keep Concept Foundation inside Requirements Discussion / Requirement Product Grill; do not add a canonical stage, `.agent-loop/concepts/`, YAML/JSON schema, ADR, Design Skill, or E2E Skill output.
 
 ## Design Readiness Check
 
-- [ ] Run before an accepted requirement enters feature construction, and repeat when Product Brief, Technical Design, or Drift reveals new shared design needs.
+- [ ] Run before an accepted Requirement enters Feature construction, and repeat when Product Definition, Technical Design, or Drift reveals new shared design needs.
 - [ ] Check for multiple features, end-to-end business closure, shared domain/state/source-of-truth rules, consistency/concurrency/recovery needs, measurable non-functional goals, and cross-system or durable boundaries.
 - [ ] Do not bypass Decision & Design merely because no technology choice is disputed.
 - [ ] Record `design-not-needed`, `candidate`, `required`, or `completed` plus signals, shared design needs, recommended next stage, decision records, and coverage status in the requirement README.
-- [ ] Route `required` to Decision & Design If Needed before Product Brief / Feature Spec construction.
+- [ ] Route `required` to Decision & Design If Needed before Feature Spec construction.
 
 ## Decision Scan / Placement
 
@@ -77,8 +77,8 @@ Before using an external skill or plugin inside a stage:
 
 ## ADR Requirement Model Technical Landing
 
-- [ ] Resolve the requirement README `Effective Concept Foundation` pointer and record the Effective Requirement Snapshot before technical landing.
-- [ ] Require a triggered Concept Foundation to be `accepted`; return `candidate` / `reopened` to the Human Grill Contract.
+- [ ] Resolve README `Effective Product Definition` or legacy `Effective Concept Foundation` and record the dual-reader Effective Requirement Snapshot before technical landing.
+- [ ] Require new Product Review `confirmed` and any triggered internal Concept Foundation accepted; return pending / `candidate` / `reopened` to Requirements Discussion.
 - [ ] Declare accepted Concept IDs and in-scope Requirement Model IDs without copying or redefining product meaning.
 - [ ] Inventory every stable source model ID (`REL-*`, `PERM-*`, `CMD-*`, `EVT-*`, `FLOW-*`, `STATE-*`, `PM-*`, `EX-*`) and give every out-of-scope ID an accepted-decision, feature-local, proposed-decision, or reasoned not-applicable owner.
 - [ ] Give every in-scope accepted Requirement Model ID exactly one Requirement Model Technical Landing Trace disposition.
@@ -88,7 +88,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] When an accepted decision no longer holds, create a Human-gated superseding ADR instead of rewriting accepted decision meaning.
 - [ ] Assess operational landing triggers; expand Migration / Backfill, Compatibility, Rollout / Cutover, or Rollback / Reversibility only when triggered, otherwise record a concrete `not-triggered` reason.
 - [ ] Keep the ADR `proposed` for structural preflight; after it passes, present the Human Review Summary and wait for explicit acceptance before recording Human Review Evidence and rerunning accepted-mode validation.
-- [ ] For a reasoned `concept-foundation-not-needed` source, use the explicit trace-not-applicable fields and do not invent Concept or Requirement Model rows.
+- [ ] For Brief or a legacy reasoned `concept-foundation-not-needed` source with no applicable stable IDs, use trace-not-applicable and do not invent Concept or Requirement Model rows.
 - [ ] Load `human-review-summary.md` and present the Decision & Design Human Review Summary before creating, accepting, superseding, or materially updating the record.
 
 ## Human-Guided Branch Management
@@ -115,9 +115,9 @@ Before using an external skill or plugin inside a stage:
 - [ ] Reclassify chat as `proposal-doc` when the human asks for a proposal/design note without implementation.
 - [ ] Keep intent as `chat` when the human explicitly wants discussion without documentation.
 - [ ] If message intent is `requirements-discussion`, route to Requirements Discussion before Feature Spec.
-- [ ] During requirements discussion, use Brainstorm / Clarify and produce a human-reviewed requirement document before archiving.
-- [ ] Archive human-reviewed requirement documents under `.agent-loop/requirements/<archive-date>-<topic>/` after the human confirms the document should be recorded.
-- [ ] Do not move requirement source into feature docs; feature `product.md` and `spec.md` only derive from and link to requirement sets.
+- [ ] During Requirements Discussion, use Brainstorm / Clarify plus Product Definition Depth Scan and produce a Human-reviewed Brief/Standard Requirement `product.md` before Record / Archive.
+- [ ] Write the reviewed Product Definition under `.agent-loop/requirements/<record-date>-<topic>/` only after exact source/output disclosure and human confirmation.
+- [ ] Preserve human original bytes and do not move Product Definition into Feature docs; new Feature `spec.md` consumes Product Slice and no new Feature `product.md` is created.
 - [ ] If unclear whether this is chat or requirements discussion, ask whether to keep discussing or shape the topic into a requirements document.
 - [ ] If unclear whether this is requirements discussion or feature implementation, ask whether to form a requirements document first or start feature construction.
 
@@ -334,7 +334,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Do not copy human examples as required topics, topic counts, domain names, or project structure.
 - [ ] Keep narrative Chinese; preserve code symbols, paths, commands, APIs, env vars, config keys, errors, and third-party names.
 - [ ] Record batch review with changed files, evidence read, coverage changes, gaps, and next batch.
-- [ ] Recommend exactly one next action: next onboarding batch, focused update, Project Memory Update, Code-Guided Operational Support, Decision & Design If Needed, Product Brief If Needed, Feature Spec, Pause, or Close Onboarding Work.
+- [ ] Recommend exactly one next action: next onboarding batch, focused update, Project Memory Update, Code-Guided Operational Support, Requirements Discussion / Product Definition, Decision & Design If Needed, Feature Spec, Pause, or Close Onboarding Work.
 
 ## Requirement Archive
 
@@ -345,10 +345,12 @@ Before using an external skill or plugin inside a stage:
 - [ ] Use `.agent-loop/requirements/YYYY-MM-DD-<topic>/` requirement set directory for new archives.
 - [ ] Group all same-topic intake materials in the requirement set: requirements, prototypes, screenshots, feedback, recordings, links, and notes.
 - [ ] Create or update requirement-set `README.md`.
+- [ ] Record exactly one `Effective Product Definition` pointer for new work; preserve legacy `Effective Concept Foundation` without adding both.
+- [ ] Write Agent-authored `product.md` only after Product Human Review; keep Product Review separate from Requirement lifecycle.
 - [ ] Run Phase Scan: recommend `Delivery Phases` when the requirement is too large for one feature, has MVP/later scope, crosses multiple boundaries, or uses staged-delivery language.
 - [ ] If Delivery Phases are used, write or update the README phase table only after human confirmation.
 - [ ] Old requirement set README files remain valid; do not force migration only because lifecycle fields are missing.
-- [ ] Do not edit `requirement.md` or other source files for lifecycle/status updates.
+- [ ] Do not edit `requirement.md`, external PRDs, prototypes, or other human originals; do not edit confirmed `product.md` in place for semantic changes.
 - [ ] Future / Deferred Requirement Intake: when the human says "先记一下", "后面做", "之后补", "下一轮做", "暂时不做", "以后加", "backlog", "defer this", "follow-up later", or "not in this feature", recommend a requirement set instead of project memory.
 - [ ] Do not write future TODO, backlog, deferred requirements, or unimplemented planned capability details into `project.md`.
 - [ ] Large follow-up conflicts get a Requirement Conflict Review before appending, rebuilding, or superseding requirements.
@@ -357,28 +359,19 @@ Before using an external skill or plugin inside a stage:
 - [ ] Do not overwrite old requirement materials.
 - [ ] Recommend `requirements/INDEX.md` only if index triggers apply.
 
-## Product Brief If Needed
+## Adaptive Product Definition
 
-- [ ] Load `product-brief.md`.
-- [ ] If `project.md` declares a Decisions index, read decision links already named by the active requirement, list decision filenames and statuses, then read other likely relevant accepted decisions by domain or boundary overlap.
-- [ ] Propose missing Applicable Decision references for human confirmation before writing `product.md`; do not create a duplicate ADR because a link is missing.
-- [ ] Product Brief Source Gate: If the request says write product.md / 落到 product.md from chat or requirements discussion, ask whether to create/reference a requirement set or confirm feature start.
-- [ ] Do not write feature product.md until a requirement source and confirmed feature context exist.
-- [ ] Load `requirement-product-grill.md` when product terms, business flows, exception paths, or prior feature behavior need clarification before synthesis.
-- [ ] Run Stage Helper Capability Scan before fallback product synthesis.
-- [ ] If a PRD/product synthesis or grill-with-docs style helper is available, use it through `external-skill-adapters.md` while writing accepted output to agent-loop `product.md` / `notes.md`.
-- [ ] Decide whether Product Brief trigger conditions apply.
-- [ ] If source requirements are too broad for one feature, recommend requirement `Delivery Phases` before writing `product.md`.
-- [ ] Inspect `project.md` Product Context and Domain Language.
-- [ ] Inspect source requirements before asking product questions.
-- [ ] Resolve README `Effective Concept Foundation` when present, then read accepted Concept Foundation and Requirement Product Model rows before synthesis.
-- [ ] If the source Concept Foundation is `candidate` or `reopened`, return to Requirements Discussion instead of writing `product.md`.
-- [ ] Add Accepted Concept References and Requirement Product Model Coverage; cite Concept/Model IDs rather than writing a feature-local replacement definition.
-- [ ] When the source records `concept-foundation-not-needed`, carry its reason instead of creating a large concept table.
-- [ ] Ask one blocking product question at a time when needed.
-- [ ] Include the recommended answer with the question.
-- [ ] Write `product.md` only after human confirmation.
-- [ ] Mark long-term product consensus candidates for Project Memory Update.
+- [ ] Load `product-definition.md` inside Requirements Discussion.
+- [ ] Inspect preserved sources and project evidence before choosing `brief | standard`.
+- [ ] Require every Brief eligibility condition; any Standard trigger or uncertainty selects Standard.
+- [ ] For Standard, scan every Product View and record `included | not-applicable` with concrete evidence/reason; do not create placeholder IDs.
+- [ ] Keep Human Grill evidence-first and ask exactly one blocking question at a time with the Agent recommendation.
+- [ ] Run Product Completeness Scan and present cumulative Product Definition Approval.
+- [ ] Keep Product Review, Requirement lifecycle, Feature start, ADR acceptance, code execution, and Git actions as separate decisions.
+- [ ] Preserve human originals byte-for-byte; use an append-only Product Definition follow-up for confirmed semantic changes.
+- [ ] Use PRD helpers only as methods; translate their output into Requirement `product.md` and forbid native PRD/Feature List/prototype deployment outputs.
+- [ ] Generate derived visuals only after scoped Human confirmation and record source IDs/digest/freshness; capability absence uses a non-blocking fallback.
+- [ ] New Feature work does not create Feature `product.md`; load `product-brief.md` only for legacy reader compatibility.
 
 ## Brainstorm / Clarify
 
@@ -390,7 +383,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Ask 1-5 high-impact questions.
 - [ ] Prefer one question at a time unless a short batch is clearer.
 - [ ] Questions must affect scope, UX, data, architecture, testing, or acceptance.
-- [ ] Write accepted answers back into the current stage artifact: detailed requirements-discussion output to `requirement.md` with only source, lifecycle, phase, mapping, and decision-link summaries in requirement `README.md`; feature output goes to `product.md`, `spec.md`, or `notes.md` through the owning stage.
+- [ ] Write accepted Requirements Discussion output to the Requirement `product.md` draft, keep only source, lifecycle, phase, mapping, and decision-link summaries in Requirement `README.md`, and write Feature-local clarification to `spec.md` or `notes.md`; do not create a new Feature `product.md`.
 
 ## Feature Monthly Archive
 
@@ -440,11 +433,11 @@ Before using an external skill or plugin inside a stage:
 
 ## Feature Spec
 
-- [ ] If `project.md` declares a Decisions index, read decision links already named by the active requirement or Product Brief, list decision filenames and statuses, then read other likely relevant accepted decisions by domain or boundary overlap.
+- [ ] If `project.md` declares a Decisions index, read decision links already named by the Effective Product Definition, legacy Product Brief when present, or active Feature Spec, then inspect other likely relevant accepted decisions by domain/boundary overlap.
 - [ ] Propose missing Applicable Decision references for human confirmation; do not create a duplicate ADR because a link is missing.
 - [ ] Confirm Design Readiness is `design-not-needed` or `completed`; run Decision & Design before Feature Spec when shared design is required.
-- [ ] Resolve the effective Concept Foundation source/status, confirm it is accepted or reasoned `concept-foundation-not-needed`, and block when status is `candidate` or `reopened`.
-- [ ] Add Accepted Concept References and Requirement Product Model Trace from the source requirement and Product Brief.
+- [ ] Resolve new `Effective Product Definition` or legacy `Effective Concept Foundation`; require confirmed/accepted source and block pending, ambiguous, stale, `candidate`, or `reopened` input.
+- [ ] Add Product Requirement Source and Product Slice from the effective source; cite Concept/Model IDs and Product Rule anchors without a Feature Product Brief intermediary.
 - [ ] Reject feature-local redefinition of accepted concept name, identity, owner, lifecycle, relationship, invariant, state, terminal meaning, or product fact.
 - [ ] Do not enter Feature Spec while required shared design is unresolved or any required design slice is unassigned.
 - [ ] For each applicable requirement-driven ADR, require a current Effective Requirement Snapshot, complete Requirement Model Technical Landing Trace, and `Upstream Compatibility: current`.
@@ -630,7 +623,7 @@ Checklist:
 ## Analyze Consistency
 
 - [ ] Run before Execute Task / Story, including after plan approval and before subagent dispatch.
-- [ ] Compare accepted `spec.md` / `product.md` against `tasks.md`, `tests.md`, and the active `plan.md`.
+- [ ] Compare accepted `spec.md` and, when present, the legacy Feature `product.md` against `tasks.md`, `tests.md`, and the active `plan.md`; resolve the current Requirement `product.md` through Product Requirement Source.
 - [ ] Confirm each planned implementation step maps to an accepted task/story and acceptance criterion.
 - [ ] Confirm each changed behavior has a test or explicit substitute verification path.
 - [ ] Trace every accepted Decision & Design slice assigned to this feature through `spec.md`, tasks, tests, and the active plan.

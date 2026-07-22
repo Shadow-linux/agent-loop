@@ -20,6 +20,8 @@ Run this check:
 
 - `project.md` Current Work
 - active feature `spec.md`
+- effective Requirement `product.md` resolved through the Requirement Set README, or the accepted legacy source for older work
+- existing legacy Feature `product.md` when present; absence is expected for new work
 - active feature `tasks.md`
 - active feature `tests.md`
 - active feature `plan.md`
@@ -39,7 +41,8 @@ Check:
 - Are all required tests or substitute verification recorded?
 - Is there fresh verification evidence in `notes.md`?
 - Did Feature Close Review complete?
-- Did feature-level Spec Review confirm `product.md` when present, `spec.md`, `tasks.md`, `tests.md`, acceptance criteria, and out-of-scope boundaries are satisfied?
+- Did feature-level Spec Review confirm the Requirement Product Definition, Feature Spec Product Slice, `tasks.md`, `tests.md`, acceptance criteria, and out-of-scope boundaries are satisfied, plus any existing legacy Feature `product.md` when present?
+- Does every Product Slice row still resolve to the effective source without redefining product meaning, and is any source change routed through compatibility/drift review?
 - Did feature-level Standards Review complete when triggered by large project, broad diff, directory or durable boundary change, security/data change, architecture change, or human request?
 - Did Drift Check complete?
 - Are feature docs aligned with implementation reality?

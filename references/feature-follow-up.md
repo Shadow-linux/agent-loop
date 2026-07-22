@@ -219,7 +219,7 @@ Human preference not to reopen is respected, but it must not break traceability.
 Use these targets:
 
 ```text
-new human bug/change material -> requirements/<archive-date>-<topic>/ or notes.md, depending on source durability
+new human bug/change material -> requirements/<record-date>-<topic>/ or notes.md, depending on source durability
 explicit Bug identity/evidence/lifecycle -> bugs/INDEX.md plus bugs/YYYY-MM-DD-<bug-slug>/README.md
 bug/change classification -> feature notes.md
 changed acceptance or behavior -> spec.md

@@ -106,7 +106,7 @@ task status/order/scope -> tasks.md
 test reality/commands/cases -> tests.md
 active execution unit -> plan.md
 evidence/history/decisions/conflicts -> notes.md
-new human material -> requirements/<archive-date>-<topic>/
+new human material -> requirements/<record-date>-<topic>/
 ```
 
 Never edit original requirement files to make them match code. Add a new requirement-set file or record a conflict in `notes.md`.

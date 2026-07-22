@@ -741,4 +741,4 @@ Do not call onboarding complete unless:
 - no unresolved placeholders, empty required rows, `TBD`, `TODO`, `待补充`, or vague “see code / 看代码” evidence remain in submitted batch files;
 - batch review records current status and gaps; batch does not add a Human Gate.
 
-Exit with exactly one recommended next action: next onboarding batch, focused update, Project Memory Update, Code-Guided Operational Support, Decision & Design If Needed, Product Brief If Needed, Feature Spec, Pause, or Close Onboarding Work.
+Exit with exactly one recommended next action: next onboarding batch, focused update, Project Memory Update, Code-Guided Operational Support, Requirements Discussion / Product Definition, Decision & Design If Needed, Feature Spec with Product Slice, Pause, or Close Onboarding Work.

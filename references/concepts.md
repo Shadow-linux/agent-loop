@@ -89,7 +89,13 @@ First version excludes:
 
 **Maintenance Fix**: A narrow feature used when a bugfix or internal correction has no clear owning recent feature and does not create a new user capability. It is not a workflow bypass and not a separate directory system. It still uses `.agent-loop/features/YYYY-MM-DD-fix-<slug>/` with `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`, verification, review, drift check, project memory update when needed, and close.
 
-**Product Brief**: Optional feature-level product understanding in `product.md`: problem, users, user stories, product scope, product decisions, and open product questions.
+**Adaptive Product Definition**: One Agent-authored, Human-reviewed Requirement `product.md` using `brief | standard` depth. Brief covers the minimum product contract; Standard expands only applicable concepts, relationships, permissions, actions, flow, state, product facts, rules, exceptions, experience, operations, and measurement.
+
+**Product Human Review**: Confirmation that the effective Requirement `product.md` accurately represents current product meaning. It is separate from Requirement lifecycle and does not authorize ADR acceptance, Feature start, code execution, or Git actions.
+
+**Product Slice**: The Feature `spec.md` mapping from one Effective Product Definition's sections/IDs/rules to this Feature's responsibility, acceptance, and coverage. It narrows delivery without redefining product meaning.
+
+**Legacy Feature Product Brief**: An existing Feature `product.md` retained for Resume, Follow-up, Review, Close, Recovery, and historical evidence. New Feature work does not create it.
 
 **Decision & Design / ADR**: Requirement-landing design for accepted requirements that need shared business-flow, domain/state/data, architecture, consistency, recovery, non-functional goals, or cross-feature ownership. The record lives under `.agent-loop/decisions/*.md`, is Human-gated, and is conditionally required only when shared design needs a durable source that no accepted decision already provides. It is not required for every feature and is not a complex ADR system.
 
@@ -150,11 +156,12 @@ remote.md  = local entry pointer for remote projects
 project.md = long-term project facts in simple mode; memory index and current state in enterprise mode
 project/   = optional enterprise long-term project memory details
 decisions/ = Human-gated project / cross-feature Decision & Design records; globally optional and conditionally required when shared design has no accepted source
-requirements/ = original human material packages, references, and requirement lifecycle/backlog records, grouped by archive-date requirement set directory
+requirements/ = original human material, Agent-authored reviewed Product Definition, and requirement lifecycle/backlog records, grouped by record-date Requirement Set
 bugs/INDEX.md = Bug inventory, backlog, and locator
 bugs/YYYY-MM-DD-<bug-slug>/README.md = stable Bug identity, facts, evidence, lifecycle, Resolution Path, verification, close, and reopen history
-product.md = optional feature product intent and product scope
-spec.md    = intended feature behavior
+requirements/<set>/product.md = effective Brief/Standard product meaning for new work
+features/<feature>/product.md = legacy reader-only Product Brief when it already exists
+spec.md    = intended Feature behavior plus Product Slice
 tasks.md   = work breakdown and order
 tests.md   = how correctness will be proven, including feature-specific E2E cases
 plan.md    = active execution plan for the current task/story
@@ -169,7 +176,7 @@ Lightweight Execution Card = persistent per-change execution control under chang
 
 Requirement-set dates are archive dates only. They do not define deadlines, requirement duration, or feature lifecycle.
 
-Requirement sets group the human's original materials for one intake event or topic: requirement docs, prototypes, feedback, screenshots, recordings, links, and follow-up notes.
+Requirement Sets group the human's original materials for one intake event or topic and one current Effective Product Definition. Human originals remain byte-stable; reviewed semantic changes append a new Product Definition source and advance the README pointer.
 
 Requirement lifecycle/backlog records future, deferred, accepted, in-progress, implemented, superseded, rejected, and reference-only demand in requirement set `README.md` and optional `requirements/INDEX.md`. It is not project memory, and it does not rewrite source files such as `requirement.md`.
 
@@ -178,8 +185,7 @@ Requirement lifecycle/backlog records future, deferred, accepted, in-progress, i
 Use one feature workspace per behavior-changing feature:
 
 ```text
-spec.md  = whole feature behavior
-product.md = optional feature product understanding
+spec.md  = whole Feature behavior plus Product Slice
 tasks.md = all tasks for the feature
 tests.md = whole feature test strategy
 plan.md  = current active task/story plan
@@ -191,6 +197,8 @@ handoffs/ = optional subagent briefs and returns
 contracts.md = optional delivery contract index or compact contract
 contracts/ = optional durable producer-consumer contract details
 ```
+
+An existing legacy Feature `product.md` may remain beside these files, but the new writer does not create one.
 
 For complex projects, `tasks.md`, `tests.md`, and `plan.md` remain stable entry files. When complexity is high, they become indexes that point to `tasks/`, `tests/`, and `plans/` detail files.
 

@@ -61,7 +61,7 @@ assert_not_exists "templates/backlog-item.md"
 
 assert_contains "references/stage-guides.md" "Future / Deferred Requirement Intake"
 assert_contains "references/stage-guides.md" 'Do not write future TODO, backlog, deferred requirements, or unimplemented planned capability details into `project.md`'
-assert_contains "references/stage-guides.md" "only when source material is provided or the human confirms creating a source record"
+assert_contains "references/stage-guides.md" "only when source material is provided or already exists"
 assert_contains "references/stage-guides.md" "Requirement Reconciliation"
 assert_contains "references/stage-guides.md" "Requirement Conflict Review"
 

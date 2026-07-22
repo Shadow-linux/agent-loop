@@ -280,18 +280,19 @@ flowchart LR
 
 | 你可以这样说 | Agent 应该怎么做 |
 |---|---|
-| “先帮我梳理这个需求，不要实现。” | 进入 Requirements Discussion，问清目标、用户、范围、约束、验收方向。 |
+| “先帮我梳理这个需求，不要实现。” | 进入 Requirements Discussion，检查来源与项目证据，选择 Brief 或 Standard，并起草 Requirement `product.md`；Product Review 后仍不会自动开始开发。 |
 | “先按 grill-with-docs 问清这个需求。” | 先问清术语、业务流程、边界和异常场景；提问前会查已有文档、代码和相关历史 feature。 |
 | “这个需求概念容易混，先把概念、关系和状态讲清楚。” | 在 Requirements Discussion 内触发 Concept Foundation：先查证据、提取候选概念、给出推荐定义及影响，再一次只确认一个真正阻塞后续模型的问题。 |
-| “只是改按钮文案，不要搞复杂建模。” | 没有产品语义变化时记录 `concept-foundation-not-needed` 和理由，不生成大型概念表。 |
-| “把这些内容落到 product.md。” | 如果还在聊天或需求澄清阶段，先问你是要创建/引用 requirement set，还是确认进入 feature Product Brief；不会直接创建 feature `product.md`。 |
+| “只是一个目标简单、边界清楚的需求。” | 只有全部轻量条件成立时使用 Brief；Brief 不制造 Concept/State 等占位表。 |
+| “把这些内容落到 product.md。” | 把它作为 Requirement Product Definition 起草；Human Review 确认产品含义后，再经 Requirement Record / Archive Gate 写到 requirement 目录，不创建 Feature `product.md`。 |
+| “这个流程复杂，画图辅助我审。” | 先说明图类型、来源 stable IDs、输出路径和评审用途；你确认后才生成，并用 source digest 管理 freshness。 |
 | “聊需求时遇到复杂架构取舍，要不要 ADR？” | 记录 Design Readiness evidence 和 Decision Candidate；不会直接创建 ADR。requirement 被确认后、feature construction 前判断是否需要 Decision & Design。 |
 | “这个需求进入 feature 前先做 ADR / Decision Design。” | 先做 Design Readiness；涉及多 feature、业务闭环、共享状态/事实源、恢复或非功能目标时进入 Decision & Design，不要求先出现技术争议。 |
 | “这个需求会拆成多个 feature，先检查整体设计是否完整。” | 运行 Design Readiness Check；需要共享设计时先形成 Decision & Design 和 Design Slice Coverage，再创建各 feature spec。 |
 | “检查 ADR 是否完整落地了 requirement model。” | 解析 Effective Requirement Snapshot，逐项检查 Requirement Model Technical Landing Trace、Design Slice 与 Verification；缺失 coverage 或 compatibility 待复核时停在 Decision & Design Human Review。 |
 | “这个需求比较大，先拆成几个阶段。” | 建议在 requirement README 里写 `Delivery Phases`，让你确认先做哪一段。 |
 | “这个先记一下，后面做。” | 作为 deferred requirement 写进 requirement set 或 optional `requirements/INDEX.md`，不写进 `project.md`。 |
-| “这是需求文档、原型图和反馈。” | 归档到 `.agent-loop/requirements/<archive-date>-<topic>/`，保留人类原始材料。 |
+| “这是需求文档、原型图和反馈。” | 记录到 `.agent-loop/requirements/<record-date>-<topic>/`，保留人类原始材料；`record-date` 是记录/归档日期，不是截止日期。 |
 
 需求归档目录示例：
 
@@ -310,15 +311,15 @@ flowchart LR
 
 当至少一个 Phase 已实现、还有其他 Phase 未实现时，requirement 状态是 `partially-implemented`；只有确认范围内的所有 Phase 都进入实现或明确的终态后，才是 `implemented`。
 
-`grill-with-docs` 在 agent-loop 里是需求/产品澄清方法，不是新的阶段。它会先查 project memory、需求来源、代码文档和相关过往 feature，再问人类一个阻塞问题；如果发现跨 feature、共享状态、恢复或长期取舍，只会记录 Design Readiness evidence / Decision Candidate，不会直接创建 ADR。
+`grill-with-docs`、`prd-writer` 等能力在 agent-loop 里是 Requirements Discussion 的方法，不是新的阶段。Agent 仍负责证据检查、Brief/Standard 深度、产物路径和 Human Gate。Helper 的 Feature List 映射为 Product Capability Scope，不创建 native `feature_list.md`、`PRD.md`、原型部署或自己的目录树。
 
 Concept Foundation 是这套澄清方法在复杂需求里的前置约束，不是新的 stage。Agent 不会让你先写“领域模型”；它从成功/失败场景和项目证据提取 Concept Candidate，用 requirement-local `Concept ID` 固定定义、identity、owner、lifecycle、relationship、invariant 和 product fact meaning。每轮 Human Grill 只问一个 downstream blocker，并附推荐定义、证据以及接受/拒绝对流程、状态和产品数据的影响。
 
-Concept Foundation 被确认后，effective requirement source 才推导 Concept Relationships、Role / Permission Matrix、Commands / Events、Primary Business Flow、Product State Model 和 Requirement Product Model。`product.md` 与 `spec.md` 同时记录 `Effective Concept Source` 并只引用 accepted Concept/Model IDs；如果归档后要改变产品含义，Agent 保留原 source、把 Gate 设为 `reopened`，经人类确认后追加 follow-up 或新建 requirement set，再更新 README 的 effective pointer，而不是改写历史文档或在下游文档/ADR 里重新定义。
+Standard Product Definition 会按适用性推导 Concept Relationships、Role / Permission Matrix、Commands / Events、Primary Business Flow、Product State Model、Requirement Product Model、Exceptions 和 Product Rules；不适用的视图写具体原因，不造假表。Feature `spec.md` 通过 Product Slice 引用 accepted IDs/section anchors；如果归档后改变产品含义，Agent 保留原 source，经人类确认后追加 product follow-up 或新建 Requirement Set，再更新 README effective pointer。
 
-如果用了 Requirement/Product Grill，requirement document 会承接术语、主流程、异常路径、事实源、历史冲突、验收场景和 Decision Candidates，而不是只写一段摘要。
+如果用了 Requirement/Product Grill，Requirement `product.md` 会承接术语、主流程、异常路径、事实源、历史冲突、验收场景和 Decision Candidates，而不是只写一段摘要。
 
-Product Brief Source Gate 的意思是：从聊天或需求澄清直接说“落到 product.md”时，Agent 不能立刻创建 feature 级 `product.md`。它要先问你是要创建/引用 requirement set，还是确认开始 feature Product Brief。如果只是整理产品意图，可以先保留在 requirement artifact 或回复草稿，等 feature context 明确后再写入 `product.md`。
+Product Human Review 确认“这份产品定义准确”，不等于 Requirement 已接受实施，也不授权 Feature start、ADR acceptance、代码执行或 Git 动作。新 PRD 只在 `.agent-loop/requirements/<date>-<topic>/product.md`；已有 legacy Feature `product.md` 继续可读，但不会自动迁移或成为新 writer 目标。
 
 Decision & Design / ADR 是 requirement 和 feature 之间的需求落地层。Requirement 接受后先运行 Design Readiness Check；只要需求会拆成多个 feature，或需要共享业务流程、领域/数据规则、事实源、一致性、恢复、性能、高可用、安全或可观测性设计，就会建议先完成整体 Decision & Design，即使没有技术争议。新的 decision draft 默认是 `proposed`，只有你明确确认后才会变成 `accepted`。每项 required Design Slice 都必须映射到 owning feature 和验证路径，普通 feature 内的小取舍仍写在 `spec.md` 的 `Design Decisions`。
 
@@ -366,8 +367,8 @@ Operational landing 不是每份 ADR 的默认大章节。只有持久化表示�
 | 你可以这样说 | Agent 应该怎么做 |
 |---|---|
 | “我要做手机号验证码登录。” | 先确认项目状态并创建/引用一个已接受的 requirement set；窄需求可以只建最小 requirement，再运行 Design Readiness 和创建 feature spec。 |
-| “把这个需求写成 feature spec。” | 写 `spec.md`，包含目标、用户故事、验收标准、行为变化、非目标和未决问题。 |
-| “先帮我梳理这个 feature 的产品意图。” | 必要时写 feature 级 `product.md`，记录产品目标、共识、领域语言和非目标。 |
+| “把这个需求写成 feature spec。” | 先解析 Requirement README 的 Effective Product Definition，再写 `spec.md` 的 Product Requirement Source、Product Slice、故事和验收标准。 |
+| “先帮我梳理这个 feature 的产品意图。” | 产品含义不清时返回 Requirements Discussion 修订 Requirement Product Definition；Feature Spec 只选择本次 Product Slice，不另写产品定义。 |
 | “把 spec 拆成 task。” | 写 `tasks.md`，优先 vertical slice，让每个 task 尽量能验证闭环。 |
 | “设计测试方案。” | 写 `tests.md`，包含模块/API/E2E/回归/手动验证和证据记录方式。 |
 | “开始执行 T003。” | 先过 Plan Gate；非简单 task 要写或确认 `plan.md` 后再执行。 |
@@ -376,7 +377,6 @@ Operational landing 不是每份 ADR 的默认大章节。只有持久化表示�
 
 ```text
 .agent-loop/features/YYYY-MM-DD-<feature-slug>/
-  product.md optional
   spec.md
   tasks.md
   tests.md
@@ -585,11 +585,12 @@ Agent 的责任是把这些话翻译成正确的下一步，而不是让你背�
 | `.agent-loop/project.md` | 长期项目记忆、当前工作、当前恢复动作 | 任务日志、原始测试输出、需求待办 |
 | `.agent-loop/project/*.md` | enterprise memory 下的长期项目细节 | 临时执行日志 |
 | `.agent-loop/onboarding-db/` | Evidence-Graph + DDD 新人/项目理解知识库 | 当前 task 状态、原始需求、测试长日志 |
-| `.agent-loop/requirements/` | 人类原始需求材料、需求生命周期、待办、Delivery Phases | Agent 的工程执行计划 |
+| `.agent-loop/requirements/` | 人类原始需求材料、Requirement `product.md`、需求生命周期、待办、Delivery Phases | Agent 的工程执行计划 |
 | `.agent-loop/skills/INDEX.md` | 项目技能状态、加载策略、触发条件、范围和验证证据 | 技能正文、执行授权 |
 | `.agent-loop/skills/<skill-name>/` | 项目常驻技能、验证记录和必要资源 | secrets、全局安装副本、feature 状态 |
-| `product.md` | feature 级产品意图 | 工程执行细节 |
-| `spec.md` | feature 行为规范 | 执行日志 |
+| `requirements/<set>/product.md` | Agent 起草、人类确认的 Brief/Standard 产品定义 | 工程执行细节、Git 授权、原始人类材料改写 |
+| `features/<feature>/product.md` | 仅 legacy reader compatibility | 新 Feature 产品定义、自动迁移内容 |
+| `spec.md` | Feature 行为规范与 Product Slice | 产品语义重定义、执行日志 |
 | `tasks.md` | 任务拆分和状态 | 原始测试输出 |
 | `tests.md` | 测试方案和矩阵 | 长篇测试日志 |
 | `plan.md` | 当前 task/story 执行计划 | 历史记录 |

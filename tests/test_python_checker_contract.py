@@ -18,6 +18,7 @@ CHECKERS = (
     "scripts/check-onboarding-core-flow-coverage.py",
     "scripts/check-concept-foundation-trace.py",
     "scripts/check-adr-requirement-model-trace.py",
+    "scripts/check-requirement-product-definition.py",
 )
 
 ARCHIVE_COMMANDS = (
@@ -88,7 +89,11 @@ class PythonCheckerContractTests(unittest.TestCase):
                 self.assertTrue((ROOT / relative).is_file(), relative)
 
     def test_canonical_checkers_use_only_stdlib_and_local_support(self) -> None:
-        allowed_local = {"checker_support", "feature_archive_support"}
+        allowed_local = {
+            "checker_support",
+            "feature_archive_support",
+            "requirement_product_support",
+        }
         for relative in CHECKERS:
             path = ROOT / relative
             tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))

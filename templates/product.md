@@ -1,132 +1,166 @@
-# Product Brief: <Feature Name>
+# Product Requirement: <Requirement Name>
 
-Created: YYYY-MM-DD
-Updated: YYYY-MM-DD
-Status: draft | active | paused | closed
+Requirement ID: <REQ-ID>
+Product Definition Profile: brief | standard
+Product Review: pending | confirmed
 
-Source Requirements:
-- Requirement:
-- Prototype:
-- Product Doc:
-- Other:
+Template rule: keep all Brief sections. For `standard`, add only evidence-backed adaptive sections and complete Product View Applicability. Remove non-applicable section bodies instead of creating placeholder rows.
 
-Summary:
-- 
+## Problem / Background
 
-## Applicable Decisions
+## Target User / Scenario
+
+## Goal / Expected Product Outcome
+
+## In Scope
 
 -
 
-## Accepted Concept References
+## Out Of Scope / Non-goals
 
-Concept Foundation Status: accepted | concept-foundation-not-needed
-Source Requirement:
-Effective Concept Source:
-Not-Needed Reason:
+-
 
-| Concept ID | Canonical Name | Product Brief Use | Source Definition / Trace |
+## Acceptance Direction
+
+-
+
+## Source Evidence
+
+| Source | Type | Product Claim Used | Preserved / Referenced |
 |---|---|---|---|
-| C-EXAMPLE |  |  | requirement.md#concept-definitions / TRACE-01 |
 
-Rules:
-- cite accepted Concept IDs; do not redefine identity, lifecycle, relationships, invariants, state, terminal meaning, or product fact ownership
-- if product semantics must change, return to the source Requirements Discussion and reopen Concept Foundation
+Human original source materials remain byte-stable. Record references or copied-source paths; do not paste over or edit the original.
 
-## Requirement Product Model Coverage
+## Open Questions / Remaining Risk
 
-| Requirement Model ID | Concept IDs | Feature Product Journey / Story | Coverage | Notes |
+-
+
+## Product Capability Scope
+
+Standard-only when needed. A capability is product scope, not an Agent Loop Feature workspace.
+
+## User Segments / Roles / Scenarios
+
+Standard-only when needed.
+
+## Concept Definitions
+
+Standard-only when Concepts are `included`.
+
+| Concept ID | Canonical Name | Definition / Non-example | Identity | Owner | Evidence |
+|---|---|---|---|---|---|
+
+## Concept Relationships
+
+Standard-only when Relationships are `included`.
+
+| Relationship ID | From Concept ID | Relationship | To Concept ID | Invariant | Evidence |
+|---|---|---|---|---|---|
+
+## Role / Permission Matrix
+
+Standard-only when Permissions are `included`.
+
+| Permission Rule ID | Role Concept ID | Product Object Concept ID | Advance / Decide | Boundary / Evidence |
 |---|---|---|---|---|
-| PM-01 / PERM-01 / FLOW-01 / STATE-01 / EX-01 | C-EXAMPLE |  | in-scope / out-of-scope / not-applicable |  |
 
-## Problem Statement
+## Commands / Events
 
-## Target Users / Actors
+Standard-only when Actions / Outcomes are `included`.
 
-- 
+| Action ID | Type | Name | Actor / Producer Concept ID | Target Concept ID | Result / Event | Evidence |
+|---|---|---|---|---|---|---|
 
-## Solution Summary
+## Primary Business Flow
 
-What changes for user/operator/system:
+Standard-only when Flow is `included`.
 
-- User:
-- Operator:
-- System:
+| Flow Step ID | Actor Concept ID | Action ID | Input / Target Concept IDs | Product State Change | Result / Next Step |
+|---|---|---|---|---|---|
 
-## Primary User Journey
+## Product State Model
 
-1.
+Standard-only when State is `included`.
 
-## User Stories
+| State Model ID | State-bearing Concept ID | From | Action / Event ID | Guard / Invariant | To | Terminal / Recovery |
+|---|---|---|---|---|---|---|
 
-### US1: <Story Title>
+## Requirement Product Model
 
-As a <actor>, I want <capability>, so that <benefit>.
+Standard-only when Product Facts are `included`. This is product meaning, not a technical table/store/schema.
 
-Acceptance Direction:
+| Product Model ID | Product Object / Fact | Concept IDs | Owner / Allowed Changer | Product Invariant | Product Fact Meaning |
+|---|---|---|---|---|---|
 
-Notes:
+## Exception Paths
 
-## Edge Cases
+Standard-only when Exceptions / Recovery are `included`.
 
-| Scenario | Expected Product Behavior | User / Operator Feedback | Notes |
+| Scenario ID | Concept / State / Action IDs | Trigger | Expected Handling | Recovery / Responsible Actor | Observable Result |
+|---|---|---|---|---|---|
+
+## Product Rules
+
+Standard-only when Product Rules are `included`. Use descriptive `###` headings and reference them as `product.md#<rule-anchor>`; do not invent `RULE-*` IDs.
+
+### <Rule Name>
+
+<Accepted product rule and evidence.>
+
+## Product View Applicability
+
+Required for `standard`; absent for `brief`.
+
+| View | Applicability | Reason / Evidence | Section / Stable IDs |
 |---|---|---|---|
-|  |  |  |  |
+| Concepts | included / not-applicable |  | Concept Definitions / IDs, or none |
+| Relationships | included / not-applicable |  | Concept Relationships / IDs, or none |
+| Permissions | included / not-applicable |  | Role / Permission Matrix / IDs, or none |
+| Actions / Outcomes | included / not-applicable |  | Commands / Events / IDs, or none |
+| Flow | included / not-applicable |  | Primary Business Flow / IDs, or none |
+| State | included / not-applicable |  | Product State Model / IDs, or none |
+| Product Facts | included / not-applicable |  | Requirement Product Model / IDs, or none |
+| Exceptions / Recovery | included / not-applicable |  | Exception Paths / IDs, or none |
+| Product Rules | included / not-applicable |  | Product Rules / product.md#anchor, or none |
 
-## Behavior Changes
+## Experience / Operations / Measurement
 
-| Actor / System | Before | After | Notes |
+Standard-only adaptive details: feedback, empty/error states, notification, manual handling, operations, and success measurement when applicable.
+
+## Delivery Phases
+
+Use only after human review; Requirement README owns phase lifecycle and Feature Mapping.
+
+| Phase | Goal | Scope | Out Of Scope | Acceptance Direction | Status |
+|---|---|---|---|---|---|
+
+## Derived Visuals
+
+Optional and only after Archify Scoped Confirmation.
+
+| Path | Type | Source IDs | Product Semantic SHA-256 | Status | Human Confirmed |
+|---|---|---|---|---|---|
+
+## Decision Candidates
+
+| Candidate | Why It Matters | Suggested Destination | Status |
 |---|---|---|---|
-| User |  |  |  |
-| Operator |  |  |  |
-| System |  |  |  |
 
-## Product Scope
+## Applicable Decisions
 
-## Out Of Scope
+- none | `.agent-loop/decisions/000N-<slug>.md`
 
-## Product Tradeoffs
+## Product Traceability
 
-| Tradeoff | Options Considered | Recommended Direction | Decision & Design Routing |
+| Product Claim | Source Evidence | Stable References | Downstream Direction |
 |---|---|---|---|
-|  |  |  | none / candidate |
 
-## Product Decisions
+## Product Human Review Evidence
 
-- Decision:
-  - Status: proposed | accepted | deferred | rejected | needs-decision
-  - Reason:
-  - Evidence / Source:
-  - Human Gate:
-  - Decision & Design Routing:
-  - Applies To: this feature | future features
+Decision: pending | confirmed
+Confirmed By:
+Confirmed At: YYYY-MM-DD
+Evidence:
+Implementation Authorized: no | separately-confirmed
 
-## Historical Compatibility
-
-| Prior Feature / Rule | Current Direction | Compatibility Decision | Notes |
-|---|---|---|---|
-|  |  | reuse / override / new scope / unresolved |  |
-
-## Success Signals
-
-| Signal | Target / Direction | How To Observe | Notes |
-|---|---|---|---|
-|  |  |  |  |
-
-## Terminology
-
-- `<term>`:
-  - Accepted Concept ID:
-  - Feature display wording / alias:
-  - Promote to project Domain Language: yes | no | pending
-
-## Open Product Questions
-
-- Question:
-  - Recommended answer:
-  - Blocks:
-
-## Long-Term Product Consensus Candidates
-
-- Candidate:
-  - Why it may affect future features:
-  - Suggested project.md section: Product Context | Domain Language | Product Principles | Known Constraints
+Product Review confirmation does not authorize Requirement acceptance, Feature start, ADR acceptance, code execution, or Git actions.

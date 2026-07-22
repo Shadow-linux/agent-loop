@@ -15,11 +15,19 @@ from checker_support import (
     section,
     table,
 )
+from requirement_product_support import (
+    CONCEPT_ID_PATTERN,
+    MODEL_ID_PATTERN,
+    ProductDefinitionError,
+    is_confirmed_review_evidence,
+    normalized,
+    resolve_effective_product_definition,
+)
 
 
-CONCEPT_ID = re.compile(r"\bC-[A-Z0-9-]+\b")
+CONCEPT_ID = CONCEPT_ID_PATTERN
 ACTION_ID = re.compile(r"\b(?:CMD|EVT)-[A-Z0-9-]+\b")
-MODEL_ID = re.compile(r"\b(?:REL|PERM|CMD|EVT|FLOW|STATE|PM|EX)-[A-Z0-9-]+\b")
+MODEL_ID = MODEL_ID_PATTERN
 
 
 class TraceError(Exception):
@@ -62,6 +70,94 @@ def reject_placeholders(content: str, path: Path) -> None:
 
 def joined_values(row: dict[str, str]) -> str:
     return " ".join(row.values())
+
+
+def _concrete(value: str | None) -> bool:
+    text = normalized(value)
+    return bool(text) and not re.fullmatch(
+        r"(?:-|none|n/a|na|not applicable|tbd|todo|unknown|pending)",
+        text,
+        re.IGNORECASE,
+    ) and re.search(r"<[^>]+>", text) is None
+
+
+def _anchor(value: str) -> str:
+    cleaned = re.sub(r"[^a-z0-9 -]", "", value.lower())
+    return re.sub(r"[ -]+", "-", cleaned).strip("-")
+
+
+def validate_requirement_product(
+    readme_path: Path, product_path: Path, spec_path: Path
+) -> str:
+    source = resolve_effective_product_definition(readme_path, product_path)
+    if source.legacy:
+        raise TraceError(
+            "--requirement-product requires an Effective Product Definition pointer"
+        )
+    spec = read_text(spec_path)
+    source_block = section(spec, "Product Requirement Source")
+    requirement_set = normalized(metadata(source_block, "Requirement Set")).replace(
+        "\\", "/"
+    )
+    if not _concrete(requirement_set) or len(Path(requirement_set).parts) < 2:
+        raise TraceError("Product Requirement Source requires Requirement Set")
+    if normalized(metadata(source_block, "Effective Product Definition")).replace(
+        "\\", "/"
+    ) != product_path.name:
+        raise TraceError(
+            "Feature Effective Product Definition does not match supplied source"
+        )
+    if metadata(source_block, "Product Definition Profile") != source.profile:
+        raise TraceError("Feature Product Definition Profile mismatch")
+    if not is_confirmed_review_evidence(
+        metadata(source_block, "Product Review Evidence")
+    ):
+        raise TraceError("Feature Product Review Evidence must be confirmed")
+
+    rows = table(spec, "Product Slice")
+    known_ids = set(source.concept_ids) | set(source.model_ids)
+    source_anchors = {
+        _anchor(heading)
+        for heading in re.findall(
+            r"^#{2,3}\s+(.+?)\s*$", source.content, re.MULTILINE
+        )
+    }
+    referenced: set[str] = set()
+    for row in rows:
+        ref = row.get("Source Section / Model ID", "")
+        row_ids = ids(ref, CONCEPT_ID) | ids(ref, MODEL_ID)
+        referenced.update(row_ids)
+        anchors = set(re.findall(r"product\.md#([a-z0-9-]+)", ref))
+        unknown_anchors = anchors - source_anchors
+        if unknown_anchors:
+            raise TraceError(
+                "Product Slice contains unknown source anchors: "
+                + ", ".join(sorted(unknown_anchors))
+            )
+        if not row_ids and not anchors:
+            raise TraceError(
+                "Product Slice row must reference a source ID or product.md anchor"
+            )
+        if not _concrete(row.get("Feature Responsibility")):
+            raise TraceError("Product Slice requires Feature Responsibility")
+        if not _concrete(row.get("Acceptance Mapping")):
+            raise TraceError("Product Slice requires Acceptance Mapping")
+        if row.get("Coverage") not in {
+            "in-scope",
+            "out-of-scope",
+            "not-applicable",
+        }:
+            raise TraceError("Product Slice contains unsupported coverage")
+    unknown = referenced - known_ids
+    if unknown:
+        raise TraceError(
+            "Product Slice contains unknown source IDs: "
+            + ", ".join(sorted(unknown))
+        )
+    return (
+        "PASS: confirmed Requirement Product Definition trace is complete "
+        f"({len(source.concept_ids)} concepts, {len(source.model_ids)} model rows)"
+    )
 
 
 def validate(requirement: str, product: str, spec: str) -> str:
@@ -391,6 +487,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         description="Validate Concept Foundation and downstream product-model traceability."
     )
+    parser.add_argument(
+        "--requirement-product",
+        action="store_true",
+        help="validate Requirement README + Requirement product.md + Feature spec.md",
+    )
     parser.add_argument("requirement", type=Path)
     parser.add_argument("product", type=Path)
     parser.add_argument("spec", type=Path)
@@ -400,11 +501,14 @@ def main() -> int:
         if not path.is_file():
             parser.error(f"missing file: {path}")
     try:
+        if args.requirement_product:
+            print(validate_requirement_product(*paths))
+            return 0
         contents = tuple(read_text(path) for path in paths)
         for content, path in zip(contents, paths, strict=True):
             reject_placeholders(content, path)
         print(validate(*contents))
-    except (TraceError, CheckFailure) as error:
+    except (TraceError, CheckFailure, ProductDefinitionError) as error:
         print(error, file=sys.stderr)
         return 1
     return 0

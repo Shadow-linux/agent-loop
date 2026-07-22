@@ -39,12 +39,15 @@ New human source material should be archived inside a requirement set directory.
 | `project/*.md` | enterprise long-term project memory details | feature execution logs |
 | `decisions/*.md` | Human-gated project / cross-feature decision reasons, trade-offs, architecture design, consequences, and verification closure | ordinary execution logs, feature-local preferences, unresolved fuzzy requirement notes |
 | `onboarding-db/*` | Evidence-Graph + DDD human-readable project understanding docs when created through `onboarding-knowledge-base.md`; old layouts are legacy evidence | current task status, feature execution logs, raw test output, human original requirements, project memory replacement |
-| `requirements/<archive-date>-<topic>/*` | original human material package and lifecycle record: requirements, prototypes, feedback, screenshots, recordings, links, references, status, backlog/deferred state | edited specs, task plans |
+| `requirements/<record-date>-<topic>/README.md` | Requirement lifecycle, source inventory, Effective Product Definition pointer, Delivery Phases, Feature Mapping, decisions, and history locators | copied product meaning, engineering plan, or Git authorization |
+| `requirements/<record-date>-<topic>/product.md` | Agent-authored, human-reviewed Brief or Standard product definition derived from preserved evidence | original human bytes, Requirement lifecycle, technical design, Feature tasks/tests/plan, or implementation authorization |
+| `requirements/<record-date>-<topic>/YYYY-MM-DD-product-follow-up-<slug>.md` | append-only reviewed replacement Product Definition for the same recognizable Requirement | in-place rewrite of prior Product Definition or original source material |
+| `requirements/<record-date>-<topic>/sources/*` and legacy root sources | original human requirements, prototypes, feedback, screenshots, recordings, links, and references; byte-stable after copy | Agent-authored product meaning, lifecycle, edited specs, or task plans |
 | `bugs/INDEX.md` | Bug inventory, backlog, locator, and current summary row for every Bug ID | full reproduction, logs, discussion, Feature tasks, or project memory |
 | `bugs/YYYY-MM-DD-<bug-slug>/README.md` | stable Bug identity, Report Origin, observed/expected evidence, Status, Resolution, relationships, Resolution Path, verification, close, and reopen history | product meaning, Requirement lifecycle, Feature tasks/tests/plan, personnel assignment, or Git authorization |
 | `bugs/YYYY-MM-DD-<bug-slug>/evidence/*` | optional bounded screenshots, redacted logs, failed tests, reproduction, and verification evidence | secrets, complete production payloads, implementation plans, or executable state database |
-| `product.md` | feature-level product intent, users, stories, product scope | engineering execution plan |
-| `spec.md` | intended feature behavior | execution logs |
+| legacy Feature `product.md` | historical feature-level product intent retained for Resume, Follow-up, Review, Close, and Recovery only | new Product Definition authoring, Requirement lifecycle, or silent migration |
+| Feature `spec.md` | intended feature behavior plus Product Requirement Source and Product Slice | Requirement product meaning, execution logs, or a second PRD |
 | `tasks.md` | work breakdown, status, and links to task details | full test evidence |
 | `tests.md` | test design, matrix, and links to test details | raw test output |
 | `plan.md` | active execution plan pointer or compact plan, including Branch Context Evidence when applicable | historical execution record or Git action authorization |
@@ -336,7 +339,8 @@ stable plan.md
 
 ```text
 current feature behavior changed -> update spec.md
-feature product intent changed -> update product.md
+accepted Requirement product meaning changed -> Human-gated append-only Product Definition follow-up, advance README pointer, then recheck ADR / open Feature compatibility
+legacy feature product intent conflict found -> stop for Requirement Conflict / Recovery; do not rewrite legacy product.md silently
 cross-feature product consensus changed -> update project.md Product Context or Domain Language in simple mode, or project/product-context.md and project/domain-language.md in enterprise mode
 task set/order changed -> update tasks.md
 test strategy changed -> update tests.md

@@ -37,7 +37,7 @@ Core workflow:
 Inspect -> Classify Intent And Project State -> Recommend One Next Action -> Human Gate When Required -> Act Through Loaded Reference -> Verify -> Review / Drift -> Record Memory -> Submit / Pause / Close
 
 Product delivery:
-Requirements / Concept -> Decision / ADR If Needed -> Feature -> Plan -> Execute -> Verify / Review / Drift -> Memory -> Submit / Close
+Requirements / Product Definition -> Decision / ADR If Needed -> Feature Product Slice -> Plan -> Execute -> Verify / Review / Drift -> Memory -> Submit / Close
 <!-- agent-loop:managed-end section:ownership -->
 
 <!-- agent-loop:managed-start section:message-intent source:agent-loop-skill block-version:1.5.0-20260721.2 -->
@@ -46,7 +46,7 @@ Requirements / Concept -> Decision / ADR If Needed -> Feature -> Plan -> Execute
 Classify the latest human message before project-state routing:
 
 - Chat answers or discusses without creating workflow artifacts.
-- Requirements Discussion shapes unresolved product need, meaning, scope, acceptance, or delivery phases before implementation.
+- Requirements Discussion shapes unresolved product need into one Human-reviewed Brief/Standard Requirement Product Definition before implementation.
 - An already-defined actionable ordinary non-Bug change enters Lightweight Change Assessment only after Bug and active-Feature ownership checks.
 - Explicit Bug intent, regression evidence, or clear Feature ownership enters Bug / Feature Follow-up before Lightweight routing.
 - Feature Request enters construction only from accepted upstream meaning and the normal runtime gates.
@@ -72,8 +72,8 @@ Use this after Bootstrap and Message Intent. Apply: Safety Stop -> Remote Discov
 | Explicit closed-history archive or rehydrate | Feature Monthly Archive | `references/stage-guides.md`, `references/artifact-rules.md`, `references/feature-follow-up.md` |
 | Explicit Bug intent, regression evidence, or clear Feature ownership | Bug / Feature Follow-up | `references/bug-management.md`, `references/feature-follow-up.md` |
 | Already-defined actionable ordinary non-Bug change that appears bounded, reversible, and exactly verifiable | Lightweight Change Assessment | `references/lightweight-change-lane.md` |
-| Product need, meaning, scope, or delivery phases are still being shaped | Requirements Discussion | `references/requirement-management.md`, `references/requirement-product-grill.md` |
-| Human confirms requirement recording, acceptance, deferral, or lifecycle action | Requirement Archive | `references/requirement-management.md`, `references/stage-guides.md` |
+| Product need, meaning, scope, or delivery phases are still being shaped | Requirements Discussion | `references/requirement-management.md`, `references/product-definition.md`, `references/requirement-product-grill.md` |
+| Human confirms Product Definition recording, requirement acceptance, deferral, or lifecycle action | Requirement Archive | `references/requirement-management.md`, `references/stage-guides.md` |
 | Durable newcomer documentation is requested after reliable Project Entry | Evidence-Graph + DDD Onboarding | `references/onboarding-knowledge-base.md` |
 | Accepted requirement needs shared technical landing before feature specification | Decision & Design If Needed | `references/project-decisions.md` |
 | Accepted upstream meaning is ready for implementation or current Feature work continues | Feature Construction / Runtime Continuation | `references/runtime.md`, `references/stage-guides.md` |
@@ -83,7 +83,7 @@ Use this after Bootstrap and Message Intent. Apply: Safety Stop -> Remote Discov
 | Submit, commit, PR, merge, release, publish, pause, close, or cleanup is requested | Lifecycle Boundary | `references/submit-and-integrate.md`, `references/stage-guides.md` |
 | Ordinary question or discussion has no artifact or action intent | Chat | `references/runtime.md` |
 
-The complete Product Brief, Feature Spec, Requirement Checklist, Work Breakdown, Delivery Contract, Test Design, E2E, Technical Design, Plan, Execute, Verify, Review, Drift Check, Project Memory Update, Feature Completion Check, and lifecycle order remains owned by `references/runtime.md` and loaded references. A Gateway selects its owner family; it never removes or reorders a downstream stage.
+The complete Product Definition, Feature Spec/Product Slice, Requirement Checklist, Work Breakdown, Delivery Contract, Test Design, E2E, Technical Design, Plan, Execute, Verify, Review, Drift Check, Project Memory Update, Feature Completion Check, and lifecycle order remains owned by `references/runtime.md` and loaded references. A Gateway selects its owner family; it never removes or reorders a downstream stage.
 <!-- agent-loop:managed-end section:workflow-stage-map -->
 
 <!-- agent-loop:managed-start section:gates source:.agent-loop/project.md block-version:1.5.0-20260721.2 -->

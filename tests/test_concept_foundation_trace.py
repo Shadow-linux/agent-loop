@@ -11,6 +11,7 @@ from tests.checker_test_support import ROOT, combined_output, run_checker
 SCRIPT = "scripts/check-concept-foundation-trace.py"
 EXAMPLE = ROOT / "examples/concept-foundation-refund"
 FIXTURES = ROOT / "tests/fixtures/concept-foundation"
+PRODUCT_FIXTURE = ROOT / "tests/fixtures/adaptive-product-definition/standard-valid"
 
 
 class ConceptFoundationTraceTests(unittest.TestCase):
@@ -196,6 +197,62 @@ class ConceptFoundationTraceTests(unittest.TestCase):
             self.requirement, self.product, self.spec, bom_crlf=True
         )
         self.assertEqual(result.returncode, 0, combined_output(result))
+
+    def test_requirement_product_mode_passes_without_feature_product(self) -> None:
+        result = run_checker(
+            SCRIPT,
+            "--requirement-product",
+            str(PRODUCT_FIXTURE / "README.md"),
+            str(PRODUCT_FIXTURE / "product.md"),
+            str(PRODUCT_FIXTURE / "spec.md"),
+        )
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn(
+            "confirmed Requirement Product Definition trace is complete",
+            result.stdout,
+        )
+
+    def test_requirement_product_mode_rejects_unconfirmed_review_evidence(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            for name in ("README.md", "product.md", "spec.md"):
+                content = (PRODUCT_FIXTURE / name).read_text(encoding="utf-8")
+                if name == "spec.md":
+                    content = content.replace(
+                        "Product Review Evidence: confirmed by human maintainer on 2026-07-22",
+                        "Product Review Evidence: unconfirmed pending human review",
+                    )
+                (root / name).write_text(content, encoding="utf-8")
+            result = run_checker(
+                SCRIPT,
+                "--requirement-product",
+                str(root / "README.md"),
+                str(root / "product.md"),
+                str(root / "spec.md"),
+            )
+        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertIn(
+            "Feature Product Review Evidence must be confirmed",
+            combined_output(result),
+        )
+
+    def test_requirement_product_mode_rejects_unknown_slice_reference(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            for name in ("README.md", "product.md", "spec.md"):
+                content = (PRODUCT_FIXTURE / name).read_text(encoding="utf-8")
+                if name == "spec.md":
+                    content = content.replace("STATE-REQUEST", "STATE-UNKNOWN")
+                (root / name).write_text(content, encoding="utf-8")
+            result = run_checker(
+                SCRIPT,
+                "--requirement-product",
+                str(root / "README.md"),
+                str(root / "product.md"),
+                str(root / "spec.md"),
+            )
+        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertIn("Product Slice contains unknown source IDs", combined_output(result))
 
 
 if __name__ == "__main__":

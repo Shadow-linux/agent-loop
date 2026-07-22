@@ -1,18 +1,18 @@
 # Requirement/Product Grill
 
-Requirement/Product Grill is a clarification method, not a PRD generator, not an ADR generator, and not a new agent-loop stage.
+Requirement/Product Grill is a clarification method inside Adaptive Product Definition, not an ADR generator and not a new agent-loop stage. Its results are synthesized into the Requirement `product.md`; it is not a separate artifact generator.
 
 ```text
 Grill early; synthesize later; send shared design signals through Design Readiness Check.
 ```
 
-Use it inside Requirements Discussion, Product Brief, and Brainstorm / Clarify when the demand has fuzzy terminology, unclear roles, domain boundaries, business flows, exception paths, conflicting prior feature behavior, or decision signals.
+Use it inside Requirements Discussion and its Brainstorm / Clarify work when the demand has fuzzy terminology, unclear roles, domain boundaries, business flows, exception paths, conflicting prior Feature behavior, or decision signals.
 
 ## Core Rules
 
 - Ask one blocking question at a time.
 - Include the agent recommended answer with each question.
-- First inspect project memory, source requirements, existing `product.md`, docs, code, and tests when the answer is discoverable.
+- First inspect project memory, original sources, the current effective Requirement `product.md` when present, docs, code, and tests when the answer is discoverable.
 - 提问前先检查相关过往 feature 的 `product.md`、`spec.md`、`tests.md`、`notes.md` when those files may already define terminology, business rules, acceptance direction, or historical decisions.
 - Do not run a full feature scan. Use targeted lookup only.
 - targeted lookup signals include keywords, domain objects, related requirement, same module/flow, active/paused/recent feature.
@@ -21,9 +21,9 @@ Use it inside Requirements Discussion, Product Brief, and Brainstorm / Clarify w
 
 ## Concept Foundation
 
-Concept Foundation is a triggered internal method of Requirements Discussion / Requirement Product Grill. It is not a PRD generator, ADR generator, canonical stage, top-level directory, or technical schema.
+Concept Foundation is a triggered internal method of Requirements Discussion / Requirement Product Grill. It is not a separate PRD, ADR generator, canonical stage, top-level directory, or technical schema.
 
-Its job is to stabilize product meaning before detailed Business Flow, State Model, or Product Data Model work. The human-reviewed requirement document owns the result.
+Its job is to stabilize product meaning before detailed Business Flow, State Model, or Product Data Model work. The human-reviewed Requirement `product.md` owns the new-format result.
 
 ### Trigger And Lightweight Route
 
@@ -54,7 +54,7 @@ Create a Concept Candidate Inventory before the first blocking question:
 |---|---|---|---|---|---|
 | C-ORDER | Order | entity | source requirement | “order” also used for request | candidate |
 
-Concept IDs are stable inside the requirement scope. They connect definitions, relationships, states, flows, product data, Product Brief, Feature Spec, and acceptance direction. They are not required to become permanent project-wide IDs.
+Concept IDs are stable inside the Requirement scope. They connect definitions, relationships, states, flows, product facts, ADR landing, Feature Product Slice, and acceptance direction. They are not required to become permanent project-wide IDs.
 
 ### Concept Definition
 
@@ -105,11 +105,11 @@ Keep status `candidate` and stop before detailed Business Flow, State Model, or 
 - a historical conflict is unresolved;
 - a product fact owner is required to proceed and is neither confirmed nor recorded as a Decision Candidate.
 
-Before setting `accepted`, present the cumulative Concept Foundation Human Review Summary defined in `human-review-summary.md`. Set `accepted` only after the human confirms the recommended definitions and every remaining uncertainty cannot change the current downstream model. This Human Gate belongs to Requirements Discussion; it does not accept implementation, archive files, create ADRs, or start a feature.
+Before treating the internal foundation as `accepted`, include the cumulative concept/model coverage in the Product Human Review Summary defined in `human-review-summary.md`. Continue only after the human confirms the recommended definitions and every remaining uncertainty cannot change the downstream model. This Human Gate belongs to Requirements Discussion; it does not accept Requirement lifecycle, implementation, archive files, ADRs, or Feature start.
 
 ### Reopen After Archive
 
-If later evidence changes accepted product semantics after the requirement document was archived, do not edit that source in place. Mark the response-local status `reopened`, stop dependent modeling, run Requirement Conflict Review, and ask one blocking question. After human confirmation, write an append-only Concept Foundation follow-up or create a new requirement set, then update the requirement README `Effective Concept Foundation` source pointer. Downstream artifacts resolve that pointer and retain the previous source for history.
+If later evidence changes accepted product semantics after `product.md` was recorded, do not edit that source in place. Mark the internal state `reopened`, stop dependent modeling, run Requirement Conflict Review, and ask one blocking question. After human confirmation, write `YYYY-MM-DD-product-follow-up-<slug>.md` or create a new Requirement Set, then update README `Effective Product Definition` while retaining the previous source for history. Legacy Requirement Sets keep their historical pointer and append-only compatibility path.
 
 ### Requirement Product Model Derivation
 
@@ -128,7 +128,7 @@ After `accepted`, derive and trace these product views from Concept IDs instead 
 
 The Requirement Product Model is product-level. It may say which fact belongs to which product concept and actor, but it must not choose tables, documents, event topics, ledgers, providers, transactions, consistency algorithms, migrations, or other technical representations.
 
-Give every derived model row a stable ID so downstream Product Brief, Feature Spec, and Decision & Design can cite it without copying meaning: `REL-*` for relationships, `PERM-*` for permission rules, `CMD-*` / `EVT-*` for actions, `FLOW-*` for flow steps, `STATE-*` for state rules, `PM-*` for product models/facts, and `EX-*` for exception/recovery scenarios. Do not create a placeholder model merely to populate a category; when Concept Foundation is reasoned not-needed, keep the lightweight path.
+Give every applicable derived model row a stable ID so Feature Product Slice and Decision & Design can cite it without copying meaning: `REL-*` for relationships, `PERM-*` for permission rules, `CMD-*` / `EVT-*` for actions, `FLOW-*` for flow steps, `STATE-*` for state rules, `PM-*` for product models/facts, and `EX-*` for exception/recovery scenarios. Do not create a placeholder model merely to populate a category; a Brief and a Standard not-applicable view stay lightweight.
 
 ## Question Targets
 
@@ -149,23 +149,23 @@ Ask only when the answer affects one of these:
 
 | Grill output | Agent-loop destination |
 |---|---|
-| Clarified local term | Requirement document terminology, `product.md` terminology, or `spec.md` wording |
-| Accepted Concept Foundation | Effective Concept Foundation source named by the requirement README; downstream artifacts cite Concept IDs/model rows |
-| Ambiguous term | Requirement document / `product.md` open questions, or `notes.md` |
-| Concrete scenario | Requirement document, Product Brief user story, or Feature Spec acceptance / edge case |
-| Prior feature conflict | Requirement document, `notes.md`, or Human Review Summary conflict table |
+| Clarified local term | Requirement `product.md` terminology or downstream display wording |
+| Accepted Concept Foundation | Effective Product Definition named by Requirement README; ADR and Product Slice cite Concept IDs/model rows |
+| Ambiguous term | Requirement `product.md` open questions; blocking ambiguity stops downstream work |
+| Concrete scenario | Requirement `product.md` outcome/flow/acceptance direction and Feature Spec Product Slice acceptance |
+| Prior feature conflict | Product Definition source/conflict evidence or Human Review Summary conflict table |
 | Durable domain language candidate | Project Memory Update proposal only after human confirmation |
 | Cross-feature / shared design / hard to reverse / real trade-off | Design Readiness evidence and Decision Candidate |
 
-Do not promote grill output to project memory, `product.md`, `spec.md`, or decisions without the owning human gate.
+Do not persist grill output to project memory, `product.md`, `spec.md`, or decisions without the owning Human Review / Record gate.
 
-Detailed grill results belong in the effective requirement source; the requirement README keeps its effective Concept Foundation pointer plus source, lifecycle, Delivery Phase, Feature Mapping, and decision-link summaries.
+Detailed new-format grill results belong in the Effective Product Definition; Requirement README keeps its pointer, source inventory, lifecycle, Delivery Phase, Feature Mapping, and decision-link summaries. Legacy effective Requirement sources remain readable.
 
-Product Brief and Feature Spec must not use “meaning in this feature” to redefine an accepted Concept ID. If a new feature needs a different meaning, return to the owning requirement discussion rather than silently creating a local synonym.
+Feature Spec must not use “meaning in this feature” to redefine an accepted Concept ID. If a Feature needs a different meaning, return to the owning Requirements Discussion rather than silently creating a local synonym.
 
 When Requirement/Product Grill was used, the owning artifact must carry grill results into structured sections, not only a prose summary.
 
-Requirement document sections:
+Standard Product Definition sections, only when applicable:
 
 - Terminology / Domain Language
 - Roles / Operators / Permission Boundary
@@ -178,15 +178,10 @@ Requirement document sections:
 - Product / Feature Mapping
 - Out Of Scope And Why
 
-Product Brief sections:
-
-- Primary User Journey
-- User Stories with Acceptance Direction
-- Edge Cases
-- Behavior Changes
-- Product Tradeoffs
-- Success Signals
-- Historical Compatibility
+- Product Capability Scope / user scenarios
+- Product View Applicability
+- Experience, operations, measurement, and acceptance direction
+- Product Traceability and Decision Candidates
 
 ## Decision Boundary
 
@@ -200,7 +195,7 @@ Decision Candidate signals:
 | Surprising without context | Future agents will ask why this rule exists |
 | Real trade-off | Multiple reasonable options exist and the choice excludes another route |
 
-Record these in the stage summary or Human Review Summary as Design Readiness evidence and Decision Candidates. When Decision & Design is required, its Decision Scan / Placement method decides whether the candidate stays in `product.md`, `spec.md`, `tests.md`, `notes.md`, or becomes a human-gated decision file.
+Record these in `product.md` and the Human Review Summary as Design Readiness evidence and Decision Candidates. When Decision & Design is required, its Decision Scan / Placement method decides whether the candidate stays product-local, Feature-local, test-local, or becomes a Human-gated decision file.
 
 ## Path Overrides
 
@@ -209,10 +204,10 @@ External grill-with-docs defaults are advisory only.
 - Do not create `CONTEXT.md`.
 - Do not create `CONTEXT-MAP.md`.
 - Do not create `docs/adr/`.
-- Requirement document owns requirement-local terminology, roles, business flows, exception paths, data/source-of-truth detail, historical conflicts, acceptance scenarios, open questions, and Decision Candidates.
+- Requirement `product.md` owns reviewed product goals, terminology, roles, business flows, exceptions, product fact ownership, historical conflicts, acceptance direction, open questions, and Decision Candidates.
 - Requirement README owns source index, lifecycle, Delivery Phases, Feature Mapping, and decision-link summaries.
-- Product Brief owns feature-level product synthesis.
-- Feature Spec owns engineering behavior and feature-local design decisions.
+- Legacy Feature Product Brief remains readable but receives no new writes.
+- Feature Spec owns engineering behavior, Product Slice, and feature-local design decisions.
 - Project memory owns durable domain language only after human confirmation.
 - `.agent-loop/decisions/` owns accepted long-term / cross-feature Decision & Design records only through Decision & Design and the human gate.
 

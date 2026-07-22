@@ -29,8 +29,8 @@ assert_contains "SKILL.md" "Workspace-level design drafts are historical or plan
 assert_not_contains "SKILL.md" "If this skill conflicts with either design source, the design source wins"
 
 # Decision & Design must be part of the canonical design flow, not only runtime extensions.
-assert_contains "references/design.md" "→ Decision & Design If Needed"
-assert_contains "references/design.md" "→ Product Brief if Needed"
+assert_contains "references/design.md" "→ Design Readiness / Decision & Design If Needed"
+assert_contains "references/design.md" "→ Feature Spec with Product Slice"
 
 # Technical Design may detect a contract need, but contract files stay behind the pre-write gate.
 assert_contains "references/stage-guides.md" "recommend Delivery Contract If Needed and stop before any contract file is created or updated"

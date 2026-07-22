@@ -68,10 +68,10 @@ assert_contains "references/project-guidance.md" "Agent Ownership: agents own th
 assert_contains "templates/root-AGENTS.md" "## Workflow Gateway Map"
 assert_contains "templates/root-AGENTS.md" "Select one first hop and load its published owner before acting."
 assert_contains "templates/root-AGENTS.md" "Load From agent-loop Skill"
-assert_contains "templates/root-AGENTS.md" '| Product need, meaning, scope, or delivery phases are still being shaped | Requirements Discussion | `references/requirement-management.md`, `references/requirement-product-grill.md` |'
+assert_contains "templates/root-AGENTS.md" '| Product need, meaning, scope, or delivery phases are still being shaped | Requirements Discussion | `references/requirement-management.md`, `references/product-definition.md`, `references/requirement-product-grill.md` |'
 assert_contains "templates/root-AGENTS.md" '| Accepted requirement needs shared technical landing before feature specification | Decision & Design If Needed | `references/project-decisions.md` |'
 assert_contains "templates/root-AGENTS.md" '| Accepted upstream meaning is ready for implementation or current Feature work continues | Feature Construction / Runtime Continuation | `references/runtime.md`, `references/stage-guides.md` |'
-assert_contains "templates/root-AGENTS.md" "The complete Product Brief, Feature Spec, Requirement Checklist, Work Breakdown"
+assert_contains "templates/root-AGENTS.md" "The complete Product Definition, Feature Spec/Product Slice, Requirement Checklist, Work Breakdown"
 assert_not_contains "templates/root-AGENTS.md" "Requirements Discussion / Grill"
 assert_not_contains "templates/root-AGENTS.md" "Decision / ADR |"
 assert_not_contains "templates/root-AGENTS.md" "Decision Scan / Placement If Needed |"
