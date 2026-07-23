@@ -114,8 +114,10 @@ The Agent checks implementation, tests, requirement and decision coverage, unrel
 | Human-Guided Bug Management | Maintain Bug identity, report provenance, lifecycle, Resolution Path, reopen history, and independent close |
 | Feature Follow-up / Flow-back | Locate responsible recent or archived Features; default ownership scan is 90 days and extends on evidence |
 | Feature Monthly Archive / Rehydrate | Move eligible closed Feature directories intact into month buckets and locate them through `features/archive.md` |
-| Post-Merge Memory Reconciliation | After code merge and verification, rewrite Target memory from Base/Source/Target/Result facts through Scan → Plan → Human Review → Apply → Post-check → Restore |
+| Post-Merge Memory Reconciliation | After code merge and verification, do nothing when no memory conflict is observed; otherwise repair only the conflicting current meaning from the latest verified facts |
 | Drift and Recovery | Detect stale or contradictory claims and backfill from current code, environment, accepted product meaning, and human authority |
+
+Small, fact-determined memory conflicts are resolved and verified by the Agent without creating a report. The human sees only the few alternatives that remain genuinely ambiguous. A concise Memory Merge Report is reserved for coupled conflicts, cross-session work, substantial rollback evidence, or an explicit request. Four-snapshot, all-path Scan → Plan → Apply → Restore tooling is available only through an explicitly authorized **Full Memory Audit / Recovery**.
 
 ## Agent Autonomy and Human Control
 
@@ -225,11 +227,13 @@ See [Usage.md](Usage.md) for copy-ready prompts covering requirements, ADR, ligh
       SKILL.md
       validation.md
   memory-merges/
-    MM-<merged-code-sha>/
-      README.md
+    MM-<merged-code-sha>-<topic>/
+      README.md                 # only for complex or durable conflict review
 ```
 
 New projects use `.agent-loop/`. A visible legacy `agent-loop/` root remains readable and requires Human-confirmed migration. Dual roots fail closed.
+
+Ordinary post-merge handling does not create `memory-merges/`: no observed conflict means no scan or report, and a small conflict stays in the conversation unless durable coordination or recovery evidence is needed.
 
 Project-local capability discovery starts at `.agent-loop/skills/`; runtime/global Skill inventory does not replace `.agent-loop/skills/INDEX.md`.
 

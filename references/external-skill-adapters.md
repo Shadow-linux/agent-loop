@@ -274,7 +274,7 @@ When `Submit / Integrate` starts and Superpowers is available:
 8. Treat a human saying "commit" as permission to enter Submit / Integrate, not final commit approval.
 9. When the Feature resolves Bugs, show Bug IDs, current Status, verification evidence, and unresolved Bug Close Decisions; finishing evidence cannot close/reopen a Bug or satisfy a Feature/Requirement/Bug Human Gate.
 10. Do not let the external finishing skill create/switch/delete branches, commit, push, publish PR text, merge, tag, release, publish, close the Feature, close/reopen a Bug, or mark submission ready without the matching agent-loop confirmation.
-11. After code integration, an external finishing helper cannot bypass or perform Post-Merge Memory Reconciliation. It cannot create a Memory Merge Report, approve a Plan Hash, Apply/finalize/restore memory, satisfy the Memory Commit Gate, inherit Git authority, or recommend Source cleanup while the report is `待确认` / `已恢复` or a transaction is unresolved.
+11. After code integration, an external finishing helper cannot invent or bypass an observed memory conflict, resolve an unresolved semantic choice, satisfy the Memory Commit Gate, inherit Git authority, or recommend Source cleanup while a real conflict/restore remains unresolved. It must accept `reconciliation-not-needed` when no conflict exists. Full Memory Audit / Recovery and its Plan Hash/transaction controls require their own explicit Human authorization.
 
 ## Subagent Adapter
 

@@ -25,7 +25,7 @@ Do not store Lightweight Execution Card history, pending inventory, command logs
 
 A changes-only root does not prove that project memory is initialized or reliable. When only `changes/` exists, do not create `project.md`, create enterprise `project/*.md`, or switch Memory Mode automatically. Classify no-value candidates as `none`; route a valuable candidate without a reliable owner to `human-review` and recommend Project Entry / Project Memory Init.
 
-Run the read-only Lightweight Change scanner at Project Entry when Changes exist, after Change completion, and before release or post-merge memory work. `completed + pending >= 3` or oldest pending age greater than seven full calendar days starts proactive semantic consolidation; exactly seven days does not. Known drift, pre-release context, and verified post-merge entry are Agent/controller fact triggers rather than scanner flags.
+Run the read-only Lightweight Change scanner at Project Entry when Changes exist, after Change completion, and before release. `completed + pending >= 3` or oldest pending age greater than seven full calendar days starts proactive semantic consolidation; exactly seven days does not. Known drift and pre-release context are Agent/controller fact triggers rather than scanner flags. Post-merge reconciliation reads one relevant Change only when the observed conflict directly requires it.
 
 The Agent may directly synchronize a Change-derived fact only when all conditions hold: the Change is completed with fresh verification; the candidate is an implemented stable fact rather than a plan; code/config/test or authorized-environment evidence proves it; it has durable future value; exactly one existing reliable memory path owns it; Requirement/Decision/Feature/Bug/root guidance and current memory do not conflict; no new product, architecture, security, data, permission, environment, Branch Strategy, or release decision is created; human original requirements remain unchanged; branch/release/customer scope is explicit; exact target path/fact/evidence/impact/rollback is disclosed before write; post-check can verify it; and rollback touches only this Agent's edit.
 
@@ -35,7 +35,7 @@ Bug inventory is also not project memory. In both modes, `.agent-loop/bugs/INDEX
 
 Human-confirmed Branch Strategy is durable project memory in both modes. Keep the compact policy and current Target Release Context pointer in `project.md` so entry and submit routing do not require loading an optional enterprise detail file. Keep development-branch selection, lifecycle, merge evidence, and cleanup decisions in the owning feature notes/plan/submit record. Never record an unconfirmed recommendation as `accepted`, and do not create `.agent-loop/branches/`.
 
-Post-Merge Memory Reconciliation does not turn its report into project memory. While a reconciliation is current, `project.md` Current Work may store only the report locator, report status, and exact blocker. Do not copy the Path Accounting Ledger, Human Decisions, diffs, Plan JSON, hash inventory, or transaction details into `project.md` or enterprise detail files. Existing enterprise files remain fact owners and are rewritten only when their durable facts are actually affected by the Desired Target Memory Snapshot.
+Post-Merge Memory Reconciliation does not turn its report into project memory. `reconciliation-not-needed` is transient submit evidence, not a durable project fact. While an observed conflict is unresolved, `project.md` Current Work may store only the conflict/report locator, status, and exact blocker. Do not copy conflict options, audit ledgers, diffs, hashes, or transaction details into project memory. Existing enterprise files remain fact owners and are rewritten only when a targeted conflict resolution directly changes their durable facts.
 
 ## Simple Mode
 
@@ -59,7 +59,7 @@ Recommended layout:
     INDEX.md        optional Bug inventory/backlog/locator
   features/
     archive.md       optional Feature Monthly Archive locator; not project history
-  memory-merges/     optional; created only after the reconciliation Start gate
+  memory-merges/     optional; only for complex/cross-session conflict records or authorized Full Audit / Recovery
 ```
 
 ## Enterprise Mode
@@ -87,7 +87,7 @@ Recommended layout:
     INDEX.md        optional Bug inventory/backlog/locator; not enterprise memory
   features/
     archive.md       optional Feature Monthly Archive locator; not enterprise memory
-  memory-merges/     optional; created only after the reconciliation Start gate
+  memory-merges/     optional; only for complex/cross-session conflict records or authorized Full Audit / Recovery
 ```
 
 In both modes, `features/archive.md` locates archived or rehydrated stable Feature IDs and `bugs/INDEX.md` locates Bug records. Do not copy historical Feature bodies, archive rows, transaction logs, Bug backlog, Bug evidence, or triage state into `project.md`; project memory records only current work and durable facts. Active/blocked/paused work stays flat, while closed month archive paths are resolved on demand through the locator.

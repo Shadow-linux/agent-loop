@@ -88,15 +88,16 @@ Bug confirmation, Resolution Path, successful tests, Feature close, and Bug Clos
 
 ## Post-Merge Memory Reconciliation Ordering
 
-After a Human-gated code merge produces one stable verified Merged Code SHA, inspect whether Source and Target Agent Loop memory changed or may differ. Memory Reconciliation must complete before push, release, publish, or Source branch cleanup.
+After a Human-gated code merge produces one stable verified Merged Code SHA, inspect changed memory and merge evidence for an observed semantic conflict. Do not treat mere difference, Source-only files, unchanged memory, or possible drift as a conflict.
 
 Use this fail-closed order:
 
 ```text
 Code Merge Gate
--> Post-Merge Memory Reconciliation Start Gate
--> Exact Plan Hash Gate
--> Apply / Post-check / Restore if needed
+-> no observed conflict: reconciliation-not-needed
+   OR observed conflict: targeted fact resolution
+      -> Human Review only if semantic alternatives remain
+      -> targeted verification / restore if needed
 -> Memory Commit Gate
 -> Push Gate
 -> Release Gate
@@ -105,13 +106,13 @@ Code Merge Gate
 
 | Observed state | Submit / Integrate action |
 |---|---|
-| no report and Source/Target memory changed or cannot be proven equal | recommend Start review; do not create the report yet |
-| report `待确认` | block Memory Commit, push, release/publish, and cleanup; continue reconciliation or Recovery |
-| report `已恢复` | block later gates; create a new reviewed plan or enter Recovery |
-| unresolved `.memory-reconciliation-txn/` | Recovery only with the exact transaction ID |
-| report `已完成` | offer only the next separately confirmed Memory Commit or later action gate |
+| no observed memory conflict | record `reconciliation-not-needed` when useful; offer the next independent gate |
+| fact-determined conflict | Agent rewrites only the owner/direct references, verifies, then offers the next independent gate |
+| unresolved semantic alternatives | block later mutation and ask one bounded Human decision |
+| targeted rewrite verification or restore fails | block later mutation and enter Recovery |
+| broad corruption or explicit forensic request | offer Full Memory Audit / Recovery; run it only after explicit authorization |
 
-The code commit/merge authorization cannot be reused as Memory Start, exact Plan Hash, Memory Commit, Push, Release, publish, or Cleanup authorization. A Memory Merge Report does not authorize code integration or any Git mutation. Record the report locator/status/blocker in Current Work and the exact independently requested action in Submit evidence.
+Unresolved observed memory conflicts block push, release, publish, and Source cleanup because Target memory is not trustworthy. `reconciliation-not-needed` does not block a separately authorized later action. Code commit/merge authorization cannot be reused as a Memory Human Decision, Memory Commit, Push, Release, publish, or Cleanup authorization. A Memory Conflict Report or Full Memory Audit report authorizes no Git mutation.
 
 ## Commit Behavior
 

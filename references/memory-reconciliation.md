@@ -1,289 +1,202 @@
 # Post-Merge Memory Reconciliation
 
-Use this reference only after code integration has produced a stable verified commit and Agent Loop memory may differ across Base, Source, Target-before, and Result. It is an internal Submit / Integrate method, not a canonical stage or message intent.
+Use this internal Submit / Integrate method only after code integration is complete and verified. It makes Target memory read like one person's current understanding of the merged project. It is not a canonical stage, a Git merge engine, or a routine audit of `.agent-loop/`.
 
-## Purpose And Boundary
-
-Post-Merge Memory Reconciliation rewrites the Target memory root into the correct semantic state after code has already been merged. It reconciles facts and artifact ownership; it is not Markdown conflict resolution.
+## Core Rule
 
 ```text
-Code Merge Complete
--> Scan
--> Fact Reconciliation
--> Desired Target Memory
--> Exact Rewrite Plan
--> Human Review
--> Apply
--> Post-check
--> Restore on failure
+Verified Code Merge
+-> Is there an Observed Memory Conflict?
+   -> no: reconciliation-not-needed
+   -> yes: inspect the conflict and minimum direct evidence
+      -> facts determine one current meaning: Agent rewrites and verifies it
+      -> facts support multiple meanings: ask the human to choose
+-> continue to the next independently authorized Git/lifecycle gate
 ```
 
 Memory Reconciliation does not perform the code merge.
 
-Change files are evidence only after code merge is complete and verified. Their source-branch Memory Result, including `synced`, never instructs Target memory to overwrite itself.
+No observed conflict means no scan, no Memory Merge Report, no reconciliation Human Gate, and no blocker for a separately authorized commit, push, release, publish, or Source cleanup.
 
-It does not create, switch, merge, delete, push, or tag branches; create commits or PRs; release or publish; modify production; or authorize a later Git action. It changes only the accepted Target memory root after its own Human Gates.
+## What Counts As An Observed Memory Conflict
 
-## Entry Preconditions
+Enter conflict-driven reconciliation when current evidence shows at least one concrete contradiction:
 
-Enter only when all of the following are known and evidenced:
+- Git reports a conflict inside the accepted Agent Loop memory root;
+- two merged memory claims assign incompatible current meanings or lifecycle states to the same stable ID;
+- a changed locator, mapping, or index points at a missing, duplicate, or incompatible canonical owner;
+- merged code, tests, configuration, or fresh environment evidence directly invalidates a current Agent-maintained memory claim;
+- a targeted check of changed memory finds a broken direct reference caused by this merge;
+- Source and Target both changed the same semantic owner and their meanings cannot coexist.
 
-- the code merge is complete at one stable, full Merged Code SHA and `HEAD` resolves to it;
-- code verification for that result has completed and its bounded evidence is available;
-- full Merge Base, Source, Target-before, and Merged Code SHAs are available;
-- Source Branch, Target Branch, Target Release Context, and Customer Boundary are known;
-- exactly one existing memory root, `.agent-loop/` or confirmed legacy `agent-loop/`, is accepted;
-- Source and Target evidence remain readable; Source branch cleanup has not occurred;
-- the human has passed the Start gate before a report directory or report is created.
+These are not entry signals by themselves:
 
-If a precondition is absent or ambiguous, stop in Recovery. Do not infer a SHA, migrate a memory root, or manufacture missing branch evidence.
+- Source and Target changed different memory files;
+- a Source-only Requirement, Feature, Change, Bug, Decision, or evidence artifact merged cleanly;
+- a memory file was unchanged and has not recently been audited;
+- unrelated drift might exist somewhere else;
+- full Base/Source/Target/Result hashes have not been assembled.
 
-## Target Canonical Memory Spine
+Do not manufacture a conflict to justify reconciliation.
 
-The **Target Canonical Memory Spine** is the actual Target branch's current artifact ownership, `project.md`, enterprise indexes, stable identities, and canonical locators. It determines scan order and the Target output structure baseline.
+## Current-Understanding Model
 
-The spine is neither a fact priority nor a path allowlist. Source-only artifacts, new artifact families, absent paths, unchanged files, directories, and unknown paths are still accounted. Target claims remain claims until checked against the authority for the question being answered.
-
-## Four Snapshot Claims
-
-Every run records four snapshots with exact keys:
-
-```text
-base | source | target_before | result
-```
-
-- `base`: common history used to distinguish inherited facts from branch changes.
-- `source`: Source branch memory and code claims before integration.
-- `target_before`: Target branch memory and code claims before integration.
-- `result`: merged-code worktree memory and project reality at the Merged Code SHA.
-
-Git trees provide Base, Source, and Target-before. The current worktree provides Result so unresolved or already-written memory changes are visible. Each claim is evidence, not a winner selected for all questions.
-
-## Path Accounting Ledger
-
-The **Path Accounting Ledger** covers every memory-root-relative path found in any snapshot, including directories, regular files, symlinks, gitlinks, unchanged rows, and meaningful absence. Each row records:
-
-- safe POSIX path and path kind;
-- presence and SHA-256 for all four snapshots;
-- semantic role and stable identity when known;
-- selected Chinese action, attention level, authority/evidence, and rationale;
-- matching operation ID when bytes must change;
-- expected post-state and blocker details.
-
-Paths must be relative POSIX text. Reject absolute paths, `.` or `..` components, backslashes, NUL, drive prefixes, symlink traversal, and casefold or Unicode-normalization collisions. Directory rows support accounting but never receive file rewrite operations. An unclassified path is visible and blocking until the Agent resolves its role or the human accepts a bounded `暂不处理` during review; a ready Apply plan cannot contain `暂不处理`.
-
-Inventory `<memory-root>/changes/YYYY-MM/YYYY-MM-DD-<topic>.md` paths across Base, Source, Target-before, and Result like every other memory-root path. Classify each by its actual content and authority. A completed card is execution evidence/current evidence; it is not an accepted Requirement, ADR, project-memory fact owner, Target overwrite instruction, or automatic import request.
-
-## Semantic Artifact Roles
-
-The role vocabulary is exactly:
+The Target branch is the current workspace, not a universal winner. Resolve each observed conflict from:
 
 ```text
-human-source | accepted-authority | append-only-evidence | current-semantic-state | derived-index | validated-package | transaction-temporary | unclassified
+current Target understanding
++ Source facts already integrated by the code merge
++ latest verified implementation / test / config / environment facts
++ accepted Requirement / Product / ADR / Human Decision constraints
++ valid historical evidence that must remain preserved
 ```
 
-- `human-source`: original requirement, prototype, feedback, screenshot, recording, or other human-supplied material. Preserve bytes; only retain or import.
-- `accepted-authority`: accepted Requirement meaning, ADR, or explicit durable Human Decision. Preserve meaning and history; replace only through a separately accepted superseding artifact.
-- `append-only-evidence`: histories, close/reopen records, verification or submit evidence whose earlier bytes/events must not disappear.
-- `current-semantic-state`: Agent-maintained present-tense facts such as Current Work, current capability, lifecycle projection, environment claim, or locator target.
-- `derived-index`: inventory, locator, mapping, or summary rebuilt from canonical owners.
-- `validated-package`: package members whose content and manifest identity must remain coherent, such as a validated Project Skill.
-- `transaction-temporary`: report-local journal and backups used only during Apply/Post-check/Restore.
-- `unclassified`: discovered content whose owner or semantics are not yet proven. It blocks readiness.
+Use latest verified facts for the disputed question, not the newest Markdown timestamp or the branch side that happened to merge last.
 
-Directory names and filename patterns are hints only. The Agent owns the semantic classification by reading the artifact and its referenced authority.
+Use the authority that owns the disputed question:
 
-## Fact Authority By Question
+| Question | Primary authority |
+|---|---|
+| What did the human originally provide? | immutable human source and provenance |
+| What product behavior is accepted? | effective accepted Requirement / Product Definition and Human Decisions |
+| What technical decision is accepted? | effective accepted ADR and supersession evidence |
+| What is implemented now? | merged code, tests, configuration, generated/runtime evidence |
+| What is currently active, closed, or located where? | canonical lifecycle owner plus current project evidence |
+| What is true in an environment? | fresh bounded environment evidence plus accepted policy |
 
-There is no global source precedence. Use the authority that owns the question:
+Code proves implementation reality, not product correctness. If implementation contradicts accepted product or technical authority, preserve that authority and expose the contradiction instead of silently rewriting it to match code.
 
-| Question | Primary authority | Required check |
-|---|---|---|
-| What did the human originally ask for? | immutable human source | byte identity and archive provenance |
-| What product behavior is accepted? | effective accepted Requirement / PRD and Human Decisions | accepted status, stable IDs, supersession |
-| What technical decision is accepted? | accepted ADR | dependency snapshot, supersession, current applicability |
-| What is implemented now? | merged code, tests, config, generated/runtime evidence | Merged Code SHA and verification evidence |
-| What is currently active or closed? | canonical lifecycle owners plus implementation evidence | cross-artifact invariant and dates/evidence |
-| Where is an artifact located? | canonical artifact plus rebuilt locator/index | filesystem identity and stable ID |
-| What is the environment truth? | bounded current environment evidence and accepted runbook/policy | freshness, scope, customer boundary |
+## Scope Boundary
 
-Code can prove implementation reality; it cannot by itself prove product correctness. When implementation conflicts with accepted Requirement, ADR, or Human Decision, keep the accepted authority intact and raise the conflict for Human Review.
+Inspect only:
 
-## Desired Target Memory
+1. the observed conflict location or stable ID;
+2. the canonical owner of the conflicting meaning;
+3. the minimum direct references, locators, or derived indexes that will become wrong when the owner changes;
+4. the minimum code, test, config, environment, Requirement, ADR, history, or Human Decision evidence needed to decide the conflict.
 
-The Agent derives one **Desired Target Memory Snapshot**:
+Do not inventory or ask the human to review:
 
-```text
-Desired Target Memory
-= merged code / test / config reality
-+ immutable human sources
-+ accepted product / technical decisions
-+ valid Source and Target history
-+ Target-appropriate current state
-+ rebuilt derived indexes and locators
-```
+- unchanged memory files;
+- all paths from historical snapshots;
+- file hashes unrelated to an actual rewrite;
+- meaningful absence across the whole memory root;
+- mechanical `保留` decisions;
+- speculative drift outside the conflict's dependency boundary.
 
-This is a semantic target, not concatenated Markdown. Source and Target artifacts may be retained, introduced, rewritten, recalculated, or have stale Agent-maintained claims removed according to ownership and facts. Branch-local Current Work is not automatically promoted to the Target. Customer-specific meaning remains isolated from the standard product line.
+If targeted inspection notices unrelated drift, report it separately as a possible Recovery item. Do not expand the current merge reconciliation unless that drift is necessary to understand the observed conflict.
 
-## Attention And Chinese Actions
+## Agent Resolution Rules
 
-Human attention has only three levels:
+The Agent owns semantic reconciliation before asking the human:
 
-- `🔴`: facts cannot determine one safe outcome; the human must decide before a ready plan.
-- `🟡`: the Agent has a recommended outcome but impact or confidence merits grouped review.
-- `🟢`: fact-determined and summarized; no item-by-item decision is requested.
+| Situation | Agent action |
+|---|---|
+| One claim is stale and facts prove the current claim | rewrite the stale current-state claim |
+| Both claims are compatible and independently useful | combine or retain them without Human Review |
+| Both claims are stale but a third verified fact is authoritative | rewrite to that verified fact |
+| A directly affected derived index or locator is stale | recalculate only that index or locator |
+| Implementation conflicts with accepted Requirement / ADR / Human Decision | preserve accepted meaning and report implementation drift |
+| Customer or release context proves one claim is branch-local | keep it isolated from the standard Target memory |
+| Multiple meanings remain legitimate or evidence is missing | present concrete alternatives to the human |
 
-Actions are exactly:
+Every automatic rewrite records the conflict, evidence, changed owner/reference, targeted verification, and rollback. It does not require a separate reconciliation Human Gate when it is deterministic, bounded to the conflict, reversible, and verified.
 
-```text
-保留 | 引入 | 重写 | 重算 | 移除过时声明 | 暂不处理
-```
+Only unresolved semantic choices require Human Review. Present the smallest set of real options, one recommendation, the evidence gap, and the consequence of each choice. For a small conflict, conduct this review directly in the conversation; do not create a file merely to ask or record one bounded answer. Do not ask the human to approve unchanged files or an all-path plan.
 
-`保留` creates no operation. `暂不处理` may describe a draft blocker but is forbidden in a ready plan. `引入` requires an absent Result preimage and a present postimage; `重写` requires an existing regular-file Result whose exact hash is the operation preimage; `重算` produces a present derived file from either an absent Result or that exact existing preimage; `移除过时声明` requires an exact existing preimage and an absent post-state. The checker rejects an action label whose actual mutation does not match these semantics.
+## Conflict Report
 
-Original human sources and accepted authorities permit only `保留 | 引入`. Their `引入` operation must copy a same-path `100644 | 100755` Git blob byte-for-byte from one recorded snapshot; inline payloads, trees, symlinks, path substitution, and overwrite-shaped imports are forbidden. Append-only evidence permits `保留 | 引入`; a generated append file may use `重写` only if the full preimage is preserved and the checker proves a strict append. `derived-index` uses `重算` when bytes change. `移除过时声明` applies only to current or derived Agent-maintained content.
+Create `<memory-root>/memory-merges/MM-<merged-code-short-sha>-<conflict-topic>/README.md` only when:
 
-## Memory Merge Report
+- several coupled conflicts or rewrites need a durable shared review surface;
+- the work must survive context/session handoff;
+- recovery/rollback evidence is too substantial to remain safely in the owning Feature/Change/submit record; or
+- the human explicitly asks to retain a report.
 
-For one Merged Code SHA, create on demand exactly one durable report at:
+Use `templates/memory-merge-report.md`. The report contains only observed conflicts, minimum direct evidence, actual rewrites, directly affected references/indexes, targeted verification, rollback, unresolved choices, and unrelated drift noticed incidentally.
 
-```text
-<memory-root>/memory-merges/MM-<collision-safe-merged-code-short-sha>/README.md
-```
+A small conflict is reviewed in the conversation. A small deterministic correction may be recorded in the owning Feature/Change/submit evidence when that already provides durable conflict, diff, verification, and rollback context. Do not create a report merely because a merge occurred or one Human answer was needed.
 
-Start with 12 lowercase SHA characters and extend one character at a time when an existing ID records a different full SHA. Reuse the existing report when its recorded full SHA is identical; a second report directory for the same full SHA fails closed before Apply. Never rename an older report. Do not create `memory-merges/` during Init Project or Project Entry.
+## Safe Rewrite And Verification
 
-Report statuses are exactly:
+Before a targeted rewrite:
 
-```text
-待确认 | 已完成 | 已恢复
-```
+- confirm the accepted memory root and current merged HEAD;
+- preserve immutable human sources, accepted authorities, and append-only history;
+- avoid symlink traversal, path escape, implicit root migration, customer leakage, and unrelated dirty work;
+- capture the exact preimage of only the files to be changed;
+- compute the exact intended postimage bytes before mutation;
+- keep a bounded backup of only the changed preimages until targeted verification passes;
+- write through a same-directory temporary file and atomically replace the owner file.
 
-The report is the audit owner for Merge Context, four-snapshot inventory, Path Accounting Ledger, attention, Human Decisions, exact operations, normalized Plan Hash, expected unchanged paths, Apply evidence, post-check, restore, and remaining risk. It is not a project encyclopedia, Bug backlog, Feature execution system, or authority that replaces its cited artifacts.
+After the rewrite:
 
-## Scan
-
-The read-only scanner:
-
-1. resolves every input SHA to a full commit, requires `HEAD == merged_code_sha`, and rejects blank Source Branch, Target Branch, Target Release Context, or Customer Boundary values;
-2. locates exactly one accepted memory root and refuses implicit root migration;
-3. inventories all four snapshots, with full path kinds and hashes;
-4. uses the Target Canonical Memory Spine for traversal order, not coverage;
-5. excludes only the current report directory and its transaction data from Result business-memory comparison;
-6. emits deterministic, sorted JSON with role hints, blockers, snapshot hashes, `scan_sha256`, and optional zero-change comparison;
-7. performs no writes.
-
-The Agent then deep-reads changed or affected records plus the canonical owners and references necessary to decide their meaning. Scan output is mechanical evidence, not the semantic decision.
-
-When Change paths are present, re-run the dedicated read-only Lightweight Change scanner for the Result root, include pending and human-review inventory in the reconciliation evidence, and re-check every Source `synced` fact against Merged Code, Target context, accepted authorities, and the Target Canonical Memory Spine. Do not change the existing reconciliation report identity, Start gate, exact Plan Hash, transaction, Apply, post-check, restore, Memory Commit, Push, Release, or cleanup sequence.
-
-## Fact Reconciliation
-
-For every ledger row, the Agent:
-
-1. identifies artifact identity and semantic role;
-2. asks the ownership-specific fact question;
-3. checks the applicable code, test, config, environment, product, governance, Requirement, ADR, Git, and Human Decision evidence;
-4. distinguishes inherited, Source-only, Target-only, jointly changed, stale, duplicated, and derived claims;
-5. proposes one action, attention level, intended post-state, and evidence-backed rationale;
-6. exposes unresolved ambiguity rather than guessing.
-
-Scripts may inventory, hash, validate, apply, and restore. They do not decide product meaning, accepted behavior, environment policy, governance, requirement compatibility, ADR intent, customer boundaries, or human choices.
-
-## Exact Rewrite Plan And Plan Hash
-
-The ready plan uses schema version `1` and records report identity, Merge Context, scan hash, the complete ledger, ordered rewrite operations, expected unchanged paths, Human Decisions, post-check expectations, and `plan_sha256`.
-
-Each operation has one ledger owner and one safe relative file path. It records sequence, action, exact preimage SHA-256 or absence, exact postimage SHA-256 or absence, output mode, and a bounded content source. Content is either validated inline base64 (2 MiB per file, 8 MiB total) or a file blob from one recorded snapshot SHA. It cannot be a command, hook, URL fetch, shell expression, or arbitrary filesystem copy.
-
-CLI JSON, PASS, and error output is UTF-8 regardless of the host console code page. On filesystems with POSIX executable bits, `100644` and `100755` remain distinct and are verified exactly. Native Windows cannot represent that executable-bit distinction in the worktree, so those two modes are equivalent only while checking the mode of an already-proven regular file; bytes, SHA-256, path, file kind, Git source mode, operation identity, and every other transaction invariant remain exact. `120000`, `160000`, directories, and other kinds never become mode-equivalent.
-
-The normalized Plan Hash is SHA-256 over canonical UTF-8 JSON excluding only `plan_sha256`. The checker recomputes it. Every changed row that needs bytes has exactly one operation, every operation has exactly one row, expected unchanged paths are hashed, and no ready plan contains unresolved red items, blockers, unclassified content, or `暂不处理`.
-
-## Human Review
-
-There are two gates:
-
-1. **Start**: before report creation, show merge identity, evidence availability, memory root, expected scope, customer/release boundary, and explicitly unauthorized Git actions. The human authorizes only creation of this report and read-only reconciliation work.
-2. **Exact Rewrite Plan**: after facts are reconciled, show 🔴 decisions, grouped 🟡 reviews, 🟢 summary, every add/update/remove path, expected unchanged paths, normalized Plan Hash, semantic post-check, restore scope, and unauthorized Git actions. The human authorizes only that exact hash.
-
-The Agent checks evidence, narrows choices, and gives a recommended decision before asking one blocking question. Changed evidence or plan bytes invalidate the old confirmation and require a new Plan Hash review.
-
-## Apply
-
-Apply accepts only the exact human-confirmed Plan Hash and a fresh successful pre-apply check. It rejects stale snapshots, unexpected dirty paths, unsafe paths, unresolved attention, incomplete accounting, prior success, or an existing unresolved transaction.
-
-Before changing business memory, create a report-local transaction journal and exact backups. Apply operations in numeric order using atomic writes without symlink traversal. While machine and semantic checks are pending, keep the report `待确认` and the journal in checking state.
+- verify the changed files match the intended postimages byte-for-byte;
+- re-read the resolved owner and directly affected references/indexes;
+- run the smallest relevant structural and semantic checks;
+- prove the original observed conflict no longer exists;
+- confirm no unrelated file changed;
+- restore only this rewrite from captured preimages if verification fails.
 
 Memory Reconciliation scripts never execute commands or hooks stored in a report or memory artifact.
 
-The Agent runs bounded domain/semantic verification separately and records the commands or procedures and their actual evidence in the report. Only finalize can mark the report `已完成`, after fresh post-apply validation proves the exact Plan Hash, evidence block, expected tree, expected unchanged paths, and zero-change result.
+## Git And Lifecycle Separation
 
-## Global Post-check
-
-Post-check is not limited to changed files. It proves:
-
-- the current HEAD and Merge Context remain identical;
-- a repeat scan against the report yields zero business-memory changes;
-- every path has the expected bytes, mode, kind, identity, and references;
-- unchanged paths still match their pre-apply hashes;
-- human sources, accepted authorities, append-only evidence, and validated packages retain their invariants;
-- derived indexes and locators match canonical artifacts;
-- no unresolved 🔴, `暂不处理`, unclassified path, broken reference, duplicate stable ID, stale current-state claim, or customer-boundary leak remains;
-- recorded domain/semantic verification succeeded;
-- transaction payload cleanup is safe.
-
-Machine checks prove deterministic structure and bytes. The Agent remains responsible for semantic evidence and must not claim product correctness from hashes alone.
-
-## Restore And Recovery
-
-On Apply or post-check failure, restore only this run's memory operations in reverse order from verified backups. Prove original bytes, modes, absence, and unchanged-path hashes before removing transaction payloads. Record failure and restore evidence, then set the report to `已恢复`. If a process exits after the journal reaches internal `restored` but before report-status update or transaction cleanup, the same Restore command revalidates the restored tree and idempotently finishes only those remaining steps.
-
-Restore does not run `git reset`, roll back merged code, alter unrelated dirty work, or perform branch actions. If identity, journal, backup scope, or restored hashes cannot be proven, retain the transaction and stop in Recovery. A failed or incomplete restore blocks all later Apply and Git actions.
-
-## Single Successful Apply
-
-One full Merged Code SHA has one durable report and at most one successful Apply. After `已完成`, Apply and replay are forbidden. Finalize may only resume or clean up the same verified transaction; it never reapplies operations. A completed report without its own verified residual transaction rejects Apply and Finalize replay.
-
-A successful result must be idempotent in observation: scanning again for the same report and Merge Context reports zero change. New code integration creates a new full Merged Code SHA and therefore a new reconciliation identity.
-
-## Git Gate Separation
-
-The required order is:
+The ordering remains:
 
 ```text
 Code Merge Gate -> Post-Merge Memory Reconciliation -> Memory Commit Gate -> Push Gate -> Release Gate -> Source Branch Cleanup Gate
 ```
 
-`待确认`, `已恢复`, an unresolved transaction, stale evidence, or missing report blocks memory commit, push, release/publish, and Source branch cleanup. `已完成` permits only presentation of the next independently authorized gate; it grants no commit, push, tag, release, publish, merge, branch deletion, or cleanup permission.
+`reconciliation-not-needed` and a successfully verified targeted resolution allow only presentation of the next independent gate. They do not authorize commit, push, PR, merge, tag, release, publish, branch deletion, or cleanup.
 
-## Domain Ownership Boundaries
+An unresolved observed conflict or failed restore blocks later mutation because Target memory is not trustworthy. A speculative conflict or missing full audit is not a blocker.
 
-Reconciliation consumes existing ownership without redefining it:
+## Full Memory Audit / Recovery
 
-- Requirement and PRD own product goals, accepted concepts, flows, states, and expected behavior.
-- ADR owns accepted technical landing and compatibility; it cannot redefine Requirement semantics during reconciliation.
-- Bug Record owns Bug identity, facts, evidence, lifecycle, Resolution Path, and closure; Feature owns code repair execution.
-- Feature artifacts own work, verification, review, drift, and Submit evidence.
-- Branch Management supplies accepted strategy and Merge Context; it does not perform reconciliation.
-- Archive changes Feature location, never identity or ownership; locator rebuilding respects archived records.
-- Project Skill manifests and bodies remain a validated package; reconciliation cannot silently mutate trust.
-- `project.md` owns long-term/current pointers, not a copy of the report ledger or transaction.
+The historical four-snapshot, all-path, exact-plan workflow remains available only as **Full Memory Audit / Recovery**. Use it when:
 
-Do not introduce new lifecycle states, canonical stages, message intents, artifact owners, or automatic policy changes through this method.
+- the human explicitly asks for a full memory audit or forensic reconciliation;
+- corruption is broad and the conflict boundary cannot be established;
+- a prior reconciliation transaction is incomplete or restore evidence is uncertain;
+- memory-root migration, widespread duplicate identities, or systemic index damage requires repository-wide accounting.
 
-## Fail-Closed Conditions
+Before it runs, obtain explicit Human authorization for that audit scope. The Python scanner also requires `--full-audit-authorized`; without it the command fails before inventory.
 
-Stop before write, or restore and stop after a partial write, when any of these occurs:
+Full Memory Audit / Recovery may use:
 
-- HEAD, a recorded SHA, branch/release/customer context, memory-root identity, scan hash, Plan Hash, or report identity is missing or changed;
-- Source/Base/Target-before/Result evidence is unavailable or cannot be read safely;
-- an unaccounted, unsafe, colliding, symlink-traversing, gitlink, or unclassified path remains;
-- ledger/operation cardinality, preimage/postimage, inline limits, content-source identity, expected unchanged path, or output mode fails validation;
-- human source, accepted authority, append-only history, validated package, customer isolation, or ownership rules would be violated;
-- the plan still contains a blocker, 🔴 item, `暂不处理`, or unrecorded Human Decision;
-- the report is already `已完成`, is `已恢复` without a new reviewed plan, or has an unresolved transaction;
-- unexpected dirty work overlaps the memory scope;
-- machine post-check, Agent semantic verification, zero-change scan, or restore proof fails.
+- `templates/full-memory-audit-report.md`;
+- four complete snapshots;
+- Target Canonical Memory Spine;
+- Path Accounting Ledger;
+- Desired Target Memory Snapshot;
+- exact normalized Plan Hash;
+- Start, exact Apply, post-check, and Restore gates;
+- the existing scan/check/apply/restore scripts.
 
-Report the exact evidence and the smallest safe next step. Never guess through a safety failure.
+These controls belong to Recovery. They must never be imported into the normal no-conflict or conflict-driven path.
+
+## Ownership Boundaries
+
+- Requirement / Product Definition owns accepted product meaning.
+- ADR owns accepted technical landing and compatibility.
+- Bug records own Bug identity and lifecycle; Features own repair execution.
+- Feature and Change artifacts own execution and verification evidence.
+- Branch Management supplies branch/release/customer context but does not perform reconciliation.
+- Feature Archive changes location, not identity.
+- Project Skill manifests and bodies remain a validated package; a package conflict is unresolved until integrity and authority are proven.
+- `project.md` may point to an active unresolved conflict but must not copy conflict matrices, audit ledgers, hashes, or transaction details.
+
+## Anti-patterns
+
+Never:
+
+- run an all-memory scan after every merge;
+- infer that different files automatically conflict;
+- treat Target memory or Source memory as universally correct;
+- ask the human to review hundreds of unchanged or retained records;
+- create a report for a small conflict that can be understood and decided in the conversation;
+- block push or release because a report was not created when no conflict exists;
+- let code silently redefine accepted product or ADR meaning;
+- use a normal conflict resolution to authorize a Git or lifecycle action;
+- invoke Full Memory Audit / Recovery without its explicit authorization.

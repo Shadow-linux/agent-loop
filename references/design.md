@@ -28,12 +28,10 @@ The core constraints are:
 - standard and customer release aggregation branches are retained; formally released versions are sealed; customer customization cannot flow wholesale into the standard product line
 - branch-specific Target Release Context and Target Branch stops apply only to an adopted strategy or versioned/customer delivery; a confirmed simple `not-needed` path continues without those fields
 - Post-Merge Memory Reconciliation is an internal Submit / Integrate method after verified code integration, not a canonical stage or message intent; it never performs code merge or authorizes a later Git action
-- the Target Canonical Memory Spine supplies output structure and scan order, not fact priority or a path allowlist; the Path Accounting Ledger covers every Base, Source, Target-before, and Result path
-- every discovered memory record is classified by semantic role, then checked against the authority for its specific question; no single snapshot or code reality is globally authoritative
-- the Agent derives one Desired Target Memory Snapshot from immutable human sources, accepted authorities, valid history, merged reality, Target-appropriate current state, and rebuilt indexes
-- one full Merged Code SHA owns one durable Memory Merge Report and at most one successful Apply; sibling report identities and completed replay fail closed
-- Chinese action labels are executable plan semantics: import starts absent, rewrite starts from the exact regular-file preimage, recalculate may rebuild an absent derived file or replace its exact preimage, stale removal ends absent, and immutable human/accepted imports copy only a same-path recorded regular Git blob
-- Memory Reconciliation CLI output is deterministic UTF-8; POSIX worktrees enforce `100644` versus `100755` exactly, while native Windows treats only those two regular-file worktree modes as equivalent because it cannot represent the executable bit, without relaxing bytes, kind, source, path, identity, or transaction checks
+- normal reconciliation is conflict-driven: no observed conflict means `reconciliation-not-needed`, no scan/report/reconciliation gate, and no later-gate blocker
+- for an observed conflict, the Agent reads only its semantic owner, direct references/indexes, and minimum direct evidence; it rewrites fact-determined current meaning and asks the human only when multiple meanings remain legitimate
+- accepted Requirement/Product/ADR/Human Decision meaning remains authoritative for its question while merged code/tests/config prove implementation reality; neither Source nor Target wins globally
+- the four-snapshot Target Canonical Memory Spine, Path Accounting Ledger, Desired Target Memory Snapshot, exact Plan Hash, and transactional Apply/Restore tooling belong only to explicitly authorized Full Memory Audit / Recovery
 - optional `.agent-loop/skills/` owns Human-gated project-local reusable capabilities; `INDEX.md` owns lifecycle and discovery metadata
 - Project Skill Discovery Guard checks active INDEX metadata before negative Project Skill claims or generic executable fallback, loads only a matched body, and fails closed on drift without adding a stage, status, cache, or execution grant
 - stable Web E2E capability belongs in `project.md`; feature-specific E2E cases belong in feature `tests.md` or `tests/e2e/*`
@@ -92,17 +90,17 @@ Human Goal
 → Feature Monthly Archive when the human explicitly asks to compact closed-history discovery
 → Project Memory Update
 → Submit / Integrate if requested
-  → [internal] Post-Merge Memory Reconciliation after verified code integration and before later Git gates when branch memories may differ
+  → [internal] Post-Merge Memory Reconciliation after verified code integration and before later Git gates only when an observed memory conflict exists
 → Resume / Pause / Close
 ```
 
 ## Post-Merge Memory Reconciliation Invariant
 
-After code integration, use the **Target Canonical Memory Spine** as the traversal and output-structure baseline, then account for all paths across Base, Source, Target-before, and Result in a **Path Accounting Ledger**. Classify each record as human source, accepted authority, append-only evidence, current semantic state, derived index, validated package, transaction temporary, or unclassified before selecting an action.
+After code integration, first ask whether a concrete memory contradiction was observed. Different files, Source-only artifacts, unchanged memory, or possible unknown drift do not create a conflict. With no observed conflict, record `reconciliation-not-needed` only when the submit evidence needs it and continue to the next independent gate.
 
-Derive a **Desired Target Memory Snapshot** by question-specific fact authority. Code proves implementation reality but does not overwrite accepted product or technical meaning. Preserve original human sources, accepted decisions, and append-only history; rebuild derived indexes; expose semantic conflicts to the human.
+For an observed conflict, treat Target memory as the current understanding, then reconcile it with Source facts already integrated, latest verified implementation/environment facts, accepted product/technical authority, and protected history. Read only the conflict owner, directly affected references/indexes, and minimum evidence. The Agent resolves deterministic conflicts; only unresolved semantic alternatives reach Human Review.
 
-The method has a Start gate before report creation and an exact Plan Hash gate before Apply. One Merged Code SHA has one report and one successful Apply. Apply, post-check, restore, memory commit, push, release, and Source branch cleanup remain distinct boundaries. See `memory-reconciliation.md` for the detailed contract.
+Full four-snapshot accounting, exact Plan Hash, and transactional Apply/Restore remain available only as explicitly authorized Full Memory Audit / Recovery. Memory commit, push, release, and Source cleanup remain independent Human Gates. See `memory-reconciliation.md`.
 
 Abstract model:
 
@@ -130,7 +128,7 @@ Behavior Intent
 
 **Adaptive Depth**: Agent-owned risk-based selection of card detail, Plan steps, targeted verification, and the smallest meaningful RED/GREEN for isolated behavior. It never reduces safety, scope, rollback, evidence, memory, or action-specific gate invariants.
 
-**Change Memory Consolidation**: internal Agent semantic review triggered by `completed + pending >= 3`, the oldest pending age being greater than seven full calendar days, known memory drift, pre-release review, or verified post-merge entry. The cross-platform scanner validates and inventories only; it never chooses meaning or writes memory.
+**Change Memory Consolidation**: internal Agent semantic review triggered by `completed + pending >= 3`, the oldest pending age being greater than seven full calendar days, known memory drift, or pre-release review. The cross-platform scanner validates and inventories only; it never chooses meaning or writes memory. A post-merge conflict reads one relevant Change directly when needed and does not trigger global Change consolidation.
 
 **Bug Report**: one source event describing a suspected defect. It is intake evidence and does not automatically create a distinct stable identity.
 
@@ -543,7 +541,7 @@ Accidental interruption may resume one `in-progress` card only after full branch
 
 The read-only standard-library scanner computes `pending_count >= 3` and `as_of_date - oldest_completed_at > 7 days`; exactly seven days does not trigger. It reports completed human-review candidates separately. Agent-owned semantic consolidation may sync only stable high-evidence facts to an existing reliable owning memory location after exact scope disclosure and post-check. A changes-only root cannot grow `project.md` or enterprise memory automatically. Uncertain facts remain visible for human review.
 
-Code integration precedes Target memory rewriting. Post-Merge Memory Reconciliation consumes monthly Change files as evidence across all snapshots and rechecks Source `synced` claims against Merged Code and Target context; no Change is a Target overwrite instruction or Git authorization.
+Code integration precedes Target memory rewriting. When an observed conflict directly involves a Change-derived fact, Post-Merge Memory Reconciliation reads only that card and the minimum owner/direct evidence needed to recheck its Source `synced` claim. It does not scan every monthly Change; no Change is a Target overwrite instruction or Git authorization.
 
 Within Decision & Design, a requirement-driven ADR uses this internal order without adding a canonical stage or default mapping artifact:
 

@@ -16,7 +16,8 @@ AGENTS.md / CLAUDE.md = agent startup guidance
 .agent-loop/requirements/<record-date>-<topic>/sources/* = preserved human source material when a new package needs a sources directory
 .agent-loop/skills/INDEX.md = optional project-skill lifecycle and discovery index
 .agent-loop/skills/<skill-name>/* = optional human-confirmed project-local capability
-.agent-loop/memory-merges/MM-<short-sha>/README.md = on-demand post-code-merge memory audit; never a default empty directory
+.agent-loop/memory-merges/MM-<short-sha>-<topic>/README.md = optional complex/cross-session conflict record
+.agent-loop/memory-merges/MM-<short-sha>/README.md = explicitly authorized Full Memory Audit / Recovery; never a default empty directory
 ```
 
 Default memory root is `.agent-loop/` because it is workflow metadata, not product code. Reuse legacy `agent-loop/` only when it is the single real accepted root, and ask before migration. If both `.agent-loop/` and legacy `agent-loop/` exist, fail closed and route to Recovery.
@@ -25,7 +26,7 @@ Do not use `AGENTS.md` as a task log. Do not use `project.md` as the startup ins
 
 Root guidance may navigate a user Agent to the Feature Monthly Archive procedure, but it must not teach manual directory movement. Active/blocked/paused work remains at the first level. Archive and rehydrate use the canonical Python scan/check/apply/restore commands, an exact plan SHA-256 Human Gate, transaction recovery, and post-check; execution resumes only after rehydrate restores the flat feature path.
 
-Root guidance may also route a post-code-integration memory check, but the detailed Target spine, four snapshots, report states, Plan Hash, scripts, and recovery algorithm stay in `memory-reconciliation.md`. Refresh the root submit managed block when this concise route is absent or its full template block revision is stale; do not copy the detailed procedure into the target root file.
+Root guidance may also route an observed post-code-integration memory conflict, but the targeted fact-resolution rules and optional Full Memory Audit / Recovery stay in `memory-reconciliation.md`. Root guidance must say no observed conflict is `reconciliation-not-needed`, with no whole-memory scan or extra gate. Refresh the root submit managed block when this concise route is absent or its full template block revision is stale; do not copy the detailed procedure into the target root file.
 
 The Workflow Gateway Map contains one exact first-hop row for an already-defined actionable ordinary non-Bug change, pointing to `Lightweight Change Assessment` and `references/lightweight-change-lane.md`. Product meaning that is still being shaped remains in Requirements Discussion. Eligibility, Feature hard triggers, card fields, Adaptive Plan/TDD, scope expansion, completion, and gate details belong in that reference, not root `AGENTS.md`.
 

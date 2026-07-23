@@ -1513,14 +1513,16 @@ Rules:
 - temporary development-branch deletion requires merge evidence and a separate human cleanup decision; retained standard/customer aggregation branches are not cleanup candidates
 - when the Feature resolves Bugs, show Bug IDs, current Status, Bug-specific verification evidence, unresolved Bug Close Decisions, Target Release Context, and branch isolation
 - Submit/commit/push approval never closes a Bug, and Bug Close approval never authorizes Submit / Integrate
-- after a stable verified code merge, when Source and Target Agent Loop memory changed or may differ, run Post-Merge Memory Reconciliation as an internal Submit / Integrate method; load `memory-reconciliation.md`
-- stop at the Start Human Gate before report creation, then at the exact Plan Hash Gate before Apply; `待确认`, `已恢复`, stale evidence, or an unresolved transaction routes to Recovery and blocks Memory Commit, push, release/publish, and Source cleanup
-- a completed Memory Merge Report permits only the next separately authorized Memory Commit or later Git gate; code merge, submit, auto-mode, or helper approval does not satisfy any reconciliation/Git gate
+- after a stable verified code merge, run Post-Merge Memory Reconciliation only when an observed semantic memory conflict exists; load `memory-reconciliation.md`
+- no observed conflict is `reconciliation-not-needed`; do not scan all memory, create a report, add a Human Gate, or block the next independently authorized Git/lifecycle action
+- for a conflict, inspect only its owner/direct dependencies and minimum evidence; let the Agent rewrite fact-determined meaning and ask the human only when multiple meanings remain legitimate
+- broad four-snapshot accounting and exact Plan Hash/transaction/restore gates are explicit Full Memory Audit / Recovery only
+- a resolved conflict permits only the next separately authorized Memory Commit or later Git gate; code merge, submit, auto-mode, or helper approval does not satisfy any Git gate
 
 Write after confirmation:
 
 - `notes.md` submit/integrate record
-- current Memory Merge Report locator/status/blocker in `project.md` Current Work only when reconciliation applies; detailed ledger and transaction evidence stay in the report
+- current Memory Conflict Report locator/status/blocker in `project.md` Current Work only when an unresolved or material conflict report exists; do not persist `reconciliation-not-needed`
 - commit only if explicitly confirmed
 
 Exit, in order:

@@ -358,39 +358,32 @@ Human Decision:
 
 An accepted Branch Strategy, Target Release Context, plan, or auto mode is never action authorization. Creation or switching of one exact development branch uses the Branch Action Gate. Ask for the exact mutation after current evidence is shown; a cleanup decision must name the temporary branch and its merge evidence.
 
-### Post-Merge Memory Reconciliation Start
+### Post-Merge Memory Conflict Decision
 
-Use before creating `memory-merges/` or a Memory Merge Report. The requested decision authorizes only this report and read-only fact reconciliation.
+Use only when targeted evidence cannot determine one current meaning. Do not use it for `reconciliation-not-needed` or fact-determined rewrites.
 
-| Item | Observed value | Evidence | Risk / blocker | Human decision |
+| Item | Observed value | Minimum evidence | Consequence | Human decision |
 |---|---|---|---|---|
-| Merge Base / Source / Target-before / Merged Code SHA | full SHAs | Git commits and HEAD | missing or unstable SHA stops | confirm / stop |
-| Source / Target Branch |  | Git plus accepted Branch Context | Source evidence must remain available | confirm / revise |
-| Target Release Context / Customer Boundary |  | accepted policy and plan | boundary ambiguity stops | confirm / revise |
-| Code Verification | pass / fail | fresh bounded evidence | failure stops | acknowledge / stop |
-| Memory Root | `.agent-loop` / `agent-loop` | existing accepted root | dual root or migration stops | confirm / recover |
-| Proposed Report | `<memory-root>/memory-merges/MM-<short-sha>/README.md` | full SHA collision check | no directory before approval | create / stop |
-| Explicitly Not Authorized | write business memory, Apply, commit, push, tag, release, publish, merge, branch delete, Source cleanup | gate boundary | none follows from Start | acknowledge |
+| Conflict | exact incompatible current claims | owner and direct references | why both cannot remain | choose / clarify / stop |
+| Option A | concrete current meaning | supporting authority/facts | affected owner/references |  |
+| Option B | concrete current meaning | supporting authority/facts | affected owner/references |  |
+| Agent Recommendation | one recommended option | evidence and remaining uncertainty | expected rewrite/verification | accept / revise |
+| Explicitly Not Authorized | commit, push, tag, release, publish, merge, branch delete, Source cleanup | independent gates | no later action follows | acknowledge |
 
-Recommendation: start read-only reconciliation for this exact Merge Context or stop with the evidenced blocker.
+Recommendation: decide only the unresolved semantic choice; let the Agent perform and verify the resulting targeted rewrite.
 
-### Post-Merge Memory Reconciliation Exact Rewrite Plan
+### Full Memory Audit / Recovery Authorization
 
-Use after Fact Reconciliation and before Apply. The requested decision authorizes only the displayed normalized Plan Hash.
+Use only when the human explicitly requests a repository-wide audit/forensic recovery or broad corruption prevents a bounded conflict scope. This is not the normal merge path.
 
 | Review group | Required content | Evidence | Human decision |
 |---|---|---|---|
-| 🔴 必须决定 | each unresolved semantic conflict, narrowed options, Agent recommendation, impact | question-specific authority | decide each / revise / stop |
-| 🟡 建议复核 | grouped recommended actions and material impact | reconciled facts and diffs | accept group / revise selected |
-| 🟢 普通变更汇总 | count and paths/stable IDs by action | deterministic ledger | acknowledge |
-| Add / Update / Remove | every path, pre/post hash, mode, expected diff | exact operations | approve / revise |
-| Expected Unchanged | every guarded path and hash | scan inventory | acknowledge / revise |
-| Plan Hash | exact 64-character normalized SHA-256 | canonical plan JSON | approve exact hash / reject |
-| Post-check | zero-change scan plus machine and Agent semantic checks | expected result | acknowledge / revise |
-| Restore Scope | only this Apply's memory changes, exact backups, reverse order | transaction plan | acknowledge / revise |
+| Start scope | exact reason normal targeted reconciliation is insufficient | corruption/forensic evidence | authorize audit / stop |
+| Snapshot context | Base, Source, Target-before, Result and accepted memory root | full SHAs and branch context | confirm / revise |
+| Exact plan | all changed/unchanged guards, plan hash, post-check, restore | generated Full Audit report | approve exact hash / reject |
 | Explicitly Not Authorized | commit, push, tag, release, publish, merge, branch delete, Source cleanup | independent gates | acknowledge |
 
-If any 🔴, `暂不处理`, unclassified path, blocker, stale scan, or changed plan remains, do not request Apply approval. A changed plan requires a new hash and a new review.
+The scanner must receive `--full-audit-authorized`. A changed plan requires a new hash and a new review.
 
 ## Rules
 

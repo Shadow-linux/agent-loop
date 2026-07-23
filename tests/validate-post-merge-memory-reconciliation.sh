@@ -17,8 +17,11 @@ assert_not_contains() {
 }
 
 for file in \
+  docs/proposal/v1.5.x/conflict-driven-memory-reconciliation.md \
+  docs/proposal/v1.5.x/conflict-driven-memory-reconciliation-implementation-plan.md \
   references/memory-reconciliation.md \
   templates/memory-merge-report.md \
+  templates/full-memory-audit-report.md \
   scripts/memory_reconciliation_support.py \
   scripts/scan-memory-reconciliation.py \
   scripts/check-memory-reconciliation.py \
@@ -34,32 +37,79 @@ for file in SKILL.md references/design.md references/runtime.md \
 done
 
 for text in \
-  'Target Canonical Memory Spine' \
-  'Desired Target Memory Snapshot' \
-  'Path Accounting Ledger' \
-  'human-source | accepted-authority | append-only-evidence | current-semantic-state | derived-index | validated-package | transaction-temporary | unclassified' \
-  '保留 | 引入 | 重写 | 重算 | 移除过时声明 | 暂不处理' \
-  '待确认 | 已完成 | 已恢复' \
-  'one Merged Code SHA' \
-  'one successful Apply' \
+  'reconciliation-not-needed' \
+  'Observed Memory Conflict' \
+  'minimum direct evidence' \
+  'latest verified facts' \
+  'Only unresolved semantic choices require Human Review' \
+  'conduct this review directly in the conversation' \
+  'Full Memory Audit / Recovery' \
   'Memory Reconciliation does not perform the code merge.'; do
   assert_contains references/memory-reconciliation.md "$text"
 done
 
+assert_contains SKILL.md 'No conflict is `reconciliation-not-needed`: do not scan the whole memory root, create a report, or add a reconciliation gate.'
+assert_contains references/runtime.md 'When none exists, use `reconciliation-not-needed`: do not scan all memory, create a report, or add a Human Gate.'
+assert_contains references/stage-guides.md 'no observed conflict is `reconciliation-not-needed`; do not scan all memory, create a report, add a Human Gate'
+assert_contains references/workflow-checklists.md 'With no conflict, use `reconciliation-not-needed`; do not scan all memory, create a report, add a Human Gate'
+assert_contains templates/root-AGENTS.md 'No observed memory conflict means `reconciliation-not-needed`: do not scan all memory, create a report, or add a Human Gate.'
+assert_contains references/memory-reconciliation.md 'Inspect only:'
+assert_contains references/memory-reconciliation.md 'the observed conflict location or stable ID;'
+assert_contains references/memory-reconciliation.md 'the canonical owner of the conflicting meaning;'
+assert_contains references/memory-reconciliation.md 'the minimum direct references, locators, or derived indexes'
+assert_contains references/memory-reconciliation.md 'the minimum code, test, config, environment, Requirement, ADR, history, or Human Decision evidence'
+assert_contains references/memory-reconciliation.md 'A small conflict is reviewed in the conversation.'
+assert_contains references/memory-reconciliation.md 'Do not create a report merely because a merge occurred or one Human answer was needed.'
+assert_contains references/lightweight-change-lane.md 'Post-merge entry alone does not start consolidation or a full Change scan.'
+assert_contains references/lightweight-change-lane.md 'read one such card only when the observed conflict directly identifies it as necessary evidence'
+assert_contains references/project-guidance.md 'MM-<short-sha>-<topic>/README.md = optional complex/cross-session conflict record'
+assert_contains references/project-guidance.md 'MM-<short-sha>/README.md = explicitly authorized Full Memory Audit / Recovery'
+assert_contains templates/project.md 'Current Memory Merge Status: 待处理 | 待人类决定 | 已解决 | 待确认 | 已完成 | 已恢复 | none'
+assert_contains references/document-templates.md 'Current Memory Merge Status: 待处理 | 待人类决定 | 已解决 | 待确认 | 已完成 | 已恢复 | none'
+assert_not_contains references/lightweight-change-lane.md 'post-merge reviews'
+
 assert_contains references/runtime.md 'Code Merge Gate -> Post-Merge Memory Reconciliation -> Memory Commit Gate'
-assert_contains references/submit-and-integrate.md 'Memory Reconciliation must complete before push, release, publish, or Source branch cleanup.'
-assert_contains references/artifact-rules.md '.agent-loop/memory-merges/MM-<merged-code-short-sha>/README.md'
-assert_contains templates/memory-merge-report.md '<!-- memory-reconciliation-plan:start -->'
-assert_contains templates/memory-merge-report.md '<!-- memory-reconciliation-plan:end -->'
-assert_contains templates/root-AGENTS.md '| Verified code integration leaves Agent Loop memory to reconcile | Post-Merge Memory Reconciliation | `references/memory-reconciliation.md` |'
+assert_contains references/submit-and-integrate.md 'reconciliation-not-needed'
+assert_contains references/submit-and-integrate.md 'Unresolved observed memory conflicts'
+assert_contains references/artifact-rules.md '.agent-loop/memory-merges/MM-<merged-code-short-sha>-<conflict-topic>/README.md'
+assert_contains references/artifact-rules.md '<memory-root>/memory-merges/MM-<collision-safe-short-sha>/README.md'
+assert_not_contains templates/memory-merge-report.md '<!-- memory-reconciliation-plan:start -->'
+assert_contains templates/memory-merge-report.md '仅列出观察到的冲突'
+for audit_only_field in \
+  '## Memory Record Matrix' \
+  '### Expected Unchanged Paths' \
+  '## Exact Rewrite Plan' \
+  'Normalized Plan Hash:'; do
+  assert_not_contains templates/memory-merge-report.md "$audit_only_field"
+  assert_contains templates/full-memory-audit-report.md "$audit_only_field"
+done
+assert_contains templates/full-memory-audit-report.md '<!-- memory-reconciliation-plan:start -->'
+assert_contains templates/full-memory-audit-report.md '<!-- memory-reconciliation-plan:end -->'
+assert_contains templates/root-AGENTS.md '| Verified code integration has an observed memory conflict | Post-Merge Memory Reconciliation | `references/memory-reconciliation.md` |'
+assert_contains templates/root-AGENTS.md '| Broad memory damage, stale/incomplete memory without a stable verified post-merge conflict boundary, outside-loop work, or unresolved reconciliation recovery | Recovery / Re-Adopt | `references/recovery-and-backfill.md` |'
+assert_not_contains templates/root-AGENTS.md '| Memory conflicts or outside-loop work | Recovery / Re-Adopt |'
+assert_not_contains templates/root-AGENTS.md '| Stale, incomplete, or outside-loop memory; unresolved reconciliation recovery | Recovery / Re-Adopt |'
+assert_contains templates/root-AGENTS.md 'No observed memory conflict means `reconciliation-not-needed`'
+assert_contains templates/root-AGENTS.md 'outside a reversible fact-determined Post-Merge Memory Reconciliation rewrite'
+assert_contains SKILL.md 'outside a reversible fact-determined Post-Merge Memory Reconciliation rewrite'
+assert_contains references/runtime.md 'outside a reversible fact-determined Post-Merge Memory Reconciliation rewrite'
 assert_contains templates/root-AGENTS.md 'Git And Lifecycle Gate'
+assert_contains templates/root-AGENTS.md 'Full Memory Audit / Recovery Apply/Restore'
 assert_contains scripts/apply-memory-reconciliation.py '--mode'
+assert_contains scripts/scan-memory-reconciliation.py '--full-audit-authorized'
+assert_contains scripts/scan-memory-reconciliation.py 'Full Memory Audit / Recovery requires explicit authorization'
 assert_contains references/memory-reconciliation.md 'Memory Reconciliation scripts never execute commands or hooks stored in a report or memory artifact.'
-assert_contains references/memory-reconciliation.md 'a second report directory for the same full SHA fails closed before Apply'
-assert_contains references/memory-reconciliation.md 'same-path `100644 | 100755` Git blob byte-for-byte'
-assert_contains references/memory-reconciliation.md 'idempotently finishes only those remaining steps'
-assert_contains references/memory-reconciliation.md 'Native Windows cannot represent that executable-bit distinction'
-assert_contains references/memory-reconciliation.md 'CLI JSON, PASS, and error output is UTF-8'
+assert_contains references/memory-reconciliation.md 'The Python scanner also requires `--full-audit-authorized`'
+assert_contains references/memory-reconciliation.md 'These controls belong to Recovery.'
+assert_contains references/memory-reconciliation.md 'compute the exact intended postimage bytes before mutation'
+assert_contains references/memory-reconciliation.md 'write through a same-directory temporary file and atomically replace the owner file'
+assert_contains references/memory-reconciliation.md 'keep a bounded backup of only the changed preimages until targeted verification passes'
+assert_contains references/memory-reconciliation.md 'verify the changed files match the intended postimages byte-for-byte'
+assert_contains references/runtime.md 'exact preimages and intended postimages'
+assert_contains templates/memory-merge-report.md 'Exact preimage'
+assert_contains templates/memory-merge-report.md 'Intended postimage'
+assert_contains templates/memory-merge-report.md 'Rollback scope / backup evidence'
+assert_contains templates/memory-merge-report.md 'Remaining risk'
 
 for scenario in \
   'Source-only Requirement/Feature' \
@@ -105,8 +155,15 @@ for forbidden in \
   'Target memory always wins' \
   'unknown directories are ignored' \
   'Apply may run again after completion' \
-  'Memory merge authorizes push'; do
+  'Memory merge authorizes push' \
+  'every path in every snapshot must be classified'; do
   assert_not_contains references/memory-reconciliation.md "$forbidden"
+done
+
+for file in SKILL.md references/design.md references/runtime.md \
+  references/submit-and-integrate.md templates/root-AGENTS.md README.md Usage.md; do
+  assert_not_contains "$file" 'all-path Path Accounting Ledger'
+  assert_not_contains "$file" 'derive one Desired Target Memory Snapshot'
 done
 
 python3 - "$root/references/runtime.md" <<'PY'

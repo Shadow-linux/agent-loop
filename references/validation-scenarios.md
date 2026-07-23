@@ -1291,7 +1291,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.5.0`, while the current root AGENTS template uses `block-version:1.5.0-20260721.2`.
+Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.5.0`, while the current root AGENTS template uses `block-version:1.5.0-20260723.2`.
 ```
 
 Expected:
@@ -1299,7 +1299,7 @@ Expected:
 - read root `AGENTS.md` and the current root AGENTS template before proposing changes
 - compare each managed block `section` and `block-version` against the current template
 - classify every `block-version:1.5.0` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
-- propose replacing stale block revisions with the full current template revision such as `block-version:1.5.0-20260721.2`
+- propose replacing stale block revisions with the full current template revision such as `block-version:1.5.0-20260723.2`
 - copy the current template start marker metadata for each refreshed section unless `source` must point at the target project's active memory root or artifact source
 - preserve all human-owned content outside managed blocks
 - ask for human confirmation before writing
@@ -1309,7 +1309,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.5.0-20260721.2`.
+Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.5.0-20260723.2`.
 ```
 
 Expected:
@@ -3813,7 +3813,43 @@ Prompt: expected behavior is still being clarified through `Resolution Path: req
 
 ## 73. Post-Merge Memory Reconciliation
 
-These scenarios start only after code integration has one stable verified Merged Code SHA. Unless a scenario says otherwise, the Agent has the four full SHAs, accepted Source/Target branch context, and one reliable memory root. The method is internal to Submit / Integrate and never adds a canonical stage or message intent.
+These scenarios start only after code integration has one stable verified Merged Code SHA. The method is internal to Submit / Integrate and never adds a canonical stage or message intent.
+
+### Normal: Clean Merge With Independent Memory
+
+- Prompt: Source and Target changed different Requirement/Feature/Change files; Git merged them cleanly and no stable ID, current-state claim, locator, or direct reference conflicts.
+- Expected: `reconciliation-not-needed`; no all-memory scan, report, Human Gate, or later-gate blocker.
+- Required Human Gate: none for reconciliation; later Git/lifecycle actions keep their own gates.
+- Forbidden Action: compare every memory file, demand four SHAs, or ask the human to approve retained records.
+- Next Stage: the next independently requested lifecycle gate.
+
+### Normal: Fact-determined Current-state Conflict
+
+- Prompt: Source and Target left incompatible current pointers for the same stable Feature, while merged code and canonical lifecycle evidence prove one current state.
+- Expected: inspect that owner, pointer, and minimum direct evidence; Agent rewrites the stale pointer, target-verifies it, and records rollback without asking the human to approve the obvious answer.
+- Required Human Gate: none for the deterministic targeted rewrite.
+- Forbidden Action: inventory unrelated paths or turn the rewrite into an all-path exact plan.
+- Next Stage: the next independent gate after targeted verification.
+
+### Normal: Genuine Semantic Choice
+
+- Prompt: two accepted Human Decisions apply to the same scope and evidence cannot prove which one supersedes the other.
+- Expected: preserve both authorities, show only the concrete alternatives, one Agent recommendation, evidence gap, and consequences directly in the conversation; do not create a report for this one bounded choice.
+- Required Human Gate: one bounded semantic decision.
+- Forbidden Action: choose by branch side/recency alone or show unchanged files.
+- Next Stage: apply and verify the selected targeted rewrite.
+
+### Normal: Unrelated Drift Not Needed For Conflict
+
+- Prompt: targeted reconciliation notices an old unrelated stale onboarding paragraph.
+- Expected: report it separately as a possible Recovery item without expanding or blocking the current conflict resolution.
+- Required Human Gate: none unless the human chooses a separate repair.
+- Forbidden Action: recursively scan the entire memory root.
+- Next Stage: finish the current targeted resolution.
+
+### Full Memory Audit / Recovery Pressure Set
+
+The alphabetic scenarios below exercise the historical four-snapshot, all-path, exact-plan tooling only after explicit Full Memory Audit / Recovery authorization. They are not normal post-merge entry rules. Unless a scenario says otherwise, the authorized audit has four full SHAs, accepted Source/Target branch context, one reliable memory root, and the scanner receives `--full-audit-authorized`.
 
 ### A. Source-only Requirement/Feature
 
@@ -4360,10 +4396,10 @@ These scenarios start only after code integration has one stable verified Merged
 ### Human Review Candidate Remains Visible
 
 - Prompt: a completed card is `Memory Review: complete` and `Memory Result: human-review`.
-- Expected Route: exclude it from automatic pending count but include its path in every relevant scanner/Project Entry/pre-release/post-merge review.
+- Expected Route: exclude it from automatic pending count but include its path in relevant scanner, Project Entry, and pre-release review; post-merge reads it only when an observed conflict directly involves that card.
 - Evidence: Agent classification complete; human decision still outstanding.
 - Required Action: present a Chinese table with real `高 | 一般` choices and update to `none` or `synced` only after decision evidence.
-- Forbidden Action: hide it because pending is zero, invent extra lifecycle, or silently choose meaning.
+- Forbidden Action: hide it because pending is zero, invent extra lifecycle, silently choose meaning, or globally scan/expose it after an unrelated merge.
 - Next: Human Review when the candidate is relevant.
 
 ### Automatic Sync Discloses Exact Memory Scope
@@ -4405,11 +4441,11 @@ These scenarios start only after code integration has one stable verified Merged
 ### Post-Merge Reconciliation Rechecks Change Evidence
 
 - Prompt: verified Merged Code includes Source Changes and Target-before has different current facts.
-- Expected Route: inventory monthly Change paths in Base/Source/Target-before/Result and derive Target memory from question-specific authority.
-- Evidence: stable full Merged Code SHA, code verification, accepted root and complete reconciliation context.
-- Required Action: recheck Source `synced` claims against Merged Code/Target context and preserve Start/Plan Hash/transaction/restore gates.
-- Forbidden Action: import because a card says synced, skip all-path accounting, or let a Change replace accepted Requirement/ADR meaning.
-- Next: Post-Merge Memory Reconciliation Human Review.
+- Expected Route: first prove whether those facts are actually incompatible; if not, return `reconciliation-not-needed`.
+- Evidence: stable full Merged Code SHA, code verification, observed conflicting current claim, relevant Source Change, and its direct owner.
+- Required Action: when a conflict exists, recheck only that Source `synced` claim against Merged Code, Target context, and accepted authority; let the Agent resolve fact-determined meaning.
+- Forbidden Action: scan every monthly Change, import because a card says synced, demand all-path accounting, or let a Change replace accepted Requirement/ADR meaning.
+- Next: targeted resolution, bounded Human choice if genuinely ambiguous, or the next independent gate when `reconciliation-not-needed`.
 
 ## 74. Adaptive Requirement Product Definition
 

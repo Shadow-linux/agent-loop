@@ -134,11 +134,11 @@ Scope expansion stops the lane before broader edits. Preserve the current invest
 
 Completion requires executed-or-explained Plan steps, fresh targeted verification, diff/scope review, valid rollback, durable-memory impact review, and Result / Residuals. After completion, run `scripts/scan-lightweight-changes.py` and keep pending/human-review results visible. Card completion grants no Feature/Bug lifecycle, branch, submit, commit, push, PR, merge, tag, release, publish, production, paid-call, configuration-write, deployment, destructive, or external action.
 
-Run the read-only Python 3.10+ standard-library scanner at Project Entry when Changes exist, after every Change completion, and before release or memory reconciliation. Use `python3 <skill-root>/scripts/scan-lightweight-changes.py --project-root <target-project-root> --as-of <current-local-date>` on macOS/POSIX and `py -3 <skill-root>\scripts\scan-lightweight-changes.py --project-root <target-project-root> --as-of <current-local-date>` on Windows. Scanner `pending-count` or `pending-age` starts proactive Change Memory Consolidation; exactly seven days does not trigger. Known memory drift, pre-release pending/human-review, and verified post-merge entry are controller fact events, not scanner flags.
+Run the read-only Python 3.10+ standard-library scanner at Project Entry when Changes exist, after every Change completion, and before release. Use `python3 <skill-root>/scripts/scan-lightweight-changes.py --project-root <target-project-root> --as-of <current-local-date>` on macOS/POSIX and `py -3 <skill-root>\scripts\scan-lightweight-changes.py --project-root <target-project-root> --as-of <current-local-date>` on Windows. Scanner `pending-count` or `pending-age` starts proactive Change Memory Consolidation; exactly seven days does not trigger. Known memory drift and pre-release pending/human-review are controller fact events, not scanner flags. Post-merge reconciliation does not trigger this scanner unless the observed conflict directly involves Change evidence.
 
 The scanner validates and inventories only. The Agent owns semantic grouping and may directly sync a Change-derived fact only when the source has fresh verification, the fact is implemented and stable, one existing reliable memory target owns it, authorities do not conflict, no new decision is created, branch/release/customer scope is clear, exact target/fact/evidence/impact/rollback is disclosed before write, post-check is possible, and rollback touches only the Agent's edit. A changes-only root cannot create `project.md`, enterprise memory, or switch modes. Uncertain candidates become visible `human-review`; project memory never copies card history, pending backlog, or command logs.
 
-Consolidation validates, groups by fact, changes only owning memory files, post-checks format/reference/fact/residual consistency, restores only its own memory writes on failure, leaves source Changes pending after failure, updates their Memory fields only after success, and never creates a recursive Change. Code merge completes before Target memory reconciliation; Change files enter Base/Source/Target-before/Result inventories as evidence, and Source `synced` claims are rechecked against Merged Code and Target context.
+Consolidation validates, groups by fact, changes only owning memory files, post-checks format/reference/fact/residual consistency, restores only its own memory writes on failure, leaves source Changes pending after failure, updates their Memory fields only after success, and never creates a recursive Change. Code merge completes before Target memory reconciliation. If an observed conflict directly involves a Change-derived fact, read only that card and minimum direct evidence to recheck its Source `synced` claim.
 
 ## Adaptive Product Definition Internal Routing
 
@@ -504,13 +504,13 @@ Do not end an action report with only "done". Always include the next recommende
 Code Merge Gate -> Post-Merge Memory Reconciliation -> Memory Commit Gate -> Push Gate -> Release Gate -> Source Branch Cleanup Gate
 ```
 
-Post-Merge Memory Reconciliation is an internal Submit / Integrate method, not a canonical stage or message intent. Route to `references/memory-reconciliation.md` only after code integration has one stable full Merged Code SHA and fresh code-verification evidence, and when Base, Source, Target-before, Result, non-empty Source/Target Branch, Target Release Context, Customer Boundary, and the accepted memory root can be identified.
+Post-Merge Memory Reconciliation is an internal Submit / Integrate method, not a canonical stage or message intent. Route to `references/memory-reconciliation.md` only after code integration has one stable full Merged Code SHA, fresh code-verification evidence, an accepted memory root, and an observed memory conflict. Require only the branch/release/customer facts needed to understand that conflict.
 
-Before creating `.agent-loop/memory-merges/` or a report, present the Start Human Review and obtain explicit authorization for that one reconciliation. Scan is then read-only. The Agent accounts for every path through the Target Canonical Memory Spine and Path Accounting Ledger, resolves question-specific fact authority, and derives the Desired Target Memory Snapshot.
+First determine whether a concrete memory conflict was observed. When none exists, use `reconciliation-not-needed`: do not scan all memory, create a report, or add a Human Gate. Different files, clean Source-only artifacts, unchanged memory, and speculative drift are not conflicts.
 
-Before Apply, present every add/update/remove path, expected unchanged path, attention item, Human Decision, post-check, restore scope, and normalized Plan Hash. Apply is authorized only for that exact hash. Changed evidence, stale plan/scan, unexpected dirty memory, unresolved 🔴 or `暂不处理`, unsafe/unclassified paths, completed replay, or missing snapshot evidence fails closed and routes to Recovery rather than guessing.
+When a conflict exists, inspect only its semantic owner, directly affected references/indexes, and minimum direct evidence. Resolve fact-determined current meaning, capture exact preimages and intended postimages, use bounded same-directory atomic replacement, run targeted verification, and retain rollback only for changed files until verification passes. Ask the human only when facts leave multiple legitimate meanings; unresolved observed conflicts and failed restore block later mutations.
 
-While the report is `待确认` or `已恢复`, or while any transaction is unresolved, block memory commit, push, release/publish, and Source branch cleanup. `已完成` permits only presentation of the next independent Human Gate; it does not authorize commit, push, tag, release, publish, merge, branch deletion, or cleanup.
+Full Base/Source/Target-before/Result inventory, Start review, exact Plan Hash, transactional Apply/Post-check/Restore, and all-path checks are Full Memory Audit / Recovery only and require explicit Human authorization. A resolved conflict or `reconciliation-not-needed` permits only presentation of the next independent Human Gate; neither authorizes commit, push, tag, release, publish, merge, branch deletion, or cleanup.
 
 ## Stage Order
 
@@ -662,7 +662,7 @@ Auto modes do not remove stop conditions. Stop and ask when:
 - a Project Skill Candidate needs Gate 1 before creation or material update
 - a project-local skill is ready to execute without a current invocation Execution Gate grant
 - spec, product scope, or acceptance criteria would change
-- code reality conflicts with project memory or feature docs
+- code reality conflicts with project memory or feature docs outside a reversible fact-determined Post-Merge Memory Reconciliation rewrite; unresolved meaning still stops
 - unrelated dirty work blocks progress
 - a new dependency, migration, destructive operation, credential, external service, or long-lived boundary directory is needed
 - directory-level `AGENTS.md` creation/update is recommended

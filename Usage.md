@@ -43,7 +43,7 @@ Auto-Loop 不是无限授权。Agent 仍然必须停在需求变化、关键设�
 | 已明确、低风险、边界小、可回滚的普通非 Bug 变更 | Lightweight Change Lane | 不为了形式创建完整 Feature |
 | 行为/API/状态/数据/权限/安全/架构/迁移或影响不明 | Feature | 不走轻量旁路 |
 | 人类明确称为 Bug | Bug Management → Feature repair | 不把 Bug 降级成轻量 Change |
-| 代码已合并，`.agent-loop/` 记忆仍冲突 | Post-Merge Memory Reconciliation | 不把普通 Git 文本合并当作语义正确 |
+| 代码已合并，已观察到 `.agent-loop/` 记忆冲突 | Post-Merge Memory Reconciliation | 无冲突不扫描、不写报告；有冲突只处理受影响事实 |
 
 如果 Agent 无法确定 Lightweight 与 Feature 的边界，它应零写入地给出少量真实选项、一个推荐及证据，然后问你。
 
@@ -188,6 +188,8 @@ Product Human Review 确认“这份产品定义准确”，但不会自动接�
 ```
 
 Decision & Design / ADR 消费产品语义，不重新定义产品。新的 decision draft 默认是 `proposed`。发现产品歧义时回到 Requirements Discussion；发现既有 accepted 技术决策不兼容时保留原记录并通过 Human Review supersede。
+
+ADR 先用 `Effective Requirement Snapshot` 锁定已确认的 Product Definition，再用 Requirement Model Scope Inventory 和 Requirement Model Technical Landing Trace 把产品流程、状态、数据、权限与异常逐项落到技术设计，避免只凭摘要重新解释需求。
 
 ## 做一个边界明确的小修改
 
@@ -456,16 +458,35 @@ hotfix/v1.0.0/login-security
 代码必须先完成 merge 并验证。之后说：
 
 ```text
-代码已经合并并验证。看看两边的项目记忆要不要合并或重写，先给我报告，不要直接改。
+代码已经合并并验证。只处理已经观察到的项目记忆冲突：
+事实足够就用最新验证结果定向修正，无法判断时再给我少量选项。
+如果没有冲突，不要扫描全部记忆，也不要创建报告。
 ```
 
-流程固定为：
+普通流程是：
 
 ```text
-Scan → Plan → Human Review → Apply → Post-check → Restore
+发现真实冲突？
+├─ 否 → reconciliation-not-needed；不扫描、不写文件、不增加 Human Gate
+└─ 是 → 只查看冲突事实、语义 owner、直接引用和最少证据
+         ├─ 最新验证事实能确定唯一结果 → Agent 定向重写、验证并保留窄回滚
+         └─ 仍有多个合理含义 → 在会话内给出少量选项和一个推荐
 ```
 
-Agent 不选择某个分支整份覆盖，也不把 Git 无冲突当作语义正确。报告只让人类处理真正不确定或高关注问题；Agent 应先自行归并高证据事实。Start Gate、精确 Plan Hash Apply、memory commit、push、release 和 Source cleanup 相互独立。
+Target 是当前理解的起点，不是永远正确的一方；Source 经验已经由 Git 合入。Agent 用最新且适用于当前问题的代码、测试、配置或环境证据修正 Agent 维护的当前事实，同时保留人类原始材料、已接受的 Product Definition、ADR、Human Decision 和追加式历史。代码能证明“现在实现了什么”，不能静默改写“产品本应是什么”。
+
+小冲突优先在当前会话里核对，不为了一个答案创建文件。只有多个相互关联的冲突、工作需要跨会话延续、回滚/恢复证据较复杂，或人类明确要求留档时，才创建精简的 `memory-merges/MM-<merged-code-short-sha>-<topic>/README.md`；它只记录真实冲突、证据、实际改写、定向验证、回滚和仍待决定的问题。
+
+如果确实需要取证式全量检查，要明确说：
+
+```text
+请执行 Full Memory Audit / Recovery。
+对整个 Agent Loop memory root 做四快照和全路径核对，先给我审计范围与计划，不要直接 Apply。
+```
+
+只有这条显式授权的 Recovery 路径才使用 Base / Source / Target-before / Result 四快照、全路径清单、Desired Target Memory、精确 Plan Hash、事务 Apply / Post-check / Restore 和对应工具。普通无冲突或小冲突处理不会自动升级成 Full Memory Audit。
+
+确定性、边界明确且可回滚的定向修正由 Agent 负责，不额外制造 reconciliation Human Gate；只有无法从事实判断的语义选择才交给人类。Full Memory Audit / Recovery 的审计范围和 Apply/Restore、memory commit、push、release 与 Source cleanup 仍是相互独立的 Human Gate。
 
 ## 提交、暂停与关闭
 
@@ -503,7 +524,7 @@ Feature Close Review 先确认所有任务、验收、测试、决策切片、Bu
 | `features/<feature>/plan.md` | 当前 task/story 的实施计划 |
 | `features/<feature>/notes.md` | 决策、证据、drift、恢复和 review |
 | `skills/INDEX.md` | project-local Skills 的状态、触发和范围 |
-| `memory-merges/<merge>/README.md` | 记忆合并计划、决策、Apply、post-check 和 restore |
+| `memory-merges/<merge>/README.md` | 仅在复杂、跨会话或显式要求时保存精简冲突、证据、改写、验证和回滚 |
 
 `project.md` 记录当前工作和当前恢复动作，不承担需求待办；未来、deferred 和 backlog 项进入 Requirement lifecycle 与可选 `requirements/INDEX.md`。
 
@@ -533,7 +554,7 @@ Feature Close Review 先确认所有任务、验收、测试、决策切片、Bu
 这套操作以后还会重复，请帮我整理成项目能力。
 给这个项目推荐分支规范。
 把两个月前已经关闭的功能按月份归档。
-代码合并完了，检查两边的项目记忆是否需要校准。
+代码合并完了；无记忆冲突就不处理，有冲突只按最新验证事实定向校准。
 提交前做一次完整检查。
 检查这个功能是否真的可以关闭。
 ```
@@ -551,6 +572,6 @@ Agent 的责任是把人类目标翻译为正确的下一步，并保持项目�
 - 生产、预发、secret、付费、外部调用、配置写入或破坏性操作
 - branch create/switch/merge/delete
 - commit、push、PR、tag、release、publish
-- Feature pause/close、Bug close、archive/rehydrate Apply、memory reconciliation Apply
+- Feature pause/close、Bug close、archive/rehydrate Apply、Full Memory Audit / Recovery Apply/Restore
 
 Agent 可以完成安全检查、形成推荐并准备精确计划；人类只处理真正需要判断或授权的部分。

@@ -160,7 +160,8 @@ assert_contains references/artifact-rules.md 'Memory Result: pending | none | sy
 assert_contains references/project-memory-mode.md 'A changes-only root does not prove that project memory is initialized or reliable.'
 assert_contains references/branch-management.md 'A Lightweight Execution Card authorizes no branch action.'
 assert_contains references/submit-and-integrate.md 'A completed Lightweight Execution Card authorizes no submit or integration action.'
-assert_contains references/memory-reconciliation.md 'Change files are evidence only after code merge is complete and verified.'
+assert_contains references/memory-reconciliation.md 'a targeted check of changed memory finds a broken direct reference caused by this merge'
+assert_contains references/lightweight-change-lane.md 'Post-merge entry alone does not start consolidation or a full Change scan.'
 assert_contains references/runtime.md 'scripts/scan-lightweight-changes.py'
 assert_contains references/design.md 'The lane reduces ceremony and document depth, not accuracy, scope control, verification strength, rollback, fact review, or Human Gates.'
 
@@ -221,7 +222,7 @@ blocks = content.scan(/<!-- agent-loop:managed-start section:([^ ]+) .*?block-ve
 abort 'FAIL: root AGENTS managed blocks missing' if blocks.empty?
 abort "FAIL: expected 13 managed blocks, found #{blocks.length}" unless blocks.length == 13
 blocks.each do |section, revision|
-  expected = '1.5.0-20260721.2'
+  expected = '1.5.0-20260723.2'
   abort "FAIL: #{section} expected #{expected}, found #{revision}" unless revision == expected
 end
 RUBY

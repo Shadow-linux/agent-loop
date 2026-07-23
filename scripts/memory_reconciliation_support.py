@@ -829,6 +829,7 @@ def _scan_for_plan(
     command = [
         sys.executable,
         str(Path(__file__).with_name("scan-memory-reconciliation.py")),
+        "--full-audit-authorized",
         "--project-root",
         str(project_root),
         "--merge-base-sha",

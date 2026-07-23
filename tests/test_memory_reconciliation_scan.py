@@ -41,11 +41,81 @@ def run_scan(workspace: MemoryMergeWorkspace, *extra: str):
         "v1.4.0",
         "--customer-boundary",
         "standard",
+        "--full-audit-authorized",
         *extra,
     )
 
 
 class MemoryReconciliationScanTests(unittest.TestCase):
+    def test_scan_rejects_unapproved_full_memory_audit(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = create_four_snapshot_workspace(Path(temp) / "repo")
+            result = run_memory_command(
+                "scan-memory-reconciliation.py",
+                "--project-root",
+                str(workspace.project_root),
+                "--merge-base-sha",
+                workspace.merge_base_sha,
+                "--source-sha",
+                workspace.source_sha,
+                "--target-before-sha",
+                workspace.target_before_sha,
+                "--merged-code-sha",
+                workspace.merged_code_sha,
+                "--source-branch",
+                "feature/v1.4.0/source-memory",
+                "--target-branch",
+                "main",
+                "--target-release-context",
+                "v1.4.0",
+                "--customer-boundary",
+                "standard",
+            )
+            self.assertEqual(result.returncode, 1)
+            self.assertIn(
+                "Full Memory Audit / Recovery requires explicit authorization",
+                result.stderr,
+            )
+
+    def test_scan_requires_authorization_before_project_or_git_inspection(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            missing_project = Path(temp) / "does-not-exist"
+            result = run_memory_command(
+                "scan-memory-reconciliation.py",
+                "--project-root",
+                str(missing_project),
+                "--merge-base-sha",
+                "not-a-commit",
+                "--source-sha",
+                "not-a-commit",
+                "--target-before-sha",
+                "not-a-commit",
+                "--merged-code-sha",
+                "not-a-commit",
+                "--source-branch",
+                "source",
+                "--target-branch",
+                "target",
+                "--target-release-context",
+                "test",
+                "--customer-boundary",
+                "standard",
+            )
+            self.assertEqual(result.returncode, 1)
+            self.assertIn(
+                "Full Memory Audit / Recovery requires explicit authorization",
+                result.stderr,
+            )
+            self.assertNotIn("project root", result.stderr.lower())
+            self.assertNotIn("invalid commit", result.stderr.lower())
+
+    def test_scan_help_exposes_only_explicit_full_audit_scope(self) -> None:
+        result = run_memory_command("scan-memory-reconciliation.py", "--help")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        normalized_help = " ".join(result.stdout.split())
+        self.assertIn("Full Memory Audit / Recovery scan", normalized_help)
+        self.assertIn("--full-audit-authorized", normalized_help)
+
     def test_scan_is_read_only(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             workspace = create_four_snapshot_workspace(Path(temp) / "repo")

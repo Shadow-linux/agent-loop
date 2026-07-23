@@ -59,7 +59,8 @@ New human source material should be archived inside a requirement set directory.
 | `handoffs/*` | subagent briefs and returned summaries when subagent mode is triggered | authoritative task status |
 | `contracts/*` | optional confirmed durable producer-consumer contract details when interface detail is needed | temporary task logs |
 | `features/archive.md` | Feature Monthly Archive locator and move ledger: stable Feature ID, current path, archive state, close date, one-line delivery locator, source/decision locators, last move | feature lifecycle, product meaning, requirement meaning, decision content, verification evidence |
-| `memory-merges/MM-<collision-safe-short-sha>/README.md` | one full Merged Code SHA's Merge Context, complete Path Accounting Ledger, Human Decisions, exact Plan Hash, Apply, post-check, restore, and remaining-risk evidence | code merge, project encyclopedia, product/ADR meaning, Feature execution, or authorization for later Git actions |
+| `memory-merges/MM-<merged-code-short-sha>-<conflict-topic>/README.md` | optional durable record for several coupled conflicts, cross-session handoff, substantial rollback/recovery evidence, or an explicitly requested report | small conversation-resolvable conflict, unchanged/all-path inventory, code merge, project encyclopedia, or authorization for later Git actions |
+| `memory-merges/MM-<collision-safe-short-sha>/README.md` | explicitly authorized Full Memory Audit / Recovery ledger, exact plan, transaction, post-check, and restore evidence | the normal no-conflict or targeted conflict path |
 
 The persisted Lightweight Execution Card is created under the one accepted memory root after clearly-eligible routing and before the first target write. Its month is the creation partition and never changes. The Agent checks the exact path before creation and uses the first free `-2`, `-3`, or later suffix in both filename and H1; it never truncates or overwrites an existing Change.
 
@@ -183,19 +184,26 @@ Record the active gate mode in `project.md` Current Work or the active feature `
 
 ## Post-Merge Memory Reconciliation Layout
 
-Create a report only after verified code integration and the Start Human Gate:
+For normal conflict-driven reconciliation, prefer conversation review for a small conflict. Create a report only for several coupled conflicts, cross-session handoff, substantial rollback/recovery evidence, or an explicit Human request:
 
 ```text
-.agent-loop/memory-merges/MM-<merged-code-short-sha>/README.md            default-root example
+.agent-loop/memory-merges/MM-<merged-code-short-sha>-<conflict-topic>/README.md
+```
+
+Use `templates/memory-merge-report.md`. It contains only the observed conflict, minimum direct evidence, affected owner/references, resolution, verification, rollback, and unresolved choice. No conflict means no directory or report.
+
+For explicitly authorized Full Memory Audit / Recovery, use:
+
+```text
 <memory-root>/memory-merges/MM-<collision-safe-short-sha>/README.md
 <memory-root>/memory-merges/MM-<collision-safe-short-sha>/.memory-reconciliation-txn/  temporary only
 ```
 
-One full Merged Code SHA owns exactly one durable report. Start the ID with 12 lowercase SHA characters and extend it only to avoid a collision with a different full SHA. Do not create `memory-merges/` during Init Project or Project Entry, and do not create a global transaction directory.
+Use `templates/full-memory-audit-report.md`. One full Merged Code SHA owns exactly one durable Full Audit report. Start the ID with 12 lowercase SHA characters and extend it only to avoid a collision with a different full SHA. Do not create `memory-merges/` during Init Project or Project Entry, and do not create a global transaction directory.
 
 The current report directory may contain `.memory-reconciliation-txn/` only while Apply, post-check, or Restore is active. A successful finalize or proven restore removes transaction payloads after exact verification. A failed or unproven restore retains its journal and blocks later Apply and Git actions.
 
-The report is an audit artifact, not a copy of canonical owners. Original human source, accepted Requirement/ADR/Human Decision meaning, append-only history, Feature/Bug state, enterprise project facts, and derived indexes remain owned by their existing artifacts.
+Both report types are evidence, not copies of canonical owners. Original human source, accepted Requirement/ADR/Human Decision meaning, append-only history, Feature/Bug state, enterprise project facts, and derived indexes remain owned by their existing artifacts.
 
 Slice type:
 

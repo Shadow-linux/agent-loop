@@ -46,6 +46,15 @@
 - Added Agent-owned high-evidence memory consolidation with exact pre-write disclosure, narrow rollback, changes-only-root protection, persistent human-review visibility, and code-first post-merge reconciliation.
 - Refreshed all 13 current root managed blocks and live revision consumers to `block-version:1.5.0-20260718` without changing Skill version `1.5.0` or weakening any Git, production, external, release, Feature, or Bug Human Gate.
 
+### Conflict-Driven Post-Merge Memory Reconciliation
+- Replaced routine four-snapshot, all-path reconciliation with an observed-conflict entry rule: no conflict now returns `reconciliation-not-needed` with no scan, report, write, or reconciliation Human Gate.
+- Limited normal inspection to the conflicting fact, its semantic owner, directly affected references or indexes, and the minimum current evidence needed to decide it.
+- Made the Agent rewrite fact-determined current memory from the latest applicable verified evidence, while preserving human originals, accepted Product/Requirement meaning, accepted ADRs, Human Decisions, and append-only history.
+- Kept small conflicts in the conversation and limited Human Review to a few genuinely unresolved alternatives with one Agent recommendation; concise reports are reserved for coupled conflicts, cross-session work, substantial recovery evidence, or explicit retention requests.
+- Reserved four complete snapshots, all-path accounting, Desired Target Memory, exact Plan Hash, and transactional Apply/Post-check/Restore tooling for explicitly authorized Full Memory Audit / Recovery.
+- Kept memory commit, push, release, and Source cleanup as independent Human Gates without changing the `1.5.0` Skill version.
+- Narrowed the root Recovery signal and stop conditions so reversible fact-determined post-merge rewrites reach the conflict-driven route, kept Apply/Restore independently gated, added changed-path rollback evidence to optional durable reports, and refreshed all 13 managed blocks plus live revision consumers to `block-version:1.5.0-20260723.2` without changing Skill version `1.5.0`.
+
 ## 1.4.0 — 2026-07-17
 
 ### Post-Merge Memory Reconciliation

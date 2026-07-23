@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE = ROOT / "templates/root-AGENTS.md"
 RUNTIME = ROOT / "references/runtime.md"
-EXPECTED_REVISION = "1.5.0-20260721.2"
+EXPECTED_REVISION = "1.5.0-20260723.2"
 
 EXPECTED_SECTIONS = (
     ("bootstrap", ".agent-loop/project.md"),
@@ -34,7 +34,7 @@ EXPECTED_GATEWAYS = (
     ("Remote source of truth", "Remote Project Discovery", (
         "references/remote-project-discovery.md",
     )),
-    ("Memory conflicts or outside-loop work", "Recovery / Re-Adopt", (
+    ("Broad memory damage, stale/incomplete memory without a stable verified post-merge conflict boundary, outside-loop work, or unresolved reconciliation recovery", "Recovery / Re-Adopt", (
         "references/recovery-and-backfill.md",
     )),
     ("Explicit closed-history archive or rehydrate", "Feature Monthly Archive", (
@@ -74,7 +74,7 @@ EXPECTED_GATEWAYS = (
         "references/project-skills.md", "references/skill-routing.md",
         "references/external-skill-adapters.md",
     )),
-    ("Verified code integration leaves Agent Loop memory to reconcile",
+    ("Verified code integration has an observed memory conflict",
      "Post-Merge Memory Reconciliation", ("references/memory-reconciliation.md",)),
     ("Submit, commit, PR, merge, release, publish, pause, close, or cleanup is requested",
      "Lifecycle Boundary", (

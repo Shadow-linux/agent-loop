@@ -36,8 +36,8 @@ CLAUDE.md -> AGENTS.md
     <date>-<bug-slug>/
       README.md
       evidence/ optional bounded evidence
-  memory-merges/ optional; create only after Start approval for a real post-merge reconciliation
-    MM-<collision-safe-short-sha>/
+  memory-merges/ optional; only for complex/cross-session conflicts or authorized Full Audit / Recovery
+    MM-<merged-code-short-sha>-<conflict-topic>/ or MM-<collision-safe-short-sha>/
       README.md
   features/
     <date>-<feature-slug>/
@@ -86,7 +86,7 @@ Do not duplicate the full card here or add Change README/INDEX/archive/move/rehy
 
 Use `references/human-review-summary.md` before asking the human to approve non-trivial stage output.
 
-For Post-Merge Memory Reconciliation, use `templates/memory-merge-report.md` only after its Start Human Gate. One full Merged Code SHA owns one report under `<memory-root>/memory-merges/MM-<collision-safe-short-sha>/README.md`. The template owns the exact plan block; do not copy its ledger, decisions, diffs, Plan JSON, or transaction details into `project.md`.
+For normal Post-Merge Memory Reconciliation, handle a small conflict and any bounded Human choice directly in the conversation. Use `templates/memory-merge-report.md` only for several coupled conflicts, cross-session handoff, substantial rollback/recovery evidence, or an explicit Human request. It records only the conflict boundary, minimum evidence, targeted changes, verification/rollback, and unresolved choices. No conflict means `reconciliation-not-needed` and no report. For explicitly authorized Full Memory Audit / Recovery, use `templates/full-memory-audit-report.md`; only that template owns the all-path ledger and exact plan block. Do not copy either report's details into `project.md`.
 
 Rules:
 
@@ -651,10 +651,10 @@ Next Suggested Action:
 Gate Mode: Strict Mode | Feature Auto-Loop | Task Auto-Run
 Gate Mode Scope:
 Gate Mode Stop Conditions:
-Current Memory Merge Report: `<memory-root>/memory-merges/MM-<short-sha>/README.md` | none
-Current Memory Merge Status: 待确认 | 已完成 | 已恢复 | none
+Current Memory Merge Report: `<memory-root>/memory-merges/MM-<short-sha>-<topic>/README.md` | `<memory-root>/memory-merges/MM-<short-sha>/README.md` for Full Audit / Recovery | none
+Current Memory Merge Status: 待处理 | 待人类决定 | 已解决 | 待确认 | 已完成 | 已恢复 | none
 Current Memory Merge Blocker: `<exact blocker>` | none
-Memory Merge Pointer Rule: keep only locator/status/blocker here; the report owns its ledger, decisions, diffs, plan, Apply, post-check, restore, and transaction evidence.
+Memory Conflict Pointer Rule: keep only an unresolved/material conflict report locator, status, and blocker here. Do not persist `reconciliation-not-needed`; targeted/full-audit evidence stays in its owning report.
 
 ## Remote Entry
 

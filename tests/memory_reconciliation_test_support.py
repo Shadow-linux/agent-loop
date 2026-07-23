@@ -49,7 +49,9 @@ class MemoryMergeWorkspace:
         report_id = str(rendered_payload.get("report_id", "MM-not-ready"))
         report = self.memory_root / "memory-merges" / report_id / "README.md"
         report.parent.mkdir(parents=True, exist_ok=True)
-        template = (ROOT / "templates/memory-merge-report.md").read_text(encoding="utf-8")
+        template = (ROOT / "templates/full-memory-audit-report.md").read_text(
+            encoding="utf-8"
+        )
         start = "<!-- memory-reconciliation-plan:start -->"
         end = "<!-- memory-reconciliation-plan:end -->"
         prefix, remainder = template.split(start, 1)

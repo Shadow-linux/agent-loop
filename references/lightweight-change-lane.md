@@ -211,16 +211,16 @@ If verification fails, diagnose whether the bounded route remains valid. Do not 
 
 ## Memory, Branch, Submit, And External Gates
 
-Run the scanner at Project Entry when Changes exist, after every Change completion, and before release or memory reconciliation:
+Run the scanner at Project Entry when Changes exist, after every Change completion, and before release:
 
 ```text
 macOS/POSIX: python3 <skill-root>/scripts/scan-lightweight-changes.py --project-root <target-project-root> --as-of <current-local-date>
 Windows: py -3 <skill-root>\scripts\scan-lightweight-changes.py --project-root <target-project-root> --as-of <current-local-date>
 ```
 
-The scanner is read-only, validates all months, and never classifies semantics or writes memory. Count trigger: `pending_count >= 3`. Age trigger: `as_of_date - oldest_completed_at > 7 days`; exactly 7 days does not trigger. `in-progress`, `stopped`, and complete reviews do not count. `human-review` is reported separately and remains visible at relevant Project Entry, pre-release, and post-merge reviews.
+The scanner is read-only, validates all months, and never classifies semantics or writes memory. Count trigger: `pending_count >= 3`. Age trigger: `as_of_date - oldest_completed_at > 7 days`; exactly 7 days does not trigger. `in-progress`, `stopped`, and complete reviews do not count. `human-review` is reported separately and remains visible at relevant Project Entry and pre-release reviews. During post-merge reconciliation, read one such card only when the observed conflict directly identifies it as necessary evidence.
 
-Known memory drift plus relevant Change evidence, pre-release pending/human-review, and verified post-merge entry are controller fact events, not scanner flags. They route the Agent into semantic Change Memory Consolidation without a scheduler, background process, canonical stage, or new message intent.
+Known memory drift plus relevant Change evidence and pre-release pending/human-review are controller fact events, not scanner flags. They route the Agent into semantic Change Memory Consolidation without a scheduler, background process, canonical stage, or new message intent. Post-merge entry alone does not start consolidation or a full Change scan.
 
 Direct Agent sync is allowed only when the source is completed with fresh verification; the candidate is an implemented stable fact; code/config/test or authorized-environment evidence proves it; it has durable value and one owning target; current memory and accepted Requirement/Decision/Feature/Bug/root guidance do not conflict; no new product, architecture, security, data, permission, environment, Branch Strategy, or release decision is created; human original requirements are preserved; branch/release/customer scope is clear; the exact target path/fact/evidence/impact/rollback is disclosed before write; post-check can verify it; and rollback removes only this Agent's memory edit.
 
@@ -230,7 +230,7 @@ Semantic consolidation validates and scans, groups candidates by fact, discloses
 
 `Memory Review: complete` with `Memory Result: human-review` means Agent classification is complete and the human decision remains outstanding. Present only real choices in a Chinese table with `高 | 一般` attention; resolution changes the result to `none` or `synced` and records evidence, target, and the decision locator.
 
-The required order is: code merge completes before Target memory reconciliation. Monthly Change paths participate in Base, Source, Target-before, and Result inventories as evidence. A Source `synced` claim never overrides Target memory; Post-Merge Memory Reconciliation rechecks it against Merged Code and Target context while preserving every existing Start/Plan Hash/transaction/restore/commit/push/release/cleanup gate.
+The required order is: code merge completes before Target memory reconciliation. A Source `synced` claim never overrides Target memory. When an observed conflict directly involves a Change-derived fact, read that card plus only the owner/direct evidence needed to resolve it. No conflict is `reconciliation-not-needed`; do not inventory every monthly Change. Full four-snapshot Start/Plan Hash/transaction/restore controls apply only to explicitly authorized Full Memory Audit / Recovery. Commit/push/release/cleanup gates remain independent.
 
 An adopted Branch Strategy, Target Release Context, sealed-release rule, customer isolation, and exact Branch Action/Cleanup gates still apply. The card authorizes no branch creation, switching, deletion, merge, push, or tag.
 

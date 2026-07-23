@@ -123,15 +123,13 @@ First version excludes:
 
 **Submit / Integrate**: The explicit stage that packages verified work for commit, PR text, merge note, or release note. It requires human confirmation and records the result in `notes.md`.
 
-**Post-Merge Memory Reconciliation**: An internal Submit / Integrate method that runs only after verified code integration. It reconciles the Target memory root and does not add a canonical stage or message intent, perform code merge, or authorize Git actions.
+**Post-Merge Memory Reconciliation**: An internal Submit / Integrate method that runs only after verified code integration and an observed semantic memory conflict. It inspects the conflict boundary and minimum evidence, rewrites fact-determined current meaning, asks the human only for unresolved alternatives, and never performs code merge or authorizes Git actions.
 
-**Target Canonical Memory Spine**: The actual Target branch's artifact ownership, `project.md`, enterprise indexes, stable IDs, and canonical locators. It supplies scan order and output structure, not universal truth or a path allowlist.
+**Observed Memory Conflict**: Concrete incompatible current claims, broken direct references/indexes, or direct contradiction between Agent-maintained memory and current verified facts. Different files, clean Source-only artifacts, unchanged memory, and speculative drift are not conflicts.
 
-**Path Accounting Ledger**: The all-path inventory and semantic disposition covering directories, files, links, unchanged rows, and meaningful absence across Base, Source, Target-before, and Result.
+**Memory Conflict Report**: Optional durable evidence for an unresolved or material targeted conflict. It records only the conflict, minimum evidence, affected owner/references, resolution, verification/rollback, and Human choice when needed.
 
-**Desired Target Memory Snapshot**: The semantic Target memory derived from merged implementation reality, immutable human sources, accepted product/technical meaning, valid history, Target-appropriate current state, and rebuilt indexes.
-
-**Memory Merge Report**: The one durable audit record for one full Merged Code SHA, including Merge Context, ledger, Human Decisions, exact Plan Hash, Apply, post-check, and restore evidence. It is not a replacement fact owner.
+**Full Memory Audit / Recovery**: Explicitly Human-authorized forensic mode that retains four-snapshot Target Canonical Memory Spine, Path Accounting Ledger, Desired Target Memory Snapshot, exact Plan Hash, and transactional Apply/Restore controls. It is not the normal merge route.
 
 **Subagent Brief**: A bounded assignment for an optional helper agent. The main agent owns state, merge, drift, submit, and close decisions.
 

@@ -34,7 +34,15 @@ from memory_reconciliation_support import (
 
 def parser() -> argparse.ArgumentParser:
     value = argparse.ArgumentParser(
-        description="Read-only four-snapshot Agent Loop memory reconciliation scan"
+        description=(
+            "Explicitly authorized read-only four-snapshot Agent Loop "
+            "Full Memory Audit / Recovery scan"
+        )
+    )
+    value.add_argument(
+        "--full-audit-authorized",
+        action="store_true",
+        help="confirm explicit Human authorization for Full Memory Audit / Recovery",
     )
     value.add_argument("--project-root", required=True)
     value.add_argument("--merge-base-sha", required=True)
@@ -200,6 +208,11 @@ def _zero_change(
 
 
 def run(arguments: argparse.Namespace) -> dict[str, object]:
+    if not arguments.full_audit_authorized:
+        raise MemoryReconciliationError(
+            "Full Memory Audit / Recovery requires explicit authorization",
+            "normal conflict-driven reconciliation must not run this scanner",
+        )
     project_root = Path(arguments.project_root).resolve()
     if not project_root.is_dir():
         raise MemoryReconciliationError("project root", str(project_root))
