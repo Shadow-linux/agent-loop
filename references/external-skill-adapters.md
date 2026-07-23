@@ -27,6 +27,57 @@ If Superpowers is available, prefer these helpers:
 
 For mandatory helper-backed stages, resolve canonical and alias names using `skill-routing.md`, then load the complete helper before stage actions. If it is absent, record `unavailable`; if it is discovered but cannot be loaded, record `load-failed`. Only those two statuses allow fallback.
 
+## Optional Visual Communication Adapter
+
+Archify (<https://github.com/tt-a1i/archify>) is preferred when a Visual Trigger materially lowers misunderstanding risk and no matching active project-local visual skill owns the project-specific presentation language. It is optional: do not add it to the mandatory helper table, do not run it merely because it is installed, and do not block the owning Agent Loop stage when it is absent.
+
+Resolve in this order:
+
+```text
+matching active project-local visual skill
+→ installed Archify
+→ recommend Archify before fallback when it would materially improve review
+→ Markdown / table / Mermaid / ASCII fallback
+```
+
+A Visual Trigger exists when a workflow, lifecycle/state model, architecture/boundary, sequence, data flow, relationship, or option comparison is materially harder for the human to verify in prose. Requirements Discussion is the primary use: render the Agent's current understanding, let the human correct it, then rewrite the accepted meaning into the Requirement `product.md`. Feature Spec visuals may explain only the accepted Product Slice, feature responsibility, and its feature-local implementation or acceptance path. Rewrite accepted feature-local clarification into `spec.md`; if the view reveals new product meaning, stop Feature Spec and return to Requirements Discussion rather than adding the meaning to `spec.md`. Decision & Design may use the adapter for technical option or boundary review. Onboarding and review/close communication may derive presentation views from already accepted evidence.
+
+Do not offer Markdown / table / Mermaid / ASCII as the first drawing path merely because Archify is absent. When Archify would materially improve the current review, present the exact, rejectable Installation Authorization first. Use the built-in fallback only when Archify is not materially justified, the human declines, the environment cannot support it, or installation/use fails. A declined or failed Archify path never blocks the owning stage.
+
+Before generation, obtain one bounded Visual Scope Grant and disclose:
+
+| Field | Required value |
+|---|---|
+| Stage | current Agent Loop stage |
+| Review Question | one concrete question the view will help answer |
+| Semantic Source | exact authoritative Markdown and stable IDs |
+| Diagram Type | one supported type such as `architecture`, `workflow`, `sequence`, `dataflow`, or `lifecycle` |
+| Working Output | exact temporary/working location or response-local presentation |
+| Iteration Boundary | same question, source, type, and working-output class |
+
+The same grant permits iterative visual corrections within that boundary. A new source, stage, type, durable destination, external side effect, or material semantic question requires a new grant.
+
+If Archify is unavailable and useful, recommend it. Before installation, present an exact Installation Authorization containing source and pinned revision, full command, runtime target/location, network and file effects, global/local impact, doctor/verification command, and no-install fallback. Human approval authorizes only that exact action. Agent Loop does not vendor Archify: do not hard-code one cross-runtime install command because supported runtimes and package locations differ. A failed install does not authorize privilege elevation, a different source/mirror/package manager/location, or a materially different retry.
+
+Use `render to converge, text to record`:
+
+- the owning Markdown is semantic authority;
+- an unrecorded working render is disposable review material;
+- human confirmation of a render requires the Agent to rewrite the owning semantic text before the existing stage Human Gate;
+- the render cannot create a product rule, accept an ADR, complete Onboarding, start a Feature, or authorize Git/release action.
+
+When the human separately confirms durable recording, use `source-render-v1`:
+
+```text
+accepted semantic source and stable IDs
+→ typed Archify JSON source definition
+→ validated derived render
+```
+
+Record both paths, both SHA-256 values, exact `archify@<version>` generator, `validate=pass; check=pass` evidence, `Status: current`, and the applicable human confirmation. Validate the pair through `scripts/visual_artifact_support.py`. HTML/PNG/SVG without its typed source, a source without its render, a digest/type/output mismatch, or a stale semantic source is not current evidence.
+
+Installation Authorization, Visual Scope Grant, and durable recording are independent. In particular, installation or generation does not authorize Product Human Review, ADR acceptance, Feature start, Git, release, publish, or future external actions. Onboarding review and the project-skill Execution Gate also remain separate.
+
 ## Controller Rule
 
 ```text

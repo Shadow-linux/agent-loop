@@ -83,7 +83,7 @@ Use this skill when the user wants to:
 
 An explicit request for a safe one-off edit is one input to Lightweight Change Assessment, not a separate undocumented bypass. Ordinary non-Bug changes still require a persistent card before target writes, Plan, fresh targeted verification, diff review, rollback, memory review, and gate review when eligible.
 
-First version excludes: multiplayer workflow, roadmap graph, roadmap adapter, tdd-guard, complex ADR system, global skill installation, automatic directory-level `AGENTS.md` generation without human confirmation, and automatic commit/PR/merge/release/publish without human confirmation.
+First version excludes: multiplayer workflow, roadmap graph, roadmap adapter, tdd-guard, complex ADR system, automatic or unscoped global skill installation, automatic directory-level `AGENTS.md` generation without human confirmation, and automatic commit/PR/merge/release/publish without human confirmation. A visual adapter may be installed only after a separate, exact Installation Authorization that discloses source, revision, command, target, effects, doctor check, and fallback.
 
 ## Skill Package Map
 
@@ -103,6 +103,7 @@ references/remote-project-discovery.md local entry + remote project discovery ru
 references/requirement-management.md     human source requirement archive rules
 references/requirement-product-grill.md requirement/product clarification plus triggered Concept Foundation and Requirement Product Model derivation
 references/product-definition.md         adaptive Brief/Standard Requirement product.md, completeness, Human Review, helpers, visuals, and Product Slice handoff
+scripts/visual_artifact_support.py       shared validator for durable Archify source/render pairs
 references/project-decisions.md   Design Readiness, Decision & Design, placement, coverage, and project-level ADR rules
 references/product-brief.md        legacy Feature Product Brief reader compatibility only
 references/delivery-contracts.md   durable producer-consumer interface handoff rules
@@ -168,6 +169,7 @@ CHANGELOG.md                        version-change source of truth for "what cha
 9. Load `references/requirement-management.md` before copying, moving, renaming, indexing, or referencing human source requirements.
 9a. Load `references/requirement-product-grill.md` during Requirements Discussion and its Brainstorm / Clarify work when requirements include ambiguous terminology, domain boundaries, business flows, exception paths, conflicting prior Feature behavior, or decision signals. When Concept Foundation triggers inside Standard, inspect evidence, extract candidate concepts, recommend one definition with impact, and ask exactly one blocking question before deriving applicable Requirement Product Model views. Grill questions clarify the Requirement `product.md` draft only; they do not create ADRs, project memory, `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/`.
 9b. Load `references/project-decisions.md` for Design Readiness Check and `Decision & Design If Needed`: before accepted requirements enter feature construction, when a requirement spans multiple features or needs shared business-flow/domain/data/architecture/recovery/non-functional design, when product or technical work reveals cross-feature decisions, or when drift changes durable facts. A requirement-driven ADR resolves the Effective Requirement Snapshot, records a Requirement Model Technical Landing Trace, and passes coverage/compatibility review before acceptance. Decision Scan / Placement is an internal method. A `.agent-loop/decisions/*.md` file is globally optional, but it becomes conditionally required when shared design is required and no accepted decision already covers it; creation and acceptance remain Human-gated.
+9c. When a complex flow, boundary, comparison, lifecycle, sequence, or relationship would materially improve human understanding, use the Optional Visual Communication Adapter from `references/external-skill-adapters.md`. Prefer a matching active project-local visual skill, then installed Archify. If Archify is absent and would materially improve review, recommend its exact installation/use before offering text/Mermaid/ASCII fallback; use fallback directly only when Archify is not justified, the human declines, the environment is unsupported, or installation/use fails. Installation requires its own exact Human Authorization. Every generation or iteration is bounded by a Visual Scope Grant; working renders are review aids, never semantic authority or acceptance evidence by themselves.
 10. Load `references/product-brief.md` only when an existing legacy Feature `product.md` must be read during Resume, Follow-up, Review, Close, or Recovery. New PRD/product synthesis stays in Requirements Discussion through `references/product-definition.md`.
 11. Load `references/e2e-discovery.md` before designing or executing Web E2E/browser verification.
 12. Load `references/delivery-contracts.md` when the human requests cross-boundary handoff/API/interface documentation, or when the agent detects a likely downstream consumer boundary such as frontend/backend, service, event, public data, SDK/library, UI state, or runtime behavior. Delivery Contracts are not created by default.
@@ -340,6 +342,7 @@ The controller owns the loop. External skills are optional stage accelerators.
 - Project Skill Creation / Update: prefer `superpowers:writing-skills` / `writing-skills` for RED/GREEN/REFACTOR and also use `skill-creator` for scaffolding and validation when available; write only to `.agent-loop/skills/<skill-name>/`.
 - Clarify: use a brainstorming skill if available.
 - Product Definition: use PRD/product discovery or grill-with-docs style helpers inside Requirements Discussion when available; translate output to Requirement `product.md` and keep all Agent Loop gates.
+- Optional Visual Communication: when a Visual Trigger exists, prefer a matching active project-local visual skill, then installed Archify; if materially useful Archify is absent, offer its exact, separately authorized installation before Mermaid/table/ASCII fallback. Fall back without blocking when Archify is unjustified, declined, unsupported, or failed. Keep semantic text authoritative and validate any durable source/render pair.
 - Planning: use a plan-writing skill if available.
 - Implementation: use a TDD skill if available.
 - Failure: use a systematic debugging skill if available.

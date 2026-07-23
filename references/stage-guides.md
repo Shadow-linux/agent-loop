@@ -311,6 +311,9 @@ Rules:
 - after internal status becomes `accepted`, derive only applicable relationships, roles/permissions, commands/events, flow, state, product facts, invariants, exceptions, and recovery from stable Concept IDs
 - for Standard, record exactly one `included | not-applicable` Product View Applicability row for every defined view; do not create empty model sections or fake IDs
 - run Product Completeness Scan before Product Human Review; structure validation never substitutes for product-semantic judgment
+- when a Visual Trigger exists, resolve a matching active project-local visual skill then installed Archify, obtain one Visual Scope Grant, and use the working render to clarify the current product question; rewrite accepted feedback into `product.md` before Product Human Review
+- if no visual adapter exists and Archify would materially improve review, recommend its exact installation/use before offering Markdown/Mermaid/ASCII; use fallback directly only when Archify is unjustified, declined, unsupported, unavailable after recommendation, or failed, and never install it without a separate exact Installation Authorization
+- keep working renders disposable; only a separately confirmed, validator-backed `source-render-v1` pair may enter Derived Visuals
 - record shared design signals as Design Readiness evidence and Decision Candidates; do not create accepted ADRs from Requirements Discussion
 - keep early ADR signals as Decision Candidates until the requirement is human-reviewed and the owning gate is clear
 - ask only questions that affect requirement clarity, scope, users/operators, constraints, non-goals, or acceptance direction
@@ -508,6 +511,7 @@ Rules:
 - Human examples are quality/detail references only. Do not copy their topic list, count, domain names, or project structure.
 - 状态图优先。Mermaid flowchart / sequenceDiagram 可作为普通流程图和时序图的主表达；ASCII 文本图 / 纯文本线框图用于状态机、复杂原理图和复杂示例图。不要把复杂流程画成 stacked box diagram / 阶段堆叠图。
 - `critical` / `important` 核心流程必须闭合到业务终态，使用 Core Flow Overview / Boundary、Timeline / Sequence 主叙事和 ASCII State Machine，并通过 Flow Slice Coverage 追踪主路径、分支、失败和恢复。
+- each diagram declares `embedded-mermaid`, `embedded-ascii`, or `archify-source-render`; resolve project-local visual skill then Archify before embedded fallback when a Visual Trigger materially benefits review; durable Archify output requires a separately confirmed `source-render-v1` source/render pair with code/config evidence, while unjustified/declined/unsupported/failed use keeps the embedded fallback
 - 模块及其他内容文档按真实边界、状态、时间、数据和恢复语义选图；stateless glossary、静态配置清单和纯索引不强制状态图。
 - Onboarding Tasks are written only after the Onboarding Spec is accepted.
 - Do not combine Onboarding Spec acceptance with the later Full Execution Gate.
@@ -690,6 +694,7 @@ Rules:
 - assign every required design slice to at least one planned feature; no required slice may remain `unassigned` before Feature Spec
 - do not enter Feature Spec when required shared design is unresolved or design-slice coverage is incomplete
 - do not accept an ADR while its Effective Requirement Snapshot is unresolved, its Requirement Model coverage is incomplete, or its compatibility is `review-required`
+- when a Visual Trigger exists, use a bounded working render to clarify technical options or boundaries, then rewrite the result into the proposed ADR; optional durable visual evidence uses `source-render-v1` and cannot accept the ADR or satisfy technical-landing coverage
 - run structural preflight while the draft remains `proposed`; only explicit human acceptance authorizes Human Review Evidence plus `Status: accepted`, followed by accepted-mode validation
 - allow a confirmed Brief with no stable model IDs/Product Rule references, or a reasoned legacy `concept-foundation-not-needed` source, to use the explicit trace-not-applicable path without inventing product models
 - when upstream accepted meaning invalidates an accepted technical decision, preserve history and propose a superseding ADR; do not rewrite accepted decision meaning in place
@@ -892,6 +897,7 @@ Rules:
 - add Product Requirement Source and Product Slice to `spec.md`; do not require or create Feature `product.md`
 - Product Slice references source Concept/Model IDs and `product.md#<rule-anchor>`; it may narrow scope but cannot redefine accepted product meaning
 - do not let Feature Spec introduce a new meaning, state, invariant, role boundary, relationship, or product object for an accepted Concept ID; return to Requirements Discussion when product semantics must change
+- when Feature Spec uses Optional Visual Communication, limit the view to the accepted Product Slice, feature responsibility, or feature-local implementation and acceptance path; rewrite accepted feature-local clarification into `spec.md`; if the view reveals new product meaning, stop and return to Requirements Discussion instead of adding it to `spec.md` or editing Requirement `product.md`
 - block Feature Spec when Product Review is pending, the effective pointer is ambiguous/stale, or a triggered internal/legacy foundation is `candidate` or `reopened`
 - confirm Design Readiness is `design-not-needed` or `completed` before writing the Feature Spec
 - for each applicable requirement-driven ADR, confirm its Effective Requirement Snapshot still resolves, `Upstream Compatibility` is `current`, and Requirement Model Technical Landing Trace coverage is complete
@@ -1380,6 +1386,7 @@ Rules:
 - review approval alone is insufficient to mark a task `done`; Task Done Gate evidence, required review, and drift decision must also be recorded
 - if required review is missing, the task remains `review`; do not mark it `done`
 - compare producer code and tests with Delivery Contracts; identify affected consumers before accepting interface drift
+- when a visual would materially improve close/review communication, derive it only from current accepted artifacts and verification evidence; a presentation render cannot replace review findings, completion evidence, drift decisions, or any close/submit gate
 
 Write:
 

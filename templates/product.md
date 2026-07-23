@@ -136,10 +136,12 @@ Use only after human review; Requirement README owns phase lifecycle and Feature
 
 ## Derived Visuals
 
-Optional and only after Archify Scoped Confirmation.
+Optional and only after a bounded Visual Scope Grant plus separate durable-path confirmation. Working previews stay response-local or temporary and are not recorded here.
 
-| Path | Type | Source IDs | Product Semantic SHA-256 | Status | Human Confirmed |
-|---|---|---|---|---|---|
+Visual Manifest Contract: source-render-v1
+
+| Diagram ID | Source Definition | Render | Type | Source IDs | Product Semantic SHA-256 | Source SHA-256 | Render SHA-256 | Generator | Validation Evidence | Status | Human Confirmed |
+|---|---|---|---|---|---|---|---|---|---|---|---|
 
 ## Decision Candidates
 

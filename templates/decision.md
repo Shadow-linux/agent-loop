@@ -228,6 +228,18 @@ Before acceptance and before dependent Feature Spec work:
 
 Run the structural validator while the ADR is still `proposed`. Then present the Decision & Design Human Review Summary. Only after explicit human acceptance may the Agent set `Status: accepted`, record the evidence below, and rerun accepted-mode validation.
 
+## Optional Visual Evidence
+
+Remove this section when unused. A working render stays outside this table: use it only under a Visual Scope Grant, then rewrite accepted meaning into the ADR. Durable evidence requires separate confirmation and cannot accept the ADR.
+
+Visual Manifest Contract: source-render-v1
+
+| Diagram ID | Review Question | Semantic References | Source Definition | Render | Type | Source SHA-256 | Render SHA-256 | Generator | Validation Evidence | Status |
+|---|---|---|---|---|---|---|---|---|---|---|
+| D-... | one concrete technical review question | accepted Product Concept/Model IDs, Product Rule refs, or `decision.md#section-anchor` | visuals/name.workflow.json | visuals/name.html | architecture / workflow / sequence / dataflow / lifecycle | 64 lowercase hex | 64 lowercase hex | archify@x.y | validate=pass; check=pass | current |
+
+The typed source and render are a derived explanation of accepted product semantics and this ADR's proposed technical design. Missing files, mismatched hashes/type/output, unknown semantic references, or stale status fail validation. Remove the example row before use.
+
 ## Human Review Evidence
 
 Populate this section only after explicit human acceptance. Leave the ADR `proposed` while these fields are absent or incomplete.

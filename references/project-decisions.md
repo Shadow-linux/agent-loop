@@ -203,6 +203,14 @@ Disposition rules:
 
 ADR must not create, rename, split, merge, or redefine a Concept, relationship, role/permission, command/event, business flow, product state, invariant, exception/recovery meaning, or product fact ownership. If accepted meaning is missing or insufficient, return to Requirements Discussion rather than filling the gap in technical design.
 
+## Optional Visual Evidence
+
+When a Visual Trigger makes a technical boundary, sequence, state/lifecycle, data flow, or option comparison materially easier to review, use the Optional Visual Communication Adapter under one bounded Visual Scope Grant. A working render is disposable: human feedback must be rewritten into the proposed ADR before review.
+
+Durable visual evidence is optional and independently confirmed. It uses `Visual Manifest Contract: source-render-v1` in the ADR `Optional Visual Evidence` section and records one typed source plus one validated render, their SHA-256 values, exact `archify@<version>` generator, validation evidence, status, one concrete Review Question, and Semantic References. Semantic References must resolve to accepted Product Concept/Model IDs, Product Rule anchors, or an ADR section anchor.
+
+The visual cannot accept the ADR, change Requirement product meaning, satisfy Requirement Model Technical Landing coverage, or replace Human Review Evidence. Missing/mismatched source/render pairs and stale/unknown references fail structural preflight. Remove the optional section when unused.
+
 ## Coverage Hard Gate
 
 A decision cannot become `accepted` while coverage is missing or Upstream Compatibility is `review-required`.

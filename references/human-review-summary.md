@@ -104,7 +104,7 @@ Use after Product Definition Depth Scan and, for Standard, after the one-questio
 | Relationships / Permissions | accepted boundaries |  | IDs / not-applicable reason | none / blocking | confirm / revise |
 | Actions / Flow / State | accepted journey and terminals |  | IDs / not-applicable reason | none / blocking | confirm / revise |
 | Product Facts / Exceptions | fact ownership and recovery |  | IDs / not-applicable reason | none / blocking | confirm / revise |
-| Derived Visuals | current / stale / absent | source IDs + semantic digest | output or fallback | none / blocking | confirm / regenerate / omit |
+| Derived Visuals | working / current durable / stale / absent | Visual Scope Grant + source IDs + semantic digest | working render, `source-render-v1` pair, or fallback | none / blocking | confirm meaning / regenerate / omit |
 | Design Readiness | none / candidate / required |  | candidate links | non-blocking / blocking | acknowledge / revise |
 
 Add:
@@ -135,6 +135,7 @@ Use before creating, accepting, superseding, or materially updating a project / 
 | Migration / Compatibility / Rollout | triggered / not-triggered for each concern, with reason or linked section |
 | Design Slice Ownership | planned / unassigned / deferred / out-of-scope, including affected Feature Specs |
 | Verification | proof direction for every landed row and accepted-decision dependency |
+| Optional Visual Evidence | absent / working only / current durable; review question, semantic refs, source/render validation; never acceptance evidence |
 | Human Decision | accept / revise / return to Requirements Discussion / require superseding ADR |
 
 Add:

@@ -25,6 +25,17 @@ Before using an external skill or plugin inside a stage:
 - [ ] Do not create external default directories such as `docs/superpowers/*` unless the human explicitly requests native external output and then confirms after the agent explains the agent-loop path override.
 - [ ] Do not let the external skill mark tasks `done`, close a feature, submit code, update project memory, accept Delivery Contracts, approve breaking changes, or skip human gates.
 
+## Optional Visual Communication
+
+- [ ] Confirm a real Visual Trigger; installed capability alone is not a reason to generate.
+- [ ] Resolve a matching active project-local visual skill before installed Archify.
+- [ ] If Archify is unavailable and would materially improve review, recommend its exact installation/use before offering Markdown/table/Mermaid/ASCII; use fallback directly only when unjustified, declined, unsupported, unavailable after recommendation, or failed.
+- [ ] Before installation, disclose exact source/revision/command/target/network-file-global effects/doctor/fallback and obtain a separate Installation Authorization.
+- [ ] Before generation, obtain one Visual Scope Grant naming stage, question, semantic source/IDs, type, working output, and iteration boundary.
+- [ ] Use `render to converge, text to record`; rewrite accepted feedback into the owning semantic artifact.
+- [ ] For a durable visual, obtain separate confirmation and validate the `source-render-v1` typed source plus derived render and both digests.
+- [ ] Keep installation, generation, durable recording, semantic acceptance, Feature, project-skill execution, Git, and release gates independent.
+
 ## Requirement/Product Grill Method
 
 - [ ] Load `requirement-product-grill.md` when Requirements Discussion or its Brainstorm / Clarify work has ambiguous terminology, business rules, flows, boundaries, exception paths, historical Feature behavior, or decision signals.
@@ -90,6 +101,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Keep the ADR `proposed` for structural preflight; after it passes, present the Human Review Summary and wait for explicit acceptance before recording Human Review Evidence and rerunning accepted-mode validation.
 - [ ] For Brief or a legacy reasoned `concept-foundation-not-needed` source with no applicable stable IDs, use trace-not-applicable and do not invent Concept or Requirement Model rows.
 - [ ] Load `human-review-summary.md` and present the Decision & Design Human Review Summary before creating, accepting, superseding, or materially updating the record.
+- [ ] If `Optional Visual Evidence` exists, validate its concrete Review Question, accepted semantic references, typed source/render pair, digests, generator, validation evidence, and `current` status; never treat it as ADR acceptance.
 
 ## Human-Guided Branch Management
 
@@ -439,6 +451,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Resolve new `Effective Product Definition` or legacy `Effective Concept Foundation`; require confirmed/accepted source and block pending, ambiguous, stale, `candidate`, or `reopened` input.
 - [ ] Add Product Requirement Source and Product Slice from the effective source; cite Concept/Model IDs and Product Rule anchors without a Feature Product Brief intermediary.
 - [ ] Reject feature-local redefinition of accepted concept name, identity, owner, lifecycle, relationship, invariant, state, terminal meaning, or product fact.
+- [ ] Feature Spec visuals may explain only the accepted Product Slice and its feature-local implementation or acceptance path; rewrite feature-local clarification into `spec.md`, and return any new product meaning to Requirements Discussion.
 - [ ] Do not enter Feature Spec while required shared design is unresolved or any required design slice is unassigned.
 - [ ] For each applicable requirement-driven ADR, require a current Effective Requirement Snapshot, complete Requirement Model Technical Landing Trace, and `Upstream Compatibility: current`.
 - [ ] Run Stage Helper Capability Scan before fallback spec writing.

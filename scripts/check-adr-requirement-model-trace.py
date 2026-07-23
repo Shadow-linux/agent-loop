@@ -27,6 +27,7 @@ from requirement_product_support import (
     product_rule_references,
     resolve_effective_product_definition,
 )
+from visual_artifact_support import VisualArtifactError, validate_durable_visual
 
 
 SLICE_ID_PATTERN = re.compile(r"DS-[A-Z0-9-]+")
@@ -71,6 +72,20 @@ REQUIRED_OPERATIONAL_CONCERNS = (
     "Compatibility",
     "Rollout / Cutover",
     "Rollback / Reversibility",
+)
+
+ADR_VISUAL_COLUMNS = (
+    "Diagram ID",
+    "Review Question",
+    "Semantic References",
+    "Source Definition",
+    "Render",
+    "Type",
+    "Source SHA-256",
+    "Render SHA-256",
+    "Generator",
+    "Validation Evidence",
+    "Status",
 )
 
 
@@ -226,6 +241,73 @@ def validate_human_review(decision: str, decision_status: str) -> None:
     parse_date(metadata(review, "Confirmed At"), "Human Review Confirmed At")
     if not concrete_reason(metadata(review, "Evidence")):
         raise TraceError("accepted ADR must record Human Review evidence")
+
+
+def heading_anchor(title: str) -> str:
+    value = re.sub(r"[^a-z0-9\s-]", "", title.lower())
+    return re.sub(r"[-\s]+", "-", value).strip("-")
+
+
+def validate_optional_visual_evidence(
+    decision: str,
+    decision_path: Path,
+    source: str,
+    *,
+    source_rules: set[str],
+) -> None:
+    visual = optional_section(decision, "Optional Visual Evidence")
+    if visual is None:
+        return
+    if "Visual Manifest Contract: source-render-v1" not in visual:
+        raise TraceError(
+            "Optional Visual Evidence must declare source-render-v1"
+        )
+    rows = table(decision, "Optional Visual Evidence")
+    for row in rows:
+        if tuple(row.keys()) != ADR_VISUAL_COLUMNS:
+            raise TraceError("ADR source-render-v1 columns mismatch")
+    diagram_ids = [normalized(row.get("Diagram ID")) for row in rows]
+    assert_unique(diagram_ids, "Optional Visual Evidence")
+
+    accepted_refs = set(CONCEPT_ID_PATTERN.findall(source))
+    accepted_refs.update(MODEL_ID_PATTERN.findall(source))
+    accepted_refs.update(source_rules)
+    decision_refs = {
+        f"{decision_path.name}#{heading_anchor(match.group(1))}"
+        for match in re.finditer(r"^##\s+(.+?)\s*$", decision, re.MULTILINE)
+    }
+    accepted_refs.update(decision_refs)
+
+    for row in rows:
+        diagram_id = normalized(row.get("Diagram ID"))
+        if not concrete_reason(row.get("Review Question")):
+            raise TraceError(f"ADR visual {diagram_id} needs a concrete review question")
+        semantic_refs = [
+            normalized(value)
+            for value in (row.get("Semantic References") or "").split(",")
+            if normalized(value)
+        ]
+        if not semantic_refs:
+            raise TraceError(f"ADR visual {diagram_id} needs semantic references")
+        unknown = set(semantic_refs) - accepted_refs
+        if unknown:
+            raise TraceError(
+                f"ADR visual {diagram_id} has unknown semantic references: "
+                + ", ".join(sorted(unknown))
+            )
+        if normalized(row.get("Status")) != "current":
+            raise TraceError(f"ADR visual {diagram_id} status must be current")
+        validate_durable_visual(
+            decision_path.parent,
+            diagram_id=diagram_id,
+            source_definition=row.get("Source Definition", ""),
+            render=row.get("Render", ""),
+            diagram_type=row.get("Type", ""),
+            source_sha256=row.get("Source SHA-256", ""),
+            render_sha256=row.get("Render SHA-256", ""),
+            generator=row.get("Generator", ""),
+            validation_evidence=row.get("Validation Evidence", ""),
+        )
 
 
 def validate_gate(decision: str, *, legacy: bool) -> None:
@@ -412,6 +494,14 @@ def validate(
     if compatibility != "current":
         raise TraceError("Upstream Compatibility must be current before acceptance")
     parse_date(last_check, "Last Compatibility Check")
+    validate_optional_visual_evidence(
+        decision,
+        decision_path,
+        source,
+        source_rules=(
+            set() if effective_source.legacy else product_rule_references(effective_source)
+        ),
+    )
 
     slice_rows = table(decision, "Design Slice Coverage")
     slice_values = [row.get("Design Slice ID", "") for row in slice_rows]
@@ -728,7 +818,7 @@ def main() -> int:
     workspace_root = (args.workspace_root or args.requirement_readme.parent).resolve()
     try:
         print(validate(*paths, workspace_root))
-    except (TraceError, CheckFailure, ProductDefinitionError) as error:
+    except (TraceError, CheckFailure, ProductDefinitionError, VisualArtifactError) as error:
         print(error, file=sys.stderr)
         return 1
     return 0

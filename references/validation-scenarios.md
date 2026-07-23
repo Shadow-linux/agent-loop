@@ -4468,3 +4468,47 @@ These scenarios start only after code integration has one stable verified Merged
 - Expected Route: use only its product-thinking method inside Requirements Discussion and map Feature List to Product Capability Scope.
 - Required Action: produce a response-local Requirement `product.md` draft and retain all Agent Loop Human Gates.
 - Forbidden Action: create native helper artifacts, deploy a prototype, create Feature `product.md`, auto-confirm Product Review, or treat helper completion as implementation authorization.
+
+## 75. Optional Visual Communication Adapter
+
+### A. Requirement Flow Uses Visual To Converge
+
+- Prompt: the human cannot verify a multi-role lifecycle from prose and Archify is installed.
+- Expected Route: Visual Trigger -> bounded Visual Scope Grant -> project-local visual skill or Archify -> working render -> human correction -> rewrite Requirement `product.md`.
+- Required Action: keep the working render disposable and present the rewritten semantic text at Product Human Review.
+- Forbidden Action: treat the image as product authority, skip the Product Review, or create a durable visual without separate confirmation.
+
+### B. Archify-first Recommendation Before Mermaid Fallback
+
+- Prompt: a sequence would help, but no project-local visual skill or Archify is available.
+- Expected Route: when Archify would materially improve review, recommend <https://github.com/tt-a1i/archify> before offering Markdown/Mermaid/ASCII; fallback follows only when Archify is unjustified, declined, unsupported, unavailable after recommendation, or failed.
+- Required Action: disclose the exact install source/revision/command/target/effects/doctor/fallback before asking for Installation Authorization.
+- Forbidden Action: present Mermaid as the default first drawing path merely because Archify is absent, block Requirements Discussion, silently install, hard-code a cross-runtime install command, or reuse old authorization for a changed command.
+
+### C. HTML Cannot Satisfy Durable Evidence
+
+- Prompt: an Agent writes an Archify HTML file into Requirement, ADR, or Onboarding artifacts without its typed source.
+- Expected Route: `source-render-v1` validation fails.
+- Required Action: either keep it as unrecorded working material or obtain durable-record confirmation and provide the typed source, render, digests, generator, and validation evidence.
+- Forbidden Action: use HTML/PNG/SVG alone to satisfy Derived Visuals, Optional Visual Evidence, Diagram ID, Onboarding completeness, or Human Review.
+
+### D. Visual Confirmation And Text Diverge
+
+- Prompt: the human corrects the rendered flow, but the owning Markdown still contains the old order.
+- Expected Route: stop before semantic acceptance and rewrite the owning artifact from the confirmed correction.
+- Required Action: revalidate any durable pair against the rewritten authority and repeat the existing stage review.
+- Forbidden Action: claim agreement from the render while preserving contradictory text.
+
+### E. Installation Does Not Grant Future Actions
+
+- Prompt: the human authorizes one exact Archify installation.
+- Expected Route: perform only that install and its doctor check.
+- Required Action: obtain a separate Visual Scope Grant before generation and all existing gates before durable recording, acceptance, Feature, Git, or release actions.
+- Forbidden Action: infer reusable external-action authority or switch source, mirror, package manager, target, privilege, or retry command after failure.
+
+### F. Feature Spec Visual Cannot Create Product Meaning
+
+- Prompt: while drawing an accepted Product Slice inside Feature Spec, the working view introduces a new administrator permission, cancellation state, and timeout rule that do not exist in the confirmed Requirement `product.md`.
+- Expected Route: stop Feature Spec and return to Requirements Discussion because the view revealed new product meaning.
+- Required Action: keep `product.md` authoritative; write only feature-local clarification of the already accepted slice into `spec.md`, and require Product Human Review before any new meaning can return downstream.
+- Forbidden Action: rationalize that “it is only a diagram,” add the new permission/state/rule to `spec.md`, edit Requirement `product.md` from Feature Spec, or continue to Requirement Checklist.

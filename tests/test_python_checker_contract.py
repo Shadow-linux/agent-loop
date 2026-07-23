@@ -93,6 +93,7 @@ class PythonCheckerContractTests(unittest.TestCase):
             "checker_support",
             "feature_archive_support",
             "requirement_product_support",
+            "visual_artifact_support",
         }
         for relative in CHECKERS:
             path = ROOT / relative

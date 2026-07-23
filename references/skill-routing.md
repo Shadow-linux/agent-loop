@@ -79,16 +79,18 @@ Do not ask the human whether to use a helper just because it exists. Announce or
 
 | Stage | Preferred Skill Type | Fallback |
 |---|---|---|
-| Requirements Discussion | brainstorming / product discovery, PRD/product helpers, grill-with-docs style helpers | Use `requirement-management.md`, `product-definition.md`, and `requirement-product-grill.md`; translate helper output into a response-local Requirement `product.md` draft and write it only through Product Human Review plus Requirement Record / Archive |
+| Requirements Discussion | brainstorming / product discovery, PRD/product helpers, grill-with-docs style helpers; optional visual communication adapter on a Visual Trigger | Use `requirement-management.md`, `product-definition.md`, and `requirement-product-grill.md`; translate helper output into a response-local Requirement `product.md` draft and write it only through Product Human Review plus Requirement Record / Archive; recommend materially useful Archify before Markdown/Mermaid/ASCII fallback |
 | Brainstorm / Clarify if Needed | brainstorming / product discovery | Ask 1-5 high-impact questions from `stage-guides.md` |
 | Project Skill Creation / Update | `writing-skills` plus `skill-creator` when available | Use `project-skills.md` and `templates/project-skills/*`; keep all output under `.agent-loop/skills/<skill-name>/` |
 | Legacy Product Brief compatibility | no new writer helper | Read an existing Feature `product.md` only for Resume, Follow-up, Review, Close, or Recovery |
-| Feature Spec | spec writing | Use `templates/spec.md` |
+| Feature Spec | spec writing; optional visual communication on a Visual Trigger | Use `templates/spec.md`; a visual may explain only the accepted Product Slice, feature responsibility, and feature-local implementation/acceptance path, while new product meaning returns to Requirements Discussion |
 | Human Review Summary | approval summary / decision table | Use `human-review-summary.md` |
 | Work Breakdown | issue/task splitter | Use `templates/tasks.md` |
 | Test Design | test matrix / TDD design | Use `templates/tests.md` |
 | E2E Discovery if Web | browser/E2E environment discovery | Use `e2e-discovery.md` |
 | Technical Design / Code Context | codebase scan / technical planning | Use `implementation-planning.md` |
+| Decision & Design If Needed | decision/architecture reasoning; optional visual communication on a Visual Trigger | Use `project-decisions.md`; keep ADR Markdown authoritative, recommend materially useful Archify before fallback, and use Markdown/Mermaid/ASCII after decline/unsupported/failure |
+| Onboarding Knowledge Base | codebase evidence extraction; optional visual communication for reviewed core flows | Use `onboarding-knowledge-base.md`; keep evidence-linked embedded diagrams as the fallback |
 | Plan Gate / Plan If Needed | Superpowers-style plan-writing | Use `implementation-planning.md` and `templates/plan.md`; record No-Plan Decision only for trivial tasks |
 | Execute Task / Story | test-driven-development | Use RED/GREEN flow in `stage-guides.md` |
 | Diagnose Failure | systematic debugging | Reproduce, isolate, hypothesize, verify |
@@ -108,6 +110,7 @@ If Superpowers is available, these map cleanly:
 - `writing-skills`: Project Skill Creation / Update; governs RED/GREEN/REFACTOR, pressure scenarios, trigger-focused descriptions, and loophole closure. When `skill-creator` is also available, use its scaffolding and validation tools without letting it replace writing-skills discipline.
 - PRD/product skills such as `prd-writer` or mattpocock `to-prd`: methods inside Requirements Discussion; map helper Feature List output to Product Capability Scope and translate output into the Requirement `product.md` draft. Do not create native `feature_list.md`, `PRD.md`, prototype deployment, helper-owned trees, or Feature `product.md`.
 - Requirement/Product Grill and mattpocock `grill-with-docs`: clarification inside Requirements Discussion and Feature-local Brainstorm / Clarify; translate accepted product meaning to the Requirement `product.md`, keep Requirement README to pointer/lifecycle/mapping summaries, write Feature-local output to `spec.md` or `notes.md`, and route Decision Candidates without creating native `CONTEXT.md` or `docs/adr/`.
+- `archify`: optional visual communication after a Visual Trigger. Resolve a matching active project-local visual skill first, then installed Archify. If absent but materially useful, recommend exact installation/use before fallback. It is preferred inside the bounded Visual Scope only, is never added to the Mandatory Helper Resolution table, and falls back to Markdown/Mermaid/ASCII without blocking the stage when unjustified, declined, unsupported, or failed.
 - `writing-plans`: Plan Gate / Plan If Needed; translate into construction-grade `plan.md` or `plans/*`, or record a justified No-Plan Decision for a trivial task, not `docs/superpowers/plans/`.
 - `test-driven-development`: Execute Task / Story; evidence still goes to `notes.md` and task status still follows Task Done Gate.
 - `systematic-debugging`: Diagnose Failure; root cause and fix evidence go to `notes.md`.

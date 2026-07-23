@@ -51,6 +51,9 @@ The core constraints are:
 - Report Origin introduces no Owner, Assignee, personnel permission, staffing, workload, or automatic Priority system
 - Adaptive Product Definition belongs inside Requirements Discussion and has only `brief | standard` depth; it is not a lifecycle or new canonical stage
 - Product Definition Depth Scan, Product Completeness Scan, Concept Foundation, Requirement Product Model, and derived visuals are internal Requirements Discussion methods; when triggered they stabilize product meaning before Design Readiness
+- Optional Visual Communication is a bounded internal method across Requirements Discussion, Feature Spec, Decision & Design, Onboarding Knowledge Base, and review/close communication; it is used only on a Visual Trigger and never becomes a canonical stage or semantic authority
+- a Visual Scope Grant bounds stage, question, source/IDs, type, working output, and iteration; installation, generation, durable recording, semantic acceptance, Feature, and Git actions remain independent gates
+- visual authority is accepted semantic text -> typed source definition -> derived render; durable `source-render-v1` records both files and validates both digests; after project-local visual-skill discovery, installed Archify is preferred and materially useful missing Archify is recommended before Markdown/Mermaid/ASCII fallback, while declined/unsupported/failed use never blocks the owning stage
 - Concept Foundation is an internal Requirements Discussion / Requirement Product Grill method, not a canonical stage.
 - the effective human-reviewed Requirement `product.md` owns new product semantics; README indexes `Effective Product Definition`, ADR consumes it for technical landing, and Feature Spec consumes it through Product Slice
 - original human materials remain byte-stable sources; confirmed Product Definition changes are append-only, while legacy `requirement.md`, `Effective Concept Foundation`, and Feature `product.md` remain readable without bulk migration
@@ -168,6 +171,12 @@ One coherent Feature may resolve several Bugs. Each Bug retains independent iden
 **Concept Foundation**: a triggered internal Standard Product Definition method inside Requirements Discussion / Requirement Product Grill that derives requirement-local stable Concept IDs, definitions, identity, lifecycle boundaries, relationships, owners, state-bearing classification, invariants, and product fact-source questions from scenarios and evidence. It is not a stage or top-level artifact.
 
 **Requirement Product Model**: the applicable product-layer views owned inside a Standard effective Product Definition. It traces accepted concepts into relationships, roles/permissions, commands/events, business flow, product state, product facts, invariants, and exception/recovery behavior without choosing tables, stores, protocols, or technical representations. Product View Applicability prevents empty placeholder models.
+
+**Optional Visual Communication Adapter**: a presentation-layer helper used only when a Visual Trigger makes human confirmation materially clearer. Resolve a matching active project-local visual skill before installed Archify; when Archify is absent but materially useful, recommend its exact installation/use before offering Mermaid/table/ASCII fallback. Feature Spec views may explain an accepted Product Slice, feature responsibility, and its feature-local implementation/acceptance path, but any new product meaning returns to Requirements Discussion. The adapter may render working or durable views but cannot own product, decision, onboarding, lifecycle, or Git meaning.
+
+**Visual Scope Grant**: the bounded Human authorization for one stage, review question, authoritative source/IDs, diagram type, working-output class, and same-question iteration. New semantic scope, source, type, durable destination, stage, or external effect requires a new grant.
+
+**Durable Visual Artifact**: a `source-render-v1` pair whose typed source definition and derived render both exist, match the accepted semantic source, carry recorded SHA-256 digests and generator evidence, pass source/render validation, and remain current. A render alone is not an artifact of record.
 
 **Effective Requirement Snapshot**: the read-only ADR header that resolves Requirement README `Effective Product Definition` or the legacy `Effective Concept Foundation`, records Profile/review or legacy status, accepted Concept/Model IDs, Product Rule references, compatibility judgment, and last check. It does not copy or redefine product meaning.
 
@@ -507,7 +516,9 @@ Source / Scenario Evidence
 → Brief draft, or Standard Product Completeness Scan
 → triggered Concept Candidate Inventory / one-blocker Human Grill
 → applicable Requirement Product Model views
-→ optional Human-confirmed derived visuals
+→ optional Visual Trigger / Visual Scope Grant / working render iteration
+→ accepted feedback rewritten into the authoritative `product.md`
+→ optional separately confirmed durable `source-render-v1` visual
 → cumulative Product Human Review
 → Requirement Record / Archive with Effective Product Definition
 ```
@@ -591,7 +602,7 @@ roadmap graph
 roadmap adapter
 tdd-guard
 complex ADR system
-global skill installation
+automatic or unscoped global skill installation
 automatic directory-level AGENTS.md generation without human confirmation
 automatic commit, PR, merge, release, or publish action without human confirmation
 ```

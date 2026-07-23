@@ -6,17 +6,23 @@
 - Consolidated new PRD ownership into one Human-reviewed Requirement `product.md` with adaptive `brief | standard` depth; Product Completeness, Concept Foundation, Requirement Product Model, and derived visuals remain internal Requirements Discussion methods rather than new stages.
 - Stopped new Feature Product Brief authoring and made Feature `spec.md` consume a direct Product Requirement Source plus Product Slice, while retaining reader compatibility for legacy Requirement and Feature product sources.
 - Added a shared new/legacy effective-product resolver, canonical `scripts/check-requirement-product-definition.py`, Product Slice and ADR dual-reader validation, Product Rule section-anchor coverage, visual semantic-digest freshness, focused fixtures, and mutation pressure.
-- Routed optional PRD helpers and Archify through Agent Loop artifact paths and Human Gates; helper Feature Lists map to Product Capability Scope, native output/deployment is forbidden, and Product Review does not authorize implementation or Git actions.
+- Routed optional PRD helpers through Agent Loop artifact paths and Human Gates; helper Feature Lists map to Product Capability Scope, native output/deployment is forbidden, and Product Review does not authorize implementation or Git actions.
 - Closed independent-review gaps by allowing reasoned Brief-to-ADR trace-not-applicable handoff, accepting the unified ADR gate for legacy readers, enforcing snapshot-shape/freshness/review evidence, aligning `record-date` ownership and Scenario 65, and restoring explicit non-bypass Product Human Review semantics.
 - Hardened review evidence and reasoned no-model ADR validation so all Product Slice checkers reject `unconfirmed` evidence consistently, while Brief and legacy not-needed paths reject fabricated Concept Definitions, Scope Inventory, or Technical Landing Trace sections before Human Review.
 
-### Root AGENTS Lossless Slimming
+### Optional Visual Communication Adapter
+- Added optional visual communication across Requirements Discussion, Feature Spec, Decision & Design, Onboarding, and review communication: Visual Triggers prefer an active project-local visual skill, then installed Archify; when materially useful Archify is absent, the Agent recommends exact installation/use before Mermaid/ASCII fallback, while Markdown remains semantic authority.
+- Constrained Feature Spec visuals to the accepted Product Slice, feature responsibility, and feature-local implementation/acceptance path; accepted feature-local clarification returns to `spec.md`, while any new product meaning returns to Requirements Discussion.
+- Added exact Installation Authorization and bounded Visual Scope Grant rules so no external skill install, generation, iteration, durable recording, review, Feature start, Git action, or release authorization can be inferred from another gate.
+- Added validator-backed `source-render-v1` typed-source/render pairs for durable Requirement, ADR, and Onboarding visuals, with source IDs, semantic digests, render digests, freshness evidence, legacy-reader compatibility, and Mermaid/ASCII fallback.
+- Established `render to converge, text to record`: working visuals support human consensus, accepted meaning is rewritten into the owning Markdown, and stale or HTML-only output cannot be claimed current.
+- Added the complete Agent Loop capability map as an Archify `workflow` source plus showcase-validated interactive HTML and SVG, and reorganized `README.md` / `Usage.md` around formal capabilities and Agent-autonomy trigger prompts.
+
+### Agent Ownership And Root Guidance
 - Reduced the canonical root `AGENTS.md` template from 224 to 170 lines while retaining all 13 managed blocks and the startup-critical project-outcome ownership, Gate, completion, submit, and artifact-authority contracts.
 - Replaced duplicated leaf-stage rows with an exact 16-row first-hop Workflow Gateway Map while keeping the complete Stage Order and routing precedence authoritative in `references/runtime.md`.
 - Added exact Gateway tuple/reference/runtime-leaf coverage, line/CJK limits, and four mutation pressure checks; migrated live consumers to `block-version:1.5.0-20260721.2` without changing Skill version `1.5.0`.
 - Aligned the root-writing guidance with the stale-intent contract, removed delegated Requirement details from the Root checklist, and made dual memory roots fail closed during general controller discovery.
-
-### Root Routing And Ownership Clarification
 - Clarified the root Stage Map signal so Lightweight Change Assessment is entered only for a human-requested, already-defined, actionable ordinary non-Bug change.
 - Kept product meaning that is still being shaped in Requirements Discussion while preserving the existing Bug, active Feature, Lightweight eligibility, Human Choice, and Feature hard-trigger precedence.
 - Made downstream Agents own the project outcome as well as workflow mechanics: investigate safely available evidence before asking and continue authorized work until verified completion or a concrete Human Gate.
@@ -33,7 +39,6 @@
 - Hardened derived Feature Follow-up rules and focused negative assertions so generic adjustment wording cannot bypass Lightweight Change Assessment or create a Bug Record without explicit Bug management intent.
 - Refreshed all 13 root managed blocks to `block-version:1.5.0-20260717` and synchronized every current version surface after explicit v1.5.0 approval.
 
-### Persistent Lightweight Change Records
 - Superseded response-local-only execution control for new eligible work with one parser-valid card under `<memory-root>/changes/YYYY-MM/YYYY-MM-DD-<topic>.md` before target writes; creation month is stable, collisions use non-overwriting suffixes, and no Change archive/index lifecycle was added.
 - Added `in-progress | completed | stopped` plus separate Memory Review/Result invariants, accidental recovery revalidation, sensitive-evidence limits, and Feature promotion for planned durable execution.
 - Added a Python 3.10+ standard-library read-only scanner for unique/default/legacy/dual roots, exact monthly/card validation, deterministic pending/human-review inventory, and the three-pending / older-than-seven-days thresholds on macOS and Windows.

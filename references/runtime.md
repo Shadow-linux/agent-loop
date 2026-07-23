@@ -49,6 +49,8 @@ If message intent is `feature-archive-maintenance`, require current project memo
 
 Requirement/Product Grill may be used inside Requirements Discussion and its Brainstorm / Clarify work when terminology, roles, business flows, exception paths, prior Feature behavior, or decision signals are unclear. It does not create a new stage. Product Definition Depth Scan, Product Completeness Scan, Concept Foundation, Requirement Product Model, and derived visual generation are internal Requirements Discussion methods, not canonical stages or message intents. They write only through the reviewed Requirement `product.md` and send shared design signals to Design Readiness Check.
 
+Optional Visual Communication is also an internal method, not a stage or mandatory helper. When a Visual Trigger exists, it may render a bounded working view so the human can correct flow, boundary, state, sequence, relationship, or option meaning before the Agent rewrites the owning text. Prefer a matching active project-local visual skill, then installed Archify. If Archify is absent and would materially improve review, recommend its exact installation/use before offering Markdown, table, Mermaid, or ASCII; use fallback directly only when Archify is not justified, the human declines, the environment is unsupported, or installation/use fails.
+
 Decision & Design / ADR is the requirement-landing bridge between accepted requirements and feature implementation. Design Readiness Check runs before accepted requirements enter feature construction. Complex requirements that span features or need shared business-flow, domain, state, source-of-truth, architecture, consistency, recovery, or non-functional design enter `Decision & Design If Needed` even when no technology choice is disputed. Ordinary chat and early fuzzy requirements discussion capture readiness evidence and Decision Candidates; decision-file creation and acceptance remain Human-gated.
 
 Message intent is not permanent; reclassify when the conversation changes intent.
@@ -180,6 +182,37 @@ When Concept Foundation is triggered, one interaction turn follows this order:
 Do not replace step 4 with a batch of concept questions. Generic Brainstorm / Clarify question-count flexibility does not override this contract. Non-blocking uncertainties remain recorded without delaying the one blocking decision.
 
 The Human Grill answer resolves one product-semantic blocker inside Requirements Discussion. It does not confirm the complete Product Definition, accept Requirement lifecycle, authorize Requirement Record / Archive writes, create an ADR, or start Feature construction.
+
+## Optional Visual Communication Adapter
+
+Use this bounded internal method in Requirements Discussion first, and in Feature Spec, Decision & Design, Onboarding Knowledge Base, or review/close communication only when a Visual Trigger exists.
+
+```text
+Current Agent Loop stage and owning semantic artifact
+→ detect Visual Trigger
+→ resolve matching active project-local visual skill
+→ otherwise resolve installed Archify
+→ unavailable but materially useful: recommend Archify before offering Mermaid / table / ASCII fallback
+→ not justified, declined, unsupported, or failed: continue with text/Mermaid/ASCII
+→ available: obtain one Visual Scope Grant
+→ render and iterate only inside that scope
+→ human corrects or confirms meaning
+→ Agent rewrites the owning semantic artifact
+→ optional, separately confirmed durable source/render record
+→ existing Product Review, ADR acceptance, Onboarding review, Feature, or Git gate
+```
+
+A Visual Trigger exists when prose alone makes a multi-step flow, state/lifecycle, boundary, sequence, data flow, relationship, option comparison, or cross-role interaction materially hard to verify. Adapter availability alone is not a trigger.
+
+Feature Spec may use a visual only to explain the accepted Product Slice, feature responsibility, or feature-local implementation and acceptance path. Rewrite accepted feature-local clarification into `spec.md`. If the view reveals a new product concept, role/permission, relationship, flow, state, invariant, terminal, fact ownership, or product rule, stop Feature Spec and return to Requirements Discussion; never add that meaning to `spec.md` or edit Requirement `product.md` from the Feature Spec stage.
+
+The Visual Scope Grant must name the current stage, review question, authoritative source and stable IDs, diagram type, working-output location, and permitted iteration boundary. One grant covers iterative edits that answer the same question from the same source with the same type and working-output class. A new source, stage, diagram type, durable path, external side effect, or material semantic question requires a new grant.
+
+Archify upstream is <https://github.com/tt-a1i/archify>. If unavailable and useful, recommend it rather than silently installing it or presenting Mermaid as the default first drawing path. Before installation, disclose the exact source and revision, command, target/runtime location, network and file effects, whether the install is global, the doctor/verification command, and the no-install fallback. Human authorization covers only that exact Installation Authorization. Agent Loop does not vendor Archify or hardcode one universal installer across runtimes. Use fallback directly only when Archify is not materially justified, the human declines, the environment cannot support it, or installation/use fails.
+
+Installation Authorization, Visual Scope Grant, durable visual recording, Product Human Review, ADR acceptance, Onboarding review, Feature start, and Git/release actions are independent gates. One never implies another. Installation failure cannot elevate privileges, switch source/mirror/package manager/location, or retry a materially different command without renewed authorization.
+
+Use `render to converge, text to record`: a working render helps the human and Agent converge, while the owning Markdown remains semantic authority. A durable visual uses `source-render-v1`: accepted semantic artifact and stable IDs → typed Archify JSON source → validated derived render. Both files and their digests are recorded; stale, missing, mismatched, or HTML-only output is never current evidence.
 
 Before confirming the complete Product Definition, load `references/human-review-summary.md` and present the cumulative Product Definition Approval summary. It shows Profile, source evidence, all included/not-applicable views, confirmed concepts/rules, blockers, visual freshness, Design Readiness candidates, and the explicit product decision. It does not replace the one-question-per-turn Grill Contract and does not authorize implementation or Git actions.
 

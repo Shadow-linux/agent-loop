@@ -28,6 +28,7 @@ from requirement_product_support import (
     product_semantic_sha256,
     resolve_effective_product_definition,
 )
+from visual_artifact_support import VisualArtifactError, validate_durable_visual
 
 
 BRIEF_SECTIONS = (
@@ -64,6 +65,30 @@ ALLOWED_VISUAL_TYPES = {
     "sequence",
     "relationship",
     "equivalent",
+}
+
+LEGACY_VISUAL_COLUMNS = {
+    "Path",
+    "Type",
+    "Source IDs",
+    "Product Semantic SHA-256",
+    "Status",
+    "Human Confirmed",
+}
+
+SOURCE_RENDER_VISUAL_COLUMNS = {
+    "Diagram ID",
+    "Source Definition",
+    "Render",
+    "Type",
+    "Source IDs",
+    "Product Semantic SHA-256",
+    "Source SHA-256",
+    "Render SHA-256",
+    "Generator",
+    "Validation Evidence",
+    "Status",
+    "Human Confirmed",
 }
 
 
@@ -140,11 +165,22 @@ def validate_human_review(content: str) -> None:
         )
 
 
-def validate_visual_manifest(source: EffectiveProductSource) -> None:
-    visual_section = optional_section(source.content, "Derived Visuals")
-    if visual_section is None:
-        return
-    rows = table(source.content, "Derived Visuals")
+def _assert_visual_columns(
+    rows: list[dict[str, str]], expected: set[str], context: str
+) -> None:
+    actual = set(rows[0])
+    if actual != expected:
+        missing = ", ".join(sorted(expected - actual)) or "none"
+        extra = ", ".join(sorted(actual - expected)) or "none"
+        raise DefinitionCheckError(
+            f"{context} columns mismatch; missing={missing} extra={extra}"
+        )
+
+
+def validate_legacy_visual_manifest(
+    source: EffectiveProductSource, rows: list[dict[str, str]]
+) -> None:
+    _assert_visual_columns(rows, LEGACY_VISUAL_COLUMNS, "legacy visual")
     paths = [normalized(row.get("Path")) for row in rows]
     _assert_unique(paths, "Derived Visuals Path")
     semantic_digest = product_semantic_sha256(source.content)
@@ -177,6 +213,70 @@ def validate_visual_manifest(source: EffectiveProductSource) -> None:
             raise DefinitionCheckError(
                 "derived visual requires concrete Human Confirmed evidence"
             )
+
+
+def validate_source_render_visual_manifest(
+    source: EffectiveProductSource, rows: list[dict[str, str]]
+) -> None:
+    _assert_visual_columns(
+        rows, SOURCE_RENDER_VISUAL_COLUMNS, "source-render-v1"
+    )
+    diagram_ids = [normalized(row.get("Diagram ID")) for row in rows]
+    source_paths = [normalized(row.get("Source Definition")) for row in rows]
+    render_paths = [normalized(row.get("Render")) for row in rows]
+    _assert_unique(diagram_ids, "Derived Visuals Diagram ID")
+    _assert_unique(source_paths, "Derived Visuals Source Definition")
+    _assert_unique(render_paths, "Derived Visuals Render")
+
+    semantic_digest = product_semantic_sha256(source.content)
+    known_ids = set(source.concept_ids) | set(source.model_ids)
+    for row in rows:
+        source_ids = set(CONCEPT_ID_PATTERN.findall(row.get("Source IDs", "")))
+        source_ids.update(MODEL_ID_PATTERN.findall(row.get("Source IDs", "")))
+        if not source_ids:
+            raise DefinitionCheckError("derived visual must name source IDs")
+        unknown = source_ids - known_ids
+        if unknown:
+            raise DefinitionCheckError(
+                "derived visual contains unknown source IDs: "
+                + ", ".join(sorted(unknown))
+            )
+        if normalized(row.get("Product Semantic SHA-256")) != semantic_digest:
+            raise DefinitionCheckError("derived visual digest is stale")
+        if normalized(row.get("Status")) != "current":
+            raise DefinitionCheckError("derived visual status must be current")
+        if not _concrete(row.get("Human Confirmed")):
+            raise DefinitionCheckError(
+                "derived visual requires concrete Human Confirmed evidence"
+            )
+        try:
+            validate_durable_visual(
+                source.path.parent,
+                diagram_id=row.get("Diagram ID", ""),
+                source_definition=row.get("Source Definition", ""),
+                render=row.get("Render", ""),
+                diagram_type=row.get("Type", ""),
+                source_sha256=row.get("Source SHA-256", ""),
+                render_sha256=row.get("Render SHA-256", ""),
+                generator=row.get("Generator", ""),
+                validation_evidence=row.get("Validation Evidence", ""),
+            )
+        except VisualArtifactError as error:
+            raise DefinitionCheckError(str(error)) from error
+
+
+def validate_visual_manifest(source: EffectiveProductSource) -> None:
+    visual_section = optional_section(source.content, "Derived Visuals")
+    if visual_section is None:
+        return
+    rows = table(source.content, "Derived Visuals")
+    contract = normalized(metadata(visual_section, "Visual Manifest Contract"))
+    if not contract:
+        validate_legacy_visual_manifest(source, rows)
+        return
+    if contract != "source-render-v1":
+        raise DefinitionCheckError(f"unsupported Visual Manifest Contract: {contract}")
+    validate_source_render_visual_manifest(source, rows)
 
 
 def validate_product_slice(source: EffectiveProductSource, spec: str) -> None:

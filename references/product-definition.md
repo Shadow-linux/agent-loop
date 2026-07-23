@@ -171,19 +171,27 @@ Available brainstorming or PRD helpers may improve discovery and drafting inside
 
 ## Archify Scoped Confirmation
 
-Archify is an optional derived-view method. Before each generation, disclose:
+This section implements the Optional Visual Communication Adapter for Requirement Product Definition.
+
+Use Archify only through the Optional Visual Communication Adapter when a Visual Trigger exists. Prefer a matching active project-local visual skill, then installed Archify. Archify upstream is <https://github.com/tt-a1i/archify>. Before generation, obtain a bounded Visual Scope Grant and disclose:
 
 | Field | Required disclosure |
 |---|---|
 | Type | workflow, lifecycle, sequence, relationship, or equivalent |
 | Source | exact effective `product.md` and stable IDs |
-| Output | exact Requirement Set `visuals/` path |
+| Output | exact response-local or Requirement Set working path |
 | Review use | the product question the view helps the human inspect |
 | Alternative | Markdown, table, Mermaid, or no visual |
 
-Generate only after the human confirms that exact scope. Record source IDs, Product Semantic SHA-256, generation evidence, `Status: current`, and Human confirmation. A changed effective Product Definition makes the prior digest stale; do not present it as current until regenerated and reconfirmed. A derived view cannot introduce a product rule absent from the source.
+The same grant permits iterations only for the same stage, question, source/IDs, diagram type, and working-output class. New semantic scope, source, type, durable path, stage, or external effect requires a new grant.
 
-Archify unavailable does not block Product Human Review. Use Markdown, tables, Mermaid, or another human-confirmed equivalent; do not install or sync a Skill merely to complete this method.
+Use `render to converge, text to record`: the human reviews the working view, but the Agent must rewrite accepted feedback into the owning `product.md`. The render cannot introduce or own a product rule.
+
+Working previews are not recorded in the Product Derived Visuals manifest. Durable recording requires separate human confirmation and `Visual Manifest Contract: source-render-v1`. Record Diagram ID, typed Source Definition, Render, Type, Source IDs, Product Semantic SHA-256, Source SHA-256, Render SHA-256, exact `archify@<version>` Generator, `validate=pass; check=pass` evidence, `Status: current`, and Human confirmation. Validate both files through `scripts/visual_artifact_support.py`. A changed Effective Product Definition makes the semantic digest stale; missing/mismatched source or render makes the pair invalid.
+
+Historical six-column Derived Visual tables remain reader-compatible and are validated by their existing path/source/digest/current/human-confirmation rules. New durable entries must use `source-render-v1`; do not silently rewrite historical products.
+
+Archify unavailable does not block Product Human Review. If installation would materially help, recommend it before offering Markdown, tables, Mermaid, or another equivalent as the drawing path; disclose the exact upstream source/revision/command/target/effects/doctor/fallback and wait for a separate Installation Authorization. Use the fallback directly only when Archify is not justified, the human declines, the environment is unsupported, or installation/use fails. Do not install or sync a Skill merely to complete this method.
 
 ## Downstream Product Slice Handoff
 
