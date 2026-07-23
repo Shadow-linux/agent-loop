@@ -61,7 +61,7 @@ assert_contains "references/validation-scenarios.md" "Accepted Design Conformanc
 
 assert_contains "docs/proposal/v1.2.x/project-decisions-adr-lane.md" "Requirement -> Design Readiness Check -> Decision & Design If Needed -> Feature Mapping -> Product Brief / Feature Spec"
 assert_contains "README.md" "Decision & Design / ADR"
-assert_contains "Usage.md" "这个需求会拆成多个 feature，先检查整体设计是否完整。"
+assert_contains "Usage.md" "这个需求会拆成多个功能，开发前先看看整体设计够不够。"
 assert_contains "references/runtime.md" "Project Entry, then Effective Product Definition, Design Readiness, Decision & Design / Feature Spec / Feature Follow-up routing"
 assert_contains "references/stage-guides.md" 'conditionally required `.agent-loop/decisions/000N-<slug>.md`'
 

@@ -96,7 +96,7 @@ assert_contains "templates/project-skills/validation.md" "Invocation end and ret
 
 assert_contains "README.md" ".agent-loop/skills/"
 assert_contains "README.md" "Project Skill Creation / Update, Brainstorm, Plan Gate"
-assert_contains "Usage.md" "把这个流程做成技能"
+assert_contains "Usage.md" "这套操作以后还会重复，帮我看看是否值得做成项目技能。"
 assert_contains "CHANGELOG.md" "Project-Local Skills"
 assert_contains "references/validation-scenarios.md" "Project Skill Creation / Update"
 assert_contains "references/validation-scenarios.md" "Execution Gate"

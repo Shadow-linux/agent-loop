@@ -156,11 +156,8 @@ For other compatible agents, use that runtime's global or project-local skill di
 Tell the Agent:
 
 ```text
-Use Agent Loop to take over and maintain this project.
-Inspect the repository and current memory first, decide the correct next stage,
-and own planning, implementation, verification, review, drift repair, and memory updates.
-Keep progressing through Agent-ready work. Stop only at a real Human Gate,
-and show me the decision, evidence, impact, rollback, and your recommendation.
+Use Agent Loop to take over this project.
+See where things stand, then keep the agreed work moving until you need a decision from me.
 ```
 
 The Agent will inspect project state before proposing `.agent-loop/` memory or root guidance. It will not create a Feature merely because the task has several steps.
@@ -168,24 +165,22 @@ The Agent will inspect project state before proposing `.agent-loop/` memory or r
 ### 3. Start from a need, not from a stage name
 
 ```text
-先别实现。用 Agent Loop 帮我把这个需求变成可落地的产品文档。
-先明确概念和大致流程，再判断 brief 或 standard。
-如果完整产品设计会消耗较多 token，开始前先告诉我。
+I have a product idea, but it is still rough. Help me clarify it before we build anything.
+Let me know first if a full product-design pass will take a lot of discussion or tokens.
 ```
 
 After the product definition is accepted, ask:
 
 ```text
-继续做 Design Readiness。需要 ADR 就先完成技术落地和 Human Review；
-不需要就记录证据。然后创建合适的 Feature Product Slice，
-后续 Agent-ready 阶段由你自主推进，直到验证完成或遇到真实门禁。
+The product definition is approved. Work out what technical design is still needed,
+then start with the smallest sensible implementation slice.
 ```
 
 ### 4. Resume safely
 
 ```text
-继续上次的 Agent Loop 工作。先核对 branch、HEAD、dirty diff、
-当前 artifact、验证证据和恢复点，再告诉我你会从哪里继续。
+Continue the last Agent Loop task.
+Check the current state first, then resume from the safest point.
 ```
 
 See [Usage.md](Usage.md) for copy-ready prompts covering requirements, ADR, lightweight changes, Features, Bugs, project-local Skills, branch strategy, archive/rehydrate, post-merge memory reconciliation, submission, and close.

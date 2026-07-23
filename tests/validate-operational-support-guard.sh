@@ -47,6 +47,6 @@ assert_contains "references/validation-scenarios.md" "feature implementation"
 assert_contains "templates/root-AGENTS.md" "secrets, paid quota, credentials, configuration, external service, production/staging, deploy, release, or destructive action"
 
 assert_contains "README.md" "Operational Support"
-assert_contains "Usage.md" "操作支持"
+assert_contains "Usage.md" "运行、测试和排障"
 
 printf 'PASS: operational support guard contract is complete\n'

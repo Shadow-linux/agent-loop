@@ -123,7 +123,7 @@ assert_contains "README.md" "Decision & Design / ADR"
 assert_contains "README.md" "During requirements discussion, the agent records Design Readiness evidence and Decision Candidates without creating ADR files."
 assert_contains "Usage.md" "Decision & Design / ADR"
 assert_contains "Usage.md" '新的 decision draft 默认是 `proposed`'
-assert_contains "Usage.md" "聊需求时遇到复杂架构取舍，要不要 ADR？"
+assert_contains "Usage.md" "有重要的技术取舍再单独找我确认。"
 assert_contains "CHANGELOG.md" "Implemented the lightweight Decision / ADR lane"
 assert_contains "CHANGELOG.md" "Clarified the human-facing ADR trigger"
 assert_contains "CHANGELOG.md" "Reframed the lane as Decision & Design / ADR for requirement landing"

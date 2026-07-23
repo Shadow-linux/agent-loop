@@ -11,18 +11,8 @@
 把下面这段直接发给 Agent：
 
 ```text
-使用 Agent Loop 接管并持续维护这个项目。
-
-先检查仓库、项目记忆、root AGENTS.md / CLAUDE.md、当前 branch、HEAD、
-dirty diff、运行和测试方式、当前工作与不确定项，再判断正确的下一阶段。
-
-你负责工作流诊断、计划、实施、测试、验证、review、drift 修复、
-项目记忆和恢复点，并在授权范围内持续推进到有新鲜证据的完成状态。
-不要因为任务有多个步骤就自动创建 Feature，也不要为了快而降低准确性；
-选择满足风险要求的最小执行通道。
-
-只有遇到真实 Human Gate 时才停下来。停下时给我：
-需要我决定什么、你的推荐、证据、影响、风险、回滚和批准后的下一步。
+用 Agent Loop 帮我接管这个项目。
+先看看现在做到哪了，之后在已经确认的范围内继续推进；需要我决定时再问我。
 ```
 
 这会授权 Agent 做安全的只读检查和当前任务范围内的正常实现工作，但不会授权生产、付费、外部副作用、Git 提交或发布等独立门禁。
@@ -30,22 +20,15 @@ dirty diff、运行和测试方式、当前工作与不确定项，再判断正�
 ### 从一个已接受需求自主开发
 
 ```text
-这个 Requirement Product Definition 已经接受。
-使用 Agent Loop 完成 Design Readiness；需要 ADR 就先完成 ADR Human Review，
-不需要就记录 design-not-needed 证据。
-
-然后建立一个合适的 Feature Product Slice。后续 Agent-ready 阶段由你自主推进：
-spec、tasks、tests、Plan、TDD、验证、review、drift 和 memory update。
-持续做到有新鲜证据的完成状态，或遇到必须由人类决定的真实门禁。
+产品方案已经确认，可以准备开发了。
+你判断还缺什么设计，并从合适的第一步开始做；需要我决定时再问我。
 ```
 
 ### 只让当前任务自动跑完
 
 ```text
-当前 task 的范围和 plan 已确认。
-启用 Task Auto-Run，只完成这个 task/story。
-先做一致性检查，然后按 TDD、验证、review、drift、状态和记忆更新推进。
-遇到范围扩大、关键决策、外部副作用或其他 Human Gate 时停止。
+这个任务已经说清楚了，你把它做完并验证。
+先不要开始别的任务，有变化再问我。
 ```
 
 Auto-Loop 不是无限授权。Agent 仍然必须停在需求变化、关键设计、安全/数据/公共接口变化、不可用环境、重复失败、无关 dirty work、生产或外部动作、Git、提交、发布、pause 和 close 等边界。
@@ -69,12 +52,11 @@ Auto-Loop 不是无限授权。Agent 仍然必须停在需求变化、关键设�
 ### 初始化或接管
 
 ```text
-用 Agent Loop 初始化这个项目。
+这是个新项目，用 Agent Loop 帮我建起来，再告诉我建议先做什么。
 ```
 
 ```text
-用 Agent Loop 接管这个已有项目。先做 Project Entry Scan，
-不要假设旧文档仍然正确。
+帮我接管这个已有项目，先看看现在的真实状态，再告诉我从哪里继续。
 ```
 
 Agent 会区分新项目、已有项目、远程项目、恢复、re-adopt 和 stale-memory，并只接受一个真实 memory root。`.agent-loop/` 与 legacy `agent-loop/` 同时存在时会停止并要求处理双根冲突。
@@ -82,22 +64,19 @@ Agent 会区分新项目、已有项目、远程项目、恢复、re-adopt 和 s
 ### 恢复中断的工作
 
 ```text
-继续上次工作。先核对 branch、完整 HEAD、dirty diff、当前 artifact、
-任务状态、验证证据和恢复点，再从真实状态继续。
+继续上次的工作。先看看现在是什么状态，再从合适的位置接着做。
 ```
 
 ### 远程项目
 
 ```text
-代码在远程机器/容器里。先确认本地入口、远程路径、运行环境和权限边界，
-再做 Project Entry，不要把空本地目录当成项目事实。
+代码在远程机器或容器里，先找到真实的项目和运行环境，再帮我接管。
 ```
 
 ### 让新人看懂
 
 ```text
-项目已经可以安全接管。现在用 Evidence-Graph + DDD Onboarding
-建立新人知识库，覆盖领域、核心流程、代码落点、运行方式和证据。
+帮新人整理一份项目说明，让他能看懂业务、主要流程、代码放在哪，以及怎么跑起来。
 ```
 
 Onboarding 是项目理解资料，不替代 Requirement、Feature、任务状态或项目记忆。
@@ -124,12 +103,8 @@ Agent 会检查核心流程完整性，并按需要使用架构/边界图、ASCI
 ### 开始需求设计前
 
 ```text
-我在谈需求，先不要实现。
-先帮助我明确核心概念、用户、目标、范围和大致流程，
-然后判断应该用 brief 还是 standard 产品定义。
-
-如果你建议进入完整产品设计流程，先告诉我为什么、
-预计会增加哪些讨论轮次和 token 投入，再等我确认。
+我有个需求还没想完整，先别写代码。
+帮我把用户、主要流程和边界聊清楚；如果完整设计会比较耗 token，先提醒我。
 ```
 
 Agent 应先检查现有产品、代码、领域材料和历史决策，激活相关产品案例、模式和理论，形成候选 Product Frame，而不是让人类从空白开始设计。
@@ -139,11 +114,8 @@ Requirement Product Definition 起草后，Requirement `product.md` 会承接术
 ### 完整产品共识循环
 
 ```text
-采用 standard 产品设计。
-你作为产品设计师主导：先形成 Product Frame 和 Design Block Map，
-再按模块提出有价值的问题、当前设计、推荐答案、影响和改写目标。
-每次只阻塞在真正需要我的问题上；我确认后重写设计并继续下一块，
-直到角色、权限、流程、状态、数据、异常、恢复和边界完整。
+按完整产品设计来。
+你先给出框架和推荐方案，再按模块和我逐步确认，直到流程、状态、数据和异常都说清楚。
 ```
 
 Standard depth 可以触发：
@@ -162,8 +134,8 @@ Standard depth 可以触发：
 ### 视觉辅助
 
 ```text
-这段流程只看文字不容易确认。请用可用的视觉技能画一张模块图或流程图，
-先说明这次图要回答的问题和权威来源；图确认后把结论重写回 product.md。
+这里光看文字不太好懂，画张图给我确认。
+图里确认下来的结论也记进产品文档。
 ```
 
 Agent 优先使用 active project-local visual skill，然后使用已安装 Archify。不要因为 Archify 尚未安装就先把 Mermaid 当成默认画图方案：如果 Archify 能实质改善本次审核，Agent 先推荐 [Archify](https://github.com/tt-a1i/archify)，单独展示来源、revision、命令、目标、影响、doctor 和 fallback，并请求明确授权。只有 Archify 不值得安装、人类拒绝、环境不支持或安装/使用失败时，才降级到 Mermaid/ASCII。
@@ -177,50 +149,42 @@ Agent 优先使用 active project-local visual skill，然后使用已安装 Arc
 ### 大需求分阶段
 
 ```text
-先保留完整产品模型，再建议 Delivery Phases。
-每个 phase 写目标、包含/排除、依赖、完成证据和 Feature Mapping，
-不要把后续阶段从产品文档中删掉。
+这个需求比较大，帮我拆成几个可以逐步交付的阶段，但要保留完整产品方案。
 ```
 
 一个 Feature 默认只实现一个已确认 phase 或更小切片。合并多个 phase 需要回到 Requirement lifecycle 重新确认。
 
-### Product Human Review 和记录
+### 确认产品方案并记录
 
 ```text
-我接受这版产品定义。请给出 Product Human Review Summary，
-但先不要创建 Feature，也不要实现。
+这版产品方案符合我的想法。帮我收好最终结论和还没解决的问题，先不要开发。
 ```
 
 ```text
-确认把这版 Requirement Product Definition 记录到项目中。
+确认，就按这版产品方案记录。
 ```
 
 Product Review、Requirement Record / Archive、ADR acceptance、Feature start 和 implementation 是独立门禁，不能互相代替。人类原始文字、图片、PRD 和原型保持 byte-stable；Agent 在新的 `product.md` 中解释和固化，不自动改写原件。
 
 Product Human Review 确认“这份产品定义准确”，但不会自动接受 Requirement lifecycle、创建 Feature、执行代码或授权 Git。
 
-## 从 Product Definition 衔接 ADR
+## 产品方案确认后还要不要做 ADR
 
 ```text
-产品定义已经接受。现在做 Design Readiness，
-检查共享业务流程、领域/数据规则、状态、事实来源、架构、恢复、
-兼容性和非功能目标是否需要 ADR。
+产品方案已经确认，看看开发前还缺不缺整体技术设计。
 ```
 
 你也可以直接问：
 
 ```text
-这个需求会拆成多个 feature，先检查整体设计是否完整。
-聊需求时遇到复杂架构取舍，要不要 ADR？
+这个需求会拆成多个功能，开发前先看看整体设计够不够。
+有重要的技术取舍再单独找我确认。
 ```
 
 简单工作可记录 `design-not-needed`。需要共享技术落地时：
 
 ```text
-根据 Effective Requirement Snapshot 起草 ADR。
-把 Requirement Product Model 的稳定 ID 全部纳入 Scope Inventory，
-为每个 in-scope ID 写 Technical Landing、保留的不变量、
-Design Slice 和验证目标。先保持 proposed，等我接受。
+需要整体技术设计。根据已经确认的产品方案给我一个推荐方案，先让我看看。
 ```
 
 Decision & Design / ADR 消费产品语义，不重新定义产品。新的 decision draft 默认是 `proposed`。发现产品歧义时回到 Requirements Discussion；发现既有 accepted 技术决策不兼容时保留原记录并通过 Human Review supersede。
@@ -229,8 +193,7 @@ Decision & Design / ADR 消费产品语义，不重新定义产品。新的 deci
 
 ```text
 把生产脚本中的旧域名替换为新域名。
-先判断是否满足 Lightweight Change；满足就创建持久执行卡，
-使用与风险匹配的最小 Plan 和针对性验证，不要为了形式创建 Feature。
+这是个小改动，用最轻但可靠的方式处理就行。
 ```
 
 执行卡位于：
@@ -245,12 +208,10 @@ Decision & Design / ADR 消费产品语义，不重新定义产品。新的 deci
 
 三张 `completed + Memory Review: pending` 卡，或最早 pending 超过七个完整日历日，会触发 Agent 主动整理稳定项目事实。高置信度事实可在精确披露 owner、证据和 rollback 后写入现有可靠记忆；语义不确定时保留给人类确认。
 
-## 开始一个 Feature
+## 开始实现一个功能
 
 ```text
-基于已接受的 Requirement Product Definition 开始这个 Feature。
-先解析 Effective Product Source，在 spec.md 写直接来源和本次 Product Slice，
-再拆 stories/tasks、设计 tests、完成必要的 E2E discovery 和 Plan。
+这份需求已经确认，先把其中的【具体范围】做出来。
 ```
 
 典型产物：
@@ -267,20 +228,18 @@ Decision & Design / ADR 消费产品语义，不重新定义产品。新的 deci
 
 Feature `spec.md` 只选择产品切片，不重新定义产品。复杂任务可按触发条件使用 `tasks/`、`tests/`、`plans/`、`handoffs/` 和 `contracts/` 子目录；不要默认展开。
 
-### Feature Auto-Loop
+### 让这个功能自主推进
 
 ```text
-这个 Feature 的 Product Slice 和 Requirement Checklist 已确认。
-启用 Feature Auto-Loop，Agent-ready 阶段自主推进。
+这个功能已经说清楚了，你在这个范围内自主推进，需要我决定时再问我。
 ```
 
 同一时间最多一个 Active Feature。切换时先 pause、记录恢复点，再激活另一个。自动模式不授权 Git、外部系统、生产、发布或 Feature close。
 
-### Delivery Contract
+### 判断是否需要交付约定
 
 ```text
-这个 Feature 是否真正需要 Delivery Contract？
-只有存在稳定 producer-consumer handoff 时才建议，并说明消费者、兼容性和破坏性变更。
+这个改动会影响其他模块或调用方吗？有必要再补交付约定，不要为了形式加文档。
 ```
 
 Delivery Contract 不是默认 artifact。创建、接受和 breaking change 各自需要 Human Gate。
@@ -288,42 +247,38 @@ Delivery Contract 不是默认 artifact。创建、接受和 breaking change 各
 ## Bug 管理与修复
 
 ```text
-这是一个 Bug。先登记或匹配 Bug identity，保存证据并去重，
-确认 Expected Behavior、Requirement 关联和负责 Feature，
-不要直接改代码。
+这是一个 Bug：【描述现象】。
+先帮我查清楚正确行为和问题可能在哪，暂时不要改代码。
 ```
 
 ```text
-确认 Resolution Path：用 maintenance-fix Feature 修复这个 Bug。
+确认，按你推荐的方式修复这个 Bug。
 ```
 
 Bug Record 管身份、来源、事实、证据、生命周期、Resolution Path、reopen 和 close；Requirement 管产品目标与预期行为；所有代码修复由 Feature 工作流承担。
 
 Bug 与 Requirement 是可选多对多关系。产品含义不清时回到 Requirements Discussion。默认 Feature ownership metadata scan 为 90 个日历日，但不是硬边界；路径、符号、验收、回归或归档 locator 有证据时继续向更早历史查找。Bug Close、Feature Close、commit 和 release 是独立门禁。
 
-## Operational Support（操作支持）
+## 运行、测试和排障
 
 ```text
 先帮我弄清楚这个项目怎么启动和测试，不要改代码。
 ```
 
 ```text
-根据当前代码和 runbook 给出线上故障排查、验证和回滚步骤。
-涉及生产、账号、配置写入、secret、付费或外部调用时先停下来确认。
+帮我看看这个线上故障该怎么排查。要碰生产或外部系统时先问我。
 ```
 
 ```text
-这个操作已经重复成功多次。评估是否值得沉淀成 project-local Skill。
+这个操作已经重复做过几次了，看看能不能整理成项目里的固定能力。
 ```
 
 Operational Support 默认先只读检查代码、配置、脚本、部署流程和环境事实。需要代码变更时再路由 Lightweight、Feature 或 Bug；不会用“运维”名义绕过写入门禁。
 
-## 项目本地 Skill
+## 把重复操作变成项目能力
 
 ```text
-把这个流程做成技能。
-把这套可重复操作做成项目技能。
-先展示 Skill Candidate、精确目录、触发条件、范围、风险和验证计划。
+这套操作以后还会重复，帮我看看是否值得做成项目技能。
 ```
 
 Gate 1 批准后，Agent 才可创建：
@@ -462,8 +417,7 @@ flowchart TB
 ```
 
 ```text
-这个项目没有明确分支规范。请用 Agent Loop 评估并推荐，
-我确认后再记录，先不要创建或切换任何分支。
+这个项目还没有分支规范，先看看现状并推荐一套；我确认前不要动分支。
 ```
 
 可选推荐模型：
@@ -483,12 +437,10 @@ hotfix/v1.0.0/login-security
 
 采用策略、创建、切换、merge、删除、push、tag、release 和 publish 都是不同 Human Gate。
 
-## 按月份归档关闭 Feature
+## 按月份归档已关闭功能
 
 ```text
-扫描 2026 年 5 月和 6 月可归档的 closed Features。
-只给我 eligible/blocked、目录移动、引用影响、恢复范围和 plan SHA-256，
-先不要 apply。
+帮我看看 2026 年 5 月和 6 月有哪些已关闭功能可以归档，先给我方案，不要直接移动。
 ```
 
 确认精确 plan SHA-256 后，Agent 才把完整 Feature 目录移动到：
@@ -499,15 +451,12 @@ hotfix/v1.0.0/login-security
 
 `features/archive.md` 用稳定 Feature ID 定位当前位置。Archive 不压缩、不删除、不改变产品或决策权威。需要再次修复时先独立 rehydrate scan 和 Human Gate；rehydrate 不自动 reopen Feature。
 
-## 代码合并后的记忆合并
+## 代码合并后校准项目记忆
 
 代码必须先完成 merge 并验证。之后说：
 
 ```text
-代码已经合并并验证。现在只处理 Agent Loop memory reconciliation。
-以当前 Target memory 为 spine，比对 Base/Source/Target/Result，
-逐条核对代码事实、环境事实、产品/决策权威和人类规范，
-形成中文 Memory Merge Report；先不要 Apply。
+代码已经合并并验证。看看两边的项目记忆要不要合并或重写，先给我报告，不要直接改。
 ```
 
 流程固定为：
@@ -521,21 +470,19 @@ Agent 不选择某个分支整份覆盖，也不把 Git 无冲突当作语义正
 ## 提交、暂停与关闭
 
 ```text
-准备提交。先检查 diff、untracked、Requirement/ADR/Feature/Change/Bug 产物、
-验证、review、drift、memory、guidance 和无关改动，给我 Human Review Summary。
-不要 commit。
+这些改动准备提交了，先帮我完整检查一遍，暂时不要提交。
 ```
 
 提交前 Agent 应同时复核 feature 文档、requirement 记录、代码 diff、验证证据、drift、project memory、root/directory guidance 影响和 unrelated changes。
 
 ```text
-提交这些已确认改动。
+确认，提交刚才审阅过的这些改动。
 ```
 
 第二句话只有在前面的精确范围仍然有效时才授权 commit；push、PR、merge、tag、release 和 publish 仍需分别授权。
 
 ```text
-评估这个 Feature 是否可以关闭。
+帮我看看这个功能是不是真的可以关闭，还有没有风险或后续工作。
 ```
 
 Feature Close Review 先确认所有任务、验收、测试、决策切片、Bug、drift、memory、残余风险和后续工作。关闭需要人类确认，不能由测试通过自动推导。
@@ -560,11 +507,10 @@ Feature Close Review 先确认所有任务、验收、测试、决策切片、Bu
 
 `project.md` 记录当前工作和当前恢复动作，不承担需求待办；未来、deferred 和 backlog 项进入 Requirement lifecycle 与可选 `requirements/INDEX.md`。
 
-## 同步 root AGENTS.md
+## 检查项目根目录的 AGENTS.md
 
 ```text
-检查这个项目的 root AGENTS.md 是否落后于当前 Agent Loop。
-先只读报告 managed block 漂移，不要覆盖人类内容。
+帮我看看项目根目录的 AGENTS.md 有没有落后。先告诉我差异，不要直接覆盖。
 ```
 
 当脚本可用时，Agent 使用 Python 3.10+ 运行 `scripts/check-root-agents-blocks.py`，把结果作为 Human Review Summary 证据；写入仍需单独确认。
@@ -576,20 +522,20 @@ Feature Close Review 先确认所有任务、验收、测试、决策切片、Bu
 ```text
 接管并持续维护这个项目。
 先别写代码，帮我把需求聊清楚。
-这个需求值得走完整产品设计吗？先告诉我 token 投入。
-把产品框架按模块和我一轮轮确认。
+这个需求比较复杂，先告诉我需要讨论多久、会不会比较耗 token。
+先提出产品框架，再按模块和我逐步确认。
 用图帮助我确认流程和状态。
-产品文档接受了，检查是否需要 ADR。
-这个小改动能不能走轻量执行卡？
-这是 Bug，先登记和定位归属。
-这个 Feature 后续你自主推进。
+产品方案已经确认，看看开发前还缺什么整体设计。
+这个改动很小，请选最轻但可靠的方式处理。
+这是一个 Bug，先确认正确行为和可能归属。
+这个功能的范围已经确认，接下来你自主推进。
 帮我跑通测试和部署流程，但先不要碰生产。
-把这套操作沉淀成项目 Skill。
+这套操作以后还会重复，请帮我整理成项目能力。
 给这个项目推荐分支规范。
-把两个月前的 closed Features 按月份归档。
-代码合并完了，校准两边的 Agent Loop 记忆。
-提交前做完整 review。
-关闭这个 Feature。
+把两个月前已经关闭的功能按月份归档。
+代码合并完了，检查两边的项目记忆是否需要校准。
+提交前做一次完整检查。
+检查这个功能是否真的可以关闭。
 ```
 
 Agent 的责任是把人类目标翻译为正确的下一步，并保持项目可验证、可恢复、可继续。
