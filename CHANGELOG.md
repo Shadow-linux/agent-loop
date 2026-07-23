@@ -2,6 +2,13 @@
 
 ## 1.5.0 — 2026-07-17
 
+### Global Skill Installation
+- Added one `npx skills` installation path for Codex、Kimi Code CLI、Claude Code 和 OpenCode without publishing a separate Agent Loop npm package.
+- Documented global update and inventory commands, retained the manual Codex clone fallback, and clarified the Node.js runtime requirement.
+- Added a post-update reminder that existing projects still need a Human-reviewed `AGENTS.md` managed-block refresh; global Skill update never authorizes automatic project-file mutation.
+- Aligned first-version scope so explicit human-authorized installation is supported while automatic or unscoped global installation remains excluded.
+- Defined `main` as the default public installation channel for the exact latest formal stable release commit; alpha branches remain explicit pre-release sources, and synchronizing a release to `main` retains a separate Human Gate.
+
 ### Adaptive Requirement Product Definition
 - Consolidated new PRD ownership into one Human-reviewed Requirement `product.md` with adaptive `brief | standard` depth; Product Completeness, Concept Foundation, Requirement Product Model, and derived visuals remain internal Requirements Discussion methods rather than new stages.
 - Stopped new Feature Product Brief authoring and made Feature `spec.md` consume a direct Product Requirement Source plus Product Slice, while retaining reader compatibility for legacy Requirement and Feature product sources.

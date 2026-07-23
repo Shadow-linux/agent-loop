@@ -4,6 +4,38 @@
 
 这是一份给人类使用的触发指南。你不需要记住 Agent Loop 的阶段名；只要说明目标、边界和你希望 Agent 自主推进到哪里，Agent 负责判断项目状态、选择流程、维护产物并在真正的 Human Gate 停下。
 
+## 安装和升级
+
+把 Agent Loop 全局安装到 Codex、Kimi Code CLI、Claude Code 和 OpenCode：
+
+```bash
+npx -y skills add Shadow-linux/agent-loop \
+  --global \
+  --skill agent-loop \
+  --agent codex \
+  --agent kimi-code-cli \
+  --agent claude-code \
+  --agent opencode \
+  --yes
+```
+
+以后升级和检查安装状态：
+
+```bash
+npx skills update agent-loop -g
+npx skills list -g
+```
+
+不指定分支时，安装与升级读取 `main`；Agent Loop 的正式发布流程会让 `main` 与最新稳定版本保持同一提交。`alpha/*` 只用于明确指定版本的预发布验证，不会成为默认安装来源。
+
+全局 Skill 更新不会自动修改已有项目的 `AGENTS.md`。进入仍在维护的 Agent Loop 项目后，对 Agent 说：
+
+```text
+Agent Loop 版本已更新，请更新项目的 AGENTS.md。
+```
+
+Agent 应先检查差异，只更新过期的 Agent Loop managed blocks，并保留人类编写的内容；实际写入仍需 Human Review。
+
 ## 最重要的用法：让 Agent 真正拥有项目
 
 ### 接管并持续维护

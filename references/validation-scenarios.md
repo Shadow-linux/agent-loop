@@ -1005,7 +1005,7 @@ Expected:
 - preserve `.agent-loop/project.md`, `requirements/`, and `features/<feature>/spec/tasks/tests/plan/notes`
 - preserve human gates
 - update design and runtime together when core behavior changes; stage references may extend a stage but cannot override either source
-- do not introduce roadmap graph, multiplayer workflow, tdd-guard, complex ADR, global install, or automatic directory-level AGENTS.md without human confirmation in v1
+- do not introduce roadmap graph, multiplayer workflow, tdd-guard, complex ADR, automatic or unscoped global install, or automatic directory-level AGENTS.md without human confirmation in v1
 
 ## 12b. DDD-Inspired Architecture Init
 

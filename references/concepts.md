@@ -11,7 +11,7 @@ First version excludes:
 - roadmap adapter
 - tdd-guard
 - complex ADR system
-- global installation
+- automatic or unscoped global installation
 - automatic directory-level AGENTS.md generation without human confirmation
 - automatic commit, PR, merge, release, or publish action without human confirmation
 

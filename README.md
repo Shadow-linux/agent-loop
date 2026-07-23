@@ -145,13 +145,44 @@ Approving one gate never approves another.
 
 ### 1. Install
 
-Place this repository in the skill directory used by your CLI agent. For Codex:
+Agent Loop can be installed directly from GitHub with the open [`skills` CLI](https://github.com/vercel-labs/skills). To install it globally for Codex, Kimi Code CLI, Claude Code, and OpenCode:
+
+```bash
+npx -y skills add Shadow-linux/agent-loop \
+  --global \
+  --skill agent-loop \
+  --agent codex \
+  --agent kimi-code-cli \
+  --agent claude-code \
+  --agent opencode \
+  --yes
+```
+
+The unqualified GitHub source follows `main`, which Agent Loop maintains as the latest formal stable release channel. Alpha branches are available only through an explicitly selected source revision and never replace the default channel.
+
+For an interactive Agent selection:
+
+```bash
+npx skills add Shadow-linux/agent-loop -g
+```
+
+Update Agent Loop and check the global installation:
+
+```bash
+npx skills update agent-loop -g
+npx skills list -g
+```
+
+> [!IMPORTANT]
+> 在使用 Agent Loop 的项目中，请对 Agent 说：`Agent Loop 版本已更新，请更新项目的 AGENTS.md。`
+
+**Manual fallback for Codex**
 
 ```bash
 git clone https://github.com/Shadow-linux/agent-loop.git ~/.codex/skills/agent-loop
 ```
 
-For other compatible agents, use that runtime's global or project-local skill directory. Do not copy Agent Loop into a target project's `.agent-loop/`; that directory stores project memory and work artifacts, not the skill package.
+The `npx` route requires Node.js 18 or later. If your runtime is not listed above, use its global or project-local Skill directory. Do not copy Agent Loop into a target project's `.agent-loop/`; that directory stores project memory and work artifacts, not the Skill package.
 
 ### 2. Let Agent Loop take over a project
 
