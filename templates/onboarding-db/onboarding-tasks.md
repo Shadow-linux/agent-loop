@@ -8,8 +8,8 @@ Onboarding Spec 的确认只授权创建本文件。人类另外确认本文件�
 
 ## Batch <n>: <name>
 
-| Task | Output | Evidence Required | Quality Gate | Status |
-|---|---|---|---|---|
+| Task | Output | Flow ID | Required Slice IDs | Required / Conditional Diagram IDs | Evidence Required | Completeness Hard Gate | Quality Score Target | Status |
+|---|---|---|---|---|---|---|---|---|
 
 ## Current Batch Notes
 
@@ -24,7 +24,10 @@ Onboarding Spec 的确认只授权创建本文件。人类另外确认本文件�
 - [ ] 当前 Onboarding Tasks 和 execution scope 已被人类单独确认。
 - [ ] 全量 planned docs 和 execution scope 已明确。
 - [ ] 每个输出文件都有 evidence required。
-- [ ] 每个 module / flow task 都要求架构/边界图、ASCII 状态图、Timeline / 时序图。
+- [ ] 每个 `critical` / `important` flow task 都要求 Core Flow Overview / Boundary、ASCII State Machine / Decision、Timeline / Sequence；module 和其他内容 task 按真实语义选图。
+- [ ] 每个 `critical` / `important` core-flow task 都列出 Flow ID、Required Slice IDs、business terminals、default/conditional diagrams 和 evidence mapping。
+- [ ] Supporting flow 只有承担核心状态、外部副作用或恢复责任时才升级为完整 slice task。
+- [ ] Completeness Hard Gate 在质量评分前执行；missing/blocked critical slice 不能标记 newcomer-ready。
 - [ ] 普通流程图和时序图优先用 Mermaid flowchart / sequenceDiagram；状态机、复杂原理图和复杂示例图优先用 ASCII。
 - [ ] 每个 task 都要求清除 `<...>`、TBD、TODO、待补充、空 required row、泛泛“看代码/see code”证据。
 - [ ] 涉及 gateway / runtime 或一致性 / 幂等 / 补偿的 task 已明确质量门禁。

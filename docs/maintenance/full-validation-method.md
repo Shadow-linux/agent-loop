@@ -23,6 +23,8 @@
 
 只有局部措辞、拼写或不改变行为的示例修正，可以只运行仓库最小检查与受影响测试。
 
+如果人类只要求某个独立功能的评分、逻辑测试或专项压测，使用 `docs/maintenance/feature-validation-method.md`。单功能方法使用独立五域权重和 feature-scoped tests，但不替代本节触发条件已经要求的全量验证。
+
 ## 验证原则
 
 1. 先确定审计对象是 Git `HEAD`、某个 commit，还是当前工作区；报告中必须写明。
@@ -100,9 +102,9 @@
 2. 运行全部 `tests/*.sh`，不能只运行新增测试。
 3. 重新执行六域语义审计，检查修复是否在另一个入口产生冲突。
 4. 重新执行代表性压力场景，至少覆盖：
-   - 复杂 Requirement -> Decision Scan -> ADR -> Feature Spec
-   - 无需 ADR 的简单需求路径
-   - Product Brief Source Gate
+   - 复杂 Requirement -> Standard Product Definition -> Decision Scan -> ADR -> Feature Spec Product Slice
+   - 无需 ADR 的简单需求 -> Brief Product Definition -> Feature Spec Product Slice
+   - Requirement Product Definition ownership、Product Human Review 和 Feature Product Slice Gate
    - Delivery Contract Human Gate
    - TDD RED 与非行为型 `N/A`
    - Active Feature、Pause、Resume、Close、Reopen
@@ -121,9 +123,9 @@
 
 - `SKILL.md` 是简洁入口，详细运行规则由发布包内的 design/runtime/reference 承载。
 - root `AGENTS.md` Stage Map 只负责用户 Agent 导航，不替代详细阶段过程。
-- Requirement 是业务目标与验收方向的 source of truth。
+- Requirement `product.md` 是新工作中产品目标、含义与验收方向的 source of truth；人类原始材料保持 byte-stable。
 - Decision / ADR 是复杂需求落地前的可选决策桥梁，不是所有 Feature 的强制产物。
-- Product Brief 和 Feature Spec 必须具有 requirement source 或明确 Feature-start 证据。
+- 新 Feature 不创建 Product Brief；Feature Spec 必须解析 confirmed Effective Product Definition（或 legacy effective source）并记录不重定义产品含义的 Product Slice。
 - accepted ADR、Decision Candidate 与实现不一致时，必须回到 Drift Check / Decision Scan。
 - Delivery Contract 不能在 Human Gate 之前创建、接受或发生 breaking change。
 - 行为变更不能跳过 TDD RED；非行为变更的 `N/A` 必须有理由。

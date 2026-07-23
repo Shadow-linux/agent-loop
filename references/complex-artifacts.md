@@ -61,7 +61,6 @@ Before creating directories, explain the complex semantics that justify the reco
 
 ```text
 .agent-loop/features/YYYY-MM-DD-<feature>/
-  product.md optional
   spec.md
   tasks.md
   tests.md

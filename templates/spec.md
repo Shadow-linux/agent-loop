@@ -9,10 +9,31 @@ Source Requirements:
 - Requirement:
 - Prototype:
 
-Product Brief: product.md | none
+## Product Requirement Source
+
+- Requirement Set:
+- Effective Product Definition:
+- Product Definition Profile:
+- Product Review Evidence:
+- Applicable Decisions:
+
+Resolve the Requirement Set README before Feature Spec. New work uses exactly one confirmed `Effective Product Definition`; legacy work may resolve `Effective Concept Foundation` without migration. Product Review is product-definition evidence only and does not authorize Feature start, implementation, or Git actions.
+
+## Product Slice
+
+| Source Section / Model ID | Feature Responsibility | Acceptance Mapping | Coverage |
+|---|---|---|---|
+| FLOW-... / STATE-... / product.md#... |  |  | in-scope / out-of-scope / not-applicable |
+
+The Product Slice selects this Feature's responsibility and acceptance mapping. It must not redefine the Requirement Product Definition. Return to Requirements Discussion when product meaning must change.
+
+Related Bugs:
+Bug Resolution Path: none | flow-back | linked-feature | maintenance-fix
 
 Related Feature:
 Flow-back Decision: none | flow-back | linked-new-feature | maintenance-fix | investigate-first | declined-reopen | defer
+
+Bug references point to the owning Bug README and do not copy full Report Origin, reproduction, or evidence into this Feature Spec. Feature acceptance does not authorize Bug close.
 
 Summary:
 - 

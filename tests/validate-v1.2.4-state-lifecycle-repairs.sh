@@ -26,7 +26,7 @@ assert_contains "references/runtime.md" "## Routing Axes And Precedence"
 assert_contains "references/runtime.md" 'Entry Context: `new-project` / `existing-project` / `remote-entry`'
 assert_contains "references/runtime.md" 'Memory Health: `absent` / `current` / `stale` / `outside-loop`'
 assert_contains "references/runtime.md" 'Work State: `idle` / `active` / `blocked` / `completion-candidate` / `paused`'
-assert_contains "references/runtime.md" "Safety Stop -> Remote Discovery -> Memory Recovery -> Active Feature Guard -> Blocker Resolution -> Intent Routing -> Normal Stage Continuation"
+assert_contains "references/runtime.md" "Safety Stop -> Remote Discovery -> Memory Recovery -> Feature Archive Maintenance -> Active Feature Guard -> Blocker Resolution -> Intent Routing -> Normal Stage Continuation"
 
 # Single-controller memory permits exactly one active feature.
 assert_contains "references/feature-completion-check.md" "Agent Loop permits at most one Active Feature."
@@ -65,7 +65,7 @@ assert_contains "references/stage-guides.md" "human-reviewed and recorded"
 assert_not_contains "references/stage-guides.md" "requirement document accepted and archived"
 
 # Every Feature Spec has a requirement-owned Design Readiness record.
-assert_contains "references/stage-guides.md" "Every feature start must reference an accepted requirement set."
-assert_contains "references/stage-guides.md" "For a narrow direct feature request, create and accept the minimum requirement set before Feature Spec."
+assert_contains "references/stage-guides.md" "Every Feature start must reference an accepted Requirement Set with a confirmed Effective Product Definition, or an explicitly supported legacy effective source."
+assert_contains "references/stage-guides.md" "For a narrow direct Feature request, create/review the minimum Brief before Feature Spec."
 
 printf 'PASS: v1.2.4 routing and lifecycle repairs are enforced\n'

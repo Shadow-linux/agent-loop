@@ -16,6 +16,13 @@ Status: active
 |---|---|---|---|
 | DS-00 |  |  | planned / verified / blocked |
 
+## Bug Verification Matrix
+
+Use only when this Feature resolves one or more Bug Records.
+
+| Bug ID | Expected Behavior Evidence | Original Reproduction | Regression / Safety Verification | Result | Evidence Link |
+|---|---|---|---|---|---|
+
 ## Functional Test Cases
 
 ## Module Tests

@@ -1,0 +1,428 @@
+{
+  "schema_version": 1,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Agent Loop Capability Map",
+    "subtitle": "Human-directed · Agent-owned · Evidence-verified",
+    "output": "agent-loop-capability-map.html",
+    "animation": "none",
+    "visual_preset": "classic",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "autonomy-loop",
+        "label": "Autonomous delivery loop",
+        "focus": [
+          "human-goal",
+          "controller",
+          "product-definition",
+          "design-readiness",
+          "delivery-router",
+          "verified-close"
+        ],
+        "note": "Follow the primary path from a human goal to an evidence-backed close."
+      },
+      {
+        "id": "project-understanding",
+        "label": "Understand and support",
+        "focus": [
+          "controller",
+          "project-entry",
+          "operational-support",
+          "onboarding"
+        ],
+        "note": "See how Agent Loop safely enters, explains, operates, and documents a project."
+      },
+      {
+        "id": "product-design",
+        "label": "Requirement to design",
+        "focus": [
+          "product-definition",
+          "visual-communication",
+          "design-readiness"
+        ],
+        "note": "Trace accepted product meaning into visual consensus and technical landing."
+      },
+      {
+        "id": "right-sized-delivery",
+        "label": "Choose the right lane",
+        "focus": [
+          "delivery-router",
+          "human-gate",
+          "verified-close"
+        ],
+        "note": "Route work to chat, operational support, lightweight change, feature, or bug follow-up without bypassing gates."
+      },
+      {
+        "id": "memory-maintenance",
+        "label": "Maintain project truth",
+        "focus": [
+          "verified-close",
+          "project-memory",
+          "history-maintenance"
+        ],
+        "note": "Keep project memory, archived history, branch context, and post-merge facts aligned."
+      }
+    ]
+  },
+  "lanes": [
+    {
+      "id": "human",
+      "label": "Human Direction / 人类决策"
+    },
+    {
+      "id": "controller",
+      "label": "Agent Loop Controller / 自主控制器"
+    },
+    {
+      "id": "understand",
+      "label": "Project Understanding / 项目理解"
+    },
+    {
+      "id": "product",
+      "label": "Product & Design / 产品与设计"
+    },
+    {
+      "id": "delivery",
+      "label": "Right-sized Delivery / 合适执行通道"
+    },
+    {
+      "id": "quality",
+      "label": "Quality & Evidence / 质量与证据"
+    },
+    {
+      "id": "maintenance",
+      "label": "Long-term Maintenance / 长期维护"
+    }
+  ],
+  "phases": [
+    {
+      "id": "intake",
+      "label": "01 · Understand",
+      "fromCol": 0,
+      "toCol": 1
+    },
+    {
+      "id": "shape",
+      "label": "02 · Shape",
+      "fromCol": 2,
+      "toCol": 3,
+      "variant": "emphasis"
+    },
+    {
+      "id": "deliver",
+      "label": "03 · Deliver & Maintain",
+      "fromCol": 4,
+      "toCol": 5,
+      "variant": "dashed"
+    }
+  ],
+  "groups": [
+    {
+      "id": "entry-support",
+      "label": "Safe project entry",
+      "lane": "understand",
+      "fromCol": 1,
+      "toCol": 5
+    },
+    {
+      "id": "product-consensus",
+      "label": "Accepted meaning",
+      "lane": "product",
+      "fromCol": 2,
+      "toCol": 5,
+      "variant": "emphasis"
+    },
+    {
+      "id": "evidence-loop",
+      "label": "Fresh proof before done",
+      "lane": "quality",
+      "fromCol": 4,
+      "toCol": 5,
+      "variant": "dashed"
+    }
+  ],
+  "mainPath": [
+    "human-goal",
+    "controller",
+    "product-definition",
+    "design-readiness",
+    "delivery-router",
+    "verified-close"
+  ],
+  "nodes": [
+    {
+      "id": "human-goal",
+      "lane": "human",
+      "col": 0,
+      "type": "external",
+      "label": "Human Goal",
+      "sublabel": "目标、范围与关键决策"
+    },
+    {
+      "id": "human-gate",
+      "lane": "human",
+      "col": 4,
+      "type": "security",
+      "label": "Human Gate",
+      "sublabel": "风险与阶段授权",
+      "tag": "independent gates"
+    },
+    {
+      "id": "controller",
+      "lane": "controller",
+      "col": 1,
+      "type": "backend",
+      "label": "Agent Loop",
+      "sublabel": "判断状态并推荐下一步",
+      "tag": "owns the workflow"
+    },
+    {
+      "id": "project-entry",
+      "lane": "understand",
+      "col": 1,
+      "type": "cloud",
+      "label": "Project Entry",
+      "sublabel": "接管、恢复与远程发现"
+    },
+    {
+      "id": "operational-support",
+      "lane": "understand",
+      "col": 3,
+      "type": "frontend",
+      "label": "Ops Support",
+      "sublabel": "运行、部署与只读诊断"
+    },
+    {
+      "id": "onboarding",
+      "lane": "understand",
+      "col": 5,
+      "type": "database",
+      "label": "Onboarding",
+      "sublabel": "证据图与领域知识库"
+    },
+    {
+      "id": "product-definition",
+      "lane": "product",
+      "col": 2,
+      "width": 126,
+      "type": "frontend",
+      "label": "Product Definition",
+      "sublabel": "概念、流程、状态与数据"
+    },
+    {
+      "id": "design-readiness",
+      "lane": "product",
+      "col": 4,
+      "width": 116,
+      "type": "backend",
+      "label": "Design Readiness",
+      "sublabel": "ADR 与技术落地判断"
+    },
+    {
+      "id": "visual-communication",
+      "lane": "product",
+      "col": 5,
+      "width": 70,
+      "type": "cloud",
+      "label": "Visuals",
+      "sublabel": "Archify / Mermaid / ASCII"
+    },
+    {
+      "id": "delivery-router",
+      "lane": "delivery",
+      "col": 4,
+      "width": 112,
+      "type": "messagebus",
+      "label": "Delivery Router",
+      "sublabel": "轻量、Feature、Bug 回流",
+      "tag": "smallest safe lane"
+    },
+    {
+      "id": "verified-close",
+      "lane": "quality",
+      "col": 5,
+      "type": "security",
+      "label": "Verified Close",
+      "sublabel": "TDD、验证、审查与漂移",
+      "tag": "fresh evidence"
+    },
+    {
+      "id": "project-memory",
+      "lane": "maintenance",
+      "col": 3,
+      "type": "database",
+      "label": "Project Memory",
+      "sublabel": "事实、恢复点与技能"
+    },
+    {
+      "id": "history-maintenance",
+      "lane": "maintenance",
+      "col": 5,
+      "type": "cloud",
+      "label": "History Care",
+      "sublabel": "分支、归档与记忆合并"
+    }
+  ],
+  "edges": [
+    {
+      "id": "goal-to-controller",
+      "from": "human-goal",
+      "to": "controller",
+      "label": "intent",
+      "variant": "emphasis",
+      "role": "main",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "route": "drop",
+      "labelSegment": 1
+    },
+    {
+      "id": "controller-to-product",
+      "from": "controller",
+      "to": "product-definition",
+      "variant": "emphasis",
+      "role": "main",
+      "fromSide": "right",
+      "toSide": "top",
+      "via": [
+        [
+          300,
+          277
+        ]
+      ]
+    },
+    {
+      "id": "product-to-design",
+      "from": "product-definition",
+      "to": "design-readiness",
+      "variant": "emphasis",
+      "role": "main"
+    },
+    {
+      "id": "design-to-delivery",
+      "from": "design-readiness",
+      "to": "delivery-router",
+      "variant": "emphasis",
+      "role": "main",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "route": "drop"
+    },
+    {
+      "id": "delivery-to-verified-close",
+      "from": "delivery-router",
+      "to": "verified-close",
+      "variant": "emphasis",
+      "role": "main",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "route": "drop"
+    },
+    {
+      "id": "controller-to-entry",
+      "from": "controller",
+      "to": "project-entry",
+      "variant": "default",
+      "role": "branch",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "route": "drop"
+    },
+    {
+      "id": "design-to-visual",
+      "from": "design-readiness",
+      "to": "visual-communication",
+      "variant": "dashed",
+      "role": "branch"
+    },
+    {
+      "id": "controller-to-gate",
+      "from": "controller",
+      "to": "human-gate",
+      "label": "needs a decision",
+      "variant": "security",
+      "role": "branch",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "route": "up-channel",
+      "labelSegment": 1
+    },
+    {
+      "id": "gate-to-delivery",
+      "from": "human-gate",
+      "to": "delivery-router",
+      "variant": "security",
+      "role": "return",
+      "fromSide": "right",
+      "toSide": "right",
+      "route": "outside-right"
+    },
+    {
+      "id": "verified-to-memory",
+      "from": "verified-close",
+      "to": "project-memory",
+      "label": "record facts",
+      "variant": "dashed",
+      "role": "return",
+      "fromSide": "bottom",
+      "toSide": "right",
+      "route": "return-left",
+      "labelSegment": 1
+    },
+    {
+      "id": "memory-to-history",
+      "from": "project-memory",
+      "to": "history-maintenance",
+      "variant": "dashed",
+      "role": "async"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Understand & Support / 理解项目",
+      "items": [
+        "Chat and explanation without workflow pollution",
+        "Project Entry Scan, remote discovery, re-adoption",
+        "Operational Support and Evidence-Graph + DDD Onboarding"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Shape Product & Design / 产品设计",
+      "items": [
+        "Brief or Standard Requirement Product Definition",
+        "Concept Foundation, roles, flows, states, data, exceptions",
+        "Optional visual consensus and Requirement-to-ADR landing"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Deliver With The Right Weight / 合适重量",
+      "items": [
+        "Persistent Lightweight Change card for bounded non-Bug work",
+        "Feature Product Slice, tasks, tests, Plan, TDD and Auto-Loop",
+        "Bug identity and Feature-owned repair; optional Delivery Contract"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Maintain Project Truth / 维护事实",
+      "items": [
+        "Project memory, root guidance and project-local skills",
+        "Branch strategy, Feature archive / rehydrate and drift repair",
+        "Post-merge memory reconciliation, Submit / Integrate and close"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Human Control / 人类控制",
+      "items": [
+        "Agent owns diagnosis, sequencing, implementation and evidence",
+        "Human owns goals, product meaning and consequential decisions",
+        "Git, production, external, release and close gates stay independent"
+      ]
+    }
+  ]
+}

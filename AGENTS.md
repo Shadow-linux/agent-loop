@@ -56,6 +56,8 @@ When testing downstream behavior, state the temporary perspective explicitly, ke
 - For this repository, when working on an `alpha-v<x.y.z>` branch, treat `<x.y.z>` as the intended skill version; ignore the `alpha` prefix for version records and changelog headings after the human approves implementation for that version.
 - Commit messages for this skill repository should use type + version scope, prefer Chinese, and include a concrete multi-line body for meaningful changes.
 - Stable release branches use the exact version name, for example `v1.0.1`, not `release/1.0.1`.
+- `main` is the default public installation channel and must resolve to the exact commit of the latest formal stable release; alpha branches never become the default installation source.
+- A formal release is not complete for default `npx skills add/update` users until the exact accepted release commit is synchronized to `main`. Updating `main` remains a separate branch/merge/push Human Gate.
 - This repository is mirrored to two remotes: `origin` (`git@github.com:Shadow-linux/agent-loop.git`) and `ai-factory` (`git@124.174.38.59:ai-factory/agent-loop.git`). When pushing release branches or tags, push the same branch and tag to both remotes.
 - Do not create or push git tags unless the human explicitly asks for a tag.
 
@@ -103,7 +105,7 @@ feat, fix, docs, refactor, test, chore
 Rules:
 
 - Prefer Chinese for the summary and body unless the project context requires English.
-- Include the current skill version scope, for example `docs(v1.2.4): 调整 Project Entry Scan 文档结构`.
+- Include the current skill version scope, for example `docs(v1.3.0): 调整 Project Entry Scan 文档结构`.
 - Do not use one-line-only commit messages for meaningful behavior, gate, artifact, template, reference, validation, or example changes.
 - Use 3-7 bullet lines in the commit body, focused on concrete changes and user/agent-facing behavior.
 - Use `docs` for proposals, README, Usage, and explanatory docs.
@@ -137,3 +139,9 @@ Also run that method after coordinated changes to canonical stage order, routing
 Full validation is a semantic audit plus executable regression testing. Mechanical checks alone are not sufficient. Preserve a RED baseline, add regression assertions for real loopholes, rerun all tests after repair, and save the Chinese report under `docs/reports/`.
 
 Do not put repository-maintenance validation rules in `references/`, `templates/root-AGENTS.md`, or target-project `.agent-loop/` artifacts. Those surfaces are for the Agent Loop user workflow; this `AGENTS.md` and `docs/maintenance/` govern development of the skill repository itself.
+
+## Single-Feature Validation
+
+When the human asks for a single-feature scoring report, focused logic test, feature pressure test, or feature-only acceptance, read and follow `docs/maintenance/feature-validation-method.md`.
+
+Use the five-domain 100-point model and feature-scoped regression boundary from that method. A single-feature report does not replace mandatory full validation when the change also triggers the Full Skill Validation rules above.
