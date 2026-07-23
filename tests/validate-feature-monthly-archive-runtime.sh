@@ -35,11 +35,13 @@ for file in \
   references/requirement-management.md \
   references/project-memory-mode.md \
   references/project-guidance.md \
-  templates/root-AGENTS.md \
   references/validation-scenarios.md; do
   assert_contains "$file" "Feature Monthly Archive"
   assert_contains "$file" "features/archive.md"
 done
+
+assert_contains templates/root-AGENTS.md '| Explicit closed-history archive or rehydrate | Feature Monthly Archive | `references/stage-guides.md`, `references/artifact-rules.md`, `references/feature-follow-up.md` |'
+assert_contains templates/root-AGENTS.md "Execution Gate"
 
 assert_contains SKILL.md "feature-archive-maintenance"
 assert_contains SKILL.md "expected plan SHA-256"
@@ -69,7 +71,6 @@ assert_contains references/project-decisions.md "archived closed Feature Spec"
 assert_contains references/requirement-management.md "stable Feature ID"
 assert_contains references/project-memory-mode.md "features/archive.md"
 assert_contains references/project-guidance.md "month archive"
-assert_contains templates/root-AGENTS.md "feature-archive-maintenance"
 assert_contains references/validation-scenarios.md "ambiguous old path"
 
 assert_contains templates/feature-archive.md "archived or rehydrated features"

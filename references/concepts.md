@@ -11,7 +11,7 @@ First version excludes:
 - roadmap adapter
 - tdd-guard
 - complex ADR system
-- global installation
+- automatic or unscoped global installation
 - automatic directory-level AGENTS.md generation without human confirmation
 - automatic commit, PR, merge, release, or publish action without human confirmation
 
@@ -31,6 +31,48 @@ First version excludes:
 
 **Requirement**: Human-provided textual or conversational need.
 
+**Lightweight Change Lane**: Bounded non-Bug execution route before Feature construction. It requires all eligibility evidence, yields to explicit Bug Management and active Feature ownership, and stops for Human Choice when uncertain.
+
+**Lightweight Execution Card**: Persistent per-change background, scope, adaptive Plan, progress, targeted verification, rollback, Human Gate, result, and Memory Review control under `<memory-root>/changes/YYYY-MM/YYYY-MM-DD-<topic>.md`. The card file is the execution source of truth; it is not a Feature workspace, shared backlog, long-term project-memory fact, or later-action authorization.
+
+**Change Memory Consolidation**: Agent-owned semantic review of completed Lightweight Change evidence. A read-only scanner validates and counts records, while the Agent alone classifies stable facts as `none | synced | human-review`, discloses exact memory scope before writes, and preserves every existing Human Gate.
+
+**Adaptive Depth**: Risk-based detail selection for the card, Plan, and targeted test/verification method. It never reduces scope control, fresh evidence, rollback, memory impact review, or an existing Human Gate.
+
+**Bug Report**: One intake event and its source evidence. Several reports may be attached to one stable Bug Record; one report does not automatically create a new Bug identity.
+
+**Bug Record**: Stable, deduplicated identity for an expected-versus-observed behavior mismatch. It owns facts, evidence, lifecycle, Resolution Path, relationships, verification, close, and reopen history, but not product meaning or repair execution.
+
+**Report Origin**: Optional provenance for a Bug Report: person, customer, group, QA, monitoring, automated test, agent, external ticket, other, or unknown. It is not Owner, Assignee, permission, Priority, or responsibility evidence.
+
+**Bug Evidence**: Bounded reproduction, environment, log, screenshot, failed-test, impact, investigation, and verification evidence attached to a Bug Record without copying secrets or unnecessary production payloads.
+
+**Expected Behavior Evidence**: Accepted product or behavior authority used to decide whether observed behavior is a Bug. Code reality can prove the observation but cannot alone define the intended product behavior.
+
+**Resolution Path**: The Bug's single current workflow relationship: `investigate-first | flow-back | linked-feature | maintenance-fix | requirement | no-fix`. It is not a personnel assignment or implementation authority.
+
+**Bug Status**: Processing state `reported | triaging | confirmed | in-progress | verifying | deferred | closed`; it is independent from the final Resolution. `in-progress` is reserved for a Human-confirmed `flow-back | linked-feature | maintenance-fix` Feature target.
+
+**Bug Resolution**: Conclusion `unresolved | fixed | duplicate | not-a-bug | cannot-reproduce | accepted-risk | superseded`; a closed Bug cannot remain unresolved.
+
+**Reopen Record**: Append-only history event that preserves prior close evidence, records the recurrence/new evidence and human decision, returns a closed Bug to `triaging` or `confirmed`, and restores `Resolution: unresolved`.
+
+**Bug Ownership Lookback**: Two-layer discovery rule: all Bug Index metadata participates in duplicate/reopen identity checks without a time cutoff, while Feature ownership uses a default 90-day metadata scan plus evidence-ranked deep read and evidence-driven extension beyond the window.
+
+**Branch Strategy**: Optional, human-confirmed durable branch policy. It records profile, main/release/development patterns, sealed-release behavior, customer isolation, and deletion policy without authorizing Git actions.
+
+**Branch Strategy Check**: Internal check at entry, planning, drift, and submit boundaries. Preserve clear existing policy; otherwise recommend one Human-Guided option and wait for explicit acceptance before adoption.
+
+**Current Branch Context**: Volatile, evidence-backed identity for the current execution unit: branch class, work type, target kind/version/customer/topic, source/target branch, lifecycle state, last check, and human decision. It belongs in feature notes/plan/submit evidence and never replaces Requirement, Feature, Task, ADR, verification, or lifecycle authority.
+
+**Target Release Context**: Current standard/customer release pointer used by feature planning. Its volatile development-branch detail stays in feature notes, plan, or Submit / Integrate evidence.
+
+**Release Aggregation Branch**: Retained standard `release/vX.Y.Z` or customer `customer/<customer>/vX.Y.Z` branch for a target version.
+
+**Development Branch**: Temporary `feature|bugfix|hotfix` branch for a standard or customer target. Deletion requires merge evidence and human confirmation.
+
+**Sealed Release**: Formally released immutable version. Repairs use a new patch version; new capabilities use a human-confirmed new version.
+
 **Prototype**: Human-provided design artifact, screenshot, diagram, or interaction reference.
 
 **Feature**: One behavior-changing work area under `.agent-loop/features/<feature-id>/`. A feature can contain many stories and many tasks.
@@ -47,7 +89,13 @@ First version excludes:
 
 **Maintenance Fix**: A narrow feature used when a bugfix or internal correction has no clear owning recent feature and does not create a new user capability. It is not a workflow bypass and not a separate directory system. It still uses `.agent-loop/features/YYYY-MM-DD-fix-<slug>/` with `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`, verification, review, drift check, project memory update when needed, and close.
 
-**Product Brief**: Optional feature-level product understanding in `product.md`: problem, users, user stories, product scope, product decisions, and open product questions.
+**Adaptive Product Definition**: One Agent-authored, Human-reviewed Requirement `product.md` using `brief | standard` depth. Brief covers the minimum product contract; Standard expands only applicable concepts, relationships, permissions, actions, flow, state, product facts, rules, exceptions, experience, operations, and measurement.
+
+**Product Human Review**: Confirmation that the effective Requirement `product.md` accurately represents current product meaning. It is separate from Requirement lifecycle and does not authorize ADR acceptance, Feature start, code execution, or Git actions.
+
+**Product Slice**: The Feature `spec.md` mapping from one Effective Product Definition's sections/IDs/rules to this Feature's responsibility, acceptance, and coverage. It narrows delivery without redefining product meaning.
+
+**Legacy Feature Product Brief**: An existing Feature `product.md` retained for Resume, Follow-up, Review, Close, Recovery, and historical evidence. New Feature work does not create it.
 
 **Decision & Design / ADR**: Requirement-landing design for accepted requirements that need shared business-flow, domain/state/data, architecture, consistency, recovery, non-functional goals, or cross-feature ownership. The record lives under `.agent-loop/decisions/*.md`, is Human-gated, and is conditionally required only when shared design needs a durable source that no accepted decision already provides. It is not required for every feature and is not a complex ADR system.
 
@@ -67,13 +115,21 @@ First version excludes:
 
 **Drift**: Mismatch between docs, code reality, or human decisions.
 
-**Feature Follow-up / Flow-back**: Bug/change intake path that checks whether a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, screenshot issue, behavior tweak, "small tweak", test failure, or QA/user feedback belongs to a recent feature before creating a new feature. Default lookback is 30 calendar days.
+**Feature Follow-up / Flow-back**: Feature-ownership route for explicit Bug management, defect/regression/QA/post-close evidence, changed accepted behavior, or clear active/closed Feature ownership. Generic adjustment wording alone routes an actionable ordinary non-Bug change through Lightweight Change Assessment before ownership scanning. When Follow-up applies, Bug identity scans all Bug Index metadata and Feature ownership defaults to 90 calendar days with evidence-driven extension; only explicit Bug management creates or updates a Bug Record.
 
 **Code-Guided Operational Support**: Read-only support lane for using current project functionality to test, run, deploy, switch account/config/model/provider, check quota/rate limits, arrange rollout, diagnose production, or produce a runbook/checklist. It does not create a feature workspace or edit code/config by default; feature/fix escalation requires human confirmation.
 
 **Re-Adopt Agent Loop Project**: Recovery path for a project that already has `.agent-loop/` or legacy `agent-loop/`, but recent development happened outside the loop. The agent compares code reality to existing memory, proposes backfill, asks human confirmation, then resumes or starts feature work.
 
 **Submit / Integrate**: The explicit stage that packages verified work for commit, PR text, merge note, or release note. It requires human confirmation and records the result in `notes.md`.
+
+**Post-Merge Memory Reconciliation**: An internal Submit / Integrate method that runs only after verified code integration and an observed semantic memory conflict. It inspects the conflict boundary and minimum evidence, rewrites fact-determined current meaning, asks the human only for unresolved alternatives, and never performs code merge or authorizes Git actions.
+
+**Observed Memory Conflict**: Concrete incompatible current claims, broken direct references/indexes, or direct contradiction between Agent-maintained memory and current verified facts. Different files, clean Source-only artifacts, unchanged memory, and speculative drift are not conflicts.
+
+**Memory Conflict Report**: Optional durable evidence for an unresolved or material targeted conflict. It records only the conflict, minimum evidence, affected owner/references, resolution, verification/rollback, and Human choice when needed.
+
+**Full Memory Audit / Recovery**: Explicitly Human-authorized forensic mode that retains four-snapshot Target Canonical Memory Spine, Path Accounting Ledger, Desired Target Memory Snapshot, exact Plan Hash, and transactional Apply/Restore controls. It is not the normal merge route.
 
 **Subagent Brief**: A bounded assignment for an optional helper agent. The main agent owns state, merge, drift, submit, and close decisions.
 
@@ -98,9 +154,12 @@ remote.md  = local entry pointer for remote projects
 project.md = long-term project facts in simple mode; memory index and current state in enterprise mode
 project/   = optional enterprise long-term project memory details
 decisions/ = Human-gated project / cross-feature Decision & Design records; globally optional and conditionally required when shared design has no accepted source
-requirements/ = original human material packages, references, and requirement lifecycle/backlog records, grouped by archive-date requirement set directory
-product.md = optional feature product intent and product scope
-spec.md    = intended feature behavior
+requirements/ = original human material, Agent-authored reviewed Product Definition, and requirement lifecycle/backlog records, grouped by record-date Requirement Set
+bugs/INDEX.md = Bug inventory, backlog, and locator
+bugs/YYYY-MM-DD-<bug-slug>/README.md = stable Bug identity, facts, evidence, lifecycle, Resolution Path, verification, close, and reopen history
+requirements/<set>/product.md = effective Brief/Standard product meaning for new work
+features/<feature>/product.md = legacy reader-only Product Brief when it already exists
+spec.md    = intended Feature behavior plus Product Slice
 tasks.md   = work breakdown and order
 tests.md   = how correctness will be proven, including feature-specific E2E cases
 plan.md    = active execution plan for the current task/story
@@ -108,13 +167,14 @@ notes.md   = what actually happened
 handoffs/  = optional subagent briefs and returns
 contracts.md = optional delivery contract index or compact contract
 contracts/ = optional durable producer-consumer contract details
+Lightweight Execution Card = persistent per-change execution control under changes/YYYY-MM/YYYY-MM-DD-topic.md; no shared backlog, Archive lifecycle, or Git authorization
 ```
 
 `AGENTS.md` / `CLAUDE.md` live outside `.agent-loop/` and tell future agents how to enter the workflow. They do not own task state.
 
 Requirement-set dates are archive dates only. They do not define deadlines, requirement duration, or feature lifecycle.
 
-Requirement sets group the human's original materials for one intake event or topic: requirement docs, prototypes, feedback, screenshots, recordings, links, and follow-up notes.
+Requirement Sets group the human's original materials for one intake event or topic and one current Effective Product Definition. Human originals remain byte-stable; reviewed semantic changes append a new Product Definition source and advance the README pointer.
 
 Requirement lifecycle/backlog records future, deferred, accepted, in-progress, implemented, superseded, rejected, and reference-only demand in requirement set `README.md` and optional `requirements/INDEX.md`. It is not project memory, and it does not rewrite source files such as `requirement.md`.
 
@@ -123,8 +183,7 @@ Requirement lifecycle/backlog records future, deferred, accepted, in-progress, i
 Use one feature workspace per behavior-changing feature:
 
 ```text
-spec.md  = whole feature behavior
-product.md = optional feature product understanding
+spec.md  = whole Feature behavior plus Product Slice
 tasks.md = all tasks for the feature
 tests.md = whole feature test strategy
 plan.md  = current active task/story plan
@@ -136,6 +195,8 @@ handoffs/ = optional subagent briefs and returns
 contracts.md = optional delivery contract index or compact contract
 contracts/ = optional durable producer-consumer contract details
 ```
+
+An existing legacy Feature `product.md` may remain beside these files, but the new writer does not create one.
 
 For complex projects, `tasks.md`, `tests.md`, and `plan.md` remain stable entry files. When complexity is high, they become indexes that point to `tasks/`, `tests/`, and `plans/` detail files.
 

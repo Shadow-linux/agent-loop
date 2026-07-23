@@ -36,6 +36,7 @@
 优先用 Mermaid flowchart；如果边界和数据所有者用 ASCII 更清楚，也可以用 ASCII 架构图。
 
 - Diagram ID：
+- Representation: embedded-mermaid | embedded-ascii | archify-source-render
 - Covered Slice IDs：
 
 ```mermaid
@@ -52,6 +53,7 @@ flowchart LR
 状态图优先。用来讲状态怎么变、异常怎么恢复、哪里重试/补偿/回滚。
 
 - Diagram ID：
+- Representation: embedded-mermaid | embedded-ascii | archify-source-render
 - Covered Slice IDs：
 
 ```text
@@ -80,6 +82,7 @@ Timeline / Sequence Diagram is the primary per-flow narrative。用来讲清楚�
 优先用 Mermaid sequenceDiagram。
 
 - Diagram ID：
+- Representation: embedded-mermaid | embedded-ascii | archify-source-render
 - Covered Slice IDs：
 
 ```mermaid
@@ -114,6 +117,18 @@ sequenceDiagram
 | entity relations affect understanding | ERD / Model Relationship |  |  |  |
 | gateway/sidecar/environment topology | Runtime / Deployment Topology |  |  |  |
 | distributed logs/metrics/traces/checkpoints | Observability / Troubleshooting Map |  |  |  |
+
+### Diagram Artifact Manifest（仅 durable Archify 图需要）
+
+Working render 不写入本表。只有经单独确认、可长期保留的 `archify-source-render` 图才使用本表；内嵌 Mermaid/ASCII 保持文内真相，不需要制造外部文件。
+
+Visual Manifest Contract: source-render-v1
+
+| Diagram ID | Evidence References | Source Definition | Render | Type | Source SHA-256 | Render SHA-256 | Generator | Validation Evidence | Status |
+|---|---|---|---|---|---|---|---|---|---|
+| D-... | `path/to/file#symbol-or-config` | visuals/name.workflow.json | visuals/name.html | architecture / workflow / sequence / dataflow / lifecycle | 64 lowercase hex | 64 lowercase hex | archify@x.y | validate=pass; check=pass | current |
+
+使用时将标题提升为 `## Diagram Artifact Manifest`，删除示例行，并保证路径相对 Onboarding 根目录。Render 不能脱离 typed Source Definition，也不能替代 Slice/Evidence/Section 追踪。
 
 ### 泳道图（可选）
 

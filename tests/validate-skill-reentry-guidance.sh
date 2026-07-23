@@ -14,11 +14,11 @@ assert_contains() {
 
 assert_contains "templates/root-AGENTS.md" "Bootstrap Protocol"
 assert_contains "templates/root-AGENTS.md" "Treat root \`AGENTS.md\` as a bootstrap cache, not a replacement for the \`agent-loop\` skill"
-assert_contains "templates/root-AGENTS.md" "if the runtime exposes the \`agent-loop\` skill, load/use it before making \`agent-loop\` workflow decisions"
-assert_contains "templates/root-AGENTS.md" "If the skill is unavailable or load-failed, force Strict Mode and suspend any existing Feature Auto-Loop or Task Auto-Run grant"
-assert_contains "templates/root-AGENTS.md" "Do not Execute, write Human-gated artifacts, Submit, Pause, or Close while the controller is unavailable"
-assert_contains "templates/root-AGENTS.md" "after context compaction"
-assert_contains "templates/root-AGENTS.md" "Run Stage Helper Capability Scan for the current stage only after the \`agent-loop\` controller is active or unavailable/load-failed"
+assert_contains "templates/root-AGENTS.md" "load the controller at Project Entry, Resume, Re-Adopt, stage boundaries, context recovery, or uncertainty"
+assert_contains "templates/root-AGENTS.md" "If the controller is unavailable or load-failed, force Strict Mode, suspend auto grants"
+assert_contains "templates/root-AGENTS.md" "do not Execute, write Human-gated artifacts, Submit, Pause, or Close"
+assert_contains "templates/root-AGENTS.md" "Run Stage Helper Capability Scan only after controller activation or recorded unavailable/load-failed status"
+assert_contains "templates/root-AGENTS.md" "Evidence Gate"
 if grep -Fq "section:skill-reentry" "$root/templates/root-AGENTS.md"; then
   printf 'FAIL: root AGENTS template should merge skill re-entry into Bootstrap Protocol, not keep section:skill-reentry\n' >&2
   exit 1

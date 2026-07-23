@@ -1,0 +1,302 @@
+{
+  "schema_version": 1,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Agent Loop Autonomous Workflow",
+    "subtitle": "Human sets direction · Agent owns the work · Evidence proves completion",
+    "output": "agent-loop-autonomous-workflow.html",
+    "animation": "none",
+    "visual_preset": "classic",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "autonomous-loop",
+        "label": "Agent-owned delivery loop",
+        "focus": [
+          "human-goal",
+          "understand-project",
+          "shape-product",
+          "product-gate",
+          "choose-route",
+          "plan-implement",
+          "verify-review",
+          "update-memory"
+        ],
+        "note": "The human provides direction and confirms product meaning; the Agent owns the work between gates."
+      },
+      {
+        "id": "human-control",
+        "label": "Human control points",
+        "focus": [
+          "human-goal",
+          "product-gate",
+          "action-gate"
+        ],
+        "note": "Goals, product meaning, consequential decisions, Git, release, and external actions remain Human-gated."
+      },
+      {
+        "id": "evidence-loop",
+        "label": "Evidence and memory",
+        "focus": [
+          "plan-implement",
+          "verify-review",
+          "update-memory",
+          "understand-project"
+        ],
+        "note": "Fresh verification closes the current unit and durable memory makes the next turn recoverable."
+      }
+    ]
+  },
+  "lanes": [
+    {
+      "id": "human",
+      "label": "Human Direction / 人类方向"
+    },
+    {
+      "id": "controller",
+      "label": "Project Understanding / 项目理解"
+    },
+    {
+      "id": "product",
+      "label": "Product Design / 产品设计"
+    },
+    {
+      "id": "routing",
+      "label": "Workflow Routing / 执行路由"
+    },
+    {
+      "id": "delivery",
+      "label": "Agent Delivery / Agent 自主交付"
+    },
+    {
+      "id": "memory",
+      "label": "Evidence & Memory / 证据与记忆"
+    }
+  ],
+  "phases": [
+    {
+      "id": "understand",
+      "label": "01 · Understand",
+      "fromCol": 0,
+      "toCol": 1
+    },
+    {
+      "id": "decide",
+      "label": "02 · Shape & Route",
+      "fromCol": 2,
+      "toCol": 3,
+      "variant": "emphasis"
+    },
+    {
+      "id": "deliver",
+      "label": "03 · Deliver & Learn",
+      "fromCol": 4,
+      "toCol": 5,
+      "variant": "dashed"
+    }
+  ],
+  "groups": [],
+  "mainPath": [
+    "human-goal",
+    "understand-project",
+    "shape-product",
+    "product-gate",
+    "choose-route",
+    "plan-implement",
+    "verify-review",
+    "update-memory"
+  ],
+  "nodes": [
+    {
+      "id": "human-goal",
+      "lane": "human",
+      "col": 0,
+      "width": 92,
+      "type": "external",
+      "label": "Human Goal",
+      "sublabel": "说明目标、范围与约束",
+      "tag": "direction"
+    },
+    {
+      "id": "product-gate",
+      "lane": "human",
+      "col": 3,
+      "width": 118,
+      "type": "security",
+      "label": "Product Gate",
+      "sublabel": "确认产品含义与关键决策",
+      "tag": "human review"
+    },
+    {
+      "id": "action-gate",
+      "lane": "human",
+      "col": 5,
+      "width": 108,
+      "type": "security",
+      "label": "Action Gate",
+      "sublabel": "提交、发布与外部操作",
+      "tag": "human approval"
+    },
+    {
+      "id": "understand-project",
+      "lane": "controller",
+      "col": 1,
+      "width": 126,
+      "type": "cloud",
+      "label": "Understand Project",
+      "sublabel": "检查代码、环境、文档与记忆"
+    },
+    {
+      "id": "shape-product",
+      "lane": "product",
+      "col": 2,
+      "width": 118,
+      "type": "frontend",
+      "label": "Shape Product",
+      "sublabel": "澄清概念、流程、状态与数据"
+    },
+    {
+      "id": "choose-route",
+      "lane": "routing",
+      "col": 3,
+      "width": 118,
+      "type": "messagebus",
+      "label": "Choose Route",
+      "sublabel": "选择最小且安全的执行通道"
+    },
+    {
+      "id": "plan-implement",
+      "lane": "delivery",
+      "col": 4,
+      "width": 92,
+      "type": "backend",
+      "label": "Execute",
+      "sublabel": "计划、TDD、实现与修复"
+    },
+    {
+      "id": "verify-review",
+      "lane": "delivery",
+      "col": 5,
+      "width": 92,
+      "type": "security",
+      "label": "Verify",
+      "sublabel": "测试、审阅、漂移与回滚"
+    },
+    {
+      "id": "update-memory",
+      "lane": "memory",
+      "col": 5,
+      "width": 108,
+      "type": "database",
+      "label": "Update Memory",
+      "sublabel": "记录稳定事实、状态与下一步",
+      "tag": "recoverable"
+    }
+  ],
+  "edges": [
+    {
+      "id": "goal-to-understanding",
+      "from": "human-goal",
+      "to": "understand-project",
+      "variant": "emphasis",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "understanding-to-product",
+      "from": "understand-project",
+      "to": "shape-product"
+    },
+    {
+      "id": "product-to-review",
+      "from": "shape-product",
+      "to": "product-gate",
+      "variant": "security",
+      "route": "drop",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "review-to-route",
+      "from": "product-gate",
+      "to": "choose-route",
+      "label": "确认通过",
+      "variant": "security",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "route-to-implementation",
+      "from": "choose-route",
+      "to": "plan-implement"
+    },
+    {
+      "id": "implementation-to-verification",
+      "from": "plan-implement",
+      "to": "verify-review"
+    },
+    {
+      "id": "verification-to-memory",
+      "from": "verify-review",
+      "to": "update-memory",
+      "label": "验证通过",
+      "variant": "emphasis",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "verification-to-action-gate",
+      "from": "verify-review",
+      "to": "action-gate",
+      "label": "如需外部操作",
+      "variant": "security",
+      "role": "branch",
+      "route": "drop",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "memory-to-next-turn",
+      "from": "update-memory",
+      "to": "understand-project",
+      "label": "下一目标 / 恢复",
+      "variant": "dashed",
+      "role": "return",
+      "route": "return-left",
+      "fromSide": "left",
+      "toSide": "left"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Agent 自主完成",
+      "items": [
+        "主动理解项目并判断当前阶段",
+        "选择合适通道并推进计划、实现与故障恢复",
+        "用新鲜证据审阅结果并推荐唯一下一步"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "人类保持控制",
+      "items": [
+        "设定目标、范围与约束",
+        "确认产品含义及高影响决策",
+        "单独授权提交、发布和外部操作"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "完成不是写完代码",
+      "items": [
+        "验证、审阅、差异、漂移和回滚必须可见",
+        "稳定事实写回项目记忆",
+        "任何中断都能从证据和下一步恢复"
+      ]
+    }
+  ]
+}

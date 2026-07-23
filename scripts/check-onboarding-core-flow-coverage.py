@@ -6,12 +6,25 @@ import re
 import sys
 from pathlib import Path
 
-from checker_support import read_text, require_supported_python
+from checker_support import optional_section, read_text, require_supported_python, table
+from visual_artifact_support import VisualArtifactError, validate_durable_visual
 
 
 FLOW_ID = re.compile(r"CF-[A-Z0-9-]+")
 SLICE_ID_TEMPLATE = r"{flow}/S\d{{2}}"
 DIAGRAM_ID = re.compile(r"D-[A-Z0-9-]+")
+ONBOARDING_VISUAL_COLUMNS = (
+    "Diagram ID",
+    "Evidence References",
+    "Source Definition",
+    "Render",
+    "Type",
+    "Source SHA-256",
+    "Render SHA-256",
+    "Generator",
+    "Validation Evidence",
+    "Status",
+)
 
 
 class CoverageError(Exception):
@@ -21,6 +34,7 @@ class CoverageError(Exception):
 class CoreFlowCoverage:
     def __init__(self, root: Path) -> None:
         self.root = root.resolve()
+        self.durable_diagram_ids: set[str] = set()
 
     def validate(self) -> tuple[int, int]:
         if not self.root.is_dir():
@@ -40,6 +54,8 @@ class CoreFlowCoverage:
         ]
         if not core_flow_rows:
             raise CoverageError("no critical/important core flow rows found")
+
+        self.durable_diagram_ids = self.validate_visual_manifests()
 
         planned_count = 0
         deferred_count = 0
@@ -108,7 +124,7 @@ class CoreFlowCoverage:
         for _, row in slice_rows:
             required_diagrams.update(DIAGRAM_ID.findall(row))
         for diagram_id in sorted(required_diagrams):
-            defined = any(
+            defined = diagram_id in self.durable_diagram_ids or any(
                 diagram_id in line
                 and not line.startswith("|")
                 and (line.startswith("#") or re.search(r"Diagram ID", line, re.IGNORECASE))
@@ -156,6 +172,65 @@ class CoreFlowCoverage:
             raise CoverageError("missing artifact: 03-flows/*.md")
         return [read_text(path) for path in paths]
 
+    def flow_doc_paths(self) -> list[Path]:
+        paths = sorted((self.root / "03-flows").glob("*.md"))
+        fallback = self.root / "flow.md"
+        if not paths and fallback.is_file():
+            paths = [fallback]
+        return paths
+
+    def validate_visual_manifests(self) -> set[str]:
+        seen: set[str] = set()
+        for path in self.flow_doc_paths():
+            content = read_text(path)
+            manifest = optional_section(content, "Diagram Artifact Manifest")
+            representation = "Representation: archify-source-render" in content
+            if not representation and manifest is None:
+                continue
+            if not representation:
+                raise CoverageError(
+                    f"Diagram Artifact Manifest requires Representation: archify-source-render in {path.name}"
+                )
+            if manifest is None:
+                raise CoverageError(
+                    f"archify-source-render requires Diagram Artifact Manifest in {path.name}"
+                )
+            if "Visual Manifest Contract: source-render-v1" not in manifest:
+                raise CoverageError(
+                    f"Diagram Artifact Manifest must declare source-render-v1 in {path.name}"
+                )
+            rows = table(content, "Diagram Artifact Manifest")
+            for row in rows:
+                if tuple(row.keys()) != ONBOARDING_VISUAL_COLUMNS:
+                    raise CoverageError("Onboarding source-render-v1 columns mismatch")
+                diagram_id = (row.get("Diagram ID") or "").strip(" `")
+                if diagram_id in seen:
+                    raise CoverageError(
+                        f"duplicate Diagram ID in Diagram Artifact Manifest: {diagram_id}"
+                    )
+                seen.add(diagram_id)
+                evidence = row.get("Evidence References", "")
+                if not re.search(r"`[^`]+#[^`]+`", evidence):
+                    raise CoverageError(
+                        f"Onboarding visual {diagram_id} needs symbol/config evidence"
+                    )
+                if (row.get("Status") or "").strip(" `") != "current":
+                    raise CoverageError(
+                        f"Onboarding visual {diagram_id} status must be current"
+                    )
+                validate_durable_visual(
+                    self.root,
+                    diagram_id=diagram_id,
+                    source_definition=row.get("Source Definition", ""),
+                    render=row.get("Render", ""),
+                    diagram_type=row.get("Type", ""),
+                    source_sha256=row.get("Source SHA-256", ""),
+                    render_sha256=row.get("Render SHA-256", ""),
+                    generator=row.get("Generator", ""),
+                    validation_evidence=row.get("Validation Evidence", ""),
+                )
+        return seen
+
     @staticmethod
     def require_token(text: str, token: str, artifact: str) -> None:
         if token not in text:
@@ -192,7 +267,7 @@ def main() -> int:
     args = parser.parse_args()
     try:
         planned, deferred = CoreFlowCoverage(args.onboarding_root).validate()
-    except CoverageError as error:
+    except (CoverageError, VisualArtifactError) as error:
         print(error, file=sys.stderr)
         return 1
     print(

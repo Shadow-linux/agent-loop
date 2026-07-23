@@ -85,11 +85,9 @@ assert_contains "references/stage-guides.md" "accepted proactive Candidate"
 assert_contains "references/workflow-checklists.md" "## Project Skill Creation / Update"
 assert_contains "references/workflow-checklists.md" "one invocation"
 
-assert_contains "templates/root-AGENTS.md" "project-skill-management"
-assert_contains "templates/root-AGENTS.md" "Project Skill Creation / Update"
-assert_contains "templates/root-AGENTS.md" ".agent-loop/skills/INDEX.md"
+assert_contains "templates/root-AGENTS.md" '| Create or manage a reusable project workflow | Project Skill Creation / Update | `references/project-skills.md`, `references/skill-routing.md`, `references/external-skill-adapters.md` |'
 assert_contains "templates/root-AGENTS.md" "Execution Gate"
-assert_contains "templates/root-AGENTS.md" "block-version:1.3.0-20260714.1"
+assert_contains "templates/root-AGENTS.md" "block-version:1.5.0-20260723.2"
 assert_contains "templates/project.md" "Project Skills"
 assert_contains "templates/project.md" ".agent-loop/skills/INDEX.md"
 assert_contains "templates/project-skills/validation.md" "Validated Content Manifest"
@@ -98,7 +96,7 @@ assert_contains "templates/project-skills/validation.md" "Invocation end and ret
 
 assert_contains "README.md" ".agent-loop/skills/"
 assert_contains "README.md" "Project Skill Creation / Update, Brainstorm, Plan Gate"
-assert_contains "Usage.md" "把这个流程做成技能"
+assert_contains "Usage.md" "这套操作以后还会重复，帮我看看是否值得做成项目技能。"
 assert_contains "CHANGELOG.md" "Project-Local Skills"
 assert_contains "references/validation-scenarios.md" "Project Skill Creation / Update"
 assert_contains "references/validation-scenarios.md" "Execution Gate"

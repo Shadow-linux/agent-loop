@@ -1,4 +1,4 @@
-# Product Brief: Refund Completion
+# Legacy Feature Product Brief Example: Refund Completion
 
 Created: 2026-07-12
 Updated: 2026-07-12

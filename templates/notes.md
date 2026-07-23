@@ -6,6 +6,23 @@ Status: active | blocked | paused | closed
 
 ## Human Decisions
 
+## Current Branch Context
+
+Branch Class: main | standard-release | customer-release | development | unknown
+Work Type: feature | bugfix | hotfix | not-applicable
+Target Kind: standard | customer | not-applicable
+Target Version:
+Customer Slug:
+Topic:
+Source Branch:
+Target Branch:
+Lifecycle State: proposed | open | aggregating | release-candidate | released / sealed | retained | active | blocked | review-ready | merged | abandoned | deleted | unknown
+Source Evidence:
+Last Checked:
+Human Decision:
+
+This context does not authorize create, switch, merge, delete, push, tag, release, or publish.
+
 ## Stage Helper Resolutions
 
 ### YYYY-MM-DD — <Stage>
@@ -36,8 +53,11 @@ Status: active | blocked | paused | closed
 - Source: human report | test failure | E2E | API verification | production/QA feedback | other
 - Report:
 - Candidate Features:
+- Related Bugs:
+- Bug Status At Start:
+- Bug Resolution Path:
 - Classification: same-feature-bug | same-feature-adjustment | regression-from-feature | new-feature | maintenance-fix | unclear
-- Lookback Window: 30 days | outside-default-window
+- Lookback Window: 90 days | outside-default-window
 - Match Evidence:
 - Related Feature:
 - Flow-back Decision: flow-back | linked-new-feature | maintenance-fix | investigate-first | declined-reopen | defer
@@ -69,6 +89,19 @@ Status: active | blocked | paused | closed
 ## TDD Cycles
 
 ## Verification Evidence
+
+## Bug Verification / Close Linkage
+
+- Related Bugs:
+- Bug Status After Feature Verification: verifying | in-progress | triaging | not-applicable
+- Original Reproduction / Substitute Evidence:
+- Regression / Safety Evidence:
+- Candidate Bug Resolution:
+- Bug Close Decision: pending | confirm | revise | keep-verifying
+- Feature Close Decision: pending | confirm | continue | pause | revise-scope
+- Evidence Links:
+
+Feature verification does not close a Bug automatically. Bug Close and Feature Close remain separately named Human decisions.
 
 ## Diagnosis
 
@@ -116,6 +149,17 @@ Status: active | blocked | paused | closed
 - Commit:
 - PR:
 - Remaining Risk:
+- Source Branch:
+- Branch Class:
+- Target Release Context:
+- Target Branch:
+- Sealed Check:
+- Customer Isolation Check:
+- Requested Authorization:
+- Explicitly Not Authorized:
+- Merge Evidence / Cleanup Decision:
+- Related Bug Status / Evidence:
+- Unresolved Bug Close Decisions:
 
 ## Spec Drift
 

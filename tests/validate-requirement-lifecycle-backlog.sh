@@ -61,7 +61,7 @@ assert_not_exists "templates/backlog-item.md"
 
 assert_contains "references/stage-guides.md" "Future / Deferred Requirement Intake"
 assert_contains "references/stage-guides.md" 'Do not write future TODO, backlog, deferred requirements, or unimplemented planned capability details into `project.md`'
-assert_contains "references/stage-guides.md" "only when source material is provided or the human confirms creating a source record"
+assert_contains "references/stage-guides.md" "only when source material is provided or already exists"
 assert_contains "references/stage-guides.md" "Requirement Reconciliation"
 assert_contains "references/stage-guides.md" "Requirement Conflict Review"
 
@@ -85,11 +85,14 @@ assert_contains "README.md" "Requirement Lifecycle / Backlog"
 assert_contains "Usage.md" "需求待办"
 assert_contains "Usage.md" "当前恢复动作"
 assert_contains "CHANGELOG.md" "Requirement Lifecycle / Backlog"
-assert_contains "SKILL.md" "Version: 1.3.0"
-assert_contains "README.md" "**Current version:** 1.3.0"
-assert_contains "Usage.md" "**版本：** 1.3.0"
-assert_contains "plugin.json" '"version": "1.3.0"'
-assert_contains "templates/root-AGENTS.md" "block-version:1.3.0-20260714.1"
+assert_contains "SKILL.md" "Version: 1.5.0"
+assert_contains "README.md" "**Current version:** 1.5.0"
+assert_contains "Usage.md" "**版本：** 1.5.0"
+assert_contains "plugin.json" '"version": "1.5.0"'
+assert_contains "templates/root-AGENTS.md" "block-version:1.5.0-20260723.2"
+assert_contains "CHANGELOG.md" "## 1.5.0 — 2026-07-17"
+assert_contains "CHANGELOG.md" "block-version:1.4.0-20260715.1"
+assert_not_contains "CHANGELOG.md" "block-version:1.3.0-20260715.1"
 assert_contains "CHANGELOG.md" "## 1.3.0 — 2026-07-11"
 assert_not_contains "templates/root-AGENTS.md" "## Agent Loop Guidance Version"
 assert_contains "AGENTS.md" 'ignore the `alpha` prefix for version records'

@@ -25,17 +25,28 @@ Before using an external skill or plugin inside a stage:
 - [ ] Do not create external default directories such as `docs/superpowers/*` unless the human explicitly requests native external output and then confirms after the agent explains the agent-loop path override.
 - [ ] Do not let the external skill mark tasks `done`, close a feature, submit code, update project memory, accept Delivery Contracts, approve breaking changes, or skip human gates.
 
+## Optional Visual Communication
+
+- [ ] Confirm a real Visual Trigger; installed capability alone is not a reason to generate.
+- [ ] Resolve a matching active project-local visual skill before installed Archify.
+- [ ] If Archify is unavailable and would materially improve review, recommend its exact installation/use before offering Markdown/table/Mermaid/ASCII; use fallback directly only when unjustified, declined, unsupported, unavailable after recommendation, or failed.
+- [ ] Before installation, disclose exact source/revision/command/target/network-file-global effects/doctor/fallback and obtain a separate Installation Authorization.
+- [ ] Before generation, obtain one Visual Scope Grant naming stage, question, semantic source/IDs, type, working output, and iteration boundary.
+- [ ] Use `render to converge, text to record`; rewrite accepted feedback into the owning semantic artifact.
+- [ ] For a durable visual, obtain separate confirmation and validate the `source-render-v1` typed source plus derived render and both digests.
+- [ ] Keep installation, generation, durable recording, semantic acceptance, Feature, project-skill execution, Git, and release gates independent.
+
 ## Requirement/Product Grill Method
 
-- [ ] Load `requirement-product-grill.md` when Requirements Discussion, Product Brief, or Brainstorm / Clarify has ambiguous terminology, business rules, flows, boundaries, exception paths, historical feature behavior, or decision signals.
-- [ ] Before asking a grill question, inspect project memory, requirement source, product.md, code/docs/tests, and targeted prior feature artifacts when relevant.
+- [ ] Load `requirement-product-grill.md` when Requirements Discussion or its Brainstorm / Clarify work has ambiguous terminology, business rules, flows, boundaries, exception paths, historical Feature behavior, or decision signals.
+- [ ] Before asking a grill question, inspect project memory, human sources, current Effective Product Definition, code/docs/tests, and targeted prior Feature artifacts when relevant.
 - [ ] Ask one blocking question at a time and include the agent's recommended answer.
 - [ ] If prior feature artifacts conflict with the current statement, state the conflict and ask whether to reuse, override, or treat it as new scope.
 - [ ] Do not turn a grill design signal into an accepted ADR; record Design Readiness evidence and route required shared design to Decision & Design.
 - [ ] Do not create external `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/` paths.
-- [ ] Keep the owning stage explicit: Requirements Discussion writes detailed output to the requirement document, Product Brief writes to `product.md`, and Feature Spec writes to `spec.md` / `notes.md`.
-- [ ] Keep requirement README limited to source, lifecycle, Delivery Phase, Feature Mapping, and decision-link summaries rather than duplicating the detailed requirement document.
-- [ ] If Requirement/Product Grill was used, verify the owning requirement document or product brief has structured sections for terminology, flows, exceptions, data/source of truth, historical conflicts, acceptance scenarios, and Decision Candidates where applicable.
+- [ ] Keep ownership explicit: Requirements Discussion drafts Requirement `product.md`; README owns pointer/lifecycle/phase/mapping; Feature Spec owns Product Slice/implementation behavior; legacy Feature Product Brief is read-only.
+- [ ] Keep Requirement README limited to source pointer, lifecycle, Delivery Phase, Feature Mapping, and decision-link summaries rather than duplicating Product Definition.
+- [ ] If Requirement/Product Grill was used, verify Standard `product.md` carries the applicable terminology, flows, exceptions, fact ownership, historical conflicts, acceptance direction, and Decision Candidates.
 
 ## Concept Foundation Gate
 
@@ -46,19 +57,19 @@ Before using an external skill or plugin inside a stage:
 - [ ] Keep status `candidate` or `reopened` while any unresolved meaning can change downstream flow, state, product data, terminal behavior, or invariants.
 - [ ] Do not draft Business Flow, Product State Model, or Requirement Product Model as assumptions plus open questions while the gate is blocked.
 - [ ] Set `accepted` only after the human confirms every blocking concept definition.
-- [ ] Before `accepted`, load `human-review-summary.md` and present the Concept Foundation Human Review Summary; keep the one-question-per-turn Grill as the method for resolving blockers.
-- [ ] After acceptance, derive Concept Relationships, Role / Permission Matrix, Commands / Events, Primary Business Flow, Product State Model, Requirement Product Model, invariants, exceptions, and recovery from stable Concept IDs.
+- [ ] Before Product Review confirmation, load `human-review-summary.md` and present cumulative Product Definition Approval; keep the one-question-per-turn Grill as the method for resolving blockers.
+- [ ] After internal acceptance, derive only applicable Concept Relationships, Role / Permission Matrix, Commands / Events, Primary Business Flow, Product State Model, Requirement Product Model, invariants, exceptions, and recovery from stable Concept IDs.
 - [ ] Record Concept-To-Product Traceability and reject any derived row whose Concept ID is undefined or unaccepted.
-- [ ] After archive, preserve reviewed source files; route `reopened` through Requirement Conflict Review, an append-only Concept Foundation follow-up or linked replacement set, and README `Effective Concept Foundation` pointer update after human confirmation.
+- [ ] After record/archive, preserve human sources and prior Product Definitions; route `reopened` through Requirement Conflict Review, `YYYY-MM-DD-product-follow-up-<slug>.md` or a linked replacement set, and README `Effective Product Definition` update after Human Review.
 - [ ] Keep Concept Foundation inside Requirements Discussion / Requirement Product Grill; do not add a canonical stage, `.agent-loop/concepts/`, YAML/JSON schema, ADR, Design Skill, or E2E Skill output.
 
 ## Design Readiness Check
 
-- [ ] Run before an accepted requirement enters feature construction, and repeat when Product Brief, Technical Design, or Drift reveals new shared design needs.
+- [ ] Run before an accepted Requirement enters Feature construction, and repeat when Product Definition, Technical Design, or Drift reveals new shared design needs.
 - [ ] Check for multiple features, end-to-end business closure, shared domain/state/source-of-truth rules, consistency/concurrency/recovery needs, measurable non-functional goals, and cross-system or durable boundaries.
 - [ ] Do not bypass Decision & Design merely because no technology choice is disputed.
 - [ ] Record `design-not-needed`, `candidate`, `required`, or `completed` plus signals, shared design needs, recommended next stage, decision records, and coverage status in the requirement README.
-- [ ] Route `required` to Decision & Design If Needed before Product Brief / Feature Spec construction.
+- [ ] Route `required` to Decision & Design If Needed before Feature Spec construction.
 
 ## Decision Scan / Placement
 
@@ -77,8 +88,8 @@ Before using an external skill or plugin inside a stage:
 
 ## ADR Requirement Model Technical Landing
 
-- [ ] Resolve the requirement README `Effective Concept Foundation` pointer and record the Effective Requirement Snapshot before technical landing.
-- [ ] Require a triggered Concept Foundation to be `accepted`; return `candidate` / `reopened` to the Human Grill Contract.
+- [ ] Resolve README `Effective Product Definition` or legacy `Effective Concept Foundation` and record the dual-reader Effective Requirement Snapshot before technical landing.
+- [ ] Require new Product Review `confirmed` and any triggered internal Concept Foundation accepted; return pending / `candidate` / `reopened` to Requirements Discussion.
 - [ ] Declare accepted Concept IDs and in-scope Requirement Model IDs without copying or redefining product meaning.
 - [ ] Inventory every stable source model ID (`REL-*`, `PERM-*`, `CMD-*`, `EVT-*`, `FLOW-*`, `STATE-*`, `PM-*`, `EX-*`) and give every out-of-scope ID an accepted-decision, feature-local, proposed-decision, or reasoned not-applicable owner.
 - [ ] Give every in-scope accepted Requirement Model ID exactly one Requirement Model Technical Landing Trace disposition.
@@ -88,8 +99,24 @@ Before using an external skill or plugin inside a stage:
 - [ ] When an accepted decision no longer holds, create a Human-gated superseding ADR instead of rewriting accepted decision meaning.
 - [ ] Assess operational landing triggers; expand Migration / Backfill, Compatibility, Rollout / Cutover, or Rollback / Reversibility only when triggered, otherwise record a concrete `not-triggered` reason.
 - [ ] Keep the ADR `proposed` for structural preflight; after it passes, present the Human Review Summary and wait for explicit acceptance before recording Human Review Evidence and rerunning accepted-mode validation.
-- [ ] For a reasoned `concept-foundation-not-needed` source, use the explicit trace-not-applicable fields and do not invent Concept or Requirement Model rows.
+- [ ] For Brief or a legacy reasoned `concept-foundation-not-needed` source with no applicable stable IDs, use trace-not-applicable and do not invent Concept or Requirement Model rows.
 - [ ] Load `human-review-summary.md` and present the Decision & Design Human Review Summary before creating, accepting, superseding, or materially updating the record.
+- [ ] If `Optional Visual Evidence` exists, validate its concrete Review Question, accepted semantic references, typed source/render pair, digests, generator, validation evidence, and `current` status; never treat it as ADR acceptance.
+
+## Human-Guided Branch Management
+
+- [ ] Run Branch Strategy Check during Project Entry, Project Entry Scan, Re-Adopt, versioned delivery planning, Drift Check, and Submit / Integrate.
+- [ ] Inspect human-confirmed policy, native repo guidance/config, current Git reality/history, and feature/plan/submit evidence in that order.
+- [ ] Preserve a simple project or clear existing strategy; do not force migration to the optional profile.
+- [ ] When rules are confused, Target Release Context is unclear, or customer isolation is risky, load `branch-management.md` and present one recommendation.
+- [ ] Record `accepted | declined | not-needed` only from an explicit human decision; an unconfirmed recommendation is not accepted.
+- [ ] Keep durable strategy and current Target Release Context pointer in `project.md`; keep mutable Current Branch Context in feature notes, plan, or Submit / Integrate evidence.
+- [ ] Block same-version work against a `released / sealed` target; repair uses a new patch version and new capability uses a human-confirmed new version.
+- [ ] Do not flow a customer release branch wholesale into `main` or a standard release line.
+- [ ] Do not treat recommendation, adoption, plan acceptance, or auto mode as permission to create, switch, merge, delete, push, tag, release, or publish.
+- [ ] Require a Branch Action Gate before creating or switching one exact development branch.
+- [ ] Require merge evidence plus separate human confirmation before deleting a temporary development branch; retain release aggregation branches.
+- [ ] Do not create a default `.agent-loop/branches/` directory.
 
 ## Message Intent
 
@@ -100,18 +127,52 @@ Before using an external skill or plugin inside a stage:
 - [ ] Reclassify chat as `proposal-doc` when the human asks for a proposal/design note without implementation.
 - [ ] Keep intent as `chat` when the human explicitly wants discussion without documentation.
 - [ ] If message intent is `requirements-discussion`, route to Requirements Discussion before Feature Spec.
-- [ ] During requirements discussion, use Brainstorm / Clarify and produce a human-reviewed requirement document before archiving.
-- [ ] Archive human-reviewed requirement documents under `.agent-loop/requirements/<archive-date>-<topic>/` after the human confirms the document should be recorded.
-- [ ] Do not move requirement source into feature docs; feature `product.md` and `spec.md` only derive from and link to requirement sets.
+- [ ] During Requirements Discussion, use Brainstorm / Clarify plus Product Definition Depth Scan and produce a Human-reviewed Brief/Standard Requirement `product.md` before Record / Archive.
+- [ ] Write the reviewed Product Definition under `.agent-loop/requirements/<record-date>-<topic>/` only after exact source/output disclosure and human confirmation.
+- [ ] Preserve human original bytes and do not move Product Definition into Feature docs; new Feature `spec.md` consumes Product Slice and no new Feature `product.md` is created.
 - [ ] If unclear whether this is chat or requirements discussion, ask whether to keep discussing or shape the topic into a requirements document.
 - [ ] If unclear whether this is requirements discussion or feature implementation, ask whether to form a requirements document first or start feature construction.
 
-## Workflow Stage Routing
+## Workflow Gateway Routing
 
 - [ ] After Message Intent and project-state classification, select exactly one next stage.
-- [ ] Workflow Stage Map routes the current signal to exactly one stage and matching detailed references.
-- [ ] Load the matching `agent-loop` reference before taking stage actions; root `AGENTS.md` is a navigation index, not the detailed procedure.
+- [ ] Workflow Gateway Map routes the current signal to exactly one first hop and the exact published reference set.
+- [ ] Confirm every Gateway reference exists in the installed package and load the owning reference before action.
+- [ ] Use `references/runtime.md` for routing precedence and complete leaf-stage order; a Gateway never removes or reorders downstream stages.
 - [ ] Reclassify and select a new stage only when the latest human intent or project evidence changes.
+
+## Lightweight Change Lane
+
+- [ ] Confirm Project Entry classification and perform only the minimum root-guidance, Git/dirty-state, scope, nearby-reference, safety, branch/sealed, and verification-entry checks needed for the route.
+- [ ] Check explicit Bug Management and active Feature ownership before lightweight eligibility.
+- [ ] Require every eligibility condition; treat any Feature hard trigger as decisive.
+- [ ] If uncertain, stop with few real options, evidence, one Agent recommendation, and zero writes before the human answer.
+- [ ] After clearly-eligible routing and before the first target write, create one parser-valid card at `<memory-root>/changes/YYYY-MM/YYYY-MM-DD-<topic>.md` with all metadata, required sections, and initial Memory fields.
+- [ ] Reuse the one accepted root, fail closed on dual roots, treat changes-only as not initialized, and allocate the first unused same-day topic suffix without overwrite.
+- [ ] Keep a Plan in every card and adapt depth to risk; never use No-Plan Decision.
+- [ ] When a reliable memory root exists, run Project Skill Discovery Guard and preserve the matched Project Skill Execution Gate.
+- [ ] Record why the change uses targeted verification or the smallest meaningful RED/GREEN.
+- [ ] Stop before broader edits on scope expansion and recommend exactly one Bug Management, Requirements Discussion, or Feature Construction route.
+- [ ] Before completion, close/explain Plan items, replace initial Memory markers, run fresh targeted verification, and review diff, disclosed scope, durable-memory impact, sensitive evidence, and rollback.
+- [ ] After completion, run `scripts/scan-lightweight-changes.py`; keep `human-review` visible and start Agent semantic consolidation for three pending or oldest age greater than seven days.
+- [ ] Allow accidental resume only after branch/full-HEAD/dirty-diff/Scope/Plan/eligibility/verification/rollback revalidation; route planned cross-session/handoff/Subagent/long-observation work to Feature.
+- [ ] Before high-evidence memory sync, require an existing reliable owner and disclose exact target path, fact, evidence, impact, and rollback; restore only this Agent's memory edit on failure.
+- [ ] Confirm branch, submit, production, external, paid, configuration-write, destructive, Feature/Bug lifecycle, and Git gates remain separate.
+- [ ] Report completed/cancelled Plan steps, result, residuals, verification, rollback, and any route promotion.
+- [ ] Do not create Change README/INDEX/archive/move/rehydrate/restore lifecycle, shared counter, recursive consolidation Change, another lightweight backlog, or a Feature substitute.
+
+## Project Skill Discovery Guard
+
+- [ ] Run only after the Agent Loop controller and reliable memory root are established.
+- [ ] Before a new actionable intent uses a generic helper, Operational Support method, or built-in fallback, inspect `.agent-loop/skills/INDEX.md` metadata when present.
+- [ ] Match only `active` bootstrap/on-demand rows by current intent, stage, task context, Triggers, and Scope.
+- [ ] Verify only the matched exact INDEX row, path, instruction-bearing/executable files, and manifest before reliance.
+- [ ] Load only the matched Skill body; do not scan all Project Skill bodies when no row matches.
+- [ ] Treat runtime/global Skill inventory as a separate source that cannot prove no Project Skill exists.
+- [ ] Permit generic fallback only for `index-absent | no-active-match`.
+- [ ] Treat missing target, invalid row/manifest, unsafe path/symlink, or conflicting owner as `project-skill-drift` and fail closed.
+- [ ] Emit the existing Execution Gate summary before following the matched workflow or causing side effects.
+- [ ] Keep ordinary chat response-only and do not create a discovery cache, Feature, Requirement, or log artifact.
 
 ## Project Entry
 
@@ -119,6 +180,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `.agent-loop/` is missing, inspect whether legacy `agent-loop/` exists.
 - [ ] If `.agent-loop/` or legacy `agent-loop/` is present, read `project.md`.
 - [ ] If `.agent-loop/skills/INDEX.md` exists, read its metadata, verify referenced active paths and SHA-256 manifests, and exclude missing/mismatched/proposed/disabled/deprecated entries from normal routing.
+- [ ] For each applicable actionable intent after entry, use Project Skill Discovery Guard before a generic helper, Operational Support method, built-in fallback, command, tool call, temporary resource, or environment action.
 - [ ] If legacy `agent-loop/` is present, use it for the current run and ask before migration or renaming.
 - [ ] If `project.md` says `Memory Mode: enterprise`, read only the needed linked project-memory detail files.
 - [ ] Locate active or paused feature.
@@ -132,11 +194,11 @@ Before using an external skill or plugin inside a stage:
 - [ ] Default to read-only code/process analysis and checklist/runbook output.
 - [ ] Confirm before code/config/deploy/destructive operations, paid-quota external calls, credential rotation, or feature/fix escalation.
 - [ ] Check root `AGENTS.md` / `CLAUDE.md` and any obvious directory-level guidance.
-- [ ] Treat root `AGENTS.md` as stale if it lacks Message Intent Guard, Workflow Stage Map, or lacks Bootstrap Protocol, Agent Ownership, Operational Support Guard, Stage Helper Capability Scan, Gate Modes, Required Stops, Completion Rules, Feature Follow-up / Flow-back, Submit And Commit Rules, root/directory guidance boundaries, or requirement archive rules.
+- [ ] Treat root `AGENTS.md` as stale if it lacks Bootstrap Protocol, project-outcome Agent Ownership, Message Intent Guard, Workflow Gateway Map, Gate Modes, all six Required Stop classes with Auto Mode non-bypass, Completion Rules, Submit And Commit Rules, Artifact Authority, root/directory guidance boundaries, or exact published-reference first hops.
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.3.0-20260714.1`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.0-20260723.2`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -218,11 +280,11 @@ Before using an external skill or plugin inside a stage:
 - [ ] Build boundary map from durable directories.
 - [ ] Inventory root and directory-level guidance files.
 - [ ] Check whether root `AGENTS.md` exists, is stale, or must be created.
-- [ ] If root `AGENTS.md` exists, verify it contains Message Intent Guard, Workflow Stage Map, Bootstrap Protocol, Agent Ownership, Gate Modes, Required Stops, and Completion Rules.
+- [ ] If root `AGENTS.md` exists, verify it contains Bootstrap Protocol, project-outcome Agent Ownership, Message Intent Guard, Workflow Gateway Map, Gate Modes, all six Required Stop classes with Auto Mode non-bypass, Completion Rules, Submit And Commit Rules, and Artifact Authority.
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.3.0-20260714.1`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.0-20260723.2`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -284,7 +346,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Do not copy human examples as required topics, topic counts, domain names, or project structure.
 - [ ] Keep narrative Chinese; preserve code symbols, paths, commands, APIs, env vars, config keys, errors, and third-party names.
 - [ ] Record batch review with changed files, evidence read, coverage changes, gaps, and next batch.
-- [ ] Recommend exactly one next action: next onboarding batch, focused update, Project Memory Update, Code-Guided Operational Support, Decision & Design If Needed, Product Brief If Needed, Feature Spec, Pause, or Close Onboarding Work.
+- [ ] Recommend exactly one next action: next onboarding batch, focused update, Project Memory Update, Code-Guided Operational Support, Requirements Discussion / Product Definition, Decision & Design If Needed, Feature Spec, Pause, or Close Onboarding Work.
 
 ## Requirement Archive
 
@@ -295,10 +357,12 @@ Before using an external skill or plugin inside a stage:
 - [ ] Use `.agent-loop/requirements/YYYY-MM-DD-<topic>/` requirement set directory for new archives.
 - [ ] Group all same-topic intake materials in the requirement set: requirements, prototypes, screenshots, feedback, recordings, links, and notes.
 - [ ] Create or update requirement-set `README.md`.
+- [ ] Record exactly one `Effective Product Definition` pointer for new work; preserve legacy `Effective Concept Foundation` without adding both.
+- [ ] Write Agent-authored `product.md` only after Product Human Review; keep Product Review separate from Requirement lifecycle.
 - [ ] Run Phase Scan: recommend `Delivery Phases` when the requirement is too large for one feature, has MVP/later scope, crosses multiple boundaries, or uses staged-delivery language.
 - [ ] If Delivery Phases are used, write or update the README phase table only after human confirmation.
 - [ ] Old requirement set README files remain valid; do not force migration only because lifecycle fields are missing.
-- [ ] Do not edit `requirement.md` or other source files for lifecycle/status updates.
+- [ ] Do not edit `requirement.md`, external PRDs, prototypes, or other human originals; do not edit confirmed `product.md` in place for semantic changes.
 - [ ] Future / Deferred Requirement Intake: when the human says "先记一下", "后面做", "之后补", "下一轮做", "暂时不做", "以后加", "backlog", "defer this", "follow-up later", or "not in this feature", recommend a requirement set instead of project memory.
 - [ ] Do not write future TODO, backlog, deferred requirements, or unimplemented planned capability details into `project.md`.
 - [ ] Large follow-up conflicts get a Requirement Conflict Review before appending, rebuilding, or superseding requirements.
@@ -307,28 +371,19 @@ Before using an external skill or plugin inside a stage:
 - [ ] Do not overwrite old requirement materials.
 - [ ] Recommend `requirements/INDEX.md` only if index triggers apply.
 
-## Product Brief If Needed
+## Adaptive Product Definition
 
-- [ ] Load `product-brief.md`.
-- [ ] If `project.md` declares a Decisions index, read decision links already named by the active requirement, list decision filenames and statuses, then read other likely relevant accepted decisions by domain or boundary overlap.
-- [ ] Propose missing Applicable Decision references for human confirmation before writing `product.md`; do not create a duplicate ADR because a link is missing.
-- [ ] Product Brief Source Gate: If the request says write product.md / 落到 product.md from chat or requirements discussion, ask whether to create/reference a requirement set or confirm feature start.
-- [ ] Do not write feature product.md until a requirement source and confirmed feature context exist.
-- [ ] Load `requirement-product-grill.md` when product terms, business flows, exception paths, or prior feature behavior need clarification before synthesis.
-- [ ] Run Stage Helper Capability Scan before fallback product synthesis.
-- [ ] If a PRD/product synthesis or grill-with-docs style helper is available, use it through `external-skill-adapters.md` while writing accepted output to agent-loop `product.md` / `notes.md`.
-- [ ] Decide whether Product Brief trigger conditions apply.
-- [ ] If source requirements are too broad for one feature, recommend requirement `Delivery Phases` before writing `product.md`.
-- [ ] Inspect `project.md` Product Context and Domain Language.
-- [ ] Inspect source requirements before asking product questions.
-- [ ] Resolve README `Effective Concept Foundation` when present, then read accepted Concept Foundation and Requirement Product Model rows before synthesis.
-- [ ] If the source Concept Foundation is `candidate` or `reopened`, return to Requirements Discussion instead of writing `product.md`.
-- [ ] Add Accepted Concept References and Requirement Product Model Coverage; cite Concept/Model IDs rather than writing a feature-local replacement definition.
-- [ ] When the source records `concept-foundation-not-needed`, carry its reason instead of creating a large concept table.
-- [ ] Ask one blocking product question at a time when needed.
-- [ ] Include the recommended answer with the question.
-- [ ] Write `product.md` only after human confirmation.
-- [ ] Mark long-term product consensus candidates for Project Memory Update.
+- [ ] Load `product-definition.md` inside Requirements Discussion.
+- [ ] Inspect preserved sources and project evidence before choosing `brief | standard`.
+- [ ] Require every Brief eligibility condition; any Standard trigger or uncertainty selects Standard.
+- [ ] For Standard, scan every Product View and record `included | not-applicable` with concrete evidence/reason; do not create placeholder IDs.
+- [ ] Keep Human Grill evidence-first and ask exactly one blocking question at a time with the Agent recommendation.
+- [ ] Run Product Completeness Scan and present cumulative Product Definition Approval.
+- [ ] Keep Product Review, Requirement lifecycle, Feature start, ADR acceptance, code execution, and Git actions as separate decisions.
+- [ ] Preserve human originals byte-for-byte; use an append-only Product Definition follow-up for confirmed semantic changes.
+- [ ] Use PRD helpers only as methods; translate their output into Requirement `product.md` and forbid native PRD/Feature List/prototype deployment outputs.
+- [ ] Generate derived visuals only after scoped Human confirmation and record source IDs/digest/freshness; capability absence uses a non-blocking fallback.
+- [ ] New Feature work does not create Feature `product.md`; load `product-brief.md` only for legacy reader compatibility.
 
 ## Brainstorm / Clarify
 
@@ -340,7 +395,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Ask 1-5 high-impact questions.
 - [ ] Prefer one question at a time unless a short batch is clearer.
 - [ ] Questions must affect scope, UX, data, architecture, testing, or acceptance.
-- [ ] Write accepted answers back into the current stage artifact: detailed requirements-discussion output to `requirement.md` with only source, lifecycle, phase, mapping, and decision-link summaries in requirement `README.md`; feature output goes to `product.md`, `spec.md`, or `notes.md` through the owning stage.
+- [ ] Write accepted Requirements Discussion output to the Requirement `product.md` draft, keep only source, lifecycle, phase, mapping, and decision-link summaries in Requirement `README.md`, and write Feature-local clarification to `spec.md` or `notes.md`; do not create a new Feature `product.md`.
 
 ## Feature Monthly Archive
 
@@ -361,32 +416,42 @@ Before using an external skill or plugin inside a stage:
 ## Feature Follow-up And Flow-back
 
 - [ ] Load `feature-follow-up.md`.
-- [ ] Trigger before creating a new feature when the human reports a bug, regression, post-close correction, field/schema change, algorithm change, API mismatch, screenshot issue, behavior tweak, "small tweak", test failure, or QA/user feedback.
-- [ ] Inspect Active Feature and Paused Features first, flat recent feature docs second, `features/archive.md` third, and archived artifacts fourth in the default 30-day lookback window.
-- [ ] Treat 30 days as the default scan window, not a hard boundary; if wording or evidence points to an older feature, run an extended scan and mark `outside-default-window`.
+- [ ] For explicit bug-record/manage/investigate/fix intent, load `bug-management.md`; keep Bug Management internal to Feature Follow-up and do not add a canonical stage/message intent.
+- [ ] Treat generic adjustment wording as assessment input only; require explicit Bug/defect evidence, changed accepted behavior, or clear Feature ownership before entering Feature Follow-up.
+- [ ] Ordinary Chat/read-only error explanation does not create a Bug artifact; missing reliable memory preserves intake and routes through Project Entry first.
+- [ ] Scan complete Bug Index metadata for duplicate/reopen identity before creating an explicit Bug or scanning Feature ownership; Bug identity has no time cutoff, but non-Bug Follow-up does not create or update a Bug Record.
+- [ ] Inspect Active/Paused pointers and Feature metadata/summaries in the default 90-day window, then deep-read evidence-ranked candidates and run `outside-default-window` extended scan when evidence points beyond 90 days.
+- [ ] Calculate Feature age from `Last Updated / Closed`, not archive month, directory mtime, or archive operation time.
 - [ ] Inspect code/test/API/data/UI paths mentioned by the report.
-- [ ] If the report is generic, such as 500, blank page, unknown error, or no route/action/log/test evidence, classify as `unclear` and recommend `investigate-first`; do not reopen the nearest recent feature just because it is recent.
+- [ ] If an explicit Bug report/title is generic, keep the Bug `triaging` and recommend `investigate-first`; do not merge/reopen the nearest record or Feature by recency/title alone.
 - [ ] Present a Candidate Match Matrix with match evidence and match strength.
 - [ ] When multiple candidates have medium/high match because evidence is incomplete, recommend `investigate-first`; ask the human only when evidence is sufficient and the remaining choice is product/ownership.
 - [ ] Classify the report as same-feature-bug, same-feature-adjustment, regression-from-feature, new-feature, maintenance-fix, or unclear.
+- [ ] Resolve Expected Behavior evidence. Ambiguity/conflict routes to Requirements Discussion / Requirement Reconciliation / Decision & Design instead of a guessed repair.
+- [ ] Validate Status/Resolution independently; stop on `closed+unresolved`, `deferred=closed`, duplicate cycles, expired-only evidence, or `in-progress` without one valid Resolution Path/Target.
+- [ ] An `in-progress` Bug requires `flow-back | linked-feature | maintenance-fix` plus one Human-confirmed Fix Feature Target. Reject `investigate-first | requirement | no-fix` with `Status: in-progress`.
+- [ ] Recommend exactly one `investigate-first | flow-back | linked-feature | maintenance-fix | requirement | no-fix` path and request the Resolution Path Gate.
 - [ ] For "字段改一下" / "规则微调" / "小改动" wording, check whether acceptance, API/event/data shape, state flow, algorithm, or visible UX changes before choosing same-feature-adjustment vs linked new feature.
-- [ ] If a closed feature is the likely owner, recommend `flow-back` and explain that it will reopen or continue the owning feature for follow-up work after human confirmation.
-- [ ] If the owner is archived, require verified Feature Monthly Archive rehydrate before lifecycle change or reopened execution.
+- [ ] If a closed Feature is the likely owner, recommend `flow-back`; Feature reopen remains a separate Human Gate.
+- [ ] Resolve/read an archived owner through `features/archive.md` without rehydrate during discovery/Human Review; after confirmed flow-back, require verified Human-gated rehydrate before lifecycle change or execution.
 - [ ] If the human declines reopen/flow-back, preserve the old feature close state and require the new linked feature or maintenance-fix to record `Related Feature`, declined reason, inherited acceptance/tests/evidence, and affected paths.
-- [ ] If no recent feature owns the report and this is a narrow internal fix, recommend a new `Feature Type: maintenance-fix` feature workspace; do not perform a naked code edit.
+- [ ] If no Feature owns the report and this is a narrow internal fix, recommend a new `Feature Type: maintenance-fix` Feature workspace; do not perform a naked code edit.
 - [ ] If the report is durable source material, ask before archiving it under `.agent-loop/requirements/`.
-- [ ] Ask before changing feature status, scope, acceptance, tasks, tests, Delivery Contracts, or project memory.
+- [ ] Keep Bug-to-Requirement links optional `0..N`; do not rewrite source or auto-change lifecycle.
+- [ ] Ask separately before Feature create/reopen, Requirement create/reconciliation, Bug close/reopen, Delivery Contract action, archive apply, or any Git action; one approval cannot be reused.
+- [ ] Write Bug identity/evidence/lifecycle to Bug README + Index; write all repair spec/tasks/tests/plan/code to Feature artifacts.
 - [ ] Record Follow-up Intake in `notes.md`.
-- [ ] Route to the next exact stage: Requirement Archive, Feature Spec update, Work Breakdown, Test Design, Targeted Feature Scan, Plan Gate, or Diagnose Failure.
+- [ ] Route to exactly one next stage: Requirements Discussion/Archive/Reconciliation, Feature Spec update, Work Breakdown, Test Design, Targeted Feature Scan, Plan Gate, Diagnose Failure, Verify, or Recovery.
 
 ## Feature Spec
 
-- [ ] If `project.md` declares a Decisions index, read decision links already named by the active requirement or Product Brief, list decision filenames and statuses, then read other likely relevant accepted decisions by domain or boundary overlap.
+- [ ] If `project.md` declares a Decisions index, read decision links already named by the Effective Product Definition, legacy Product Brief when present, or active Feature Spec, then inspect other likely relevant accepted decisions by domain/boundary overlap.
 - [ ] Propose missing Applicable Decision references for human confirmation; do not create a duplicate ADR because a link is missing.
 - [ ] Confirm Design Readiness is `design-not-needed` or `completed`; run Decision & Design before Feature Spec when shared design is required.
-- [ ] Resolve the effective Concept Foundation source/status, confirm it is accepted or reasoned `concept-foundation-not-needed`, and block when status is `candidate` or `reopened`.
-- [ ] Add Accepted Concept References and Requirement Product Model Trace from the source requirement and Product Brief.
+- [ ] Resolve new `Effective Product Definition` or legacy `Effective Concept Foundation`; require confirmed/accepted source and block pending, ambiguous, stale, `candidate`, or `reopened` input.
+- [ ] Add Product Requirement Source and Product Slice from the effective source; cite Concept/Model IDs and Product Rule anchors without a Feature Product Brief intermediary.
 - [ ] Reject feature-local redefinition of accepted concept name, identity, owner, lifecycle, relationship, invariant, state, terminal meaning, or product fact.
+- [ ] Feature Spec visuals may explain only the accepted Product Slice and its feature-local implementation or acceptance path; rewrite feature-local clarification into `spec.md`, and return any new product meaning to Requirements Discussion.
 - [ ] Do not enter Feature Spec while required shared design is unresolved or any required design slice is unassigned.
 - [ ] For each applicable requirement-driven ADR, require a current Effective Requirement Snapshot, complete Requirement Model Technical Landing Trace, and `Upstream Compatibility: current`.
 - [ ] Run Stage Helper Capability Scan before fallback spec writing.
@@ -498,6 +563,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Discover real scripts, configs, docs, seed/fixture files, env docs, CI, existing E2E directories, browser URLs, auth/session requirements, and safe execution constraints.
 - [ ] Classify the E2E path as `existing-framework`, `browser`, `chrome`, `computer-use`, `manual`, or `blocked`.
 - [ ] Record durable E2E capability in `project.md` and feature-specific cases in `tests.md` or `tests/e2e/*`.
+- [ ] Run Branch Strategy Check; preserve clear existing rules or recommend the optional profile only when trigger evidence exists.
 
 ## Technical Design / Code Context
 
@@ -513,6 +579,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If a durable interface is new or changed, route to Delivery Contract If Needed.
 - [ ] Stop or mark `Human-gated` if signatures, parameters, return shapes, or file paths cannot be discovered or safely defined.
 - [ ] Update task detail or plan with the discovered context.
+- [ ] When adopted branch policy applies, resolve Current Branch Context from Target Release Context and Git evidence; stop on missing version/customer/source/target facts.
 
 ## Plan Gate / Plan If Needed
 
@@ -556,6 +623,9 @@ Checklist:
 - [ ] Placeholder scan is clean: no TBD/TODO/fill-in/add proper/write tests/similar language.
 - [ ] Type/signature consistency is checked.
 - [ ] Risks or rollback notes are recorded.
+- [ ] When an adopted Branch Strategy or versioned/customer delivery applies, `Branch Context Evidence` cites the complete Current Branch Context in `notes.md` and repeats only strategy status/profile, Target Release Context, Target Branch, sealed/customer-isolation results, and `Git actions authorized by this plan: none`.
+- [ ] When that branch context applies, the plan does not target a sealed release, cross customer isolation, or assume an unauthorized Git action.
+- [ ] For a confirmed simple `not-needed` path, record branch-specific Plan and Submit checks as `not-applicable`; do not require Target Release Context or Target Branch and do not block ordinary non-versioned work.
 - [ ] Present plan approval with Human Review Summary table.
 - [ ] Human approves plan before execution.
 - [ ] After approval, ask whether to stay in Strict Mode or enable Task Auto-Run for this task/story.
@@ -566,7 +636,7 @@ Checklist:
 ## Analyze Consistency
 
 - [ ] Run before Execute Task / Story, including after plan approval and before subagent dispatch.
-- [ ] Compare accepted `spec.md` / `product.md` against `tasks.md`, `tests.md`, and the active `plan.md`.
+- [ ] Compare accepted `spec.md` and, when present, the legacy Feature `product.md` against `tasks.md`, `tests.md`, and the active `plan.md`; resolve the current Requirement `product.md` through Product Requirement Source.
 - [ ] Confirm each planned implementation step maps to an accepted task/story and acceptance criterion.
 - [ ] Confirm each changed behavior has a test or explicit substitute verification path.
 - [ ] Trace every accepted Decision & Design slice assigned to this feature through `spec.md`, tasks, tests, and the active plan.
@@ -637,6 +707,9 @@ Checklist:
 - [ ] Run it fresh.
 - [ ] Read full output and exit status.
 - [ ] Record evidence in `notes.md`.
+- [ ] When Bugs are related, execute the Bug Verification Matrix against original reproduction/substitute and regression/safety paths; update the Bug README and Index row.
+- [ ] Feature evidence may move `in-progress -> verifying`; do not set `closed` without the Bug Close Gate.
+- [ ] Failed Bug-specific verification returns to `in-progress` or `triaging` with append-only evidence.
 - [ ] Do not claim completion without evidence.
 
 ## Review
@@ -679,10 +752,12 @@ Checklist:
 - [ ] If long-term project facts changed, load `project-memory-mode.md` and route updates to `project.md` or enterprise `project/*.md`.
 - [ ] Do not rewrite original human requirements.
 - [ ] If the feature references a Delivery Phase, propose phase status / Feature Mapping updates for human confirmation.
+- [ ] Compare related Bug Expected Behavior, Resolution Path, Fix Feature, Status/Resolution, and close evidence; route semantic conflicts to Requirements Discussion / Reconciliation / Decision & Design.
 - [ ] Record drift decisions in `notes.md`.
 - [ ] Do not route directly to Close from Drift Check.
 - [ ] Next stage is Project Memory Update / Requirement Reconciliation when long-term project facts, requirement lifecycle, Delivery Phase status, or Feature Mapping changed; otherwise Feature Completion Check.
 - [ ] Present drift decisions with Human Review Summary table.
+- [ ] When an adopted Branch Strategy or versioned/customer delivery applies, compare accepted Branch Strategy and Target Release Context with Current Branch Context and Git reality; stop on sealed target, isolation violation, or unapproved cleanup/action. For a confirmed simple `not-needed` path, record this branch-specific drift check as `not-applicable`.
 
 ## Project Memory Update
 
@@ -691,6 +766,7 @@ Checklist:
 - [ ] If hard or soft enterprise triggers apply, recommend a mode switch before adding lots of detail to `project.md`.
 - [ ] Confirm the change affects future work, not only current task history.
 - [ ] Do not write future TODO, backlog, deferred requirements, or unimplemented planned capability details into `project.md`.
+- [ ] Do not write Bug backlog, triage/evidence, Status/Resolution rows, or assignment-like data into project memory; use `bugs/INDEX.md` and Bug README files.
 - [ ] Update Current Work and Next Suggested Action.
 - [ ] In simple mode, update the matching `project.md` section.
 - [ ] In enterprise mode, keep `project.md` as index/current state and update the matching `project/*.md` detail file.
@@ -701,11 +777,13 @@ Checklist:
 - [ ] Update Domain Language, Product Context, Known Constraints, or Long-Term Decisions if future agents need them.
 - [ ] Resolve or add Project Entry Uncertainties when confidence changes.
 - [ ] Run Requirement Reconciliation when the feature references or creates requirement sets.
+- [ ] A Bug link alone does not change Requirement lifecycle; reconcile only when current evidence invalidates delivery truth and the human confirms the transition.
 - [ ] Apply Delivery Phase Status Roll-up; do not mark a multi-phase requirement `implemented` from one completed feature while unimplemented phases remain.
 - [ ] Do not edit `requirement.md` or other source files for lifecycle/status updates.
 - [ ] Update requirement set README / optional requirements INDEX for lifecycle status, Delivery Phase status, and Feature Mapping only after human confirmation.
 - [ ] Ask before changing root or directory-level `AGENTS.md`.
 - [ ] Present proposed memory updates with Human Review Summary table.
+- [ ] Record durable Branch Strategy / Target Release Context only after human confirmation; do not copy mutable feature branch lifecycle into long-term policy.
 
 ## Submit / Integrate
 
@@ -722,6 +800,18 @@ Checklist:
 - [ ] Confirm fresh verification evidence exists.
 - [ ] Confirm drift check result and known drift.
 - [ ] Confirm required review has passed or record why submit must stop.
+- [ ] When the Feature resolves Bugs, show Bug IDs, current Status, Bug-specific evidence, unresolved Bug Close Decisions, Target Release Context, and isolation.
+- [ ] Do not reuse submit/commit/push approval as Bug close, or Bug close as submit authorization.
+- [ ] After code integration yields a stable verified Merged Code SHA, run the Post-Merge Memory Reconciliation check by looking for an observed semantic memory conflict rather than mere file differences.
+- [ ] With no conflict, use `reconciliation-not-needed`; do not scan all memory, create a report, add a Human Gate, or block the next independent action.
+- [ ] With a conflict, inspect only its owner, direct references/indexes, and minimum evidence; preserve accepted product/ADR meaning and protected history.
+- [ ] Let the Agent rewrite and target-verify fact-determined current meaning; ask the human only when multiple meanings remain legitimate.
+- [ ] Treat an unresolved observed conflict or failed targeted restore as blocking; a speculative conflict or missing full audit is not blocking.
+- [ ] Use four-snapshot accounting, exact Plan Hash, and transactional Apply/Restore only after explicit Full Memory Audit / Recovery authorization.
+- [ ] Treat resolution only as permission to offer the next independent Memory Commit / Push / Release / Cleanup Human Gate; never inherit code-merge or submit authorization.
+- [ ] When an adopted Branch Strategy or versioned/customer delivery applies, verify Source Branch, Branch Class, Target Release Context, Target Branch, sealed state, customer isolation, and requested action.
+- [ ] Require merge evidence and a separate cleanup decision before deleting a temporary development branch; never treat a retained release aggregation branch as temporary cleanup.
+- [ ] Treat each create/switch/merge/delete/push/tag/release/publish action as separately Human-gated even when the strategy and plan are accepted; create/switch uses the Branch Action Gate.
 - [ ] Present submit/integrate decision with Human Review Summary table.
 - [ ] Ask human which action to take: prepare only, commit, PR text, merge note, release note, publish/release note, or skip.
 - [ ] Only commit, publish, release, merge, or create final PR text after explicit human confirmation.
@@ -747,6 +837,8 @@ Checklist:
 - [ ] Confirm accepted Delivery Contracts match producer code/tests and have no unapproved breaking changes.
 - [ ] Confirm long-term facts are reflected in `project.md`.
 - [ ] Confirm submit/integration status is recorded if requested.
+- [ ] Confirm every related Bug expected to be fixed is `verifying` with fresh evidence; passing Feature tests do not auto-close it.
+- [ ] Present `Bug Close Decision: confirm | revise | keep-verifying` separately from `Feature Close Decision: confirm | continue | pause | revise-scope`.
 - [ ] Record the check in `notes.md`.
 - [ ] If blockers prevent completion, record Result: blocked and recommend exactly one unblock stage.
 - [ ] Recommend Close, Continue, Pause before new feature, or Scope Update.

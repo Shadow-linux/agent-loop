@@ -20,12 +20,15 @@ Run this check:
 
 - `project.md` Current Work
 - active feature `spec.md`
+- effective Requirement `product.md` resolved through the Requirement Set README, or the accepted legacy source for older work
+- existing legacy Feature `product.md` when present; absence is expected for new work
 - active feature `tasks.md`
 - active feature `tests.md`
 - active feature `plan.md`
 - active feature `notes.md`
 - accepted Decision & Design records linked by the feature
 - active feature `contracts.md` and linked `contracts/*` details when present
+- related Bug README files and matching `bugs/INDEX.md` rows when the Feature resolves Bugs
 - linked detail files only when needed
 
 ## Completion Questions
@@ -38,7 +41,8 @@ Check:
 - Are all required tests or substitute verification recorded?
 - Is there fresh verification evidence in `notes.md`?
 - Did Feature Close Review complete?
-- Did feature-level Spec Review confirm `product.md` when present, `spec.md`, `tasks.md`, `tests.md`, acceptance criteria, and out-of-scope boundaries are satisfied?
+- Did feature-level Spec Review confirm the Requirement Product Definition, Feature Spec Product Slice, `tasks.md`, `tests.md`, acceptance criteria, and out-of-scope boundaries are satisfied, plus any existing legacy Feature `product.md` when present?
+- Does every Product Slice row still resolve to the effective source without redefining product meaning, and is any source change routed through compatibility/drift review?
 - Did feature-level Standards Review complete when triggered by large project, broad diff, directory or durable boundary change, security/data change, architecture change, or human request?
 - Did Drift Check complete?
 - Are feature docs aligned with implementation reality?
@@ -48,9 +52,20 @@ Check:
 - Are accepted Delivery Contracts aligned with producer code and tests, with no unapproved breaking changes?
 - Are long-term facts reflected in `project.md` for simple mode, or the matching `project/*.md` detail files for enterprise mode?
 - Is submit/integration status recorded when the human requested submit/commit/PR?
+- Is every related Bug expected to be fixed in `verifying` with fresh Bug-specific reproduction/substitute and regression/safety evidence?
+- Are Bug Status/Resolution/Resolution Path and the Fix Feature consistent with the current Index, Feature, Requirement, ADR, Contract, and archive locator evidence?
 - Are there unresolved Human-gated decisions, blockers, or open questions?
 
 Feature close is blocked until all assigned design slices have implementation and verification evidence, or a human-approved decision explicitly reassigns, defers, removes, or supersedes the slice.
+
+Bug verification and Feature completion are connected but not collapsed. Passing Feature tests can move a related Bug to `verifying`; it cannot close the Bug. At completion, present separately named decisions:
+
+```text
+Bug Close Decision: confirm | revise | keep-verifying
+Feature Close Decision: confirm | continue | pause | revise-scope
+```
+
+One summary may request both decisions, but neither authorization is inferred from the other. If Bug close is not confirmed, do not claim the Bug resolution loop complete; keep the Bug `verifying` or route to the required evidence/repair stage.
 
 ## Outcomes
 
@@ -173,6 +188,10 @@ Record the check in `notes.md`:
 - Drift:
 - Project Memory:
 - Submit Status:
+- Related Bugs / Status:
+- Bug Verification Evidence:
+- Bug Close Decision: confirm | revise | keep-verifying | not-applicable
+- Feature Close Decision: confirm | continue | pause | revise-scope
 - Recommendation:
 - Human Decision:
 ```

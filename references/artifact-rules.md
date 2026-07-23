@@ -33,18 +33,25 @@ New human source material should be archived inside a requirement set directory.
 
 | File | Owns | Does Not Own |
 |---|---|---|
+| `changes/YYYY-MM/YYYY-MM-DD-<topic>.md` Lightweight Execution Card | one bounded Change's background, scope, adaptive Plan, progress, verification, rollback, result, and Memory Review | project-memory fact ownership, shared backlog, Feature replacement, Bug lifecycle, Archive lifecycle, or Git authorization |
 | `remote.md` | how to find, verify, and access a remote project from a local entry directory | feature logs or project capabilities |
-| `project.md` | long-term project facts in simple mode; memory index and current state in enterprise mode | task logs, backlog lists, deferred requirements |
+| `project.md` | long-term project facts in simple mode; memory index/current state in enterprise mode; human-confirmed durable Branch Strategy and current Target Release Context pointer | task logs, backlog lists, deferred requirements, mutable development-branch lifecycle |
 | `project/*.md` | enterprise long-term project memory details | feature execution logs |
 | `decisions/*.md` | Human-gated project / cross-feature decision reasons, trade-offs, architecture design, consequences, and verification closure | ordinary execution logs, feature-local preferences, unresolved fuzzy requirement notes |
 | `onboarding-db/*` | Evidence-Graph + DDD human-readable project understanding docs when created through `onboarding-knowledge-base.md`; old layouts are legacy evidence | current task status, feature execution logs, raw test output, human original requirements, project memory replacement |
-| `requirements/<archive-date>-<topic>/*` | original human material package and lifecycle record: requirements, prototypes, feedback, screenshots, recordings, links, references, status, backlog/deferred state | edited specs, task plans |
-| `product.md` | feature-level product intent, users, stories, product scope | engineering execution plan |
-| `spec.md` | intended feature behavior | execution logs |
+| `requirements/<record-date>-<topic>/README.md` | Requirement lifecycle, source inventory, Effective Product Definition pointer, Delivery Phases, Feature Mapping, decisions, and history locators | copied product meaning, engineering plan, or Git authorization |
+| `requirements/<record-date>-<topic>/product.md` | Agent-authored, human-reviewed Brief or Standard product definition derived from preserved evidence | original human bytes, Requirement lifecycle, technical design, Feature tasks/tests/plan, or implementation authorization |
+| `requirements/<record-date>-<topic>/YYYY-MM-DD-product-follow-up-<slug>.md` | append-only reviewed replacement Product Definition for the same recognizable Requirement | in-place rewrite of prior Product Definition or original source material |
+| `requirements/<record-date>-<topic>/sources/*` and legacy root sources | original human requirements, prototypes, feedback, screenshots, recordings, links, and references; byte-stable after copy | Agent-authored product meaning, lifecycle, edited specs, or task plans |
+| `bugs/INDEX.md` | Bug inventory, backlog, locator, and current summary row for every Bug ID | full reproduction, logs, discussion, Feature tasks, or project memory |
+| `bugs/YYYY-MM-DD-<bug-slug>/README.md` | stable Bug identity, Report Origin, observed/expected evidence, Status, Resolution, relationships, Resolution Path, verification, close, and reopen history | product meaning, Requirement lifecycle, Feature tasks/tests/plan, personnel assignment, or Git authorization |
+| `bugs/YYYY-MM-DD-<bug-slug>/evidence/*` | optional bounded screenshots, redacted logs, failed tests, reproduction, and verification evidence | secrets, complete production payloads, implementation plans, or executable state database |
+| legacy Feature `product.md` | historical feature-level product intent retained for Resume, Follow-up, Review, Close, and Recovery only | new Product Definition authoring, Requirement lifecycle, or silent migration |
+| Feature `spec.md` | intended feature behavior plus Product Requirement Source and Product Slice | Requirement product meaning, execution logs, or a second PRD |
 | `tasks.md` | work breakdown, status, and links to task details | full test evidence |
 | `tests.md` | test design, matrix, and links to test details | raw test output |
-| `plan.md` | active execution plan pointer or compact plan | historical execution record |
-| `notes.md` | decisions, follow-up intake, evidence, drift, pause/close | original requirements |
+| `plan.md` | active execution plan pointer or compact plan, including Branch Context Evidence when applicable | historical execution record or Git action authorization |
+| `notes.md` | decisions, follow-up intake, Current Branch Context, evidence, drift, submit, pause/close | original requirements or durable branch policy |
 | `contracts.md` | optional confirmed delivery contract index, compact contracts, status, and verification links | temporary subagent assignments |
 | `tasks/*` | detailed task instructions when complex mode is triggered | feature-wide ledger |
 | `tests/*` | detailed test cases when complex mode is triggered | raw test output |
@@ -52,6 +59,27 @@ New human source material should be archived inside a requirement set directory.
 | `handoffs/*` | subagent briefs and returned summaries when subagent mode is triggered | authoritative task status |
 | `contracts/*` | optional confirmed durable producer-consumer contract details when interface detail is needed | temporary task logs |
 | `features/archive.md` | Feature Monthly Archive locator and move ledger: stable Feature ID, current path, archive state, close date, one-line delivery locator, source/decision locators, last move | feature lifecycle, product meaning, requirement meaning, decision content, verification evidence |
+| `memory-merges/MM-<merged-code-short-sha>-<conflict-topic>/README.md` | optional durable record for several coupled conflicts, cross-session handoff, substantial rollback/recovery evidence, or an explicitly requested report | small conversation-resolvable conflict, unchanged/all-path inventory, code merge, project encyclopedia, or authorization for later Git actions |
+| `memory-merges/MM-<collision-safe-short-sha>/README.md` | explicitly authorized Full Memory Audit / Recovery ledger, exact plan, transaction, post-check, and restore evidence | the normal no-conflict or targeted conflict path |
+
+The persisted Lightweight Execution Card is created under the one accepted memory root after clearly-eligible routing and before the first target write. Its month is the creation partition and never changes. The Agent checks the exact path before creation and uses the first free `-2`, `-3`, or later suffix in both filename and H1; it never truncates or overwrites an existing Change.
+
+Do not add a Change README, INDEX, archive locator, per-change summary, move, rehydrate, restore transaction, scheduler, or shared counter. Planned multi-session work, pause/resume lifecycle, handoff, Subagent execution, long observation, complex evidence, or Feature-level tracking still requires Feature construction.
+
+Lightweight Change status is exactly:
+
+```text
+in-progress | completed | stopped
+```
+
+Memory state uses two separate axes:
+
+```text
+Memory Review: pending | complete
+Memory Result: pending | none | synced | human-review
+```
+
+Valid combinations are `in-progress + pending/pending`, `stopped + complete/none`, and `completed + pending/pending | complete/none | complete/synced | complete/human-review`. `pending: verification not complete` and `pending: classify at completion` are valid only for `in-progress`. A completed card requires Plan closure or explanation, fresh verification, diff/scope review, concrete rollback, Result / Residuals, actual Memory Evidence, and a candidate target or concrete undecided-target reason. `none` requires a concrete reason. Code-only completion is invalid.
 
 ## Status Values
 
@@ -112,6 +140,30 @@ Feature Auto-Loop
 Task Auto-Run
 ```
 
+Branch Strategy adoption status:
+
+```text
+accepted
+declined
+not-needed
+```
+
+An unconfirmed recommendation has no accepted status. The optional strategy uses `existing-project | human-guided-release | not-applicable` profile values; `not-applicable` is reserved for a human-confirmed `declined` outcome with a concrete reason. Release lifecycle distinguishes `open | released / sealed`; sealed is immutable. These values describe evidence and policy only, never Git action authorization.
+
+Do not create a default `.agent-loop/branches/` directory. Durable policy and Target Release Context live in `project.md`; feature branch state lives in `notes.md`, `plan.md`, or Submit / Integrate evidence.
+
+Bug Status and Resolution are independent:
+
+```text
+Bug Status: reported | triaging | confirmed | in-progress | verifying | deferred | closed
+Bug Resolution: unresolved | fixed | duplicate | not-a-bug | cannot-reproduce | accepted-risk | superseded
+Bug Resolution Path: investigate-first | flow-back | linked-feature | maintenance-fix | requirement | no-fix
+```
+
+`closed` cannot use `unresolved`; `deferred` is not closed; reopen is append-only and restores `unresolved`. `bugs/INDEX.md` owns the Bug backlog. Do not copy Open Bugs, Deferred Bugs, assignees, or reproduction logs into `project.md`.
+
+An `in-progress` Bug requires `flow-back | linked-feature | maintenance-fix` plus one Human-confirmed Fix Feature Target. `investigate-first`, `requirement`, and `no-fix` must not use `Status: in-progress`.
+
 ## Feature Monthly Archive Layout
 
 Feature ID is stable while its location may be flat or archived:
@@ -129,6 +181,29 @@ Feature Monthly Archive moves the complete eligible directory without content co
 Scope boundaries are explicit: no per-feature archive summary, no historical/ directory, no Deep Archive, no deletion/packing/scheduled archive, and No `--force`. A closed archived feature must rehydrate before reopened execution.
 
 Record the active gate mode in `project.md` Current Work or the active feature `notes.md` checkpoint. If scope changes, switch back to Strict Mode unless the human renews the auto-mode grant.
+
+## Post-Merge Memory Reconciliation Layout
+
+For normal conflict-driven reconciliation, prefer conversation review for a small conflict. Create a report only for several coupled conflicts, cross-session handoff, substantial rollback/recovery evidence, or an explicit Human request:
+
+```text
+.agent-loop/memory-merges/MM-<merged-code-short-sha>-<conflict-topic>/README.md
+```
+
+Use `templates/memory-merge-report.md`. It contains only the observed conflict, minimum direct evidence, affected owner/references, resolution, verification, rollback, and unresolved choice. No conflict means no directory or report.
+
+For explicitly authorized Full Memory Audit / Recovery, use:
+
+```text
+<memory-root>/memory-merges/MM-<collision-safe-short-sha>/README.md
+<memory-root>/memory-merges/MM-<collision-safe-short-sha>/.memory-reconciliation-txn/  temporary only
+```
+
+Use `templates/full-memory-audit-report.md`. One full Merged Code SHA owns exactly one durable Full Audit report. Start the ID with 12 lowercase SHA characters and extend it only to avoid a collision with a different full SHA. Do not create `memory-merges/` during Init Project or Project Entry, and do not create a global transaction directory.
+
+The current report directory may contain `.memory-reconciliation-txn/` only while Apply, post-check, or Restore is active. A successful finalize or proven restore removes transaction payloads after exact verification. A failed or unproven restore retains its journal and blocks later Apply and Git actions.
+
+Both report types are evidence, not copies of canonical owners. Original human source, accepted Requirement/ADR/Human Decision meaning, append-only history, Feature/Bug state, enterprise project facts, and derived indexes remain owned by their existing artifacts.
 
 Slice type:
 
@@ -191,6 +266,14 @@ Requirement set directory:
 ```
 
 The date is the archive date only. It is not a deadline, feature duration, implementation start date, or implementation end date.
+
+Bug directory:
+
+```text
+.agent-loop/bugs/YYYY-MM-DD-<bug-slug>/
+```
+
+Create `bugs/` only after explicit bug-record, manage, investigate, or fix intent. Do not create an empty Bug directory during Project Entry. Bug directories may contain `README.md` and optional `evidence/`; explicitly forbid `.agent-loop/bugs/<bug>/tasks.md`, `.agent-loop/bugs/<bug>/tests.md`, `.agent-loop/bugs/<bug>/plan.md`, and any Bug implementation subtree. Every code repair remains in a normal, follow-up, or maintenance-fix Feature workspace.
 
 Onboarding-db directory:
 
@@ -264,12 +347,18 @@ stable plan.md
 
 ```text
 current feature behavior changed -> update spec.md
-feature product intent changed -> update product.md
+accepted Requirement product meaning changed -> Human-gated append-only Product Definition follow-up, advance README pointer, then recheck ADR / open Feature compatibility
+legacy feature product intent conflict found -> stop for Requirement Conflict / Recovery; do not rewrite legacy product.md silently
 cross-feature product consensus changed -> update project.md Product Context or Domain Language in simple mode, or project/product-context.md and project/domain-language.md in enterprise mode
 task set/order changed -> update tasks.md
 test strategy changed -> update tests.md
 active execution changed -> update plan.md
 actual execution/evidence changed -> update notes.md
+Bug identity, evidence, Status, Resolution, Resolution Path, close, or reopen changed -> update the Bug README and its single matching bugs/INDEX.md row; keep history append-only
+Feature repair evidence changed -> update Feature notes/tests plus the related Bug verification links; Feature tests do not auto-close the Bug
+Requirement delivery truth changed because of Bug evidence -> run Human-gated Requirement Reconciliation; never rewrite the Requirement source or auto-change lifecycle
+durable branch strategy or Target Release Context changed -> update project.md after human confirmation
+feature Current Branch Context or branch-action evidence changed -> update notes.md / plan.md / Submit / Integrate record
 confirmed producer-consumer API/event/public-data/UI-state/SDK-library/runtime interface changed -> update contracts.md and matching contracts/* detail after human confirmation; list affected consumers; ask human confirmation before accepting a breaking change
 long-term project fact changed -> update project.md in simple mode, or matching project/*.md in enterprise mode
 submission/integration happened -> update notes.md Submit / Integrate

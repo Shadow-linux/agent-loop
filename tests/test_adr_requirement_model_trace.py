@@ -13,6 +13,8 @@ SCRIPT = "scripts/check-adr-requirement-model-trace.py"
 FIXTURES = ROOT / "tests/fixtures/adr-technical-landing"
 VALID = FIXTURES / "valid"
 NOT_NEEDED = FIXTURES / "valid-not-needed"
+PRODUCT_VALID = ROOT / "tests/fixtures/adaptive-product-definition/standard-valid"
+PRODUCT_BRIEF = ROOT / "tests/fixtures/adaptive-product-definition/brief-valid"
 
 
 class AdrRequirementModelTraceTests(unittest.TestCase):
@@ -158,6 +160,26 @@ class AdrRequirementModelTraceTests(unittest.TestCase):
         )
         self.assertEqual(result.returncode, 0, combined_output(result))
         self.assertIn("reasoned concept-foundation-not-needed ADR proposed gate", result.stdout)
+
+    def test_legacy_source_accepts_the_current_unified_gate_template(self) -> None:
+        unified_gate = re.search(
+            r"^## Coverage Hard Gate\n.*?(?=^## |\Z)",
+            (PRODUCT_VALID / "decision.md").read_text(encoding="utf-8"),
+            flags=re.MULTILINE | re.DOTALL,
+        )
+        self.assertIsNotNone(unified_gate)
+        decision = re.sub(
+            r"^## Coverage Hard Gate\n.*?(?=^## |\Z)",
+            unified_gate.group(0),
+            self.decision,
+            flags=re.MULTILINE | re.DOTALL,
+        )
+        self.assert_accepted(
+            self.readme,
+            self.source,
+            decision,
+            "ADR accepted technical landing trace covers 8",
+        )
 
     def test_owner_paths_support_existing_and_explicitly_planned_artifacts(self) -> None:
         planned = self.decision.replace(
@@ -338,6 +360,207 @@ class AdrRequirementModelTraceTests(unittest.TestCase):
             self.readme, self.source, self.decision, bom_crlf=True
         )
         self.assertEqual(result.returncode, 0, combined_output(result))
+
+
+class ProductDefinitionAdrTraceTests(unittest.TestCase):
+    def run_product_decision(
+        self,
+        *,
+        readme_mutation=lambda value: value,
+        product_mutation=lambda value: value,
+        decision_mutation=lambda value: value,
+    ):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            values = {
+                "README.md": readme_mutation(
+                    (PRODUCT_VALID / "README.md").read_text(encoding="utf-8")
+                ),
+                "product.md": product_mutation(
+                    (PRODUCT_VALID / "product.md").read_text(encoding="utf-8")
+                ),
+                "decision.md": decision_mutation(
+                    (PRODUCT_VALID / "decision.md").read_text(encoding="utf-8")
+                ),
+            }
+            for name, content in values.items():
+                (root / name).write_text(content, encoding="utf-8")
+            return run_checker(
+                SCRIPT,
+                str(root / "README.md"),
+                str(root / "product.md"),
+                str(root / "decision.md"),
+                str(root),
+            )
+
+    def run_brief_decision(self, decision_mutation=lambda value: value):
+        decision = (NOT_NEEDED / "decision.md").read_text(encoding="utf-8")
+        snapshot = (
+            "## Effective Requirement Snapshot\n\n"
+            "Effective Product Source: product.md\n"
+            "Product Definition Profile: brief\n"
+            "Product Review: confirmed\n"
+            "Accepted Concept IDs: none\n"
+            "Accepted Requirement Model IDs: none\n"
+            "Accepted Product Rule References: none\n"
+            "Upstream Compatibility: current\n"
+            "Last Compatibility Check: 2026-07-22\n"
+            "Trace Applicability: not-applicable\n"
+            "Trace Not-Applicable Reason: the confirmed Brief contains no stable product-model IDs or accepted Product Rule references\n\n"
+        )
+        decision = re.sub(
+            r"^## Effective Requirement Snapshot\n.*?(?=^## |\Z)",
+            snapshot,
+            decision,
+            flags=re.MULTILINE | re.DOTALL,
+        )
+        unified_gate = re.search(
+            r"^## Coverage Hard Gate\n.*?(?=^## |\Z)",
+            (PRODUCT_VALID / "decision.md").read_text(encoding="utf-8"),
+            flags=re.MULTILINE | re.DOTALL,
+        )
+        self.assertIsNotNone(unified_gate)
+        decision = re.sub(
+            r"^## Coverage Hard Gate\n.*?(?=^## |\Z)",
+            unified_gate.group(0),
+            decision,
+            flags=re.MULTILINE | re.DOTALL,
+        )
+        decision = decision_mutation(decision)
+
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            for name in ("README.md", "product.md"):
+                shutil.copy2(PRODUCT_BRIEF / name, root / name)
+            (root / "decision.md").write_text(decision, encoding="utf-8")
+            return run_checker(
+                SCRIPT,
+                str(root / "README.md"),
+                str(root / "product.md"),
+                str(root / "decision.md"),
+                str(root),
+            )
+
+    def test_new_product_definition_adr_passes(self) -> None:
+        result = self.run_product_decision()
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("covers 11 in-scope", result.stdout)
+
+    def test_confirmed_brief_allows_reasoned_not_applicable_trace(self) -> None:
+        result = self.run_brief_decision()
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("reasoned confirmed Brief ADR proposed gate", result.stdout)
+
+    def test_reasoned_brief_rejects_fabricated_model_sections(self) -> None:
+        sections = {
+            "Concept Definitions": (
+                "| Concept ID | Canonical Name | Definition |\n"
+                "|---|---|---|\n"
+                "| C-FAKE | fabricated concept | invented product meaning |\n\n"
+            ),
+            "Requirement Model Scope Inventory": (
+                "| Requirement Model / Rule Reference | Scope Disposition | Owner / Reason |\n"
+                "|---|---|---|\n"
+                "| PM-FAKE | in-scope | this ADR |\n\n"
+            ),
+            "Requirement Model Technical Landing Trace": (
+                "| Requirement Model / Rule Reference | Accepted Meaning / Rule | Disposition | Technical Landing | Preserved Invariant | Design Slice | Verification |\n"
+                "|---|---|---|---|---|---|---|\n"
+                "| PM-FAKE | fabricated meaning | landed | fake.service | fake invariant | DS-NOT-NEEDED-01 | fake verification |\n\n"
+            ),
+        }
+        for heading, body in sections.items():
+            with self.subTest(heading=heading):
+                result = self.run_brief_decision(
+                    lambda value, heading=heading, body=body: value.replace(
+                        "## Operational Landing Trigger Assessment",
+                        f"## {heading}\n\n{body}"
+                        "## Operational Landing Trigger Assessment",
+                    )
+                )
+                self.assertEqual(result.returncode, 1, combined_output(result))
+                self.assertIn(
+                    f"reasoned no-model ADR must omit {heading}",
+                    combined_output(result),
+                )
+
+    def test_reasoned_legacy_source_rejects_fabricated_model_sections(self) -> None:
+        readme = (NOT_NEEDED / "README.md").read_text(encoding="utf-8")
+        source = (NOT_NEEDED / "requirement.md").read_text(encoding="utf-8")
+        decision = (NOT_NEEDED / "decision.md").read_text(encoding="utf-8")
+        decision = decision.replace(
+            "## Operational Landing Trigger Assessment",
+            "## Requirement Model Scope Inventory\n\n"
+            "| Requirement Model ID | Scope Disposition | Owner / Reason |\n"
+            "|---|---|---|\n"
+            "| PM-FAKE | in-scope | this ADR |\n\n"
+            "## Operational Landing Trigger Assessment",
+        )
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            for name, content in (
+                ("README.md", readme),
+                ("requirement.md", source),
+                ("decision.md", decision),
+            ):
+                (root / name).write_text(content, encoding="utf-8")
+            result = run_checker(
+                SCRIPT,
+                str(root / "README.md"),
+                str(root / "requirement.md"),
+                str(root / "decision.md"),
+                str(root),
+            )
+        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertIn(
+            "reasoned no-model ADR must omit Requirement Model Scope Inventory",
+            combined_output(result),
+        )
+
+    def test_new_snapshot_rejects_legacy_metadata_shape(self) -> None:
+        result = self.run_product_decision(
+            decision_mutation=lambda value: value.replace(
+                "Effective Product Source: product.md",
+                "Effective Product Source: product.md\n"
+                "Effective Concept Source: requirement.md\n"
+                "Concept Foundation Status: accepted",
+            )
+        )
+        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertIn(
+            "ADR snapshot must not mix Product Definition and legacy Concept Foundation metadata",
+            combined_output(result),
+        )
+
+    def test_new_adr_rejects_unknown_product_rule_anchor(self) -> None:
+        result = self.run_product_decision(
+            decision_mutation=lambda value: value.replace(
+                "product.md#approval-authority", "product.md#unknown-authority"
+            )
+        )
+        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertIn(
+            "unknown Product Rule references", combined_output(result)
+        )
+
+    def test_new_adr_rejects_review_required_compatibility(self) -> None:
+        result = self.run_product_decision(
+            decision_mutation=lambda value: value.replace(
+                "Upstream Compatibility: current",
+                "Upstream Compatibility: review-required",
+            )
+        )
+        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertIn("Upstream Compatibility must be current", combined_output(result))
+
+    def test_new_adr_rejects_unconfirmed_product_source(self) -> None:
+        result = self.run_product_decision(
+            readme_mutation=lambda value: value.replace(
+                "Product Review: confirmed", "Product Review: pending"
+            )
+        )
+        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertIn("Product Review must be confirmed", combined_output(result))
 
 
 if __name__ == "__main__":

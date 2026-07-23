@@ -1,148 +1,77 @@
-# Product Brief
+# Legacy Feature Product Brief Compatibility
 
-Use this file when raw requirements need product/PRD-style synthesis before engineering specification.
+## Purpose
 
-## Core Split
+This reference is reader-only compatibility for an existing Feature `product.md`. New Product Definition authoring belongs to `references/product-definition.md` and writes Requirement `product.md` only through Product Human Review plus Requirement Record / Archive.
 
-```text
-requirements/<date-topic>/ = original human source material package
-feature/product.md   = current feature product understanding
-feature/spec.md      = engineering behavior specification
-project.md Product Context = cross-feature product consensus
-project.md Domain Language = durable business terminology
-```
+Read an existing Feature Product Brief during Resume, Follow-up, Review, Close, or Recovery. Do not create `feature/product.md` for new work.
 
-`product.md` belongs to one feature. Long-term product consensus must be proposed for `project.md` during Project Memory Update.
+If it conflicts with the Effective Product Definition, stop for Requirement conflict/recovery; do not rewrite either source silently.
 
-## Accepted Concept Foundation
+Do not create `feature/product.md` for new work. Do not copy `templates/product.md` into a Feature; that template now belongs to Requirement Product Definition.
 
-Product Brief consumes the accepted Requirement Product Model from its source requirement. It does not define a competing product language.
+Existing Feature Product Briefs remain valid historical/working evidence during:
 
-Before synthesis:
+- Resume;
+- Feature Follow-up / Flow-back discovery;
+- Review and Drift Check;
+- Feature Completion / Close Review;
+- Recovery / Backfill;
+- audit of behavior that predates Adaptive Product Definition.
 
-1. resolve requirement README `Effective Concept Foundation` when present, otherwise use the backward-compatible status in the human-reviewed requirement document;
-2. require `accepted`, or a reasoned `concept-foundation-not-needed` for a simple requirement;
-3. load the effective human-reviewed source and the Concept IDs / Requirement Product Model row IDs relevant to this feature;
-4. record the effective source plus those IDs under `Accepted Concept References` and `Requirement Product Model Coverage` in `product.md`.
+## Legacy Read Order
 
-If status is `candidate` or `reopened`, return to Requirements Discussion and the Human Grill Contract. Do not use Open Product Questions to carry an unresolved product-semantic blocker into Product Brief.
+When a Feature already contains `product.md`:
 
-Product Brief may select a feature slice, journey, scope, and product tradeoff from accepted concepts. It must not redefine an accepted Concept ID's canonical name, identity, owner, relationship, lifecycle, invariant, state, terminal meaning, or product fact. A semantic change reopens the source Concept Foundation.
+1. read Feature `spec.md` and its Requirement links;
+2. resolve Requirement README `Effective Product Definition` when present;
+3. otherwise resolve legacy `Effective Concept Foundation` / reviewed `requirement.md`;
+4. read Feature `product.md` as a historical Feature view;
+5. compare its concept/model meaning and Applicable Decisions with the effective Requirement source;
+6. continue only when the sources agree or the disagreement has a Human-reviewed Recovery owner.
 
-## Product Brief Source Gate
+The Requirement source outranks a Feature-local paraphrase for product meaning. Feature `product.md` may provide user journey, story, scope, tradeoff, and historical context, but it cannot redefine accepted identity, relationship, lifecycle, state, permission, invariant, fact ownership, terminal meaning, or Product Rule.
 
-If the latest human message comes from `chat` or `requirements-discussion` and asks to write `product.md`, create a Product Brief, or “落到 product.md”, do not create feature `product.md` directly.
+## Conflict And Drift
 
-First ask whether to create or reference a requirement set, or confirm feature start and create the feature-level Product Brief.
+If an existing Feature Product Brief conflicts with the Effective Product Definition, stop for Requirement conflict/recovery; do not rewrite either source silently.
 
-Without a requirement source and confirmed feature context, do not create feature `product.md`.
+Use these outcomes:
 
-Product Brief human confirmation is not the same as feature-start confirmation. The human may confirm that product intent is useful while still wanting the work to remain in Requirements Discussion. Treat that as requirement/product shaping, not feature workspace creation.
+| Evidence | Route |
+|---|---|
+| legacy Feature view is merely narrower | keep it as historical Feature scope and use current `spec.md` Product Slice for new work |
+| Requirement source changed after the Feature closed | record drift/compatibility evidence; do not rewrite closed history |
+| open Feature depends on stale product meaning | stop Feature Spec / Plan / Execute and return to Requirements Discussion / ADR compatibility review |
+| no reliable Requirement source exists | Recovery / Backfill Human Review before changing product meaning |
+| same goal has confirmed new meaning | append-only Requirement Product Definition follow-up; then refresh Product Slice after its own gate |
 
-## Trigger Conditions
+Do not automatically delete, move, rename, migrate, or synthesize a Requirement `product.md` from a legacy Feature Product Brief.
 
-Recommend Product Brief when any are true:
+## Human Gate Boundary
 
-- feature has a meaningful user journey or UI/interaction flow
-- human provides prototype, product document, PRD, design notes, or long requirement text
-- multiple users, actors, roles, permissions, or tenants are involved
-- 3 or more user stories are likely
-- product scope and out-of-scope need negotiation
-- terminology is ambiguous or conflicts with existing domain language
-- humans ask for PRD, product doc, product brief, or product understanding
+Reading a legacy Product Brief needs no new gate. Any write still uses its owning action gate:
 
-Skip Product Brief for narrow bugs, small refactors, configuration-only changes, or already-clear technical tasks.
+- Requirement Product Definition or follow-up: Product Human Review plus Requirement Record / Archive;
+- Requirement lifecycle: Requirement lifecycle Human Gate;
+- Feature Spec Product Slice: Feature Spec Human Review;
+- ADR compatibility/technical landing: Decision & Design Human Review;
+- source movement or migration: explicit bounded migration approval;
+- commit, push, tag, release, or publish: each independent Git/release gate.
 
-## Product Brief Content
+Legacy Product Brief presence, status, or earlier human acceptance grants none of these actions.
 
-Write `feature/product.md` from `templates/product.md`.
+## Completion And Close Compatibility
 
-Include:
+For a legacy Feature, Feature Close Review still compares implementation and `spec.md` against the existing Product Brief when present. For new Features, compare implementation against the Requirement Product Definition via `spec.md` Product Slice; absence of Feature `product.md` is expected and is not drift.
 
-- source requirements
-- problem statement
-- target users / actors
-- solution summary
-- primary user journey
-- user stories
-- acceptance direction for each user story
-- product scope
-- out of scope
-- product decisions
-- edge cases
-- behavior changes for user/operator/system
-- product tradeoffs
-- success signals
-- historical compatibility
-- open product questions
-- terminology used in this feature
-- accepted Concept IDs and Requirement Product Model coverage
-- long-term consensus candidates
+## Stop Rules
 
-Product Decisions must record status, evidence/source, human gate, and Decision & Design routing when applicable.
+Stop when:
 
-When Requirement/Product Grill was used, `product.md` must carry the clarified terminology, journey, edge cases, behavior changes, historical compatibility, tradeoffs, and success signals that apply. Do not collapse grill results into only Problem Statement, Solution Summary, and Open Product Questions.
-
-## Requirement/Product Grill
-
-Product Brief synthesis starts after grill questions are resolved enough to express product intent.
-
-Before asking the human, inspect available project memory and source material:
-
-```text
-project.md Product Context
-project.md Domain Language
-project.md Product Principles
-root or directory AGENTS.md
-relevant docs / code / tests when the answer is discoverable
-targeted prior feature artifacts when terminology, flow, or historical behavior may already be defined
-```
-
-Rules:
-
-- If code/docs can answer the question, inspect them instead of asking.
-- If a term is fuzzy or overloaded, propose a canonical meaning.
-- If a term conflicts with `Domain Language`, call out the conflict.
-- If prior feature artifacts conflict with the current product direction, state the conflict and ask whether to reuse, override, or treat it as new scope.
-- Ask one blocking product question at a time.
-- Include the agent's recommended answer with each question.
-- Record accepted product clarifications in `product.md`.
-- Record durable terminology in `project.md Domain Language` only after human confirmation.
-- to-prd-style Implementation Decisions and Testing Decisions are Design Readiness / Decision & Design inputs, not accepted ADRs.
-
-## Product Context Backfill
-
-During Project Memory Update, ask whether product decisions should be promoted when they affect future features:
-
-- product positioning
-- target users or roles
-- core workflows
-- permission/tenant/business rules
-- durable out-of-scope decisions
-- canonical terminology
-
-Do not promote feature-local scope choices.
-
-## Product To Spec
-
-Before Product To Spec, repeat Design Readiness Check. Enter Decision & Design If Needed when Applicable Decisions, Decision Candidates, or newly discovered shared business-flow/domain/data/architecture/recovery/non-functional needs exist.
-
-Do not enter Feature Spec while required shared design remains unresolved or any required design slice is unassigned.
-
-`spec.md` should reference `product.md` when it exists:
-
-```md
-Product Brief: product.md
-```
-
-`spec.md` should translate product intent into:
-
-- added / modified / removed behavior
-- acceptance criteria
-- dependencies
-- edge cases
-- testing implications
-
-Do not duplicate all product prose in `spec.md`.
-
-Do not duplicate Concept Foundation definitions either. `product.md` and `spec.md` cite accepted Concept IDs and model rows; the effective human-reviewed requirement source remains product-semantics authority.
+- Requirement and Feature sources disagree on product semantics;
+- one Requirement README exposes both new and legacy effective pointers;
+- an open Feature Product Slice references a stale source;
+- resolving history would require rewriting human originals or accepted records;
+- a proposed compatibility fix would recreate Feature Product Brief authoring for new work;
+- a migration, source move, or Git/release action lacks its own authorization.

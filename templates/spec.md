@@ -9,10 +9,31 @@ Source Requirements:
 - Requirement:
 - Prototype:
 
-Product Brief: product.md | none
+## Product Requirement Source
+
+- Requirement Set:
+- Effective Product Definition:
+- Product Definition Profile:
+- Product Review Evidence:
+- Applicable Decisions:
+
+Resolve the Requirement Set README before Feature Spec. New work uses exactly one confirmed `Effective Product Definition`; legacy work may resolve `Effective Concept Foundation` without migration. Product Review is product-definition evidence only and does not authorize Feature start, implementation, or Git actions.
+
+## Product Slice
+
+| Source Section / Model ID | Feature Responsibility | Acceptance Mapping | Coverage |
+|---|---|---|---|
+| FLOW-... / STATE-... / product.md#... |  |  | in-scope / out-of-scope / not-applicable |
+
+The Product Slice selects this Feature's responsibility and acceptance mapping. It must not redefine the Requirement Product Definition. Return to Requirements Discussion when product meaning must change.
+
+Related Bugs:
+Bug Resolution Path: none | flow-back | linked-feature | maintenance-fix
 
 Related Feature:
 Flow-back Decision: none | flow-back | linked-new-feature | maintenance-fix | investigate-first | declined-reopen | defer
+
+Bug references point to the owning Bug README and do not copy full Report Origin, reproduction, or evidence into this Feature Spec. Feature acceptance does not authorize Bug close.
 
 Summary:
 - 
@@ -22,24 +43,6 @@ Summary:
 ## Applicable Decisions
 
 -
-
-## Accepted Concept References
-
-Concept Foundation Status: accepted | concept-foundation-not-needed
-Source Requirement:
-Effective Concept Source:
-
-| Concept ID | Canonical Name | Feature Use | Source Definition / Trace |
-|---|---|---|---|
-| C-EXAMPLE |  |  | requirement.md#concept-definitions / TRACE-01 |
-
-Do not redefine accepted product meaning in this Feature Spec. Return to Requirements Discussion if identity, owner, relationship, lifecycle, invariant, state, terminal meaning, or product fact must change.
-
-## Requirement Product Model Trace
-
-| Requirement Model ID | Concept / Action / Flow / State IDs | Feature Behavior / Story | Acceptance / Verification Direction | Coverage |
-|---|---|---|---|---|
-| PM-01 | C-EXAMPLE / PERM-01 / CMD-01 / FLOW-01 / STATE-01 / EX-01 | US1 |  | planned / covered / out-of-scope |
 
 ## Maintenance Fix Scope
 

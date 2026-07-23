@@ -16,6 +16,12 @@ Close ends the feature in agent-loop.
 
 Never commit, open a PR, merge, release, publish, or claim submission readiness without human confirmation.
 
+A completed Lightweight Execution Card authorizes no submit or integration action.
+
+At Submit / Integrate, re-read the persisted card's fresh verification, diff, scope, memory result, sensitive-evidence review, and rollback evidence as input only. Run the read-only Change scanner and surface pending or `human-review` memory candidates before a release recommendation. Card execution approval cannot become commit, push, PR, merge, tag, release, or publish approval; every requested action keeps the existing two-stage confirmation and Branch Strategy checks.
+
+Code integration completes and is verified before Target memory reconciliation consumes Change evidence. Source-branch cards, including `Memory Result: synced`, cannot update Target memory or authorize a later Git action by themselves.
+
 ## Entry Conditions
 
 Enter this stage only after:
@@ -27,6 +33,8 @@ Enter this stage only after:
 - long-term project facts are updated in `project.md`, or no long-term project facts changed
 - `tasks.md` reflects current task status
 - `plan.md` is closed, superseded, or points to the next active unit
+- Branch Strategy Check has resolved the current Source Branch, Branch Class, Target Release Context, Target Branch, sealed state, and customer boundary when branch policy applies
+- when the Feature resolves Bugs, every related Bug expected to be fixed has fresh Bug-specific verification and is `verifying`; any unresolved Bug Close Decision is explicitly shown rather than rationalized as complete
 
 If any item is missing, recommend the missing upstream stage first.
 
@@ -61,13 +69,50 @@ Before submit:
 7. Confirm verification evidence is fresh enough for the submit claim.
 8. Confirm required Review is complete and recorded.
 9. Confirm drift check result and remaining known drift.
-10. Ask human confirmation for the submit action.
+10. When an adopted Branch Strategy or versioned/customer delivery applies, compare accepted Branch Strategy and Target Release Context with current Git reality and feature Current Branch Context.
+11. In that applicable context, fail closed when the target is `released / sealed`, customer isolation would be violated, or the requested action/scope is ambiguous.
+12. For a confirmed simple `not-needed` path, record branch-specific checks as `not-applicable`; do not require Target Release Context or Target Branch and do not block ordinary non-versioned submit preparation.
+13. For development-branch cleanup, require merge evidence and ask separately; never delete retained standard/customer release aggregation branches as cleanup.
+14. When the Feature resolves Bugs, review Bug IDs, current Status, candidate Resolution, Fix Feature, reproduction/substitute evidence, regression/safety evidence, unresolved Bug Close Decisions, Target Release Context, and branch isolation.
+15. Ask human confirmation for the exact submit action.
 
 ## Two-Stage Submit Confirmation
 
 A human request such as `commit this` or `prepare PR` authorizes entry into Submit / Integrate only. It is not final approval to commit, publish PR text, merge, release, or mark submission ready.
 
 After diff inspection, feature/requirement artifact review, verification check, review check, drift check, project-memory/guidance impact check, and unrelated-change check, present a Human Review Summary and ask again for the exact submit action.
+
+Strategy adoption and plan approval are context only. They never authorize branch creation, switching, merge, deletion, push, tag, release, or publish. List every requested action and every explicitly non-authorized action in the Branch Strategy And Action Review.
+
+Bug confirmation, Resolution Path, successful tests, Feature close, and Bug Close decisions are also context only. Submit/commit/push approval must not be reused as Bug close, and Bug Close approval must not authorize Submit / Integrate or any Git mutation.
+
+## Post-Merge Memory Reconciliation Ordering
+
+After a Human-gated code merge produces one stable verified Merged Code SHA, inspect changed memory and merge evidence for an observed semantic conflict. Do not treat mere difference, Source-only files, unchanged memory, or possible drift as a conflict.
+
+Use this fail-closed order:
+
+```text
+Code Merge Gate
+-> no observed conflict: reconciliation-not-needed
+   OR observed conflict: targeted fact resolution
+      -> Human Review only if semantic alternatives remain
+      -> targeted verification / restore if needed
+-> Memory Commit Gate
+-> Push Gate
+-> Release Gate
+-> Source Branch Cleanup Gate
+```
+
+| Observed state | Submit / Integrate action |
+|---|---|
+| no observed memory conflict | record `reconciliation-not-needed` when useful; offer the next independent gate |
+| fact-determined conflict | Agent rewrites only the owner/direct references, verifies, then offers the next independent gate |
+| unresolved semantic alternatives | block later mutation and ask one bounded Human decision |
+| targeted rewrite verification or restore fails | block later mutation and enter Recovery |
+| broad corruption or explicit forensic request | offer Full Memory Audit / Recovery; run it only after explicit authorization |
+
+Unresolved observed memory conflicts block push, release, publish, and Source cleanup because Target memory is not trustworthy. `reconciliation-not-needed` does not block a separately authorized later action. Code commit/merge authorization cannot be reused as a Memory Human Decision, Memory Commit, Push, Release, publish, or Cleanup authorization. A Memory Conflict Report or Full Memory Audit report authorizes no Git mutation.
 
 ## Commit Behavior
 
@@ -107,14 +152,14 @@ feat, fix, docs, refactor, test, chore
 For the `agent-loop` skill repository:
 
 - prefer Chinese in the summary and body
-- include the current skill version scope, for example `docs(v1.3.0): 调整 Project Entry Scan 文档结构`
+- include the current skill version scope, for example `docs(v1.5.0): 调整 Project Entry Scan 文档结构`
 - use 3-7 concrete bullet lines for behavior, gate, artifact, template, reference, validation scenario, or documentation changes
 - keep version numbers unchanged unless the human explicitly approves a version bump
 
 Example:
 
 ```text
-docs(v1.3.0): 调整 Project Entry Scan 文档结构
+docs(v1.5.0): 调整 Project Entry Scan 文档结构
 
 - 移除旧 onboarding-db 生成入口
 - 统一旧项目入口为 Project Entry Scan
@@ -152,6 +197,20 @@ Append to `notes.md`:
 - Commit:
 - PR:
 - Remaining Risk:
+- Source Branch:
+- Branch Class:
+- Target Release Context:
+- Target Branch:
+- Sealed Check:
+- Customer Isolation Check:
+- Requested Authorization:
+- Explicitly Not Authorized:
+- Merge Evidence / Cleanup Decision:
+- Related Bugs / Current Status:
+- Bug Verification Evidence:
+- Unresolved Bug Close Decisions:
+- Memory Merge Report / Status / Blocker:
+- Memory Commit Gate Decision:
 ```
 
 ## Ordered Exit Decision

@@ -395,6 +395,10 @@ For gateway/runtime flows involving Nginx, OpenResty, ingress, API gateway, reve
 
 Any content-bearing onboarding-db document must use diagrams that explain real semantics for its document type. Core flow docs have a fixed default diagram set. Module and other content docs use relevant diagrams when they have real boundary, state, timing, data, decision, or recovery semantics; stateless docs do not invent diagrams to satisfy a quota.
 
+Each diagram declares one representation: `embedded-mermaid`, `embedded-ascii`, or `archify-source-render`. Embedded text remains a canonical repository fallback, not the first visual-helper choice. When a Visual Trigger and bounded Visual Scope Grant justify a durable presentation, resolve a matching active project-local visual skill and then installed Archify; if Archify is absent but materially useful, recommend it before choosing embedded Mermaid/ASCII. `archify-source-render` is allowed only as a validated `source-render-v1` pair; it does not replace Diagram ID, Covered Slice IDs, narrative explanation, or concrete code/config evidence.
+
+Working Archify renders are review aids and are not written into the durable manifest. A separately confirmed durable pair records the typed JSON source, derived render, both SHA-256 values, exact generator, `validate=pass; check=pass`, and `Status: current` in `## Diagram Artifact Manifest`. The Onboarding validator rejects HTML-only output, stale/mismatched pairs, duplicate Diagram IDs, or entries without symbol/config evidence. If Archify is unjustified, declined, unsupported, unavailable after recommendation, or failed, use embedded Mermaid/ASCII; absence never blocks Onboarding completeness.
+
 Explicitly exempted docs are control/review artifacts such as `onboarding-spec.md`, `onboarding-tasks.md`, `coverage-matrix.md`, `batch-review.md`, `08-review/evidence-graph.md`, `08-review/open-questions.md`, and `08-review/human-review-summary.md`. For other docs, Diagram Plan records the real semantics and selected view rather than forcing an irrelevant diagram.
 
 ## Core Flow Diagram Set
@@ -720,6 +724,7 @@ Focused Update is available only when the existing onboarding-db already follows
 - Do not write temporary TODO, future backlog, or unconfirmed requirements into `project.md`.
 - If onboarding discovers stable project facts missing from project memory, recommend Project Memory Update.
 - If code changes stale onboarding docs, mark coverage `stale` or `needs-refresh`.
+- Post-Merge Memory Reconciliation rewrites onboarding knowledge only when an observed conflict directly invalidates one of its claims or locators. Inspect and update only that claim and its direct dependencies; do not run a whole onboarding rewrite, invent missing evidence, or use onboarding material as a substitute for project memory.
 
 ## Completion Gate
 
@@ -740,4 +745,4 @@ Do not call onboarding complete unless:
 - no unresolved placeholders, empty required rows, `TBD`, `TODO`, `待补充`, or vague “see code / 看代码” evidence remain in submitted batch files;
 - batch review records current status and gaps; batch does not add a Human Gate.
 
-Exit with exactly one recommended next action: next onboarding batch, focused update, Project Memory Update, Code-Guided Operational Support, Decision & Design If Needed, Product Brief If Needed, Feature Spec, Pause, or Close Onboarding Work.
+Exit with exactly one recommended next action: next onboarding batch, focused update, Project Memory Update, Code-Guided Operational Support, Requirements Discussion / Product Definition, Decision & Design If Needed, Feature Spec with Product Slice, Pause, or Close Onboarding Work.

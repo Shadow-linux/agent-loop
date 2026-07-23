@@ -55,9 +55,9 @@ assert_contains "references/stage-guides.md" "Effective Requirement Snapshot"
 assert_contains "references/workflow-checklists.md" "Requirement Model Technical Landing Trace"
 assert_contains "references/workflow-checklists.md" "Upstream Compatibility"
 assert_contains "references/workflow-checklists.md" "Coverage Hard Gate"
-assert_contains "templates/root-AGENTS.md" "Upstream Compatibility"
-assert_contains "templates/root-AGENTS.md" "Requirement Model Technical Landing Trace"
-assert_contains "references/project-guidance.md" "Requirement Model Technical Landing Trace"
+assert_contains "templates/root-AGENTS.md" '| Accepted requirement needs shared technical landing before feature specification | Decision & Design If Needed | `references/project-decisions.md` |'
+assert_contains "templates/root-AGENTS.md" "Semantic Gate"
+assert_contains "references/project-guidance.md" "Decision, Feature Construction"
 
 # Human review and generic ADR template.
 assert_contains "references/human-review-summary.md" "### Decision & Design Approval"
@@ -68,10 +68,12 @@ assert_contains "references/human-review-summary.md" "| Migration / Compatibilit
 assert_contains "references/human-review-summary.md" "| Design Slice Ownership |"
 
 assert_contains "templates/decision.md" "## Effective Requirement Snapshot"
-assert_contains "templates/decision.md" "Effective Concept Source:"
-assert_contains "templates/decision.md" "Concept Foundation Status: accepted | concept-foundation-not-needed"
+assert_contains "templates/decision.md" "Effective Product Source:"
+assert_contains "templates/decision.md" "Product Definition Profile: brief | standard"
+assert_contains "templates/decision.md" "Product Review: confirmed"
 assert_contains "templates/decision.md" "Accepted Concept IDs:"
 assert_contains "templates/decision.md" "Accepted Requirement Model IDs:"
+assert_contains "templates/decision.md" "Accepted Product Rule References:"
 assert_contains "templates/decision.md" "Upstream Compatibility: current | review-required"
 assert_contains "templates/decision.md" "Last Compatibility Check:"
 assert_contains "templates/decision.md" "Trace Applicability: required | not-applicable"
@@ -82,7 +84,7 @@ assert_contains "templates/decision.md" "## Requirement Model Technical Landing 
 assert_contains "templates/decision.md" "| Requirement Model Ref | Accepted Meaning / Constraint | Disposition | Technical Landing | Preserved Invariant | Design Slice | Verification |"
 assert_contains "templates/decision.md" "landed | covered-by-accepted-decision | feature-local | not-applicable"
 assert_contains "templates/decision.md" "## Coverage Hard Gate"
-assert_contains "templates/decision.md" "Every source Requirement Model ID has an explicit scope disposition"
+assert_contains "templates/decision.md" "Every source Requirement Model ID and accepted Product Rule reference has an explicit scope disposition"
 assert_contains "templates/decision.md" "## Human Review Evidence"
 assert_contains "templates/decision.md" 'Run the structural validator while the ADR is still `proposed`.'
 assert_contains "templates/decision.md" "## Upstream Compatibility And Drift"
@@ -128,6 +130,11 @@ done
 assert_file_exists "scripts/check-adr-requirement-model-trace.py"
 valid="$root/tests/fixtures/adr-technical-landing/valid"
 python3 "$root/scripts/check-adr-requirement-model-trace.py" "$valid/README.md" "$valid/requirement.md" "$valid/decision.md"
+(python3 "$root/scripts/check-adr-requirement-model-trace.py" \
+  "$root/tests/fixtures/adaptive-product-definition/standard-valid/README.md" \
+  "$root/tests/fixtures/adaptive-product-definition/standard-valid/product.md" \
+  "$root/tests/fixtures/adaptive-product-definition/standard-valid/decision.md" \
+  "$root/tests/fixtures/adaptive-product-definition/standard-valid")
 (cd "$root" && python3 -m unittest tests/test_adr_requirement_model_trace.py)
 
 not_needed="$root/tests/fixtures/adr-technical-landing/valid-not-needed"

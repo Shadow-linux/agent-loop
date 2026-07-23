@@ -26,17 +26,14 @@ assert_contains "references/stage-guides.md" "Do not edit code, change configura
 assert_contains "references/stage-guides.md" "feature implementation or an operational change scope"
 assert_contains "references/stage-guides.md" "current project functionality"
 
-assert_contains "templates/root-AGENTS.md" "Operational Support Guard"
-assert_contains "templates/root-AGENTS.md" "test, run, deploy, switch account/config/model/provider"
-assert_contains "templates/root-AGENTS.md" "default to read-only code/process analysis"
-assert_contains "templates/root-AGENTS.md" "ask whether they want feature implementation or help using current project functionality"
+assert_contains "templates/root-AGENTS.md" '| Use, test, run, deploy, or diagnose current behavior without implementation approval | Code-Guided Operational Support | `references/stage-guides.md`, `references/runtime.md` |'
+assert_contains "templates/root-AGENTS.md" "External Mutation Gate"
+assert_contains "references/runtime.md" "If the request could mean either existing operational use or new implementation, ask whether the human wants help using current project functionality or feature implementation."
 
-assert_contains "references/project-guidance.md" "Operational Support Guard"
-assert_contains "references/project-guidance.md" "read-only operational support"
-assert_contains "references/project-guidance.md" "do not create a feature, edit code, change config, deploy, or run destructive commands"
+assert_contains "references/project-guidance.md" "Operational Support, Bug / Feature Follow-up, Requirements, Decision, Feature Construction, Project Skill, Archive, Memory Reconciliation, Lifecycle, and Chat enter through their exact Gateway rows"
 
 assert_contains "references/workflow-checklists.md" "Operational Support Guard"
-assert_contains "references/workflow-checklists.md" "lacks Bootstrap Protocol, Agent Ownership, Operational Support Guard"
+assert_contains "references/workflow-checklists.md" "lacks Bootstrap Protocol, project-outcome Agent Ownership, Message Intent Guard, Workflow Gateway Map"
 assert_contains "references/workflow-checklists.md" "Classify operational support before Feature Spec, Plan Gate, or Execute"
 assert_contains "references/workflow-checklists.md" "Confirm before code/config/deploy/destructive operations"
 
@@ -47,9 +44,9 @@ assert_contains "references/validation-scenarios.md" "新账号接入一下，�
 assert_contains "references/validation-scenarios.md" "current project functionality"
 assert_contains "references/validation-scenarios.md" "feature implementation"
 
-assert_contains "templates/root-AGENTS.md" "secrets, paid quota, production/staging external-service calls, config changes, credential rotation, deploy, release, publish, or destructive operations"
+assert_contains "templates/root-AGENTS.md" "secrets, paid quota, credentials, configuration, external service, production/staging, deploy, release, or destructive action"
 
 assert_contains "README.md" "Operational Support"
-assert_contains "Usage.md" "操作支持"
+assert_contains "Usage.md" "运行、测试和排障"
 
 printf 'PASS: operational support guard contract is complete\n'

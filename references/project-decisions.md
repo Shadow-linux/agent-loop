@@ -3,7 +3,7 @@
 Decision & Design / ADR is the requirement-landing bridge between accepted requirements and feature implementation. It turns shared business-flow, domain, data, architecture, recovery, and non-functional needs into one coherent design before feature stories fragment the work.
 
 ```text
-Requirement -> Design Readiness Check -> Decision & Design If Needed -> Feature Mapping -> Product Brief / Feature Spec
+Requirement Product Definition -> Design Readiness Check -> Decision & Design If Needed -> Feature Mapping -> Feature Spec Product Slice
 ```
 
 Requirement explains what humans want and how success is recognized. Decision & Design explains how the complete requirement can work across features and which shared rules every feature must preserve. Feature artifacts implement and verify assigned design slices.
@@ -12,7 +12,7 @@ PRD / Requirement Product Model owns product meaning. ADR consumes accepted prod
 
 Concept Foundation and Requirement Product Model do not choose tables, stores, event topics, providers, or other technical representations. Decision & Design may select those representations only after requirement acceptance and through its own Human Gate, while preserving accepted product meaning.
 
-Design Readiness Check is a required method at Requirement Archive, Product Brief, and Feature Spec boundaries; it is not a standalone stage.
+Design Readiness Check is a required method at Requirement Record / Archive and Feature Spec boundaries; it is not a standalone stage. A legacy Feature Product Brief may trigger the same check during Resume or Follow-up, but new work does not author one.
 
 Decision Scan / Placement remains a lightweight method inside Decision & Design. It decides where a decision belongs; it is not the whole design stage.
 
@@ -30,14 +30,14 @@ Creating `.agent-loop/decisions/` does not enable enterprise memory mode. The di
 
 `project.md` records whether `.agent-loop/decisions/` exists so future agents can rediscover accepted project decisions in simple or enterprise memory mode.
 
-Before Decision & Design, Product Brief, or Feature Spec:
+Before Decision & Design or Feature Spec:
 
 1. Read decision links already named by the active requirement, `product.md`, or `spec.md`.
 2. List `.agent-loop/decisions/*.md` filenames and statuses when the project Decisions index is present.
 3. Read other likely relevant accepted decisions by domain, boundary, data, runtime, or workflow overlap.
 4. Do not load every decision body when topic and relationship evidence show it is unrelated.
 5. Do not create a duplicate decision merely because an existing accepted decision was not linked from the current feature yet; propose the missing reference instead.
-6. Before writing Product Brief or Feature Spec, present missing Applicable Decision references for human confirmation and backfill the approved links.
+6. Before writing a Feature Spec Product Slice, present missing Applicable Decision references for human confirmation and backfill the approved links.
 
 Feature Monthly Archive changes the path of historical ownership, not accepted decision meaning. An ADR `feature-local` or Design Slice owner may resolve an archived closed Feature Spec through the stable Feature ID plus `features/archive.md`; the locator row and month path must agree, and `closed` is historical coverage only. New work or reopened execution must rehydrate the owner to a flat path first. Archive/rehydrate may update only the approved locator/path reference and must not rewrite accepted ADR content, status, rationale, Human Review Evidence, or product semantics.
 
@@ -53,7 +53,7 @@ Do not create an ADR during ordinary chat or early fuzzy requirements discussion
 
 ## Design Readiness Check
 
-Run Design Readiness Check before an accepted requirement enters feature construction, and repeat it when Product Brief, Technical Design, or Drift reveals new shared design needs.
+Run Design Readiness Check before a confirmed product definition enters feature construction, and repeat it when a Product Slice, legacy Product Brief, Technical Design, or Drift reveals new shared design needs.
 
 Recommend `Decision & Design If Needed` when any signal is true:
 
@@ -140,15 +140,17 @@ The decision file status cannot become `accepted` without explicit human confirm
 
 ## Effective Requirement Snapshot
 
-Every ADR driven by a Requirement Product Model resolves the requirement README `Effective Concept Foundation` block before technical design. If the block exists, follow `Effective Source`; older requirement sets may use the reviewed requirement document as a backward-compatible source.
+Every ADR driven by accepted product semantics resolves exactly one Requirement Set README source before technical design. New sets use `Effective Product Definition`; older sets retain the `Effective Concept Foundation` / reviewed `requirement.md` reader. Never add both pointers or migrate a legacy source just to start ADR work.
 
 Record this snapshot near the ADR header:
 
 ```text
-Effective Concept Source:
-Concept Foundation Status: accepted | concept-foundation-not-needed
+Effective Product Source:
+Product Definition Profile: brief | standard
+Product Review: confirmed
 Accepted Concept IDs:
 Accepted Requirement Model IDs:
+Accepted Product Rule References:
 Upstream Compatibility: current | review-required
 Last Compatibility Check:
 Trace Applicability: required | not-applicable
@@ -157,22 +159,24 @@ Trace Not-Applicable Reason:
 
 Rules:
 
-- a triggered Concept Foundation must be `accepted`; `candidate` or `reopened` returns to the Human Grill Contract before ADR work continues
-- list only accepted Concept IDs and the accepted Requirement Model IDs declared inside this ADR's coherent decision scope
+- a new source must have Product Review `confirmed`; a triggered internal Concept Foundation must be accepted inside that Product Definition; pending, `candidate`, or `reopened` meaning returns to the Human Grill Contract before ADR work continues
+- list only accepted Concept IDs, accepted Requirement Model IDs, and resolvable Product Rule section anchors declared inside this ADR's coherent decision scope
 - cite or concisely summarize unchanged accepted meaning; do not copy a new definition into the decision
 - resolve the effective source again before ADR acceptance and before a dependent Feature Spec, Plan, or implementation begins
 - `Upstream Compatibility` is a dependency judgment, not a new decision status
-- when the effective source is reasoned `concept-foundation-not-needed`, record both accepted-ID fields as `none`, set trace applicability to `not-applicable`, give a concrete reason, and do not invent product-model tables
+- Product Rules use source anchors such as `product.md#approval-authority`; do not invent `RULE-*`
+- a confirmed Brief with no stable model IDs or Product Rule references records all accepted-ID/rule fields as `none`, sets trace applicability to `not-applicable`, gives a concrete reason, and does not invent product-model tables
+- legacy snapshots may retain `Effective Concept Source` and `Concept Foundation Status`; when legacy source is reasoned `concept-foundation-not-needed`, use the same reasoned not-applicable shape. Never mix new and legacy snapshot metadata; legacy records may retain either the exact old Coverage Hard Gate or the current unified gate without migration
 
 ## Requirement Model Scope Inventory
 
-Before choosing the ADR scope, inventory every stable Requirement Model ID in the effective source: relationship (`REL-*`), permission (`PERM-*`), command/event (`CMD-*` / `EVT-*`), flow (`FLOW-*`), state (`STATE-*`), product model (`PM-*`), and exception/recovery (`EX-*`). Give each source ID exactly one scope disposition:
+Before choosing the ADR scope, inventory every stable Requirement Model ID and accepted Product Rule section anchor in the effective source: relationship (`REL-*`), permission (`PERM-*`), command/event (`CMD-*` / `EVT-*`), flow (`FLOW-*`), state (`STATE-*`), product model (`PM-*`), exception/recovery (`EX-*`), plus references such as `product.md#approval-authority`. Give each source reference exactly one scope disposition:
 
 ```text
 in-scope | covered-by-accepted-decision | feature-local | proposed-decision | not-applicable
 ```
 
-- `in-scope` names this ADR; these IDs exactly match `Accepted Requirement Model IDs` and the Technical Landing Trace rows
+- `in-scope` names this ADR; model IDs and Product Rule references exactly match the snapshot and Technical Landing Trace rows
 - `covered-by-accepted-decision` names an existing accepted decision Markdown path
 - `feature-local` names an existing Feature Spec path, or an explicit canonical future path prefixed with `planned:`
 - `proposed-decision` names an existing decision draft, or an explicit canonical future path prefixed with `planned:`
@@ -188,7 +192,7 @@ Use one generic trace table inside the ADR:
 |---|---|---|---|---|---|---|
 | `<accepted-model-id>` | link or concise unchanged meaning | landed / covered-by-accepted-decision / feature-local / not-applicable |  |  |  |  |
 
-Every in-scope accepted relationship, permission rule, command, event, flow step, state rule, product-model row, and exception/recovery row needs exactly one disposition. Do not require an ADR to copy the whole PRD; the Scope Inventory accounts for the complete stable-ID set, while the snapshot and trace declare the coherent scope handled or deliberately delegated by this ADR.
+Every in-scope accepted relationship, permission rule, command, event, flow step, state rule, product-model row, exception/recovery row, and Product Rule anchor needs exactly one disposition. Do not require an ADR to copy the whole PRD; the Scope Inventory accounts for the complete source-reference set, while the snapshot and trace declare the coherent scope handled or deliberately delegated by this ADR.
 
 Disposition rules:
 
@@ -199,6 +203,14 @@ Disposition rules:
 
 ADR must not create, rename, split, merge, or redefine a Concept, relationship, role/permission, command/event, business flow, product state, invariant, exception/recovery meaning, or product fact ownership. If accepted meaning is missing or insufficient, return to Requirements Discussion rather than filling the gap in technical design.
 
+## Optional Visual Evidence
+
+When a Visual Trigger makes a technical boundary, sequence, state/lifecycle, data flow, or option comparison materially easier to review, use the Optional Visual Communication Adapter under one bounded Visual Scope Grant. A working render is disposable: human feedback must be rewritten into the proposed ADR before review.
+
+Durable visual evidence is optional and independently confirmed. It uses `Visual Manifest Contract: source-render-v1` in the ADR `Optional Visual Evidence` section and records one typed source plus one validated render, their SHA-256 values, exact `archify@<version>` generator, validation evidence, status, one concrete Review Question, and Semantic References. Semantic References must resolve to accepted Product Concept/Model IDs, Product Rule anchors, or an ADR section anchor.
+
+The visual cannot accept the ADR, change Requirement product meaning, satisfy Requirement Model Technical Landing coverage, or replace Human Review Evidence. Missing/mismatched source/render pairs and stale/unknown references fail structural preflight. Remove the optional section when unused.
+
 ## Coverage Hard Gate
 
 A decision cannot become `accepted` while coverage is missing or Upstream Compatibility is `review-required`.
@@ -208,8 +220,8 @@ The Agent first runs structural preflight while the ADR remains `proposed`. Only
 Before asking for ADR acceptance or allowing a dependent Feature Spec:
 
 1. resolve the effective source and confirm compatibility is `current`;
-2. confirm every stable Requirement Model ID in the effective source has one Scope Inventory row;
-3. confirm the in-scope inventory IDs exactly equal the snapshot IDs and trace rows;
+2. confirm every stable Requirement Model ID and accepted Product Rule reference in the effective source has one Scope Inventory row;
+3. confirm the in-scope inventory references exactly equal the snapshot model IDs plus Product Rule references and the trace rows;
 4. confirm every `landed` row has a concrete Technical Landing, Preserved Invariant, Design Slice, and Verification target;
 5. confirm accepted-decision paths exist and are accepted; confirm feature-local paths either exist or use an explicit canonical `planned:` path;
 6. present every `not-applicable`, `feature-local`, proposed-decision, deferred, and out-of-scope item to the human;
@@ -220,7 +232,7 @@ An `Applicable Decisions` reference proves awareness only. It cannot replace Req
 
 ## Upstream Compatibility And Drift
 
-Re-run compatibility review when the requirement README effective source changes or newly accepted requirement evidence changes Concept IDs, Requirement Model IDs, or their accepted meaning.
+Re-run compatibility review when the Requirement Set README effective source changes or newly accepted product evidence changes Concept IDs, Requirement Model IDs, Product Rule anchors, or their accepted meaning.
 
 1. set the dependency judgment to `Upstream Compatibility: review-required`;
 2. stop new dependent Feature Spec, Plan, and implementation work;
@@ -230,6 +242,8 @@ Re-run compatibility review when the requirement README effective source changes
 6. preserve the accepted ADR for audit; do not rewrite its decision meaning in place.
 
 Compatibility review may add references or current evidence to an accepted record only when repository policy permits append-only metadata. It must not use a metadata update to disguise a changed decision.
+
+Post-Merge Memory Reconciliation preserves accepted ADR technical meaning and supersession history. Code/result drift is evidence for Human Review, not permission to rewrite an accepted decision in place; any incompatible meaning still requires the existing Human-gated superseding ADR path.
 
 ## Triggered Operational Landing
 
@@ -252,8 +266,8 @@ Use these relationship fields consistently:
 
 | Field | Meaning | Primary Location |
 |---|---|---|
-| Source Requirements | The requirement source that triggered or constrains the decision or feature | decision file, product.md, spec.md |
-| Applicable Decisions | Existing decisions that constrain this requirement, product brief, or feature | requirement README, product.md, spec.md |
+| Source Requirements | The Requirement Product Definition that triggered or constrains the decision or feature | decision file, Requirement `product.md`, Feature `spec.md` |
+| Applicable Decisions | Existing decisions that constrain this requirement or feature | requirement README, Requirement `product.md`, Feature `spec.md` |
 | Triggered Decisions | New decisions caused by a requirement | requirement README |
 | Implements Decisions | Which decision slice this feature implements | spec.md |
 | Implemented By | Which features implement a requirement or decision | requirement README, decision file |
@@ -263,7 +277,7 @@ Requirement README owns lifecycle, phase mapping, triggered decisions, and imple
 
 Decision files own technical design reasoning: goals, accepted product-concept references, business-flow landing, chosen option, architecture design, consequences, and verification closure. The source PRD / Requirement Product Model continues to own product definitions.
 
-Feature `product.md` and `spec.md` reference applicable decisions and state which part of a decision they implement. They do not restate the whole decision.
+New Feature `spec.md` references applicable decisions and states which Product Slice / Design Slice it implements. Existing legacy Feature `product.md` remains reader-compatible, but new work does not create or refresh one.
 
 ## Design Slice Coverage
 
@@ -294,7 +308,7 @@ Rules:
 | Requirements Discussion | Capture Design Readiness evidence and early Decision Candidates; do not create ADR from fuzzy chat |
 | Requirement Archive | Run Design Readiness Check; record status, signals, and recommended next stage after human review |
 | Decision & Design If Needed | Complete the shared business/architecture blueprint, run Decision Scan / Placement, and assign all required design slices |
-| Product Brief | Route newly discovered product tradeoffs and shared design needs back through Design Readiness |
+| Legacy Product Brief compatibility | Route newly discovered product tradeoffs and shared design needs back to Requirements Discussion / Design Readiness; do not rewrite the legacy brief |
 | Feature Spec | Load applicable decisions and implement assigned design slices before writing final behavior and acceptance |
 | Technical Design / Code Context | Re-scan if implementation introduces long-term boundaries, dependencies, data, transactions, consistency, concurrency, or recovery choices |
 | Plan Gate | Block plans that bypass unresolved required decisions |

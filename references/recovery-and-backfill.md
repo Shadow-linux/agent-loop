@@ -29,6 +29,15 @@ Use this protocol when:
 - implementation behavior differs from `spec.md`
 - the human asks to continue an old project or old feature
 - Feature Monthly Archive memory is unsafe: a `features/archive.md` target is missing, an archived directory lacks a row, a Feature ID exists at both flat/month paths, a `rehydrated` row points to a month path, an incomplete `.archive-txn` remains, or verified apply leaves old durable references
+- a targeted Post-Merge Memory Reconciliation rewrite failed verification/restore, or an explicitly authorized Full Memory Audit lacks one of its four SHAs, has a stale/invalid Plan Hash, an unresolved `.memory-reconciliation-txn/`, a failed post-check, or a restore that cannot prove exact recovery
+
+## Post-Merge Memory Reconciliation Recovery
+
+Ordinary stale-memory recovery starts from current code reality plus protected human intent and asks before backfill. A failed targeted conflict resolution recovers only its changed files from captured preimages, then rechecks the original conflict and direct references. It does not escalate into an all-memory scan automatically.
+
+An explicitly authorized Full Memory Audit / Recovery transaction is different: it must recover the exact Merge Base, Source, Target-before, and Merged Code full SHAs, Source/Target branch context, Full Memory Audit report, reviewed Plan Hash, and exact transaction ID when present.
+
+Do not fabricate missing SHAs, infer a deleted Source snapshot from the Result, pick the newest transaction, or silently turn a targeted conflict into Full Memory Audit. Recover evidence from Git/reflog/retained branch or preserved report context when possible; otherwise report the missing evidence and stop. Restore changes only the recorded memory transaction, never merged code or Git refs. A restored Full Audit report remains blocking until a new exact plan is reviewed or the human chooses another safe Recovery path.
 
 ## Re-Adopt Agent Loop Project
 
@@ -99,7 +108,7 @@ task status/order/scope -> tasks.md
 test reality/commands/cases -> tests.md
 active execution unit -> plan.md
 evidence/history/decisions/conflicts -> notes.md
-new human material -> requirements/<archive-date>-<topic>/
+new human material -> requirements/<record-date>-<topic>/
 ```
 
 Never edit original requirement files to make them match code. Add a new requirement-set file or record a conflict in `notes.md`.

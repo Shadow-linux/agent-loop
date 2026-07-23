@@ -46,6 +46,12 @@ jobs:
           tests.test_feature_monthly_archive_scan
           tests.test_feature_monthly_archive_apply
           tests.test_feature_monthly_archive_restore
+          tests.test_memory_reconciliation_support
+          tests.test_memory_reconciliation_scan
+          tests.test_memory_reconciliation_check
+          tests.test_memory_reconciliation_apply
+          tests.test_memory_reconciliation_restore
+          tests.test_lightweight_change_scan
           -v
 
       - name: Check Feature Monthly Archive command entrypoints
@@ -54,3 +60,13 @@ jobs:
           python scripts/check-feature-monthly-archive.py --help
           python scripts/apply-feature-monthly-archive.py --help
           python scripts/restore-feature-monthly-archive.py --help
+
+      - name: Check Post-Merge Memory Reconciliation command entrypoints
+        run: |
+          python scripts/scan-memory-reconciliation.py --help
+          python scripts/check-memory-reconciliation.py --help
+          python scripts/apply-memory-reconciliation.py --help
+          python scripts/restore-memory-reconciliation.py --help
+
+      - name: Check Lightweight Change command entrypoint
+        run: python scripts/scan-lightweight-changes.py --help

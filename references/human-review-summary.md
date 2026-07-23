@@ -17,13 +17,13 @@ risk / blocker / human decision = never hidden
 
 Use before human confirmation for:
 
-- Concept Foundation acceptance
+- Product Definition / Product Human Review, including cumulative internal Concept Foundation coverage when triggered
 - Decision & Design record creation, acceptance, compatibility update, or superseding decision
 - Project Entry / Project Entry Scan
+- Branch Strategy recommendation/adoption and every requested Git action
 - legacy onboarding-db reference cleanup
 - Remote Project Discovery
 - Requirement Archive
-- Product Brief
 - Feature Spec
 - Work Breakdown / Tasks
 - Delivery Contract acceptance or breaking change
@@ -92,24 +92,34 @@ High-confidence rows can be drafted, but cannot become reviewed or written as ac
 
 ## Stage Table Patterns
 
-### Concept Foundation Approval
+### Product Definition Approval
 
-Use after the one-question-per-turn Human Grill Contract has resolved each blocker and before changing a triggered foundation to `accepted`.
+Use after Product Definition Depth Scan and, for Standard, after the one-question-per-turn Human Grill Contract has resolved each blocker. This is the cumulative Product Human Review surface; internal Concept Foundation / Requirement Product Model methods do not add another approval stage.
 
-| Concept ID | Recommended Definition | Identity / Lifecycle Boundary | Relationship / State Impact | Evidence | Open Conflict | Human Decision |
-|---|---|---|---|---|---|---|
-|  |  |  |  |  | none / blocking | accept / revise / keep candidate |
+| Review Item | Agent Recommendation | Source Evidence | Included / Not-Applicable Detail | Open Blocker / Risk | Human Decision |
+|---|---|---|---|---|---|
+| Profile | brief / standard with trigger |  |  | none / blocking | confirm / revise |
+| Product Value / Scope | problem, outcome, in/out scope |  |  | none / blocking | confirm / revise |
+| Concepts / Rules | cumulative accepted meanings |  | Concept IDs / rule anchors / not-applicable reason | none / blocking | confirm / revise |
+| Relationships / Permissions | accepted boundaries |  | IDs / not-applicable reason | none / blocking | confirm / revise |
+| Actions / Flow / State | accepted journey and terminals |  | IDs / not-applicable reason | none / blocking | confirm / revise |
+| Product Facts / Exceptions | fact ownership and recovery |  | IDs / not-applicable reason | none / blocking | confirm / revise |
+| Derived Visuals | working / current durable / stale / absent | Visual Scope Grant + source IDs + semantic digest | working render, `source-render-v1` pair, or fallback | none / blocking | confirm meaning / regenerate / omit |
+| Design Readiness | none / candidate / required |  | candidate links | non-blocking / blocking | acknowledge / revise |
 
 Add:
 
 ```text
-Effective Concept Source:
-Requirement Product Model derivation authorized: yes | no
+Requirement Set path:
+Effective Product Definition draft/source:
+Product Definition Profile: brief | standard
+Product Review decision: confirm | revise
+Requirement lifecycle decision: separate / unchanged / explicitly <status>
 Artifacts to write/update:
-Recommended next stage: continue Requirements Discussion | Requirement Archive
+Recommended next stage: continue Requirements Discussion | Requirement Record / Archive | Design Readiness
 ```
 
-This summary is cumulative confirmation of the current concept baseline. It does not replace the strict one-question-per-turn Grill used to resolve blocking meanings, and it does not accept implementation, create an ADR, archive files, or start a feature.
+This summary is cumulative confirmation of the current product baseline. It does not replace the strict one-question-per-turn Grill used to resolve blocking meanings. Product Human Review confirmation is non-bypassable for a new Effective Product Definition: `revise` or an unresolved row remains in Requirements Discussion. Product Review confirmation does not authorize Requirement acceptance, Feature start, ADR acceptance, code execution, or Git actions. Requirement Record / Archive still requires disclosure of exact files and byte-stable human sources.
 
 ### Decision & Design Approval
 
@@ -117,7 +127,7 @@ Use before creating, accepting, superseding, or materially updating a project / 
 
 | Item | Review Content |
 |---|---|
-| Effective Requirement Source | effective source path, Concept Foundation status, Last Compatibility Check, and `current` / `review-required` |
+| Effective Requirement Source | Effective Product Definition path/Profile/Product Review, or legacy Effective Concept Foundation status, plus Last Compatibility Check and `current` / `review-required` |
 | Requirement Model Scope | source total / in-scope / existing-decision / feature-local / proposed-decision / not-applicable / missing |
 | Requirement Model Coverage | in-scope total / landed / existing-decision / feature-local / not-applicable / missing |
 | Chosen Technical Decision | chosen option and the main rejected alternatives |
@@ -125,13 +135,14 @@ Use before creating, accepting, superseding, or materially updating a project / 
 | Migration / Compatibility / Rollout | triggered / not-triggered for each concern, with reason or linked section |
 | Design Slice Ownership | planned / unassigned / deferred / out-of-scope, including affected Feature Specs |
 | Verification | proof direction for every landed row and accepted-decision dependency |
+| Optional Visual Evidence | absent / working only / current durable; review question, semantic refs, source/render validation; never acceptance evidence |
 | Human Decision | accept / revise / return to Requirements Discussion / require superseding ADR |
 
 Add:
 
 ```text
 ADR path:
-Effective Concept Source:
+Effective Product Source or legacy Effective Concept Source:
 Upstream Compatibility: current | review-required
 Artifacts to write/update:
 Recommended next stage: Decision & Design If Needed | Feature Spec | Requirements Discussion
@@ -224,6 +235,18 @@ For breaking changes, list every affected consumer, scan evidence, compatibility
 | Explicit Non-Goals | no onboarding-db / no deep dives / no onboarding diagrams |  |  | approve / revise |
 | Write Plan | project memory / guidance |  |  | approve / revise |
 
+### Branch Strategy Adoption
+
+| Item | Current Evidence | Recommended Value | Risk / Reason | Human Decision |
+|---|---|---|---|---|
+| Adoption Status | unconfirmed | accepted / declined / not-needed | recommendation is not adoption | human only |
+| Profile | existing-project / unclear / not-applicable | existing-project / human-guided-release / not-applicable | declined requires not-applicable plus a concrete reason | human only |
+| Main / Release / Development Patterns |  |  | naming and release boundary | human only |
+| Release Immutability |  | released / sealed | repairs require a new patch | human only |
+| Customer Isolation |  | no wholesale reverse merge | protects standard product line | human only |
+| Deletion Policy |  | temporary branch only after merge evidence | release branches retained | human only |
+| Target Release Context |  | standard / customer pointer | no Git action authorization | human only |
+
 ### Legacy Onboarding-DB Reference Cleanup
 
 | File / Item | Action | Change Summary | Source Evidence | Confidence | Affects Long-Term Memory | Suggested Action |
@@ -252,6 +275,42 @@ If subagent scan results conflict, include:
 
 The scan is read-only. The Batch Human Gate authorizes only the displayed expected plan SHA-256; a stale plan requires a new scan and review. Feature Monthly Archive maintains `features/archive.md`; rehydrate before reopened execution.
 
+### Bug Triage And Resolution Path Review
+
+| Item | Status / Value | Evidence | Human Decision |
+|---|---|---|---|
+| Bug Identity | new / existing / duplicate-candidate / reopen-candidate / unclear | Bug Index + README + overlap evidence | confirm / investigate |
+| Report Origin | person / customer / group / qa / monitoring / automated-test / agent / external-ticket / other / unknown | source reference or `unknown` | acknowledge |
+| Observed Behavior | concise failure fact | reproduction/log/test/runtime evidence | acknowledge / revise |
+| Expected Behavior | accepted / ambiguous / conflicting | Requirement / ADR / Contract / Feature / explicit human evidence | confirm / requirements discussion |
+| Duplicate / Reopen | none / candidate / confirmed | canonical Bug or prior Close/Reopen evidence | confirm / investigate |
+| Severity / Priority | evidence-backed / human-decided / unknown | impact + explicit priority evidence | confirm / revise |
+| Requirement Impact | none / violates-accepted-behavior / ambiguity-found / change-required | related Requirement evidence | no change / reconcile / discuss |
+| Recommended Resolution Path | investigate-first / flow-back / linked-feature / maintenance-fix / requirement / no-fix | Candidate Match Matrix + rationale | confirm / revise / stop |
+| Target | exact Feature / Requirement / investigation / candidate Resolution | resolved locator/source | confirm / revise |
+| Requested Authorization | exact Resolution Path only, plus separately named Feature/Requirement action if requested | current review | human only |
+| Explicitly Not Authorized | Bug close/reopen, other Feature/Requirement actions, archive apply, branch, submit, commit, push, tag, release, publish unless separately named | gate inventory | acknowledge |
+| Human Decision | exact bounded decision | current review | human only |
+
+Unknown Origin does not block progress. Similar titles do not prove duplicate identity. Resolution Path approval cannot be reused as Feature creation/reopen, Requirement change, Bug close, or Git authorization.
+
+### Bug Verification And Close Review
+
+| Item | Status / Value | Evidence | Human Decision |
+|---|---|---|---|
+| Bug ID / Current Status | `verifying` / other | Bug README + Index | acknowledge / investigate |
+| Candidate Resolution | fixed / duplicate / not-a-bug / cannot-reproduce / accepted-risk / superseded | required Resolution evidence | confirm / revise / keep-verifying |
+| Fix Feature | exact Feature or no-fix | Feature Spec/notes and locator | acknowledge / revise |
+| Original Reproduction / Substitute | pass / fail / incomplete | Bug Verification Matrix | accept / rerun |
+| Regression / Safety Evidence | pass / fail / incomplete | fresh commands/results | accept / revise |
+| Review / Drift | complete / missing / conflict | current records | proceed / stop |
+| Remaining Risk | none / concrete risk | evidence and impact | accept / resolve |
+| Bug Close Decision | confirm / revise / keep-verifying | Bug-specific closure evidence | human only |
+| Feature Close Decision | confirm / continue / pause / revise-scope | Feature Completion Check | human only |
+| Explicitly Not Authorized | Feature close, submit, branch, commit, push, tag, release, publish unless separately confirmed | gate inventory | acknowledge |
+
+Bug Close and Feature Close may appear in one summary but remain separate decisions. Passing Feature tests is not the Bug Close Gate, and commit/push approval is not a close decision.
+
 ### Feature Completion Check
 
 | Check | Status | Evidence | Issue |
@@ -279,6 +338,52 @@ Human Decision:
 | Diff Review | clean / issues |  |
 | Unrelated Changes | none / present |  |
 | Action | prepare / commit / PR text / skip | human decision needed |
+
+### Branch Strategy And Action Review
+
+| Item | Status / Value | Evidence | Human Decision |
+|---|---|---|---|
+| Observed Policy / Git Evidence | coherent / conflicting / incomplete | native policy + Git evidence | acknowledge / investigate |
+| Adoption Status / Profile |  | `project.md` | acknowledge / revise |
+| Source Branch / Branch Class |  | Git + feature evidence | acknowledge / revise |
+| Target Release Context / Target Branch |  | accepted policy + plan | acknowledge / revise |
+| Sealed Check | open / released / sealed / unknown | release evidence | proceed / stop |
+| Customer Isolation | pass / fail / unknown | branch ancestry and policy | proceed / stop |
+| Verification / Review / Drift | pass / fail / missing | current feature evidence | proceed / stop |
+| Merge Evidence / Deletion Policy | complete / missing / not-applicable | merge/submit evidence | delete / retain / stop |
+| Requested Authorization | prepare / create / switch / commit / push / merge / delete / tag / release / publish | latest human request | human only |
+| Explicitly Not Authorized | every action outside the request | review summary | acknowledge |
+| Remaining Risk / Blocker | none / exact blocker | evidence and impact | accept / resolve / stop |
+| Human Decision | exact bounded action or no action | current review | human only |
+
+An accepted Branch Strategy, Target Release Context, plan, or auto mode is never action authorization. Creation or switching of one exact development branch uses the Branch Action Gate. Ask for the exact mutation after current evidence is shown; a cleanup decision must name the temporary branch and its merge evidence.
+
+### Post-Merge Memory Conflict Decision
+
+Use only when targeted evidence cannot determine one current meaning. Do not use it for `reconciliation-not-needed` or fact-determined rewrites.
+
+| Item | Observed value | Minimum evidence | Consequence | Human decision |
+|---|---|---|---|---|
+| Conflict | exact incompatible current claims | owner and direct references | why both cannot remain | choose / clarify / stop |
+| Option A | concrete current meaning | supporting authority/facts | affected owner/references |  |
+| Option B | concrete current meaning | supporting authority/facts | affected owner/references |  |
+| Agent Recommendation | one recommended option | evidence and remaining uncertainty | expected rewrite/verification | accept / revise |
+| Explicitly Not Authorized | commit, push, tag, release, publish, merge, branch delete, Source cleanup | independent gates | no later action follows | acknowledge |
+
+Recommendation: decide only the unresolved semantic choice; let the Agent perform and verify the resulting targeted rewrite.
+
+### Full Memory Audit / Recovery Authorization
+
+Use only when the human explicitly requests a repository-wide audit/forensic recovery or broad corruption prevents a bounded conflict scope. This is not the normal merge path.
+
+| Review group | Required content | Evidence | Human decision |
+|---|---|---|---|
+| Start scope | exact reason normal targeted reconciliation is insufficient | corruption/forensic evidence | authorize audit / stop |
+| Snapshot context | Base, Source, Target-before, Result and accepted memory root | full SHAs and branch context | confirm / revise |
+| Exact plan | all changed/unchanged guards, plan hash, post-check, restore | generated Full Audit report | approve exact hash / reject |
+| Explicitly Not Authorized | commit, push, tag, release, publish, merge, branch delete, Source cleanup | independent gates | acknowledge |
+
+The scanner must receive `--full-audit-authorized`. A changed plan requires a new hash and a new review.
 
 ## Rules
 

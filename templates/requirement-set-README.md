@@ -24,15 +24,25 @@ Exit Condition:
 
 One-line summary:
 
-## Effective Concept Foundation
+Related Bugs:
+Requirement Impact: none | violates-accepted-behavior | ambiguity-found | change-required
 
-Status: not-recorded | candidate | accepted | reopened | concept-foundation-not-needed
-Effective Source: requirement.md | YYYY-MM-DD-concept-foundation-<slug>.md | none
+Bug relationships are optional `0..N`. They do not rewrite Requirement sources or automatically change Requirement/Delivery Phase lifecycle; only Human-gated Requirement Reconciliation may update delivery truth.
+
+## Effective Product Definition
+
+Source: product.md | YYYY-MM-DD-product-follow-up-<slug>.md | none
+Profile: brief | standard | none
+Product Review: pending | confirmed | none
 Previous Source: none
 Last Confirmed: YYYY-MM-DD | none
 Reason / Reopen Trigger:
 
-This block is an effective-status pointer only. Concept definitions and the Requirement Product Model stay in the referenced human-reviewed source file.
+This block is an effective-source and freshness pointer only. Product meaning stays in the referenced human-reviewed source file.
+
+Product Review confirmation does not change Requirement Status or authorize Feature start.
+
+Legacy reader compatibility: an existing Requirement Set may keep its historical `Effective Concept Foundation` block. Never render both effective-pointer blocks in one new README and never bulk-migrate a legacy source.
 
 ## Delivery Phases
 
@@ -58,7 +68,7 @@ Status: not-scanned | design-not-needed | candidate | required | completed
 Shared Design Needs:
 -
 
-Recommended Next Stage: Decision & Design If Needed | Product Brief If Needed | Feature Spec
+Recommended Next Stage: Product Human Review | Decision & Design If Needed | Feature Spec with Product Slice
 
 Decision Records:
 -
@@ -81,9 +91,9 @@ Decisions caused by this requirement:
 
 ## Source Files
 
-- Requirement:
-- Requirement Document:
-- Concept Foundation Follow-ups:
+- Product Definition:
+- Product Definition Follow-ups:
+- Human Original Requirements:
 - Prototype:
 - Feedback:
 - Screenshots:

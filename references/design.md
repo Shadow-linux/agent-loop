@@ -12,23 +12,54 @@ The core constraints are:
 
 - single-person + CLI agent first
 - human controls goals, source requirements, and stage gates
+- A new Effective Product Definition cannot bypass Product Human Review confirmation. That confirmation remains separate from Requirement lifecycle, ADR, Feature start, implementation, and Git authorization.
 - agent controls workflow mechanics, artifacts, implementation, verification, and backfill
-- `.agent-loop/` is the default workflow memory root; legacy `agent-loop/` may be read and migrated only after confirmation
+- `.agent-loop/` is the default workflow memory root; legacy `agent-loop/` may be read and migrated only after confirmation. If both `.agent-loop/` and legacy `agent-loop/` exist, fail closed and route to Recovery.
 - local remote-entry directories use thin local `.agent-loop/remote.md` and `project.md`; full memory should live with the remote source of truth when possible
 - root `AGENTS.md` / `CLAUDE.md` are startup guidance artifacts that teach agents to use `agent-loop`
+- root `AGENTS.md` is a compact startup contract and first-hop Gateway projection; `runtime.md` owns the complete executable Stage Order and owning references hold detailed algorithms
 - `project.md` is project-level long-term memory
 - Project Memory Mode is `simple` by default; in `enterprise`, `project.md` becomes an index and long-term details move to optional `.agent-loop/project/*.md`
 - `project.md` owns cross-feature Product Context and Domain Language
+- Human-Guided Branch Management is an optional internal Branch Strategy Check, not a canonical stage and not a mandatory Git Flow migration
+- a durable Branch Strategy is recorded in `project.md` only after explicit human acceptance; `declined` uses `Profile: not-applicable` plus a concrete reason, not-needed keeps the lightweight existing-project profile, and an unconfirmed recommendation is never `accepted`
+- a Branch Action Gate confirms creation or switching of one exact development branch; strategy adoption, plan acceptance, and auto modes never satisfy it
+- `project.md` owns the accepted long-term strategy and current Target Release Context pointer; mutable per-feature branch state belongs in feature notes, plan, or Submit / Integrate evidence
+- standard and customer release aggregation branches are retained; formally released versions are sealed; customer customization cannot flow wholesale into the standard product line
+- branch-specific Target Release Context and Target Branch stops apply only to an adopted strategy or versioned/customer delivery; a confirmed simple `not-needed` path continues without those fields
+- Post-Merge Memory Reconciliation is an internal Submit / Integrate method after verified code integration, not a canonical stage or message intent; it never performs code merge or authorizes a later Git action
+- normal reconciliation is conflict-driven: no observed conflict means `reconciliation-not-needed`, no scan/report/reconciliation gate, and no later-gate blocker
+- for an observed conflict, the Agent reads only its semantic owner, direct references/indexes, and minimum direct evidence; it rewrites fact-determined current meaning and asks the human only when multiple meanings remain legitimate
+- accepted Requirement/Product/ADR/Human Decision meaning remains authoritative for its question while merged code/tests/config prove implementation reality; neither Source nor Target wins globally
+- the four-snapshot Target Canonical Memory Spine, Path Accounting Ledger, Desired Target Memory Snapshot, exact Plan Hash, and transactional Apply/Restore tooling belong only to explicitly authorized Full Memory Audit / Recovery
 - optional `.agent-loop/skills/` owns Human-gated project-local reusable capabilities; `INDEX.md` owns lifecycle and discovery metadata
+- Project Skill Discovery Guard checks active INDEX metadata before negative Project Skill claims or generic executable fallback, loads only a matched body, and fails closed on drift without adding a stage, status, cache, or execution grant
 - stable Web E2E capability belongs in `project.md`; feature-specific E2E cases belong in feature `tests.md` or `tests/e2e/*`
 - `requirements/` stores human source material packages and requirement lifecycle/backlog records as requirement set directories: requirements, prototypes, feedback, screenshots, recordings, links, follow-up notes, status, and optional `requirements/INDEX.md`
-- Concept Foundation is an internal Requirements Discussion / Requirement Product Grill method, not a canonical stage; when triggered, it stabilizes requirement-local product concepts before business-flow, state, and product-data modeling
-- the effective human-reviewed requirement source owns accepted Concept Foundation and Requirement Product Model semantics; after archive, requirement README indexes the effective source/status without copying details, and Product Brief / Feature Spec consume those meanings by reference
+- Human-Guided Bug Management is an internal method of `Feature Follow-up / Flow-back`, not a canonical stage or message intent
+- Lightweight Change Lane is an internal route before Feature construction for bounded ordinary non-Bug changes; it is not a canonical stage, message intent, Feature Type, Bug Resolution Path, lifecycle, status, or Auto Mode
+- Lightweight Execution Card is one persistent per-change execution source under `<memory-root>/changes/YYYY-MM/YYYY-MM-DD-<topic>.md`, with required background, adaptive Plan, progress, targeted verification, rollback, gate, result, and Memory Review fields; it creates no shared backlog or Archive lifecycle
+- Adaptive Depth lets the Agent vary Plan and test detail by real risk while fresh verification, diff review, rollback, scope control, memory impact, and Human Gates stay fixed
+- `bugs/INDEX.md` owns Bug inventory/backlog/locator state, while each Bug README owns stable identity, facts, evidence, lifecycle, Resolution Path, verification, close, and reopen history
+- Bug Report, Bug Record, Report Origin, Expected Behavior Evidence, Status, Resolution, and Reopen are distinct; Bug Status and Resolution form independent axes
+- Requirement owns product meaning, Bug Record owns defect coordination, and Feature owns every code repair; Bug-to-Requirement links are optional `0..N` and never auto-change Requirement lifecycle
+- Bug identity scans all Bug Index metadata without a cutoff; Feature ownership defaults to a 90-day metadata scan, evidence-ranked deep reads, and evidence-driven extension beyond 90 days
+- Bug intake order is complete Bug Index metadata scan -> 90-day Feature metadata scan -> evidence-ranked deep read / evidence-driven extended scan -> create/update/reopen Bug Record
+- archive changes Feature location, not identity or ownership; discovery and Human Review read archived evidence without rehydrate, while confirmed flow-back rehydrates before reopened execution
+- Report Origin introduces no Owner, Assignee, personnel permission, staffing, workload, or automatic Priority system
+- Adaptive Product Definition belongs inside Requirements Discussion and has only `brief | standard` depth; it is not a lifecycle or new canonical stage
+- Product Definition Depth Scan, Product Completeness Scan, Concept Foundation, Requirement Product Model, and derived visuals are internal Requirements Discussion methods; when triggered they stabilize product meaning before Design Readiness
+- Optional Visual Communication is a bounded internal method across Requirements Discussion, Feature Spec, Decision & Design, Onboarding Knowledge Base, and review/close communication; it is used only on a Visual Trigger and never becomes a canonical stage or semantic authority
+- a Visual Scope Grant bounds stage, question, source/IDs, type, working output, and iteration; installation, generation, durable recording, semantic acceptance, Feature, and Git actions remain independent gates
+- visual authority is accepted semantic text -> typed source definition -> derived render; durable `source-render-v1` records both files and validates both digests; after project-local visual-skill discovery, installed Archify is preferred and materially useful missing Archify is recommended before Markdown/Mermaid/ASCII fallback, while declined/unsupported/failed use never blocks the owning stage
+- Concept Foundation is an internal Requirements Discussion / Requirement Product Grill method, not a canonical stage.
+- the effective human-reviewed Requirement `product.md` owns new product semantics; README indexes `Effective Product Definition`, ADR consumes it for technical landing, and Feature Spec consumes it through Product Slice
+- original human materials remain byte-stable sources; confirmed Product Definition changes are append-only, while legacy `requirement.md`, `Effective Concept Foundation`, and Feature `product.md` remain readable without bulk migration
 - requirement-driven ADRs freeze an Effective Requirement Snapshot, inventory every source Requirement Model ID, and trace every in-scope accepted ID to a disposition, technical landing, Design Slice, and verification without taking ownership of product semantics
 - upstream requirement changes invalidate dependency availability until compatibility review; `review-required` is not a decision lifecycle status, and incompatible accepted decisions are superseded rather than rewritten
-- requirement-set dates mean archive date only, not deadlines or feature lifecycle dates
+- the canonical `<record-date>` in a Requirement Set name is the date that the set was recorded/archived, not a deadline or Feature lifecycle date; existing legacy `<archive-date>` names remain readable without rename
 - future/deferred work belongs in requirement sets and optional `requirements/INDEX.md`, not in `project.md`
-- `product.md` is optional feature-level product understanding when needed
+- new `product.md` is Requirement-level Brief/Standard product definition; Feature-level `product.md` is legacy reader-only compatibility
 - each feature has stable `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`; `contracts.md` is added only after human confirmation when producer-consumer boundaries need explicit handoff
 - Feature Monthly Archive is explicit closed-history maintenance: Feature ID is stable, eligible whole directories move to `features/YYYY-MM/<feature-id>/`, and root `features/archive.md` is only the locator/ledger
 - archive state is not feature lifecycle; active / blocked / paused features stay flat, and archived closed features rehydrate before reopened execution
@@ -47,18 +78,29 @@ The core constraints are:
 
 ```text
 Human Goal
+→ [internal] Branch Strategy Check when branch rules, target version, or customer isolation affect safe delivery
 → Operational Support when the goal is to use/run/test/deploy current project behavior without confirmed implementation
+→ [internal] Lightweight Change Assessment and persistent monthly card for bounded ordinary non-Bug local changes before Feature construction
 → Project Skill Creation / Update when a repeatable project workflow should become a durable local capability
 → Feature Workspace
 → Task / Test / Plan
 → Execute / Verify
 → Drift Check
-→ Feature Follow-up / Flow-back when post-close bug/change appears
+→ Feature Follow-up / Flow-back with internal Bug Management when explicit defect management appears
 → Feature Monthly Archive when the human explicitly asks to compact closed-history discovery
 → Project Memory Update
 → Submit / Integrate if requested
+  → [internal] Post-Merge Memory Reconciliation after verified code integration and before later Git gates only when an observed memory conflict exists
 → Resume / Pause / Close
 ```
+
+## Post-Merge Memory Reconciliation Invariant
+
+After code integration, first ask whether a concrete memory contradiction was observed. Different files, Source-only artifacts, unchanged memory, or possible unknown drift do not create a conflict. With no observed conflict, record `reconciliation-not-needed` only when the submit evidence needs it and continue to the next independent gate.
+
+For an observed conflict, treat Target memory as the current understanding, then reconcile it with Source facts already integrated, latest verified implementation/environment facts, accepted product/technical authority, and protected history. Read only the conflict owner, directly affected references/indexes, and minimum evidence. The Agent resolves deterministic conflicts; only unresolved semantic alternatives reach Human Review.
+
+Full four-snapshot accounting, exact Plan Hash, and transactional Apply/Restore remain available only as explicitly authorized Full Memory Audit / Recovery. Memory commit, push, release, and Source cleanup remain independent Human Gates. See `memory-reconciliation.md`.
 
 Abstract model:
 
@@ -80,15 +122,81 @@ Behavior Intent
 
 **Requirement**: human-provided need, goal, document, or natural-language request.
 
-**Concept Foundation**: a triggered method inside Requirements Discussion / Requirement Product Grill that derives requirement-local stable Concept IDs, definitions, identity, lifecycle boundaries, relationships, owners, state-bearing classification, invariants, and product fact-source questions from scenarios and evidence. It is not a stage or top-level artifact.
+**Lightweight Change Lane**: bounded non-Bug execution route before Feature construction. Explicit Bug Management and active Feature ownership take precedence; hard triggers use Feature, and uncertain impact returns to Human Choice before writes.
 
-**Requirement Product Model**: the product-layer derivation owned by the effective human-reviewed requirement source. It traces accepted concepts into relationships, roles/permissions, commands/events, business flow, product state, product data objects, invariants, and exception/recovery behavior without choosing tables, stores, protocols, or other technical representations. After archive, append-only follow-ups or a linked replacement set preserve prior sources while README indexes the effective source.
+**Lightweight Execution Card**: persistent per-change background, goal, scope, rationale, risk, Plan, progress, verification, rollback, Human Gate, result, and Memory Review control under the active memory root's `changes/YYYY-MM/YYYY-MM-DD-<topic>.md`. The card file is the execution source of truth; it is not a Feature `plan.md`, shared backlog, long-term project-memory owner, or authorization for later actions.
 
-**Effective Requirement Snapshot**: the read-only ADR header that resolves the requirement README's current Effective Concept Foundation pointer and records the accepted source, Concept Foundation status, accepted Concept IDs, accepted Requirement Model IDs, compatibility judgment, and last compatibility check. It does not copy or redefine product meaning.
+**Adaptive Depth**: Agent-owned risk-based selection of card detail, Plan steps, targeted verification, and the smallest meaningful RED/GREEN for isolated behavior. It never reduces safety, scope, rollback, evidence, memory, or action-specific gate invariants.
+
+**Change Memory Consolidation**: internal Agent semantic review triggered by `completed + pending >= 3`, the oldest pending age being greater than seven full calendar days, known memory drift, or pre-release review. The cross-platform scanner validates and inventories only; it never chooses meaning or writes memory. A post-merge conflict reads one relevant Change directly when needed and does not trigger global Change consolidation.
+
+**Bug Report**: one source event describing a suspected defect. It is intake evidence and does not automatically create a distinct stable identity.
+
+**Bug Record**: stable deduplicated entity for an expected-versus-observed mismatch. It owns provenance, observations, evidence, Status, Resolution, Resolution Path, relationships, verification, close, and reopen history. It does not own product meaning or implementation.
+
+**Report Origin**: optional provenance using `person | customer | group | qa | monitoring | automated-test | agent | external-ticket | other | unknown`. It never becomes Owner, Assignee, permission, Priority, branch, or responsibility evidence.
+
+**Bug Evidence**: bounded reproduction, impact, environment, investigation, failure, and verification evidence that excludes secrets and unnecessary production payloads.
+
+**Expected Behavior Evidence**: accepted Requirement, Decision / ADR, Delivery Contract, Feature Spec/test, stable product rule, prior verified behavior, or explicit human clarification used to judge the Bug claim.
+
+**Resolution Path**: one current Bug workflow relationship: `investigate-first | flow-back | linked-feature | maintenance-fix | requirement | no-fix`. It is Human-gated before creating/reopening a Feature or changing a Requirement.
+
+**Bug Status**: `reported | triaging | confirmed | in-progress | verifying | deferred | closed` processing state. An `in-progress` Bug requires `flow-back | linked-feature | maintenance-fix` plus one Human-confirmed Fix Feature Target. `investigate-first`, `requirement`, and `no-fix` are not Feature repair execution states.
+
+**Bug Resolution**: independent conclusion `unresolved | fixed | duplicate | not-a-bug | cannot-reproduce | accepted-risk | superseded`.
+
+**Reopen Record**: append-only event that preserves the prior Close Record, records recurrence/new evidence and human decision, returns the Bug to `triaging` or `confirmed`, and resets Resolution to `unresolved`.
+
+**Bug Ownership Lookback**: unbounded Bug Index metadata identity scan followed by a default 90-day Feature metadata scan, evidence-ranked deep reads, and evidence-driven extended scan.
+
+Bug relationships are:
+
+```text
+Bug Report 1..N -> 1 Bug Record
+Bug Record 0..N -> Requirement
+Bug Record 0..N -> Related Feature / Decision / Contract
+Bug Record 1 -> current Resolution Path
+Bug Record 0..1 -> Fix Feature while repair is active
+Feature 0..N -> Bug Record
+Bug Record 0..1 -> Duplicate Of canonical Bug Record
+```
+
+One coherent Feature may resolve several Bugs. Each Bug retains independent identity, verification, Resolution, close, and reopen evidence. There is no Bug Owner/Assignee model, and Bug artifacts never own tasks, tests, plans, or code execution.
+
+**Adaptive Product Definition**: the Requirements Discussion method that chooses `brief | standard`, drafts one Requirement `product.md` from preserved evidence, runs Product Completeness/Human Grill as needed, and stops at Product Human Review plus Requirement Record / Archive. Profile is depth only.
+
+**Concept Foundation**: a triggered internal Standard Product Definition method inside Requirements Discussion / Requirement Product Grill that derives requirement-local stable Concept IDs, definitions, identity, lifecycle boundaries, relationships, owners, state-bearing classification, invariants, and product fact-source questions from scenarios and evidence. It is not a stage or top-level artifact.
+
+**Requirement Product Model**: the applicable product-layer views owned inside a Standard effective Product Definition. It traces accepted concepts into relationships, roles/permissions, commands/events, business flow, product state, product facts, invariants, and exception/recovery behavior without choosing tables, stores, protocols, or technical representations. Product View Applicability prevents empty placeholder models.
+
+**Optional Visual Communication Adapter**: a presentation-layer helper used only when a Visual Trigger makes human confirmation materially clearer. Resolve a matching active project-local visual skill before installed Archify; when Archify is absent but materially useful, recommend its exact installation/use before offering Mermaid/table/ASCII fallback. Feature Spec views may explain an accepted Product Slice, feature responsibility, and its feature-local implementation/acceptance path, but any new product meaning returns to Requirements Discussion. The adapter may render working or durable views but cannot own product, decision, onboarding, lifecycle, or Git meaning.
+
+**Visual Scope Grant**: the bounded Human authorization for one stage, review question, authoritative source/IDs, diagram type, working-output class, and same-question iteration. New semantic scope, source, type, durable destination, stage, or external effect requires a new grant.
+
+**Durable Visual Artifact**: a `source-render-v1` pair whose typed source definition and derived render both exist, match the accepted semantic source, carry recorded SHA-256 digests and generator evidence, pass source/render validation, and remain current. A render alone is not an artifact of record.
+
+**Effective Requirement Snapshot**: the read-only ADR header that resolves Requirement README `Effective Product Definition` or the legacy `Effective Concept Foundation`, records Profile/review or legacy status, accepted Concept/Model IDs, Product Rule references, compatibility judgment, and last check. It does not copy or redefine product meaning.
 
 **Requirement Model Scope Inventory**: the source-wide ADR section that accounts for every stable Requirement Model ID (`REL-*`, `PERM-*`, `CMD-*`, `EVT-*`, `FLOW-*`, `STATE-*`, `PM-*`, and `EX-*`) before declaring the coherent ADR scope. It prevents silent omissions and records external, proposed, feature-local, or reasoned not-applicable ownership without becoming a separate artifact.
 
 **Requirement Model Technical Landing Trace**: the table inside an existing Decision & Design record that gives every in-scope accepted Requirement Model ID one disposition and, when landed by this ADR, connects it to a concrete technical landing, preserved invariant, Design Slice, and verification path. It is not a separate artifact or executable schema.
+
+**Branch Strategy**: a human-confirmed durable policy describing the project profile, main branch, release and development naming patterns, sealed-release rule, customer isolation, and cleanup policy. Accepted profiles are `existing-project | human-guided-release`; a declined recommendation records `Profile: not-applicable` plus its reason. It is optional guidance and does not itself authorize a Git mutation.
+
+**Branch Strategy Check**: an internal method used at Project Entry, planning, drift, and submit boundaries. It preserves a clear existing strategy, recommends the optional Human-Guided profile only when rules are confused, target release is unclear, or customer boundaries are risky, and stops before adoption until the human decides. Branch-specific target-context stops do not apply to a human-confirmed simple `not-needed` path.
+
+**Branch Action Gate**: the action-specific Human Gate for creating or switching one exact development branch. Strategy adoption, target selection, plan acceptance, and auto modes do not authorize it.
+
+**Current Branch Context**: the volatile feature-level evidence for branch class, work type, target kind/version/customer/topic, source/target, lifecycle, and last human decision. It does not replace Requirement, Feature, Task, ADR, verification, or lifecycle authority.
+
+**Release Aggregation Branch**: a retained `release/vX.Y.Z` standard line or `customer/<customer>/vX.Y.Z` customer line that receives reviewed work for one target version. Retention is policy; creation, merge, push, and release remain separately Human-gated actions.
+
+**Development Branch**: temporary feature, bugfix, or hotfix work named `feature|bugfix|hotfix/vX.Y.Z/<topic>` for standard delivery or `feature|bugfix|hotfix/<customer>-vX.Y.Z/<topic>` for customer delivery. It may be deleted only after merge evidence and human confirmation.
+
+**Target Release Context**: the current standard or customer release pointer needed to plan a feature safely. It names the target kind/version/customer and expected release branch without authorizing that branch to be created or changed.
+
+**Sealed Release**: a formally released version that is immutable. A repair moves to a new patch version and a new capability moves to a human-confirmed new version.
 
 **Prototype**: human-provided design artifact, screenshot, wireframe, or interaction reference.
 
@@ -127,6 +235,16 @@ If plan.md exists, it must be construction-grade: exact paths, code context, int
 **Drift**: mismatch between implementation, code reality, human decision, and existing `agent-loop` documents.
 
 **Project Skill**: a reusable project-specific capability under `.agent-loop/skills/<skill-name>/`. The index uses `proposed | active | disabled | deprecated` lifecycle and `bootstrap | on-demand` load policy. Active trust is bound to a validated content manifest. Loading is read-only preparation; every actual invocation requires the Execution Gate, with a named-skill/concrete-scope request accepted only when the disclosed plan stays fully inside that scope.
+
+## Project Skill Discovery Guard
+
+Project Skill Discovery Guard is an internal read-only controller invariant, not a canonical stage or message intent. After reliable memory/intent routing and before a stage-specific helper or generic executable fallback, the Agent inspects INDEX metadata, matches only active `bootstrap | on-demand` candidates, verifies the matched exact INDEX row/path/manifest, and loads only the matched body.
+
+The response-local outcomes are `matched-active | index-absent | no-active-match | project-skill-drift`; they are not Project Skill lifecycle values and are not persisted in a cache or new artifact. `matched-active` continues to the existing per-invocation Execution Gate. Ordinary chat remains response-only and does not require all Project Skill bodies to load.
+
+runtime/global Skill inventory does not prove that no Project Skill exists. Only `index-absent` or `no-active-match` permits generic fallback. `project-skill-drift` fails closed and cannot be bypassed through an equivalent generic operation.
+
+Context may reuse unchanged INDEX metadata within one uncompacted reliable stage, but context compaction, controller re-entry, long-session uncertainty, stage-boundary uncertainty, INDEX change, or manifest change requires rediscovery. Project-local matches remain below Agent Loop controller/Human Gates and above runtime/global helpers and built-in fallback.
 
 ## Entry Scenarios
 
@@ -297,19 +415,20 @@ Project Entry and memory bootstrap have priority over Feature Follow-up.
 Condition:
 
 ```text
-Human reports bug, regression, post-close correction, field/schema/algorithm/API change, test failure, screenshot issue, QA/user feedback, or small tweak
+Explicit Bug management intent, defect/regression/QA/post-close evidence, changed accepted behavior, or clear Feature ownership indicates follow-up
+Generic adjustment wording alone does not enter Feature Follow-up; route an actionable ordinary non-Bug change through Lightweight Change Assessment first.
 .agent-loop/ or legacy agent-loop/ memory exists
 ```
 
 Action:
 
 ```text
-Load feature-follow-up.md.
-Inspect Active / Paused / Closed features and recent feature docs.
-Use 30 days as the default lookback, not a hard boundary.
-Present Candidate Match Matrix.
-Recommend flow-back, linked new feature, maintenance-fix, or investigate-first.
-Resolve Active/Paused first, flat recent features second, `features/archive.md` third, and archived artifacts fourth. Rehydrate a confirmed archived owner before lifecycle change or execution.
+Load bug-management.md for explicit Bug management and feature-follow-up.md for ownership routing.
+Scan all Bug Index metadata for duplicate/reopen identity before Feature candidates; without explicit Bug management intent, do not create or update a Bug Record.
+Inspect Active / Paused / Closed Feature metadata in the default 90-day window, then deep-read evidence-ranked candidates and extend beyond 90 days when evidence points there.
+Resolve archived candidates through `features/archive.md`; discovery and Human Review are read-only and do not require rehydrate.
+For explicit Bug management, create/update/reopen the Bug Record, verify Expected Behavior, and recommend exactly one Resolution Path.
+Wait for the Resolution Path Gate only for explicit Bug management; every Feature create/reopen action keeps its separate gate. Rehydrate a confirmed archived owner only before reopened execution.
 ```
 
 ### Feature Monthly Archive
@@ -387,17 +506,42 @@ Require the Execution Gate for every invocation.
 
 ## Main Flow
 
-Within Requirements Discussion, triggered complex requirements use this internal semantic order before the canonical stage flow continues:
+Within Requirements Discussion, Adaptive Product Definition uses this internal semantic order before the canonical stage flow continues:
 
 ```text
-Scenario / Evidence
-→ Concept Candidate Inventory
-→ Concept Foundation Human Confirmation
-→ Requirement Product Model
-→ human-reviewed Requirement Document
+Source / Scenario Evidence
+→ Product Definition Depth Scan (`brief | standard`)
+→ Brief draft, or Standard Product Completeness Scan
+→ triggered Concept Candidate Inventory / one-blocker Human Grill
+→ applicable Requirement Product Model views
+→ optional Visual Trigger / Visual Scope Grant / working render iteration
+→ accepted feedback rewritten into the authoritative `product.md`
+→ optional separately confirmed durable `source-render-v1` visual
+→ cumulative Product Human Review
+→ Requirement Record / Archive with Effective Product Definition
 ```
 
-Simple requirements record `concept-foundation-not-needed` with a reason and remain lightweight. `candidate` and `reopened` are blocking; only `accepted` or a reasoned not-needed result may continue into requirement product modeling.
+Brief remains lightweight without fabricated model tables. For Standard, internal `candidate` and `reopened` are blocking; only accepted meanings continue into applicable product modeling. Product Review and Requirement lifecycle are independent and authorize no Feature/Git action.
+
+For an actionable ordinary non-Bug local change before Feature construction, use this internal route:
+
+```text
+Explicit Bug Management / active Feature ownership first
+→ Lightweight Change Assessment
+  → clearly eligible: persistent monthly card before target writes, bounded edit, targeted verification, diff/rollback/memory review
+  → Feature trigger: normal Feature construction
+  → uncertain: Human Choice with one Agent recommendation and zero writes
+```
+
+Eligibility is all-of; Feature hard triggers are any-of. The lane reduces ceremony and document depth, not accuracy, scope control, verification strength, rollback, fact review, or Human Gates. Fact/config/path/domain/docs changes use failure-matched targeted verification, while isolated behavior logic uses the smallest meaningful RED/GREEN. Scope expansion stops before broader edits and returns to Human Review.
+
+The card is created under the one accepted memory root at `changes/YYYY-MM/YYYY-MM-DD-<topic>.md` before the first target write. A changes-only root does not prove initialization; a unique legacy root is reused; dual roots fail closed. The creation month is stable and not Archive. Same-day collisions use the first unused numeric topic suffix without overwrite. There is no Change README, INDEX, archive, move, rehydrate, restore transaction, scheduler, shared counter, new canonical stage, or helper-native document tree.
+
+Accidental interruption may resume one `in-progress` card only after full branch, HEAD, dirty-work, Scope/Plan/progress, eligibility, verification, and rollback revalidation. Planned multi-session work, pause/resume, handoff, Subagent execution, long observation, and complex evidence remain Feature hard triggers.
+
+The read-only standard-library scanner computes `pending_count >= 3` and `as_of_date - oldest_completed_at > 7 days`; exactly seven days does not trigger. It reports completed human-review candidates separately. Agent-owned semantic consolidation may sync only stable high-evidence facts to an existing reliable owning memory location after exact scope disclosure and post-check. A changes-only root cannot grow `project.md` or enterprise memory automatically. Uncertain facts remain visible for human review.
+
+Code integration precedes Target memory rewriting. When an observed conflict directly involves a Change-derived fact, Post-Merge Memory Reconciliation reads only that card and the minimum owner/direct evidence needed to recheck its Source `synced` claim. It does not scan every monthly Change; no Change is a Target overwrite instruction or Git authorization.
 
 Within Decision & Design, a requirement-driven ADR uses this internal order without adding a canonical stage or default mapping artifact:
 
@@ -419,14 +563,14 @@ Project Entry
 → Re-Adopt Agent Loop Project if Needed
 → Feature Monthly Archive If Explicitly Requested
 → Code-Guided Operational Support if Needed
+→ [internal] Lightweight Change Assessment for eligible ordinary non-Bug changes
 → Project Skill Creation / Update if Needed
-→ Requirement Archive
-→ Decision & Design If Needed
-→ Product Brief if Needed
-→ Brainstorm / Clarify if Needed
+→ Requirement Archive [Requirement Record / Archive]
+→ Design Readiness / Decision & Design If Needed
+→ Brainstorm / Clarify if Needed for Feature-local implementation uncertainty
 → Feature Follow-up And Flow-back if Needed
 → Targeted Feature Scan if Needed
-→ Feature Spec
+→ Feature Spec with Product Slice
 → Requirement Checklist
 → Work Breakdown
 → Delivery Contract if Needed
@@ -456,7 +600,7 @@ roadmap graph
 roadmap adapter
 tdd-guard
 complex ADR system
-global skill installation
+automatic or unscoped global skill installation
 automatic directory-level AGENTS.md generation without human confirmation
 automatic commit, PR, merge, release, or publish action without human confirmation
 ```

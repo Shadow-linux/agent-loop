@@ -1,5 +1,110 @@
 # Agent Loop Changelog
 
+## 1.5.0 — 2026-07-17
+
+### Global Skill Installation
+- Added one `npx skills` installation path for Codex、Kimi Code CLI、Claude Code 和 OpenCode without publishing a separate Agent Loop npm package.
+- Documented global update and inventory commands, retained the manual Codex clone fallback, and clarified the Node.js runtime requirement.
+- Added a post-update reminder that existing projects still need a Human-reviewed `AGENTS.md` managed-block refresh; global Skill update never authorizes automatic project-file mutation.
+- Aligned first-version scope so explicit human-authorized installation is supported while automatic or unscoped global installation remains excluded.
+- Defined `main` as the default public installation channel for the exact latest formal stable release commit; alpha branches remain explicit pre-release sources, and synchronizing a release to `main` retains a separate Human Gate.
+
+### Adaptive Requirement Product Definition
+- Consolidated new PRD ownership into one Human-reviewed Requirement `product.md` with adaptive `brief | standard` depth; Product Completeness, Concept Foundation, Requirement Product Model, and derived visuals remain internal Requirements Discussion methods rather than new stages.
+- Stopped new Feature Product Brief authoring and made Feature `spec.md` consume a direct Product Requirement Source plus Product Slice, while retaining reader compatibility for legacy Requirement and Feature product sources.
+- Added a shared new/legacy effective-product resolver, canonical `scripts/check-requirement-product-definition.py`, Product Slice and ADR dual-reader validation, Product Rule section-anchor coverage, visual semantic-digest freshness, focused fixtures, and mutation pressure.
+- Routed optional PRD helpers through Agent Loop artifact paths and Human Gates; helper Feature Lists map to Product Capability Scope, native output/deployment is forbidden, and Product Review does not authorize implementation or Git actions.
+- Closed independent-review gaps by allowing reasoned Brief-to-ADR trace-not-applicable handoff, accepting the unified ADR gate for legacy readers, enforcing snapshot-shape/freshness/review evidence, aligning `record-date` ownership and Scenario 65, and restoring explicit non-bypass Product Human Review semantics.
+- Hardened review evidence and reasoned no-model ADR validation so all Product Slice checkers reject `unconfirmed` evidence consistently, while Brief and legacy not-needed paths reject fabricated Concept Definitions, Scope Inventory, or Technical Landing Trace sections before Human Review.
+
+### Optional Visual Communication Adapter
+- Added optional visual communication across Requirements Discussion, Feature Spec, Decision & Design, Onboarding, and review communication: Visual Triggers prefer an active project-local visual skill, then installed Archify; when materially useful Archify is absent, the Agent recommends exact installation/use before Mermaid/ASCII fallback, while Markdown remains semantic authority.
+- Constrained Feature Spec visuals to the accepted Product Slice, feature responsibility, and feature-local implementation/acceptance path; accepted feature-local clarification returns to `spec.md`, while any new product meaning returns to Requirements Discussion.
+- Added exact Installation Authorization and bounded Visual Scope Grant rules so no external skill install, generation, iteration, durable recording, review, Feature start, Git action, or release authorization can be inferred from another gate.
+- Added validator-backed `source-render-v1` typed-source/render pairs for durable Requirement, ADR, and Onboarding visuals, with source IDs, semantic digests, render digests, freshness evidence, legacy-reader compatibility, and Mermaid/ASCII fallback.
+- Established `render to converge, text to record`: working visuals support human consensus, accepted meaning is rewritten into the owning Markdown, and stale or HTML-only output cannot be claimed current.
+- Added the complete Agent Loop capability map as an Archify `workflow` source plus showcase-validated interactive HTML and SVG, and reorganized `README.md` / `Usage.md` around formal capabilities and Agent-autonomy trigger prompts.
+
+### Agent Ownership And Root Guidance
+- Reduced the canonical root `AGENTS.md` template from 224 to 170 lines while retaining all 13 managed blocks and the startup-critical project-outcome ownership, Gate, completion, submit, and artifact-authority contracts.
+- Replaced duplicated leaf-stage rows with an exact 16-row first-hop Workflow Gateway Map while keeping the complete Stage Order and routing precedence authoritative in `references/runtime.md`.
+- Added exact Gateway tuple/reference/runtime-leaf coverage, line/CJK limits, and four mutation pressure checks; migrated live consumers to `block-version:1.5.0-20260721.2` without changing Skill version `1.5.0`.
+- Aligned the root-writing guidance with the stale-intent contract, removed delegated Requirement details from the Root checklist, and made dual memory roots fail closed during general controller discovery.
+- Clarified the root Stage Map signal so Lightweight Change Assessment is entered only for a human-requested, already-defined, actionable ordinary non-Bug change.
+- Kept product meaning that is still being shaped in Requirements Discussion while preserving the existing Bug, active Feature, Lightweight eligibility, Human Choice, and Feature hard-trigger precedence.
+- Made downstream Agents own the project outcome as well as workflow mechanics: investigate safely available evidence before asking and continue authorized work until verified completion or a concrete Human Gate.
+- Added focused regression and pressure coverage for the Requirements Discussion and Agent Ownership boundaries, then refreshed all 13 root managed blocks to `block-version:1.5.0-20260721.1` without changing Skill version `1.5.0`.
+
+### Lightweight Change Lane
+- Added Agent-owned Lightweight Change Assessment before Feature construction for bounded ordinary non-Bug changes, while preserving explicit Bug Management and active Feature ownership precedence.
+- Added a response-local Lightweight Execution Card with required background, goal/completion criteria, scope, rationale, risk, adaptive Plan, progress, targeted verification, rollback, Human Gates, and result/residuals.
+- Made Plan depth and verification risk-driven: fact/config/path/domain/docs changes use syntax, parse, reference, residual, and bounded dry-run evidence; isolated behavior logic uses the smallest meaningful RED/GREEN.
+- Added all-of eligibility, any-of Feature hard triggers, zero-write Human Choice with one Agent recommendation when uncertain, and scope-expansion stop before broader edits.
+- Kept the lane out of canonical stages, message intents, Feature Types, Bug Resolution Paths, lifecycle/status models, Auto Modes, and default target-project directories/backlogs.
+- Preserved Project Skill discovery/execution order plus production, external, paid-call, configuration-write, branch, submit, commit, push, PR, merge, tag, release, publish, Feature-close, and Bug lifecycle Human Gates.
+- Added sixteen focused positive/negative pressure scenarios, a cross-surface RED/GREEN contract, coordinated runtime/design/root/human guidance, and fresh full-validation evidence.
+- Hardened derived Feature Follow-up rules and focused negative assertions so generic adjustment wording cannot bypass Lightweight Change Assessment or create a Bug Record without explicit Bug management intent.
+- Refreshed all 13 root managed blocks to `block-version:1.5.0-20260717` and synchronized every current version surface after explicit v1.5.0 approval.
+
+- Superseded response-local-only execution control for new eligible work with one parser-valid card under `<memory-root>/changes/YYYY-MM/YYYY-MM-DD-<topic>.md` before target writes; creation month is stable, collisions use non-overwriting suffixes, and no Change archive/index lifecycle was added.
+- Added `in-progress | completed | stopped` plus separate Memory Review/Result invariants, accidental recovery revalidation, sensitive-evidence limits, and Feature promotion for planned durable execution.
+- Added a Python 3.10+ standard-library read-only scanner for unique/default/legacy/dual roots, exact monthly/card validation, deterministic pending/human-review inventory, and the three-pending / older-than-seven-days thresholds on macOS and Windows.
+- Hardened scanner acceptance so filesystem enumeration failures return relative-path contract JSON, generated authoring markers cannot enter runtime cards, fenced Markdown evidence cannot create false headings/metadata, and valid branch names containing `@` remain parseable through the final SHA separator.
+- Added Agent-owned high-evidence memory consolidation with exact pre-write disclosure, narrow rollback, changes-only-root protection, persistent human-review visibility, and code-first post-merge reconciliation.
+- Refreshed all 13 current root managed blocks and live revision consumers to `block-version:1.5.0-20260718` without changing Skill version `1.5.0` or weakening any Git, production, external, release, Feature, or Bug Human Gate.
+
+### Conflict-Driven Post-Merge Memory Reconciliation
+- Replaced routine four-snapshot, all-path reconciliation with an observed-conflict entry rule: no conflict now returns `reconciliation-not-needed` with no scan, report, write, or reconciliation Human Gate.
+- Limited normal inspection to the conflicting fact, its semantic owner, directly affected references or indexes, and the minimum current evidence needed to decide it.
+- Made the Agent rewrite fact-determined current memory from the latest applicable verified evidence, while preserving human originals, accepted Product/Requirement meaning, accepted ADRs, Human Decisions, and append-only history.
+- Kept small conflicts in the conversation and limited Human Review to a few genuinely unresolved alternatives with one Agent recommendation; concise reports are reserved for coupled conflicts, cross-session work, substantial recovery evidence, or explicit retention requests.
+- Reserved four complete snapshots, all-path accounting, Desired Target Memory, exact Plan Hash, and transactional Apply/Post-check/Restore tooling for explicitly authorized Full Memory Audit / Recovery.
+- Kept memory commit, push, release, and Source cleanup as independent Human Gates without changing the `1.5.0` Skill version.
+- Narrowed the root Recovery signal and stop conditions so reversible fact-determined post-merge rewrites reach the conflict-driven route, kept Apply/Restore independently gated, added changed-path rollback evidence to optional durable reports, and refreshed all 13 managed blocks plus live revision consumers to `block-version:1.5.0-20260723.2` without changing Skill version `1.5.0`.
+
+## 1.4.0 — 2026-07-17
+
+### Post-Merge Memory Reconciliation
+- Added Target-spine-led four-snapshot scanning, complete path accounting, semantic artifact roles, question-specific fact authority, and Desired Target Memory derivation after verified code integration.
+- Added the on-demand Memory Merge Report with Start and exact Plan Hash Human Gates, three attention levels, Chinese actions, independent Memory Commit/Push/Release/Cleanup gates, and single-success replay protection.
+- Added Python 3.10+ standard-library scan/check/apply/restore commands with exact inline or Git-blob bytes, bounded payloads, safe paths, transaction journals, atomic writes, zero-change post-check, crash-resumable finalize, and fail-closed exact restore.
+- Hardened action/preimage/post-state binding, immutable same-path regular-blob imports, non-empty merge context, one-report-per-full-SHA enforcement, Source-only parent-directory convergence, and idempotent cleanup after a restored-journal crash window.
+- Made CLI output deterministic UTF-8 on Windows code pages and kept `100644`/`100755` worktree checks portable: exact on POSIX, regular-file-mode equivalent only on native Windows, with bytes, kind, Git source, and transaction identity still exact.
+- Preserved Requirement, ADR, Delivery Contract, Bug, Feature Archive, Project Skill, onboarding, customer-isolation, and original-source ownership without adding a canonical stage, message intent, automatic Git action, or default empty directory.
+- Refreshed all 13 root managed blocks to `block-version:1.4.0-20260716.1` with one concise post-integration routing reminder and added focused pressure/transaction/full-validation coverage without changing Skill version `1.4.0`.
+
+### Project Skill Discovery Guard
+- Required reliable projects to inspect `.agent-loop/skills/INDEX.md` before negative Project Skill claims or generic Operational Support/fallback actions.
+- Kept discovery progressive by matching active INDEX metadata first and loading/verifying only the matched Skill, while preserving the per-invocation Execution Gate.
+- Made `project-skill-drift` fail closed so missing paths, invalid manifests, unsafe owners, or conflicting Skill sources cannot be bypassed through equivalent generic actions.
+- Refreshed all 13 root managed blocks to `block-version:1.4.0-20260716` and added ordering-aware focused regression without changing Skill version `1.4.0`.
+
+### Human-Guided Bug Management
+- Added stable Bug identity, report provenance, deduplication, evidence, lifecycle, Resolution Path, reopen history, and Human-confirmed close records under `.agent-loop/bugs/` without adding a canonical stage or message intent.
+- Kept Requirement authority limited to product goals and expected behavior, made Bug-to-Requirement links optional many-to-many, and prevented Bug handling from automatically changing Requirement lifecycle.
+- Kept all code repair in existing Feature workflows while adding Bug links and Bug-specific verification evidence to Feature spec, tests, plan, notes, completion, submit, and Human Review surfaces.
+- Changed Feature ownership discovery to a default 90-calendar-day metadata scan with evidence-driven extension, stable archive lookup, and rehydrate only after confirmed flow-back and before repair execution.
+- Standardized Bug records on `bugs/YYYY-MM-DD-<bug-slug>/`, fixed intake order as Bug Index identity scan → Feature ownership scan → Bug create/update/reopen, and reserved `in-progress` for a Human-confirmed Feature repair target on `flow-back | linked-feature | maintenance-fix`.
+- Preserved Report Origin as provenance rather than Owner, Assignee, permissions, or workload, and kept Bug close separate from Feature tests, Feature close, commit, push, branch, and release authorization.
+- Refreshed all 13 root managed blocks to `block-version:1.4.0-20260715.1` and coordinated runtime/design, templates, checklists, archive/branch boundaries, human docs, pressure scenarios, and focused/full validation evidence.
+
+### Human-Guided Branch Management
+- Added an optional Branch Strategy Check that preserves clear existing conventions and recommends a Human-Guided profile only for confused rules, unclear target releases, or customer-isolation risk.
+- Added human-confirmed durable strategy and Target Release Context fields in `project.md`, with volatile Current Branch Context kept in feature notes, plans, and Submit / Integrate evidence.
+- Standardized retained `release/vX.Y.Z` and `customer/<customer>/vX.Y.Z` aggregation branches plus versioned `feature | bugfix | hotfix` development naming without adding a canonical stage or default `.agent-loop/branches/` artifact.
+- Sealed formally released versions, routed later repairs to new patch versions, prevented wholesale customer-to-standard reverse merges, and required merge evidence plus human confirmation for temporary branch cleanup.
+- Preserved separate Human Gates for strategy adoption and every create, switch, merge, delete, push, tag, release, or publish action; external finishing helpers cannot widen those grants.
+- Scoped branch-specific fail-closed behavior to adopted, versioned, or customer delivery contexts so `not-needed` simple projects remain usable, and defined one exact Branch Action Gate for development-branch creation or switching.
+- Made declined recommendations non-authoritative through `Profile: not-applicable` plus a required decline reason, and replaced the root managed reminder with a canonical English one-line router that projects may localize.
+- Refreshed all root managed blocks to `block-version:1.4.0-20260715` and added RED/GREEN coverage for Auto Mode Git stops, optionality, declined memory, and root-language ownership.
+- Coordinated runtime/design, stage/checklist/planning/submit rules, project-memory ownership, templates, root routing guidance, human docs, pressure scenarios, and regression coverage while aligning all version-bearing surfaces to `1.4.0` after explicit human approval.
+- Added a focused RED/GREEN contract, fifteen branch-specific pressure scenarios, and a fresh six-domain full-validation report; validation performed no real branch, commit, push, tag, PR, merge, release, or publish action.
+
+### Release Validation
+- Revalidated the complete `stable-v1.3.0..alpha/v1.4.0` behavior set across the full Python/shell suite, focused Post-Merge Memory Reconciliation boundary, six-domain semantic audit, version synchronization, and mechanical checks.
+- Recorded Human approval for the v1.4.0 Release Gate: commit and dual-push the release candidate, then create and dual-push branch `v1.4.0` and tag `stable-v1.4.0` only after the exact release commit passes the configured macOS/Windows × Python 3.10/3.x CI matrix.
+- Kept GitHub Release publication and installed-Skill synchronization outside this authorization.
+
 ## 1.3.0 — 2026-07-11
 
 ### Version Baseline

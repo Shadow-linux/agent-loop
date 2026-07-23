@@ -19,6 +19,7 @@ Mode: simple | enterprise
 
 - Decisions: `.agent-loop/decisions/` | none
 - Project Skills: `.agent-loop/skills/INDEX.md` | none
+- Bug Inventory: `.agent-loop/bugs/INDEX.md` | none
 
 If simple:
 - This file is the main long-term project memory body.
@@ -89,18 +90,46 @@ Proposed / Disabled / Deprecated:
 - `<skill-name>` | none
 Execution Rule: loading never authorizes execution; each invocation requires the Project Skill Execution Gate. A named-skill/concrete-scope request counts only after the execution summary shows no undisclosed action or effect.
 
+## Branch Strategy
+
+Adoption Status: accepted | declined | not-needed
+Profile: existing-project | human-guided-release | not-applicable
+Decline Reason: required when Adoption Status is declined | not-applicable
+Main Branch:
+Standard Release Pattern:
+Customer Release Pattern:
+Development Pattern:
+Release Immutability:
+Customer Isolation:
+Deletion Policy:
+Human Confirmed:
+Evidence:
+
+Recording Rules:
+- An unanswered recommendation is not `accepted`.
+- `declined` records `Profile: not-applicable` and a concrete Decline Reason without copying the proposed profile as current policy.
+- `not-needed` records why a simple or existing project remains lightweight.
+- Changing durable strategy requires Drift Check and a Human Gate.
+
 ## Current Work
 
 Active Feature: one feature path | none
 Paused Features:
+Target Release Context: <standard-or-customer-release pointer> | none
 Next Suggested Action:
 Gate Mode: Strict Mode | Feature Auto-Loop | Task Auto-Run
 Gate Mode Scope:
 Gate Mode Stop Conditions:
-Feature Follow-up Lookback: 30 days
+Feature Follow-up Lookback: 90 days
+Current Memory Merge Report: `<memory-root>/memory-merges/MM-<short-sha>-<topic>/README.md` | `<memory-root>/memory-merges/MM-<short-sha>/README.md` for Full Audit / Recovery | none
+Current Memory Merge Status: 待处理 | 待人类决定 | 已解决 | 待确认 | 已完成 | 已恢复 | none
+Current Memory Merge Blocker: `<exact blocker>` | none
+Memory Conflict Pointer Rule: keep only an unresolved/material conflict report locator, status, and blocker here. Do not persist `reconciliation-not-needed`; targeted/full-audit evidence stays in its owning report.
 Recent Feature Flow-back Policy:
-- When bugs, regressions, post-close corrections, field/schema changes, algorithm changes, API mismatches, test failures, or QA/user feedback appear, inspect recent features before creating a new feature.
-- Flow back to the owning feature when evidence shows the change repairs, adjusts, or completes that feature.
+- For explicit Bug management, scan all Bug Index metadata for duplicate/reopen identity, then scan Feature metadata in the configured window and extend beyond it when evidence points to an older owner.
+- Resolve archived owners through `features/archive.md`; discovery/Human Review is read-only, while confirmed flow-back rehydrates before reopened execution.
+- Flow back to the owning Feature only after the Bug Resolution Path and any Feature reopen/create gate are confirmed.
+- Keep Bug backlog, evidence, Status/Resolution, and assignment-like data out of `project.md`; `bugs/INDEX.md` and Bug README files own them.
 
 ## Remote Entry
 

@@ -64,21 +64,21 @@ assert_contains "$tmpdir/missing.out" "message-intent | missing"
 
 remove_section "workflow-stage-map" "$template" "$tmpdir/missing-stage-map.md"
 if python3 "$checker" --template "$template" --target "$tmpdir/missing-stage-map.md" > "$tmpdir/missing-stage-map.out"; then
-  printf 'FAIL: checker should fail when Workflow Stage Map is missing\n' >&2
+  printf 'FAIL: checker should fail when Workflow Gateway Map is missing\n' >&2
   cat "$tmpdir/missing-stage-map.out" >&2
   exit 1
 fi
 assert_contains "$tmpdir/missing-stage-map.out" "FAIL root AGENTS drift found"
 assert_contains "$tmpdir/missing-stage-map.out" "workflow-stage-map | missing"
 
-sed 's/block-version:1\.3\.0-20260714\.1/block-version:1.3.0/' "$template" > "$tmpdir/stale.md"
+sed 's/block-version:1\.5\.0-20260723\.2/block-version:1.5.0/' "$template" > "$tmpdir/stale.md"
 if python3 "$checker" --template "$template" --target "$tmpdir/stale.md" > "$tmpdir/stale.out"; then
   printf 'FAIL: checker should fail when block-version values are stale\n' >&2
   cat "$tmpdir/stale.out" >&2
   exit 1
 fi
 assert_contains "$tmpdir/stale.out" "message-intent | stale-block-version"
-assert_contains "$tmpdir/stale.out" "expected 1.3.0-20260714.1"
+assert_contains "$tmpdir/stale.out" "expected 1.5.0-20260723.2"
 
 awk '
   /<!-- agent-loop:managed-end section:ownership -->/ { next }
@@ -94,7 +94,7 @@ assert_contains "$tmpdir/broken.out" "ownership | broken-markers"
 awk '
   /<!-- agent-loop:managed-start section:ownership/ && inserted != 1 {
     print
-    print "<!-- agent-loop:managed-start section:nested source:.agent-loop/project.md block-version:1.3.0-20260714.1 -->"
+    print "<!-- agent-loop:managed-start section:nested source:.agent-loop/project.md block-version:1.5.0-20260721.1 -->"
     print "nested"
     print "<!-- agent-loop:managed-end section:nested -->"
     inserted = 1
@@ -112,7 +112,7 @@ assert_contains "$tmpdir/nested.out" "ownership | nested-managed-block"
 awk '
   { print }
   /<!-- agent-loop:managed-end section:ownership -->/ && inserted != 1 {
-    print "<!-- agent-loop:managed-start section:ownership source:.agent-loop/project.md block-version:1.3.0-20260714.1 -->"
+    print "<!-- agent-loop:managed-start section:ownership source:.agent-loop/project.md block-version:1.5.0-20260721.1 -->"
     print "duplicate"
     print "<!-- agent-loop:managed-end section:ownership -->"
     inserted = 1
@@ -127,7 +127,7 @@ assert_contains "$tmpdir/duplicate.out" "ownership | duplicate-section"
 
 {
   cat "$template"
-  printf '\n<!-- agent-loop:managed-start section:legacy-extra source:.agent-loop/project.md block-version:1.3.0-20260714.1 -->\n'
+  printf '\n<!-- agent-loop:managed-start section:legacy-extra source:.agent-loop/project.md block-version:1.5.0-20260721.1 -->\n'
   printf '## Legacy Extra\n\n'
   printf '<!-- agent-loop:managed-end section:legacy-extra -->\n'
 } > "$tmpdir/extra.md"
@@ -176,7 +176,7 @@ assert_contains "$tmpdir/bare-end.out" "malformed-marker"
 
 {
   cat "$template"
-  printf '\n<!-- agent-loop:managed-start section:same-line source:.agent-loop/project.md block-version:1.3.0-20260714.1 --><!-- agent-loop:managed-end section:same-line -->\n'
+  printf '\n<!-- agent-loop:managed-start section:same-line source:.agent-loop/project.md block-version:1.5.0-20260721.1 --><!-- agent-loop:managed-end section:same-line -->\n'
 } > "$tmpdir/same-line.md"
 if python3 "$checker" --template "$template" --target "$tmpdir/same-line.md" > "$tmpdir/same-line.out"; then
   printf 'FAIL: checker should fail when multiple managed markers are on the same line\n' >&2
