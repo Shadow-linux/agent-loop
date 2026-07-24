@@ -145,7 +145,9 @@ Approving one gate never approves another.
 
 ### 1. Install
 
-Agent Loop can be installed directly from GitHub with the open [`skills` CLI](https://github.com/vercel-labs/skills). To install it globally for Codex, Kimi Code CLI, Claude Code, and OpenCode:
+#### Public GitHub
+
+Install Agent Loop directly from GitHub with the open [`skills` CLI](https://github.com/vercel-labs/skills). This is the recommended external installation path for Codex, Kimi Code CLI, Claude Code, and OpenCode:
 
 ```bash
 npx -y skills add Shadow-linux/agent-loop \
@@ -173,16 +175,67 @@ npx skills update agent-loop -g
 npx skills list -g
 ```
 
+The public GitHub route requires Node.js 18 or later.
+
+#### Compatible Git clone
+
+Use this route when `npx` is unavailable or the environment must install from a Git mirror. Choose exactly one source:
+
+```bash
+# Public GitHub
+git clone \
+  --branch stable-v1.5.0 \
+  --depth 1 \
+  https://github.com/Shadow-linux/agent-loop.git \
+  ~/.local/share/agent-loop-source
+
+# Private Git mirror
+git clone \
+  --branch stable-v1.5.0 \
+  --depth 1 \
+  <git-mirror-url> \
+  ~/.local/share/agent-loop-source
+```
+
+On macOS or Linux, synchronize the checked-out Skill into the shared Agent Skills directory:
+
+```bash
+mkdir -p ~/.agents/skills/agent-loop
+rsync -ac --delete \
+  --exclude='.git' \
+  --exclude='.DS_Store' \
+  --exclude='__pycache__/' \
+  ~/.local/share/agent-loop-source/ \
+  ~/.agents/skills/agent-loop/
+```
+
+On Windows PowerShell, use the equivalent mirrored copy:
+
+```powershell
+$Source = "$HOME\.local\share\agent-loop-source"
+$Target = "$HOME\.agents\skills\agent-loop"
+New-Item -ItemType Directory -Force $Target | Out-Null
+robocopy $Source $Target /MIR /XD .git __pycache__ /XF .DS_Store
+if ($LASTEXITCODE -ge 8) { exit $LASTEXITCODE }
+```
+
+For a later clone-based upgrade, fetch tags, check out the new stable tag explicitly, and repeat the platform-specific synchronization:
+
+```bash
+git -C ~/.local/share/agent-loop-source fetch --tags origin
+git -C ~/.local/share/agent-loop-source checkout --detach stable-v1.5.0
+```
+
+`~/.agents/skills/agent-loop` is the preferred shared location. If an Agent runtime does not discover it, synchronize the same verified source into that runtime's configured Skill directory rather than maintaining divergent copies.
+
+#### After an update
+
+Verify the installed version in `SKILL.md`, then refresh the managed guidance of every active Agent Loop project:
+
 > [!IMPORTANT]
 > 在使用 Agent Loop 的项目中，请对 Agent 说：`Agent Loop 版本已更新，请更新项目的 AGENTS.md。`
 
-**Manual fallback for Codex**
-
-```bash
-git clone https://github.com/Shadow-linux/agent-loop.git ~/.codex/skills/agent-loop
-```
-
-The `npx` route requires Node.js 18 or later. If your runtime is not listed above, use its global or project-local Skill directory. Do not copy Agent Loop into a target project's `.agent-loop/`; that directory stores project memory and work artifacts, not the Skill package.
+Do not copy Agent Loop into a target project's `.agent-loop/`; that directory stores project memory and work artifacts, not the Skill package.
 
 ### 2. Let Agent Loop take over a project
 

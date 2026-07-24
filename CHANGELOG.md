@@ -1,5 +1,12 @@
 # Agent Loop Changelog
 
+## Unreleased
+
+### Installation Documentation
+- Kept public GitHub installation on `npx skills` while adding one compatible stable-tag `git clone` route for GitHub and the internal Git mirror.
+- Added checksum-based macOS/Linux synchronization and a Windows `robocopy` equivalent into the shared Agent Skills directory.
+- Kept project `AGENTS.md` refresh as a separate post-upgrade Human Review action for both installation routes.
+
 ## 1.5.0 — 2026-07-17
 
 ### Global Skill Installation

@@ -6,7 +6,9 @@
 
 ## 安装和升级
 
-把 Agent Loop 全局安装到 Codex、Kimi Code CLI、Claude Code 和 OpenCode：
+### 外部环境：GitHub
+
+外部用户统一通过 `npx skills` 从 GitHub 安装 Agent Loop。下面的命令会把它安装给 Codex、Kimi Code CLI、Claude Code 和 OpenCode：
 
 ```bash
 npx -y skills add Shadow-linux/agent-loop \
@@ -27,6 +29,48 @@ npx skills list -g
 ```
 
 不指定分支时，安装与升级读取 `main`；Agent Loop 的正式发布流程会让 `main` 与最新稳定版本保持同一提交。`alpha/*` 只用于明确指定版本的预发布验证，不会成为默认安装来源。
+
+### 兼容安装：Git clone
+
+无法使用 `npx`，或者需要从 Git 镜像安装时，从下面两个来源中选择一个：
+
+```bash
+# Public GitHub
+git clone --branch stable-v1.5.0 --depth 1 \
+  https://github.com/Shadow-linux/agent-loop.git \
+  ~/.local/share/agent-loop-source
+
+# Private Git mirror
+git clone --branch stable-v1.5.0 --depth 1 \
+  <git-mirror-url> \
+  ~/.local/share/agent-loop-source
+```
+
+macOS/Linux：
+
+```bash
+mkdir -p ~/.agents/skills/agent-loop
+rsync -ac --delete \
+  --exclude='.git' \
+  --exclude='.DS_Store' \
+  --exclude='__pycache__/' \
+  ~/.local/share/agent-loop-source/ \
+  ~/.agents/skills/agent-loop/
+```
+
+Windows PowerShell：
+
+```powershell
+$Source = "$HOME\.local\share\agent-loop-source"
+$Target = "$HOME\.agents\skills\agent-loop"
+New-Item -ItemType Directory -Force $Target | Out-Null
+robocopy $Source $Target /MIR /XD .git __pycache__ /XF .DS_Store
+if ($LASTEXITCODE -ge 8) { exit $LASTEXITCODE }
+```
+
+升级时执行 `git fetch --tags`，明确切换到新的 `stable-v<version>`，再重复同步。默认安装目标是 `~/.agents/skills/agent-loop`；如果运行时不读取该目录，将同一份已验证源码同步到它配置的 Skill 目录，不要手工维护内容不同的副本。
+
+### 升级后刷新项目 guidance
 
 全局 Skill 更新不会自动修改已有项目的 `AGENTS.md`。进入仍在维护的 Agent Loop 项目后，对 Agent 说：
 

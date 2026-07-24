@@ -58,7 +58,7 @@ When testing downstream behavior, state the temporary perspective explicitly, ke
 - Stable release branches use the exact version name, for example `v1.0.1`, not `release/1.0.1`.
 - `main` is the default public installation channel and must resolve to the exact commit of the latest formal stable release; alpha branches never become the default installation source.
 - A formal release is not complete for default `npx skills add/update` users until the exact accepted release commit is synchronized to `main`. Updating `main` remains a separate branch/merge/push Human Gate.
-- This repository is mirrored to two remotes: `origin` (`git@github.com:Shadow-linux/agent-loop.git`) and `ai-factory` (`git@124.174.38.59:ai-factory/agent-loop.git`). When pushing release branches or tags, push the same branch and tag to both remotes.
+- Keep private mirror names and addresses in local Git configuration or private operational documentation, never in public tracked files. When the human explicitly authorizes a multi-remote push, inspect the configured remotes locally and confirm the exact branch or tag on every requested remote.
 - Do not create or push git tags unless the human explicitly asks for a tag.
 
 ## Version Sync Checklist
