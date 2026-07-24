@@ -1274,7 +1274,7 @@ If the human later authorizes commits, prefer these reviewable commits; do not c
    - human docs, scenarios, changelog, reports;
    - full validation evidence.
 
-Each meaningful commit uses the repository-required Chinese multiline body. Push both `origin` and `ai-factory` only after explicit push authorization. Do not tag unless separately requested.
+Each meaningful commit uses the repository-required Chinese multiline body. Push only to the locally configured remotes explicitly authorized by the human. Do not tag unless separately requested.
 
 ## Plan Self-Review
 

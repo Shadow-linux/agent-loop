@@ -195,7 +195,7 @@ for test_file in tests/*.sh; do bash "$test_file"; done
 - 删除中的两个 v1.4 proposal；
 - `docs/proposal/v2.0.x/`。
 
-行为提交 `7253461` 已推送到 `origin/alpha/v1.3.0` 与 `ai-factory/alpha/v1.3.0`。两个远端 `v1.3.0` branch 在审计开始时也指向 `7253461`。本轮 release-evidence 变更尚未 commit 或 push。
+行为提交 `7253461` 已推送到两个经授权远端的 `alpha/v1.3.0`。两个远端的 `v1.3.0` branch 在审计开始时也指向 `7253461`。本轮 release-evidence 变更尚未 commit 或 push。
 
 ## 11. 下一阶段
 
