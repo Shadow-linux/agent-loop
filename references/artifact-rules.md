@@ -260,7 +260,7 @@ plan.md
 notes.md
 ```
 
-The Feature Context Snapshot is derived execution context inside `spec.md` by default. Do not create optional `context.md` for an ordinary Feature. It may be added only through the existing Complex Artifact Human Gate when keeping the complete Snapshot in `spec.md` would make the Feature no longer locally understandable; `spec.md` keeps the summary, exact link, source identity, digests, and freshness. Neither file owns product meaning.
+The Feature Context Snapshot is derived execution context inside `spec.md` by default. Do not create optional `context.md` for an ordinary Feature. It may be added only through the existing Complex Artifact Human Gate when keeping the complete Snapshot in `spec.md` would make the Feature no longer locally understandable; `spec.md` keeps the summary, exact link, source identity, digests, and freshness. Generate Product and Decision Markdown digests after canonicalizing `CRLF` and lone `CR` to `LF`; the checker accepts legacy raw LF/CRLF digests so OS checkout behavior does not create false drift. Neither file owns product meaning.
 
 Do not create dated variants like `tasks-2026-05-26.md` in v1.
 

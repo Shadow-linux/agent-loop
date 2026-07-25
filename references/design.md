@@ -247,7 +247,7 @@ One coherent Feature may resolve several Bugs. Each Bug retains independent iden
 
 **Feature**: one behavior-changing work area under `.agent-loop/features/<feature-id>/`.
 
-**Feature Context Snapshot**: a compact, derived execution cache in Feature `spec.md` that records project-root-relative Requirement/ADR authority, source digests, Product Slice references, and the product outcome, journey, rules, states, exceptions, recovery, boundary, and acceptance context needed for downstream work. It cannot redefine accepted product or ADR meaning.
+**Feature Context Snapshot**: a compact, derived execution cache in Feature `spec.md` that records project-root-relative Requirement/ADR authority, source digests, Product Slice references, and the product outcome, journey, rules, states, exceptions, recovery, boundary, and acceptance context needed for downstream work. Product and Decision Markdown digests canonicalize `CRLF` and lone `CR` to `LF`, so checkout-only newline changes do not create false drift; legacy raw LF/CRLF digests remain reader-compatible. It cannot redefine accepted product or ADR meaning.
 
 **Feature Monthly Archive**: An explicit, Human-gated maintenance capability that moves an eligible closed feature directory intact to `.agent-loop/features/YYYY-MM/<feature-id>/`, updates `features/archive.md` and approved references, post-checks, and restores on failure. The scan is read-only and apply requires the exact expected plan SHA-256 Batch Human Gate plus transaction journal. It creates no per-feature archive summary, no `historical/`, no Deep Archive, and no `--force`.
 

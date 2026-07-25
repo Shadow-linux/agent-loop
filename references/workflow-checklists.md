@@ -480,7 +480,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Confirm Design Readiness is `design-not-needed` or `completed`; run Decision & Design before Feature Spec when shared design is required.
 - [ ] Resolve new `Effective Product Definition` or legacy `Effective Concept Foundation`; require confirmed/accepted source and block pending, ambiguous, stale, `candidate`, or `reopened` input.
 - [ ] Add Product Requirement Source and Product Slice from the effective source; cite Concept/Model IDs and Product Rule anchors without a Feature Product Brief intermediary.
-- [ ] Create the default Feature Context Snapshot in `spec.md` from one current Requirement README/Product Definition/accepted-ADR baseline, using project-root-relative paths and current SHA-256 evidence.
+- [ ] Create the default Feature Context Snapshot in `spec.md` from one current Requirement README/Product Definition/accepted-ADR baseline, using project-root-relative paths and SHA-256 evidence computed after Markdown newline canonicalization (`CRLF` / lone `CR` -> `LF`).
 - [ ] Include product outcome, actors/core journey, applicable rules/invariants, states/exceptions/recovery, and Feature boundary/acceptance context without creating independent product truth.
 - [ ] Require the checker to return `CURRENT` before Requirement Checklist acceptance.
 - [ ] Reject feature-local redefinition of accepted concept name, identity, owner, lifecycle, relationship, invariant, state, terminal meaning, or product fact.

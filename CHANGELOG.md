@@ -17,6 +17,7 @@ _当前状态：预发布；尚未执行正式版全量验证。_
 - Task、Test、Plan、恢复执行和 subagent handoff 都会先检查产品来源与 ADR 是否仍然有效，避免只读 Feature 目录时沿着过期上下文继续开发。
 - 新增只读的 Python 3.10+ `scripts/check-feature-context.py`，以 `current | refresh-required | blocked` 明确告诉 Agent 可以继续、需要刷新或必须停止。
 - 补强真实 memory root、时间戳、重复权威指针和旧版 Concept Foundation 兼容检查。
+- Product 与 Decision Markdown 摘要统一换行后计算，并兼容旧版 LF/CRLF 原始摘要，避免 Windows checkout 仅因换行转换误报上下文漂移。
 
 ### Checker 出错时允许隔离诊断与临时修正（Checker Self-Repair）
 - Agent 会先区分产物错误、环境能力问题、Checker 缺陷和原因未明，不会看到校验失败就直接绕过。

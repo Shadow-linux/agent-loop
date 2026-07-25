@@ -93,8 +93,14 @@ def project_path(project_root: Path, value: str) -> Path:
     return resolved
 
 
-def digest(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+def compatible_text_digests(path: Path) -> frozenset[str]:
+    raw = path.read_bytes()
+    canonical = raw.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    crlf = canonical.replace(b"\n", b"\r\n")
+    return frozenset(
+        hashlib.sha256(content).hexdigest()
+        for content in (raw, canonical, crlf)
+    )
 
 
 def heading_anchors(content: str) -> set[str]:
@@ -432,7 +438,7 @@ def classify(
         if product_digest:
             if not SHA256.fullmatch(product_digest):
                 refresh_reasons.append("Product Source SHA-256 is malformed")
-            elif product_digest != digest(source.path):
+            elif product_digest not in compatible_text_digests(source.path):
                 refresh_reasons.append("Product Source SHA-256 changed")
 
         verified_at = snapshot_fields.get("Verified At")
@@ -516,7 +522,9 @@ def classify(
                         "Decision Source SHA-256 paths differ from Applicable Decisions"
                     )
                 for display_path, decision_path in decisions:
-                    if evidence[display_path] != digest(decision_path):
+                    if evidence[display_path] not in compatible_text_digests(
+                        decision_path
+                    ):
                         refresh_reasons.append(
                             f"Decision Source SHA-256 changed: {display_path}"
                         )

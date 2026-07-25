@@ -102,9 +102,9 @@ Requirement Lifecycle: accepted
 Resolved Product Source: .agent-loop/requirements/2026-07-25-example/product.md
 Product Definition Profile: standard
 Product Review: confirmed
-Product Source SHA-256: <real lowercase SHA-256 of product.md bytes>
+Product Source SHA-256: <real lowercase SHA-256 after CRLF / lone CR -> LF canonicalization>
 Applicable Decisions: .agent-loop/decisions/0001-example.md
-Decision Source SHA-256: .agent-loop/decisions/0001-example.md=<real lowercase SHA-256>
+Decision Source SHA-256: .agent-loop/decisions/0001-example.md=<real lowercase canonical-text SHA-256>
 Product Slice References: C-ACCOUNT / FLOW-RECHARGE / STATE-RECHARGE / EX-PAYMENT-UNKNOWN / product.md#confirmed-credit
 Verified At: 2026-07-25T12:00:00+08:00
 Freshness: current
@@ -382,8 +382,14 @@ def project_path(project_root: Path, value: str) -> Path:
     return resolved
 
 
-def digest(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+def compatible_text_digests(path: Path) -> frozenset[str]:
+    raw = path.read_bytes()
+    canonical = raw.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    crlf = canonical.replace(b"\n", b"\r\n")
+    return frozenset(
+        hashlib.sha256(content).hexdigest()
+        for content in (raw, canonical, crlf)
+    )
 
 
 def heading_anchors(content: str) -> set[str]:

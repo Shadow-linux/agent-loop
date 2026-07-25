@@ -16,7 +16,7 @@ Product Slice References:
 Verified At: <ISO-8601 timestamp with timezone>
 Freshness: current | refresh-required | blocked
 
-This optional file expands the derived Snapshot for one complex Feature. It has no independent product, Requirement lifecycle, approval, task, test, plan, code-fact, or execution authority. Its source identity and digests must exactly match `spec.md`, and all source paths are project-root-relative.
+This optional file expands the derived Snapshot for one complex Feature. It has no independent product, Requirement lifecycle, approval, task, test, plan, code-fact, or execution authority. Its source identity and digests must exactly match `spec.md`, and all source paths are project-root-relative. Generate Product and Decision Markdown SHA-256 values after canonicalizing `CRLF` and lone `CR` to `LF`; legacy raw LF/CRLF digests remain reader-compatible.
 
 ## Product Outcome
 

@@ -43,7 +43,7 @@ Freshness: current | refresh-required | blocked
 
 ### Feature Boundary And Acceptance Context
 
-This Snapshot is derived execution context, not product authority. The Requirement README resolves the current Effective Product Definition; every Requirement, product, and decision path above is project-root-relative. Run the read-only `scripts/check-feature-context.py` before relying on the Snapshot. `## Product Slice` remains the Feature responsibility and coverage table.
+This Snapshot is derived execution context, not product authority. The Requirement README resolves the current Effective Product Definition; every Requirement, product, and decision path above is project-root-relative. Generate Product and Decision Markdown SHA-256 values after canonicalizing `CRLF` and lone `CR` to `LF`; legacy raw LF/CRLF digests remain reader-compatible. Run the read-only `scripts/check-feature-context.py` before relying on the Snapshot. `## Product Slice` remains the Feature responsibility and coverage table.
 
 ## Product Slice
 

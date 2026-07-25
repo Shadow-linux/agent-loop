@@ -910,7 +910,7 @@ Include:
 - `Related Bugs` and the Human-confirmed Bug Resolution Path source when this Feature repairs Bugs; do not copy full Bug report/evidence
 - problem/goal
 - Product Requirement Source: Requirement Set, Effective Product Definition, Profile, Product Review Evidence, and Applicable Decisions
-- Feature Context Snapshot derived from that one resolved authority: project-root-relative Requirement/product/ADR paths, current lifecycle/review/profile, Product and Decision SHA-256 values, Product Slice references, verification time, Freshness, and the outcome/journey/rules/states/exceptions/recovery/boundary context needed downstream
+- Feature Context Snapshot derived from that one resolved authority: project-root-relative Requirement/product/ADR paths, current lifecycle/review/profile, Product and Decision SHA-256 values generated after Markdown newline canonicalization (`CRLF` / lone `CR` -> `LF`), Product Slice references, verification time, Freshness, and the outcome/journey/rules/states/exceptions/recovery/boundary context needed downstream; legacy raw LF/CRLF digests remain reader-compatible
 - Product Slice rows mapping source sections/IDs/rules to Feature responsibility, acceptance, and `in-scope | out-of-scope | not-applicable` coverage
 - requirement Delivery Phase reference when the feature implements a phase or phase slice
 - scope

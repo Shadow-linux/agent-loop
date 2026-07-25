@@ -252,6 +252,8 @@ class PythonCheckerContractTests(unittest.TestCase):
             "tests.test_onboarding_core_flow_coverage",
             "tests.test_concept_foundation_trace",
             "tests.test_adr_requirement_model_trace",
+            "tests.test_feature_context",
+            "tests.test_feature_review",
             "tests.test_feature_archive_support",
             "tests.test_feature_monthly_archive_scan",
             "tests.test_feature_monthly_archive_apply",

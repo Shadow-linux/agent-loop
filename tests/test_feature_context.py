@@ -48,6 +48,47 @@ class FeatureContextCheckerTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, combined_output(result))
         self.assertIn("CURRENT:", result.stdout)
 
+    def test_current_snapshot_survives_crlf_checkout(self):
+        def mutate(root):
+            for path in (root / ".agent-loop").rglob("*.md"):
+                content = (
+                    path.read_bytes()
+                    .replace(b"\r\n", b"\n")
+                    .replace(b"\r", b"\n")
+                )
+                path.write_bytes(content.replace(b"\n", b"\r\n"))
+
+        result = self.run_project(mutate)
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CURRENT:", result.stdout)
+
+    def test_legacy_crlf_byte_digests_survive_lf_checkout(self):
+        def crlf_digest(path):
+            content = (
+                path.read_bytes()
+                .replace(b"\r\n", b"\n")
+                .replace(b"\r", b"\n")
+                .replace(b"\n", b"\r\n")
+            )
+            return hashlib.sha256(content).hexdigest()
+
+        def mutate(root):
+            spec = root / FEATURE
+            text = spec.read_text(encoding="utf-8")
+            text = text.replace(
+                hashlib.sha256((root / PRODUCT).read_bytes()).hexdigest(),
+                crlf_digest(root / PRODUCT),
+            )
+            text = text.replace(
+                hashlib.sha256((root / DECISION).read_bytes()).hexdigest(),
+                crlf_digest(root / DECISION),
+            )
+            spec.write_text(text, encoding="utf-8")
+
+        result = self.run_project(mutate)
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CURRENT:", result.stdout)
+
     def test_current_legacy_requirement_source_passes(self):
         def mutate(root):
             requirement_root = (root / README).parent

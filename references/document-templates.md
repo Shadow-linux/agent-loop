@@ -954,6 +954,8 @@ Feature-local decisions that do not need standalone project ADR files:
 ## Open Questions
 ```
 
+Generate Product and Decision Markdown SHA-256 values after canonicalizing `CRLF` and lone `CR` to `LF`. Readers accept legacy raw LF/CRLF digests; other content changes still require refresh.
+
 ## Optional `context.md`
 
 Use `templates/feature-context.md` only for a complex Feature whose complete Snapshot would make `spec.md` no longer locally understandable, and only after the Complex Artifact Human Gate. It must record:
@@ -977,6 +979,7 @@ Freshness: current | refresh-required | blocked
 ```
 
 Keep exact source/digest parity with `spec.md`. This file expands derived context only; it owns no independent product, lifecycle, approval, Task, Test, Plan, code-fact, or execution meaning.
+Generate Product and Decision Markdown SHA-256 values after canonicalizing `CRLF` and lone `CR` to `LF`; reader compatibility with legacy raw LF/CRLF digests does not permit any other content drift.
 
 ## `tasks.md`
 

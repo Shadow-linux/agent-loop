@@ -214,7 +214,7 @@ Rules:
 2. Requirement, product, and decision paths are project-root-relative and confined to the one accepted real-directory memory root; root files, root symlinks, and dual roots fail closed. Paths are not relative to the Feature directory, so Feature archive/rehydrate movement cannot invalidate them.
 3. `Requirement Lifecycle` records the current compatible lifecycle; a later delivery status does not replace Product Review.
 4. `Resolved Product Source` records the result for traceability but never outranks README.
-5. `Product Source SHA-256` is the full source digest used for change detection.
+5. `Product Source SHA-256` is the Markdown text digest used for change detection. New evidence canonicalizes `CRLF` and lone `CR` to `LF`; readers accept legacy raw LF/CRLF digests so OS checkout behavior does not create false drift, while every other content change remains meaningful.
 6. Product Slice References name stable IDs and/or exact `product.md#<anchor>` references.
 7. Snapshot prose contains only the meaning needed to design and execute this Feature.
 8. Snapshot prose must preserve accepted terminology and must not invent a local synonym or rule.
@@ -235,7 +235,7 @@ read Feature spec.md
 -> verify Product Review is confirmed
 -> verify Requirement lifecycle remains compatible with dependent execution
 -> verify the resolved file exists inside the accepted memory root
--> calculate Product Source SHA-256
+-> calculate Product Source SHA-256 after Markdown newline canonicalization
 -> verify Product Slice IDs/anchors still resolve
 -> verify applicable ADR files exist, remain accepted, and are not review-required
 -> compare recorded paths and digests
