@@ -120,6 +120,7 @@ references/recovery-and-backfill.md code-reality recovery and document backfill 
 references/feature-completion-check.md proactive close/pause/continue checks for active features
 references/human-review-summary.md table-first approval summaries for human gates
 references/stage-guides.md         stage-by-stage procedures
+references/checker-recovery.md     Human-authorized isolated recovery for a defective canonical Agent Loop checker
 references/artifact-rules.md       artifact ownership, drift, status, and naming
 references/skill-routing.md        optional preferred skills and fallback behavior
 references/external-skill-adapters.md stage plugin rules for Superpowers and other external skills
@@ -154,6 +155,7 @@ CHANGELOG.md                        version-change source of truth for "what cha
 1. Discover exactly one real memory root before relying on project memory. If both `.agent-loop/` and legacy `agent-loop/` exist, fail closed and route to Recovery. If neither exists, continue with the applicable new-project, existing-project, or clearly eligible changes-only path without inventing reliable memory.
 2. Check root `AGENTS.md` / `CLAUDE.md` as the Root Agent Bootstrap Gate; if either is missing or stale, load `references/project-guidance.md` and include the guidance repair in the recommended Project Entry action unless the human has explicitly deferred it.
 2a. Canonical `scripts/check-*.py` validation requires Python 3.10+ and only the Python standard library. Run the `.py` entrypoints natively on macOS or Windows; if a required checker cannot run because Python is missing or unsupported, fail closed and report the capability gap instead of silently using an obsolete implementation.
+2b. When a canonical Agent Loop checker fails after an exact rerun, load `references/checker-recovery.md` inside Diagnose Failure / Verify. Classify the failure as artifact, environment, checker candidate, or unresolved before proposing a fix. A temporary checker write requires an exact Human authorization, uses an isolated copy by default, preserves RED/GREEN and negative-control evidence, and may substitute only for one named Gate after a separate Human decision; the canonical result remains failed until formal source repair.
 3. Classify the latest message intent: `chat`, `requirements-discussion`, `project-skill-management`, `feature-archive-maintenance`, `feature-request`, `operational-support`, `feature-follow-up`, `deferred-requirement`, or `unknown`.
 3a. For `chat`, answer or discuss only; do not create requirement sets, feature workspaces, tasks, tests, or plans.
 3b. For `requirements-discussion`, load `references/requirement-management.md` and `references/product-definition.md`, use Brainstorm / Clarify, choose `brief | standard`, produce a human-reviewed Requirement `product.md`, and write it under `.agent-loop/requirements/<record-date>-<topic>/` only after Product Human Review plus Requirement Record / Archive confirmation before any Feature construction.
@@ -369,6 +371,7 @@ Stop when:
 - Project Skill Discovery Guard finds `project-skill-drift`, or an active match has not been resolved before an equivalent generic action
 - an active project skill is about to execute without a current bounded Execution Gate grant or with undisclosed planned actions/effects
 - TDD cannot be followed or verification repeatedly fails
+- a canonical Agent Loop checker may be defective but its failure has not been classified, an exact Temporary Checker Repair Review has not been accepted before patch writes, or a temporary result is being reused outside its named Gate
 - review finds behavior, scope, or architecture changes
 - unrelated dirty work blocks progress
 - subagents are needed but not yet approved

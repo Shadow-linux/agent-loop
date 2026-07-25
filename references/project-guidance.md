@@ -30,6 +30,8 @@ Root guidance may also route an observed post-code-integration memory conflict, 
 
 The Workflow Gateway Map contains one exact first-hop row for an already-defined actionable ordinary non-Bug change, pointing to `Lightweight Change Assessment` and `references/lightweight-change-lane.md`. Product meaning that is still being shaped remains in Requirements Discussion. Eligibility, Feature hard triggers, card fields, Adaptive Plan/TDD, scope expansion, completion, and gate details belong in that reference, not root `AGENTS.md`.
 
+The Checker Recovery Gateway contains one concise row for a canonical Agent Loop checker that still fails after an exact rerun. It routes to `Diagnose Failure / Checker Recovery` and `references/checker-recovery.md`; root guidance must not copy the detailed classification, fixture, RED/GREEN, isolation, substitute-evidence, expiry, or formal-repair algorithm. The Evidence Gate must keep suspected checker repair Human-authorized and forbid silent bypass or canonical-pass claims.
+
 ## Root Agent Bootstrap Gate
 
 Root `AGENTS.md` is the bootstrap node that teaches future agents how to enter `agent-loop`. It is not optional project decoration.
@@ -57,7 +59,7 @@ Every time `agent-loop` is used inside a target project, check root guidance bef
 - project uses `agent-loop`
 - Bootstrap Protocol is missing skill-loading/fallback rules: root guidance must say root `AGENTS.md` is a bootstrap cache rather than a replacement for the `agent-loop` skill, must load/use the available skill before agent-loop workflow decisions, and must say Stage Helper Capability Scan happens only after the controller is active or unavailable/load-failed
 - Message Intent Guard: distinguish Chat, Requirements Discussion, already-defined ordinary non-Bug change, explicit Bug/follow-up, Feature Request, Operational Support, Project Skill, Archive/Rehydrate, Memory Reconciliation, proposal/deferred, and lifecycle requests before project-state routing
-- Workflow Gateway Map: route each of the 16 startup signal families to exactly one first hop and exact published reference set; root guidance is navigation only, while `references/runtime.md` owns the complete leaf-stage order
+- Workflow Gateway Map: route each of the 17 startup signal families to exactly one first hop and exact published reference set; root guidance is navigation only, while `references/runtime.md` owns the complete leaf-stage order
 - Lightweight Change Gateway: route only already-defined actionable bounded non-Bug work to `references/lightweight-change-lane.md`; unresolved product meaning remains in Requirements Discussion
 - Bootstrap Protocol: inspect `.agent-loop/`, classify the stage, and recommend exactly one next action
 - Bootstrap Protocol lacks the concise Project Skill discovery-before-fallback reminder; detailed result names, drift handling, manifest procedure, and precedence remain in `references/runtime.md` and `references/project-skills.md`, not root guidance
@@ -65,6 +67,7 @@ Every time `agent-loop` is used inside a target project, check root guidance bef
 - Stage Helper Capability Scan: agents actively check available skills/plugins/helpers before fallback stage guidance
 - Gate Modes: Strict Mode, Feature Auto-Loop, Task Auto-Run, and their explicit human enablement rules
 - Required Stops: all six visible classes — Semantic, Scope And Risk, Execution, Evidence, External Mutation, and Git And Lifecycle — plus explicit Auto Mode non-bypass
+- Checker Recovery Gateway: exact rerun routes a canonical Agent Loop checker failure to `references/checker-recovery.md`; isolated repair is Human-authorized and cannot be presented as canonical pass
 - Completion Rules: code changes alone are not done; fresh verification, Review, Drift Check, project-memory evidence, Feature Completion Check, and Feature Close Review remain visible
 - Submit And Commit Rules: submit/commit/push/PR/merge/tag/release/publish/pause/close/cleanup remain independent Human Gates and only intended files are included
 - Artifact Authority: Requirement, Decision / ADR, Feature, Bug, Lightweight Execution Card, and project memory retain distinct ownership
@@ -236,7 +239,7 @@ Keep it short and long-lived:
 - project uses `agent-loop`
 - Bootstrap Protocol skill loading: root `AGENTS.md` is bootstrap guidance, not a replacement for the `agent-loop` skill; if the runtime exposes the skill, load/use it before making workflow decisions, especially during Project Entry, Resume, Re-Adopt, stage boundaries, after context compaction, or when workflow state is uncertain; Stage Helper Capability Scan happens only after the controller is active or unavailable/load-failed; unavailable/load-failed fallback forces Strict Mode and permits only Chat/read-only entry/recovery/operational analysis while Execute, Human-gated writes, Submit, Pause, and Close remain blocked
 - Message Intent Guard: before project-state routing, distinguish Chat, Requirements Discussion, already-defined ordinary non-Bug change, explicit Bug/follow-up, Feature Request, Operational Support, Project Skill, Archive/Rehydrate, Memory Reconciliation, proposal/deferred, and lifecycle requests; keep eligibility, internal methods, lifecycle algorithms, and artifact-writing rules in the exact Gateway owners
-- Workflow Gateway Map: after intent and project-state classification, route the 16 startup signal families to exactly one first hop and its exact published reference set; load the matching owner before acting, while `references/runtime.md` retains the complete leaf-stage order
+- Workflow Gateway Map: after intent and project-state classification, route the 17 startup signal families to exactly one first hop and its exact published reference set; load the matching owner before acting, while `references/runtime.md` retains the complete leaf-stage order
 - Root Agent Bootstrap: read `AGENTS.md`, inspect `.agent-loop/`, classify the current stage, and recommend exactly one next action
 - guidance language follows project language; keep stable artifact/stage names in English
 - before development, discover exactly one `.agent-loop/` or accepted legacy `agent-loop/` root; if reliable memory is missing, route to Project Entry / Init

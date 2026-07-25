@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE = ROOT / "templates/root-AGENTS.md"
 RUNTIME = ROOT / "references/runtime.md"
-EXPECTED_REVISION = "1.5.0-20260723.2"
+EXPECTED_REVISION = "1.5.0-20260725.1"
 
 EXPECTED_SECTIONS = (
     ("bootstrap", ".agent-loop/project.md"),
@@ -69,6 +69,10 @@ EXPECTED_GATEWAYS = (
     ("Use, test, run, deploy, or diagnose current behavior without implementation approval",
      "Code-Guided Operational Support", (
         "references/stage-guides.md", "references/runtime.md",
+    )),
+    ("Canonical Agent Loop checker failure after an exact rerun",
+     "Diagnose Failure / Checker Recovery", (
+        "references/checker-recovery.md", "references/stage-guides.md",
     )),
     ("Create or manage a reusable project workflow", "Project Skill Creation / Update", (
         "references/project-skills.md", "references/skill-routing.md",

@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+### Checker Self-Repair
+- Added a Diagnose Failure / Verify recovery path that distinguishes invalid artifacts, environment capability failures, proven checker defects, and unresolved causes before any workaround.
+- Allowed an exact Human-authorized isolated checker patch to provide RED/GREEN and negative-control substitute evidence for one named Gate while preserving the canonical failure, expiry, rollback, and later action-specific Gates.
+- Forbade silent installed/global Skill mutation, broad bypasses, reusable temporary grants, and Agent Loop source releases based only on an isolated patched copy; formal source repair and canonical validation remain required.
+- Added one concise root Gateway entry, human trigger guidance, adversarial scenarios, and focused cross-surface regression coverage; refreshed current managed-block consumers to `block-version:1.5.0-20260725.1` without changing the Skill version.
+
+### ADR Product Rule Trace Compatibility
+- Allowed a confirmed Standard Product Definition with accepted Product Rules but no Concept or Requirement Model IDs to use `none` for the absent ID fields while retaining required Product Rule scope and technical-landing coverage.
+- Added focused positive and negative regression tests so `none` cannot hide Concept or Requirement Model IDs that the effective source actually declares.
+
 ### Installation Documentation
 - Kept public GitHub installation on `npx skills` while adding one compatible stable-tag `git clone` route for GitHub and the internal Git mirror.
 - Added checksum-based macOS/Linux synchronization and a Windows `robocopy` equivalent into the shared Agent Skills directory.

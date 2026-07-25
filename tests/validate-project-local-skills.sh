@@ -87,7 +87,7 @@ assert_contains "references/workflow-checklists.md" "one invocation"
 
 assert_contains "templates/root-AGENTS.md" '| Create or manage a reusable project workflow | Project Skill Creation / Update | `references/project-skills.md`, `references/skill-routing.md`, `references/external-skill-adapters.md` |'
 assert_contains "templates/root-AGENTS.md" "Execution Gate"
-assert_contains "templates/root-AGENTS.md" "block-version:1.5.0-20260723.2"
+assert_contains "templates/root-AGENTS.md" "block-version:1.5.0-20260725.1"
 assert_contains "templates/project.md" "Project Skills"
 assert_contains "templates/project.md" ".agent-loop/skills/INDEX.md"
 assert_contains "templates/project-skills/validation.md" "Validated Content Manifest"

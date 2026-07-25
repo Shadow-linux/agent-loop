@@ -291,6 +291,8 @@ Run structural preflight while the ADR is `proposed`. A successful preflight per
 
 For a confirmed Brief or legacy reasoned `concept-foundation-not-needed` source with no applicable stable model IDs or Product Rule references, keep Accepted Concept IDs / Accepted Requirement Model IDs / Accepted Product Rule References as `none`, set Trace Applicability to `not-applicable`, record a concrete reason, and do not fabricate Concept Definitions, Scope Inventory, or Technical Landing Trace rows. The current unified Coverage Hard Gate wording applies to new decisions; legacy decisions may retain the earlier exact legacy gate wording without migration.
 
+For a confirmed Standard source, either Accepted Concept IDs or Accepted Requirement Model IDs may independently be `none` only when the effective source declares no IDs of that kind. When accepted Product Rule references remain, keep Trace Applicability `required`, name those resolvable anchors, and cover them through Scope Inventory and Technical Landing Trace instead of inventing Concept or Requirement Model IDs.
+
 When the README effective source changes or new accepted requirement evidence changes an upstream model, set the dependency judgment to:
 
 ```text
@@ -370,6 +372,43 @@ Apply the blocked routing matrix in order and choose the first matching row:
 5. external blocker with no immediate unblock path -> Pause
 
 Diagnosis and available read-only verification may proceed before requesting access or approval for a later mutation. Ask Human first only when the missing human input is required for the next safe diagnostic or verification action itself.
+
+## Checker Failure Recovery
+
+Checker Failure Recovery is an internal method of Diagnose Failure and Verify, not a canonical stage, status, lifecycle, artifact family, or Auto Mode. Load `references/checker-recovery.md` when a canonical Agent Loop checker still fails after the exact command is rerun with unchanged inputs.
+
+Apply this order:
+
+```text
+preserve canonical command/output/path/digest
+-> artifact-invalid | environment-invalid | checker-defect-candidate | unresolved
+-> artifact or environment repair when those facts decide the cause
+-> minimal authority-backed positive fixture plus negative controls for a checker candidate
+-> Temporary Checker Repair Review
+-> exact Human authorization before checker/support writes
+-> isolated temporary copy by default
+-> unmodified-copy RED
+-> minimal patch
+-> GREEN plus negative controls
+-> exact target run
+-> canonical failure plus temporary result
+-> separate Human substitute decision for one named Gate
+-> expiry and formal source repair follow-up
+```
+
+Read-only reproduction, reduction, and authority comparison may proceed before asking. The Agent must not rewrite a valid artifact to satisfy a known-wrong checker, silently modify an installed/global Skill, add a general bypass, or present temporary evidence as a canonical pass.
+
+The Human may accept a fresh temporary result as substitute verification for one exact Gate only when the defect proof, source digests, RED/GREEN, negative controls, target command, expiry, rollback, and residual canonical failure are visible. Record:
+
+```text
+Canonical validation: failed
+Temporary checker recovery: passed | failed
+Human substitute decision: accepted-for-this-gate | declined
+```
+
+This decision grants no later Gate or action. Any checker/support/input/authority digest change, different target or command, Gate exit, context loss without persisted evidence, or failed negative control expires it. Short same-session evidence may remain response-local; cross-session, handoff, or later action reliance records the compact evidence in the existing owning artifact without creating a mandatory recovery directory.
+
+Formal repair belongs in the Agent Loop source repository with the regression test and canonical checker change. Agent Loop itself cannot claim a released checker fix from an isolated patched copy; focused and required full validation must pass on the formal source.
 
 ## Inspection Order
 
@@ -673,6 +712,7 @@ Auto modes do not remove stop conditions. Stop and ask when:
 - Bug Index/README, duplicate/reopen, Status/Resolution, Resolution Target, Expected Behavior authority, or Fix Feature locator evidence is invalid or contradictory
 - an archive row target is missing, an archived directory lacks a row, a flat/month Feature ID collides, a `rehydrated` row points to a month path, an incomplete `.archive-txn` exists, or verified apply leaves an old durable path
 - TDD cannot be followed or verification repeatedly fails
+- a canonical Agent Loop checker failure needs a temporary patch but the exact Temporary Checker Repair Review or one-Gate substitute decision is missing, expired, or being widened
 - review finds behavior/scope/architecture changes
 - subagents are needed but not yet approved
 - branch creation, switching, deletion, push, or tag is requested

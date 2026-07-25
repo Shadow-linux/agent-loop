@@ -353,6 +353,21 @@ Bug 与 Requirement 是可选多对多关系。产品含义不清时回到 Requi
 
 Operational Support 默认先只读检查代码、配置、脚本、部署流程和环境事实。需要代码变更时再路由 Lightweight、Feature 或 Bug；不会用“运维”名义绕过写入门禁。
 
+### 临时修正 Agent Loop Checker
+
+如果校验器本身可能有问题，可以说：
+
+```text
+这个 Agent Loop Checker 可能有问题。
+先保留原始失败并判断是文档、环境还是 Checker；
+如果确实是 Checker 缺陷，给我一个隔离临时修复方案，
+我确认后只用于当前 Gate。
+```
+
+Agent 会先重跑原命令并缩小问题。确认为 Checker 缺陷后，它会展示原 Checker 路径和 digest、最小复现、规则依据、补丁范围、RED/GREEN、反例检查、临时目录、回滚和失效条件。人类确认前不会写补丁；默认只修改隔离副本，不会静默改全局 Agent Loop。
+
+临时结果只能作为当前指定 Gate 的人类批准替代证据。原始 canonical 结果仍记录为失败，换了文件、Checker、命令或 Gate 就失效；正式修复仍需回到 Agent Loop 源码、补回归测试并通过正式验证。
+
 ## 把重复操作变成项目能力
 
 ```text

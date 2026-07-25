@@ -697,6 +697,7 @@ Rules:
 - when a Visual Trigger exists, use a bounded working render to clarify technical options or boundaries, then rewrite the result into the proposed ADR; optional durable visual evidence uses `source-render-v1` and cannot accept the ADR or satisfy technical-landing coverage
 - run structural preflight while the draft remains `proposed`; only explicit human acceptance authorizes Human Review Evidence plus `Status: accepted`, followed by accepted-mode validation
 - allow a confirmed Brief with no stable model IDs/Product Rule references, or a reasoned legacy `concept-foundation-not-needed` source, to use the explicit trace-not-applicable path without inventing product models
+- allow a confirmed Standard source with Product Rules but no Concept or Requirement Model IDs to keep the absent ID fields as `none`, while requiring normal Product Rule scope and technical-landing coverage
 - when upstream accepted meaning invalidates an accepted technical decision, preserve history and propose a superseding ADR; do not rewrite accepted decision meaning in place
 - assess Migration / Backfill, Compatibility, Rollout / Cutover, and Rollback / Reversibility, but expand operational landing only for triggered concerns
 - update Requirement README/Product Definition and Feature `spec.md` decision references after human confirmation
@@ -1300,6 +1301,7 @@ Load:
 
 - `skill-routing.md` for Stage Helper Capability Scan
 - `external-skill-adapters.md` when Stage Helper Capability Scan finds Superpowers or another systematic debugging skill
+- `checker-recovery.md` when a canonical Agent Loop checker still fails after the exact command is rerun with unchanged inputs
 
 Rules:
 
@@ -1308,10 +1310,16 @@ Rules:
 - find root cause
 - form one hypothesis at a time
 - write regression test when possible
+- for a canonical checker failure, preserve its exact command/output/path/digest and classify `artifact-invalid | environment-invalid | checker-defect-candidate | unresolved` before changing checker or artifact logic
+- reduce a checker candidate to a published-authority-backed positive fixture and negative controls; read-only diagnosis may continue without interruption
+- present the exact Temporary Checker Repair Review before any checker/support-file write; use an isolated temporary copy by default and require a separate in-place installed-Skill authorization
+- verify the unmodified copied checker produces RED, then the minimal patch produces GREEN while negative controls still fail
+- never rewrite a valid artifact for a known-wrong checker, add a broad bypass, hide canonical failure, or reuse a temporary grant after its Gate or digest scope expires
 
 Write:
 
 - diagnosis in `notes.md`
+- compact checker-recovery evidence in the existing owning artifact only when the result must cross sessions, handoff, or a later action-specific Gate; same-session evidence may remain response-local
 
 Exit:
 
@@ -1327,6 +1335,7 @@ Load:
 
 - `skill-routing.md` for Stage Helper Capability Scan
 - `external-skill-adapters.md` when Stage Helper Capability Scan finds Superpowers or another verification skill
+- `checker-recovery.md` when verification depends on a suspected defective canonical Agent Loop checker
 
 Rules:
 
@@ -1338,6 +1347,9 @@ Rules:
 - when the Feature resolves Bugs, execute the Bug Verification Matrix against the original reproduction or accepted substitute and regression/safety paths
 - after Feature evidence exists, move a related repair Bug from `in-progress` to `verifying`; do not set `closed`
 - failed Bug-specific verification returns the Bug to `in-progress` when the repair remains valid or `triaging` when Expected Behavior/diagnosis was invalidated; append the failure evidence
+- a temporary checker result may substitute for one named Gate only after fresh defect proof, RED/GREEN, negative controls, exact target run, expiry/rollback disclosure, and explicit Human acceptance
+- retain the dual result exactly: `Canonical validation: failed`, `Temporary checker recovery: passed | failed`, and `Human substitute decision: accepted-for-this-gate | declined`
+- do not claim Agent Loop itself fixed until the formal source checker and required focused/full validation pass
 
 Write:
 

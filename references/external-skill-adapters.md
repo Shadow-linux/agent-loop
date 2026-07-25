@@ -258,7 +258,8 @@ When verification fails or unexpected behavior appears:
 2. Reproduce and identify root cause before proposing fixes.
 3. Record root cause, evidence, fix decision, and follow-up verification in Feature `notes.md`; Bug Management may link the evidence in the Bug README.
 4. The helper must not create, merge, close, reopen, or change Bug Records; select a Resolution Path; create a Requirement/Feature; mutate lifecycle; or widen Git authority.
-5. Return to Execute / Verify / Review under `agent-loop`.
+5. If a canonical Agent Loop checker remains failed after an exact rerun and the checker may be defective, load `checker-recovery.md`; the debugging helper may reduce the fixture but cannot authorize or apply a temporary checker patch by itself.
+6. Return to Execute / Verify / Review under `agent-loop`.
 
 ## Submit / Integrate Adapter
 

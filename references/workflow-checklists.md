@@ -90,9 +90,9 @@ Before using an external skill or plugin inside a stage:
 
 - [ ] Resolve README `Effective Product Definition` or legacy `Effective Concept Foundation` and record the dual-reader Effective Requirement Snapshot before technical landing.
 - [ ] Require new Product Review `confirmed` and any triggered internal Concept Foundation accepted; return pending / `candidate` / `reopened` to Requirements Discussion.
-- [ ] Declare accepted Concept IDs and in-scope Requirement Model IDs without copying or redefining product meaning.
-- [ ] Inventory every stable source model ID (`REL-*`, `PERM-*`, `CMD-*`, `EVT-*`, `FLOW-*`, `STATE-*`, `PM-*`, `EX-*`) and give every out-of-scope ID an accepted-decision, feature-local, proposed-decision, or reasoned not-applicable owner.
-- [ ] Give every in-scope accepted Requirement Model ID exactly one Requirement Model Technical Landing Trace disposition.
+- [ ] Declare only source-backed accepted Concept IDs, in-scope Requirement Model IDs, and Product Rule anchors without copying or redefining product meaning; use `none` for an ID kind only when the effective source declares none.
+- [ ] Inventory every stable source model ID (`REL-*`, `PERM-*`, `CMD-*`, `EVT-*`, `FLOW-*`, `STATE-*`, `PM-*`, `EX-*`) and accepted Product Rule anchor, then give every out-of-scope reference an accepted-decision, feature-local, proposed-decision, or reasoned not-applicable owner.
+- [ ] Give every in-scope accepted Requirement Model ID and Product Rule reference exactly one Requirement Model Technical Landing Trace disposition.
 - [ ] Apply the Coverage Hard Gate: every `landed` row has Technical Landing, Preserved Invariant, Design Slice, and Verification; non-landed dispositions name an owner or concrete reason.
 - [ ] Treat `Applicable Decisions` as awareness only, never as a substitute for Requirement Model coverage or Design Slice ownership.
 - [ ] Keep `Upstream Compatibility: review-required` separate from ADR lifecycle status and block dependent Feature Spec, Plan, and implementation.
@@ -198,7 +198,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.0-20260723.2`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.0-20260725.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -284,7 +284,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.0-20260723.2`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.0-20260725.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -698,6 +698,13 @@ Checklist:
 - [ ] Write a failing regression test when possible.
 - [ ] Fix root cause, not symptom.
 - [ ] Record diagnosis in `notes.md`.
+- [ ] For a canonical Agent Loop checker failure, rerun the exact command unchanged and preserve command, target, exit status, output, checker path/version/commit, and SHA-256.
+- [ ] Classify `artifact-invalid | environment-invalid | checker-defect-candidate | unresolved` before proposing an artifact, environment, or checker write.
+- [ ] Prove a checker candidate with one published-authority-backed positive fixture and negative controls; do not invent checker meaning.
+- [ ] Present a Temporary Checker Repair Review with exact patch, isolation target, permitted command/Gate, expiry, rollback, and residual before the first checker/support write.
+- [ ] Use an isolated temporary copy by default; installed/global in-place mutation requires a second exact Human authorization with preimage/backup/restore evidence.
+- [ ] Verify unmodified-copy RED, minimal-patch GREEN, negative-control rejection, and the exact target run.
+- [ ] Never add a general bypass, silently rewrite the installed Skill, or alter a valid artifact to satisfy a known-wrong checker.
 
 ## Verify
 
@@ -710,6 +717,10 @@ Checklist:
 - [ ] When Bugs are related, execute the Bug Verification Matrix against original reproduction/substitute and regression/safety paths; update the Bug README and Index row.
 - [ ] Feature evidence may move `in-progress -> verifying`; do not set `closed` without the Bug Close Gate.
 - [ ] Failed Bug-specific verification returns to `in-progress` or `triaging` with append-only evidence.
+- [ ] When temporary checker recovery is used, record `Canonical validation: failed`, `Temporary checker recovery: passed | failed`, and `Human substitute decision: accepted-for-this-gate | declined`.
+- [ ] Accept temporary substitute evidence only for the named Gate after explicit Human decision; expire it on Gate, target, command, checker/support/input/authority digest, or negative-control change.
+- [ ] Keep residual canonical failure visible at every later action-specific Gate that relies on the result.
+- [ ] Require formal Agent Loop source repair and canonical focused/full validation before claiming the checker or Agent Loop itself fixed.
 - [ ] Do not claim completion without evidence.
 
 ## Review

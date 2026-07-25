@@ -33,6 +33,7 @@ The core constraints are:
 - accepted Requirement/Product/ADR/Human Decision meaning remains authoritative for its question while merged code/tests/config prove implementation reality; neither Source nor Target wins globally
 - the four-snapshot Target Canonical Memory Spine, Path Accounting Ledger, Desired Target Memory Snapshot, exact Plan Hash, and transactional Apply/Restore tooling belong only to explicitly authorized Full Memory Audit / Recovery
 - optional `.agent-loop/skills/` owns Human-gated project-local reusable capabilities; `INDEX.md` owns lifecycle and discovery metadata
+- Checker Self-Repair is a bounded internal Diagnose Failure / Verify method: classify artifact, environment, checker, or unresolved cause first; use an isolated Human-authorized RED/GREEN patch only for one named Gate; retain canonical failure and require formal source repair
 - Project Skill Discovery Guard checks active INDEX metadata before negative Project Skill claims or generic executable fallback, loads only a matched body, and fails closed on drift without adding a stage, status, cache, or execution grant
 - stable Web E2E capability belongs in `project.md`; feature-specific E2E cases belong in feature `tests.md` or `tests/e2e/*`
 - `requirements/` stores human source material packages and requirement lifecycle/backlog records as requirement set directories: requirements, prototypes, feedback, screenshots, recordings, links, follow-up notes, status, and optional `requirements/INDEX.md`
@@ -85,6 +86,7 @@ Human Goal
 → Feature Workspace
 → Task / Test / Plan
 → Execute / Verify
+  → [internal] Checker Self-Repair only for a proven canonical checker defect and one Human-authorized Gate substitute
 → Drift Check
 → Feature Follow-up / Flow-back with internal Bug Management when explicit defect management appears
 → Feature Monthly Archive when the human explicitly asks to compact closed-history discovery
@@ -229,6 +231,8 @@ If plan.md exists, it must be construction-grade: exact paths, code context, int
 ```
 
 **Evidence**: fresh proof such as test output, build output, lint/typecheck output, API results, E2E/browser verification, screenshots, logs, or review findings.
+
+**Checker Self-Repair**: internal Diagnose Failure / Verify recovery for a proven canonical Agent Loop checker defect. The Agent preserves the original failure, proves the mismatch against published authority with a minimal fixture, requests exact authorization before writing an isolated temporary copy, verifies RED/GREEN and negative controls, and may use the result only as Human-approved substitute evidence for one named Gate. It creates no new lifecycle or mandatory artifact and never turns the canonical result into `pass`.
 
 **E2E Discovery**: the stage that discovers real Web E2E capability from project reality before writing or executing browser automation. It records durable environment facts in `project.md` and feature-specific cases in `tests.md` or `tests/e2e/*`.
 
