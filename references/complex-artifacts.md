@@ -14,9 +14,9 @@ plan.md
 notes.md
 ```
 
-`product.md` remains optional and should exist when Product Brief is triggered.
+The Feature Context Snapshot remains inside `spec.md` for ordinary Features. Do not create `context.md` by default.
 
-When complex artifact mode is confirmed, `tasks.md`, `tests.md`, and `plan.md` become indexes and current-state summaries for the areas that need detail. `product.md`, `spec.md`, and `notes.md` remain stable source/record files. Detailed artifacts may live in:
+When complex artifact mode is confirmed, `tasks.md`, `tests.md`, and `plan.md` become indexes and current-state summaries for the areas that need detail. `spec.md` and `notes.md` remain stable source/record files. Detailed artifacts may live in:
 
 ```text
 tasks/
@@ -24,6 +24,8 @@ tests/
 plans/
 contracts/
 ```
+
+Optional `context.md` is the one non-directory expansion: create it only when the complete Snapshot would make `spec.md` no longer locally understandable. Its creation uses the existing Complex Artifact Human Gate. `spec.md` must retain the Snapshot summary, exact `context.md` link, Requirement/product/ADR source identity, digests, Product Slice references, and Freshness; `context.md` must keep exact source/digest parity. It is derived context and never independent product truth.
 
 Do not delete or replace the stable entry files. Future agents must still start there.
 
@@ -57,11 +59,14 @@ Ordinary files within one cohesive module do not justify Complex Artifact Mode. 
 
 Before creating directories, explain the complex semantics that justify the recommendation, name which files need detail, and ask human confirmation. Create only the detail directories that are actually needed.
 
+The same rule applies to optional `context.md`: recommend it from lost local understandability, not size alone, and create it only after the Complex Artifact Human Gate.
+
 ## Directory Layout
 
 ```text
 .agent-loop/features/YYYY-MM-DD-<feature>/
   spec.md
+  context.md  # optional expanded derived Feature Context Snapshot
   tasks.md
   tests.md
   plan.md

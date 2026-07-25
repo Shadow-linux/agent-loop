@@ -424,14 +424,18 @@ Use this order:
 6b. If `.agent-loop/skills/INDEX.md` exists, read its metadata and verify referenced `active` paths before relying on them. Re-match active `bootstrap` / `on-demand` rows for each applicable actionable intent before stage-specific helper or fallback action; load and verify only the matched body. Do not load `proposed`, `disabled`, or `deprecated` skills into normal routing.
 6c. For explicit Bug management, read `bugs/INDEX.md` metadata before creating a Bug or scanning Feature ownership. Resolve current Bug README, duplicate/reopen pointers, and related flat/archived Feature locators before relying on lifecycle or target claims.
 6d. When `<memory-root>/changes/` exists, run the read-only Lightweight Change scanner across every month before relying on Change status, pending thresholds, or human-review inventory. A changes-only root does not prove reliable `project.md` or completed Project Entry.
-7. Read current feature `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`, and `contracts.md` if present.
-8. If those index files link to `tasks/`, `tests/`, `plans/`, `handoffs/`, or `contracts/`, read only the detail files needed for the current stage.
+7. Read current Feature `spec.md` as the bootstrap. Run `python3 <skill-root>/scripts/check-feature-context.py --project-root <target-project-root> <feature-spec-path>` before relying on downstream Feature context. Exit `0 / CURRENT` permits loading stage-relevant ledgers; exit `3 / REFRESH_REQUIRED` stops for semantic refresh; exit `1 / BLOCKED` routes to the owning Requirement, Decision & Design, Feature Definition, or Recovery Gate. On Windows use the equivalent `py -3` command.
+8. Only after Feature Context is `current`, read stage-relevant current Feature `tasks.md`, `tests.md`, `plan.md`, `notes.md`, and `contracts.md` if present. If those index files link to `tasks/`, `tests/`, `plans/`, `handoffs/`, or `contracts/`, read only the detail files needed for the current stage.
 9. Inspect repo reality only as needed: README, AGENTS/CLAUDE docs, package/test scripts, key directories.
 10. If local repo reality points to remote execution, or the human says this is a remote project, load `references/remote-project-discovery.md`. An empty local directory alone is not enough; if there are no remote hints, classify as `new-project`.
 11. Verify long-term memory index targets before trusting them. If `project.md`, root guidance, or current artifacts point to onboarding-db, enterprise `project/*.md`, feature docs, contracts, or guidance files, check that the referenced path exists before relying on it.
 12. Compare project memory with obvious repo reality.
 12a. Run Branch Strategy Check when branch evidence affects the current work. Compare accepted durable policy and Target Release Context with native repository guidance, current Git reality, and feature/plan/submit evidence. Recommendation is read-only; adoption and every Git mutation remain separately Human-gated.
 13. Choose the next stage.
+
+This Feature Context Load Contract also runs after context compaction, Resume, controller re-entry, long-running uncertainty, Requirement/ADR source change, archive rehydrate before reopened execution, and before Plan or Execute reliance. Conversation summaries, `tasks.md`, and `plan.md` cannot replace `spec.md` bootstrap plus freshness evidence.
+
+When the checker returns `refresh-required`, read the changed Requirement README and only applicable Product Definition/ADR sections, compare current accepted meaning with the Snapshot and Product Slice, refresh derived context and downstream trace only when scope/acceptance/decision meaning is unchanged, and record evidence in `notes.md`. Scope, behavior, acceptance, role, state, rule, invariant, exception, recovery, or accepted-decision impact returns to the existing Human Gate.
 
 If `project.md` declares a Decisions index, list decision files before Decision & Design or Feature Spec. Read decisions already linked by the active Requirement Product Definition, legacy Feature Product Brief, or `spec.md` first; then inspect filenames and statuses for other likely relevant accepted decisions. Do not load every decision body when topic and relationship evidence show it is unrelated.
 
@@ -694,6 +698,7 @@ Do not offer an auto mode as a substitute for missing clarification. If scope, a
 
 Auto modes do not remove stop conditions. Stop and ask when:
 
+- Feature Context Snapshot freshness is `refresh-required | blocked`; Auto Mode cannot continue until semantic refresh succeeds or the owning Gate resolves the blocker
 - a task is `Human-gated`
 - product, design, architecture, security, data, approval, or public-interface decisions are needed
 - a stage would modify human original requirements

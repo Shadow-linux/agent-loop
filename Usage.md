@@ -306,6 +306,8 @@ ADR 先用 `Effective Requirement Snapshot` 锁定已确认的 Product Definitio
 
 Feature `spec.md` 只选择产品切片，不重新定义产品。复杂任务可按触发条件使用 `tasks/`、`tests/`、`plans/`、`handoffs/` 和 `contracts/` 子目录；不要默认展开。
 
+Feature 工作从 `spec.md` 里的本地 **Feature Context Snapshot** 开始。Agent 会自动从 Requirement README 找到真正的 `product.md`，检查适用 ADR 和摘要是否仍然一致；来源未变时走快速路径，来源变化时先刷新语义或停在已有 Human Gate。人类不需要手动定位、重开或反复指定 `product.md`。Snapshot 只是派生执行上下文，不是第二份产品真相；只有复杂且长期运行的 Feature 才会在现有 Complex Artifact Human Gate 后增加可选 `context.md`。
+
 ### 让这个功能自主推进
 
 ```text
@@ -609,7 +611,8 @@ Feature Close Review 先确认所有任务、验收、测试、决策切片、Bu
 | `decisions/*.md` | 条件触发、Human-accepted 的共享技术决策 |
 | `changes/YYYY-MM/*.md` | 持久轻量执行卡 |
 | `bugs/<bug>/README.md` | Bug identity、证据、Resolution Path 和 close |
-| `features/<feature>/spec.md` | Feature Product Slice 与行为规范 |
+| `features/<feature>/spec.md` | Feature Context Snapshot、Product Slice 与行为规范 |
+| `features/<feature>/context.md` | 仅复杂 Feature 可选的扩展派生上下文，不拥有产品真相 |
 | `features/<feature>/tasks.md` | 任务分解和状态 |
 | `features/<feature>/tests.md` | 测试设计和验收矩阵 |
 | `features/<feature>/plan.md` | 当前 task/story 的实施计划 |

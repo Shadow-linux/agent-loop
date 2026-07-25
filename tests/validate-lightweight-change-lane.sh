@@ -222,7 +222,7 @@ blocks = content.scan(/<!-- agent-loop:managed-start section:([^ ]+) .*?block-ve
 abort 'FAIL: root AGENTS managed blocks missing' if blocks.empty?
 abort "FAIL: expected 13 managed blocks, found #{blocks.length}" unless blocks.length == 13
 blocks.each do |section, revision|
-  expected = '1.5.0-20260725.1'
+  expected = '1.5.0-20260725.2'
   abort "FAIL: #{section} expected #{expected}, found #{revision}" unless revision == expected
 end
 RUBY

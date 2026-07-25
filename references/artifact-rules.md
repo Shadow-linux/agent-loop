@@ -47,7 +47,8 @@ New human source material should be archived inside a requirement set directory.
 | `bugs/YYYY-MM-DD-<bug-slug>/README.md` | stable Bug identity, Report Origin, observed/expected evidence, Status, Resolution, relationships, Resolution Path, verification, close, and reopen history | product meaning, Requirement lifecycle, Feature tasks/tests/plan, personnel assignment, or Git authorization |
 | `bugs/YYYY-MM-DD-<bug-slug>/evidence/*` | optional bounded screenshots, redacted logs, failed tests, reproduction, and verification evidence | secrets, complete production payloads, implementation plans, or executable state database |
 | legacy Feature `product.md` | historical feature-level product intent retained for Resume, Follow-up, Review, Close, and Recovery only | new Product Definition authoring, Requirement lifecycle, or silent migration |
-| Feature `spec.md` | intended feature behavior plus Product Requirement Source and Product Slice | Requirement product meaning, execution logs, or a second PRD |
+| Feature `spec.md` | intended feature behavior, Product Requirement Source, derived Feature Context Snapshot, and Product Slice | Requirement product meaning, execution logs, or a second PRD |
+| optional Feature `context.md` | expanded derived execution context for a complex or long-running Feature, with exact source/digest parity to `spec.md` | independent product truth, Requirement lifecycle, approval, task/test/plan, code-fact, or execution authority |
 | `tasks.md` | work breakdown, status, and links to task details | full test evidence |
 | `tests.md` | test design, matrix, and links to test details | raw test output |
 | `plan.md` | active execution plan pointer or compact plan, including Branch Context Evidence when applicable | historical execution record or Git action authorization |
@@ -248,6 +249,8 @@ plan.md
 notes.md
 ```
 
+The Feature Context Snapshot is derived execution context inside `spec.md` by default. Do not create optional `context.md` for an ordinary Feature. It may be added only through the existing Complex Artifact Human Gate when keeping the complete Snapshot in `spec.md` would make the Feature no longer locally understandable; `spec.md` keeps the summary, exact link, source identity, digests, and freshness. Neither file owns product meaning.
+
 Do not create dated variants like `tasks-2026-05-26.md` in v1.
 
 Optional complex directories are allowed only after trigger conditions and human confirmation:
@@ -347,6 +350,7 @@ stable plan.md
 
 ```text
 current feature behavior changed -> update spec.md
+Feature Context source or digest changed -> rerun the read-only freshness checker, semantically refresh derived spec.md Snapshot and optional context.md only when authority remains valid, and keep both in exact source/digest parity
 accepted Requirement product meaning changed -> Human-gated append-only Product Definition follow-up, advance README pointer, then recheck ADR / open Feature compatibility
 legacy feature product intent conflict found -> stop for Requirement Conflict / Recovery; do not rewrite legacy product.md silently
 cross-feature product consensus changed -> update project.md Product Context or Domain Language in simple mode, or project/product-context.md and project/domain-language.md in enterprise mode

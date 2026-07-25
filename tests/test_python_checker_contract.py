@@ -19,6 +19,7 @@ CHECKERS = (
     "scripts/check-concept-foundation-trace.py",
     "scripts/check-adr-requirement-model-trace.py",
     "scripts/check-requirement-product-definition.py",
+    "scripts/check-feature-context.py",
 )
 
 ARCHIVE_COMMANDS = (
@@ -312,6 +313,12 @@ class PythonCheckerContractTests(unittest.TestCase):
             adr = root / "adr"
             shutil.copytree(ROOT / "tests/fixtures/adr-technical-landing/valid", adr)
 
+            feature_context = root / "feature-context"
+            shutil.copytree(
+                ROOT / "tests/fixtures/feature-context/current/.agent-loop",
+                feature_context / ".agent-loop",
+            )
+
             runs = (
                 (
                     "scripts/check-root-agents-blocks.py",
@@ -332,6 +339,15 @@ class PythonCheckerContractTests(unittest.TestCase):
                     str(adr / "README.md"),
                     str(adr / "requirement.md"),
                     str(adr / "decision.md"),
+                ),
+                (
+                    "scripts/check-feature-context.py",
+                    "--project-root",
+                    str(feature_context),
+                    str(
+                        feature_context
+                        / ".agent-loop/features/2026-07-25-example/spec.md"
+                    ),
                 ),
             )
             before = self.snapshot(root)

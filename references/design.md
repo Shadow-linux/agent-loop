@@ -114,6 +114,32 @@ Behavior Intent
 → Memory
 ```
 
+## Feature Context Snapshot Invariant
+
+Feature Context Snapshot is a derived execution cache inside Feature `spec.md` by default. Requirement README resolves the Effective Product Definition, and the Requirement `product.md` plus applicable accepted ADRs remain authoritative. Optional Feature `context.md` only expands the same derived context for a complex Feature after the existing Complex Artifact Human Gate.
+
+Freshness is exactly:
+
+```text
+current | refresh-required | blocked
+```
+
+Freshness is a dependency judgment, not Feature lifecycle, Requirement lifecycle, Product Review, ADR status, execution permission, or a new Human Gate. Requirement, product, and ADR locators in the Snapshot are project-root-relative so archive and rehydrate cannot invalidate them.
+
+The authority and execution chain is:
+
+```text
+Requirement README
+-> Effective Product Definition
+-> accepted ADRs
+-> Feature Context Snapshot
+-> Product Slice
+-> Tasks / Tests / Plan
+-> Execute / Verify / Review
+```
+
+Before Task, Test, Plan, Resume, Execute, Subagent Handoff, Verify, Review, Drift Check, or Close relies on Feature context, the read-only checker must resolve the Requirement authority and require current Product/ADR evidence. `refresh-required` stops downstream generation for semantic refresh; `blocked` routes to the existing owning Requirement, Decision & Design, Feature Definition, or Recovery Gate. Auto Mode cannot continue on either result.
+
 ## Definitions
 
 **Project**: current codebase or repository. Long-term memory lives in `.agent-loop/project.md` by default.
@@ -203,6 +229,8 @@ One coherent Feature may resolve several Bugs. Each Bug retains independent iden
 **Prototype**: human-provided design artifact, screenshot, wireframe, or interaction reference.
 
 **Feature**: one behavior-changing work area under `.agent-loop/features/<feature-id>/`.
+
+**Feature Context Snapshot**: a compact, derived execution cache in Feature `spec.md` that records project-root-relative Requirement/ADR authority, source digests, Product Slice references, and the product outcome, journey, rules, states, exceptions, recovery, boundary, and acceptance context needed for downstream work. It cannot redefine accepted product or ADR meaning.
 
 **Feature Monthly Archive**: An explicit, Human-gated maintenance capability that moves an eligible closed feature directory intact to `.agent-loop/features/YYYY-MM/<feature-id>/`, updates `features/archive.md` and approved references, post-checks, and restores on failure. The scan is read-only and apply requires the exact expected plan SHA-256 Batch Human Gate plus transaction journal. It creates no per-feature archive summary, no `historical/`, no Deep Archive, and no `--force`.
 

@@ -856,6 +856,16 @@ Exit:
 - Human confirms the named Resolution Path and any separate Feature/Requirement action, or the Bug remains `triaging`/`deferred`
 - next stage: Requirements Discussion, Requirement Archive/Reconciliation, Feature Spec update, Work Breakdown, Test Design, Targeted Feature Scan, Plan Gate, Diagnose Failure, Verify, or Recovery
 
+## Feature Context Load Contract
+
+For every current Feature, bootstrap from `spec.md`, not `tasks.md` or `plan.md`. Run the read-only checker before Task, Test, Plan, Resume, controller re-entry, context-compaction recovery, Execute, Subagent Handoff, Verify, Review, Drift Check, or Close relies on Feature context:
+
+```text
+python3 <skill-root>/scripts/check-feature-context.py --project-root <target-project-root> <feature-spec-path>
+```
+
+`CURRENT` (`0`) permits the local Snapshot fast path. `REFRESH_REQUIRED` (`3`) stops downstream generation while the Agent reads only changed/applicable Requirement and ADR meaning, compares semantic impact, refreshes derived Snapshot evidence, and repairs affected Tasks/Tests/Plan/Handoffs. `BLOCKED` (`1`) routes to Requirements Discussion, Decision & Design compatibility review, Feature Definition Review, or Recovery. Auto Mode cannot continue on either non-current result. On Windows use `py -3`.
+
 ## Feature Spec
 
 Entry: goal and source requirements are clear enough.
@@ -880,6 +890,7 @@ Include:
 - `Related Bugs` and the Human-confirmed Bug Resolution Path source when this Feature repairs Bugs; do not copy full Bug report/evidence
 - problem/goal
 - Product Requirement Source: Requirement Set, Effective Product Definition, Profile, Product Review Evidence, and Applicable Decisions
+- Feature Context Snapshot derived from that one resolved authority: project-root-relative Requirement/product/ADR paths, current lifecycle/review/profile, Product and Decision SHA-256 values, Product Slice references, verification time, Freshness, and the outcome/journey/rules/states/exceptions/recovery/boundary context needed downstream
 - Product Slice rows mapping source sections/IDs/rules to Feature responsibility, acceptance, and `in-scope | out-of-scope | not-applicable` coverage
 - requirement Delivery Phase reference when the feature implements a phase or phase slice
 - scope
@@ -896,6 +907,8 @@ Rules:
 - inspect the Effective Product Definition, original source links as needed, and Applicable Decisions before writing behavior and acceptance
 - use the dual reader: new `Effective Product Definition` requires Profile/Product Review `confirmed`; legacy `Effective Concept Foundation` / reviewed Requirement remains valid without migration
 - add Product Requirement Source and Product Slice to `spec.md`; do not require or create Feature `product.md`
+- create the default Snapshot inside `spec.md`; optional `context.md` is expanded derived context only for a Human-confirmed complex Feature and must keep exact source/digest parity
+- run the checker after writing the Snapshot and require `CURRENT` before Requirement Checklist acceptance
 - Product Slice references source Concept/Model IDs and `product.md#<rule-anchor>`; it may narrow scope but cannot redefine accepted product meaning
 - do not let Feature Spec introduce a new meaning, state, invariant, role boundary, relationship, or product object for an accepted Concept ID; return to Requirements Discussion when product semantics must change
 - when Feature Spec uses Optional Visual Communication, limit the view to the accepted Product Slice, feature responsibility, or feature-local implementation and acceptance path; rewrite accepted feature-local clarification into `spec.md`; if the view reveals new product meaning, stop and return to Requirements Discussion instead of adding it to `spec.md` or editing Requirement `product.md`
@@ -945,6 +958,7 @@ Entry: draft spec exists.
 
 Check:
 
+- Feature Context Snapshot is complete, paths are project-root-relative, its source references resolve through one Requirement README, and the checker returns `CURRENT`
 - no major ambiguity
 - stories independently testable
 - acceptance criteria measurable
@@ -974,6 +988,8 @@ Write:
 
 Rules:
 
+- load `spec.md` and require a current Feature Context Snapshot before creating or revising Tasks
+- map every Task to a Product Slice responsibility/acceptance, an accepted ADR Design Slice, or an explicit technical prerequisite for a named later vertical Product Slice
 - default to vertical slices / tracer bullets
 - each normal task should form a narrow verifiable loop through the necessary layers
 - allow horizontal foundation tasks only when a verifiable product slice is not yet possible
@@ -1064,6 +1080,8 @@ Include:
 
 Rules:
 
+- load and require a current Feature Context Snapshot before designing tests
+- cover every applicable acceptance criterion, actor/permission boundary, state transition/terminal, Product Rule/invariant, exception/recovery path, and accepted ADR verification obligation; uncovered applicable meaning blocks readiness or needs the existing Human-approved substitute path
 - do not assume an E2E framework, local URL, account, seed, or browser tool
 - if web-visible behavior exists, run E2E Discovery first
 - if a task changes HTTP/API behavior, service-to-service behavior, events, background jobs, auth, persistence, or integration boundaries, API/integration verification is applicable unless a human approves a substitute verification
@@ -1102,6 +1120,7 @@ Helper-friendly stage: Technical Design / Code Context runs Stage Helper Capabil
 
 Load:
 
+- current Feature Context Snapshot plus applicable accepted ADRs; separate accepted product meaning, accepted ADR landing, and current code facts throughout Technical Design
 - `implementation-planning.md`
 - `project-decisions.md` when implementation design introduces long-term/cross-feature boundaries, dependencies, data ownership, transaction, consistency, concurrency, idempotency, or recovery choices
 - `large-projects.md` for large, old, or multi-package projects
@@ -1161,6 +1180,8 @@ Write one of:
 
 Rules:
 
+- require Feature Context Snapshot `Freshness: current` before accepting a Plan or No-Plan Decision
+- require every active Plan to name its Product Slice and Task, preserve applicable product/ADR invariants, separate code facts from product intent, and verify the mapped acceptance without implementing nearby out-of-scope Requirement meaning
 - decide whether a plan is required before any code implementation
 - create `plan.md` when the task/story is complex, multi-file, changes behavior, changes tests, touches interfaces, crosses module boundaries, involves data/API/async/security/deployment behavior, needs TDD design, needs subagents, or the human asks for a plan
 - a No-Plan Decision is allowed only for a trivial, low-risk, single-file or documentation-only task with clear acceptance, exact files, and exact verification command
@@ -1196,6 +1217,8 @@ Entry: before implementation when spec/tasks/tests and either plan or a recorded
 
 Check:
 
+- rerun Feature Context freshness and require `CURRENT`
+- trace Product Slice through Tasks, Tests, and the active Plan; stop when any accepted role, state, rule, exception, recovery, acceptance, or ADR obligation is lost
 - each accepted requirement has task coverage
 - each task maps to spec or explicit technical need
 - tests cover acceptance criteria
@@ -1226,6 +1249,8 @@ Load:
 
 Rules:
 
+- before dispatch, require current Feature Context and put the Feature path, Snapshot Product SHA-256/Freshness, Product Slice IDs/anchors, applicable ADR paths/digests, and exact assigned scope in every implementation brief
+- the handoff expires immediately when the Product Source SHA-256 or any applicable Decision Source SHA-256 changes; the receiving Agent reruns freshness before acting
 - after explicit human approval and mandatory helper resolution, use the loaded `subagent-driven-development` helper; use fallback only for recorded `unavailable` or `load-failed`
 - subagents are optional and never implied by task count alone
 - ask human confirmation before dispatching subagents
@@ -1260,6 +1285,7 @@ Mandatory helper: Execute Task / Story resolves and loads `superpowers:test-driv
 
 Rules:
 
+- rerun or reuse only fresh same-stage checker evidence and reject Execute when Feature Context is missing, `refresh-required`, or `blocked`
 - default unit is task
 - story execution requires explicit human choice
 - whole-feature execution requires explicit human confirmation and only for tiny features
@@ -1339,6 +1365,7 @@ Load:
 
 Rules:
 
+- rerun Feature Context freshness before verification relies on Snapshot acceptance references; non-current context stops verification claims
 - after mandatory helper resolution, use the loaded verification adapter; use fallback only for recorded `unavailable` or `load-failed`, while completion remains controlled by agent-loop
 - identify proof command/action
 - run fresh verification
@@ -1376,7 +1403,8 @@ Load:
 
 Check:
 
-- Spec Review: implementation matches `product.md` when present, `spec.md`, acceptance criteria, scope, and out-of-scope
+- current Feature Context Snapshot and authoritative acceptance references; code disagreement is implementation drift and must not be copied into the Snapshot
+- Spec Review: implementation matches the current Requirement Product Definition through the Snapshot/Product Slice, legacy Feature `product.md` only when present, `spec.md`, acceptance criteria, scope, and out-of-scope
 - Decision & Design Review: implementation matches accepted Decision & Design records and every design slice assigned to this feature has current evidence
 - Standards Review: implementation follows root/directory `AGENTS.md`, `project.md` rules, directory boundaries, testing rules, and local code conventions
 - test adequacy
@@ -1415,6 +1443,7 @@ Entry: after implementation or before close.
 
 Check:
 
+- rerun Feature Context freshness and compare code behavior with current product/ADR authority; report disagreement as drift rather than overwriting product truth
 - implementation vs `spec.md`
 - completed work vs `tasks.md`
 - test reality vs `tests.md`
@@ -1623,6 +1652,7 @@ Pause writes:
 
 Close requires:
 
+- Feature Context freshness rechecked as `CURRENT`; `refresh-required | blocked` stops Close and Auto Mode
 - fresh verification evidence
 - Feature Close Review
 - drift check

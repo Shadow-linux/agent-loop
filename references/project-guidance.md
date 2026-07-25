@@ -10,6 +10,8 @@ AGENTS.md / CLAUDE.md = agent startup guidance
 .agent-loop/project/* = optional enterprise project memory details
 .agent-loop/remote.md = local entry pointer for remote projects
 .agent-loop/features/* = feature execution state
+.agent-loop/features/*/spec.md = Feature bootstrap plus derived Feature Context Snapshot and Product Slice
+.agent-loop/features/*/context.md = optional expanded derived context for a complex Feature; never independent product truth
 .agent-loop/features/archive.md = Feature Monthly Archive locator for stable Feature IDs
 .agent-loop/features/YYYY-MM/* = Human-gated closed-history month archive; never an execution path
 .agent-loop/requirements/<record-date>-<topic>/product.md = Agent-authored Human-reviewed Product Definition
@@ -66,6 +68,7 @@ Every time `agent-loop` is used inside a target project, check root guidance bef
 - Agent Ownership: agents own the project outcome as well as the loop, inspect safely available evidence before asking, and continue through authorized scope until verified completion or a concrete Human Gate
 - Stage Helper Capability Scan: agents actively check available skills/plugins/helpers before fallback stage guidance
 - Gate Modes: Strict Mode, Feature Auto-Loop, Task Auto-Run, and their explicit human enablement rules
+- Feature Context startup invariant: before Task/Test/Plan/Execute/Resume relies on a Feature, load `spec.md`, run the Requirement/ADR freshness check, and require the Feature Context Snapshot to be current
 - Required Stops: all six visible classes — Semantic, Scope And Risk, Execution, Evidence, External Mutation, and Git And Lifecycle — plus explicit Auto Mode non-bypass
 - Checker Recovery Gateway: exact rerun routes a canonical Agent Loop checker failure to `references/checker-recovery.md`; isolated repair is Human-authorized and cannot be presented as canonical pass
 - Completion Rules: code changes alone are not done; fresh verification, Review, Drift Check, project-memory evidence, Feature Completion Check, and Feature Close Review remain visible
@@ -258,6 +261,7 @@ Keep it short and long-lived:
 - ask human confirmation before each agent-loop stage
 - use table-first Human Review Summary for non-trivial confirmations
 - Autonomous Execution After Approval: Feature Auto-Loop and Task Auto-Run continue only Agent-ready work inside the accepted scope and bypass none of the six Gate classes
+- before Task/Test/Plan/Execute/Resume relies on a Feature, load its Feature Context Snapshot and require the Requirement/ADR freshness check to be current; non-current context stops Auto Mode
 - completion and submit projection: fresh verification, Review, Drift Check, Project Memory evidence, Feature Completion Check, Feature Close Review, intended-file-only submit scope, and independent lifecycle/Git confirmations
 - stable project commands and hard constraints, only if every agent should know them immediately
 - managed block markers for `agent-loop` maintained sections, so future updates do not overwrite human-owned content

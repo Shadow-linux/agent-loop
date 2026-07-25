@@ -134,6 +134,7 @@ scripts/check-root-agents-blocks.py read-only root AGENTS managed-block drift ch
 scripts/check-onboarding-core-flow-coverage.py onboarding core-flow coverage checker
 scripts/check-concept-foundation-trace.py accepted concept/model trace checker
 scripts/check-adr-requirement-model-trace.py ADR requirement-model landing checker
+scripts/check-feature-context.py read-only Requirement/ADR authority and Feature Context Snapshot freshness checker
 scripts/scan-feature-monthly-archive.py read-only deterministic archive/rehydrate plan
 scripts/check-feature-monthly-archive.py read-only pre/post archive contract checker
 scripts/apply-feature-monthly-archive.py exact-hash Human-gated archive/rehydrate apply
@@ -234,6 +235,7 @@ CHANGELOG.md                        version-change source of truth for "what cha
     YYYY-MM/ archived closed feature directories
     <date>-<feature-slug>/
       spec.md
+      context.md optional expanded derived context for complex Features
       tasks.md
       tests.md
       plan.md
@@ -263,6 +265,7 @@ If the local directory is only a remote-project entry point, create only thin lo
 - Whole-feature execution requires explicit human confirmation and only fits tiny features.
 - A feature may contain many stories and many tasks; `tasks.md` is the feature task ledger.
 - Use Requirement `product.md` as the new product-semantics owner and Feature `spec.md` Product Slice as the implementation view. Existing Feature `product.md` is legacy reader-only evidence.
+- Use Feature `spec.md` as the execution bootstrap. Before Task, Test, Plan, Resume, Execute, Handoff, Verify, Review, Drift, or Close relies on a Feature, run `scripts/check-feature-context.py`; continue only on `CURRENT`, stop for semantic refresh on `REFRESH_REQUIRED`, and route `BLOCKED` to the owning existing Gate. The Snapshot and optional `context.md` are derived caches, never product authority.
 - Do not create `contracts.md` or `contracts/` by default. Use them only for durable producer-consumer delivery boundaries such as API, event, public data, UI state/behavior, SDK/library, or runtime interfaces.
 - Create or update Delivery Contract files only after human confirmation. The agent may proactively recommend one when it detects downstream impact, but simple single-person tasks, pure internal logic, and changes with no downstream consumer should skip contracts.
 - During Work Breakdown, Technical Design / Code Context, Plan, Review, and Drift Check, detect whether a Delivery Contract should be recommended.
@@ -325,7 +328,7 @@ If the local directory is only a remote-project entry point, create only thin lo
 - Feature Auto-Loop may run Agent-ready feature work after a passed Requirement Checklist, Feature Spec acceptance, and explicit human confirmation.
 - Task Auto-Run runs Analyze Consistency before executing one accepted task/story plan after explicit human confirmation.
 - If the human appears slowed down by repeated confirmations, or when starting a feature/task execution lane, proactively explain the available gate modes and recommend either Feature Auto-Loop or Task Auto-Run when safe.
-- Auto modes stop at Human-gated work, unclear decisions, risky changes, failed verification, drift needing approval, unrelated dirty work blocking progress, Bug Resolution Path decisions, Bug close/reopen, Feature create/reopen, Requirement create/lifecycle change, Delivery Contract creation/acceptance/breaking changes, archive/rehydrate apply, directory guidance changes, unapproved subagent dispatch, branch creation, switching, deletion, push, or tag, submit, pause, close, commit, PR, merge, release, or publish.
+- Auto modes stop at Feature Context `refresh-required | blocked`, Human-gated work, unclear decisions, risky changes, failed verification, drift needing approval, unrelated dirty work blocking progress, Bug Resolution Path decisions, Bug close/reopen, Feature create/reopen, Requirement create/lifecycle change, Delivery Contract creation/acceptance/breaking changes, archive/rehydrate apply, directory guidance changes, unapproved subagent dispatch, branch creation, switching, deletion, push, or tag, submit, pause, close, commit, PR, merge, release, or publish.
 - Human confirmations should use table-first Human Review Summary by default; full artifacts remain the source of truth. When multiple documents, facts, or long-term memory entries will change, use Batch Human Review.
 - Root `AGENTS.md` / `CLAUDE.md` guidance must tell future agents to own the workflow: classify the stage, recommend one next action, propose missing artifacts, and keep responsibility for sequencing, diagnosis, verification, drift checks, and project-memory updates.
 - Root guidance must also explain autonomous execution after approval: Feature Auto-Loop may continue Agent-ready work after Requirement Checklist passes, Feature Spec is accepted, and the mode is explicitly enabled; Task Auto-Run must run Analyze Consistency before completing one accepted task/story plan through TDD, implementation, verification, bug fixing, review, drift, status update, and final report.

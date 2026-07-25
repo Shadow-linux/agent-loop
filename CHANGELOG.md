@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Feature Context Snapshot
+- Added a derived Feature-local Context Snapshot while keeping Requirement `product.md` and accepted ADRs authoritative; no new Feature-level product truth or standalone Human Gate was introduced.
+- Added Requirement README authority resolution plus the read-only Python 3.10+ `scripts/check-feature-context.py` checker with deterministic `current | refresh-required | blocked` outcomes.
+- Required Task, Test, Plan, Resume, Execute, and Subagent Handoff paths to stop on non-current Requirement or ADR freshness before relying on local Feature context.
+- Hardened real-memory-root, timestamp, duplicate authority-pointer, and legacy Effective Concept Foundation normalization checks, then refreshed all 13 managed root blocks to `block-version:1.5.0-20260725.2` without changing Skill version `1.5.0`.
+
 ### Checker Self-Repair
 - Added a Diagnose Failure / Verify recovery path that distinguishes invalid artifacts, environment capability failures, proven checker defects, and unresolved causes before any workaround.
 - Allowed an exact Human-authorized isolated checker patch to provide RED/GREEN and negative-control substitute evidence for one named Gate while preserving the canonical failure, expiry, rollback, and later action-specific Gates.

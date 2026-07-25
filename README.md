@@ -68,6 +68,8 @@ During requirements discussion, the agent records Design Readiness evidence and 
 
 New Feature work creates no Feature `product.md`; Feature `spec.md` selects a bounded Product Slice from the effective Requirement Product Definition.
 
+Feature work now starts from a local **Feature Context Snapshot** in `spec.md`. Agent Loop first checks the real Requirement `product.md` selected by Requirement README plus applicable ADR digests. Unchanged sources use the fast path; changed sources are semantically refreshed or blocked before downstream work continues. The Snapshot is derived context, never a second product truth.
+
 ### Deliver with the smallest safe workflow
 
 | Route | Use it for | Control and evidence |
@@ -81,6 +83,7 @@ New Feature work creates no Feature `product.md`; Feature `spec.md` selects a bo
 Feature delivery includes:
 
 - direct Product Requirement Source and bounded Product Slice in `spec.md`
+- freshness-checked Feature Context Snapshot for Task, Test, Plan, Resume, Execute, Handoff, Verify, Review, Drift, and Close
 - story/task breakdown, test design, Web E2E discovery, and construction-grade planning
 - TDD with real RED/GREEN evidence for behavior changes
 - optional Delivery Contracts for durable producer-consumer boundaries

@@ -830,6 +830,32 @@ Source Requirements:
 - Product Review Evidence:
 - Applicable Decisions:
 
+## Feature Context Snapshot
+
+Requirement Set: .agent-loop/requirements/<requirement-id>/README.md
+Requirement Lifecycle: accepted | in-progress | partially-implemented | implemented
+Resolved Product Source: .agent-loop/requirements/<requirement-id>/product.md
+Product Definition Profile: brief | standard | legacy
+Product Review: confirmed | accepted | concept-foundation-not-needed
+Product Source SHA-256:
+Applicable Decisions: none | .agent-loop/decisions/<decision>.md
+Decision Source SHA-256: none | .agent-loop/decisions/<decision>.md=<sha256>
+Product Slice References:
+Verified At: <ISO-8601 timestamp with timezone>
+Freshness: current | refresh-required | blocked
+
+### Product Outcome
+
+### Actors And Core Journey
+
+### Applicable Product Rules And Invariants
+
+### Applicable States, Exceptions, And Recovery
+
+### Feature Boundary And Acceptance Context
+
+This Snapshot is derived execution context. Requirement README resolves authority; Requirement, product, and ADR paths are project-root-relative; `scripts/check-feature-context.py` is read-only; and Product Slice remains the responsibility/coverage table.
+
 ## Product Slice
 
 | Source Section / Model ID | Feature Responsibility | Acceptance Mapping | Coverage |
@@ -927,6 +953,30 @@ Feature-local decisions that do not need standalone project ADR files:
 
 ## Open Questions
 ```
+
+## Optional `context.md`
+
+Use `templates/feature-context.md` only for a complex Feature whose complete Snapshot would make `spec.md` no longer locally understandable, and only after the Complex Artifact Human Gate. It must record:
+
+```md
+Derived Context: yes
+Authority: Requirement README -> Effective Product Definition -> accepted ADRs
+Independent Product Truth: no
+
+Requirement Set: .agent-loop/requirements/<requirement-id>/README.md
+Requirement Lifecycle: accepted | in-progress | partially-implemented | implemented
+Resolved Product Source: .agent-loop/requirements/<requirement-id>/product.md
+Product Definition Profile: brief | standard | legacy
+Product Review: confirmed | accepted | concept-foundation-not-needed
+Product Source SHA-256:
+Applicable Decisions: none | .agent-loop/decisions/<decision>.md
+Decision Source SHA-256: none | .agent-loop/decisions/<decision>.md=<sha256>
+Product Slice References:
+Verified At: <ISO-8601 timestamp with timezone>
+Freshness: current | refresh-required | blocked
+```
+
+Keep exact source/digest parity with `spec.md`. This file expands derived context only; it owns no independent product, lifecycle, approval, Task, Test, Plan, code-fact, or execution meaning.
 
 ## `tasks.md`
 

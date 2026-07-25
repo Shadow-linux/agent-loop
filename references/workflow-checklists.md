@@ -198,7 +198,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.0-20260725.1`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.0-20260725.2`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -284,7 +284,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.0-20260725.1`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.0-20260725.2`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -443,6 +443,16 @@ Before using an external skill or plugin inside a stage:
 - [ ] Record Follow-up Intake in `notes.md`.
 - [ ] Route to exactly one next stage: Requirements Discussion/Archive/Reconciliation, Feature Spec update, Work Breakdown, Test Design, Targeted Feature Scan, Plan Gate, Diagnose Failure, Verify, or Recovery.
 
+## Feature Context Load / Resume
+
+- [ ] Start from Feature `spec.md`; do not reconstruct Resume, controller re-entry, or context-compaction recovery from `tasks.md`, `plan.md`, or conversation memory alone.
+- [ ] Run `python3 <skill-root>/scripts/check-feature-context.py --project-root <target-project-root> <feature-spec-path>`; on Windows use the equivalent `py -3` command.
+- [ ] Exit `0` / `CURRENT` permits the local Snapshot fast path and stage-relevant ledger loading.
+- [ ] Exit `3` / `REFRESH_REQUIRED` stops downstream generation for semantic comparison, derived Snapshot refresh, downstream impact repair, and `notes.md` evidence.
+- [ ] Exit `1` / `BLOCKED` routes to the owning Requirements Discussion, Decision & Design, Feature Definition Review, or Recovery Gate.
+- [ ] Auto Mode cannot continue on `refresh-required | blocked`.
+- [ ] Recheck after Requirement/ADR change, long-running uncertainty, archive rehydrate, and before Plan/Execute/Verify/Review/Drift/Close reliance.
+
 ## Feature Spec
 
 - [ ] If `project.md` declares a Decisions index, read decision links already named by the Effective Product Definition, legacy Product Brief when present, or active Feature Spec, then inspect other likely relevant accepted decisions by domain/boundary overlap.
@@ -450,6 +460,9 @@ Before using an external skill or plugin inside a stage:
 - [ ] Confirm Design Readiness is `design-not-needed` or `completed`; run Decision & Design before Feature Spec when shared design is required.
 - [ ] Resolve new `Effective Product Definition` or legacy `Effective Concept Foundation`; require confirmed/accepted source and block pending, ambiguous, stale, `candidate`, or `reopened` input.
 - [ ] Add Product Requirement Source and Product Slice from the effective source; cite Concept/Model IDs and Product Rule anchors without a Feature Product Brief intermediary.
+- [ ] Create the default Feature Context Snapshot in `spec.md` from one current Requirement README/Product Definition/accepted-ADR baseline, using project-root-relative paths and current SHA-256 evidence.
+- [ ] Include product outcome, actors/core journey, applicable rules/invariants, states/exceptions/recovery, and Feature boundary/acceptance context without creating independent product truth.
+- [ ] Require the checker to return `CURRENT` before Requirement Checklist acceptance.
 - [ ] Reject feature-local redefinition of accepted concept name, identity, owner, lifecycle, relationship, invariant, state, terminal meaning, or product fact.
 - [ ] Feature Spec visuals may explain only the accepted Product Slice and its feature-local implementation or acceptance path; rewrite feature-local clarification into `spec.md`, and return any new product meaning to Requirements Discussion.
 - [ ] Do not enter Feature Spec while required shared design is unresolved or any required design slice is unassigned.
@@ -469,6 +482,7 @@ Before using an external skill or plugin inside a stage:
 
 ## Requirement Checklist
 
+- [ ] Confirm the Feature Context Snapshot is complete, its source references resolve, paths are project-root-relative, and freshness is `CURRENT`.
 - [ ] Confirm the Feature Spec references an accepted requirement set and its exact Delivery Phase or phase slice when applicable.
 - [ ] Confirm Design Readiness is `design-not-needed` or `completed`.
 - [ ] Confirm no major ambiguity remains.
@@ -498,6 +512,8 @@ Before using an external skill or plugin inside a stage:
 ## Work Breakdown
 
 - [ ] Confirm the spec is accepted and a passed Requirement Checklist record exists.
+- [ ] Load `spec.md` and require a current Feature Context Snapshot before creating or revising Tasks.
+- [ ] Map each Task to Product Slice responsibility/acceptance, an accepted ADR Design Slice, or an explicit technical prerequisite for a named later vertical Product Slice.
 - [ ] Run Stage Helper Capability Scan before fallback Work Breakdown.
 - [ ] Default to vertical slices / tracer bullets.
 - [ ] Each normal task forms a narrow verifiable loop through necessary layers.
@@ -537,6 +553,8 @@ Before using an external skill or plugin inside a stage:
 
 ## Test Design
 
+- [ ] Load and require a current Feature Context Snapshot before designing Tests.
+- [ ] Cover every applicable acceptance criterion, actor/permission boundary, state transition/terminal, Product Rule/invariant, exception/recovery path, and accepted ADR verification obligation.
 - [ ] Run Stage Helper Capability Scan before fallback Test Design.
 - [ ] Separate requirement checklist from real test execution.
 - [ ] Define functional test cases.
@@ -567,6 +585,8 @@ Before using an external skill or plugin inside a stage:
 
 ## Technical Design / Code Context
 
+- [ ] Load the current Feature Context Snapshot and applicable accepted ADRs before interpreting code choices.
+- [ ] Keep accepted product meaning, accepted ADR landing, and current code facts explicitly separate.
 - [ ] Run Stage Helper Capability Scan before fallback Technical Design / Code Context.
 - [ ] Load `implementation-planning.md`.
 - [ ] Inspect exact files likely to change.
@@ -608,6 +628,8 @@ No-Plan Decision is allowed only when:
 
 Checklist:
 
+- [ ] Require Feature Context Snapshot `Freshness: current` before Plan acceptance or No-Plan Decision execution.
+- [ ] Name the mapped Product Slice and Task, preserve product/ADR invariants, separate code facts, and verify mapped acceptance.
 - [ ] Load `implementation-planning.md`.
 - [ ] Resolve and load `superpowers:writing-plans` or `writing-plans` before planning actions; record Stage Helper Resolution, or record `unavailable` / `load-failed` before fallback.
 - [ ] If Superpowers `writing-plans` or another plan-writing helper is available, use it through `external-skill-adapters.md` while writing to agent-loop `plan.md` / `plans/*`.
@@ -636,6 +658,8 @@ Checklist:
 ## Analyze Consistency
 
 - [ ] Run before Execute Task / Story, including after plan approval and before subagent dispatch.
+- [ ] Rerun Feature Context freshness and stop unless it is `CURRENT`.
+- [ ] Trace Product Slice through Tasks, Tests, and Plan, including roles, states, rules, exceptions, recovery, acceptance, and ADR obligations.
 - [ ] Compare accepted `spec.md` and, when present, the legacy Feature `product.md` against `tasks.md`, `tests.md`, and the active `plan.md`; resolve the current Requirement `product.md` through Product Requirement Source.
 - [ ] Confirm each planned implementation step maps to an accepted task/story and acceptance criterion.
 - [ ] Confirm each changed behavior has a test or explicit substitute verification path.
@@ -649,6 +673,9 @@ Checklist:
 
 ## Subagent Execution If Approved
 
+- [ ] Require `CURRENT` Feature Context before preparing or dispatching an implementation handoff.
+- [ ] Put Feature path, Snapshot Product SHA-256/Freshness, Product Slice IDs/anchors, applicable ADR paths/digests, and exact assigned scope in the brief.
+- [ ] Expire the handoff on any Product/Decision digest change; the receiving Agent reruns freshness before acting.
 - [ ] Confirm the human explicitly approved this subagent dispatch.
 - [ ] Do not treat Feature Auto-Loop or Task Auto-Run approval as subagent approval.
 - [ ] If using one approval for a bounded task group, list included task/story IDs or scan lanes, allowed boundaries, one brief per subagent, stop conditions, and main-agent review responsibility before asking.
@@ -668,6 +695,7 @@ Checklist:
 
 ## Execute Task / Story
 
+- [ ] Reject execution when Feature Context is missing, `refresh-required`, or `blocked`.
 - [ ] Confirm execution scope: task by default, story only by explicit choice.
 - [ ] Confirm Plan Gate passed: accepted `plan.md` / `plans/*`, or recorded No-Plan Decision for a trivial task.
 - [ ] If Task Auto-Run is enabled, confirm an accepted plan exists; No-Plan Decision is insufficient.
@@ -708,6 +736,7 @@ Checklist:
 
 ## Verify
 
+- [ ] Recheck Feature Context freshness before relying on Snapshot acceptance references; stop completion claims on a non-current result.
 - [ ] Resolve and load `superpowers:verification-before-completion` or `verification-before-completion` before any completion claim; record Stage Helper Resolution, or record `unavailable` / `load-failed` before fallback.
 - [ ] If Superpowers `verification-before-completion` or another verification helper is available, use it through `external-skill-adapters.md` while recording evidence in agent-loop `notes.md`.
 - [ ] Identify what command or action proves the claim.
@@ -725,6 +754,8 @@ Checklist:
 
 ## Review
 
+- [ ] Recheck Feature Context freshness and review against the current Snapshot plus authoritative acceptance references.
+- [ ] Report code/product disagreement as drift; never overwrite the Snapshot from current code behavior.
 - [ ] Resolve and load `superpowers:requesting-code-review` or `requesting-code-review` before each task, submit, or feature-close review scope; record a fresh Stage Helper Resolution, or record `unavailable` / `load-failed` before fallback.
 - [ ] If Superpowers `requesting-code-review` or another review helper is available, use it through `external-skill-adapters.md` while recording findings in agent-loop `notes.md`.
 - [ ] Perform lightweight Spec Review for every task before marking it `done`.
@@ -751,6 +782,7 @@ Checklist:
 
 ## Drift Check
 
+- [ ] Recheck Feature Context source freshness before the drift decision and report code/product disagreement as drift.
 - [ ] Compare implementation against `spec.md`.
 - [ ] During Drift Check, compare assigned Design Slice IDs with implementation and verification evidence.
 - [ ] Compare each applicable ADR Effective Requirement Snapshot and Requirement Model Technical Landing Trace with the current effective source; route `review-required` to Decision & Design before close.
@@ -872,6 +904,7 @@ Pause:
 
 Close:
 
+- [ ] Feature Context freshness is freshly `CURRENT`; `refresh-required | blocked` stops Close.
 - [ ] Fresh verification evidence exists.
 - [ ] Drift check completed.
 - [ ] Feature Close Review completed.

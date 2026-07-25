@@ -16,6 +16,24 @@ plan.md         = construction plan: exact steps, code/test snippets, commands, 
 
 Do not put construction-level code snippets in `tasks.md`. Put them in `plan.md` or the dated plan file referenced by `plan.md`.
 
+## Feature Context Derivation
+
+Task/Test/Plan derive from:
+
+```text
+current Feature Context Snapshot
++ current Product Slice
++ applicable accepted ADRs
++ relevant code facts
+```
+
+Run `scripts/check-feature-context.py` before construction planning and require `CURRENT`. Accepted product meaning, ADR landing, and code reality remain separate evidence layers; code facts cannot rewrite the Snapshot.
+
+- Every Task maps to a Product Slice responsibility/acceptance, accepted ADR Design Slice, or explicit technical prerequisite for a named later vertical slice.
+- Tests cover every applicable acceptance criterion, actor/permission boundary, state transition/terminal, Product Rule/invariant, exception/recovery path, and accepted ADR verification obligation.
+- Every active Plan names its Product Slice and Task, preserves applicable product/ADR invariants, identifies code facts separately, and includes exact verification for mapped acceptance.
+- `refresh-required | blocked` stops Task/Test/Plan creation, approval, and execution until semantic refresh or the owning existing Gate resolves it.
+
 ## Primary Inspiration
 
 Main source: Superpowers `writing-plans`.
@@ -61,6 +79,7 @@ If the needed signature, parameter, return shape, or dependency is unknown after
 
 Every `plan.md` with implementation content must include:
 
+- current Feature Context Snapshot digest/freshness, mapped Product Slice IDs/anchors, applicable ADRs, and the accepted product/ADR invariants this execution unit must preserve
 - goal and architecture summary
 - tech context
 - files to create/modify/test/read with exact paths
@@ -175,6 +194,7 @@ Expected 403, received 201
 Before asking the human to approve the plan, verify:
 
 - every accepted spec behavior maps to a step or explicit out-of-scope note
+- every Task/Test/Plan mapping remains traceable to the current Product Slice and applicable accepted ADRs
 - every referenced function/type/path exists or is created earlier in the plan
 - signatures, parameters, and property names are consistent across steps
 - no placeholder language remains

@@ -1291,7 +1291,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.5.0`, while the current root AGENTS template uses `block-version:1.5.0-20260725.1`.
+Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.5.0`, while the current root AGENTS template uses `block-version:1.5.0-20260725.2`.
 ```
 
 Expected:
@@ -1299,7 +1299,7 @@ Expected:
 - read root `AGENTS.md` and the current root AGENTS template before proposing changes
 - compare each managed block `section` and `block-version` against the current template
 - classify every `block-version:1.5.0` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
-- propose replacing stale block revisions with the full current template revision such as `block-version:1.5.0-20260725.1`
+- propose replacing stale block revisions with the full current template revision such as `block-version:1.5.0-20260725.2`
 - copy the current template start marker metadata for each refreshed section unless `source` must point at the target project's active memory root or artifact source
 - preserve all human-owned content outside managed blocks
 - ask for human confirmation before writing
@@ -1309,7 +1309,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.5.0-20260725.1`.
+Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.5.0-20260725.2`.
 ```
 
 Expected:
@@ -4638,3 +4638,131 @@ The alphabetic scenarios below exercise the historical four-snapshot, all-path, 
 - Required Action: commit the regression test and formal canonical fix only after focused and required full validation pass on source; retain independent Git/release/install Gates.
 - Forbidden Action: use the isolated result as release evidence, publish a same-version silent mutation, or claim Agent Loop fixed.
 - Required Human Gate: normal source commit, push, tag, release, publish, and installation/update Gates after canonical validation.
+
+## 77. Feature Context Snapshot And Load Contract
+
+### A. Unchanged Sources Use The Local Fast Path
+
+- Prompt: Resume a Feature whose Requirement pointer, Product Source SHA-256, Product Slice references, and accepted ADR digests are unchanged.
+- Expected Route: checker returns `CURRENT`; load the local Feature Context Snapshot and only stage-relevant cited source sections.
+- Required Action: begin from `spec.md`, record/reuse fresh same-stage evidence, and continue to the selected Task/Test/Plan/Execute stage.
+- Forbidden Action: reread the complete Requirement/ADR bodies by default, start from `tasks.md` alone, or treat the Snapshot as product authority.
+
+### B. Redirected Effective Product Definition Requires Refresh
+
+- Prompt: Requirement README now points to a different confirmed Product Definition while the Feature records the old resolved path.
+- Expected Route: checker returns `REFRESH_REQUIRED`.
+- Required Action: resolve the new source from README, compare applicable meaning, refresh derived paths/digests/context, and inspect downstream impact.
+- Forbidden Action: trust the cached direct path, silently continue Plan/Execute, or require a Human Gate when semantic comparison proves no Feature impact.
+
+### C. Product Digest Changed Without Slice Impact
+
+- Prompt: accepted `product.md` changed only in an unrelated section or formatting while Feature meaning and acceptance remain unchanged.
+- Expected Route: `REFRESH_REQUIRED` followed by `no-slice-impact` semantic refresh.
+- Required Action: update derived Snapshot/digest evidence and `notes.md`, then repair references only where needed.
+- Forbidden Action: silently set Freshness current without semantic comparison, bulk rewrite Features, or reopen Feature definition unnecessarily.
+
+### D. Scope-Changing Product Meaning Blocks
+
+- Prompt: the changed source alters an applicable role, permission, state, rule, exception, recovery path, behavior, or acceptance criterion.
+- Expected Route: stop at Feature Definition Review, Requirements Discussion, or Decision & Design according to ownership.
+- Required Action: preserve current evidence and expose Task/Test/Plan/Handoff impact.
+- Forbidden Action: classify the change as editorial, refresh only the digest, or let Auto Mode continue.
+
+### E. Missing Or Ambiguous Requirement Authority Blocks
+
+- Prompt: Feature has no unique Requirement README pointer, two effective pointers exist, the Snapshot and Product Requirement Source name different ADR sets, the accepted memory root is a file/symlink, or the resolved source escapes that real root.
+- Expected Route: checker returns `BLOCKED` and routes to Recovery / Requirement Conflict Review.
+- Required Action: fail closed with the unsafe locator reason.
+- Forbidden Action: guess from filenames, use a Feature-relative path, or trust a cached Product Source over README.
+
+### F. Unknown Product Slice Reference Blocks
+
+- Prompt: Product Slice or Snapshot names an unknown Concept/Model ID or `product.md#<anchor>`.
+- Expected Route: checker returns `BLOCKED`.
+- Required Action: return to Feature Definition / Requirements Discussion and restore a resolvable accepted reference.
+- Forbidden Action: drop the unknown row silently, infer an approximate anchor, or continue from prose similarity.
+
+### G. ADR Digest Change Requires Semantic Refresh
+
+- Prompt: an applicable accepted ADR remains `Upstream Compatibility: current` but its bytes changed.
+- Expected Route: checker returns `REFRESH_REQUIRED`.
+- Required Action: compare the applicable decision meaning, refresh the derived decision digest only when Feature scope/acceptance/invariants remain unchanged, and expire old handoffs.
+- Forbidden Action: continue from the recorded digest or let a changed accepted decision be rewritten from Feature context.
+
+### H. Review-Required Or Missing ADR Blocks
+
+- Prompt: an applicable ADR is missing, not accepted, superseded without a current replacement, or `Upstream Compatibility: review-required`.
+- Expected Route: checker returns `BLOCKED`; Plan and Execute route to Decision & Design compatibility review.
+- Required Action: preserve the accepted record and obtain the existing owning decision.
+- Forbidden Action: downgrade to a warning, remove the ADR from the Snapshot to pass, or implement from code convention alone.
+
+### I. Work Breakdown Requires Current Context
+
+- Prompt: the Agent is about to create Tasks after Requirement Checklist but Feature context has not been checked.
+- Expected Route: Feature Context Load Contract before Work Breakdown.
+- Required Action: require `CURRENT` and map every Task to Product Slice/ADR responsibility or an explicit prerequisite for a named vertical slice.
+- Forbidden Action: split by code layer from `spec.md` headings alone or create independent product scope.
+
+### J. Test Design Detects Missing Exception Coverage
+
+- Prompt: current Snapshot contains an accepted unknown-result recovery path but `tests.md` covers only success.
+- Expected Route: Test Design remains incomplete.
+- Required Action: add state, exception, recovery, actor/permission, invariant, and acceptance coverage or use the existing Human-approved substitute path.
+- Forbidden Action: pass readiness from happy-path tests or remove the Snapshot exception.
+
+### K. Plan Cannot Pass With Stale Slice
+
+- Prompt: active Plan names a Product Slice whose Snapshot digest is stale.
+- Expected Route: Plan Gate rejects acceptance/execution and returns to semantic refresh.
+- Required Action: make the Plan name current Product Slice/Task, preserve product/ADR invariants, separate code facts, and verify mapped acceptance.
+- Forbidden Action: approve from technical coherence alone or treat No-Plan Decision as a stale-context bypass.
+
+### L. Context Compaction Resume Reloads Snapshot
+
+- Prompt: conversation context was compacted during a long-running Feature.
+- Expected Route: `spec.md` bootstrap -> freshness checker -> stage-relevant ledgers -> needed code facts.
+- Required Action: reconstruct from artifacts and fresh source evidence.
+- Forbidden Action: rely on the conversation summary, start from `plan.md`, or reuse pre-compaction checker output without re-entry validation.
+
+### M. Subagent Handoff Expires On Digest Change
+
+- Prompt: a handoff records Feature path, Product/Decision digests, Product Slice IDs, ADRs, and scope; upstream bytes then change before dispatch or action.
+- Expected Route: handoff expires and freshness is rechecked.
+- Required Action: refresh/reapprove the bounded brief only after semantic impact is resolved.
+- Forbidden Action: reuse dispatch authorization, copy a new Product Definition into the brief, or let the receiving Agent act from the old digest.
+
+### N. Archived Feature Discovery Does Not Bulk Refresh
+
+- Prompt: the human inspects an archived closed Feature without reopening it.
+- Expected Route: read-only discovery through `features/archive.md`; no Snapshot refresh write.
+- Required Action: preserve archive location and current evidence.
+- Forbidden Action: bulk migrate archived Features, create missing `context.md`, or change Feature lifecycle from inspection.
+
+### O. Rehydrated Feature Checks Before Reopened Execution
+
+- Prompt: a closed archived Feature is Human-gated rehydrated for confirmed follow-up.
+- Expected Route: flat-path restore -> `spec.md` bootstrap -> Feature Context freshness check -> separate reopen/execution gates.
+- Required Action: refresh or block before any reopened execution.
+- Forbidden Action: infer current context from successful rehydrate or let archive movement satisfy Feature reopen.
+
+### P. Legacy Feature Product Remains Reader-Compatible
+
+- Prompt: an old Feature has Feature-level `product.md` and a resolvable current Requirement owner.
+- Expected Route: legacy reader preserves historical evidence while current Requirement/ADR authority wins.
+- Required Action: normalize an accepted legacy Effective Concept Foundation as Snapshot profile `legacy` with its accepted/not-needed review state, and report conflicts through Requirement Conflict Review / Recovery.
+- Forbidden Action: bulk migrate, delete history, or let legacy Feature product override the reviewed Requirement.
+
+### Q. Checker Is Deterministic And Read-Only
+
+- Prompt: run `scripts/check-feature-context.py` twice against unchanged Feature, Requirement, and ADR fixtures, including CRLF/BOM input and a timezone-aware ISO-8601 `Verified At`.
+- Expected Route: identical output/exit and identical bytes for every target artifact.
+- Required Action: use Python 3.10+ standard library plus repository-local read helpers only.
+- Forbidden Action: rewrite Freshness/digests, normalize target bytes, create directories, or perform semantic product design.
+
+### R. Code Drift Never Overwrites Product Truth
+
+- Prompt: current runtime behavior conflicts with a `CURRENT` Snapshot and accepted Requirement meaning.
+- Expected Route: Verify/Review/Drift reports implementation drift.
+- Required Action: repair code only through accepted Feature scope or return to Requirements Discussion when the human intends product change.
+- Forbidden Action: copy code behavior into Snapshot/Requirement as truth, close the Feature, or let Auto Mode continue across the conflict.

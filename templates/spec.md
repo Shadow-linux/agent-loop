@@ -19,6 +19,32 @@ Source Requirements:
 
 Resolve the Requirement Set README before Feature Spec. New work uses exactly one confirmed `Effective Product Definition`; legacy work may resolve `Effective Concept Foundation` without migration. Product Review is product-definition evidence only and does not authorize Feature start, implementation, or Git actions.
 
+## Feature Context Snapshot
+
+Requirement Set: .agent-loop/requirements/<requirement-id>/README.md
+Requirement Lifecycle: accepted | in-progress | partially-implemented | implemented
+Resolved Product Source: .agent-loop/requirements/<requirement-id>/product.md
+Product Definition Profile: brief | standard | legacy
+Product Review: confirmed | accepted | concept-foundation-not-needed
+Product Source SHA-256:
+Applicable Decisions: none | .agent-loop/decisions/<decision>.md
+Decision Source SHA-256: none | .agent-loop/decisions/<decision>.md=<sha256>
+Product Slice References:
+Verified At: <ISO-8601 timestamp with timezone>
+Freshness: current | refresh-required | blocked
+
+### Product Outcome
+
+### Actors And Core Journey
+
+### Applicable Product Rules And Invariants
+
+### Applicable States, Exceptions, And Recovery
+
+### Feature Boundary And Acceptance Context
+
+This Snapshot is derived execution context, not product authority. The Requirement README resolves the current Effective Product Definition; every Requirement, product, and decision path above is project-root-relative. Run the read-only `scripts/check-feature-context.py` before relying on the Snapshot. `## Product Slice` remains the Feature responsibility and coverage table.
+
 ## Product Slice
 
 | Source Section / Model ID | Feature Responsibility | Acceptance Mapping | Coverage |
