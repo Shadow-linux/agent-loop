@@ -136,10 +136,21 @@ Human-gated
 Gate modes:
 
 ```text
+Normal Two-Gate Feature Construction
 Strict Mode
 Feature Auto-Loop
 Task Auto-Run
 ```
+
+Feature notes own the compact derived package state:
+
+```text
+Implementation Readiness: preparing | review-ready | accepted
+```
+
+Gate 1 sets `preparing`; package completeness and consistency set `review-ready`; Gate 2 sets `accepted`. This field is not Feature lifecycle and authorizes no target implementation, Git, external mutation, submit, release, or close by itself. `notes.md` also persists Gate 1 decision/spec digest, Gate 2 decision/time, complete Package Files/Digest, non-rotatable Stable Files/Digest, accepted Agent-ready task IDs, Active Plan Scope, Plan Evidence (`plan.md | plans/<detail>.md | no-plan:<accepted-task>`), and Auto-Loop enabled/disabled. Package-only acceptance requires a later explicit start instruction plus a current/unchanged/no-new-stop check before execution. Existing `spec.md`, `tasks.md`, `tests.md`, `plan.md`, and `notes.md` remain the owners; do not create a separate readiness artifact or hierarchy.
+
+The Package Digest is SHA-256 over sorted `<Feature-relative-path><TAB>sha256:<file-digest>` rows with a final newline. It must inventory every current file under triggered `tasks/`, `tests/`, `plans/`, and `contracts/` directories plus optional `context.md` / `contracts.md`; a self-reported subset is invalid. Stable Digest uses the same algorithm but excludes rotatable `plan.md` and `plans/*`. `scripts/check-feature-review.py` validates the durable evidence: `review` and package-only `start` require the full Package Digest; active `execute` permits a newly rotated detailed Plan but requires the complete Stable Digest, accepted Tasks that actually exist and are classified Agent-ready, and Plan/No-Plan evidence matching an Active Plan Scope inside the accepted task set.
 
 Branch Strategy adoption status:
 
@@ -181,7 +192,7 @@ Feature Monthly Archive moves the complete eligible directory without content co
 
 Scope boundaries are explicit: no per-feature archive summary, no historical/ directory, no Deep Archive, no deletion/packing/scheduled archive, and No `--force`. A closed archived feature must rehydrate before reopened execution.
 
-Record the active gate mode in `project.md` Current Work or the active feature `notes.md` checkpoint. If scope changes, switch back to Strict Mode unless the human renews the auto-mode grant.
+Record the active gate mode in `project.md` Current Work or the active feature `notes.md` checkpoint. Product meaning, Product Slice, scope, or acceptance changes invalidate Gate 1 and return readiness to `preparing`; material package changes invalidate Gate 2 and return readiness to `preparing`. Human-selected Strict Mode remains explicit stage-by-stage control.
 
 ## Post-Merge Memory Reconciliation Layout
 

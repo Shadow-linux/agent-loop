@@ -140,6 +140,23 @@ Requirement README
 
 Before Task, Test, Plan, Resume, Execute, Subagent Handoff, Verify, Review, Drift Check, or Close relies on Feature context, the read-only checker must resolve the Requirement authority and require current Product/ADR evidence. `refresh-required` stops downstream generation for semantic refresh; `blocked` routes to the existing owning Requirement, Decision & Design, Feature Definition, or Recovery Gate. Auto Mode cannot continue on either result.
 
+## Feature Construction Two-Gate Invariant
+
+Normal Feature construction has two meaningful Human Reviews, not one approval after every internal quality stage:
+
+```text
+explicit implementation request
+-> checked Feature Spec + Product Slice
+-> Gate 1: Feature Definition Review
+-> Implementation Package Preparation
+-> Gate 2: Implementation Readiness Review
+-> Agent-ready execution
+```
+
+Gate 1 freezes what will be built and authorizes package preparation only. Package preparation retains Work Breakdown, conditional Delivery Contract assessment, Test Design, E2E Discovery, Technical Design / Code Context, Plan Gate, and Analyze Consistency as mandatory Agent quality methods, but does not modify target implementation and does not interrupt the human after each method. Gate 2 reviews the complete trace from acceptance through tasks, tests, code context, Plan, risk, verification, and rollback.
+
+`Approve package only` records readiness without execution. `Approve package and start implementation` also enables Feature Auto-Loop for the disclosed Agent-ready work; no third generic enablement prompt exists. Product/scope/acceptance changes return to Gate 1, material package changes return to Gate 2, and separately owned Delivery Contract, subagent, Git, external, submit, close, and release actions retain their exact Human Gates.
+
 ## Definitions
 
 **Project**: current codebase or repository. Long-term memory lives in `.agent-loop/project.md` by default.

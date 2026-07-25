@@ -3,6 +3,23 @@
 Created: YYYY-MM-DD
 Updated: YYYY-MM-DD
 Status: active | blocked | paused | closed
+Implementation Readiness: preparing | review-ready | accepted
+Gate 1 Decision: pending | accepted | revise | pause
+Gate 1 Spec Digest: pending | sha256:<digest>
+Gate 2 Decision: pending | package-only | approve-and-start | revise | pause
+Gate 2 Package Files: pending | <comma-separated Feature-relative paths>
+Gate 2 Package Digest: pending | sha256:<digest>
+Gate 2 Stable Files: pending | <comma-separated Feature-relative paths excluding rotatable plan.md>
+Gate 2 Stable Digest: pending | sha256:<digest>
+Gate 2 Agent-ready Tasks: pending | <comma-separated task IDs>
+Active Plan Scope: pending | <accepted task/story ID>
+Gate 2 Plan Evidence: pending | plan.md | plans/<detail>.md | no-plan:<accepted task ID>
+Feature Auto-Loop: disabled | enabled
+Gate 2 Reviewed At: pending | <ISO-8601>
+
+`preparing` means Gate 1 accepted and package preparation is active. `review-ready` means package completeness and Analyze Consistency passed and Gate 2 is pending. `accepted` means Gate 2 accepted the package; execution still depends on the recorded Gate 2 choice. This field is not Feature lifecycle or Git/external/submit/close authorization.
+
+The Gate 1 digest freezes the accepted Spec. Gate 2 Package Files/Digest include every current artifact under triggered `tasks/`, `tests/`, `plans/`, and `contracts/` directories and freeze package-only start evidence. Stable Files/Digest exclude rotatable `plan.md` and `plans/*`, while protecting definition/tasks/tests/context/contracts during Feature Auto-Loop. Plan Evidence binds the active scope to the compact Plan, one detailed Plan, or an explicit No-Plan Decision. `package-only` requires Auto-Loop `disabled`; `approve-and-start` requires `enabled`.
 
 ## Human Decisions
 

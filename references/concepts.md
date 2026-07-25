@@ -135,9 +135,17 @@ First version excludes:
 
 **Delivery Contract**: A durable producer-consumer boundary handoff in `contracts.md` and optional `contracts/*` details. It records API, service, event, async workflow, data, UI-behavior, library, or runtime interfaces that downstream work depends on. It is distinct from temporary subagent briefs.
 
-**Strict Mode**: Default gate mode. Ask before and after every stage.
+**Strict Mode**: Explicit stage-by-stage control mode, and the fail-closed fallback when the controller is unavailable. Ask before and after every stage. Normal Feature construction instead uses the two meaningful reviews below.
 
-**Feature Auto-Loop**: Feature-level authorization after Requirement Checklist passes and Feature Spec is accepted. The agent may advance Agent-ready feature stages/tasks until a stop condition appears. It must stop before Submit / Integrate and Close.
+**Feature Definition Review**: Gate 1 of normal Feature construction. The human accepts the checked Feature Spec and Product Slice, authorizing creation/update of the Feature's planning, test-design, technical-context, and readiness artifacts but not target implementation.
+
+**Implementation Package Preparation**: Agent-owned continuation after Gate 1 that completes Work Breakdown, Delivery Contract assessment, Test Design, E2E Discovery, Technical Design / Code Context, Plan, trace coverage, risk, rollback, and consistency checks without separate stage approval prompts.
+
+**Implementation Readiness Review**: Gate 2 of normal Feature construction. The human reviews the complete implementation package and chooses approve-documents-only, approve-and-start, revise, or pause.
+
+**Feature Review Baseline**: Durable Gate 1/Gate 2 decisions plus Spec, complete-package (including triggered detail directories), and non-rotatable stable digests, accepted Agent-ready task IDs, Active Plan Scope, matching compact/detailed Plan or No-Plan evidence, and Auto-Loop state recorded in Feature `notes.md`.
+
+**Feature Auto-Loop**: Feature-level execution authorization created by Gate 2 `Approve package and start implementation`. The agent may advance only the accepted Agent-ready task set. It may rotate the active task/story Plan inside that set when stable evidence and package boundaries remain unchanged and the new Plan passes Plan Gate/consistency; otherwise Gate 2 repeats. It must stop before every preserved independent Human Gate, Submit / Integrate, and Close.
 
 **Task Auto-Run**: Task/story-level authorization after the selected task/story plan is accepted. The agent runs Analyze Consistency before TDD execution, then may complete only that task/story through verification, review, drift, and status update.
 

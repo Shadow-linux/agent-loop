@@ -1,6 +1,6 @@
 # Agent Loop
 
-**Current version:** 1.5.0
+**Current version:** 1.5.1
 
 Agent Loop is a reusable controller skill for single-human, CLI-agent software development. It lets the Agent own project diagnosis, workflow sequencing, implementation, verification, and memory maintenance while the human keeps control of goals, product meaning, consequential decisions, and external actions.
 
@@ -91,6 +91,8 @@ Feature delivery includes:
 - mandatory helper resolution for Project Skill Creation / Update, Brainstorm, Plan Gate, execution, diagnosis, verification, and review
 - Feature Auto-Loop and Task Auto-Run for uninterrupted Agent-ready work
 - approved subagent execution and complex artifact modes when scale requires them
+
+Feature construction uses **two meaningful reviews** instead of interrupting the human after every internal quality stage. Feature Definition Review confirms what will be built. The Agent then writes and self-reviews tasks, tests, E2E evidence, code context, Plan, verification, risk, and rollback without changing target code. Implementation Readiness Review accepts that complete package and either stops at accepted documents or starts Agent-ready implementation. The decisions and package baseline are recorded so a later session can prove what was accepted; a multi-task Feature may advance between already accepted tasks without asking again, but package drift returns to review. Delivery Contract, subagent, Git, external, submit, close, and release actions remain separately gated.
 
 ### Verify, review, and close
 
@@ -187,14 +189,14 @@ Use this route when `npx` is unavailable or the environment must install from a 
 ```bash
 # Public GitHub
 git clone \
-  --branch stable-v1.5.0 \
+  --branch stable-v1.5.1 \
   --depth 1 \
   https://github.com/Shadow-linux/agent-loop.git \
   ~/.local/share/agent-loop-source
 
 # Private Git mirror
 git clone \
-  --branch stable-v1.5.0 \
+  --branch stable-v1.5.1 \
   --depth 1 \
   <git-mirror-url> \
   ~/.local/share/agent-loop-source
@@ -226,7 +228,7 @@ For a later clone-based upgrade, fetch tags, check out the new stable tag explic
 
 ```bash
 git -C ~/.local/share/agent-loop-source fetch --tags origin
-git -C ~/.local/share/agent-loop-source checkout --detach stable-v1.5.0
+git -C ~/.local/share/agent-loop-source checkout --detach stable-v1.5.1
 ```
 
 `~/.agents/skills/agent-loop` is the preferred shared location. If an Agent runtime does not discover it, synchronize the same verified source into that runtime's configured Skill directory rather than maintaining divergent copies.

@@ -866,6 +866,26 @@ python3 <skill-root>/scripts/check-feature-context.py --project-root <target-pro
 
 `CURRENT` (`0`) permits the local Snapshot fast path. `REFRESH_REQUIRED` (`3`) stops downstream generation while the Agent reads only changed/applicable Requirement and ADR meaning, compares semantic impact, refreshes derived Snapshot evidence, and repairs affected Tasks/Tests/Plan/Handoffs. `BLOCKED` (`1`) routes to Requirements Discussion, Decision & Design compatibility review, Feature Definition Review, or Recovery. Auto Mode cannot continue on either non-current result. On Windows use `py -3`.
 
+## Feature Construction Two-Gate Review
+
+Normal Feature construction uses exactly two ordinary review stops after an explicit implementation request:
+
+```text
+Feature Spec + Requirement Checklist
+-> Gate 1: Feature Definition Review
+-> Implementation Package Preparation
+-> Gate 2: Implementation Readiness Review
+-> Execute Agent-ready work
+```
+
+Gate 1 accepts the checked definition and Product Slice. Its acceptance sets `Implementation Readiness: preparing`, records `Gate 1 Decision: accepted` plus the current Spec SHA-256 in Feature `notes.md`, and authorizes package preparation only; target implementation is forbidden before Gate 2. Package preparation completes every applicable Work Breakdown, Delivery Contract assessment/exact candidate, Test Design, E2E Discovery, Technical Design / Code Context, Plan, trace coverage, risk, rollback, and Analyze Consistency method without separate approval prompts.
+
+When the package is complete, record in `notes.md` the complete reviewed Package Files/Digest (including every current triggered detail file), non-rotatable Stable Files/Digest, accepted Agent-ready task IDs, initial Active Plan Scope, matching `plan.md | plans/<detail>.md | no-plan:<accepted-task>` evidence, and Gate 2 review time; set `Implementation Readiness: review-ready` and present Gate 2. After the human chooses, record `Gate 2 Decision` and the matching Auto-Loop state, then run `python3 <skill-root>/scripts/check-feature-review.py --mode review <feature-dir>`; on Windows use `py -3`. `Approve package only` sets readiness `accepted` without execution. `Approve package and start implementation` sets readiness `accepted` and enables Feature Auto-Loop without another generic prompt. Product meaning, Product Slice, scope, or acceptance changes return to Gate 1. Material task/test/code-context/Plan/risk/rollback changes repeat Gate 2. Fact-determined refinements inside accepted scope may continue with evidence.
+
+After package-only acceptance, a later explicit instruction to start this Feature may enable Feature Auto-Loop without repeating the full Gate 2 review only when Feature Context is still `CURRENT`, `check-feature-review.py --mode start` proves the complete accepted package unchanged, and no new stop condition or Human-gated item exists. Record the new explicit authorization as `approve-and-start`, enable Auto-Loop, update the review time, and run `--mode execute` before target implementation. Otherwise route the changed meaning to Gate 1 or the changed package to Gate 2.
+
+Strict Mode remains available when the human explicitly requests stage-by-stage control. Delivery Contract creation/acceptance must be separately named with exact content inside Gate 2 or stop at its own gate; breaking changes always stop separately. Human-gated tasks, subagent dispatch, branch/Git actions, external mutation, production, credentials, submit, pause, close, release, and publish retain their independent gates.
+
 ## Feature Spec
 
 Entry: goal and source requirements are clear enough.
@@ -943,7 +963,7 @@ Inspect only feature-relevant areas:
 - related tests and E2E specs
 - related guidance docs and directory `AGENTS.md`
 
-Write after confirmation:
+Write inside the explicit draft Feature construction authorization, without a separate Targeted Feature Scan prompt:
 
 - feature-specific findings into `spec.md`, `tasks.md`, `tests.md`, or `notes.md`
 - lasting project facts into `project.md` only after human confirmation
@@ -972,9 +992,9 @@ Write:
 
 Exit:
 
-- human accepts the checked spec or requests revision
-- accepted spec and recorded passed Requirement Checklist are ready for Work Breakdown
-- after acceptance, explain that Strict Mode asks before each stage and offer Feature Auto-Loop for Agent-ready downstream work if the human wants fewer confirmations
+- Gate 1 `Feature Definition Review` accepts the checked spec and authorizes complete Implementation Package Preparation, requests definition revision, or pauses
+- accepted spec and recorded passed Requirement Checklist set `Implementation Readiness: preparing` and persist `Gate 1 Decision: accepted` with the exact current Spec SHA-256
+- Gate 1 does not authorize target implementation, Feature Auto-Loop, external mutation, or Git actions
 
 ## Work Breakdown
 
@@ -1011,8 +1031,9 @@ Rules:
 
 Exit:
 
-- human accepts granularity and order
-- in Feature Auto-Loop, continue automatically only if remaining tasks are Agent-ready and no stop condition appears
+- during Implementation Package Preparation, task granularity/order self-review passes and the Agent continues to the next package method without another prompt
+- unresolved product/scope/acceptance meaning returns to Gate 1; unresolved task ownership or package structure stops before Gate 2
+- in human-selected Strict Mode, retain the ordinary stage review
 
 ## Delivery Contract If Needed
 
@@ -1044,7 +1065,9 @@ Rules:
 - Delivery Contracts are not default feature artifacts
 - skip Delivery Contracts for simple single-person tasks, pure internal logic, or changes with no downstream consumer
 - agent proactively recommends a Delivery Contract; the human does not need to request one by name
-- ask before writing contract files in every mode, including Feature Auto-Loop and Task Auto-Run
+- during Implementation Package Preparation, do not write contract files by default; prepare the exact proposed content and action disclosure for Gate 2
+- Delivery Contract creation and acceptance may proceed only when Gate 2 separately names each exact action, path, consumers, compatibility, verification, and consequence
+- outside that exact Gate 2 decision, ask before writing contract files in every mode, including Feature Auto-Loop and Task Auto-Run
 - human confirmation is required before status becomes `accepted`
 - human confirmation after affected-consumer analysis is required before changing producer code, tests, or contract files for any breaking change to accepted, implemented, or verified contracts
 - creating a new `draft` or `superseded` contract cannot bypass the breaking-change gate when existing consumers would observe changed behavior
@@ -1094,8 +1117,9 @@ Rules:
 
 Exit:
 
-- human accepts how correctness will be proven
-- in Feature Auto-Loop, continue automatically only if the test strategy has no unresolved human decisions
+- during Implementation Package Preparation, coverage self-review passes and the Agent continues without a separate Test Design approval prompt
+- a substitute-verification choice or unresolved capability needed for package coherence remains a named Human decision for Gate 2 or stops preparation
+- in human-selected Strict Mode, retain the ordinary stage review
 
 ## E2E Discovery if Web
 
@@ -1110,11 +1134,11 @@ Load:
 Exit:
 
 - E2E path is classified as existing-framework, browser, chrome, computer-use, manual, or blocked
-- next stage: Test Design when E2E cases still need recording, or Technical Design / Code Context when test strategy is accepted
+- during Implementation Package Preparation, continue to Test Design when cases still need recording, or Technical Design / Code Context when the package strategy is complete; do not add a separate approval prompt
 
 ## Technical Design / Code Context
 
-Entry: accepted tasks and tests, before writing `plan.md` or executing a non-trivial task/story.
+Entry: prepared tasks and tests during Implementation Package Preparation, or accepted tasks and tests in human-selected Strict Mode, before writing `plan.md` or executing a non-trivial task/story.
 
 Helper-friendly stage: Technical Design / Code Context runs Stage Helper Capability Scan before fallback. Use matching codebase-scan or technical-planning helpers as method support only; keep code context, interface decisions, plan readiness, and human gates under agent-loop control.
 
@@ -1157,11 +1181,12 @@ Rules:
 
 Exit:
 
-- code context is concrete enough for a construction-grade plan, or the task becomes Human-gated
+- during Implementation Package Preparation, code context is concrete enough for a construction-grade Plan and the Agent continues without a separate approval prompt
+- otherwise the task becomes Human-gated or preparation stops before Gate 2
 
 ## Plan Gate / Plan If Needed
 
-Entry: selected task/story has accepted tasks and tests, and Technical Design / Code Context has enough evidence to decide whether a construction plan is required.
+Entry: selected task/story has prepared tasks and tests during Implementation Package Preparation, or accepted tasks and tests in human-selected Strict Mode, and Technical Design / Code Context has enough evidence to decide whether a construction plan is required.
 
 Mandatory helper: Plan Gate / Plan If Needed resolves and loads `superpowers:writing-plans` or `writing-plans` before writing, approving, or recording a No-Plan Decision. Record Stage Helper Resolution; fallback requires `unavailable` or `load-failed`.
 
@@ -1185,11 +1210,14 @@ Rules:
 - decide whether a plan is required before any code implementation
 - create `plan.md` when the task/story is complex, multi-file, changes behavior, changes tests, touches interfaces, crosses module boundaries, involves data/API/async/security/deployment behavior, needs TDD design, needs subagents, or the human asks for a plan
 - a No-Plan Decision is allowed only for a trivial, low-risk, single-file or documentation-only task with clear acceptance, exact files, and exact verification command
-- in Strict Mode, ask human confirmation before executing from a No-Plan Decision
+- in human-selected Strict Mode, ask human confirmation before executing from a No-Plan Decision
 - in Feature Auto-Loop, a No-Plan Decision may proceed only if the task is Agent-ready and no plan trigger applies
 - Task Auto-Run always requires an accepted task/story plan; No-Plan Decision cannot enable Task Auto-Run
 - plan scope is `task` or `story`
 - default scope is task
+- a task Plan ID must be one Gate 2-accepted Agent-ready task; a story Plan must list non-empty `Included Tasks`, every included ID must belong to that accepted task set, and every included Task must map to the named Story in `tasks.md`
+- for a multi-task Feature package, Gate 2 accepts the complete Agent-ready task set, ordering/barriers, stable files, and initial active Plan; later `plan.md` rotation may select only another accepted task/story and must pass Plan Gate, Analyze Consistency, and `check-feature-review.py --mode execute`
+- treat Plan rotation inside the unchanged accepted task/test boundary as execution refinement; a new task, stable-file drift, changed ordering/boundary, or material interface/risk/rollback/verification change repeats Gate 2
 - assume the executor has near-zero codebase context
 - include technical context, source structure decision, code context, interface contracts, data contracts when applicable, files, TDD plan, commands, expected outputs, risks
 - include `Branch Context Evidence` when an adopted strategy or versioned delivery applies: cite the complete `notes.md` Current Branch Context and repeat only Branch Strategy status/profile, Target Release Context, Target Branch, sealed/customer-isolation results, and `Git actions authorized by this plan: none`
@@ -1208,8 +1236,10 @@ Rules:
 
 Exit:
 
-- human accepts plan, or human accepts/Feature Auto-Loop records the No-Plan Decision
-- after acceptance, explain that Strict Mode asks before each stage and offer Task Auto-Run for this task/story if the human wants fewer confirmations
+- during Implementation Package Preparation, Plan self-review and package coverage pass without a separate Plan approval prompt
+- after Analyze Consistency passes, set `Implementation Readiness: review-ready` and present Gate 2 `Implementation Readiness Review`
+- a material Plan/risk/rollback revision repeats Gate 2; a definition/scope/acceptance revision returns to Gate 1
+- in human-selected Strict Mode, retain ordinary Plan acceptance
 
 ## Analyze Consistency
 
@@ -1229,11 +1259,18 @@ Check:
 Write:
 
 - findings in `notes.md`
-- update docs only after confirmation
+- during Gate 1-authorized package preparation, repair fact-determined gaps in `tasks.md`, `tests.md`, technical context, and Plan without another prompt while the accepted definition remains unchanged
+- return product meaning, Product Slice, scope, or acceptance changes to Gate 1; after Gate 2, repeat Gate 2 before relying on any material package revision
+- outside the Gate 1 preparation grant or an active execution grant, retain the owning Human Gate before broader artifact mutation
 
 Exit:
 
-- ready for execution or revise upstream docs
+- during package preparation, a clean result completes readiness and routes to Gate 2
+- before presenting Gate 2, persist Package Files/Digest, Stable Files/Digest, accepted Agent-ready task IDs, initial Active Plan Scope, matching Plan/No-Plan evidence, and the review timestamp in `notes.md`
+- Gate 2 choices are `Approve package and start implementation`, `Approve package only; do not implement yet`, `Revise package`, or `Pause`
+- after recording the chosen Gate 2 decision and matching Auto-Loop state, require `check-feature-review.py --mode review` to pass
+- approve-and-start enables Feature Auto-Loop without a third generic prompt; package-only never authorizes execution
+- gaps revise the affected package and repeat Gate 2, or return to Gate 1 when definition/scope/acceptance changes
 
 ## Subagent Execution If Approved
 

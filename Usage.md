@@ -1,6 +1,6 @@
 # Agent Loop Usage
 
-**版本：** 1.5.0
+**版本：** 1.5.1
 
 这是一份给人类使用的触发指南。你不需要记住 Agent Loop 的阶段名；只要说明目标、边界和你希望 Agent 自主推进到哪里，Agent 负责判断项目状态、选择流程、维护产物并在真正的 Human Gate 停下。
 
@@ -36,12 +36,12 @@ npx skills list -g
 
 ```bash
 # Public GitHub
-git clone --branch stable-v1.5.0 --depth 1 \
+git clone --branch stable-v1.5.1 --depth 1 \
   https://github.com/Shadow-linux/agent-loop.git \
   ~/.local/share/agent-loop-source
 
 # Private Git mirror
-git clone --branch stable-v1.5.0 --depth 1 \
+git clone --branch stable-v1.5.1 --depth 1 \
   <git-mirror-url> \
   ~/.local/share/agent-loop-source
 ```
@@ -96,8 +96,8 @@ Agent 应先检查差异，只更新过期的 Agent Loop managed blocks，并保
 ### 从一个已接受需求自主开发
 
 ```text
-产品方案已经确认，可以准备开发了。
-你判断还缺什么设计，并从合适的第一步开始做；需要我决定时再问我。
+产品方案已经确认了，先准备这个功能。
+范围让我确认一次；实现方案、任务和测试都准备齐以后，再一起给我确认。
 ```
 
 ### 只让当前任务自动跑完
@@ -166,8 +166,8 @@ Agent 会检查核心流程完整性，并按需要使用架构/边界图、ASCI
 这些说法都会路由到人类文档，而不是凭 Agent 记忆回答：
 
 ```text
-1.5.0 更新了什么？
-当前 1.5.0 使用的是什么流程？
+1.5.1 更新了什么？
+当前 1.5.1 使用的是什么流程？
 和 1.2.2 比有什么变化？
 现在 agent-loop 怎么用？
 ```
@@ -308,13 +308,40 @@ Feature `spec.md` 只选择产品切片，不重新定义产品。复杂任务�
 
 Feature 工作从 `spec.md` 里的本地 **Feature Context Snapshot** 开始。Agent 会自动从 Requirement README 找到真正的 `product.md`，检查适用 ADR 和摘要是否仍然一致；来源未变时走快速路径，来源变化时先刷新语义或停在已有 Human Gate。人类不需要手动定位、重开或反复指定 `product.md`。Snapshot 只是派生执行上下文，不是第二份产品真相；只有复杂且长期运行的 Feature 才会在现有 Complex Artifact Human Gate 后增加可选 `context.md`。
 
-### 让这个功能自主推进
+你不需要记住 Feature 的内部阶段。正常只会在两个时点找你：
+
+1. **确认做什么**（Feature Definition Review）：你确认功能范围和验收结果。
+2. **确认怎么做**（Implementation Readiness Review）：Agent 把实现方案、任务、测试、风险和回滚一次准备齐，你看完整包后决定是否开工。
+
+第一次确认后，Agent 会自行完成任务拆分、测试设计、E2E 判断、代码理解和实施计划，不会每写一份文档就停下来问一次，也不会提前改目标代码。
+
+#### 第一次：范围没问题
 
 ```text
-这个功能已经说清楚了，你在这个范围内自主推进，需要我决定时再问我。
+范围没问题。把实现方案、任务和测试都准备齐，再一起给我看。
 ```
 
-同一时间最多一个 Active Feature。切换时先 pause、记录恢复点，再激活另一个。自动模式不授权 Git、外部系统、生产、发布或 Feature close。
+#### 第二次：方案没问题，直接开始
+
+```text
+方案没问题，开始做吧。
+```
+
+如果这次只想把方案留好，可以说：
+
+```text
+方案没问题，先把文档保存好，暂时不要写代码。
+```
+
+以后要继续，不必重新解释全部背景：
+
+```text
+继续做这个功能。开始前先确认需求和方案没有变化。
+```
+
+Agent 会核对保存的范围、产品来源、技术决策和完整实施包。内容没变就直接继续；范围、任务或稳定方案发生变化时，才会再次请你确认。
+
+任务拆分、测试设计、E2E、技术设计和 Plan 仍然会完成，只是不再逐项打断你。Delivery Contract、subagent、Git、外部系统、生产、提交、关闭和发布仍各自需要确认。同一时间最多一个 Active Feature；切换时会先保存恢复点。
 
 ### 判断是否需要交付约定
 

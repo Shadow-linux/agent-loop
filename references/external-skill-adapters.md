@@ -223,7 +223,7 @@ When `Plan Gate / Plan If Needed` starts and Superpowers is available:
 5. Save the plan to `plan.md` for the active task/story, or to `plans/YYYY-MM-DD-<task>-<slug>.md` in complex artifact mode.
 6. If a plan is not required, record the No-Plan Decision in `notes.md` and the selected task row/detail with exact files, exact verification command, and why no trigger applies.
 7. Do not create `docs/superpowers/plans/*` unless the human explicitly requests native Superpowers docs and confirms the external directory after path-override explanation.
-8. Do not let the external skill choose execution mode. Offer agent-loop modes: Strict Mode, Feature Auto-Loop, Task Auto-Run, or human-approved subagent execution. Task Auto-Run still requires an accepted plan.
+8. Do not let the external skill choose execution mode. Agent Loop owns normal two-gate Feature construction, human-selected Strict Mode, Gate 2 Feature Auto-Loop, Task Auto-Run, and human-approved subagent execution. Task Auto-Run still requires an accepted plan.
 
 ## Project Skill Authoring Adapter
 

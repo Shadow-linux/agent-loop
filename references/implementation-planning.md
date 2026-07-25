@@ -34,6 +34,16 @@ Run `scripts/check-feature-context.py` before construction planning and require 
 - Every active Plan names its Product Slice and Task, preserves applicable product/ADR invariants, identifies code facts separately, and includes exact verification for mapped acceptance.
 - `refresh-required | blocked` stops Task/Test/Plan creation, approval, and execution until semantic refresh or the owning existing Gate resolves it.
 
+## Two-Gate Package Preparation
+
+After Gate 1 Feature Definition Review accepts the checked `spec.md`, construction planning is part of one bounded Implementation Package Preparation run. Write and self-review the Feature's tasks, tests, E2E evidence, technical/code context, Plan, coverage, verification, risk, and rollback artifacts without separate Plan approval. Do not change target implementation.
+
+Plan Gate remains a mandatory quality method. Its result becomes one component of Gate 2 Implementation Readiness Review. Gate 2 cannot be presented until the complete package is executable, placeholder-free, traced to accepted Product Slice/ADR meaning, and Analyze Consistency passes.
+
+`Approve package only` accepts the documents without execution. `Approve package and start implementation` also enables Feature Auto-Loop. Product/scope/acceptance changes invalidate Gate 1; material task/test/code-context/Plan/risk/rollback changes invalidate Gate 2.
+
+For a multi-task Feature Auto-Loop, Gate 2 freezes the Agent-ready task set, ordering/barriers, verification, risk, rollback, stable package digest, and initial task/story Plan. A task Plan ID must name one accepted Agent-ready task. A story Plan must name a non-empty `Included Tasks` subset of that accepted task set, and each included Task must map to the named Story in `tasks.md`. Later `plan.md` rotation to another accepted task/story is an execution refinement, not a material package revision, only when the stable digest and accepted task/test boundaries remain unchanged and the replacement Plan passes Plan Gate plus Analyze Consistency. Otherwise repeat Gate 2.
+
 ## Primary Inspiration
 
 Main source: Superpowers `writing-plans`.

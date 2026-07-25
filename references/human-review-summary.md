@@ -24,12 +24,10 @@ Use before human confirmation for:
 - legacy onboarding-db reference cleanup
 - Remote Project Discovery
 - Requirement Archive
-- Feature Spec
-- Work Breakdown / Tasks
+- Feature Definition Review
+- Implementation Readiness Review
 - Delivery Contract acceptance or breaking change
-- Test Design
-- E2E Discovery
-- Plan approval
+- Work Breakdown / Tasks, Test Design, E2E Discovery, or Plan approval only in human-selected Strict Mode or at a preserved hard gate
 - Drift Check
 - Project Memory Update
 - Feature Completion Check
@@ -47,6 +45,8 @@ Decision:
 ```
 
 Do not force a large table when it adds noise.
+
+Normal Feature construction does not present separate Work Breakdown, Test Design, E2E Discovery, Technical Design, and Plan approval summaries. It presents the two summaries below. Individual stage summaries remain available only in human-selected Strict Mode or when a preserved hard gate stops preparation.
 
 ## Required Shape
 
@@ -91,6 +91,55 @@ Use Batch Human Review for:
 High-confidence rows can be drafted, but cannot become reviewed or written as accepted long-term fact without human confirmation.
 
 ## Stage Table Patterns
+
+## Feature Definition Review Summary
+
+Use this as Gate 1 after the Requirement Checklist passes:
+
+| Area | Agent Summary | Evidence | Blocker / Risk | Human Decision |
+|---|---|---|---|---|
+| Goal / Outcome | problem, target outcome, user/business value | Requirement/Product source |  | accept / revise |
+| Scope | in scope, out of scope, added/modified/removed behavior | `spec.md` |  | accept / revise |
+| Product Slice | source IDs/rules to Feature responsibility and acceptance | Snapshot + Product Slice |  | accept / revise |
+| Acceptance | measurable criteria, important states/exceptions/recovery | `spec.md` |  | accept / revise |
+| Decisions | applicable ADRs and Feature-local decisions | ADR paths/digests |  | acknowledge / revise |
+| Checklist | Feature Context and Requirement Checklist result | checker + notes |  | pass / revise |
+
+Allowed choices:
+
+```text
+Accept definition and prepare implementation package
+Revise definition
+Pause
+```
+
+State clearly: Gate 1 authorizes writing the Feature's implementation-package artifacts only. It does not authorize target implementation, Feature Auto-Loop, Delivery Contract action, subagent dispatch, external mutation, Git, submit, or close.
+
+## Implementation Readiness Review Summary
+
+Use this as Gate 2 only after the complete package passes self-review and Analyze Consistency:
+
+| Area | Complete Package Evidence | Coverage / Result | Human Decision Needed |
+|---|---|---|---|
+| Frozen definition | Feature Spec identity/digest and Gate 1 baseline | unchanged since Gate 1 | none / return Gate 1 |
+| Package inventory | tasks, tests, E2E, code context, Plan, conditional contract candidates | present / missing | accept / revise |
+| Trace coverage | acceptance -> tasks -> tests -> Plan | complete / gap | accept / revise |
+| Execution shape | accepted Agent-ready task IDs, order/barriers, initial Active Plan Scope, later Plan rotation rule | executable / blocked | accept / revise |
+| Verification | exact RED/GREEN, focused, integration, E2E/manual commands | executable / substitute needed | accept / named decision |
+| Risk / Rollback | architecture/data/security/migration/dependency/external risk and bounded rollback | acceptable / blocking | accept / revise |
+| Conditional actions | exact contract creation/acceptance or other separately gated action | none / fully disclosed | separately accept / defer |
+| Durable authorization | Gate 2 decision/time, Package Files/Digest, Stable Files/Digest, accepted tasks, Active Plan Scope, Plan/No-Plan evidence, Auto-Loop state | reproducible / missing | accept / revise |
+
+Allowed choices:
+
+```text
+Approve package and start implementation
+Approve package only; do not implement yet
+Revise package
+Pause
+```
+
+Package-only acceptance never authorizes execution. Approve-and-start enables Feature Auto-Loop for the disclosed Agent-ready scope without a third generic prompt. A later explicit start instruction may use the unchanged accepted package only after a fresh Feature Context/package/stop-condition check; drift repeats the affected review. Separately owned Human Gates remain separately named.
 
 ### Product Definition Approval
 

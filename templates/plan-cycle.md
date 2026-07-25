@@ -10,6 +10,7 @@ Supersedes:
 Scope:
 - Type: task | story
 - ID:
+- Included Tasks:
 - Detail Task:
 - Related Tests:
 

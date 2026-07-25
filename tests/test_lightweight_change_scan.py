@@ -535,8 +535,8 @@ Memory Target: example only
             path = workspace.change("2026-07-18", "at-branch")
             content = path.read_text(encoding="utf-8")
             content = content.replace(
-                "feature/v1.5.0/example@0123456789abcdef0123456789abcdef01234567",
-                "feature/v1.5.0/foo@bar@0123456789abcdef0123456789abcdef01234567",
+                "feature/v1.5.1/example@0123456789abcdef0123456789abcdef01234567",
+                "feature/v1.5.1/foo@bar@0123456789abcdef0123456789abcdef01234567",
                 1,
             )
             path.write_text(content, encoding="utf-8")

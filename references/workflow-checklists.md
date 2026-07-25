@@ -198,7 +198,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.0-20260725.2`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.1-20260725.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -284,7 +284,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.0-20260725.2`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.1-20260725.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -453,6 +453,26 @@ Before using an external skill or plugin inside a stage:
 - [ ] Auto Mode cannot continue on `refresh-required | blocked`.
 - [ ] Recheck after Requirement/ADR change, long-running uncertainty, archive rehydrate, and before Plan/Execute/Verify/Review/Drift/Close reliance.
 
+## Feature Construction Two-Gate Review
+
+- [ ] Treat an explicit implementation request for one disclosed Requirement/phase/slice as draft Feature construction authorization, not Feature definition acceptance.
+- [ ] Gate 1 `Feature Definition Review` presents the checked Feature Spec, Product Slice, acceptance, applicable decisions, checklist result, and unresolved blockers.
+- [ ] Gate 1 choices are accept definition and prepare package, revise definition, or pause.
+- [ ] After Gate 1 acceptance, record `Implementation Readiness: preparing`, `Gate 1 Decision: accepted`, and the current Spec SHA-256; do not modify target implementation.
+- [ ] Prepare Work Breakdown, Delivery Contract assessment/exact candidate, Tests, E2E, technical code context, Plan, coverage, verification, risk, rollback, and consistency without separate stage prompts.
+- [ ] Stop package preparation only for a genuine human decision, incoherent package, or preserved hard gate; resolve fact-determined findings autonomously.
+- [ ] Set `Implementation Readiness: review-ready` only after package completeness, placeholder, trace, real-code-context, verification, risk, rollback, and consistency checks pass.
+- [ ] Before Gate 2, record complete Package Files/Digest including every current triggered detail file, non-rotatable Stable Files/Digest, accepted Agent-ready task IDs, initial Active Plan Scope, matching `plan.md | plans/<detail>.md | no-plan:<accepted-task>` evidence, and review time in `notes.md`.
+- [ ] Gate 2 `Implementation Readiness Review` presents the complete package and separately names every conditional action.
+- [ ] Gate 2 choices are `Approve package and start implementation`, `Approve package only; do not implement yet`, `Revise package`, or `Pause`.
+- [ ] `Approve package only` sets readiness accepted but never authorizes execution.
+- [ ] `Approve package and start implementation` sets readiness accepted and enables Feature Auto-Loop without another generic enablement question.
+- [ ] Record the exact Gate 2 decision, matching Auto-Loop state, and timestamp; require `python3 <skill-root>/scripts/check-feature-review.py --mode review <feature-dir>` to pass.
+- [ ] After package-only acceptance, treat a later explicit start instruction as execution authorization only after confirming Feature Context is `CURRENT`, `check-feature-review.py --mode start` proves the accepted package unchanged, and no new stop condition or Human-gated item exists; then record approve-and-start/enabled and require `--mode execute` before implementation.
+- [ ] Product meaning, Product Slice, scope, or acceptance revision returns to Gate 1; material tasks/tests/code-context/Plan/risk/rollback revision repeats Gate 2.
+- [ ] During multi-task Feature Auto-Loop, rotate `plan.md` only to another Gate 2-accepted task/story; require unchanged Stable Digest, unchanged task/test boundaries and ordering, Plan Gate, Analyze Consistency, and `check-feature-review.py --mode execute`.
+- [ ] Preserve separate Delivery Contract breaking-change, Human-gated task, subagent, branch/Git, external, production, credentials, submit, commit, push, PR, merge, tag, release, publish, pause, and close gates.
+
 ## Feature Spec
 
 - [ ] If `project.md` declares a Decisions index, read decision links already named by the Effective Product Definition, legacy Product Brief when present, or active Feature Spec, then inspect other likely relevant accepted decisions by domain/boundary overlap.
@@ -492,9 +512,8 @@ Before using an external skill or plugin inside a stage:
 - [ ] Confirm edge cases and out-of-scope boundaries are recorded.
 - [ ] Record the result in `tests.md` or `notes.md` before Work Breakdown.
 - [ ] If the checklist changes requirement intent or Feature Spec scope, stop for human confirmation and rerun Design Readiness when shared design changed.
-- [ ] Present the checked Feature Spec with Human Review Summary and ask the human to accept or revise it.
-- [ ] After acceptance, ask whether to stay in Strict Mode or enable Feature Auto-Loop.
-- [ ] Before Feature Auto-Loop, list assumptions, Human-gated items, risk points, and stop conditions.
+- [ ] Present Gate 1 Feature Definition Review and ask the human to accept definition/package preparation, revise, or pause.
+- [ ] Gate 1 acceptance authorizes writing and self-reviewing the complete implementation-package artifacts, not Feature Auto-Loop or target implementation.
 
 ## Targeted Feature Scan
 
@@ -533,8 +552,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Detect likely durable producer-consumer boundaries: API, service, event, async workflow, public data, UI state/behavior, SDK/library, or runtime.
 - [ ] Recommend Delivery Contract If Needed before downstream implementation relies on assumptions.
 - [ ] Do not use roadmap graph in v1.
-- [ ] Present task breakdown approval with Human Review Summary table.
-- [ ] Ask human to approve task granularity.
+- [ ] During Implementation Package Preparation, self-review task granularity/order and continue without a separate approval prompt.
 
 ## Delivery Contract If Needed
 
@@ -542,13 +560,13 @@ Before using an external skill or plugin inside a stage:
 - [ ] Confirm that work crosses a durable producer-consumer boundary.
 - [ ] Confirm this is not a simple internal change with no downstream consumer.
 - [ ] Identify producer and named consumers.
-- [ ] Ask human confirmation before creating or updating contract files.
+- [ ] During package preparation, draft exact candidate content response-locally or in Gate 2 material; do not create/update contract files before a separately named exact decision.
 - [ ] Create or update `contracts.md`.
 - [ ] Create `contracts/<ID>-<slug>.md` detail when schema, examples, errors, history, or multiple consumers need more space.
 - [ ] Record interface shape, inputs, outputs, errors, side effects, permissions, compatibility, producer verification, and consumer notes.
 - [ ] Keep temporary subagent assignments in `handoffs/`, not Delivery Contracts.
-- [ ] In all modes, including Feature Auto-Loop and Task Auto-Run, ask before writing contract files.
-- [ ] Ask human confirmation before status becomes `accepted`.
+- [ ] Gate 2 may separately authorize exact contract creation and acceptance only when path, full content, consumers, compatibility, verification, and consequences are visible.
+- [ ] Outside that exact Gate 2 decision, ask before writing contract files or changing status to `accepted`.
 - [ ] Ask human confirmation and list affected consumers before a breaking contract change.
 
 ## Test Design
@@ -572,7 +590,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Stop or mark Human-gated when URL, app start, auth/session, seed data, external service, or browser tool cannot be safely determined.
 - [ ] Define regression tests for bugs or changed behavior.
 - [ ] Record test commands and manual verification needs.
-- [ ] Present Test Design approval with Human Review Summary table.
+- [ ] During Implementation Package Preparation, self-review Test Design coverage and continue without a separate approval prompt.
 
 ## E2E Discovery if Web
 
@@ -624,7 +642,7 @@ No-Plan Decision is allowed only when:
 - [ ] exact file(s) and exact verification command are known
 - [ ] no plan trigger above applies
 - [ ] decision is recorded in `notes.md` and the selected task row/detail
-- [ ] Strict Mode asks human confirmation before execution, or Feature Auto-Loop records why the Agent-ready task can proceed
+- [ ] Human-selected Strict Mode asks before execution; normal package preparation defers execution authorization to Gate 2; active Feature Auto-Loop records why the Agent-ready task can proceed.
 
 Checklist:
 
@@ -648,16 +666,18 @@ Checklist:
 - [ ] When an adopted Branch Strategy or versioned/customer delivery applies, `Branch Context Evidence` cites the complete Current Branch Context in `notes.md` and repeats only strategy status/profile, Target Release Context, Target Branch, sealed/customer-isolation results, and `Git actions authorized by this plan: none`.
 - [ ] When that branch context applies, the plan does not target a sealed release, cross customer isolation, or assume an unauthorized Git action.
 - [ ] For a confirmed simple `not-needed` path, record branch-specific Plan and Submit checks as `not-applicable`; do not require Target Release Context or Target Branch and do not block ordinary non-versioned work.
-- [ ] Present plan approval with Human Review Summary table.
-- [ ] Human approves plan before execution.
-- [ ] After approval, ask whether to stay in Strict Mode or enable Task Auto-Run for this task/story.
+- [ ] During Implementation Package Preparation, self-review the Plan and continue to Analyze Consistency without a separate Plan approval prompt.
+- [ ] Gate 2 accepts the Plan only as part of the complete traced package; execution still depends on the Gate 2 choice.
+- [ ] For a multi-task package, record the accepted Agent-ready task set and initial Active Plan Scope; later Plan rotation is allowed only inside that set with unchanged stable evidence and fresh Plan/consistency checks.
+- [ ] Require a task Plan ID to be one accepted Agent-ready task; require a story Plan to list a non-empty `Included Tasks` subset of the accepted Agent-ready task set and verify every included Task maps to that Story in `tasks.md`.
+- [ ] After package-only acceptance, offer Task Auto-Run only when the human later wants one bounded task/story executed.
 - [ ] Do not offer Task Auto-Run without an accepted plan.
 - [ ] If the human seems slowed by confirmations, explain Task Auto-Run as a safe task/story-level option.
 - [ ] Before Task Auto-Run, list assumptions, risk points, verification commands, and stop conditions.
 
 ## Analyze Consistency
 
-- [ ] Run before Execute Task / Story, including after plan approval and before subagent dispatch.
+- [ ] Run before Gate 2 and again before Execute Task / Story when execution does not start immediately; in Strict Mode run after Plan approval, and always run before subagent dispatch.
 - [ ] Rerun Feature Context freshness and stop unless it is `CURRENT`.
 - [ ] Trace Product Slice through Tasks, Tests, and Plan, including roles, states, rules, exceptions, recovery, acceptance, and ADR obligations.
 - [ ] Compare accepted `spec.md` and, when present, the legacy Feature `product.md` against `tasks.md`, `tests.md`, and the active `plan.md`; resolve the current Requirement `product.md` through Product Requirement Source.
@@ -670,6 +690,7 @@ Checklist:
 - [ ] Confirm file paths, commands, function signatures, parameters, return shapes, data contracts, and side effects match code reality.
 - [ ] Record findings in `notes.md` under `Analyze Consistency`.
 - [ ] If gaps exist, stop and recommend exactly one next action: update spec, update tasks/tests, revise plan, ask clarification, or investigate first.
+- [ ] When package consistency passes, persist the review baseline, set `Implementation Readiness: review-ready`, and present Gate 2 instead of executing.
 
 ## Subagent Execution If Approved
 

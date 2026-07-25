@@ -36,7 +36,7 @@ assert_contains "references/runtime.md" "3. missing human decision/access/approv
 assert_contains "references/feature-completion-check.md" "Apply the first matching blocker route"
 
 # Helper absence respects the already-authorized gate mode.
-assert_contains "references/skill-routing.md" "In Strict Mode, ask the normal stage gate before acting. In an active auto mode, continue without a new helper-specific gate when the stage is already authorized and no stop condition applies."
+assert_contains "references/skill-routing.md" "During Gate 1-authorized Implementation Package Preparation, continue across authorized artifact-writing and read-only quality methods without a new helper-specific gate"
 assert_not_contains "references/skill-routing.md" "5. Ask the human gate."
 
 # Onboarding has two non-bypassable gates on every controlling surface.
@@ -55,15 +55,15 @@ assert_not_contains "references/project-entry-scan.md" ".agent-loop/features/"
 
 # Requirement Checklist is a recorded prerequisite to acceptance and Work Breakdown.
 assert_contains "references/stage-guides.md" "Entry: accepted spec with a recorded passed Requirement Checklist."
-assert_contains "references/stage-guides.md" "human accepts the checked spec or requests revision"
-assert_contains "references/runtime.md" "Feature Auto-Loop | current feature | after Feature Spec and Requirement Checklist are accepted"
+assert_contains "references/stage-guides.md" 'Gate 1 `Feature Definition Review` accepts the checked spec and authorizes complete Implementation Package Preparation'
+assert_contains "references/runtime.md" 'Feature Auto-Loop | current accepted Feature package | Gate 2 selects `Approve package and start implementation`'
 
 # Task Auto-Run always starts with Analyze Consistency.
 assert_contains "references/runtime.md" "run Analyze Consistency, then complete that task/story"
 assert_contains "references/validation-scenarios.md" "run and record Analyze Consistency before executing T003"
-assert_contains "SKILL.md" "Feature Auto-Loop may run Agent-ready feature work after a passed Requirement Checklist, Feature Spec acceptance, and explicit human confirmation."
+assert_contains "SKILL.md" '`Approve package and start implementation` enables Feature Auto-Loop for the disclosed Agent-ready scope without a third generic prompt.'
 assert_contains "SKILL.md" "Task Auto-Run runs Analyze Consistency before executing one accepted task/story plan"
-assert_contains "references/concepts.md" "Feature-level authorization after Requirement Checklist passes and Feature Spec is accepted."
+assert_contains "references/concepts.md" 'Feature-level execution authorization created by Gate 2 `Approve package and start implementation`.'
 assert_contains "references/concepts.md" "The agent runs Analyze Consistency before TDD execution"
 
 # Pause, resume, close, and reopen have complete canonical state mutation.
