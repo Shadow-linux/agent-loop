@@ -190,9 +190,30 @@ Temporary Result:
 Human Substitute Decision:
 Expiry:
 Formal Repair Follow-up:
+Upstream Issue URL:
 ```
 
 Do not persist full temporary directories, unredacted sensitive payloads, or broad command logs.
+
+## Upstream GitHub Issue Reporting
+
+The Agent may prepare a sanitized upstream Issue Draft after checker-defect evidence exists. Drafting is read-only; creating the Issue is an external mutation and requires an independent **Issue Reporting Human Gate** even when Temporary Checker Repair or one-Gate substitute evidence was already accepted.
+
+Before creation, present:
+
+| Field | Required content |
+|---|---|
+| Repository | exact public GitHub owner/repository |
+| Title / body | exact title and complete sanitized body |
+| Public evidence | published authority/checker paths, neutral minimal fixture, RED and negative controls |
+| Redactions | list of removed credentials, private repository/host/customer names, private absolute paths, payloads, and unnecessary project data |
+| Labels / method | exact labels when known and authenticated creation method |
+| External effect | one public Issue will be created |
+| Explicitly not authorized | repair writes, installed Skill mutation, Feature execution, Git branch/commit/push/tag, PR, release, publish, installation, or synchronization |
+
+Only `create exact issue` authorizes that disclosed submission. `Revise draft` and `keep draft only` do not. Repair authorization does not authorize submission; submission does not authorize repair or any later repository action.
+
+If no authenticated GitHub capability is available, return the exact sanitized draft and the authentication/capability blocker. Do not install a client, request or expose credentials, reuse unrelated authentication, or silently skip reporting. After successful creation, record the Issue URL in the existing compact recovery evidence; do not create a new mandatory artifact.
 
 ## Failure And Rollback
 

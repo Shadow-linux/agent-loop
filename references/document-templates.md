@@ -1346,6 +1346,7 @@ Gate 2 Decision: pending | package-only | approve-and-start | revise | pause
 Gate 2 Package Files: pending | <comma-separated Feature-relative paths>
 Gate 2 Package Digest: pending | sha256:<digest>
 Gate 2 Stable Files: pending | <comma-separated Feature-relative paths excluding rotatable plan.md>
+Gate 2 Stable Digest Algorithm: review-definition-v2
 Gate 2 Stable Digest: pending | sha256:<digest>
 Gate 2 Agent-ready Tasks: pending | <comma-separated task IDs>
 Active Plan Scope: pending | <accepted task/story ID>

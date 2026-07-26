@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE = ROOT / "templates/root-AGENTS.md"
 RUNTIME = ROOT / "references/runtime.md"
-EXPECTED_REVISION = "1.5.1-20260725.1"
+EXPECTED_REVISION = "1.5.1-20260727.1"
 
 EXPECTED_SECTIONS = (
     ("bootstrap", ".agent-loop/project.md"),

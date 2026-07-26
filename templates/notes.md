@@ -10,6 +10,7 @@ Gate 2 Decision: pending | package-only | approve-and-start | revise | pause
 Gate 2 Package Files: pending | <comma-separated Feature-relative paths>
 Gate 2 Package Digest: pending | sha256:<digest>
 Gate 2 Stable Files: pending | <comma-separated Feature-relative paths excluding rotatable plan.md>
+Gate 2 Stable Digest Algorithm: review-definition-v2
 Gate 2 Stable Digest: pending | sha256:<digest>
 Gate 2 Agent-ready Tasks: pending | <comma-separated task IDs>
 Active Plan Scope: pending | <accepted task/story ID>
@@ -19,7 +20,7 @@ Gate 2 Reviewed At: pending | <ISO-8601>
 
 `preparing` means Gate 1 accepted and package preparation is active. `review-ready` means package completeness and Analyze Consistency passed and Gate 2 is pending. `accepted` means Gate 2 accepted the package; execution still depends on the recorded Gate 2 choice. This field is not Feature lifecycle or Git/external/submit/close authorization.
 
-The Gate 1 digest freezes the accepted Spec. Gate 2 Package Files/Digest include every current artifact under triggered `tasks/`, `tests/`, `plans/`, and `contracts/` directories and freeze package-only start evidence. Stable Files/Digest exclude rotatable `plan.md` and `plans/*`, while protecting definition/tasks/tests/context/contracts during Feature Auto-Loop. Plan Evidence binds the active scope to the compact Plan, one detailed Plan, or an explicit No-Plan Decision. `package-only` requires Auto-Loop `disabled`; `approve-and-start` requires `enabled`.
+The Gate 1 digest freezes the accepted Spec. Gate 2 Package Files/Digest use raw bytes and include every current artifact under triggered `tasks/`, `tests/`, `plans/`, and `contracts/` directories to freeze package-only start evidence. Stable Files/Digest exclude rotatable `plan.md` and `plans/*`; `review-definition-v2` protects task/test definitions while normalizing only the published runtime ledger fields. Compute evidence with `check-feature-review.py --mode digest`; missing or unknown algorithms fail closed and legacy `raw-v1` never migrates silently. Plan Evidence binds the active scope to the compact Plan, one detailed Plan, or an explicit No-Plan Decision. `package-only` requires Auto-Loop `disabled`; `approve-and-start` requires `enabled`.
 
 ## Human Decisions
 

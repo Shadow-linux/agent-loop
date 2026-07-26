@@ -89,7 +89,7 @@ assert_contains "SKILL.md" "Version: 1.5.1"
 assert_contains "README.md" "**Current version:** 1.5.1"
 assert_contains "Usage.md" "**版本：** 1.5.1"
 assert_contains "plugin.json" '"version": "1.5.1"'
-assert_contains "templates/root-AGENTS.md" "block-version:1.5.1-20260725.1"
+assert_contains "templates/root-AGENTS.md" "block-version:1.5.1-20260727.1"
 assert_contains "CHANGELOG.md" "## 1.5.1 — 2026-07-25"
 assert_contains "CHANGELOG.md" "## 1.5.0 — 2026-07-17"
 assert_contains "CHANGELOG.md" "block-version:1.4.0-20260715.1"

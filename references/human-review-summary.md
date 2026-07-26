@@ -128,7 +128,7 @@ Use this as Gate 2 only after the complete package passes self-review and Analyz
 | Verification | exact RED/GREEN, focused, integration, E2E/manual commands | executable / substitute needed | accept / named decision |
 | Risk / Rollback | architecture/data/security/migration/dependency/external risk and bounded rollback | acceptable / blocking | accept / revise |
 | Conditional actions | exact contract creation/acceptance or other separately gated action | none / fully disclosed | separately accept / defer |
-| Durable authorization | Gate 2 decision/time, Package Files/Digest, Stable Files/Digest, accepted tasks, Active Plan Scope, Plan/No-Plan evidence, Auto-Loop state | reproducible / missing | accept / revise |
+| Durable authorization | Gate 2 decision/time, raw Package Files/Digest, Stable Files/Algorithm/Digest, accepted tasks, Active Plan Scope, Plan/No-Plan evidence, Auto-Loop state | reproducible / missing | accept / revise |
 
 Allowed choices:
 
@@ -140,6 +140,22 @@ Pause
 ```
 
 Package-only acceptance never authorizes execution. Approve-and-start enables Feature Auto-Loop for the disclosed Agent-ready scope without a third generic prompt. A later explicit start instruction may use the unchanged accepted package only after a fresh Feature Context/package/stop-condition check; drift repeats the affected review. Separately owned Human Gates remain separately named.
+
+For new Gate 2 evidence, show `review-definition-v2` and the read-only checker command. Explain that runtime task/test ledger values may change without redefining reviewed work, while IDs, order, mappings, Mode, dependencies, gates, acceptance, verification, commands, assertions, risk, interface, and rollback remain protected. A legacy `raw-v1` migration is itself part of Human review and never hides an existing mismatch.
+
+### Checker Issue Reporting Review
+
+Use only after a canonical checker defect candidate is evidenced and a sanitized upstream draft exists. This review is independent from Temporary Checker Repair and one-Gate substitute decisions.
+
+| Field | Required content |
+|---|---|
+| Repository | exact public GitHub owner/repository |
+| Issue | exact title and complete sanitized body |
+| Evidence | public authority/checker paths, minimal neutral fixture, RED/negative controls |
+| Redactions | credentials, private repositories/hosts/customers, private absolute paths, payloads, unnecessary project data removed |
+| Labels / method | exact labels when known; authenticated creation method or no-auth blocker |
+| External effect | one public Issue will be created; no repair, Git, install, release, or publish authority is implied |
+| Human decision | create exact issue / revise draft / keep draft only |
 
 ### Product Definition Approval
 

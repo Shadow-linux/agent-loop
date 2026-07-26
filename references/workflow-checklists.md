@@ -198,7 +198,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.1-20260725.1`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.1-20260727.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -284,7 +284,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.1-20260725.1`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.1-20260727.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -470,7 +470,9 @@ Before using an external skill or plugin inside a stage:
 - [ ] Record the exact Gate 2 decision, matching Auto-Loop state, and timestamp; require `python3 <skill-root>/scripts/check-feature-review.py --mode review <feature-dir>` to pass.
 - [ ] After package-only acceptance, treat a later explicit start instruction as execution authorization only after confirming Feature Context is `CURRENT`, `check-feature-review.py --mode start` proves the accepted package unchanged, and no new stop condition or Human-gated item exists; then record approve-and-start/enabled and require `--mode execute` before implementation.
 - [ ] Product meaning, Product Slice, scope, or acceptance revision returns to Gate 1; material tasks/tests/code-context/Plan/risk/rollback revision repeats Gate 2.
-- [ ] During multi-task Feature Auto-Loop, rotate `plan.md` only to another Gate 2-accepted task/story; require unchanged Stable Digest, unchanged task/test boundaries and ordering, Plan Gate, Analyze Consistency, and `check-feature-review.py --mode execute`.
+- [ ] Record raw Package Digest plus explicit `review-definition-v2`; compute both with read-only `check-feature-review.py --mode digest` and fail closed on missing/unknown algorithm.
+- [ ] During multi-task Feature Auto-Loop, rotate `plan.md` only to another Gate 2-accepted task/story; require current v2 Stable Definition Digest, unchanged task/test definitions and ordering, Plan Gate, Analyze Consistency, and `check-feature-review.py --mode execute`.
+- [ ] Allow only published task/test runtime ledger values to change under v2; any change to identity, mapping, Mode, dependency, Gate, acceptance, verification, command, assertion, evidence definition, risk, interface, or rollback repeats Gate 2.
 - [ ] Preserve separate Delivery Contract breaking-change, Human-gated task, subagent, branch/Git, external, production, credentials, submit, commit, push, PR, merge, tag, release, publish, pause, and close gates.
 
 ## Feature Spec
@@ -753,6 +755,8 @@ Checklist:
 - [ ] Present a Temporary Checker Repair Review with exact patch, isolation target, permitted command/Gate, expiry, rollback, and residual before the first checker/support write.
 - [ ] Use an isolated temporary copy by default; installed/global in-place mutation requires a second exact Human authorization with preimage/backup/restore evidence.
 - [ ] Verify unmodified-copy RED, minimal-patch GREEN, negative-control rejection, and the exact target run.
+- [ ] Prepare any upstream Issue Draft read-only and sanitized; create it only after a separate Issue Reporting Human Gate that shows exact repository/title/body/redactions/labels/method/external effect.
+- [ ] If authenticated GitHub capability is absent, return the exact draft and blocker; do not install tools, expose credentials, or silently skip reporting.
 - [ ] Never add a general bypass, silently rewrite the installed Skill, or alter a valid artifact to satisfy a known-wrong checker.
 
 ## Verify

@@ -21,6 +21,7 @@ REQUIRED_FIELDS = (
     "Gate 2 Package Files",
     "Gate 2 Package Digest",
     "Gate 2 Stable Files",
+    "Gate 2 Stable Digest Algorithm",
     "Gate 2 Stable Digest",
     "Gate 2 Agent-ready Tasks",
     "Active Plan Scope",
@@ -28,6 +29,10 @@ REQUIRED_FIELDS = (
     "Feature Auto-Loop",
     "Gate 2 Reviewed At",
 )
+
+RAW_STABLE_DIGEST = "raw-v1"
+PROJECTED_STABLE_DIGEST = "review-definition-v2"
+STABLE_DIGEST_ALGORITHMS = {RAW_STABLE_DIGEST, PROJECTED_STABLE_DIGEST}
 
 
 def parse_fields(notes: Path) -> dict[str, str]:
@@ -67,11 +72,137 @@ def resolve_files(feature: Path, names: list[str], errors: list[str]) -> dict[st
     return resolved
 
 
-def package_digest(feature: Path, names: list[str], errors: list[str]) -> str:
+def _project_task_definition(name: str, text: str, errors: list[str]) -> bytes:
+    lines = text.splitlines()
+    projected: list[str] = []
+    section = ""
+    in_task = False
+    seen_tasks: set[str] = set()
+    seen_runtime_fields: set[str] = set()
+    is_root = name == "tasks.md"
+
+    for line_number, line in enumerate(lines, start=1):
+        heading = re.match(r"^##\s+(.+?)\s*$", line)
+        if heading:
+            section = heading.group(1)
+            in_task = False
+
+        if not section and re.match(r"^(Updated|Status):\s*", line):
+            line = re.sub(r":.*$", ": <runtime>", line)
+
+        if is_root:
+            task = re.match(r"^(\s*-\s*)\[[ xX]\](\s+(T\d+)\b.*)$", line)
+            if task:
+                task_id = task.group(3)
+                if task_id in seen_tasks:
+                    errors.append(
+                        f"ambiguous Stable Digest projection in {name}:{line_number}: "
+                        f"duplicate task ID {task_id}"
+                    )
+                seen_tasks.add(task_id)
+                line = f"{task.group(1)}[ ]{task.group(2)}"
+                in_task = True
+                seen_runtime_fields = set()
+            elif in_task and re.match(
+                r"^\s+-\s+(Status|Review|Drift):\s*", line
+            ):
+                field = re.match(r"^\s+-\s+(Status|Review|Drift):", line)
+                assert field is not None
+                field_name = field.group(1)
+                if field_name in seen_runtime_fields:
+                    errors.append(
+                        f"ambiguous Stable Digest projection in {name}:{line_number}: "
+                        f"duplicate runtime field {field_name}"
+                    )
+                seen_runtime_fields.add(field_name)
+                line = re.sub(r":.*$", ": <runtime>", line)
+        elif section == "Task Done Gate":
+            line = re.sub(r"^(\s*-\s*)\[[ xX]\]", r"\1[ ]", line)
+            if re.match(r"^(Evidence|Review|Drift):\s*", line):
+                line = re.sub(r":.*$", ": <runtime>", line)
+
+        projected.append(line)
+    return ("\n".join(projected) + "\n").encode("utf-8")
+
+
+def _is_markdown_separator(line: str) -> bool:
+    return bool(re.fullmatch(r"\|[\s:|-]+\|", line.strip()))
+
+
+def _project_test_definition(name: str, text: str, errors: list[str]) -> bytes:
+    lines = text.splitlines()
+    projected: list[str] = []
+    section = ""
+    is_root = name == "tests.md"
+
+    for line_number, line in enumerate(lines, start=1):
+        heading = re.match(r"^##\s+(.+?)\s*$", line)
+        if heading:
+            section = heading.group(1)
+
+        if not section and re.match(r"^(Updated|Status):\s*", line):
+            line = re.sub(r":.*$", ": <runtime>", line)
+
+        if is_root and line.strip().startswith("|") and not _is_markdown_separator(line):
+            cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+            if section == "Design Slice Verification Matrix":
+                if cells and cells[0] == "Design Slice ID":
+                    pass
+                elif len(cells) != 4:
+                    errors.append(
+                        f"malformed Design Slice Verification Matrix row in "
+                        f"{name}:{line_number}"
+                    )
+                else:
+                    cells[-1] = "<runtime>"
+                    line = "| " + " | ".join(cells) + " |"
+            elif section == "Bug Verification Matrix":
+                if cells and cells[0] == "Bug ID":
+                    pass
+                elif len(cells) != 6:
+                    errors.append(
+                        f"malformed Bug Verification Matrix row in {name}:{line_number}"
+                    )
+                else:
+                    cells[-2:] = ["<runtime>", "<runtime>"]
+                    line = "| " + " | ".join(cells) + " |"
+
+        projected.append(line)
+    return ("\n".join(projected) + "\n").encode("utf-8")
+
+
+def stable_file_bytes(
+    name: str, path: Path, algorithm: str, errors: list[str]
+) -> bytes:
+    if algorithm == RAW_STABLE_DIGEST:
+        return path.read_bytes()
+    if algorithm != PROJECTED_STABLE_DIGEST:
+        errors.append(f"unsupported Gate 2 Stable Digest Algorithm: {algorithm}")
+        return b""
+    try:
+        text = path.read_text(encoding="utf-8-sig")
+    except UnicodeDecodeError:
+        errors.append(f"Stable Digest projection requires UTF-8 Markdown: {name}")
+        return b""
+    if name == "tasks.md" or name.startswith("tasks/"):
+        return _project_task_definition(name, text, errors)
+    if name == "tests.md" or name.startswith("tests/"):
+        return _project_test_definition(name, text, errors)
+    return path.read_bytes()
+
+
+def package_digest(
+    feature: Path,
+    names: list[str],
+    errors: list[str],
+    *,
+    algorithm: str = RAW_STABLE_DIGEST,
+) -> str:
     paths = resolve_files(feature, names, errors)
     rows = []
     for name, path in sorted(paths.items()):
-        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        payload = stable_file_bytes(name, path, algorithm, errors)
+        digest = hashlib.sha256(payload).hexdigest()
         rows.append(f"{name}\tsha256:{digest}")
     payload = ("\n".join(rows) + "\n").encode()
     return "sha256:" + hashlib.sha256(payload).hexdigest()
@@ -195,6 +326,11 @@ def validate(feature: Path, mode: str) -> list[str]:
 
     package_files = parse_list(fields["Gate 2 Package Files"])
     stable_files = parse_list(fields["Gate 2 Stable Files"])
+    stable_algorithm = fields["Gate 2 Stable Digest Algorithm"]
+    if stable_algorithm not in STABLE_DIGEST_ALGORITHMS:
+        errors.append(
+            "Gate 2 Stable Digest Algorithm must be raw-v1 or review-definition-v2"
+        )
     required = {"spec.md", "tasks.md", "tests.md"}
     if not required.issubset(package_files):
         errors.append("Gate 2 Package Files must include spec.md,tasks.md,tests.md")
@@ -216,7 +352,12 @@ def validate(feature: Path, mode: str) -> list[str]:
     current_package = package_digest(feature, package_files, package_errors)
     errors.extend(package_errors)
     stable_errors: list[str] = []
-    current_stable = package_digest(feature, stable_files, stable_errors)
+    current_stable = package_digest(
+        feature,
+        stable_files,
+        stable_errors,
+        algorithm=stable_algorithm,
+    )
     errors.extend(stable_errors)
 
     tasks = set(parse_list(fields["Gate 2 Agent-ready Tasks"]))
@@ -306,14 +447,68 @@ def validate(feature: Path, mode: str) -> list[str]:
     return errors
 
 
+def digest_evidence(feature: Path) -> tuple[list[str], list[str]]:
+    errors: list[str] = []
+    notes = feature / "notes.md"
+    if not notes.is_file():
+        return [], ["missing file: notes.md"]
+    fields = parse_fields(notes)
+    required = (
+        "Gate 2 Package Files",
+        "Gate 2 Stable Files",
+        "Gate 2 Stable Digest Algorithm",
+    )
+    for field in required:
+        if not fields.get(field):
+            errors.append(f"missing field: {field}")
+    if errors:
+        return [], errors
+    algorithm = fields["Gate 2 Stable Digest Algorithm"]
+    if algorithm not in STABLE_DIGEST_ALGORITHMS:
+        return [], [
+            "Gate 2 Stable Digest Algorithm must be raw-v1 or review-definition-v2"
+        ]
+    package_files = parse_list(fields["Gate 2 Package Files"])
+    stable_files = parse_list(fields["Gate 2 Stable Files"])
+    package_errors: list[str] = []
+    package_value = package_digest(feature, package_files, package_errors)
+    stable_errors: list[str] = []
+    stable_value = package_digest(
+        feature,
+        stable_files,
+        stable_errors,
+        algorithm=algorithm,
+    )
+    errors.extend(package_errors)
+    errors.extend(stable_errors)
+    if errors:
+        return [], errors
+    return [
+        f"Gate 2 Package Digest: {package_value}",
+        f"Gate 2 Stable Digest Algorithm: {algorithm}",
+        f"Gate 2 Stable Digest: {stable_value}",
+    ], []
+
+
 def main() -> int:
     configure_utf8_stdio()
     require_supported_python()
     parser = argparse.ArgumentParser()
-    parser.add_argument("--mode", choices=("review", "start", "execute"), required=True)
+    parser.add_argument(
+        "--mode", choices=("review", "start", "execute", "digest"), required=True
+    )
     parser.add_argument("feature_dir")
     args = parser.parse_args()
     feature = Path(args.feature_dir)
+    if args.mode == "digest":
+        evidence, errors = digest_evidence(feature)
+        if errors:
+            for error in errors:
+                print(f"FAIL: {error}")
+            return 1
+        for line in evidence:
+            print(line)
+        return 0
     errors = validate(feature, args.mode)
     if errors:
         for error in errors:

@@ -93,6 +93,8 @@ Migration:
 
 ## Task Done Gate
 
+Under Gate 2 `review-definition-v2`, the checkboxes and the `Evidence`, `Review`, and `Drift` result values in this section, plus top-level `Status` / `Updated`, are runtime ledger fields. All other task-detail meaning remains protected definition.
+
 - [ ] Implementation scope complete.
 - [ ] Required tests or substitute verification ran fresh.
 - [ ] Evidence recorded in `notes.md`.

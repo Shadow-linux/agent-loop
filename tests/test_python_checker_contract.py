@@ -75,6 +75,21 @@ class PythonCheckerContractTests(unittest.TestCase):
             with self.subTest(relative=relative):
                 self.assertTrue((ROOT / relative).is_file(), relative)
 
+    def test_feature_review_digest_mode_has_no_write_api(self) -> None:
+        path = ROOT / "scripts/check-feature-review.py"
+        tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+        function = next(
+            node
+            for node in tree.body
+            if isinstance(node, ast.FunctionDef) and node.name == "digest_evidence"
+        )
+        attributes = {
+            node.attr for node in ast.walk(function) if isinstance(node, ast.Attribute)
+        }
+        self.assertFalse(
+            {"write_text", "write_bytes", "unlink", "rename", "replace"} & attributes
+        )
+
     def test_archive_command_files_exist(self) -> None:
         for relative in ARCHIVE_COMMANDS:
             with self.subTest(relative=relative):

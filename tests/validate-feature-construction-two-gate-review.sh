@@ -57,6 +57,9 @@ assert_contains references/runtime.md 'explicitly says to start implementation a
 assert_contains references/runtime.md 'confirm the accepted spec/tasks/tests/Plan package is unchanged'
 assert_contains references/runtime.md 'Gate 2 Package Digest'
 assert_contains references/runtime.md 'Gate 2 Stable Digest'
+assert_contains references/runtime.md 'Gate 2 Stable Digest Algorithm'
+assert_contains references/runtime.md 'review-definition-v2'
+assert_contains references/runtime.md 'check-feature-review.py --mode digest'
 assert_contains references/runtime.md 'check-feature-review.py --mode start'
 assert_contains references/runtime.md 'check-feature-review.py --mode execute'
 
@@ -82,9 +85,13 @@ assert_contains references/workflow-checklists.md 'Approve package and start imp
 assert_contains references/workflow-checklists.md 'non-rotatable Stable Files/Digest'
 assert_contains templates/notes.md 'Implementation Readiness: preparing | review-ready | accepted'
 assert_contains templates/notes.md 'Gate 2 Agent-ready Tasks'
+assert_contains templates/notes.md 'Gate 2 Stable Digest Algorithm: review-definition-v2'
 assert_contains templates/notes.md 'Gate 2 Plan Evidence'
 assert_contains templates/root-AGENTS.md 'Feature construction normally stops at two reviews'
 assert_contains references/project-guidance.md 'Feature construction normally stops at two reviews'
+assert_contains references/artifact-rules.md 'published runtime ledger values'
+assert_contains scripts/check-feature-review.py 'PROJECTED_STABLE_DIGEST = "review-definition-v2"'
+assert_contains tests/test_feature_review.py 'test_v2_allows_root_task_runtime_updates_and_plan_rotation'
 
 assert_contains SKILL.md 'Feature Definition Review'
 assert_contains SKILL.md 'Implementation Readiness Review'

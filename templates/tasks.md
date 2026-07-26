@@ -19,6 +19,7 @@ Default Split: vertical-slice
 - Do not mark a task `done` from code changes alone.
 - After implementation and fresh verification, use `Status: review` until Task Done Gate passes.
 - Task Done Gate: implementation complete, required tests or substitute verification run fresh, evidence recorded in `notes.md`, lightweight Spec Review recorded, Standards Review recorded when triggered, drift decision recorded, and evidence location named below.
+- Under Gate 2 `review-definition-v2`, only each `T<digits>` checkbox plus its `Status`, `Review`, and `Drift` values are runtime ledger fields. Task identity/order/title, mappings, Mode, dependencies, Human Gate, Acceptance, Verification, evidence location, barriers, risk, interface, and rollback meaning remain protected definition.
 
 ## Split Rules
 

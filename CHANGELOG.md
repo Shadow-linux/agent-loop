@@ -1,8 +1,14 @@
 # Agent Loop Changelog
 
-## 1.5.1 — 2026-07-25
+## 1.5.1 — 2026-07-27
 
-_当前状态：预发布；尚未执行正式版全量验证。_
+_当前状态：正式稳定版；已完成 focused、全量 Shell/Python、机械检查与六域语义验证。_
+
+### Gate 2 Stable Digest 稳定投影与 Checker Issue 上报
+- 保留原始 Package Digest，并为 Stable Digest 增加显式 `review-definition-v2`：任务完成、Review/Drift 和测试结果等白名单运行态变化不再错误阻断多任务 Feature Auto-Loop。
+- Stable Digest 继续保护任务/测试的身份、顺序、映射、依赖、Gate、验收、验证、命令、断言、风险、接口和回滚；投影解析不明确时 fail closed。
+- 新增只读 `check-feature-review.py --mode digest`，计算与 review/start/execute 使用同一实现；缺失/未知算法和 legacy 不安全迁移不会被自动接受。
+- Checker Self-Repair 可生成脱敏上游 Issue Draft；真正创建 GitHub Issue 保留独立 Human Gate，且不授权 repair、Git、安装、同步或发布。
 
 ### Feature 开发只保留两次关键确认（Feature Construction Two-Gate Review）
 - 人类先确认“做什么”；随后 Agent 自主准备任务、测试、E2E、代码上下文、实施计划、风险、验证和回滚，不再每完成一份文档就停下来询问。

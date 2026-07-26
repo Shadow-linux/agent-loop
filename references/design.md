@@ -155,7 +155,7 @@ explicit implementation request
 
 Gate 1 freezes what will be built and authorizes package preparation only. Package preparation retains Work Breakdown, conditional Delivery Contract assessment, Test Design, E2E Discovery, Technical Design / Code Context, Plan Gate, and Analyze Consistency as mandatory Agent quality methods, but does not modify target implementation and does not interrupt the human after each method. Gate 2 reviews the complete trace from acceptance through tasks, tests, code context, Plan, risk, verification, and rollback.
 
-`Approve package only` records readiness without execution. `Approve package and start implementation` also enables Feature Auto-Loop for the disclosed Agent-ready work; no third generic enablement prompt exists. Product/scope/acceptance changes return to Gate 1, material package changes return to Gate 2, and separately owned Delivery Contract, subagent, Git, external, submit, close, and release actions retain their exact Human Gates.
+`Approve package only` records readiness without execution. `Approve package and start implementation` also enables Feature Auto-Loop for the disclosed Agent-ready work; no third generic enablement prompt exists. Raw Package Digest preserves the exact reviewed package, while `review-definition-v2` Stable Digest projects only explicit task/test runtime ledger values so legal completion and plan rotation do not masquerade as definition drift. Product/scope/acceptance changes return to Gate 1, non-whitelisted package meaning changes return to Gate 2, and separately owned Delivery Contract, subagent, Git, external, submit, close, and release actions retain their exact Human Gates.
 
 ## Definitions
 
@@ -277,7 +277,7 @@ If plan.md exists, it must be construction-grade: exact paths, code context, int
 
 **Evidence**: fresh proof such as test output, build output, lint/typecheck output, API results, E2E/browser verification, screenshots, logs, or review findings.
 
-**Checker Self-Repair**: internal Diagnose Failure / Verify recovery for a proven canonical Agent Loop checker defect. The Agent preserves the original failure, proves the mismatch against published authority with a minimal fixture, requests exact authorization before writing an isolated temporary copy, verifies RED/GREEN and negative controls, and may use the result only as Human-approved substitute evidence for one named Gate. It creates no new lifecycle or mandatory artifact and never turns the canonical result into `pass`.
+**Checker Self-Repair**: internal Diagnose Failure / Verify recovery for a proven canonical Agent Loop checker defect. The Agent preserves the original failure, proves the mismatch against published authority with a minimal fixture, requests exact authorization before writing an isolated temporary copy, verifies RED/GREEN and negative controls, and may use the result only as Human-approved substitute evidence for one named Gate. It may prepare a sanitized upstream Issue Draft, but public GitHub creation requires a separate Issue Reporting Human Gate and grants no repair/Git/install/release authority. It creates no new lifecycle or mandatory artifact and never turns the canonical result into `pass`.
 
 **E2E Discovery**: the stage that discovers real Web E2E capability from project reality before writing or executing browser automation. It records durable environment facts in `project.md` and feature-specific cases in `tests.md` or `tests/e2e/*`.
 

@@ -397,6 +397,12 @@ Agent 会先重跑原命令并缩小问题。确认为 Checker 缺陷后，它�
 
 临时结果只能作为当前指定 Gate 的人类批准替代证据。原始 canonical 结果仍记录为失败，换了文件、Checker、命令或 Gate 就失效；正式修复仍需回到 Agent Loop 源码、补回归测试并通过正式验证。
 
+Agent 还可以先生成一个已脱敏的上游 GitHub Issue 草稿。真正创建 Issue 是独立的外部变更：它会先展示准确仓库、标题、完整正文、删去的敏感信息、标签/提交方式和影响范围，等人类单独确认。没有可用登录能力时只返回草稿与阻塞，不会自行安装工具、索取或泄露凭据。Issue 授权不包含临时修正、全局 Skill 修改、Git、安装、同步或发布。
+
+### Gate 2 摘要不会被任务完成状态误伤
+
+新 Feature 的 Gate 2 同时保存原始 Package Digest 和 `review-definition-v2` Stable Digest。任务勾选、任务 Review/Drift、测试结果等明确运行态字段可以随执行更新；任务 ID/顺序/依赖/Gate/验收/验证以及测试命令和断言仍保持受保护。Agent 使用只读 `check-feature-review.py --mode digest` 计算证据；旧 `raw-v1` 不会静默迁移，缺少算法或出现非白名单变化会回到 Human Review。
+
 ## 把重复操作变成项目能力
 
 ```text
