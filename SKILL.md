@@ -5,7 +5,7 @@ description: Use when starting, continuing, resuming, structuring, testing, impl
 
 # Agent Loop
 
-Version: 1.5.0
+Version: 1.5.1
 
 Run a single-human, CLI-agent development loop from goal intake to verified close. This skill is a controller: it decides the current stage, loads the right reference, produces or updates `agent-loop` artifacts, and stops at human gates.
 
@@ -120,6 +120,7 @@ references/recovery-and-backfill.md code-reality recovery and document backfill 
 references/feature-completion-check.md proactive close/pause/continue checks for active features
 references/human-review-summary.md table-first approval summaries for human gates
 references/stage-guides.md         stage-by-stage procedures
+references/checker-recovery.md     Human-authorized isolated recovery for a defective canonical Agent Loop checker
 references/artifact-rules.md       artifact ownership, drift, status, and naming
 references/skill-routing.md        optional preferred skills and fallback behavior
 references/external-skill-adapters.md stage plugin rules for Superpowers and other external skills
@@ -133,6 +134,8 @@ scripts/check-root-agents-blocks.py read-only root AGENTS managed-block drift ch
 scripts/check-onboarding-core-flow-coverage.py onboarding core-flow coverage checker
 scripts/check-concept-foundation-trace.py accepted concept/model trace checker
 scripts/check-adr-requirement-model-trace.py ADR requirement-model landing checker
+scripts/check-feature-context.py read-only Requirement/ADR authority and Feature Context Snapshot freshness checker
+scripts/check-feature-review.py read-only Gate decision, package digest, and multi-task Plan-scope checker
 scripts/scan-feature-monthly-archive.py read-only deterministic archive/rehydrate plan
 scripts/check-feature-monthly-archive.py read-only pre/post archive contract checker
 scripts/apply-feature-monthly-archive.py exact-hash Human-gated archive/rehydrate apply
@@ -154,6 +157,7 @@ CHANGELOG.md                        version-change source of truth for "what cha
 1. Discover exactly one real memory root before relying on project memory. If both `.agent-loop/` and legacy `agent-loop/` exist, fail closed and route to Recovery. If neither exists, continue with the applicable new-project, existing-project, or clearly eligible changes-only path without inventing reliable memory.
 2. Check root `AGENTS.md` / `CLAUDE.md` as the Root Agent Bootstrap Gate; if either is missing or stale, load `references/project-guidance.md` and include the guidance repair in the recommended Project Entry action unless the human has explicitly deferred it.
 2a. Canonical `scripts/check-*.py` validation requires Python 3.10+ and only the Python standard library. Run the `.py` entrypoints natively on macOS or Windows; if a required checker cannot run because Python is missing or unsupported, fail closed and report the capability gap instead of silently using an obsolete implementation.
+2b. When a canonical Agent Loop checker fails after an exact rerun, load `references/checker-recovery.md` inside Diagnose Failure / Verify. Classify the failure as artifact, environment, checker candidate, or unresolved before proposing a fix. A temporary checker write requires an exact Human authorization, uses an isolated copy by default, preserves RED/GREEN and negative-control evidence, and may substitute only for one named Gate after a separate Human decision; the canonical result remains failed until formal source repair.
 3. Classify the latest message intent: `chat`, `requirements-discussion`, `project-skill-management`, `feature-archive-maintenance`, `feature-request`, `operational-support`, `feature-follow-up`, `deferred-requirement`, or `unknown`.
 3a. For `chat`, answer or discuss only; do not create requirement sets, feature workspaces, tasks, tests, or plans.
 3b. For `requirements-discussion`, load `references/requirement-management.md` and `references/product-definition.md`, use Brainstorm / Clarify, choose `brief | standard`, produce a human-reviewed Requirement `product.md`, and write it under `.agent-loop/requirements/<record-date>-<topic>/` only after Product Human Review plus Requirement Record / Archive confirmation before any Feature construction.
@@ -232,6 +236,7 @@ CHANGELOG.md                        version-change source of truth for "what cha
     YYYY-MM/ archived closed feature directories
     <date>-<feature-slug>/
       spec.md
+      context.md optional expanded derived context for complex Features
       tasks.md
       tests.md
       plan.md
@@ -261,6 +266,7 @@ If the local directory is only a remote-project entry point, create only thin lo
 - Whole-feature execution requires explicit human confirmation and only fits tiny features.
 - A feature may contain many stories and many tasks; `tasks.md` is the feature task ledger.
 - Use Requirement `product.md` as the new product-semantics owner and Feature `spec.md` Product Slice as the implementation view. Existing Feature `product.md` is legacy reader-only evidence.
+- Use Feature `spec.md` as the execution bootstrap. Before Task, Test, Plan, Resume, Execute, Handoff, Verify, Review, Drift, or Close relies on a Feature, run `scripts/check-feature-context.py`; continue only on `CURRENT`, stop for semantic refresh on `REFRESH_REQUIRED`, and route `BLOCKED` to the owning existing Gate. The Snapshot and optional `context.md` are derived caches, never product authority.
 - Do not create `contracts.md` or `contracts/` by default. Use them only for durable producer-consumer delivery boundaries such as API, event, public data, UI state/behavior, SDK/library, or runtime interfaces.
 - Create or update Delivery Contract files only after human confirmation. The agent may proactively recommend one when it detects downstream impact, but simple single-person tasks, pure internal logic, and changes with no downstream consumer should skip contracts.
 - During Work Breakdown, Technical Design / Code Context, Plan, Review, and Drift Check, detect whether a Delivery Contract should be recommended.
@@ -319,14 +325,16 @@ If the local directory is only a remote-project entry point, create only thin lo
 - When creating or updating root `AGENTS.md`, run AGENTS Cleanup / Migration Review: preserve human-owned content, surface workflow rules that conflict with current agent-loop, and migrate long-term project facts to `.agent-loop/project.md` or enterprise project memory only after human confirmation.
 - Root and directory guidance language follows the project language when clear; default to English only when project language is unclear. Preserve stable artifact names, stage names, and file paths in English.
 - Directory-level `AGENTS.md` is proposed for new or existing long-lived boundary directories, created only after human confirmation.
-- Strict Mode is default: ask before and after every stage.
-- Feature Auto-Loop may run Agent-ready feature work after a passed Requirement Checklist, Feature Spec acceptance, and explicit human confirmation.
+- Normal Feature construction uses two meaningful reviews after an explicit implementation request: Gate 1 `Feature Definition Review` accepts the checked Feature Spec and authorizes writing the implementation-package artifacts without modifying target implementation; Gate 2 `Implementation Readiness Review` accepts the complete tasks/tests/E2E/code-context/Plan/risk/rollback package and may start execution.
+- Gate 1 package preparation runs Work Breakdown, Delivery Contract assessment, Test Design, E2E Discovery, Technical Design / Code Context, Plan Gate, and consistency review without separate approval prompts and without target implementation.
+- `Approve package only` at Gate 2 records accepted readiness but does not execute. `Approve package and start implementation` enables Feature Auto-Loop for the disclosed Agent-ready scope without a third generic prompt. A later explicit start may use an unchanged accepted package only after Feature Context, package drift, and stop-condition checks pass.
+- Strict Mode remains available when the human explicitly requests stage-by-stage control and remains the fail-closed controller-unavailable fallback.
 - Task Auto-Run runs Analyze Consistency before executing one accepted task/story plan after explicit human confirmation.
-- If the human appears slowed down by repeated confirmations, or when starting a feature/task execution lane, proactively explain the available gate modes and recommend either Feature Auto-Loop or Task Auto-Run when safe.
-- Auto modes stop at Human-gated work, unclear decisions, risky changes, failed verification, drift needing approval, unrelated dirty work blocking progress, Bug Resolution Path decisions, Bug close/reopen, Feature create/reopen, Requirement create/lifecycle change, Delivery Contract creation/acceptance/breaking changes, archive/rehydrate apply, directory guidance changes, unapproved subagent dispatch, branch creation, switching, deletion, push, or tag, submit, pause, close, commit, PR, merge, release, or publish.
+- If the human wants to execute only one task after accepting the package without starting the Feature, explain Task Auto-Run and request its bounded grant.
+- Auto modes stop at Feature Context `refresh-required | blocked`, Human-gated work, unclear decisions, risky changes, failed verification, drift needing approval, unrelated dirty work blocking progress, Bug Resolution Path decisions, Bug close/reopen, Feature create/reopen, Requirement create/lifecycle change, Delivery Contract creation/acceptance/breaking changes, archive/rehydrate apply, directory guidance changes, unapproved subagent dispatch, branch creation, switching, deletion, push, or tag, submit, pause, close, commit, PR, merge, release, or publish.
 - Human confirmations should use table-first Human Review Summary by default; full artifacts remain the source of truth. When multiple documents, facts, or long-term memory entries will change, use Batch Human Review.
 - Root `AGENTS.md` / `CLAUDE.md` guidance must tell future agents to own the workflow: classify the stage, recommend one next action, propose missing artifacts, and keep responsibility for sequencing, diagnosis, verification, drift checks, and project-memory updates.
-- Root guidance must also explain autonomous execution after approval: Feature Auto-Loop may continue Agent-ready work after Requirement Checklist passes, Feature Spec is accepted, and the mode is explicitly enabled; Task Auto-Run must run Analyze Consistency before completing one accepted task/story plan through TDD, implementation, verification, bug fixing, review, drift, status update, and final report.
+- Root guidance must also explain the two Feature construction reviews: Gate 1 authorizes package preparation only; Gate 2 may accept documents only or accept and start Feature Auto-Loop. Task Auto-Run must run Analyze Consistency before completing one accepted task/story plan through TDD, implementation, verification, bug fixing, review, drift, status update, and final report.
 - TDD is default: RED, verify RED, GREEN, verify GREEN, refactor.
 - No completion claim without fresh verification evidence.
 - Submit requires fresh verification, drift check, diff review, human confirmation, and a recorded submit note.
@@ -369,6 +377,7 @@ Stop when:
 - Project Skill Discovery Guard finds `project-skill-drift`, or an active match has not been resolved before an equivalent generic action
 - an active project skill is about to execute without a current bounded Execution Gate grant or with undisclosed planned actions/effects
 - TDD cannot be followed or verification repeatedly fails
+- a canonical Agent Loop checker may be defective but its failure has not been classified, an exact Temporary Checker Repair Review has not been accepted before patch writes, or a temporary result is being reused outside its named Gate
 - review finds behavior, scope, or architecture changes
 - unrelated dirty work blocks progress
 - subagents are needed but not yet approved

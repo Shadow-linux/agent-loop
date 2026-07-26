@@ -1,11 +1,36 @@
 # Agent Loop Changelog
 
-## Unreleased
+## 1.5.1 — 2026-07-25
 
-### Installation Documentation
-- Kept public GitHub installation on `npx skills` while adding one compatible stable-tag `git clone` route for GitHub and the internal Git mirror.
-- Added checksum-based macOS/Linux synchronization and a Windows `robocopy` equivalent into the shared Agent Skills directory.
-- Kept project `AGENTS.md` refresh as a separate post-upgrade Human Review action for both installation routes.
+_当前状态：预发布；尚未执行正式版全量验证。_
+
+### Feature 开发只保留两次关键确认（Feature Construction Two-Gate Review）
+- 人类先确认“做什么”；随后 Agent 自主准备任务、测试、E2E、代码上下文、实施计划、风险、验证和回滚，不再每完成一份文档就停下来询问。
+- 完整实施包准备好后，人类一次确认“怎么做”，并可选择只保存文档，或确认后立即开始实现。
+- 只保存文档后，未来一句“继续做这个功能”即可恢复；Agent 会先核对需求、技术决策和实施包是否变化，未变化时不重复整轮审阅。
+- 多任务 Feature 可以在已经接受的任务范围内轮换当前 Plan；新增任务、稳定方案变化或上下文失效会重新回到开工确认。
+- Delivery Contract、subagent、Git、外部系统、生产、提交、关闭和发布仍保留各自的独立 Human Gate。
+- 新增 `scripts/check-feature-review.py`、持久化确认记录、实施包摘要以及漂移、恢复和 Plan 轮换回归测试。
+
+### Feature 能可靠承接 Requirement 产品文档（Feature Context Snapshot）
+- Feature 内新增派生的 Context Snapshot，直接指向当前 Requirement `product.md` 和适用 ADR；它只负责帮助实现，不会复制出第二份产品真相。
+- Task、Test、Plan、恢复执行和 subagent handoff 都会先检查产品来源与 ADR 是否仍然有效，避免只读 Feature 目录时沿着过期上下文继续开发。
+- 新增只读的 Python 3.10+ `scripts/check-feature-context.py`，以 `current | refresh-required | blocked` 明确告诉 Agent 可以继续、需要刷新或必须停止。
+- 补强真实 memory root、时间戳、重复权威指针和旧版 Concept Foundation 兼容检查。
+- Product 与 Decision Markdown 摘要统一换行后计算，并兼容旧版 LF/CRLF 原始摘要，避免 Windows checkout 仅因换行转换误报上下文漂移。
+
+### Checker 出错时允许隔离诊断与临时修正（Checker Self-Repair）
+- Agent 会先区分产物错误、环境能力问题、Checker 缺陷和原因未明，不会看到校验失败就直接绕过。
+- 只有人类明确同意后，Agent 才能在隔离副本中做最小临时修正，并用 RED/GREEN 和反例证明它只解决当前 Checker 缺陷。
+- 临时结果只对指定 Gate 有效；原始失败、回滚和失效条件都会保留，不能借此静默修改全局 Skill 或发布 Agent Loop。
+
+### ADR Product Rule Trace 兼容修正（ADR Product Rule Trace Compatibility）
+- 已确认的 Standard Product Definition 如果只有 Product Rules、确实没有 Concept IDs 或 Requirement Model IDs，可以在缺失字段写 `none`，同时仍必须完成 Product Rule 的技术落地覆盖。
+- 正反向回归测试会阻止 `none` 隐藏来源中真实存在的 Concept 或 Requirement Model IDs。
+
+### 安装与升级说明（Installation Documentation）
+- GitHub 用户继续使用 `npx skills`；同时保留 Git clone 兼容安装方式以及 macOS/Linux、Windows 的同步示例。
+- 全局 Skill 升级后，项目 `AGENTS.md` 仍需单独让 Agent 检查和刷新，不能因为升级自动覆盖项目文件。
 
 ## 1.5.0 — 2026-07-17
 

@@ -198,7 +198,7 @@ If the owning feature is closed:
 2. Explain why this is better than a new feature.
 3. Ask human confirmation before changing status or adding work.
 4. Record the Follow-up Intake in `notes.md`.
-5. Update `spec.md`, `tasks.md`, `tests.md`, and `plan.md` only as needed. Requirement changes that alter acceptance, field meaning, API shape, algorithm behavior, or visible UX must update `spec.md` and `tests.md` before execution.
+5. Update `spec.md`, `tasks.md`, `tests.md`, and `plan.md` only as needed. Requirement changes that alter acceptance, field meaning, API shape, algorithm behavior, or visible UX must update `spec.md` and `tests.md`, rerun Requirement Checklist, and return through Gate 1 before execution. Material package-only changes repeat Gate 2.
 6. Move the feature to `Active Feature` and set its lifecycle status to `active`.
 7. Execute through normal Plan Gate, TDD, Verify, Review, Drift Check, Project Memory Update, Feature Completion Check, and Close.
 
@@ -271,7 +271,7 @@ Always ask before:
 - accepting a breaking API/event/data/UI behavior change
 - marking the follow-up complete or closing the feature again
 
-Feature Auto-Loop may continue only after the human confirms the flow-back decision and any updated spec/tasks/tests are accepted. Auto modes still stop at all normal stop conditions.
+Feature Auto-Loop may continue only after the human confirms the flow-back decision and the affected Feature Definition Review or Implementation Readiness Review is accepted. Auto modes still stop at all normal stop conditions.
 
 ## Completion
 

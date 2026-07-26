@@ -291,6 +291,8 @@ Run structural preflight while the ADR is `proposed`. A successful preflight per
 
 For a confirmed Brief or legacy reasoned `concept-foundation-not-needed` source with no applicable stable model IDs or Product Rule references, keep Accepted Concept IDs / Accepted Requirement Model IDs / Accepted Product Rule References as `none`, set Trace Applicability to `not-applicable`, record a concrete reason, and do not fabricate Concept Definitions, Scope Inventory, or Technical Landing Trace rows. The current unified Coverage Hard Gate wording applies to new decisions; legacy decisions may retain the earlier exact legacy gate wording without migration.
 
+For a confirmed Standard source, either Accepted Concept IDs or Accepted Requirement Model IDs may independently be `none` only when the effective source declares no IDs of that kind. When accepted Product Rule references remain, keep Trace Applicability `required`, name those resolvable anchors, and cover them through Scope Inventory and Technical Landing Trace instead of inventing Concept or Requirement Model IDs.
+
 When the README effective source changes or new accepted requirement evidence changes an upstream model, set the dependency judgment to:
 
 ```text
@@ -371,6 +373,43 @@ Apply the blocked routing matrix in order and choose the first matching row:
 
 Diagnosis and available read-only verification may proceed before requesting access or approval for a later mutation. Ask Human first only when the missing human input is required for the next safe diagnostic or verification action itself.
 
+## Checker Failure Recovery
+
+Checker Failure Recovery is an internal method of Diagnose Failure and Verify, not a canonical stage, status, lifecycle, artifact family, or Auto Mode. Load `references/checker-recovery.md` when a canonical Agent Loop checker still fails after the exact command is rerun with unchanged inputs.
+
+Apply this order:
+
+```text
+preserve canonical command/output/path/digest
+-> artifact-invalid | environment-invalid | checker-defect-candidate | unresolved
+-> artifact or environment repair when those facts decide the cause
+-> minimal authority-backed positive fixture plus negative controls for a checker candidate
+-> Temporary Checker Repair Review
+-> exact Human authorization before checker/support writes
+-> isolated temporary copy by default
+-> unmodified-copy RED
+-> minimal patch
+-> GREEN plus negative controls
+-> exact target run
+-> canonical failure plus temporary result
+-> separate Human substitute decision for one named Gate
+-> expiry and formal source repair follow-up
+```
+
+Read-only reproduction, reduction, and authority comparison may proceed before asking. The Agent must not rewrite a valid artifact to satisfy a known-wrong checker, silently modify an installed/global Skill, add a general bypass, or present temporary evidence as a canonical pass.
+
+The Human may accept a fresh temporary result as substitute verification for one exact Gate only when the defect proof, source digests, RED/GREEN, negative controls, target command, expiry, rollback, and residual canonical failure are visible. Record:
+
+```text
+Canonical validation: failed
+Temporary checker recovery: passed | failed
+Human substitute decision: accepted-for-this-gate | declined
+```
+
+This decision grants no later Gate or action. Any checker/support/input/authority digest change, different target or command, Gate exit, context loss without persisted evidence, or failed negative control expires it. Short same-session evidence may remain response-local; cross-session, handoff, or later action reliance records the compact evidence in the existing owning artifact without creating a mandatory recovery directory.
+
+Formal repair belongs in the Agent Loop source repository with the regression test and canonical checker change. Agent Loop itself cannot claim a released checker fix from an isolated patched copy; focused and required full validation must pass on the formal source.
+
 ## Inspection Order
 
 Use this order:
@@ -385,14 +424,18 @@ Use this order:
 6b. If `.agent-loop/skills/INDEX.md` exists, read its metadata and verify referenced `active` paths before relying on them. Re-match active `bootstrap` / `on-demand` rows for each applicable actionable intent before stage-specific helper or fallback action; load and verify only the matched body. Do not load `proposed`, `disabled`, or `deprecated` skills into normal routing.
 6c. For explicit Bug management, read `bugs/INDEX.md` metadata before creating a Bug or scanning Feature ownership. Resolve current Bug README, duplicate/reopen pointers, and related flat/archived Feature locators before relying on lifecycle or target claims.
 6d. When `<memory-root>/changes/` exists, run the read-only Lightweight Change scanner across every month before relying on Change status, pending thresholds, or human-review inventory. A changes-only root does not prove reliable `project.md` or completed Project Entry.
-7. Read current feature `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`, and `contracts.md` if present.
-8. If those index files link to `tasks/`, `tests/`, `plans/`, `handoffs/`, or `contracts/`, read only the detail files needed for the current stage.
+7. Read current Feature `spec.md` as the bootstrap. Run `python3 <skill-root>/scripts/check-feature-context.py --project-root <target-project-root> <feature-spec-path>` before relying on downstream Feature context. Exit `0 / CURRENT` permits loading stage-relevant ledgers; exit `3 / REFRESH_REQUIRED` stops for semantic refresh; exit `1 / BLOCKED` routes to the owning Requirement, Decision & Design, Feature Definition, or Recovery Gate. On Windows use the equivalent `py -3` command.
+8. Only after Feature Context is `current`, read stage-relevant current Feature `tasks.md`, `tests.md`, `plan.md`, `notes.md`, and `contracts.md` if present. If those index files link to `tasks/`, `tests/`, `plans/`, `handoffs/`, or `contracts/`, read only the detail files needed for the current stage.
 9. Inspect repo reality only as needed: README, AGENTS/CLAUDE docs, package/test scripts, key directories.
 10. If local repo reality points to remote execution, or the human says this is a remote project, load `references/remote-project-discovery.md`. An empty local directory alone is not enough; if there are no remote hints, classify as `new-project`.
 11. Verify long-term memory index targets before trusting them. If `project.md`, root guidance, or current artifacts point to onboarding-db, enterprise `project/*.md`, feature docs, contracts, or guidance files, check that the referenced path exists before relying on it.
 12. Compare project memory with obvious repo reality.
 12a. Run Branch Strategy Check when branch evidence affects the current work. Compare accepted durable policy and Target Release Context with native repository guidance, current Git reality, and feature/plan/submit evidence. Recommendation is read-only; adoption and every Git mutation remain separately Human-gated.
 13. Choose the next stage.
+
+This Feature Context Load Contract also runs after context compaction, Resume, controller re-entry, long-running uncertainty, Requirement/ADR source change, archive rehydrate before reopened execution, and before Plan or Execute reliance. Conversation summaries, `tasks.md`, and `plan.md` cannot replace `spec.md` bootstrap plus freshness evidence.
+
+When the checker returns `refresh-required`, read the changed Requirement README and only applicable Product Definition/ADR sections, compare current accepted meaning with the Snapshot and Product Slice, refresh derived context and downstream trace only when scope/acceptance/decision meaning is unchanged, and record evidence in `notes.md`. Scope, behavior, acceptance, role, state, rule, invariant, exception, recovery, or accepted-decision impact returns to the existing Human Gate.
 
 If `project.md` declares a Decisions index, list decision files before Decision & Design or Feature Spec. Read decisions already linked by the active Requirement Product Definition, legacy Feature Product Brief, or `spec.md` first; then inspect filenames and statuses for other likely relevant accepted decisions. Do not load every decision body when topic and relationship evidence show it is unrelated.
 
@@ -568,21 +611,57 @@ Use `references/stage-guides.md` for the exact procedure.
 
 ## Human Gate Modes
 
-Default is Strict Mode:
+Normal Feature construction uses two meaningful reviews:
 
 ```text
-Before stage: ask permission.
-After stage: ask continue / revise / pause / submit / close.
+explicit implementation request
+-> checked Feature Spec and Product Slice
+-> Gate 1: Feature Definition Review
+-> Implementation Package Preparation
+-> Gate 2: Implementation Readiness Review
+-> Agent-ready implementation
 ```
 
 For non-trivial gates, the approval prompt must include a Human Review Summary. The summary is the human-facing approval view; the full artifact files remain the source of truth.
 
-Allowed modes:
+Gate 1 acceptance authorizes package preparation only and does not authorize target implementation. During package preparation, the Agent completes Work Breakdown, Delivery Contract assessment, Test Design, E2E Discovery if applicable, Technical Design / Code Context, Plan Gate / Plan, coverage review, and Analyze Consistency without separate Work Breakdown, Test Design, E2E Discovery, Technical Design, or Plan approval prompts. Target implementation is forbidden until Gate 2.
+
+Record this compact derived state in current Feature notes:
+
+```text
+Implementation Readiness: preparing | review-ready | accepted
+```
+
+- `preparing`: Gate 1 accepted and the package is being built.
+- `review-ready`: package completeness and consistency checks pass; Gate 2 is pending.
+- `accepted`: Gate 2 accepts the package.
+
+The state is not Feature lifecycle or authorization for Git, external mutation, submit, release, or close.
+
+Feature `notes.md` must also persist the Gate decisions and comparison baseline: `Gate 1 Decision` / `Gate 1 Spec Digest`; `Gate 2 Decision` / `Gate 2 Reviewed At`; `Gate 2 Package Files` / `Gate 2 Package Digest`; `Gate 2 Stable Files` / `Gate 2 Stable Digest`; `Gate 2 Agent-ready Tasks`; `Active Plan Scope`; `Gate 2 Plan Evidence`; and `Feature Auto-Loop` enabled/disabled. Package Digest covers the complete reviewed package, including every current artifact under triggered `tasks/`, `tests/`, `plans/`, and `contracts/` directories and the initial `plan.md` when Plan Gate requires one. Stable Digest covers `spec.md`, `tasks.md`, `tests.md`, optional `context.md`, contracts, task/test details, and every other non-rotatable reviewed package file, but excludes rotatable `plan.md` and `plans/*`. Plan Evidence is `plan.md`, `plans/<detail>.md`, or `no-plan:<accepted task ID>` and must match Active Plan Scope. Use `scripts/check-feature-review.py` to fail closed on incomplete inventory, missing evidence, digest drift, invalid decision/Auto-Loop pairing, non-Agent-ready task claims, or Plan scope outside the accepted task set.
+
+Gate 2 choices are:
+
+```text
+Approve package and start implementation
+Approve package only; do not implement yet
+Revise package
+Pause
+```
+
+`Approve package only` records accepted readiness and does not execute. `Approve package and start implementation` accepts the package and enables Feature Auto-Loop for the disclosed Agent-ready work without a third generic Feature Auto-Loop prompt.
+
+If the human later explicitly says to start implementation after package-only acceptance, first require Feature Context `CURRENT`, confirm the accepted spec/tasks/tests/Plan package is unchanged, and confirm no new stop condition or Human-gated item exists. When all three hold, that explicit instruction enables Feature Auto-Loop without repeating the full Gate 2 review. Any definition drift returns to Gate 1; any material package drift returns to Gate 2.
+
+Run `python3 <skill-root>/scripts/check-feature-review.py --mode start <feature-dir>` for that later start, then record Gate 2 Decision `approve-and-start`, Feature Auto-Loop `enabled`, and the new authorization time. On Windows use `py -3`.
+
+Available control modes:
 
 | Mode | Authorization scope | When it can start | What it may do without another stage gate |
 |---|---|---|---|
-| Strict Mode | one stage at a time | default for all work | nothing beyond the confirmed stage |
-| Feature Auto-Loop | current feature | after Feature Spec and Requirement Checklist are accepted and human explicitly enables it | advance Agent-ready stages and tasks for the feature |
+| Normal two-gate construction | one current Feature definition/package | explicit implementation request, then Gate 1 | write the complete implementation-package artifacts without modifying target implementation |
+| Strict Mode | one stage at a time | human explicitly requests stage-by-stage control, or controller fallback forces it | nothing beyond the confirmed stage |
+| Feature Auto-Loop | current accepted Feature package | Gate 2 selects `Approve package and start implementation` | execute and advance Agent-ready tasks for the feature |
 | Task Auto-Run | one task or one story | after the task/story plan is accepted and human explicitly enables it | run Analyze Consistency, then complete that task/story through TDD, verification, review, drift, Task Done Gate, and task status update |
 
 Feature Auto-Loop means:
@@ -591,7 +670,9 @@ Feature Auto-Loop means:
 Feature Auto-Loop = give one feature a bounded release lane.
 ```
 
-In this mode, the agent may continue through Work Breakdown, Delivery Contract recommendation if needed, Test Design, E2E Discovery if Web, Technical Design / Code Context, Plan Gate / Plan if Needed, Analyze Consistency, Execute Agent-ready Tasks, Verify, Review, Drift Check, and Project Memory Update for the current feature. It must not skip Plan Gate before execution. It must stop before Bug Resolution Path decisions, Bug close/reopen, Feature creation/reopen, Requirement creation/lifecycle reconciliation, Feature Monthly Archive or rehydrate and their Batch Human Gates, branch creation, switching, deletion, push, or tag, creating or materially updating a project-local skill, executing a project-local skill without a current invocation grant, creating or updating Delivery Contract files, contract acceptance, breaking contract changes, Submit / Integrate, and Pause / Close.
+In this mode, the agent may continue through Analyze Consistency, Execute Agent-ready Tasks, Verify, Review, Drift Check, and Project Memory Update for the current accepted package. It must not skip Plan Gate before execution. It must stop before Bug Resolution Path decisions, Bug close/reopen, Feature creation/reopen, Requirement creation/lifecycle reconciliation, Feature Monthly Archive or rehydrate and their Batch Human Gates, branch creation, switching, deletion, push, or tag, creating or materially updating a project-local skill, executing a project-local skill without a current invocation grant, Delivery Contract creation and acceptance not separately named in Gate 2, breaking contract changes, subagent dispatch, external mutation, Submit / Integrate, commit, push, PR, merge, tag, release, publish, and Pause / Close.
+
+For multiple accepted Agent-ready tasks, Feature Auto-Loop may rotate `plan.md` and Active Plan Scope to the next Gate 2 task or story without repeating Gate 2 only when Stable Digest still matches, task/test boundaries and ordering are unchanged, the new task/story Plan passes Plan Gate and Analyze Consistency, and interfaces/risk/rollback/verification obligations remain within the reviewed package. A task Plan ID must be one accepted Agent-ready task. A story Plan must explicitly list only accepted Agent-ready Tasks in `Included Tasks`, and each included Task must map to that Story in `tasks.md`. Run `python3 <skill-root>/scripts/check-feature-review.py --mode execute <feature-dir>` before execution; on Windows use `py -3`. A new task ID, an unaccepted or story-mismatched task inside a story Plan, stable-file drift, changed boundary/order, or material risk/interface/rollback/verification change returns to Gate 2.
 
 Task Auto-Run means:
 
@@ -628,33 +709,34 @@ The task may enter `review` after implementation and all applicable fresh verifi
 
 If any item is missing, keep the task as `review`, `in-progress`, or `blocked`; never use `done`.
 
-Before enabling either auto mode, perform a final clarification pass:
+Before Gate 2 may start Feature Auto-Loop, or before enabling Task Auto-Run, perform a final clarification pass:
 
 - list remaining assumptions
 - list Human-gated tasks or decisions
 - list likely risk points
 - list stop conditions
-- ask for explicit mode confirmation
+- include these facts in the Gate 2 choice or Task Auto-Run request and obtain the corresponding explicit confirmation; do not add a third generic Feature Auto-Loop prompt after approve-and-start
 
-## When To Offer Auto Modes
+## When To Offer Execution Modes
 
-Offer auto modes proactively, without waiting for the human to know the terms:
+Use the normal two-gate path without asking the human to choose a mode after every stage:
 
-- after Requirement Checklist passes and Feature Spec acceptance is recorded, offer `Feature Auto-Loop` for Agent-ready downstream work
+- after Requirement Checklist passes, present Gate 1 and recommend complete package preparation
+- after package consistency passes, present Gate 2 with package-only and package-plus-start choices
 - after a task/story plan is accepted, offer `Task Auto-Run` for that execution unit
-- when the human says confirmation is too frequent, asks the agent to continue by default, or appears to be repeatedly approving low-risk stages
-- when a feature has a clear spec, clear tests, Agent-ready tasks, and no unresolved product/design/architecture/security/data decisions
+- use Strict Mode only when the human explicitly asks for stage-by-stage review or the controller-unavailable fallback requires it
 
 Recommended wording:
 
 ```text
-Strict Mode is safest and asks before each stage. If you want fewer confirmations, I can enable Feature Auto-Loop for this feature, or Task Auto-Run just for the selected task/story. Auto modes still stop for Human-gated decisions, unclear decisions, risky changes, failed verification, drift needing approval, unrelated dirty work blocking progress, human original requirement changes, first-version exclusions, Delivery Contract creation/acceptance/breaking changes, Complex Artifact Mode detail directory creation, directory guidance changes, unapproved subagent dispatch, branch creation, switching, deletion, push, or tag, submit, pause, close, commit, PR, merge, release, and publish.
+First review what will be built. After you accept the checked Feature definition, I will prepare tasks, tests, code context, Plan, verification, risk, and rollback without changing target code. The second review accepts the complete package and can either stop there or start Agent-ready implementation. Delivery Contract, subagent, Git, external, submit, close, and release actions keep their own gates.
 ```
 
 Do not offer an auto mode as a substitute for missing clarification. If scope, acceptance, test approach, data rules, or affected boundaries are unclear, clarify first.
 
 Auto modes do not remove stop conditions. Stop and ask when:
 
+- Feature Context Snapshot freshness is `refresh-required | blocked`; Auto Mode cannot continue until semantic refresh succeeds or the owning Gate resolves the blocker
 - a task is `Human-gated`
 - product, design, architecture, security, data, approval, or public-interface decisions are needed
 - a stage would modify human original requirements
@@ -673,6 +755,7 @@ Auto modes do not remove stop conditions. Stop and ask when:
 - Bug Index/README, duplicate/reopen, Status/Resolution, Resolution Target, Expected Behavior authority, or Fix Feature locator evidence is invalid or contradictory
 - an archive row target is missing, an archived directory lacks a row, a flat/month Feature ID collides, a `rehydrated` row points to a month path, an incomplete `.archive-txn` exists, or verified apply leaves an old durable path
 - TDD cannot be followed or verification repeatedly fails
+- a canonical Agent Loop checker failure needs a temporary patch but the exact Temporary Checker Repair Review or one-Gate substitute decision is missing, expired, or being widened
 - review finds behavior/scope/architecture changes
 - subagents are needed but not yet approved
 - branch creation, switching, deletion, push, or tag is requested
@@ -681,14 +764,16 @@ Auto modes do not remove stop conditions. Stop and ask when:
 Allowed replies:
 
 ```text
-continue
-revise
+accept definition and prepare implementation package
+approve package and start implementation
+approve package only
+revise definition
+revise package
 pause
 submit
 close
 change scope
 skip with reason
-enable Feature Auto-Loop
 enable Task Auto-Run
 switch to Strict Mode
 ```

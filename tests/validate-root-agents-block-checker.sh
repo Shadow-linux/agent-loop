@@ -71,14 +71,14 @@ fi
 assert_contains "$tmpdir/missing-stage-map.out" "FAIL root AGENTS drift found"
 assert_contains "$tmpdir/missing-stage-map.out" "workflow-stage-map | missing"
 
-sed 's/block-version:1\.5\.0-20260723\.2/block-version:1.5.0/' "$template" > "$tmpdir/stale.md"
+sed 's/block-version:1\.5\.1-20260725\.1/block-version:1.5.1/' "$template" > "$tmpdir/stale.md"
 if python3 "$checker" --template "$template" --target "$tmpdir/stale.md" > "$tmpdir/stale.out"; then
   printf 'FAIL: checker should fail when block-version values are stale\n' >&2
   cat "$tmpdir/stale.out" >&2
   exit 1
 fi
 assert_contains "$tmpdir/stale.out" "message-intent | stale-block-version"
-assert_contains "$tmpdir/stale.out" "expected 1.5.0-20260723.2"
+assert_contains "$tmpdir/stale.out" "expected 1.5.1-20260725.1"
 
 awk '
   /<!-- agent-loop:managed-end section:ownership -->/ { next }

@@ -47,7 +47,8 @@ New human source material should be archived inside a requirement set directory.
 | `bugs/YYYY-MM-DD-<bug-slug>/README.md` | stable Bug identity, Report Origin, observed/expected evidence, Status, Resolution, relationships, Resolution Path, verification, close, and reopen history | product meaning, Requirement lifecycle, Feature tasks/tests/plan, personnel assignment, or Git authorization |
 | `bugs/YYYY-MM-DD-<bug-slug>/evidence/*` | optional bounded screenshots, redacted logs, failed tests, reproduction, and verification evidence | secrets, complete production payloads, implementation plans, or executable state database |
 | legacy Feature `product.md` | historical feature-level product intent retained for Resume, Follow-up, Review, Close, and Recovery only | new Product Definition authoring, Requirement lifecycle, or silent migration |
-| Feature `spec.md` | intended feature behavior plus Product Requirement Source and Product Slice | Requirement product meaning, execution logs, or a second PRD |
+| Feature `spec.md` | intended feature behavior, Product Requirement Source, derived Feature Context Snapshot, and Product Slice | Requirement product meaning, execution logs, or a second PRD |
+| optional Feature `context.md` | expanded derived execution context for a complex or long-running Feature, with exact source/digest parity to `spec.md` | independent product truth, Requirement lifecycle, approval, task/test/plan, code-fact, or execution authority |
 | `tasks.md` | work breakdown, status, and links to task details | full test evidence |
 | `tests.md` | test design, matrix, and links to test details | raw test output |
 | `plan.md` | active execution plan pointer or compact plan, including Branch Context Evidence when applicable | historical execution record or Git action authorization |
@@ -135,10 +136,21 @@ Human-gated
 Gate modes:
 
 ```text
+Normal Two-Gate Feature Construction
 Strict Mode
 Feature Auto-Loop
 Task Auto-Run
 ```
+
+Feature notes own the compact derived package state:
+
+```text
+Implementation Readiness: preparing | review-ready | accepted
+```
+
+Gate 1 sets `preparing`; package completeness and consistency set `review-ready`; Gate 2 sets `accepted`. This field is not Feature lifecycle and authorizes no target implementation, Git, external mutation, submit, release, or close by itself. `notes.md` also persists Gate 1 decision/spec digest, Gate 2 decision/time, complete Package Files/Digest, non-rotatable Stable Files/Digest, accepted Agent-ready task IDs, Active Plan Scope, Plan Evidence (`plan.md | plans/<detail>.md | no-plan:<accepted-task>`), and Auto-Loop enabled/disabled. Package-only acceptance requires a later explicit start instruction plus a current/unchanged/no-new-stop check before execution. Existing `spec.md`, `tasks.md`, `tests.md`, `plan.md`, and `notes.md` remain the owners; do not create a separate readiness artifact or hierarchy.
+
+The Package Digest is SHA-256 over sorted `<Feature-relative-path><TAB>sha256:<file-digest>` rows with a final newline. It must inventory every current file under triggered `tasks/`, `tests/`, `plans/`, and `contracts/` directories plus optional `context.md` / `contracts.md`; a self-reported subset is invalid. Stable Digest uses the same algorithm but excludes rotatable `plan.md` and `plans/*`. `scripts/check-feature-review.py` validates the durable evidence: `review` and package-only `start` require the full Package Digest; active `execute` permits a newly rotated detailed Plan but requires the complete Stable Digest, accepted Tasks that actually exist and are classified Agent-ready, and Plan/No-Plan evidence matching an Active Plan Scope inside the accepted task set.
 
 Branch Strategy adoption status:
 
@@ -180,7 +192,7 @@ Feature Monthly Archive moves the complete eligible directory without content co
 
 Scope boundaries are explicit: no per-feature archive summary, no historical/ directory, no Deep Archive, no deletion/packing/scheduled archive, and No `--force`. A closed archived feature must rehydrate before reopened execution.
 
-Record the active gate mode in `project.md` Current Work or the active feature `notes.md` checkpoint. If scope changes, switch back to Strict Mode unless the human renews the auto-mode grant.
+Record the active gate mode in `project.md` Current Work or the active feature `notes.md` checkpoint. Product meaning, Product Slice, scope, or acceptance changes invalidate Gate 1 and return readiness to `preparing`; material package changes invalidate Gate 2 and return readiness to `preparing`. Human-selected Strict Mode remains explicit stage-by-stage control.
 
 ## Post-Merge Memory Reconciliation Layout
 
@@ -247,6 +259,8 @@ tests.md
 plan.md
 notes.md
 ```
+
+The Feature Context Snapshot is derived execution context inside `spec.md` by default. Do not create optional `context.md` for an ordinary Feature. It may be added only through the existing Complex Artifact Human Gate when keeping the complete Snapshot in `spec.md` would make the Feature no longer locally understandable; `spec.md` keeps the summary, exact link, source identity, digests, and freshness. Generate Product and Decision Markdown digests after canonicalizing `CRLF` and lone `CR` to `LF`; the checker accepts legacy raw LF/CRLF digests so OS checkout behavior does not create false drift. Neither file owns product meaning.
 
 Do not create dated variants like `tasks-2026-05-26.md` in v1.
 
@@ -347,6 +361,7 @@ stable plan.md
 
 ```text
 current feature behavior changed -> update spec.md
+Feature Context source or digest changed -> rerun the read-only freshness checker, semantically refresh derived spec.md Snapshot and optional context.md only when authority remains valid, and keep both in exact source/digest parity
 accepted Requirement product meaning changed -> Human-gated append-only Product Definition follow-up, advance README pointer, then recheck ADR / open Feature compatibility
 legacy feature product intent conflict found -> stop for Requirement Conflict / Recovery; do not rewrite legacy product.md silently
 cross-feature product consensus changed -> update project.md Product Context or Domain Language in simple mode, or project/product-context.md and project/domain-language.md in enterprise mode

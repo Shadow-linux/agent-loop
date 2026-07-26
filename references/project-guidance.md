@@ -10,6 +10,8 @@ AGENTS.md / CLAUDE.md = agent startup guidance
 .agent-loop/project/* = optional enterprise project memory details
 .agent-loop/remote.md = local entry pointer for remote projects
 .agent-loop/features/* = feature execution state
+.agent-loop/features/*/spec.md = Feature bootstrap plus derived Feature Context Snapshot and Product Slice
+.agent-loop/features/*/context.md = optional expanded derived context for a complex Feature; never independent product truth
 .agent-loop/features/archive.md = Feature Monthly Archive locator for stable Feature IDs
 .agent-loop/features/YYYY-MM/* = Human-gated closed-history month archive; never an execution path
 .agent-loop/requirements/<record-date>-<topic>/product.md = Agent-authored Human-reviewed Product Definition
@@ -29,6 +31,8 @@ Root guidance may navigate a user Agent to the Feature Monthly Archive procedure
 Root guidance may also route an observed post-code-integration memory conflict, but the targeted fact-resolution rules and optional Full Memory Audit / Recovery stay in `memory-reconciliation.md`. Root guidance must say no observed conflict is `reconciliation-not-needed`, with no whole-memory scan or extra gate. Refresh the root submit managed block when this concise route is absent or its full template block revision is stale; do not copy the detailed procedure into the target root file.
 
 The Workflow Gateway Map contains one exact first-hop row for an already-defined actionable ordinary non-Bug change, pointing to `Lightweight Change Assessment` and `references/lightweight-change-lane.md`. Product meaning that is still being shaped remains in Requirements Discussion. Eligibility, Feature hard triggers, card fields, Adaptive Plan/TDD, scope expansion, completion, and gate details belong in that reference, not root `AGENTS.md`.
+
+The Checker Recovery Gateway contains one concise row for a canonical Agent Loop checker that still fails after an exact rerun. It routes to `Diagnose Failure / Checker Recovery` and `references/checker-recovery.md`; root guidance must not copy the detailed classification, fixture, RED/GREEN, isolation, substitute-evidence, expiry, or formal-repair algorithm. The Evidence Gate must keep suspected checker repair Human-authorized and forbid silent bypass or canonical-pass claims.
 
 ## Root Agent Bootstrap Gate
 
@@ -57,14 +61,16 @@ Every time `agent-loop` is used inside a target project, check root guidance bef
 - project uses `agent-loop`
 - Bootstrap Protocol is missing skill-loading/fallback rules: root guidance must say root `AGENTS.md` is a bootstrap cache rather than a replacement for the `agent-loop` skill, must load/use the available skill before agent-loop workflow decisions, and must say Stage Helper Capability Scan happens only after the controller is active or unavailable/load-failed
 - Message Intent Guard: distinguish Chat, Requirements Discussion, already-defined ordinary non-Bug change, explicit Bug/follow-up, Feature Request, Operational Support, Project Skill, Archive/Rehydrate, Memory Reconciliation, proposal/deferred, and lifecycle requests before project-state routing
-- Workflow Gateway Map: route each of the 16 startup signal families to exactly one first hop and exact published reference set; root guidance is navigation only, while `references/runtime.md` owns the complete leaf-stage order
+- Workflow Gateway Map: route each of the 17 startup signal families to exactly one first hop and exact published reference set; root guidance is navigation only, while `references/runtime.md` owns the complete leaf-stage order
 - Lightweight Change Gateway: route only already-defined actionable bounded non-Bug work to `references/lightweight-change-lane.md`; unresolved product meaning remains in Requirements Discussion
 - Bootstrap Protocol: inspect `.agent-loop/`, classify the stage, and recommend exactly one next action
 - Bootstrap Protocol lacks the concise Project Skill discovery-before-fallback reminder; detailed result names, drift handling, manifest procedure, and precedence remain in `references/runtime.md` and `references/project-skills.md`, not root guidance
 - Agent Ownership: agents own the project outcome as well as the loop, inspect safely available evidence before asking, and continue through authorized scope until verified completion or a concrete Human Gate
 - Stage Helper Capability Scan: agents actively check available skills/plugins/helpers before fallback stage guidance
-- Gate Modes: Strict Mode, Feature Auto-Loop, Task Auto-Run, and their explicit human enablement rules
+- Gate Modes: normal Feature construction has Gate 1 Feature Definition Review and Gate 2 Implementation Readiness Review; Strict Mode is explicit stage-by-stage control; Feature Auto-Loop starts only from Gate 2 approve-and-start; Task Auto-Run remains one accepted task/story
+- Feature Context startup invariant: before Task/Test/Plan/Execute/Resume relies on a Feature, load `spec.md`, run the Requirement/ADR freshness check, and require the Feature Context Snapshot to be current
 - Required Stops: all six visible classes — Semantic, Scope And Risk, Execution, Evidence, External Mutation, and Git And Lifecycle — plus explicit Auto Mode non-bypass
+- Checker Recovery Gateway: exact rerun routes a canonical Agent Loop checker failure to `references/checker-recovery.md`; isolated repair is Human-authorized and cannot be presented as canonical pass
 - Completion Rules: code changes alone are not done; fresh verification, Review, Drift Check, project-memory evidence, Feature Completion Check, and Feature Close Review remain visible
 - Submit And Commit Rules: submit/commit/push/PR/merge/tag/release/publish/pause/close/cleanup remain independent Human Gates and only intended files are included
 - Artifact Authority: Requirement, Decision / ADR, Feature, Bug, Lightweight Execution Card, and project memory retain distinct ownership
@@ -154,7 +160,7 @@ Rules:
 - Managed block maintenance rules belong here and in refresh tooling; do not require the target root `AGENTS.md` to include a separate Managed Block Rule prose section.
 - If an existing `AGENTS.md` has no managed blocks, propose adding the minimal needed managed blocks instead of replacing the whole file.
 - If a block-version is missing or older than the current template, treat that block as stale.
-- Treat bare skill-version-only block revisions such as `block-version:1.5.0` as stale because they cannot distinguish same-version template revisions.
+- Treat bare skill-version-only block revisions such as `block-version:1.5.1` as stale because they cannot distinguish same-version template revisions.
 - If a managed block exists in the current template but is missing from root AGENTS.md, treat it as a missing managed block and propose adding it.
 - If a managed block source is missing, stale, or contradictory, classify the block as stale and propose either source correction or block refresh through Human Review Summary.
 - If marker pairs are broken, duplicated, nested, or ambiguous, stop and ask before editing.
@@ -236,7 +242,7 @@ Keep it short and long-lived:
 - project uses `agent-loop`
 - Bootstrap Protocol skill loading: root `AGENTS.md` is bootstrap guidance, not a replacement for the `agent-loop` skill; if the runtime exposes the skill, load/use it before making workflow decisions, especially during Project Entry, Resume, Re-Adopt, stage boundaries, after context compaction, or when workflow state is uncertain; Stage Helper Capability Scan happens only after the controller is active or unavailable/load-failed; unavailable/load-failed fallback forces Strict Mode and permits only Chat/read-only entry/recovery/operational analysis while Execute, Human-gated writes, Submit, Pause, and Close remain blocked
 - Message Intent Guard: before project-state routing, distinguish Chat, Requirements Discussion, already-defined ordinary non-Bug change, explicit Bug/follow-up, Feature Request, Operational Support, Project Skill, Archive/Rehydrate, Memory Reconciliation, proposal/deferred, and lifecycle requests; keep eligibility, internal methods, lifecycle algorithms, and artifact-writing rules in the exact Gateway owners
-- Workflow Gateway Map: after intent and project-state classification, route the 16 startup signal families to exactly one first hop and its exact published reference set; load the matching owner before acting, while `references/runtime.md` retains the complete leaf-stage order
+- Workflow Gateway Map: after intent and project-state classification, route the 17 startup signal families to exactly one first hop and its exact published reference set; load the matching owner before acting, while `references/runtime.md` retains the complete leaf-stage order
 - Root Agent Bootstrap: read `AGENTS.md`, inspect `.agent-loop/`, classify the current stage, and recommend exactly one next action
 - guidance language follows project language; keep stable artifact/stage names in English
 - before development, discover exactly one `.agent-loop/` or accepted legacy `agent-loop/` root; if reliable memory is missing, route to Project Entry / Init
@@ -252,9 +258,10 @@ Keep it short and long-lived:
 - when existing branch rules are confused, target version is unclear, or customer boundaries are risky, load `references/branch-management.md`, recommend the optional profile, and adopt it only after explicit human acceptance; recommendation/adoption never authorizes a Git action
 - Agent Ownership: agents own the project outcome as well as the loop, inspect safely available evidence before asking, classify the current stage, recommend exactly one next action, propose missing artifacts, and continue through authorized scope until verified completion or a concrete Human Gate
 - Stage Helper Capability Scan: before every helper-friendly stage listed in `skill-routing.md`, inspect the current runtime for available helper skills/plugins such as Superpowers; use matching helpers as methods while keeping agent-loop control
-- ask human confirmation before each agent-loop stage
+- Feature construction normally stops at two reviews: Gate 1 accepts the checked definition and authorizes writing the implementation-package artifacts without modifying target implementation; Gate 2 accepts the complete package and may start Feature Auto-Loop. Ask before each stage only in human-selected Strict Mode.
 - use table-first Human Review Summary for non-trivial confirmations
-- Autonomous Execution After Approval: Feature Auto-Loop and Task Auto-Run continue only Agent-ready work inside the accepted scope and bypass none of the six Gate classes
+- Autonomous Execution After Approval: Gate 1 preparation continues across internal quality stages without target implementation; Gate 2 approve-and-start enables Feature Auto-Loop; Task Auto-Run continues one accepted execution unit; none bypass the six Gate classes
+- before Task/Test/Plan/Execute/Resume relies on a Feature, load its Feature Context Snapshot and require the Requirement/ADR freshness check to be current; non-current context stops Auto Mode
 - completion and submit projection: fresh verification, Review, Drift Check, Project Memory evidence, Feature Completion Check, Feature Close Review, intended-file-only submit scope, and independent lifecycle/Git confirmations
 - stable project commands and hard constraints, only if every agent should know them immediately
 - managed block markers for `agent-loop` maintained sections, so future updates do not overwrite human-owned content

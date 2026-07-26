@@ -33,6 +33,7 @@ The core constraints are:
 - accepted Requirement/Product/ADR/Human Decision meaning remains authoritative for its question while merged code/tests/config prove implementation reality; neither Source nor Target wins globally
 - the four-snapshot Target Canonical Memory Spine, Path Accounting Ledger, Desired Target Memory Snapshot, exact Plan Hash, and transactional Apply/Restore tooling belong only to explicitly authorized Full Memory Audit / Recovery
 - optional `.agent-loop/skills/` owns Human-gated project-local reusable capabilities; `INDEX.md` owns lifecycle and discovery metadata
+- Checker Self-Repair is a bounded internal Diagnose Failure / Verify method: classify artifact, environment, checker, or unresolved cause first; use an isolated Human-authorized RED/GREEN patch only for one named Gate; retain canonical failure and require formal source repair
 - Project Skill Discovery Guard checks active INDEX metadata before negative Project Skill claims or generic executable fallback, loads only a matched body, and fails closed on drift without adding a stage, status, cache, or execution grant
 - stable Web E2E capability belongs in `project.md`; feature-specific E2E cases belong in feature `tests.md` or `tests/e2e/*`
 - `requirements/` stores human source material packages and requirement lifecycle/backlog records as requirement set directories: requirements, prototypes, feedback, screenshots, recordings, links, follow-up notes, status, and optional `requirements/INDEX.md`
@@ -85,6 +86,7 @@ Human Goal
 → Feature Workspace
 → Task / Test / Plan
 → Execute / Verify
+  → [internal] Checker Self-Repair only for a proven canonical checker defect and one Human-authorized Gate substitute
 → Drift Check
 → Feature Follow-up / Flow-back with internal Bug Management when explicit defect management appears
 → Feature Monthly Archive when the human explicitly asks to compact closed-history discovery
@@ -111,6 +113,49 @@ Behavior Intent
 → Evidence
 → Memory
 ```
+
+## Feature Context Snapshot Invariant
+
+Feature Context Snapshot is a derived execution cache inside Feature `spec.md` by default. Requirement README resolves the Effective Product Definition, and the Requirement `product.md` plus applicable accepted ADRs remain authoritative. Optional Feature `context.md` only expands the same derived context for a complex Feature after the existing Complex Artifact Human Gate.
+
+Freshness is exactly:
+
+```text
+current | refresh-required | blocked
+```
+
+Freshness is a dependency judgment, not Feature lifecycle, Requirement lifecycle, Product Review, ADR status, execution permission, or a new Human Gate. Requirement, product, and ADR locators in the Snapshot are project-root-relative so archive and rehydrate cannot invalidate them.
+
+The authority and execution chain is:
+
+```text
+Requirement README
+-> Effective Product Definition
+-> accepted ADRs
+-> Feature Context Snapshot
+-> Product Slice
+-> Tasks / Tests / Plan
+-> Execute / Verify / Review
+```
+
+Before Task, Test, Plan, Resume, Execute, Subagent Handoff, Verify, Review, Drift Check, or Close relies on Feature context, the read-only checker must resolve the Requirement authority and require current Product/ADR evidence. `refresh-required` stops downstream generation for semantic refresh; `blocked` routes to the existing owning Requirement, Decision & Design, Feature Definition, or Recovery Gate. Auto Mode cannot continue on either result.
+
+## Feature Construction Two-Gate Invariant
+
+Normal Feature construction has two meaningful Human Reviews, not one approval after every internal quality stage:
+
+```text
+explicit implementation request
+-> checked Feature Spec + Product Slice
+-> Gate 1: Feature Definition Review
+-> Implementation Package Preparation
+-> Gate 2: Implementation Readiness Review
+-> Agent-ready execution
+```
+
+Gate 1 freezes what will be built and authorizes package preparation only. Package preparation retains Work Breakdown, conditional Delivery Contract assessment, Test Design, E2E Discovery, Technical Design / Code Context, Plan Gate, and Analyze Consistency as mandatory Agent quality methods, but does not modify target implementation and does not interrupt the human after each method. Gate 2 reviews the complete trace from acceptance through tasks, tests, code context, Plan, risk, verification, and rollback.
+
+`Approve package only` records readiness without execution. `Approve package and start implementation` also enables Feature Auto-Loop for the disclosed Agent-ready work; no third generic enablement prompt exists. Product/scope/acceptance changes return to Gate 1, material package changes return to Gate 2, and separately owned Delivery Contract, subagent, Git, external, submit, close, and release actions retain their exact Human Gates.
 
 ## Definitions
 
@@ -202,6 +247,8 @@ One coherent Feature may resolve several Bugs. Each Bug retains independent iden
 
 **Feature**: one behavior-changing work area under `.agent-loop/features/<feature-id>/`.
 
+**Feature Context Snapshot**: a compact, derived execution cache in Feature `spec.md` that records project-root-relative Requirement/ADR authority, source digests, Product Slice references, and the product outcome, journey, rules, states, exceptions, recovery, boundary, and acceptance context needed for downstream work. Product and Decision Markdown digests canonicalize `CRLF` and lone `CR` to `LF`, so checkout-only newline changes do not create false drift; legacy raw LF/CRLF digests remain reader-compatible. It cannot redefine accepted product or ADR meaning.
+
 **Feature Monthly Archive**: An explicit, Human-gated maintenance capability that moves an eligible closed feature directory intact to `.agent-loop/features/YYYY-MM/<feature-id>/`, updates `features/archive.md` and approved references, post-checks, and restores on failure. The scan is read-only and apply requires the exact expected plan SHA-256 Batch Human Gate plus transaction journal. It creates no per-feature archive summary, no `historical/`, no Deep Archive, and no `--force`.
 
 **Feature Locator**: The root `features/archive.md` mapping from stable Feature ID to current flat or month path. It locates history but does not own product, requirement, decision, lifecycle, test, or delivery facts.
@@ -229,6 +276,8 @@ If plan.md exists, it must be construction-grade: exact paths, code context, int
 ```
 
 **Evidence**: fresh proof such as test output, build output, lint/typecheck output, API results, E2E/browser verification, screenshots, logs, or review findings.
+
+**Checker Self-Repair**: internal Diagnose Failure / Verify recovery for a proven canonical Agent Loop checker defect. The Agent preserves the original failure, proves the mismatch against published authority with a minimal fixture, requests exact authorization before writing an isolated temporary copy, verifies RED/GREEN and negative controls, and may use the result only as Human-approved substitute evidence for one named Gate. It creates no new lifecycle or mandatory artifact and never turns the canonical result into `pass`.
 
 **E2E Discovery**: the stage that discovers real Web E2E capability from project reality before writing or executing browser automation. It records durable environment facts in `project.md` and feature-specific cases in `tests.md` or `tests/e2e/*`.
 

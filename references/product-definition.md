@@ -201,7 +201,10 @@ After Product Review and Requirement lifecycle gates pass, run Design Readiness.
 - Effective Product Definition path;
 - Product Definition Profile and review evidence;
 - Applicable Decisions;
+- a derived Feature Context Snapshot with Requirement lifecycle, resolved product source, Product/Decision SHA-256 evidence, Product Slice references, verification time, and `current | refresh-required | blocked` Freshness;
 - a Product Slice mapping source sections/IDs to Feature responsibility, acceptance, and coverage.
+
+Requirement, product, and ADR locators are project-root-relative. Before downstream work relies on the Snapshot or Product Slice, run the read-only `scripts/check-feature-context.py` freshness checker. `current` uses the local fast path; `refresh-required` performs semantic source comparison and repairs derived context before continuing; `blocked` returns to the owning Requirement, Decision & Design, Feature Definition, or Recovery gate.
 
 The Product Slice can narrow implementation scope but cannot rename, reverse, or locally redefine accepted product meaning. Out-of-scope items keep a visible Requirement Phase, another Feature, accepted Decision, or concrete not-applicable owner.
 
