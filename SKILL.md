@@ -5,7 +5,7 @@ description: Use when starting, continuing, resuming, structuring, testing, impl
 
 # Agent Loop
 
-Version: 1.5.1
+Version: 1.5.2
 
 Run a single-human, CLI-agent development loop from goal intake to verified close. This skill is a controller: it decides the current stage, loads the right reference, produces or updates `agent-loop` artifacts, and stops at human gates.
 
@@ -135,7 +135,6 @@ scripts/check-onboarding-core-flow-coverage.py onboarding core-flow coverage che
 scripts/check-concept-foundation-trace.py accepted concept/model trace checker
 scripts/check-adr-requirement-model-trace.py ADR requirement-model landing checker
 scripts/check-feature-context.py read-only Requirement/ADR authority and Feature Context Snapshot freshness checker
-scripts/check-feature-review.py read-only Gate decision, package digest, and multi-task Plan-scope checker
 scripts/scan-feature-monthly-archive.py read-only deterministic archive/rehydrate plan
 scripts/check-feature-monthly-archive.py read-only pre/post archive contract checker
 scripts/apply-feature-monthly-archive.py exact-hash Human-gated archive/rehydrate apply
@@ -327,8 +326,10 @@ If the local directory is only a remote-project entry point, create only thin lo
 - Directory-level `AGENTS.md` is proposed for new or existing long-lived boundary directories, created only after human confirmation.
 - Normal Feature construction uses two meaningful reviews after an explicit implementation request: Gate 1 `Feature Definition Review` accepts the checked Feature Spec and authorizes writing the implementation-package artifacts without modifying target implementation; Gate 2 `Implementation Readiness Review` accepts the complete tasks/tests/E2E/code-context/Plan/risk/rollback package and may start execution.
 - Gate 1 package preparation runs Work Breakdown, Delivery Contract assessment, Test Design, E2E Discovery, Technical Design / Code Context, Plan Gate, and consistency review without separate approval prompts and without target implementation.
-- `Approve package only` at Gate 2 records accepted readiness but does not execute. `Approve package and start implementation` enables Feature Auto-Loop for the disclosed Agent-ready scope without a third generic prompt. A later explicit start may use an unchanged accepted package only after Feature Context, package drift, and stop-condition checks pass.
-- Gate 2 Package Digest remains raw review evidence; new Stable Digest evidence records `review-definition-v2`, which ignores only published task/test runtime ledger values while protecting definitions. Compute it read-only with `check-feature-review.py --mode digest`; missing/unknown algorithms or non-whitelisted drift fail closed and legacy evidence never migrates silently.
+- Only `Approve package only` and `Approve package and start implementation` set Gate 2 readiness to accepted. Package-only does not execute. `Approve package and start implementation` enables Feature Auto-Loop for the accepted execution boundary without a third generic prompt. `Revise package` returns to preparation and `Pause` does not claim accepted readiness.
+- AI judges Human decision provenance, complete package inventory, Gate/action/time consistency, semantic completeness, Story/Task/Plan/No-Plan meaning, risk, verification, rollback, and boundary drift directly from current artifacts and reliable Human evidence. Feature Gate acceptance and continuation require no local digest or Feature review Checker.
+- Initial Gate 2 Task IDs remain reviewed decomposition, not an immutable whitelist; `Gate 2 Accepted Stories` is durable Agent-reviewed semantic memory rather than a value rebuilt from mutable Task rows. A new Agent-ready Task inside that Story and the accepted Product Slice/Acceptance does not repeat Gate 2 merely because its ID is new. A No-Plan path still binds the same Task ID in top-level notes and the Task row/detail.
+- After the reliable Gate 2 choice, the Agent records the original accepted decision/Auto-Loop/time baseline directly. A later package-only start re-reads the recorded package files and current Feature artifacts, validates the accepted boundary and Human instruction, assesses any change, preserves that baseline, records separate Later Start decision/time/Human evidence, and updates current project `Gate Mode`. Manifest omissions and every workflow inconsistency remain Agent stops.
 - Strict Mode remains available when the human explicitly requests stage-by-stage control and remains the fail-closed controller-unavailable fallback.
 - Task Auto-Run runs Analyze Consistency before executing one accepted task/story plan after explicit human confirmation.
 - If the human wants to execute only one task after accepting the package without starting the Feature, explain Task Auto-Run and request its bounded grant.

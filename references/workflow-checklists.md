@@ -198,7 +198,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.1-20260727.1`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.2-20260728`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -284,7 +284,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.1-20260727.1`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.2-20260728`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -456,23 +456,27 @@ Before using an external skill or plugin inside a stage:
 ## Feature Construction Two-Gate Review
 
 - [ ] Treat an explicit implementation request for one disclosed Requirement/phase/slice as draft Feature construction authorization, not Feature definition acceptance.
-- [ ] Gate 1 `Feature Definition Review` presents the checked Feature Spec, Product Slice, acceptance, applicable decisions, checklist result, and unresolved blockers.
+- [ ] Gate 1 `Feature Definition Review` presents one compact decision table for Goal, Scope, Acceptance, and Explicit Exclusions; keep the checked Feature Spec, Product Slice, applicable decisions, and checklist result available as authority.
 - [ ] Gate 1 choices are accept definition and prepare package, revise definition, or pause.
-- [ ] After Gate 1 acceptance, record `Implementation Readiness: preparing`, `Gate 1 Decision: accepted`, and the current Spec SHA-256; do not modify target implementation.
+- [ ] After Gate 1 acceptance, record `Implementation Readiness: preparing` and `Gate 1 Decision: accepted`; do not modify target implementation.
 - [ ] Prepare Work Breakdown, Delivery Contract assessment/exact candidate, Tests, E2E, technical code context, Plan, coverage, verification, risk, rollback, and consistency without separate stage prompts.
 - [ ] Stop package preparation only for a genuine human decision, incoherent package, or preserved hard gate; resolve fact-determined findings autonomously.
 - [ ] Set `Implementation Readiness: review-ready` only after package completeness, placeholder, trace, real-code-context, verification, risk, rollback, and consistency checks pass.
-- [ ] Before Gate 2, record complete Package Files/Digest including every current triggered detail file, non-rotatable Stable Files/Digest, accepted Agent-ready task IDs, initial Active Plan Scope, matching `plan.md | plans/<detail>.md | no-plan:<accepted-task>` evidence, and review time in `notes.md`.
-- [ ] Gate 2 `Implementation Readiness Review` presents the complete package and separately names every conditional action.
+- [ ] Before Gate 2, have AI verify complete Package Files coverage and record the inventory, initial Agent-ready task IDs, `Gate 2 Accepted Stories`, initial Active Plan Scope, matching Plan/No-Plan evidence, and `Implementation Readiness: review-ready`; leave review time pending until the reliable Human decision.
+- [ ] Gate 2 `Implementation Readiness Review` presents one compact decision table for Execution Boundary, Verification, Risk/Rollback, and execution choice; keep the complete package available and separately name every conditional action.
 - [ ] Gate 2 choices are `Approve package and start implementation`, `Approve package only; do not implement yet`, `Revise package`, or `Pause`.
 - [ ] `Approve package only` sets readiness accepted but never authorizes execution.
 - [ ] `Approve package and start implementation` sets readiness accepted and enables Feature Auto-Loop without another generic enablement question.
-- [ ] Record the exact Gate 2 decision, matching Auto-Loop state, and timestamp; require `python3 <skill-root>/scripts/check-feature-review.py --mode review <feature-dir>` to pass.
-- [ ] After package-only acceptance, treat a later explicit start instruction as execution authorization only after confirming Feature Context is `CURRENT`, `check-feature-review.py --mode start` proves the accepted package unchanged, and no new stop condition or Human-gated item exists; then record approve-and-start/enabled and require `--mode execute` before implementation.
-- [ ] Product meaning, Product Slice, scope, or acceptance revision returns to Gate 1; material tasks/tests/code-context/Plan/risk/rollback revision repeats Gate 2.
-- [ ] Record raw Package Digest plus explicit `review-definition-v2`; compute both with read-only `check-feature-review.py --mode digest` and fail closed on missing/unknown algorithm.
-- [ ] During multi-task Feature Auto-Loop, rotate `plan.md` only to another Gate 2-accepted task/story; require current v2 Stable Definition Digest, unchanged task/test definitions and ordering, Plan Gate, Analyze Consistency, and `check-feature-review.py --mode execute`.
-- [ ] Allow only published task/test runtime ledger values to change under v2; any change to identity, mapping, Mode, dependency, Gate, acceptance, verification, command, assertion, evidence definition, risk, interface, or rollback repeats Gate 2.
+- [ ] Only the two approval choices set `Implementation Readiness: accepted`. `Revise package` returns readiness to `preparing`; `Pause` does not mark readiness accepted.
+- [ ] Record the exact Gate 2 decision, matching Auto-Loop state, and timestamp from reliable Human evidence; independently verify them as Agent-owned semantics.
+- [ ] Classify drift as `within-approved-boundary | feature-definition-change | implementation-boundary-change | unresolved`; bind the assessment to the exact Feature, Gate, changed areas, direct evidence, reason, and timezone-aware time, then route the latter three to Gate 1, Gate 2, or one blocking Human question.
+- [ ] After package-only acceptance, treat a later explicit start instruction as execution authorization only after confirming Feature Context is `CURRENT`, re-reading the recorded Package Files and current Feature artifacts, assessing the accepted boundary, confirming the Human instruction remains reliable, and finding no new stop condition or Human-gated item; then preserve the original Gate 2 baseline, atomically record Later Start decision/time/Human evidence, and update current project `Gate Mode` before implementation.
+- [ ] During multi-task Feature Auto-Loop, have AI validate every rotated `plan.md` and Agent-ready Task/story against the accepted boundary; require Plan Gate, Analyze Consistency, and current drift evidence when artifact meaning changes.
+- [ ] Treat Gate 2 Task IDs as initial decomposition, not an immutable whitelist. Keep `Gate 2 Accepted Stories` as the durable reviewed snapshot rather than rebuilding it from current Task rows. A new Agent-ready Task needs snapshot Story mapping, accepted Product Slice/Acceptance, optional valid `Derived From` trace, current within-boundary assessment, and valid Plan binding; replacement of every initial Task ID may continue inside that boundary, while a new execution boundary repeats Gate 2.
+- [ ] Have AI reject incomplete Package Files, unsafe or unresolved package paths, and evidence that escapes the Feature root.
+- [ ] Reject duplicate or history-sourced Task Mode/mapping/No-Plan metadata and duplicate initial Task IDs.
+- [ ] Treat Human decision provenance and Task/Plan semantics as Agent-owned checks. Do not invent approval from Markdown; after context loss, ask one blocking confirmation only when reliable Human evidence is unavailable.
+- [ ] Confirm Feature Gate acceptance and continuation require no local digest or Feature review Checker.
 - [ ] Preserve separate Delivery Contract breaking-change, Human-gated task, subagent, branch/Git, external, production, credentials, submit, commit, push, PR, merge, tag, release, publish, pause, and close gates.
 
 ## Feature Spec
@@ -643,7 +647,7 @@ No-Plan Decision is allowed only when:
 - [ ] acceptance is clear
 - [ ] exact file(s) and exact verification command are known
 - [ ] no plan trigger above applies
-- [ ] decision is recorded in `notes.md` and the selected task row/detail
+- [ ] top-level `notes.md` records `No-Plan Decision: <task ID>` and the selected task row/detail records `No-Plan Decision: accepted`
 - [ ] Human-selected Strict Mode asks before execution; normal package preparation defers execution authorization to Gate 2; active Feature Auto-Loop records why the Agent-ready task can proceed.
 
 Checklist:
@@ -670,8 +674,8 @@ Checklist:
 - [ ] For a confirmed simple `not-needed` path, record branch-specific Plan and Submit checks as `not-applicable`; do not require Target Release Context or Target Branch and do not block ordinary non-versioned work.
 - [ ] During Implementation Package Preparation, self-review the Plan and continue to Analyze Consistency without a separate Plan approval prompt.
 - [ ] Gate 2 accepts the Plan only as part of the complete traced package; execution still depends on the Gate 2 choice.
-- [ ] For a multi-task package, record the accepted Agent-ready task set and initial Active Plan Scope; later Plan rotation is allowed only inside that set with unchanged stable evidence and fresh Plan/consistency checks.
-- [ ] Require a task Plan ID to be one accepted Agent-ready task; require a story Plan to list a non-empty `Included Tasks` subset of the accepted Agent-ready task set and verify every included Task maps to that Story in `tasks.md`.
+- [ ] For a multi-task package, record the initial Agent-ready task decomposition, durable `Gate 2 Accepted Stories`, and initial Active Plan Scope; later Plan rotation or Task replacement is allowed inside the accepted Story/Product Slice/Acceptance boundary with fresh Plan/consistency checks and an exact current assessment when artifact meaning changes.
+- [ ] Require a task Plan ID to be an existing Agent-ready task mapped to `Gate 2 Accepted Stories`; require a story Plan to list non-empty `Included Tasks` and verify every included Task exists, remains Agent-ready, and maps to that accepted Story in `tasks.md`.
 - [ ] After package-only acceptance, offer Task Auto-Run only when the human later wants one bounded task/story executed.
 - [ ] Do not offer Task Auto-Run without an accepted plan.
 - [ ] If the human seems slowed by confirmations, explain Task Auto-Run as a safe task/story-level option.
@@ -925,7 +929,7 @@ Pause:
 - [ ] Record blockers and files touched.
 - [ ] Move the feature from `Active Feature` to `Paused Features`, record its resume point, and set `Active Feature: none`.
 - [ ] Set feature lifecycle status to `paused`.
-- [ ] Clear feature-scoped Feature Auto-Loop or Task Auto-Run authorization.
+- [ ] Clear feature-scoped Feature Auto-Loop or Task Auto-Run authorization through current project `Gate Mode` and the pause transition; preserve the durable Gate 2 baseline and any separate Later Start evidence.
 
 Close:
 

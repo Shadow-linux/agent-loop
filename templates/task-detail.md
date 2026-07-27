@@ -4,6 +4,7 @@ Task ID: TNNN
 Story: USN
 Status: todo | in-progress | review | done | blocked | skipped
 Mode: Agent-ready | Human-gated
+No-Plan Decision: accepted | not-applicable
 Slice Type: vertical | horizontal-foundation
 Created: YYYY-MM-DD
 Updated: YYYY-MM-DD
@@ -93,7 +94,7 @@ Migration:
 
 ## Task Done Gate
 
-Under Gate 2 `review-definition-v2`, the checkboxes and the `Evidence`, `Review`, and `Drift` result values in this section, plus top-level `Status` / `Updated`, are runtime ledger fields. All other task-detail meaning remains protected definition.
+AI owns task-detail meaning and reviews current checkbox, `Status`, `Evidence`, `Review`, and `Drift` values directly against the accepted Story/Product Slice and execution boundary.
 
 - [ ] Implementation scope complete.
 - [ ] Required tests or substitute verification ran fresh.

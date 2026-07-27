@@ -1008,6 +1008,7 @@ Default Split: vertical-slice
 - Do not mark a task `done` from code changes alone.
 - After implementation and fresh verification, use `Status: review` until Task Done Gate passes.
 - Task Done Gate: implementation complete, required tests or substitute verification run fresh, evidence recorded in `notes.md`, lightweight Spec Review recorded, Standards Review recorded when triggered, drift decision recorded, and evidence location named below.
+- A Feature No-Plan path records the current Task ID in `notes.md` and `No-Plan Decision: accepted` in the selected task row/detail; the Agent still proves that no Plan trigger applies.
 
 ## Split Rules
 
@@ -1024,6 +1025,7 @@ Default Split: vertical-slice
 - [ ] T001 [US1] <task title>
   - Status: todo
   - Mode: Agent-ready | Human-gated
+  - No-Plan Decision: accepted | not-applicable
   - Slice Type: vertical | horizontal-foundation
   - Parent:
   - Depends on:
@@ -1341,18 +1343,27 @@ Updated: YYYY-MM-DD
 Status: active
 Implementation Readiness: preparing | review-ready | accepted
 Gate 1 Decision: pending | accepted | revise | pause
-Gate 1 Spec Digest: pending | sha256:<digest>
 Gate 2 Decision: pending | package-only | approve-and-start | revise | pause
 Gate 2 Package Files: pending | <comma-separated Feature-relative paths>
-Gate 2 Package Digest: pending | sha256:<digest>
-Gate 2 Stable Files: pending | <comma-separated Feature-relative paths excluding rotatable plan.md>
-Gate 2 Stable Digest Algorithm: review-definition-v2
-Gate 2 Stable Digest: pending | sha256:<digest>
 Gate 2 Agent-ready Tasks: pending | <comma-separated task IDs>
+Gate 2 Accepted Stories: pending | <comma-separated Story IDs>
 Active Plan Scope: pending | <accepted task/story ID>
 Gate 2 Plan Evidence: pending | plan.md | plans/<detail>.md | no-plan:<accepted task ID>
+No-Plan Decision: none | <accepted task ID>
 Feature Auto-Loop: disabled | enabled
 Gate 2 Reviewed At: pending | <ISO-8601>
+Later Start Decision: none | approved
+Later Start Authorized At: none | <ISO-8601>
+Later Start Evidence: none | <Human instruction evidence>
+
+The Gate 2 decision/Auto-Loop/time fields are the original durable review baseline, not the live execution-mode pointer. A package-only later start preserves that baseline, records the three Later Start fields, and updates current project `Gate Mode`; it does not create or repeat Gate 2. Pause clears project `Gate Mode` and records the transition without rewriting accepted baseline or later-start evidence; Resume requires a newly confirmed applicable mode. AI owns Human provenance, complete Package Files coverage, Gate/action pairing, timestamps, Task/Story/Plan/No-Plan meaning, risk, rollback, verification, and every Gate Drift Assessment. Only the two approval choices set readiness accepted; Feature Gate acceptance and continuation require no local digest or Feature review Checker.
+
+## Gate Drift Assessments
+
+| Feature ID | Gate | Classification | Changed Areas | Evidence | Reason | Assessed At |
+|---|---|---|---|---|---|---|
+
+Add a row only after AI Semantic Review. `Classification` is `within-approved-boundary | feature-definition-change | implementation-boundary-change | unresolved`.
 
 ## Human Decisions
 

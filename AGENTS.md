@@ -56,6 +56,7 @@ When testing downstream behavior, state the temporary perspective explicitly, ke
 - For this repository, when working on an `alpha-v<x.y.z>` branch, treat `<x.y.z>` as the intended skill version; ignore the `alpha` prefix for version records and changelog headings after the human approves implementation for that version.
 - Commit messages for this skill repository should use type + version scope, prefer Chinese, and include a concrete multi-line body for meaningful changes.
 - Stable release branches use the exact version name, for example `v1.0.1`, not `release/1.0.1`.
+- Only formal stable Git tags use `stable-v<x.y.z>`, for example `stable-v1.5.1`. Human-facing version labels and changelog headings remain `x.y.z` or `vX.Y.Z`, and stable release branches remain `vX.Y.Z`.
 - `main` is the default public installation channel and must resolve to the exact commit of the latest formal stable release; alpha branches never become the default installation source.
 - A formal release is not complete for default `npx skills add/update` users until the exact accepted release commit is synchronized to `main`. Updating `main` remains a separate branch/merge/push Human Gate.
 - Keep private mirror names and addresses in local Git configuration or private operational documentation, never in public tracked files. When the human explicitly authorizes a multi-remote push, inspect the configured remotes locally and confirm the exact branch or tag on every requested remote.

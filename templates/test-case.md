@@ -8,7 +8,7 @@ Status: draft | active | passing | failing | blocked
 Created: YYYY-MM-DD
 Updated: YYYY-MM-DD
 
-Under Gate 2 `review-definition-v2`, only top-level `Status` and `Updated` are runtime fields in this detail file. Scenario, command, assertion, environment, expected evidence, and cleanup meaning remain protected definition.
+AI reviews current top-level `Status` and `Updated` values and owns scenario, command, assertion, environment, evidence, and cleanup meaning.
 
 Index:
 - Test Matrix: ../tests.md

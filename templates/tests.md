@@ -4,7 +4,7 @@ Created: YYYY-MM-DD
 Updated: YYYY-MM-DD
 Status: active
 
-Under Gate 2 `review-definition-v2`, top-level `Updated` / `Status`, Design Slice matrix `Status`, and Bug matrix `Result` / `Evidence Link` are runtime result fields. Test identity, mapping, purpose, commands, assertions, expected evidence, environment, safety, and cleanup meaning remain protected definition.
+AI reviews current top-level `Updated` / `Status`, Design Slice matrix `Status`, and Bug matrix `Result` / `Evidence Link` values directly and owns test semantics.
 
 ## Requirement Checklist
 

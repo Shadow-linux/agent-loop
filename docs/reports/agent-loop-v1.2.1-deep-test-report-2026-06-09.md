@@ -1,8 +1,8 @@
 # Agent Loop v1.2.1 深度测试报告
 
-**测试日期：** 2026-06-09  
-**测试范围：** SKILL.md、CHANGELOG.md、全部 31 份 references、22 份 onboarding-db 模板、validation-scenarios.md、examples/ 实际产物  
-**测试方法：** 规则审查 + 模板落地审查 + 验证场景审查 + 示例产物审查  
+**测试日期：** 2026-06-09
+**测试范围：** SKILL.md、CHANGELOG.md、全部 31 份 references、22 份 onboarding-db 模板、validation-scenarios.md、examples/ 实际产物
+**测试方法：** 规则审查 + 模板落地审查 + 验证场景审查 + 示例产物审查
 **测试人：** Kimi Code CLI
 
 ---

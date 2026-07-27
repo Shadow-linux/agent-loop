@@ -61,9 +61,10 @@ assert_contains "references/runtime.md" 'Feature Auto-Loop | current accepted Fe
 # Task Auto-Run always starts with Analyze Consistency.
 assert_contains "references/runtime.md" "run Analyze Consistency, then complete that task/story"
 assert_contains "references/validation-scenarios.md" "run and record Analyze Consistency before executing T003"
-assert_contains "SKILL.md" '`Approve package and start implementation` enables Feature Auto-Loop for the disclosed Agent-ready scope without a third generic prompt.'
+assert_contains "SKILL.md" '`Approve package and start implementation` enables Feature Auto-Loop for the accepted execution boundary without a third generic prompt.'
 assert_contains "SKILL.md" "Task Auto-Run runs Analyze Consistency before executing one accepted task/story plan"
-assert_contains "references/concepts.md" 'Feature-level execution authorization created by Gate 2 `Approve package and start implementation`.'
+assert_contains "references/concepts.md" 'Feature-level execution authorization created by Gate 2 `Approve package and start implementation`, or by a separate valid later-start transition after Gate 2 package-only acceptance.'
+assert_contains "references/concepts.md" 'it does not create a third Gate.'
 assert_contains "references/concepts.md" "The agent runs Analyze Consistency before TDD execution"
 
 # Pause, resume, close, and reopen have complete canonical state mutation.

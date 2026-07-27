@@ -170,7 +170,7 @@ If no Active Feature exists and the human asks to resume paused work:
 2. Read its feature docs and recorded resume point.
 3. Move the selected feature from `Paused Features` to `Active Feature` in `project.md` and remove its paused entry.
 4. Set the feature lifecycle status to `active` and record the resume transition in `notes.md`.
-5. Resume in Strict Mode unless the human separately re-enables an auto mode after reviewing current scope and stop conditions.
+5. Resume in Strict Mode unless the human separately re-enables an auto mode after reviewing current scope and stop conditions. Preserve the historical Gate 2 decision/Auto-Loop baseline and any Later Start evidence; use project `Gate Mode` plus the recorded pause/resume transition for current-mode state.
 6. Run Feature Completion Check before continuing the recorded next stage.
 
 ## Notes Record

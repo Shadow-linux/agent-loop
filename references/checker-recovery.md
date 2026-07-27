@@ -2,6 +2,10 @@
 
 Use this reference when a canonical Agent Loop checker fails and the failure may come from the checked artifact, the execution environment, or the checker implementation itself.
 
+Feature Definition Review and Implementation Readiness Review do not use a local Feature review Checker. Checker Recovery applies only to other canonical Agent Loop checkers that remain published for structural or freshness contracts; it must never be inserted into the Feature Gate path as a replacement authorization mechanism.
+
+Human decision provenance is not a Checker input that can be repaired. The Agent checks current conversation or preserved Human decision evidence and asks one blocking confirmation only when provenance is genuinely unavailable. Checker Recovery must not manufacture approval or add a local authorization issuer.
+
 Checker Self-Repair is an internal method of `Diagnose Failure` and `Verify`. It is not a canonical stage, lifecycle, status, Auto Mode, artifact family, or permission to bypass validation.
 
 ## Core Rule
