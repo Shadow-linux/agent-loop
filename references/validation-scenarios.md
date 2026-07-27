@@ -5120,3 +5120,10 @@ A story-scoped Plan follows the same route only when AI confirms its non-empty `
 - Expected Route: AI detects the workflow or completeness problem and stops at its owner.
 - Required Action: keep every Feature Gate invariant in one Agent review path backed by current artifacts and reliable Human evidence.
 - Forbidden Action: split the same semantic rules across several local commands or present generated machine output as authorization.
+
+### AR. Clear Feature Skips Brainstorming
+
+- Prompt: an accepted Product Definition and ADR-0001 already assign the applicable Product Slice and Design Slice; Feature scope, exclusions, and measurable acceptance are explicit.
+- Expected Route: classify `brainstorm-not-needed` response-locally and proceed directly to Feature Spec without loading or invoking brainstorming merely because the helper is installed.
+- Required Action: preserve the accepted Requirement and ADR authority, use a spec helper only when otherwise useful, and enter Brainstorm / Clarify only if one concrete Feature-local scope, acceptance, or implementation-boundary uncertainty remains.
+- Forbidden Action: make brainstorming a universal Feature prerequisite, ask the human to reconfirm settled ADR meaning, add product scope, or rewrite ADR-0001 from Feature Spec.

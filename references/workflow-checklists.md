@@ -494,7 +494,8 @@ Before using an external skill or plugin inside a stage:
 - [ ] Do not enter Feature Spec while required shared design is unresolved or any required design slice is unassigned.
 - [ ] For each applicable requirement-driven ADR, require a current Effective Requirement Snapshot, complete Requirement Model Technical Landing Trace, and `Upstream Compatibility: current`.
 - [ ] Run Stage Helper Capability Scan before fallback spec writing.
-- [ ] If a spec-writing, brainstorming, or product-discovery helper is available, use it through `external-skill-adapters.md` while writing accepted output to agent-loop `spec.md`.
+- [ ] Use an applicable spec-writing helper through `external-skill-adapters.md`; use brainstorming/product discovery only when a named Feature-local scope, acceptance, or implementation-boundary uncertainty remains after loading Product Slice and ADR evidence.
+- [ ] Do not load brainstorming merely because Feature Spec is active. A clear Feature proceeds directly; product or accepted-ADR meaning changes return to the owning Human Review.
 - [ ] Create or update feature workspace.
 - [ ] Set `Feature Type: normal | maintenance-fix | follow-up`.
 - [ ] If the source requirement uses `Delivery Phases`, record the specific phase or single-phase slice in `Source Requirements`.

@@ -608,6 +608,8 @@ Effective Requirement Source
 
 The trace consumes accepted product semantics. Product ambiguity returns to Requirements Discussion; technical incompatibility with an accepted ADR creates a superseding decision after Human Review.
 
+A clear Feature with a current Product Slice, applicable accepted ADRs, explicit scope, and measurable acceptance skips Brainstorm / Clarify. The method is conditional on remaining Feature-local scope, acceptance, or implementation-boundary uncertainty; helper availability is not a trigger. It may improve the definition method inside that boundary, but cannot redefine Requirement product meaning or accepted ADR decisions.
+
 ```text
 Project Entry
 → Remote Project Discovery if Needed

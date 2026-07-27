@@ -5,6 +5,7 @@
 _当前状态：正式稳定版；已完成 focused RED/GREEN、双 Agent 混沌测试、全量 Shell/Python、机械检查与六域语义验证。正式 tag 为 `stable-v1.5.2`；默认安装通道 `main` 的同步仍保留独立 Human Gate。_
 
 ### AI 主导的轻量 Feature Gates
+- Feature Spec 只在真实的 Feature-local 范围、验收或实施边界歧义仍存在时调用 brainstorming；Product Slice、适用 ADR、范围、排除项和验收已经明确时直接继续，避免把辅助方法变成所有 Feature 的固定前置步骤。
 - 保留 Feature Definition Review 与 Implementation Readiness Review，但把人类决策摘要收敛为 Goal/Scope/Acceptance/Exclusions 与 Execution Boundary/Verification/Risk/Rollback/start choice。
 - 移除 Feature Gate 的本地 review Checker、摘要字段及 MATCH/CHANGED/INVALID 路由；Gate 接受、later-start 和多任务继续不再依赖脚本结果。
 - Gate 2 保留完整 Package Files、accepted Story 快照、初始 Task、Active Plan、No-Plan、风险、验证和回滚证据，由 Agent 直接完成语义与事实检查。

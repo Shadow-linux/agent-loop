@@ -306,6 +306,8 @@ ADR 先用 `Effective Requirement Snapshot` 锁定已确认的 Product Definitio
 
 Feature `spec.md` 只选择产品切片，不重新定义产品。复杂任务可按触发条件使用 `tasks/`、`tests/`、`plans/`、`handoffs/` 和 `contracts/` 子目录；不要默认展开。
 
+Feature 已经有明确的 Product Slice、适用 ADR、范围、排除项和验收时，Agent 不会为了形式调用 brainstorming，而是直接整理 Feature Spec。只有仍存在一个具体的 Feature-local 范围、验收或实施边界问题时才使用它；它只能辅助收敛局部定义，不能重新设计产品或改写已接受 ADR。
+
 Feature 工作从 `spec.md` 里的本地 **Feature Context Snapshot** 开始。Agent 会自动从 Requirement README 找到真正的 `product.md`，检查适用 ADR 和摘要是否仍然一致；来源未变时走快速路径，来源变化时先刷新语义或停在已有 Human Gate。人类不需要手动定位、重开或反复指定 `product.md`。Snapshot 只是派生执行上下文，不是第二份产品真相；只有复杂且长期运行的 Feature 才会在现有 Complex Artifact Human Gate 后增加可选 `context.md`。
 
 你不需要记住 Feature 的内部阶段。正常只会在两个时点找你：

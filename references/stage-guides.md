@@ -897,7 +897,7 @@ Load:
 - `project.md` Decisions index and linked accepted decisions when present
 - `project-decisions.md` when accepted requirements or product decisions have Decision Candidates, Applicable Decisions, or unresolved long-term/cross-feature choices
 - `skill-routing.md` for Stage Helper Capability Scan
-- `external-skill-adapters.md` when Stage Helper Capability Scan finds Superpowers, brainstorming, or another spec-writing helper
+- `external-skill-adapters.md` when Stage Helper Capability Scan finds a spec-writing helper, or when a concrete Feature-local uncertainty makes brainstorming applicable
 
 Write:
 
@@ -923,7 +923,8 @@ Include:
 
 Rules:
 
-- before fallback spec writing, run Stage Helper Capability Scan; when a spec/brainstorming helper is available, use it for ambiguity removal, scope checks, and acceptance thinking while writing to `spec.md`
+- before fallback spec writing, run Stage Helper Capability Scan for applicable spec-writing support; helper availability alone does not trigger Brainstorm / Clarify
+- When Product Slice, applicable accepted ADR Design Slices, scope, exclusions, and acceptance are already clear, skip Brainstorm / Clarify and proceed directly with Feature Spec. Use brainstorming only for a named unresolved Feature-local scope, acceptance, or implementation-boundary question; route product or accepted-ADR changes back to their owning Human Review.
 - inspect the Effective Product Definition, original source links as needed, and Applicable Decisions before writing behavior and acceptance
 - use the dual reader: new `Effective Product Definition` requires Profile/Product Review `confirmed`; legacy `Effective Concept Foundation` / reviewed Requirement remains valid without migration
 - add Product Requirement Source and Product Slice to `spec.md`; do not require or create Feature `product.md`

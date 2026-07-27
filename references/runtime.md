@@ -600,6 +600,8 @@ Submit / Integrate
 Pause / Close
 ```
 
+Feature Spec enters Brainstorm / Clarify only when concrete feature-local scope, acceptance, or implementation-boundary uncertainty remains after loading the accepted Product Slice and applicable ADRs. If the Product Slice, assigned ADR Design Slices, scope, exclusions, and measurable acceptance are already clear, classify the method response-locally as `brainstorm-not-needed` and proceed directly to Feature Spec. This label is not a lifecycle status or artifact field. Helper availability alone never triggers the method. Brainstorming may compare or clarify Feature-local alternatives, but it cannot reopen Requirement product meaning, rewrite an accepted ADR, or add scope; product ambiguity returns to Requirements Discussion and ADR incompatibility returns to Decision & Design Human Review.
+
 ## Stage Entry And Exit
 
 Each stage must define:
