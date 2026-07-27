@@ -609,6 +609,7 @@ def validate(
             metadata(snapshot, "Accepted Concept IDs"),
             CONCEPT_ID_PATTERN,
             "ADR Accepted Concept IDs",
+            allow_none=True,
         )
     )
     snapshot_models = set(
@@ -616,6 +617,7 @@ def validate(
             metadata(snapshot, "Accepted Requirement Model IDs"),
             MODEL_ID_PATTERN,
             "ADR Accepted Requirement Model IDs",
+            allow_none=True,
         )
     )
     snapshot_rules: set[str] = set()

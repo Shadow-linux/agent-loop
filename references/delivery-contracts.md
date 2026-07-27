@@ -86,7 +86,8 @@ draft -> accepted -> implemented -> verified -> superseded
 ## Human Gates
 
 - In Strict Mode, ask before creating or changing contract files.
-- In Feature Auto-Loop and Task Auto-Run, the agent may recommend a contract but must pause before creating or updating contract files.
+- Gate 2 Implementation Readiness Review may authorize exact contract creation and acceptance only when each action is separately named and the human can see the complete path, content, consumers, compatibility, verification, and consequences.
+- In Feature Auto-Loop and Task Auto-Run, or when Gate 2 did not authorize that exact action, the agent may recommend a contract but must pause before creating or updating contract files.
 - Moving a contract from `draft` to `accepted` always requires human confirmation.
 - A breaking change to an `accepted`, `implemented`, or `verified` contract always requires affected-consumer analysis first, then a separate human confirmation.
 - The human saying "just change it" before seeing affected consumers is not enough. Present the impact table, compatibility options, migration risk, and then ask again.

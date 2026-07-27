@@ -166,6 +166,7 @@ Rules:
 - `Upstream Compatibility` is a dependency judgment, not a new decision status
 - Product Rules use source anchors such as `product.md#approval-authority`; do not invent `RULE-*`
 - a confirmed Brief with no stable model IDs or Product Rule references records all accepted-ID/rule fields as `none`, sets trace applicability to `not-applicable`, gives a concrete reason, and does not invent product-model tables
+- a confirmed Standard source may record either accepted-ID field as `none` only when that source declares no IDs of the corresponding kind; Product Rule references still make trace applicability `required` and must receive normal scope and technical-landing coverage
 - legacy snapshots may retain `Effective Concept Source` and `Concept Foundation Status`; when legacy source is reasoned `concept-foundation-not-needed`, use the same reasoned not-applicable shape. Never mix new and legacy snapshot metadata; legacy records may retain either the exact old Coverage Hard Gate or the current unified gate without migration
 
 ## Requirement Model Scope Inventory

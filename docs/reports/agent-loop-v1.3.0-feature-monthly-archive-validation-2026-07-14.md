@@ -116,4 +116,4 @@ bash tests/validate-feature-monthly-compaction-proposal.sh
 
 ## 8. 授权与边界
 
-本报告覆盖实现、focused validation 与跨平台 CI。功能提交 `7253461` 已推送到 `origin/alpha/v1.3.0` 和 `ai-factory/alpha/v1.3.0`。v1.3.0 Release Human Gate 已于 2026-07-14 批准，发布目标为 `stable-v1.3.0`；tag 只能在精确 release-evidence commit 的 Windows/macOS CI 全部成功后创建。发布复验在隔离 worktree 中进行，没有吸收主工作区的 onboarding proposal 修改、v1.4 proposal 删除或 `docs/proposal/v2.0.x/` 内容。
+本报告覆盖实现、focused validation 与跨平台 CI。功能提交 `7253461` 已推送到两个经授权远端的 `alpha/v1.3.0`。v1.3.0 Release Human Gate 已于 2026-07-14 批准，发布目标为 `stable-v1.3.0`；tag 只能在精确 release-evidence commit 的 Windows/macOS CI 全部成功后创建。发布复验在隔离 worktree 中进行，没有吸收主工作区的 onboarding proposal 修改、v1.4 proposal 删除或 `docs/proposal/v2.0.x/` 内容。

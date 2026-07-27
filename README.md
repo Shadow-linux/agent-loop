@@ -1,6 +1,6 @@
 # Agent Loop
 
-**Current version:** 1.5.0
+**Current version:** 1.5.2 (stable)
 
 Agent Loop is a reusable controller skill for single-human, CLI-agent software development. It lets the Agent own project diagnosis, workflow sequencing, implementation, verification, and memory maintenance while the human keeps control of goals, product meaning, consequential decisions, and external actions.
 
@@ -68,6 +68,8 @@ During requirements discussion, the agent records Design Readiness evidence and 
 
 New Feature work creates no Feature `product.md`; Feature `spec.md` selects a bounded Product Slice from the effective Requirement Product Definition.
 
+Feature work now starts from a local **Feature Context Snapshot** in `spec.md`. Agent Loop first checks the real Requirement `product.md` selected by Requirement README plus applicable ADR digests. Unchanged sources use the fast path; changed sources are semantically refreshed or blocked before downstream work continues. The Snapshot is derived context, never a second product truth.
+
 ### Deliver with the smallest safe workflow
 
 | Route | Use it for | Control and evidence |
@@ -81,6 +83,7 @@ New Feature work creates no Feature `product.md`; Feature `spec.md` selects a bo
 Feature delivery includes:
 
 - direct Product Requirement Source and bounded Product Slice in `spec.md`
+- freshness-checked Feature Context Snapshot for Task, Test, Plan, Resume, Execute, Handoff, Verify, Review, Drift, and Close
 - story/task breakdown, test design, Web E2E discovery, and construction-grade planning
 - TDD with real RED/GREEN evidence for behavior changes
 - optional Delivery Contracts for durable producer-consumer boundaries
@@ -88,6 +91,10 @@ Feature delivery includes:
 - mandatory helper resolution for Project Skill Creation / Update, Brainstorm, Plan Gate, execution, diagnosis, verification, and review
 - Feature Auto-Loop and Task Auto-Run for uninterrupted Agent-ready work
 - approved subagent execution and complex artifact modes when scale requires them
+
+Feature construction uses **two meaningful reviews** instead of interrupting the human after every internal quality stage. Feature Definition Review confirms Goal, Scope, Acceptance, and Explicit Exclusions. The Agent then writes and self-reviews tasks, tests, E2E evidence, code context, Plan, verification, risk, and rollback without changing target code. Implementation Readiness Review confirms the Execution Boundary, Verification, Risk/Rollback, and whether to start. The Agent directly owns Human intent, complete Package Files, Gate/action/time consistency, and all Task/Plan/product semantics; Feature Gate acceptance and continuation do not depend on a local digest or Feature review Checker. New Agent-ready Task IDs inside the same accepted Story/Product Slice/Acceptance do not require another Human Gate—even when every initial Task ID is replaced—but new execution boundaries do. Delivery Contract, Human-gated tasks, subagent, Git, external, submit, close, and release actions remain separately gated.
+
+For a later start after package-only acceptance, the Agent re-reads the recorded package files and current Feature artifacts, compares them with the accepted boundary, checks the Human instruction and stop conditions, preserves the original Gate 2 baseline, and records a separate start transition plus current execution mode. If Human decision evidence is unavailable after context loss, the Agent asks once.
 
 ### Verify, review, and close
 
@@ -145,7 +152,9 @@ Approving one gate never approves another.
 
 ### 1. Install
 
-Agent Loop can be installed directly from GitHub with the open [`skills` CLI](https://github.com/vercel-labs/skills). To install it globally for Codex, Kimi Code CLI, Claude Code, and OpenCode:
+#### Public GitHub
+
+Install Agent Loop directly from GitHub with the open [`skills` CLI](https://github.com/vercel-labs/skills). This is the recommended external installation path for Codex, Kimi Code CLI, Claude Code, and OpenCode:
 
 ```bash
 npx -y skills add Shadow-linux/agent-loop \
@@ -173,16 +182,67 @@ npx skills update agent-loop -g
 npx skills list -g
 ```
 
+The public GitHub route requires Node.js 18 or later.
+
+#### Compatible Git clone
+
+Use this route when `npx` is unavailable or the environment must install from a Git mirror. Choose exactly one source:
+
+```bash
+# Public GitHub
+git clone \
+  --branch stable-v1.5.2 \
+  --depth 1 \
+  https://github.com/Shadow-linux/agent-loop.git \
+  ~/.local/share/agent-loop-source
+
+# Private Git mirror
+git clone \
+  --branch stable-v1.5.2 \
+  --depth 1 \
+  <git-mirror-url> \
+  ~/.local/share/agent-loop-source
+```
+
+On macOS or Linux, synchronize the checked-out Skill into the shared Agent Skills directory:
+
+```bash
+mkdir -p ~/.agents/skills/agent-loop
+rsync -ac --delete \
+  --exclude='.git' \
+  --exclude='.DS_Store' \
+  --exclude='__pycache__/' \
+  ~/.local/share/agent-loop-source/ \
+  ~/.agents/skills/agent-loop/
+```
+
+On Windows PowerShell, use the equivalent mirrored copy:
+
+```powershell
+$Source = "$HOME\.local\share\agent-loop-source"
+$Target = "$HOME\.agents\skills\agent-loop"
+New-Item -ItemType Directory -Force $Target | Out-Null
+robocopy $Source $Target /MIR /XD .git __pycache__ /XF .DS_Store
+if ($LASTEXITCODE -ge 8) { exit $LASTEXITCODE }
+```
+
+For a later clone-based upgrade, fetch tags, check out the new stable tag explicitly, and repeat the platform-specific synchronization:
+
+```bash
+git -C ~/.local/share/agent-loop-source fetch --tags origin
+git -C ~/.local/share/agent-loop-source checkout --detach stable-v1.5.2
+```
+
+`~/.agents/skills/agent-loop` is the preferred shared location. If an Agent runtime does not discover it, synchronize the same verified source into that runtime's configured Skill directory rather than maintaining divergent copies.
+
+#### After an update
+
+Verify the installed version in `SKILL.md`, then refresh the managed guidance of every active Agent Loop project:
+
 > [!IMPORTANT]
 > 在使用 Agent Loop 的项目中，请对 Agent 说：`Agent Loop 版本已更新，请更新项目的 AGENTS.md。`
 
-**Manual fallback for Codex**
-
-```bash
-git clone https://github.com/Shadow-linux/agent-loop.git ~/.codex/skills/agent-loop
-```
-
-The `npx` route requires Node.js 18 or later. If your runtime is not listed above, use its global or project-local Skill directory. Do not copy Agent Loop into a target project's `.agent-loop/`; that directory stores project memory and work artifacts, not the Skill package.
+Do not copy Agent Loop into a target project's `.agent-loop/`; that directory stores project memory and work artifacts, not the Skill package.
 
 ### 2. Let Agent Loop take over a project
 

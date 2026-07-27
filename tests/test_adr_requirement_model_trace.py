@@ -363,6 +363,77 @@ class AdrRequirementModelTraceTests(unittest.TestCase):
 
 
 class ProductDefinitionAdrTraceTests(unittest.TestCase):
+    @staticmethod
+    def product_rules_only_source(value: str) -> str:
+        value = re.sub(
+            r"\n## Concept Definitions\n.*?(?=\n## Product Rules\n)",
+            "\n",
+            value,
+            flags=re.DOTALL,
+        )
+        applicability_rows = {
+            "Concepts": "no stable product concept identity is required for this rule-only definition",
+            "Relationships": "no stable concept relationship is required for this rule-only definition",
+            "Permissions": "the accepted authority constraint is owned directly by the Product Rule",
+            "Actions / Outcomes": "no stable command or event model is required for this rule-only definition",
+            "Flow": "no multi-step product flow is required for this rule-only definition",
+            "State": "no product state lifecycle is required for this rule-only definition",
+            "Product Facts": "no separate durable product fact model is required for this rule-only definition",
+            "Exceptions / Recovery": "no separate exception model is required for this rule-only definition",
+        }
+        for view, reason in applicability_rows.items():
+            value = re.sub(
+                rf"^\| {re.escape(view)} \|.*$",
+                f"| {view} | not-applicable | {reason} | none |",
+                value,
+                flags=re.MULTILINE,
+            )
+        value = value.replace(
+            "Only an actor satisfying PERM-APPROVE may apply CMD-APPROVE to C-REQUEST; submission never implies approval.",
+            "Only an authorized reviewer may approve an eligible request; submission never implies approval.",
+        )
+        value = value.replace(
+            "PERM-APPROVE / CMD-APPROVE / STATE-REQUEST / product.md#approval-authority",
+            "product.md#approval-authority",
+        )
+        return value.replace(
+            "| approval persistence and consistency | technical landing must preserve PM-APPROVAL | Decision & Design | proposed |",
+            "| approval persistence and consistency | technical landing must preserve product.md#approval-authority | Decision & Design | proposed |",
+        )
+
+    @staticmethod
+    def product_rules_only_decision(value: str) -> str:
+        value = re.sub(
+            r"^Accepted Concept IDs:.*$",
+            "Accepted Concept IDs: none",
+            value,
+            flags=re.MULTILINE,
+        )
+        value = re.sub(
+            r"^Accepted Requirement Model IDs:.*$",
+            "Accepted Requirement Model IDs: none",
+            value,
+            flags=re.MULTILINE,
+        )
+        value = re.sub(
+            r"^## Requirement Model Scope Inventory\n.*?(?=^## )",
+            "## Requirement Model Scope Inventory\n\n"
+            "| Requirement Model Ref | Scope Disposition | Owner / Reason |\n"
+            "|---|---|---|\n"
+            "| product.md#approval-authority | in-scope | ADR-9100 |\n\n",
+            value,
+            flags=re.MULTILINE | re.DOTALL,
+        )
+        return re.sub(
+            r"^## Requirement Model Technical Landing Trace\n.*?(?=^## )",
+            "## Requirement Model Technical Landing Trace\n\n"
+            "| Requirement Model Ref | Accepted Meaning / Constraint | Disposition | Technical Landing | Preserved Invariant | Design Slice | Verification |\n"
+            "|---|---|---|---|---|---|---|\n"
+            "| product.md#approval-authority | preserve the accepted approval authority rule | landed | approval authorization policy | unauthorized actors cannot approve | DS-APPROVAL | authority rule verification |\n\n",
+            value,
+            flags=re.MULTILINE | re.DOTALL,
+        )
+
     def run_product_decision(
         self,
         *,
@@ -445,6 +516,45 @@ class ProductDefinitionAdrTraceTests(unittest.TestCase):
         result = self.run_product_decision()
         self.assertEqual(result.returncode, 0, combined_output(result))
         self.assertIn("covers 11 in-scope", result.stdout)
+
+    def test_standard_product_rules_only_allows_none_concept_and_model_ids(
+        self,
+    ) -> None:
+        result = self.run_product_decision(
+            product_mutation=self.product_rules_only_source,
+            decision_mutation=self.product_rules_only_decision,
+        )
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("covers 1 in-scope", result.stdout)
+
+    def test_none_concept_ids_do_not_bypass_declared_source_concepts(self) -> None:
+        result = self.run_product_decision(
+            decision_mutation=lambda value: re.sub(
+                r"^Accepted Concept IDs:.*$",
+                "Accepted Concept IDs: none",
+                value,
+                flags=re.MULTILINE,
+            )
+        )
+        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertIn(
+            "ADR scope must name accepted Concept IDs", combined_output(result)
+        )
+
+    def test_none_model_ids_do_not_bypass_declared_source_models(self) -> None:
+        result = self.run_product_decision(
+            decision_mutation=lambda value: re.sub(
+                r"^Accepted Requirement Model IDs:.*$",
+                "Accepted Requirement Model IDs: none",
+                value,
+                flags=re.MULTILINE,
+            )
+        )
+        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertIn(
+            "ADR scope must name accepted Requirement Model IDs",
+            combined_output(result),
+        )
 
     def test_confirmed_brief_allows_reasoned_not_applicable_trace(self) -> None:
         result = self.run_brief_decision()

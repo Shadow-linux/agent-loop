@@ -47,7 +47,8 @@ New human source material should be archived inside a requirement set directory.
 | `bugs/YYYY-MM-DD-<bug-slug>/README.md` | stable Bug identity, Report Origin, observed/expected evidence, Status, Resolution, relationships, Resolution Path, verification, close, and reopen history | product meaning, Requirement lifecycle, Feature tasks/tests/plan, personnel assignment, or Git authorization |
 | `bugs/YYYY-MM-DD-<bug-slug>/evidence/*` | optional bounded screenshots, redacted logs, failed tests, reproduction, and verification evidence | secrets, complete production payloads, implementation plans, or executable state database |
 | legacy Feature `product.md` | historical feature-level product intent retained for Resume, Follow-up, Review, Close, and Recovery only | new Product Definition authoring, Requirement lifecycle, or silent migration |
-| Feature `spec.md` | intended feature behavior plus Product Requirement Source and Product Slice | Requirement product meaning, execution logs, or a second PRD |
+| Feature `spec.md` | intended feature behavior, Product Requirement Source, derived Feature Context Snapshot, and Product Slice | Requirement product meaning, execution logs, or a second PRD |
+| optional Feature `context.md` | expanded derived execution context for a complex or long-running Feature, with exact source/digest parity to `spec.md` | independent product truth, Requirement lifecycle, approval, task/test/plan, code-fact, or execution authority |
 | `tasks.md` | work breakdown, status, and links to task details | full test evidence |
 | `tests.md` | test design, matrix, and links to test details | raw test output |
 | `plan.md` | active execution plan pointer or compact plan, including Branch Context Evidence when applicable | historical execution record or Git action authorization |
@@ -135,10 +136,31 @@ Human-gated
 Gate modes:
 
 ```text
+Normal Two-Gate Feature Construction
 Strict Mode
 Feature Auto-Loop
 Task Auto-Run
 ```
+
+Feature notes own the compact derived package state:
+
+```text
+Implementation Readiness: preparing | review-ready | accepted
+```
+
+Gate 1 sets `preparing`; package completeness and consistency set `review-ready`; only the two Gate 2 approval choices set `accepted`. `Revise package` returns to `preparing`; `Pause` records a separate workflow transition and does not claim accepted readiness. This field is not Feature lifecycle and authorizes no target implementation, Git, external mutation, submit, release, or close by itself. `notes.md` also persists unique top-level Gate 1 decision, Gate 2 decision/time, complete Package Files, initially reviewed Agent-ready task IDs, the `Gate 2 Accepted Stories` snapshot derived at review, Active Plan Scope, Plan Evidence (`plan.md | plans/<detail>.md | no-plan:<accepted-task>`), the current No-Plan Decision binding, the Gate 2 Auto-Loop decision value, separate Later Start decision/time/Human evidence, and exact Gate Drift Assessments when needed. The Gate 2 decision/Auto-Loop/time values are the original durable accepted-review baseline, not a live execution-mode pointer. Package-only acceptance requires a later explicit Human start instruction plus current Feature Context, direct Agent review of the recorded package files/current artifacts, boundary assessment, and no-new-stop checks before execution; the Agent then preserves the Gate 2 baseline, records the separate Later Start transition, and updates project `Gate Mode`. Pause clears project `Gate Mode` and records a transition without rewriting accepted baseline or later-start evidence; Resume requires a newly confirmed mode. History sections never override current fields. Existing `spec.md`, `tasks.md`, `tests.md`, `plan.md`, and `notes.md` remain the owners; do not create a separate readiness artifact or hierarchy.
+
+Legacy Feature notes without the three Later Start fields remain readable. Absence means no recorded later-start transition and grants nothing; a truthful historical Gate 2 approve-and-start record remains valid. Add the fields only during an otherwise authorized Gate evidence refresh or a valid later-start transition, never through silent approval backfill.
+
+Human decision provenance is not represented by a locally generated signature or digest. The Agent may record `accepted` plus the Gate 2 decision/Auto-Loop/review-time baseline, or a separate Later Start decision/time/Human-evidence transition, only from reliable Human conversation or preserved Human decision evidence. If provenance is unavailable after resume or context loss, ask one blocking confirmation.
+
+`Gate 2 Package Files` inventories `spec.md`, `tasks.md`, `tests.md`, `plan.md` when present, optional `context.md` / `contracts.md`, and every current file under triggered `tasks/`, `tests/`, `plans/`, and `contracts/` directories. AI owns every coverage, Gate, action, time, semantic, and drift decision. Legacy hash fields may remain as inert history in older Features, but current agents do not require, refresh, or use them for authorization or continuation.
+
+The optional `notes.md` `Gate Drift Assessments` table records `Feature ID | Gate | Classification | Changed Areas | Evidence | Reason | Assessed At`. Allowed diagnostic classifications are `within-approved-boundary | feature-definition-change | implementation-boundary-change | unresolved`; they are not lifecycle values. The table is an Agent-owned audit log. After a within-boundary decision, record the exact transition and continue only when current package, Plan, verification, risk, and rollback remain inside the accepted boundary.
+
+`Gate 2 Agent-ready Tasks` preserves the initial reviewed decomposition. `Gate 2 Accepted Stories` preserves the Story IDs derived from those tasks at Gate 2 and must not be reconstructed from later mutable rows. AI verifies that a new Agent-ready Task exists, maps to that snapshot and the accepted Product Slice/Acceptance, uses `Derived From` only as trace, and is bound by the current Plan. A new Task ID alone does not repeat Gate 2; a new execution boundary does. Missing identity, Human-gated mode, new Story/Acceptance, story mismatch, or changed verification/interface/risk/rollback obligations is a hard stop or repeats the owning review. A No-Plan path additionally binds the same task ID in top-level notes and records `No-Plan Decision: accepted` in its row/detail; the Agent owns both the structural read and Plan-trigger judgment.
+
+Task-row metadata ends at the next Task or Markdown heading. Duplicate current `Mode`, `Covers Stories`, `Derived From`, or `No-Plan Decision` values are malformed; a later history section cannot provide current authorization. Package paths must remain Feature-relative and resolve inside the Feature root. Duplicate initial Task IDs fail closed under Agent review.
 
 Branch Strategy adoption status:
 
@@ -180,7 +202,7 @@ Feature Monthly Archive moves the complete eligible directory without content co
 
 Scope boundaries are explicit: no per-feature archive summary, no historical/ directory, no Deep Archive, no deletion/packing/scheduled archive, and No `--force`. A closed archived feature must rehydrate before reopened execution.
 
-Record the active gate mode in `project.md` Current Work or the active feature `notes.md` checkpoint. If scope changes, switch back to Strict Mode unless the human renews the auto-mode grant.
+Record the active gate mode in `project.md` Current Work or the active feature `notes.md` checkpoint. Product meaning, Product Slice, scope, or acceptance changes invalidate Gate 1 and return readiness to `preparing`; material package changes invalidate Gate 2 and return readiness to `preparing`. Human-selected Strict Mode remains explicit stage-by-stage control.
 
 ## Post-Merge Memory Reconciliation Layout
 
@@ -247,6 +269,8 @@ tests.md
 plan.md
 notes.md
 ```
+
+The Feature Context Snapshot is derived execution context inside `spec.md` by default. Do not create optional `context.md` for an ordinary Feature. It may be added only through the existing Complex Artifact Human Gate when keeping the complete Snapshot in `spec.md` would make the Feature no longer locally understandable; `spec.md` keeps the summary, exact link, source identity, digests, and freshness. Generate Product and Decision Markdown digests after canonicalizing `CRLF` and lone `CR` to `LF`; the checker accepts legacy raw LF/CRLF digests so OS checkout behavior does not create false drift. Neither file owns product meaning.
 
 Do not create dated variants like `tasks-2026-05-26.md` in v1.
 
@@ -347,6 +371,7 @@ stable plan.md
 
 ```text
 current feature behavior changed -> update spec.md
+Feature Context source or digest changed -> rerun the read-only freshness checker, semantically refresh derived spec.md Snapshot and optional context.md only when authority remains valid, and keep both in exact source/digest parity
 accepted Requirement product meaning changed -> Human-gated append-only Product Definition follow-up, advance README pointer, then recheck ADR / open Feature compatibility
 legacy feature product intent conflict found -> stop for Requirement Conflict / Recovery; do not rewrite legacy product.md silently
 cross-feature product consensus changed -> update project.md Product Context or Domain Language in simple mode, or project/product-context.md and project/domain-language.md in enterprise mode
