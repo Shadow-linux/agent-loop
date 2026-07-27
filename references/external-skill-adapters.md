@@ -14,7 +14,7 @@ If Superpowers is available, prefer these helpers:
 | Brainstorm / Clarify | `superpowers:brainstorming` |
 | Project Skill Creation / Update | `superpowers:writing-skills` / `writing-skills`; also `skill-creator` when available |
 | Legacy Product Brief compatibility | no writer helper; reader-only compatibility |
-| Feature Spec | `superpowers:brainstorming` plus spec helpers when available |
+| Feature Spec with real feature-local uncertainty | `superpowers:brainstorming` plus spec helpers when available; otherwise use a spec helper or direct Feature Spec guidance without brainstorming |
 | Plan Gate / Plan If Needed | `superpowers:writing-plans` |
 | Execute Task / Story | `superpowers:test-driven-development` |
 | Diagnose Failure | `superpowers:systematic-debugging` |
@@ -168,7 +168,7 @@ Use Superpowers when available for these stages, while applying the path and gat
 | Brainstorm / Clarify if Needed | `superpowers:brainstorming` | context exploration, one-question-at-a-time, options, design approval | write to the owning stage artifact; do not write `docs/superpowers/specs/`; do not auto-transition to `writing-plans` |
 | Project Skill Creation / Update | `superpowers:writing-skills` / `writing-skills`, plus `skill-creator` when available | RED/GREEN/REFACTOR, pressure testing, concise skill authoring, scaffolding, metadata generation, structural validation | Gate 1 before files; write only to `.agent-loop/skills/<skill-name>/`; activation only after validation; Execution Gate for every invocation |
 | Legacy Product Brief compatibility | no writer helper | historical product intent from an existing Feature artifact | read only; route semantic conflict to Requirements Discussion / Recovery |
-| Feature Spec | brainstorming/spec methods | ambiguity removal, scope check, acceptance thinking | write to `spec.md`; use agent-loop Human Review Summary |
+| Feature Spec with real feature-local uncertainty | brainstorming/spec methods | clarify unresolved local scope, acceptance, or implementation-boundary alternatives | write only accepted Feature-local clarification to `spec.md`; never redefine Product Slice or accepted ADR meaning |
 | Plan Gate / Plan If Needed | `superpowers:writing-plans` | decide plan vs recorded No-Plan Decision; construction-grade plan, exact paths, test code, commands, expected outputs, no placeholders, self-review | write to `plan.md` or `plans/*`, or record No-Plan Decision only for trivial tasks; preserve Branch Context Evidence and never let plan approval authorize Git actions; do not write `docs/superpowers/plans/`; execution mode remains agent-loop controlled |
 | Execute Task / Story | `superpowers:test-driven-development` | RED, verify RED, GREEN, verify GREEN, refactor | task status still controlled by Task Done Gate; evidence to `notes.md` |
 | Diagnose Failure | `superpowers:systematic-debugging` | reproduce, isolate, trace root cause before fixing | findings to `notes.md`; return to Execute / Verify / Review |
@@ -184,6 +184,8 @@ Use Superpowers when available for these stages, while applying the path and gat
 When `Brainstorm / Clarify if Needed` starts and Superpowers is available:
 
 Requirements Discussion drafts the Requirement `product.md`; after Product Human Review plus Requirement Record / Archive, the Requirement README records only the effective pointer, lifecycle, Delivery Phase, Feature Mapping, and decision-link summaries. Feature Spec writes Product Slice to `spec.md` and evidence to `notes.md`. Existing Feature Product Briefs remain reader-only.
+
+A clear Feature does not enter Brainstorm / Clarify, does not load brainstorming merely because Feature Spec is active, and requires no Brainstorm Stage Helper Resolution. First load the accepted Product Slice and applicable ADRs. Trigger the method only for a concrete unresolved Feature-local scope, acceptance, or implementation-boundary question. If the question would change product meaning or an accepted ADR, leave Feature Spec and route to Requirements Discussion or Decision & Design Human Review instead.
 
 1. Use `superpowers:brainstorming` as the preferred method.
 2. Inspect project context first.
@@ -223,7 +225,7 @@ When `Plan Gate / Plan If Needed` starts and Superpowers is available:
 5. Save the plan to `plan.md` for the active task/story, or to `plans/YYYY-MM-DD-<task>-<slug>.md` in complex artifact mode.
 6. If a plan is not required, record the No-Plan Decision in `notes.md` and the selected task row/detail with exact files, exact verification command, and why no trigger applies.
 7. Do not create `docs/superpowers/plans/*` unless the human explicitly requests native Superpowers docs and confirms the external directory after path-override explanation.
-8. Do not let the external skill choose execution mode. Offer agent-loop modes: Strict Mode, Feature Auto-Loop, Task Auto-Run, or human-approved subagent execution. Task Auto-Run still requires an accepted plan.
+8. Do not let the external skill choose execution mode. Agent Loop owns normal two-gate Feature construction, human-selected Strict Mode, Gate 2 Feature Auto-Loop, Task Auto-Run, and human-approved subagent execution. Task Auto-Run still requires an accepted plan.
 
 ## Project Skill Authoring Adapter
 
@@ -258,7 +260,8 @@ When verification fails or unexpected behavior appears:
 2. Reproduce and identify root cause before proposing fixes.
 3. Record root cause, evidence, fix decision, and follow-up verification in Feature `notes.md`; Bug Management may link the evidence in the Bug README.
 4. The helper must not create, merge, close, reopen, or change Bug Records; select a Resolution Path; create a Requirement/Feature; mutate lifecycle; or widen Git authority.
-5. Return to Execute / Verify / Review under `agent-loop`.
+5. If a canonical Agent Loop checker remains failed after an exact rerun and the checker may be defective, load `checker-recovery.md`; the debugging helper may reduce the fixture but cannot authorize or apply a temporary checker patch by itself.
+6. Return to Execute / Verify / Review under `agent-loop`.
 
 ## Submit / Integrate Adapter
 

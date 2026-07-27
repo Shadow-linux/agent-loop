@@ -8,6 +8,8 @@ Status: draft | active | passing | failing | blocked
 Created: YYYY-MM-DD
 Updated: YYYY-MM-DD
 
+AI reviews current top-level `Status` and `Updated` values and owns scenario, command, assertion, environment, evidence, and cleanup meaning.
+
 Index:
 - Test Matrix: ../tests.md
 - Task Ledger: ../tasks.md

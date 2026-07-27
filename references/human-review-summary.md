@@ -24,12 +24,10 @@ Use before human confirmation for:
 - legacy onboarding-db reference cleanup
 - Remote Project Discovery
 - Requirement Archive
-- Feature Spec
-- Work Breakdown / Tasks
+- Feature Definition Review
+- Implementation Readiness Review
 - Delivery Contract acceptance or breaking change
-- Test Design
-- E2E Discovery
-- Plan approval
+- Work Breakdown / Tasks, Test Design, E2E Discovery, or Plan approval only in human-selected Strict Mode or at a preserved hard gate
 - Drift Check
 - Project Memory Update
 - Feature Completion Check
@@ -47,6 +45,8 @@ Decision:
 ```
 
 Do not force a large table when it adds noise.
+
+Normal Feature construction does not present separate Work Breakdown, Test Design, E2E Discovery, Technical Design, and Plan approval summaries. It presents the two summaries below. Individual stage summaries remain available only in human-selected Strict Mode or when a preserved hard gate stops preparation.
 
 ## Required Shape
 
@@ -91,6 +91,67 @@ Use Batch Human Review for:
 High-confidence rows can be drafted, but cannot become reviewed or written as accepted long-term fact without human confirmation.
 
 ## Stage Table Patterns
+
+## Feature Definition Review Summary
+
+Use this as Gate 1 after the Requirement Checklist passes:
+
+| Area | Recommended Definition | Evidence | Blocker / Risk | Human Decision |
+|---|---|---|---|---|
+| Goal | problem, target outcome, user/business value | Requirement/Product source |  | accept / revise |
+| Scope | added/modified behavior and Product Slice boundary | `spec.md` + Snapshot |  | accept / revise |
+| Acceptance | measurable criteria, important states/exceptions/recovery | `spec.md` |  | accept / revise |
+| Explicit Exclusions | out-of-scope behavior and adjacent work not authorized | `spec.md` |  | accept / revise |
+
+Allowed choices:
+
+```text
+Accept definition and prepare implementation package
+Revise definition
+Pause
+```
+
+State clearly: this compact table is the decision view; the checked `spec.md`, Product Slice, Requirement Checklist, and applicable decisions remain authoritative and available for inspection. Gate 1 authorizes writing the Feature's implementation-package artifacts only. It does not authorize target implementation, Feature Auto-Loop, Delivery Contract action, subagent dispatch, external mutation, Git, submit, or close.
+
+## Implementation Readiness Review Summary
+
+Use this as Gate 2 only after the complete package passes self-review and Analyze Consistency:
+
+| Area | Agent Recommendation | Evidence | Human Decision Needed |
+|---|---|---|---|
+| Execution Boundary | accepted Story/Product Slice/Acceptance, Agent-ready work, interfaces/dependencies, excluded Human-gated work | complete package trace | accept / revise |
+| Verification | exact RED/GREEN, focused, integration, E2E/manual commands and substitute needs | tasks/tests/Plan | accept / named decision |
+| Risk / Rollback | architecture/data/security/migration/dependency/external risk and bounded rollback | code context + Plan | accept / revise |
+| Execution Choice | package only or package and start; separately gated actions listed explicitly | notes + conditional candidates | choose / revise / pause |
+
+Allowed choices:
+
+```text
+Approve package and start implementation
+Approve package only; do not implement yet
+Revise package
+Pause
+```
+
+This compact table is the decision view; the complete tasks/tests/E2E/code-context/Plan/risk/rollback package and exact durable Gate evidence remain authoritative and available for inspection. Gate 2 records the initial Agent-ready decomposition plus the accepted Story snapshot; package-only acceptance never authorizes execution. Approve-and-start enables Feature Auto-Loop for the accepted execution boundary without a third generic prompt. Separately owned Human Gates remain separately named.
+
+AI judges whether a reliable Human decision exists, whether Package Files are complete, whether Gate/action/time records agree, and whether later changes remain inside the accepted boundary. Present direct artifact paths, current task/test/Plan evidence, verification, risk, and rollback rather than a local digest result. A new Task ID inside the accepted Story/Product Slice/Acceptance is not itself a new decision, even when all initial Task IDs are replaced; a new execution boundary repeats Gate 2.
+
+After a reliable Human choice, record the durable Gate 2 baseline fields directly. On later package-only start, the Agent re-reads that baseline and current Feature artifacts, checks the accepted boundary and Human instruction, preserves the original Gate 2 values, records separate Later Start decision/time/Human evidence, and updates current project `Gate Mode` only when reliable. If context loss leaves Human provenance uncertain, ask one blocking confirmation. Feature Gate acceptance and continuation require no local Feature review Checker.
+
+### Checker Issue Reporting Review
+
+Use only after a canonical checker defect candidate is evidenced and a sanitized upstream draft exists. This review is independent from Temporary Checker Repair and one-Gate substitute decisions.
+
+| Field | Required content |
+|---|---|
+| Repository | exact public GitHub owner/repository |
+| Issue | exact title and complete sanitized body |
+| Evidence | public authority/checker paths, minimal neutral fixture, RED/negative controls |
+| Redactions | credentials, private repositories/hosts/customers, private absolute paths, payloads, unnecessary project data removed |
+| Labels / method | exact labels when known; authenticated creation method or no-auth blocker |
+| External effect | one public Issue will be created; no repair, Git, install, release, or publish authority is implied |
+| Human decision | create exact issue / revise draft / keep draft only |
 
 ### Product Definition Approval
 

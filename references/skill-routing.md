@@ -106,7 +106,7 @@ Do not ask the human whether to use a helper just because it exists. Announce or
 If Superpowers is available, these map cleanly:
 
 - `using-superpowers`: reminder that relevant skills should be loaded before acting.
-- `brainstorming`: Brainstorm / Clarify if Needed; Requirements Discussion produces the Requirement `product.md` draft, Requirement README keeps pointer/lifecycle/mapping summaries, and Feature Spec writes Product Slice to `spec.md` / `notes.md`; never default to `docs/superpowers/specs/`.
+- `brainstorming`: Brainstorm / Clarify if Needed; Requirements Discussion produces the Requirement `product.md` draft. Feature Spec uses it only for real Feature-local scope, acceptance, or implementation-boundary uncertainty after loading the accepted Product Slice and applicable ADRs; a clear Feature skips it. Write accepted local clarification to `spec.md` / `notes.md` and never default to `docs/superpowers/specs/`.
 - `writing-skills`: Project Skill Creation / Update; governs RED/GREEN/REFACTOR, pressure scenarios, trigger-focused descriptions, and loophole closure. When `skill-creator` is also available, use its scaffolding and validation tools without letting it replace writing-skills discipline.
 - PRD/product skills such as `prd-writer` or mattpocock `to-prd`: methods inside Requirements Discussion; map helper Feature List output to Product Capability Scope and translate output into the Requirement `product.md` draft. Do not create native `feature_list.md`, `PRD.md`, prototype deployment, helper-owned trees, or Feature `product.md`.
 - Requirement/Product Grill and mattpocock `grill-with-docs`: clarification inside Requirements Discussion and Feature-local Brainstorm / Clarify; translate accepted product meaning to the Requirement `product.md`, keep Requirement README to pointer/lifecycle/mapping summaries, write Feature-local output to `spec.md` or `notes.md`, and route Decision Candidates without creating native `CONTEXT.md` or `docs/adr/`.
@@ -154,9 +154,9 @@ When no external skill is available or loading fails:
 2. Name the fallback source.
 3. Load the current stage in `stage-guides.md`.
 4. Use the matching template.
-5. Respect the current gate mode. In Strict Mode, ask the normal stage gate before acting. In an active auto mode, continue without a new helper-specific gate when the stage is already authorized and no stop condition applies.
+5. Respect the current authorization context. In human-selected Strict Mode, ask the normal stage gate before acting. During Gate 1-authorized Implementation Package Preparation, continue across authorized artifact-writing and read-only quality methods without a new helper-specific gate, but do not modify target implementation. In an active execution auto mode, continue without a new helper-specific gate when the stage is already authorized and no stop condition applies.
 6. Act.
 7. Record output in the owning artifact.
 8. Recommend the next stage.
 
-Helper absence never expands authorization and never creates a new human gate by itself. Existing stage gates and auto-mode stop conditions still apply.
+Helper absence never expands authorization and never creates a new human gate by itself. The two Feature construction reviews, human-selected Strict Mode, independent hard gates, and auto-mode stop conditions still apply.

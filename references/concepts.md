@@ -135,9 +135,17 @@ First version excludes:
 
 **Delivery Contract**: A durable producer-consumer boundary handoff in `contracts.md` and optional `contracts/*` details. It records API, service, event, async workflow, data, UI-behavior, library, or runtime interfaces that downstream work depends on. It is distinct from temporary subagent briefs.
 
-**Strict Mode**: Default gate mode. Ask before and after every stage.
+**Strict Mode**: Explicit stage-by-stage control mode, and the fail-closed fallback when the controller is unavailable. Ask before and after every stage. Normal Feature construction instead uses the two meaningful reviews below.
 
-**Feature Auto-Loop**: Feature-level authorization after Requirement Checklist passes and Feature Spec is accepted. The agent may advance Agent-ready feature stages/tasks until a stop condition appears. It must stop before Submit / Integrate and Close.
+**Feature Definition Review**: Gate 1 of normal Feature construction. The human accepts the checked Feature Spec and Product Slice, authorizing creation/update of the Feature's planning, test-design, technical-context, and readiness artifacts but not target implementation.
+
+**Implementation Package Preparation**: Agent-owned continuation after Gate 1 that completes Work Breakdown, Delivery Contract assessment, Test Design, E2E Discovery, Technical Design / Code Context, Plan, trace coverage, risk, rollback, and consistency checks without separate stage approval prompts.
+
+**Implementation Readiness Review**: Gate 2 of normal Feature construction. The human reviews the complete implementation package and chooses approve-documents-only, approve-and-start, revise, or pause.
+
+**Feature Review Baseline**: Durable Gate 1/Gate 2 decisions plus Spec, complete Package Files inventory (including triggered detail directories), accepted Agent-ready task IDs, Accepted Stories, Active Plan Scope, matching compact/detailed Plan or No-Plan evidence, Auto-Loop state, review time, and later Gate Drift Assessments recorded in Feature `notes.md`. Human decision provenance and boundary continuity are judged by the Agent from current artifacts, reliable conversation, and preserved Human evidence; no local Feature Gate script or digest is required.
+
+**Feature Auto-Loop**: Feature-level execution authorization created by Gate 2 `Approve package and start implementation`, or by a separate valid later-start transition after Gate 2 package-only acceptance. Later start preserves the original Gate 2 baseline, records its own Human decision/time/evidence, and updates current project `Gate Mode`; it does not create a third Gate. The agent may advance only Agent-ready work inside the accepted Story/Product Slice/Acceptance and execution boundary. `Gate 2 Agent-ready Tasks` preserves the initial decomposition while `Gate 2 Accepted Stories` preserves the durable Story snapshot; later Task replacement or Plan rotation may continue inside that boundary after Plan Gate, consistency, and exact current assessment when needed. A new execution boundary repeats Gate 2. It must stop before every preserved independent Human Gate, Submit / Integrate, and Close.
 
 **Task Auto-Run**: Task/story-level authorization after the selected task/story plan is accepted. The agent runs Analyze Consistency before TDD execution, then may complete only that task/story through verification, review, drift, and status update.
 

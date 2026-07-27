@@ -18,7 +18,7 @@ Status: {status}
 Created At: {created_at}
 Updated At: {updated_at}
 Completed At: {completed_at}
-Git Context: feature/v1.5.0/example@0123456789abcdef0123456789abcdef01234567
+Git Context: feature/v1.5.1/example@0123456789abcdef0123456789abcdef01234567
 
 ## Background
 

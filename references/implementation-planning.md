@@ -16,6 +16,36 @@ plan.md         = construction plan: exact steps, code/test snippets, commands, 
 
 Do not put construction-level code snippets in `tasks.md`. Put them in `plan.md` or the dated plan file referenced by `plan.md`.
 
+## Feature Context Derivation
+
+Task/Test/Plan derive from:
+
+```text
+current Feature Context Snapshot
++ current Product Slice
++ applicable accepted ADRs
++ relevant code facts
+```
+
+Run `scripts/check-feature-context.py` before construction planning and require `CURRENT`. Accepted product meaning, ADR landing, and code reality remain separate evidence layers; code facts cannot rewrite the Snapshot.
+
+- Every Task maps to a Product Slice responsibility/acceptance, accepted ADR Design Slice, or explicit technical prerequisite for a named later vertical slice.
+- Tests cover every applicable acceptance criterion, actor/permission boundary, state transition/terminal, Product Rule/invariant, exception/recovery path, and accepted ADR verification obligation.
+- Every active Plan names its Product Slice and Task, preserves applicable product/ADR invariants, identifies code facts separately, and includes exact verification for mapped acceptance.
+- `refresh-required | blocked` stops Task/Test/Plan creation, approval, and execution until semantic refresh or the owning existing Gate resolves it.
+
+## Two-Gate Package Preparation
+
+After Gate 1 Feature Definition Review accepts the checked `spec.md`, construction planning is part of one bounded Implementation Package Preparation run. Write and self-review the Feature's tasks, tests, E2E evidence, technical/code context, Plan, coverage, verification, risk, and rollback artifacts without separate Plan approval. Do not change target implementation.
+
+Plan Gate remains a mandatory quality method. Its result becomes one component of Gate 2 Implementation Readiness Review. Gate 2 cannot be presented until the complete package is executable, placeholder-free, traced to accepted Product Slice/ADR meaning, and Analyze Consistency passes.
+
+`Approve package only` accepts the documents without execution. `Approve package and start implementation` also enables Feature Auto-Loop. Product/scope/acceptance changes invalidate Gate 1; material task/test/code-context/Plan/risk/rollback changes invalidate Gate 2.
+
+For a multi-task Feature Auto-Loop, Gate 2 accepts the execution boundary and records the initial Agent-ready task decomposition, independently persisted `Gate 2 Accepted Stories`, ordering/barriers, verification, risk, rollback, complete Package Files, and initial task/story Plan. A task Plan ID must name an existing Agent-ready Task mapped to that Story snapshot and the accepted Product Slice/Acceptance. A story Plan must name non-empty `Included Tasks`, and each included Task must map to that accepted Story in `tasks.md`. Later `plan.md` rotation or Task splitting/replacement is an execution refinement when the replacement Plan passes Plan Gate and Analyze Consistency and any changed artifact meaning has an exact current `within-approved-boundary` assessment. All initial Task IDs may be replaced without losing the snapshot; a new Task ID alone does not repeat Gate 2, while a new execution boundary does.
+
+Human authorization remains conversation-owned rather than locally signed. After the reliable Gate 2 choice, record the accepted Gate 2 decision/Auto-Loop/time baseline directly. AI owns package completeness, Gate/action consistency, Story, Task, Plan, No-Plan, and drift meaning. A later explicit start re-reads the recorded package files and current Feature artifacts while the Agent validates the accepted boundary and Human instruction, then preserves the package-only baseline, records separate Later Start decision/time/Human evidence, and updates current project `Gate Mode`. No local Feature Gate preflight is required.
+
 ## Primary Inspiration
 
 Main source: Superpowers `writing-plans`.
@@ -61,6 +91,7 @@ If the needed signature, parameter, return shape, or dependency is unknown after
 
 Every `plan.md` with implementation content must include:
 
+- current Feature Context Snapshot digest/freshness, mapped Product Slice IDs/anchors, applicable ADRs, and the accepted product/ADR invariants this execution unit must preserve
 - goal and architecture summary
 - tech context
 - files to create/modify/test/read with exact paths
@@ -175,6 +206,7 @@ Expected 403, received 201
 Before asking the human to approve the plan, verify:
 
 - every accepted spec behavior maps to a step or explicit out-of-scope note
+- every Task/Test/Plan mapping remains traceable to the current Product Slice and applicable accepted ADRs
 - every referenced function/type/path exists or is created earlier in the plan
 - signatures, parameters, and property names are consistent across steps
 - no placeholder language remains

@@ -493,9 +493,9 @@ Purpose:
 - tell future agents that they own workflow steering instead of waiting for the human to name every next step
 - state stable startup rules and core commands
 - point task state back to `.agent-loop/`
-- explain the active gate modes: Strict Mode, Feature Auto-Loop, and Task Auto-Run
-- explain what autonomous execution is allowed to do after Feature Auto-Loop or Task Auto-Run is explicitly enabled
-- tell agents to proactively offer auto modes when repeated confirmations slow the human down
+- explain normal Feature construction's Gate 1 definition review and Gate 2 readiness review
+- explain that Strict Mode is explicit stage-by-stage control, Gate 2 may start Feature Auto-Loop, and Task Auto-Run remains one bounded accepted execution unit
+- explain what package preparation and autonomous execution may do without bypassing independent gates
 
 Do not put task logs, feature progress, or raw requirements in `AGENTS.md`.
 
@@ -830,6 +830,32 @@ Source Requirements:
 - Product Review Evidence:
 - Applicable Decisions:
 
+## Feature Context Snapshot
+
+Requirement Set: .agent-loop/requirements/<requirement-id>/README.md
+Requirement Lifecycle: accepted | in-progress | partially-implemented | implemented
+Resolved Product Source: .agent-loop/requirements/<requirement-id>/product.md
+Product Definition Profile: brief | standard | legacy
+Product Review: confirmed | accepted | concept-foundation-not-needed
+Product Source SHA-256:
+Applicable Decisions: none | .agent-loop/decisions/<decision>.md
+Decision Source SHA-256: none | .agent-loop/decisions/<decision>.md=<sha256>
+Product Slice References:
+Verified At: <ISO-8601 timestamp with timezone>
+Freshness: current | refresh-required | blocked
+
+### Product Outcome
+
+### Actors And Core Journey
+
+### Applicable Product Rules And Invariants
+
+### Applicable States, Exceptions, And Recovery
+
+### Feature Boundary And Acceptance Context
+
+This Snapshot is derived execution context. Requirement README resolves authority; Requirement, product, and ADR paths are project-root-relative; `scripts/check-feature-context.py` is read-only; and Product Slice remains the responsibility/coverage table.
+
 ## Product Slice
 
 | Source Section / Model ID | Feature Responsibility | Acceptance Mapping | Coverage |
@@ -928,6 +954,33 @@ Feature-local decisions that do not need standalone project ADR files:
 ## Open Questions
 ```
 
+Generate Product and Decision Markdown SHA-256 values after canonicalizing `CRLF` and lone `CR` to `LF`. Readers accept legacy raw LF/CRLF digests; other content changes still require refresh.
+
+## Optional `context.md`
+
+Use `templates/feature-context.md` only for a complex Feature whose complete Snapshot would make `spec.md` no longer locally understandable, and only after the Complex Artifact Human Gate. It must record:
+
+```md
+Derived Context: yes
+Authority: Requirement README -> Effective Product Definition -> accepted ADRs
+Independent Product Truth: no
+
+Requirement Set: .agent-loop/requirements/<requirement-id>/README.md
+Requirement Lifecycle: accepted | in-progress | partially-implemented | implemented
+Resolved Product Source: .agent-loop/requirements/<requirement-id>/product.md
+Product Definition Profile: brief | standard | legacy
+Product Review: confirmed | accepted | concept-foundation-not-needed
+Product Source SHA-256:
+Applicable Decisions: none | .agent-loop/decisions/<decision>.md
+Decision Source SHA-256: none | .agent-loop/decisions/<decision>.md=<sha256>
+Product Slice References:
+Verified At: <ISO-8601 timestamp with timezone>
+Freshness: current | refresh-required | blocked
+```
+
+Keep exact source/digest parity with `spec.md`. This file expands derived context only; it owns no independent product, lifecycle, approval, Task, Test, Plan, code-fact, or execution meaning.
+Generate Product and Decision Markdown SHA-256 values after canonicalizing `CRLF` and lone `CR` to `LF`; reader compatibility with legacy raw LF/CRLF digests does not permit any other content drift.
+
 ## `tasks.md`
 
 Use vertical slices / tracer bullets by default, with linear, parallel, and barrier structure instead of a graph.
@@ -955,6 +1008,7 @@ Default Split: vertical-slice
 - Do not mark a task `done` from code changes alone.
 - After implementation and fresh verification, use `Status: review` until Task Done Gate passes.
 - Task Done Gate: implementation complete, required tests or substitute verification run fresh, evidence recorded in `notes.md`, lightweight Spec Review recorded, Standards Review recorded when triggered, drift decision recorded, and evidence location named below.
+- A Feature No-Plan path records the current Task ID in `notes.md` and `No-Plan Decision: accepted` in the selected task row/detail; the Agent still proves that no Plan trigger applies.
 
 ## Split Rules
 
@@ -971,6 +1025,7 @@ Default Split: vertical-slice
 - [ ] T001 [US1] <task title>
   - Status: todo
   - Mode: Agent-ready | Human-gated
+  - No-Plan Decision: accepted | not-applicable
   - Slice Type: vertical | horizontal-foundation
   - Parent:
   - Depends on:
@@ -1286,6 +1341,29 @@ templates/requirements-index.md
 Created: YYYY-MM-DD
 Updated: YYYY-MM-DD
 Status: active
+Implementation Readiness: preparing | review-ready | accepted
+Gate 1 Decision: pending | accepted | revise | pause
+Gate 2 Decision: pending | package-only | approve-and-start | revise | pause
+Gate 2 Package Files: pending | <comma-separated Feature-relative paths>
+Gate 2 Agent-ready Tasks: pending | <comma-separated task IDs>
+Gate 2 Accepted Stories: pending | <comma-separated Story IDs>
+Active Plan Scope: pending | <accepted task/story ID>
+Gate 2 Plan Evidence: pending | plan.md | plans/<detail>.md | no-plan:<accepted task ID>
+No-Plan Decision: none | <accepted task ID>
+Feature Auto-Loop: disabled | enabled
+Gate 2 Reviewed At: pending | <ISO-8601>
+Later Start Decision: none | approved
+Later Start Authorized At: none | <ISO-8601>
+Later Start Evidence: none | <Human instruction evidence>
+
+The Gate 2 decision/Auto-Loop/time fields are the original durable review baseline, not the live execution-mode pointer. A package-only later start preserves that baseline, records the three Later Start fields, and updates current project `Gate Mode`; it does not create or repeat Gate 2. Pause clears project `Gate Mode` and records the transition without rewriting accepted baseline or later-start evidence; Resume requires a newly confirmed applicable mode. AI owns Human provenance, complete Package Files coverage, Gate/action pairing, timestamps, Task/Story/Plan/No-Plan meaning, risk, rollback, verification, and every Gate Drift Assessment. Only the two approval choices set readiness accepted; Feature Gate acceptance and continuation require no local digest or Feature review Checker.
+
+## Gate Drift Assessments
+
+| Feature ID | Gate | Classification | Changed Areas | Evidence | Reason | Assessed At |
+|---|---|---|---|---|---|---|
+
+Add a row only after AI Semantic Review. `Classification` is `within-approved-boundary | feature-definition-change | implementation-boundary-change | unresolved`.
 
 ## Human Decisions
 
