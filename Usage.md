@@ -1,6 +1,6 @@
 # Agent Loop Usage
 
-**版本：** 1.5.1
+**版本：** 1.5.2（正式稳定版）
 
 这是一份给人类使用的触发指南。你不需要记住 Agent Loop 的阶段名；只要说明目标、边界和你希望 Agent 自主推进到哪里，Agent 负责判断项目状态、选择流程、维护产物并在真正的 Human Gate 停下。
 
@@ -36,12 +36,12 @@ npx skills list -g
 
 ```bash
 # Public GitHub
-git clone --branch stable-v1.5.1 --depth 1 \
+git clone --branch stable-v1.5.2 --depth 1 \
   https://github.com/Shadow-linux/agent-loop.git \
   ~/.local/share/agent-loop-source
 
 # Private Git mirror
-git clone --branch stable-v1.5.1 --depth 1 \
+git clone --branch stable-v1.5.2 --depth 1 \
   <git-mirror-url> \
   ~/.local/share/agent-loop-source
 ```
@@ -166,8 +166,8 @@ Agent 会检查核心流程完整性，并按需要使用架构/边界图、ASCI
 这些说法都会路由到人类文档，而不是凭 Agent 记忆回答：
 
 ```text
-1.5.1 更新了什么？
-当前 1.5.1 使用的是什么流程？
+1.5.2 更新了什么？
+当前 1.5.2 使用的是什么流程？
 和 1.2.2 比有什么变化？
 现在 agent-loop 怎么用？
 ```
@@ -306,12 +306,14 @@ ADR 先用 `Effective Requirement Snapshot` 锁定已确认的 Product Definitio
 
 Feature `spec.md` 只选择产品切片，不重新定义产品。复杂任务可按触发条件使用 `tasks/`、`tests/`、`plans/`、`handoffs/` 和 `contracts/` 子目录；不要默认展开。
 
+Feature 已经有明确的 Product Slice、适用 ADR、范围、排除项和验收时，Agent 不会为了形式调用 brainstorming，而是直接整理 Feature Spec。只有仍存在一个具体的 Feature-local 范围、验收或实施边界问题时才使用它；它只能辅助收敛局部定义，不能重新设计产品或改写已接受 ADR。
+
 Feature 工作从 `spec.md` 里的本地 **Feature Context Snapshot** 开始。Agent 会自动从 Requirement README 找到真正的 `product.md`，检查适用 ADR 和摘要是否仍然一致；来源未变时走快速路径，来源变化时先刷新语义或停在已有 Human Gate。人类不需要手动定位、重开或反复指定 `product.md`。Snapshot 只是派生执行上下文，不是第二份产品真相；只有复杂且长期运行的 Feature 才会在现有 Complex Artifact Human Gate 后增加可选 `context.md`。
 
 你不需要记住 Feature 的内部阶段。正常只会在两个时点找你：
 
-1. **确认做什么**（Feature Definition Review）：你确认功能范围和验收结果。
-2. **确认怎么做**（Implementation Readiness Review）：Agent 把实现方案、任务、测试、风险和回滚一次准备齐，你看完整包后决定是否开工。
+1. **确认做什么**（Feature Definition Review）：你确认目标、范围、验收和明确排除项。
+2. **确认怎么做**（Implementation Readiness Review）：Agent 给出执行边界、验证、风险/回滚和完整实施包，你决定只保存文档还是立即开工。
 
 第一次确认后，Agent 会自行完成任务拆分、测试设计、E2E 判断、代码理解和实施计划，不会每写一份文档就停下来问一次，也不会提前改目标代码。
 
@@ -396,6 +398,18 @@ Operational Support 默认先只读检查代码、配置、脚本、部署流程
 Agent 会先重跑原命令并缩小问题。确认为 Checker 缺陷后，它会展示原 Checker 路径和 digest、最小复现、规则依据、补丁范围、RED/GREEN、反例检查、临时目录、回滚和失效条件。人类确认前不会写补丁；默认只修改隔离副本，不会静默改全局 Agent Loop。
 
 临时结果只能作为当前指定 Gate 的人类批准替代证据。原始 canonical 结果仍记录为失败，换了文件、Checker、命令或 Gate 就失效；正式修复仍需回到 Agent Loop 源码、补回归测试并通过正式验证。
+
+Agent 还可以先生成一个已脱敏的上游 GitHub Issue 草稿。真正创建 Issue 是独立的外部变更：它会先展示准确仓库、标题、完整正文、删去的敏感信息、标签/提交方式和影响范围，等人类单独确认。没有可用登录能力时只返回草稿与阻塞，不会自行安装工具、索取或泄露凭据。Issue 授权不包含临时修正、全局 Skill 修改、Git、安装、同步或发布。
+
+### Feature Gate 完全由 Agent 与人类证据驱动
+
+新 Feature 的 Gate 保留完整 Package Files、accepted Story 快照、初始 Task 分解、Active Plan、No-Plan、风险、验证和回滚证据。Agent 直接判断清单是否完整、Gate/action/time 是否一致，以及变化是否仍在已接受边界内。Feature Gate 不再要求本地摘要或 Feature review Checker。
+
+后续文件变化由 Agent 对照 Goal/Scope/Acceptance 和已接受执行边界分类为 `within-approved-boundary | feature-definition-change | implementation-boundary-change | unresolved`，并记录变化区域、直接证据、理由和时间。只有确实改变产品定义、执行边界或无法确定时，才回到 Gate 1、Gate 2 或一次阻塞问题。
+
+Gate 2 保存 accepted Story 快照、初始 Task 分解、Active Plan 和 No-Plan 记录，并由 Agent 阅读和判断。这样同一 Story/Product Slice/Acceptance 内的 Task 拆分、替换、表格转义或历史说明不会因为解析器猜错而变成伪 Gate 错误；新增执行边界仍必须由 Agent 路由到人类确认。
+
+Human Gate 的来源由 Agent 从可靠会话或保留的人类决定证据判断。人类作出 Gate 2 选择后，Agent 直接记录 accepted、决定、Auto-Loop 和时间，作为原始评审基线。later-start 仍只需人类明确说开始：Agent 重新读取 Package Files 与当前 Feature artifacts，检查 package-only baseline、接受边界和停止条件，保留原 Gate 2 字段，另行记录 Later Start 决定、时间、人类指令证据并更新当前 `Gate Mode`。如果上下文丢失且找不到可靠决定证据，才问一次确认。清单遗漏、Plan/No-Plan、决定/动作绑定和边界变化均由 Agent 停止或路由。
 
 ## 把重复操作变成项目能力
 

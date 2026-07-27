@@ -1,8 +1,8 @@
 # Agent Loop v1.2.1 全量逻辑检查报告
 
-**检查日期：** 2026-06-09  
-**检查范围：** SKILL.md、CHANGELOG.md、references/*.md（31 份）、templates/*.md（22 份 onboarding-db + 核心模板）、Usage.md、examples/、validation-scenarios.md、plugin.json  
-**检查方法：** 交叉引用验证、stage order 对齐、entry classification 映射、artifact 定义一致性、stop condition 完整性、validation scenario 覆盖度、模板与规则对照  
+**检查日期：** 2026-06-09
+**检查范围：** SKILL.md、CHANGELOG.md、references/*.md（31 份）、templates/*.md（22 份 onboarding-db + 核心模板）、Usage.md、examples/、validation-scenarios.md、plugin.json
+**检查方法：** 交叉引用验证、stage order 对齐、entry classification 映射、artifact 定义一致性、stop condition 完整性、validation scenario 覆盖度、模板与规则对照
 **检查人：** Kimi Code CLI
 
 ---
@@ -21,7 +21,7 @@
 
 ### 1. design.md Main Flow 遗漏 4 个关键阶段
 
-**位置：** `references/design.md` 第 207–235 行（Main Flow）  
+**位置：** `references/design.md` 第 207–235 行（Main Flow）
 **现象：**
 
 `runtime.md` Stage Order（第 102–134 行）和 `stage-guides.md` 均包含以下阶段，但 `design.md` 的 Main Flow 中**完全缺失**：
@@ -76,7 +76,7 @@ Project Entry
 
 ### 2. design.md Entry Scenarios 仅覆盖 50% 的 Runtime Entry States
 
-**位置：** `references/design.md` 第 104–205 行（Entry Scenarios）vs `references/runtime.md` 第 21–36 行（Entry Classification）  
+**位置：** `references/design.md` 第 104–205 行（Entry Scenarios）vs `references/runtime.md` 第 21–36 行（Entry Classification）
 **现象：**
 
 `runtime.md` 定义了 10 个 entry states：
@@ -138,7 +138,7 @@ Action: Ask human or diagnose.
 
 ### 3. validation-scenarios.md 缺少 "Analyze Consistency" 独立验证场景
 
-**位置：** `references/validation-scenarios.md`  
+**位置：** `references/validation-scenarios.md`
 **现象：** `stage-guides.md` 明确定义了 "Analyze Consistency" 阶段（Plan Gate 之后、Subagent/Execute 之前），要求检查 "each accepted requirement has task coverage", "each task maps to spec", "tests cover acceptance", "plan scope matches selected task"。但 validation scenarios 中没有对应的独立压测场景。
 
 **影响：** Agent 在实战中可能跳过 Analyze Consistency，或在 Feature Auto-Loop 中从 Plan Gate 直接进入 Execute 而不做一致性检查。
@@ -204,7 +204,7 @@ Expected: Agent 先运行 Analyze Consistency（检查 spec→tasks→tests→pl
 
 ### 6. examples/ai-meeting-minutes-backend/ 缺少 onboarding-db 参考实现
 
-**位置：** `examples/ai-meeting-minutes-backend/`  
+**位置：** `examples/ai-meeting-minutes-backend/`
 **现象：** 该目录下仅有 `README.md`，没有展示 Expanded onboarding-db 在多模块、多流程、async、部署拓扑下的实际产出。
 
 **影响：** 这不是逻辑错误，但导致 Agent 和人类缺少"复杂项目 onboarding-db 应该长什么样"的标杆。v1.2.1 规则要求 Deep Scan 产出大量图解和 Walkthrough，但没有示例可供对标。
@@ -217,7 +217,7 @@ Expected: Agent 先运行 Analyze Consistency（检查 spec→tasks→tests→pl
 
 ### 7. SKILL.md Required Runtime Behavior 编号使用 #17/#17a 和 #21/#21a
 
-**位置：** `SKILL.md` 第 110–129 行  
+**位置：** `SKILL.md` 第 110–129 行
 **现象：** 正常编号到 #17 后，用 #17a 表示 onboarding-diagnostics，#17a 后又回到 #18；#21 后使用 #21a 表示 onboarding-db + recovery-and-backfill。
 
 **评估：** 这种编号方式在 Markdown 中常见，用于规则扩展，**不构成逻辑错误**。但如果未来有自动化解析工具扫描 SKILL.md，可能需要处理非数字编号。
@@ -226,7 +226,7 @@ Expected: Agent 先运行 Analyze Consistency（检查 spec→tasks→tests→pl
 
 ### 8. templates/root-AGENTS.md 的 `section:architecture` 为占位符说明
 
-**位置：** `templates/root-AGENTS.md` 第 97–101 行  
+**位置：** `templates/root-AGENTS.md` 第 97–101 行
 **现象：** `section:architecture` 的内容是 "Add only startup-critical architecture boundaries... Keep details in ARCHITECTURE.md..."，这是指导性文字而非实际内容。
 
 **评估：** 这是模板设计，让项目初始化时知道该填什么。**不构成错误。**
@@ -235,7 +235,7 @@ Expected: Agent 先运行 Analyze Consistency（检查 spec→tasks→tests→pl
 
 ### 9. plugin.json 的 description 与 SKILL.md 的 description 字段语义不同
 
-**位置：** `plugin.json` 第 4 行 vs `SKILL.md` frontmatter 第 3 行  
+**位置：** `plugin.json` 第 4 行 vs `SKILL.md` frontmatter 第 3 行
 **现象：**
 - `plugin.json`: "Agent-guided single-human development loop..."
 - `SKILL.md`: "Use when starting, continuing, resuming..."

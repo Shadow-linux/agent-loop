@@ -5,21 +5,29 @@ Updated: YYYY-MM-DD
 Status: active | blocked | paused | closed
 Implementation Readiness: preparing | review-ready | accepted
 Gate 1 Decision: pending | accepted | revise | pause
-Gate 1 Spec Digest: pending | sha256:<digest>
 Gate 2 Decision: pending | package-only | approve-and-start | revise | pause
 Gate 2 Package Files: pending | <comma-separated Feature-relative paths>
-Gate 2 Package Digest: pending | sha256:<digest>
-Gate 2 Stable Files: pending | <comma-separated Feature-relative paths excluding rotatable plan.md>
-Gate 2 Stable Digest: pending | sha256:<digest>
 Gate 2 Agent-ready Tasks: pending | <comma-separated task IDs>
+Gate 2 Accepted Stories: pending | <comma-separated Story IDs>
 Active Plan Scope: pending | <accepted task/story ID>
 Gate 2 Plan Evidence: pending | plan.md | plans/<detail>.md | no-plan:<accepted task ID>
+No-Plan Decision: none | <accepted task ID>
 Feature Auto-Loop: disabled | enabled
 Gate 2 Reviewed At: pending | <ISO-8601>
+Later Start Decision: none | approved
+Later Start Authorized At: none | <ISO-8601>
+Later Start Evidence: none | <Human instruction evidence>
 
 `preparing` means Gate 1 accepted and package preparation is active. `review-ready` means package completeness and Analyze Consistency passed and Gate 2 is pending. `accepted` means Gate 2 accepted the package; execution still depends on the recorded Gate 2 choice. This field is not Feature lifecycle or Git/external/submit/close authorization.
 
-The Gate 1 digest freezes the accepted Spec. Gate 2 Package Files/Digest include every current artifact under triggered `tasks/`, `tests/`, `plans/`, and `contracts/` directories and freeze package-only start evidence. Stable Files/Digest exclude rotatable `plan.md` and `plans/*`, while protecting definition/tasks/tests/context/contracts during Feature Auto-Loop. Plan Evidence binds the active scope to the compact Plan, one detailed Plan, or an explicit No-Plan Decision. `package-only` requires Auto-Loop `disabled`; `approve-and-start` requires `enabled`.
+The Gate records preserve review evidence, and AI owns their completeness and meaning: reliable Human provenance, complete Package Files coverage, Gate/action pairing, timestamps, Goal/Scope/Acceptance, Story/Task, Plan/No-Plan, risk, verification, rollback, and boundary drift. After the Human Gate 2 choice, only the two approval choices record accepted readiness plus the matching Gate 2 decision/Auto-Loop/time fields. `Revise package` returns readiness to `preparing`; `Pause` does not mark readiness accepted. The Gate 2 decision/Auto-Loop/time fields are the original durable review baseline, not the live execution-mode pointer. A package-only later start preserves those values, records the three Later Start fields from reliable Human evidence after current package/boundary checks, and sets current project `Gate Mode`; it does not create or repeat Gate 2. Pause clears project `Gate Mode` without rewriting accepted baseline or later-start evidence; Resume requires a newly confirmed applicable mode. Feature Gate acceptance and continuation require no local digest or Feature review Checker.
+
+## Gate Drift Assessments
+
+| Feature ID | Gate | Classification | Changed Areas | Evidence | Reason | Assessed At |
+|---|---|---|---|---|---|---|
+
+Add a row only after AI Semantic Review. `Classification` is `within-approved-boundary | feature-definition-change | implementation-boundary-change | unresolved`. Bind every row to this Feature directory name, Gate, concrete changed areas, direct evidence, reason, and a timezone-aware ISO-8601 time. Product or execution-boundary changes still return to their owning Human Gate; unresolved meaning asks one blocking Human question.
 
 ## Human Decisions
 

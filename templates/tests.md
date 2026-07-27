@@ -4,6 +4,8 @@ Created: YYYY-MM-DD
 Updated: YYYY-MM-DD
 Status: active
 
+AI reviews current top-level `Updated` / `Status`, Design Slice matrix `Status`, and Bug matrix `Result` / `Evidence Link` values directly and owns test semantics.
+
 ## Requirement Checklist
 
 - [ ] Requirements are testable and unambiguous.

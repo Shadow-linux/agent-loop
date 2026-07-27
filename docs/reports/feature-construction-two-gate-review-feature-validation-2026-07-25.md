@@ -1,11 +1,11 @@
 # Feature Construction Two-Gate Review 单功能验证报告
 
-**日期：** 2026-07-25  
-**分支：** `v1.5.1`  
-**版本：** `1.5.1` pre-release  
-**基线 HEAD：** `28efa8cd42f7`  
-**审计对象：** Feature 构造“两次有意义的确认”  
-**结论：** `100/100 — STRONG`  
+**日期：** 2026-07-25
+**分支：** `v1.5.1`
+**版本：** `1.5.1` pre-release
+**基线 HEAD：** `28efa8cd42f7`
+**审计对象：** Feature 构造“两次有意义的确认”
+**结论：** `100/100 — STRONG`
 **Severity：** Critical 0 / High 0 / Medium 0 / Low 0
 
 ## 1. Scope Lock

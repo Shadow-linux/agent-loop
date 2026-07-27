@@ -1,6 +1,6 @@
 # Agent Loop
 
-**Current version:** 1.5.1
+**Current version:** 1.5.2 (stable)
 
 Agent Loop is a reusable controller skill for single-human, CLI-agent software development. It lets the Agent own project diagnosis, workflow sequencing, implementation, verification, and memory maintenance while the human keeps control of goals, product meaning, consequential decisions, and external actions.
 
@@ -92,7 +92,9 @@ Feature delivery includes:
 - Feature Auto-Loop and Task Auto-Run for uninterrupted Agent-ready work
 - approved subagent execution and complex artifact modes when scale requires them
 
-Feature construction uses **two meaningful reviews** instead of interrupting the human after every internal quality stage. Feature Definition Review confirms what will be built. The Agent then writes and self-reviews tasks, tests, E2E evidence, code context, Plan, verification, risk, and rollback without changing target code. Implementation Readiness Review accepts that complete package and either stops at accepted documents or starts Agent-ready implementation. The decisions and package baseline are recorded so a later session can prove what was accepted; a multi-task Feature may advance between already accepted tasks without asking again, but package drift returns to review. Delivery Contract, subagent, Git, external, submit, close, and release actions remain separately gated.
+Feature construction uses **two meaningful reviews** instead of interrupting the human after every internal quality stage. Feature Definition Review confirms Goal, Scope, Acceptance, and Explicit Exclusions. The Agent then writes and self-reviews tasks, tests, E2E evidence, code context, Plan, verification, risk, and rollback without changing target code. Implementation Readiness Review confirms the Execution Boundary, Verification, Risk/Rollback, and whether to start. The Agent directly owns Human intent, complete Package Files, Gate/action/time consistency, and all Task/Plan/product semantics; Feature Gate acceptance and continuation do not depend on a local digest or Feature review Checker. New Agent-ready Task IDs inside the same accepted Story/Product Slice/Acceptance do not require another Human Gate—even when every initial Task ID is replaced—but new execution boundaries do. Delivery Contract, Human-gated tasks, subagent, Git, external, submit, close, and release actions remain separately gated.
+
+For a later start after package-only acceptance, the Agent re-reads the recorded package files and current Feature artifacts, compares them with the accepted boundary, checks the Human instruction and stop conditions, preserves the original Gate 2 baseline, and records a separate start transition plus current execution mode. If Human decision evidence is unavailable after context loss, the Agent asks once.
 
 ### Verify, review, and close
 
@@ -189,14 +191,14 @@ Use this route when `npx` is unavailable or the environment must install from a 
 ```bash
 # Public GitHub
 git clone \
-  --branch stable-v1.5.1 \
+  --branch stable-v1.5.2 \
   --depth 1 \
   https://github.com/Shadow-linux/agent-loop.git \
   ~/.local/share/agent-loop-source
 
 # Private Git mirror
 git clone \
-  --branch stable-v1.5.1 \
+  --branch stable-v1.5.2 \
   --depth 1 \
   <git-mirror-url> \
   ~/.local/share/agent-loop-source
@@ -228,7 +230,7 @@ For a later clone-based upgrade, fetch tags, check out the new stable tag explic
 
 ```bash
 git -C ~/.local/share/agent-loop-source fetch --tags origin
-git -C ~/.local/share/agent-loop-source checkout --detach stable-v1.5.1
+git -C ~/.local/share/agent-loop-source checkout --detach stable-v1.5.2
 ```
 
 `~/.agents/skills/agent-loop` is the preferred shared location. If an Agent runtime does not discover it, synchronize the same verified source into that runtime's configured Skill directory rather than maintaining divergent copies.

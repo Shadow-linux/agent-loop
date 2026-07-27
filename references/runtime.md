@@ -393,10 +393,14 @@ preserve canonical command/output/path/digest
 -> exact target run
 -> canonical failure plus temporary result
 -> separate Human substitute decision for one named Gate
+-> optional sanitized Issue Draft
+-> independent Issue Reporting Human Gate before GitHub creation
 -> expiry and formal source repair follow-up
 ```
 
 Read-only reproduction, reduction, and authority comparison may proceed before asking. The Agent must not rewrite a valid artifact to satisfy a known-wrong checker, silently modify an installed/global Skill, add a general bypass, or present temporary evidence as a canonical pass.
+
+Preparing a sanitized upstream Issue Draft is read-only. Public GitHub Issue creation is an external mutation with its own review of exact repository, title, body, redactions, labels/method, and effect. If authenticated capability is absent, return the draft and blocker; do not install tools or disclose credentials. Issue authorization, repair authorization, one-Gate substitute evidence, Git, installation, synchronization, and release remain independent.
 
 The Human may accept a fresh temporary result as substitute verification for one exact Gate only when the defect proof, source digests, RED/GREEN, negative controls, target command, expiry, rollback, and residual canonical failure are visible. Record:
 
@@ -596,6 +600,8 @@ Submit / Integrate
 Pause / Close
 ```
 
+Feature Spec enters Brainstorm / Clarify only when concrete feature-local scope, acceptance, or implementation-boundary uncertainty remains after loading the accepted Product Slice and applicable ADRs. If the Product Slice, assigned ADR Design Slices, scope, exclusions, and measurable acceptance are already clear, classify the method response-locally as `brainstorm-not-needed` and proceed directly to Feature Spec. This label is not a lifecycle status or artifact field. Helper availability alone never triggers the method. Brainstorming may compare or clarify Feature-local alternatives, but it cannot reopen Requirement product meaning, rewrite an accepted ADR, or add scope; product ambiguity returns to Requirements Discussion and ADR incompatibility returns to Decision & Design Human Review.
+
 ## Stage Entry And Exit
 
 Each stage must define:
@@ -638,7 +644,19 @@ Implementation Readiness: preparing | review-ready | accepted
 
 The state is not Feature lifecycle or authorization for Git, external mutation, submit, release, or close.
 
-Feature `notes.md` must also persist the Gate decisions and comparison baseline: `Gate 1 Decision` / `Gate 1 Spec Digest`; `Gate 2 Decision` / `Gate 2 Reviewed At`; `Gate 2 Package Files` / `Gate 2 Package Digest`; `Gate 2 Stable Files` / `Gate 2 Stable Digest`; `Gate 2 Agent-ready Tasks`; `Active Plan Scope`; `Gate 2 Plan Evidence`; and `Feature Auto-Loop` enabled/disabled. Package Digest covers the complete reviewed package, including every current artifact under triggered `tasks/`, `tests/`, `plans/`, and `contracts/` directories and the initial `plan.md` when Plan Gate requires one. Stable Digest covers `spec.md`, `tasks.md`, `tests.md`, optional `context.md`, contracts, task/test details, and every other non-rotatable reviewed package file, but excludes rotatable `plan.md` and `plans/*`. Plan Evidence is `plan.md`, `plans/<detail>.md`, or `no-plan:<accepted task ID>` and must match Active Plan Scope. Use `scripts/check-feature-review.py` to fail closed on incomplete inventory, missing evidence, digest drift, invalid decision/Auto-Loop pairing, non-Agent-ready task claims, or Plan scope outside the accepted task set.
+Feature `notes.md` must persist the Gate decisions and review baseline: `Gate 1 Decision`; `Gate 2 Decision` / `Gate 2 Reviewed At`; `Gate 2 Package Files`; `Gate 2 Agent-ready Tasks`; `Gate 2 Accepted Stories`; `Active Plan Scope`; `Gate 2 Plan Evidence`; `No-Plan Decision`; the Gate 2 `Feature Auto-Loop` decision value enabled/disabled; `Later Start Decision` / `Later Start Authorized At` / `Later Start Evidence`; and, when later evidence is assessed, a row under `## Gate Drift Assessments`. The Agent owns every field's completeness, meaning, timing, and consistency. Current top-level fields are authoritative; fenced examples and later history sections never supply current Gate evidence. The Gate 2 decision/Auto-Loop/time fields are the original durable review baseline, not the live execution-mode pointer. A package-only later start records the separate Later Start transition while preserving the original Gate 2 review baseline. Pause clears the current project `Gate Mode` and records the transition without rewriting either accepted baseline or later-start evidence; Resume requires a newly confirmed applicable mode.
+
+Existing Feature notes without Later Start fields remain reader-compatible. Their absence means no recorded later-start transition and never authorizes execution; it does not invalidate a truthful historical Gate 2 approve-and-start record. Add the three fields only when the Agent next performs an authorized Gate evidence refresh or records a valid package-only later start. Never infer or backfill Human approval from history, urgency, or current mode.
+
+The Agent verifies the complete implementation package directly from current Feature artifacts. `Gate 2 Package Files` must inventory `spec.md`, `tasks.md`, `tests.md`, `plan.md` when present, optional `context.md` / `contracts.md`, and every current file under triggered `tasks/`, `tests/`, `plans/`, and `contracts/` directories. The Agent also verifies Story/Task/Plan bindings, required roots, risk, rollback, verification, placeholders, and consistency before presenting Gate 2. This review is semantic and evidence-backed; no digest or local Feature Gate Checker is part of the authorization path.
+
+Human authorization provenance is an Agent responsibility. At Gate 2, the Agent records `accepted`, the exact Gate 2 decision, matching Gate 2 Auto-Loop state, and a timezone-aware review time only after the corresponding Human choice is present in the current reliable conversation or preserved Human decision evidence. A later-start transition separately records its decision, authorization time, and Human instruction evidence. After context loss or when decision provenance is genuinely uncertain, the Agent asks one blocking Human confirmation instead of manufacturing evidence.
+
+AI must read current Task rows and current Plan evidence rather than letting history sections override `Mode`, Story coverage, `Derived From`, or `No-Plan Decision`. AI checks package completeness, Gate/action pairing, readiness, timestamp, Goal/Scope/Acceptance, accepted Story/Product Slice boundaries, Task/Plan/No-Plan bindings, risk, rollback, verification, and boundary drift. These remain Agent-owned workflow judgments and are not delegated to a local script.
+
+For a No-Plan route, AI must still bind `Gate 2 Plan Evidence: no-plan:<task ID>` and top-level `No-Plan Decision: <task ID>` to the same current Task, and require that Task row/detail to record `No-Plan Decision: accepted`.
+
+When reviewed Feature artifacts change after Gate 2, compare the concrete delta with the accepted Goal/Scope/Acceptance and execution boundary. Record `within-approved-boundary | feature-definition-change | implementation-boundary-change | unresolved`, changed areas, reason, evidence, and timezone-aware assessment time in the Agent-owned assessment log. A current `within-approved-boundary` assessment may continue without repeating Gate 2; a product-definition change returns to Gate 1, an implementation-boundary change returns to Gate 2, and unresolved meaning asks one blocking Human question. Do not invent Human decisions or semantic mappings.
 
 Gate 2 choices are:
 
@@ -649,11 +667,11 @@ Revise package
 Pause
 ```
 
-`Approve package only` records accepted readiness and does not execute. `Approve package and start implementation` accepts the package and enables Feature Auto-Loop for the disclosed Agent-ready work without a third generic Feature Auto-Loop prompt.
+Only the two approval choices set `Implementation Readiness: accepted`. `Approve package only` records accepted readiness and does not execute. `Approve package and start implementation` accepts the package and enables Feature Auto-Loop for the disclosed Agent-ready work without a third generic Feature Auto-Loop prompt. `Revise package` returns readiness to `preparing`; `Pause` does not mark readiness accepted and records the separate Pause state while preserving the last truthful readiness value.
 
-If the human later explicitly says to start implementation after package-only acceptance, first require Feature Context `CURRENT`, confirm the accepted spec/tasks/tests/Plan package is unchanged, and confirm no new stop condition or Human-gated item exists. When all three hold, that explicit instruction enables Feature Auto-Loop without repeating the full Gate 2 review. Any definition drift returns to Gate 1; any material package drift returns to Gate 2.
+If the human later explicitly says to start implementation after package-only acceptance, first require Feature Context `CURRENT`, re-read the recorded package files and current Feature artifacts, compare their meaning with the accepted execution boundary, and confirm no new stop condition or Human-gated item exists. When the package is unchanged or AI records the current delta as `within-approved-boundary`, that explicit instruction enables Feature Auto-Loop without repeating the full Gate 2 review. A `feature-definition-change` returns to Gate 1; an `implementation-boundary-change` returns to Gate 2; `unresolved` asks one blocking Human question. No local script result is required to continue.
 
-Run `python3 <skill-root>/scripts/check-feature-review.py --mode start <feature-dir>` for that later start, then record Gate 2 Decision `approve-and-start`, Feature Auto-Loop `enabled`, and the new authorization time. On Windows use `py -3`.
+After the human explicitly says start and those Agent-owned checks pass, atomically record `Later Start Decision: approved`, `Later Start Authorized At: <ISO-8601>`, and `Later Start Evidence: <Human instruction evidence>`, then set the current project `Gate Mode` to Feature Auto-Loop before target implementation. Preserve `Gate 2 Decision: package-only`, the Gate 2 `Feature Auto-Loop: disabled` review value, and `Gate 2 Reviewed At` as the original Gate 2 review baseline. No local command issues or repairs Human authorization.
 
 Available control modes:
 
@@ -661,7 +679,7 @@ Available control modes:
 |---|---|---|---|
 | Normal two-gate construction | one current Feature definition/package | explicit implementation request, then Gate 1 | write the complete implementation-package artifacts without modifying target implementation |
 | Strict Mode | one stage at a time | human explicitly requests stage-by-stage control, or controller fallback forces it | nothing beyond the confirmed stage |
-| Feature Auto-Loop | current accepted Feature package | Gate 2 selects `Approve package and start implementation` | execute and advance Agent-ready tasks for the feature |
+| Feature Auto-Loop | current accepted Feature package | Gate 2 selects `Approve package and start implementation`, or a valid separate later-start transition follows package-only acceptance | execute and advance Agent-ready tasks for the feature |
 | Task Auto-Run | one task or one story | after the task/story plan is accepted and human explicitly enables it | run Analyze Consistency, then complete that task/story through TDD, verification, review, drift, Task Done Gate, and task status update |
 
 Feature Auto-Loop means:
@@ -672,7 +690,7 @@ Feature Auto-Loop = give one feature a bounded release lane.
 
 In this mode, the agent may continue through Analyze Consistency, Execute Agent-ready Tasks, Verify, Review, Drift Check, and Project Memory Update for the current accepted package. It must not skip Plan Gate before execution. It must stop before Bug Resolution Path decisions, Bug close/reopen, Feature creation/reopen, Requirement creation/lifecycle reconciliation, Feature Monthly Archive or rehydrate and their Batch Human Gates, branch creation, switching, deletion, push, or tag, creating or materially updating a project-local skill, executing a project-local skill without a current invocation grant, Delivery Contract creation and acceptance not separately named in Gate 2, breaking contract changes, subagent dispatch, external mutation, Submit / Integrate, commit, push, PR, merge, tag, release, publish, and Pause / Close.
 
-For multiple accepted Agent-ready tasks, Feature Auto-Loop may rotate `plan.md` and Active Plan Scope to the next Gate 2 task or story without repeating Gate 2 only when Stable Digest still matches, task/test boundaries and ordering are unchanged, the new task/story Plan passes Plan Gate and Analyze Consistency, and interfaces/risk/rollback/verification obligations remain within the reviewed package. A task Plan ID must be one accepted Agent-ready task. A story Plan must explicitly list only accepted Agent-ready Tasks in `Included Tasks`, and each included Task must map to that Story in `tasks.md`. Run `python3 <skill-root>/scripts/check-feature-review.py --mode execute <feature-dir>` before execution; on Windows use `py -3`. A new task ID, an unaccepted or story-mismatched task inside a story Plan, stable-file drift, changed boundary/order, or material risk/interface/rollback/verification change returns to Gate 2.
+For multiple Agent-ready tasks, Feature Auto-Loop may rotate `plan.md` and Active Plan Scope without repeating Gate 2 when the Agent confirms the current task/story Plan passes Plan Gate and Analyze Consistency and interfaces/risk/rollback/verification obligations remain inside the accepted execution boundary. `Gate 2 Agent-ready Tasks` is the initial reviewed decomposition, not an immutable whitelist, while `Gate 2 Accepted Stories` is the durable semantic snapshot derived at Gate 2 and is not rebuilt from current Task rows. A new Task ID does not by itself repeat Gate 2. A new Agent-ready Task may execute only when the Agent verifies that it exists in `tasks.md`, maps to the accepted Story/Product Slice/Acceptance, any `Derived From` value is valid trace rather than substitute authorization, and the current delta is `within-approved-boundary`. A new Story/Product Slice/Acceptance, Human-gated Task, missing Task identity, story mismatch, changed interface/risk/rollback/verification boundary, or classified implementation-boundary change returns to Gate 2.
 
 Task Auto-Run means:
 

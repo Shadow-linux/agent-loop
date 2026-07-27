@@ -14,7 +14,7 @@ If Superpowers is available, prefer these helpers:
 | Brainstorm / Clarify | `superpowers:brainstorming` |
 | Project Skill Creation / Update | `superpowers:writing-skills` / `writing-skills`; also `skill-creator` when available |
 | Legacy Product Brief compatibility | no writer helper; reader-only compatibility |
-| Feature Spec | `superpowers:brainstorming` plus spec helpers when available |
+| Feature Spec with real feature-local uncertainty | `superpowers:brainstorming` plus spec helpers when available; otherwise use a spec helper or direct Feature Spec guidance without brainstorming |
 | Plan Gate / Plan If Needed | `superpowers:writing-plans` |
 | Execute Task / Story | `superpowers:test-driven-development` |
 | Diagnose Failure | `superpowers:systematic-debugging` |
@@ -168,7 +168,7 @@ Use Superpowers when available for these stages, while applying the path and gat
 | Brainstorm / Clarify if Needed | `superpowers:brainstorming` | context exploration, one-question-at-a-time, options, design approval | write to the owning stage artifact; do not write `docs/superpowers/specs/`; do not auto-transition to `writing-plans` |
 | Project Skill Creation / Update | `superpowers:writing-skills` / `writing-skills`, plus `skill-creator` when available | RED/GREEN/REFACTOR, pressure testing, concise skill authoring, scaffolding, metadata generation, structural validation | Gate 1 before files; write only to `.agent-loop/skills/<skill-name>/`; activation only after validation; Execution Gate for every invocation |
 | Legacy Product Brief compatibility | no writer helper | historical product intent from an existing Feature artifact | read only; route semantic conflict to Requirements Discussion / Recovery |
-| Feature Spec | brainstorming/spec methods | ambiguity removal, scope check, acceptance thinking | write to `spec.md`; use agent-loop Human Review Summary |
+| Feature Spec with real feature-local uncertainty | brainstorming/spec methods | clarify unresolved local scope, acceptance, or implementation-boundary alternatives | write only accepted Feature-local clarification to `spec.md`; never redefine Product Slice or accepted ADR meaning |
 | Plan Gate / Plan If Needed | `superpowers:writing-plans` | decide plan vs recorded No-Plan Decision; construction-grade plan, exact paths, test code, commands, expected outputs, no placeholders, self-review | write to `plan.md` or `plans/*`, or record No-Plan Decision only for trivial tasks; preserve Branch Context Evidence and never let plan approval authorize Git actions; do not write `docs/superpowers/plans/`; execution mode remains agent-loop controlled |
 | Execute Task / Story | `superpowers:test-driven-development` | RED, verify RED, GREEN, verify GREEN, refactor | task status still controlled by Task Done Gate; evidence to `notes.md` |
 | Diagnose Failure | `superpowers:systematic-debugging` | reproduce, isolate, trace root cause before fixing | findings to `notes.md`; return to Execute / Verify / Review |
@@ -184,6 +184,8 @@ Use Superpowers when available for these stages, while applying the path and gat
 When `Brainstorm / Clarify if Needed` starts and Superpowers is available:
 
 Requirements Discussion drafts the Requirement `product.md`; after Product Human Review plus Requirement Record / Archive, the Requirement README records only the effective pointer, lifecycle, Delivery Phase, Feature Mapping, and decision-link summaries. Feature Spec writes Product Slice to `spec.md` and evidence to `notes.md`. Existing Feature Product Briefs remain reader-only.
+
+A clear Feature does not enter Brainstorm / Clarify, does not load brainstorming merely because Feature Spec is active, and requires no Brainstorm Stage Helper Resolution. First load the accepted Product Slice and applicable ADRs. Trigger the method only for a concrete unresolved Feature-local scope, acceptance, or implementation-boundary question. If the question would change product meaning or an accepted ADR, leave Feature Spec and route to Requirements Discussion or Decision & Design Human Review instead.
 
 1. Use `superpowers:brainstorming` as the preferred method.
 2. Inspect project context first.

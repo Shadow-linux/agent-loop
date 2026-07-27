@@ -64,7 +64,6 @@ assert_contains "references/validation-scenarios.md" "four stories inside one co
 assert_contains "references/validation-scenarios.md" "four stories that are 牵一发而动全身"
 assert_contains "references/validation-scenarios.md" "five simple stories still do not automatically recommend Complex Artifact Mode"
 
-assert_contains "references/runtime.md" "Complex Artifact Mode detail directory creation"
 assert_contains "references/runtime.md" "Complex Artifact Mode detail directories (\`tasks/\`, \`tests/\`, \`plans/\`) would be created or the feature would switch from simple to complex artifact mode"
 
 printf 'PASS: complex artifact thresholds contract is complete\n'

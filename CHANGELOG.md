@@ -1,8 +1,33 @@
 # Agent Loop Changelog
 
-## 1.5.1 — 2026-07-25
+## 1.5.2 — 2026-07-28
 
-_当前状态：预发布；尚未执行正式版全量验证。_
+_当前状态：正式稳定版；已完成 focused RED/GREEN、双 Agent 混沌测试、全量 Shell/Python、机械检查与六域语义验证。正式 tag 为 `stable-v1.5.2`；默认安装通道 `main` 的同步仍保留独立 Human Gate。_
+
+### AI 主导的轻量 Feature Gates
+- Feature Spec 只在真实的 Feature-local 范围、验收或实施边界歧义仍存在时调用 brainstorming；Product Slice、适用 ADR、范围、排除项和验收已经明确时直接继续，避免把辅助方法变成所有 Feature 的固定前置步骤。
+- 保留 Feature Definition Review 与 Implementation Readiness Review，但把人类决策摘要收敛为 Goal/Scope/Acceptance/Exclusions 与 Execution Boundary/Verification/Risk/Rollback/start choice。
+- 移除 Feature Gate 的本地 review Checker、摘要字段及 MATCH/CHANGED/INVALID 路由；Gate 接受、later-start 和多任务继续不再依赖脚本结果。
+- Gate 2 保留完整 Package Files、accepted Story 快照、初始 Task、Active Plan、No-Plan、风险、验证和回滚证据，由 Agent 直接完成语义与事实检查。
+- AI Drift Assessment 记录 Feature、Gate、分类、变化区域、直接证据、理由和时间；within-boundary 变化可继续，产品或执行边界变化仍返回对应 Human Gate。
+- Gate 2 Task IDs 改为初始审阅分解，而非永久白名单；同一已接受 Story/Product Slice/Acceptance 内的新 Agent-ready Task 经当前边界评估后可继续，新增执行边界仍回到 Human Gate。
+- Gate 2 的 `Accepted Stories`、初始 Task、Plan 与 No-Plan 记录保留为 Agent 语义证据，避免合法 Task 拆分、表格转义或历史说明触发伪 Gate 错误。
+- Human 决定来源、清单完整性、Gate/action/time、产品语义、Task/Plan 绑定和边界判断均由 Agent 负责；缺失或冲突时停止在其真实拥有者，而不是本地解析器。
+- package-only 后的 later-start 由 Agent 重新读取记录的 Package Files 和当前 Feature artifacts，核对接受边界、人类指令及停止条件，保留原 Gate 2 评审基线，并单独记录 Later Start 决定、授权时间、人类证据和当前 `Gate Mode`；上下文丢失且缺少可靠人类证据时只问一次确认。
+- Gate 1 不再要求无模板落点的 Spec SHA-256；Feature 定义接受与后续语义漂移继续由 Agent 对照当前 Goal/Scope/Acceptance/Exclusions 判断。
+- focused regression 改为按 owning Markdown section 验证 Gate 选择、later-start、独立 Contract/subagent/Git/Submit/Close/release stops，并用负向 mutation 防止其他章节的重复正确文本掩盖关键段落退化。
+- 只有 package-only 与 approve-and-start 两个选择会写入 readiness accepted；revise 返回 preparing，pause 不伪造 accepted。
+- Delivery Contract、Human-gated Task、subagent、Git、外部系统、Submit、Close 和 Release 等独立 Human Gates 保持不变。
+
+## 1.5.1 — 2026-07-27
+
+_当前状态：正式稳定版；已完成 focused、全量 Shell/Python、机械检查与六域语义验证。_
+
+### Gate 2 Stable Digest 稳定投影与 Checker Issue 上报
+- 保留原始 Package Digest，并为 Stable Digest 增加显式 `review-definition-v2`：任务完成、Review/Drift 和测试结果等白名单运行态变化不再错误阻断多任务 Feature Auto-Loop。
+- Stable Digest 继续保护任务/测试的身份、顺序、映射、依赖、Gate、验收、验证、命令、断言、风险、接口和回滚；投影解析不明确时 fail closed。
+- 新增只读 `check-feature-review.py --mode digest`，计算与 review/start/execute 使用同一实现；缺失/未知算法和 legacy 不安全迁移不会被自动接受。
+- Checker Self-Repair 可生成脱敏上游 Issue Draft；真正创建 GitHub Issue 保留独立 Human Gate，且不授权 repair、Git、安装、同步或发布。
 
 ### Feature 开发只保留两次关键确认（Feature Construction Two-Gate Review）
 - 人类先确认“做什么”；随后 Agent 自主准备任务、测试、E2E、代码上下文、实施计划、风险、验证和回滚，不再每完成一份文档就停下来询问。

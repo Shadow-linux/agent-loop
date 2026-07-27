@@ -20,7 +20,6 @@ CHECKERS = (
     "scripts/check-adr-requirement-model-trace.py",
     "scripts/check-requirement-product-definition.py",
     "scripts/check-feature-context.py",
-    "scripts/check-feature-review.py",
 )
 
 ARCHIVE_COMMANDS = (
