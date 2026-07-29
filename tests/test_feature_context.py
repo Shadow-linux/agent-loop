@@ -175,7 +175,7 @@ Implement only the cited legacy Product Slice.
         self.assertEqual(result.returncode, 0, combined_output(result))
         self.assertIn("CURRENT:", result.stdout)
 
-    def test_changed_product_digest_requires_refresh(self):
+    def test_changed_product_digest_is_advisory(self):
         def mutate(root):
             product = root / PRODUCT
             product.write_text(
@@ -184,10 +184,10 @@ Implement only the cited legacy Product Slice.
             )
 
         result = self.run_project(mutate)
-        self.assertEqual(result.returncode, 3, combined_output(result))
-        self.assertIn("REFRESH_REQUIRED:", combined_output(result))
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
 
-    def test_missing_snapshot_requires_refresh(self):
+    def test_missing_snapshot_is_advisory(self):
         def mutate(root):
             spec = root / FEATURE
             text = spec.read_text(encoding="utf-8")
@@ -196,9 +196,10 @@ Implement only the cited legacy Product Slice.
             spec.write_text(text[:start] + text[end:], encoding="utf-8")
 
         result = self.run_project(mutate)
-        self.assertEqual(result.returncode, 3, combined_output(result))
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
 
-    def test_redirected_effective_product_requires_refresh(self):
+    def test_redirected_effective_product_is_advisory(self):
         def mutate(root):
             requirement = root / README
             replacement = requirement.parent / "replacement.md"
@@ -211,9 +212,10 @@ Implement only the cited legacy Product Slice.
             )
 
         result = self.run_project(mutate)
-        self.assertEqual(result.returncode, 3, combined_output(result))
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
 
-    def test_missing_required_snapshot_field_requires_refresh(self):
+    def test_missing_required_snapshot_field_is_advisory(self):
         def mutate(root):
             spec = root / FEATURE
             spec.write_text(
@@ -227,9 +229,10 @@ Implement only the cited legacy Product Slice.
             )
 
         result = self.run_project(mutate)
-        self.assertEqual(result.returncode, 3, combined_output(result))
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
 
-    def test_unconfirmed_product_blocks(self):
+    def test_unconfirmed_product_is_reported_for_agent_review(self):
         def mutate(root):
             readme = root / README
             readme.write_text(
@@ -240,10 +243,11 @@ Implement only the cited legacy Product Slice.
             )
 
         result = self.run_project(mutate)
-        self.assertEqual(result.returncode, 1, combined_output(result))
-        self.assertIn("BLOCKED:", combined_output(result))
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
+        self.assertIn("Product Review", combined_output(result))
 
-    def test_invalid_requirement_lifecycle_blocks(self):
+    def test_incompatible_requirement_lifecycle_is_advisory(self):
         def mutate(root):
             readme = root / README
             readme.write_text(
@@ -254,9 +258,11 @@ Implement only the cited legacy Product Slice.
             )
 
         result = self.run_project(mutate)
-        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
+        self.assertIn("Requirement lifecycle", combined_output(result))
 
-    def test_unknown_product_slice_anchor_blocks(self):
+    def test_unknown_product_slice_anchor_is_advisory(self):
         def mutate(root):
             spec = root / FEATURE
             spec.write_text(
@@ -267,9 +273,10 @@ Implement only the cited legacy Product Slice.
             )
 
         result = self.run_project(mutate)
-        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
 
-    def test_unknown_product_slice_id_blocks(self):
+    def test_unknown_product_slice_id_is_advisory(self):
         def mutate(root):
             spec = root / FEATURE
             spec.write_text(
@@ -280,9 +287,10 @@ Implement only the cited legacy Product Slice.
             )
 
         result = self.run_project(mutate)
-        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
 
-    def test_review_required_adr_blocks(self):
+    def test_review_required_adr_is_reported_for_agent_review(self):
         def mutate(root):
             decision = root / DECISION
             decision.write_text(
@@ -294,9 +302,11 @@ Implement only the cited legacy Product Slice.
             )
 
         result = self.run_project(mutate)
-        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
+        self.assertIn("Upstream Compatibility", combined_output(result))
 
-    def test_changed_adr_digest_requires_refresh(self):
+    def test_changed_adr_digest_is_advisory(self):
         def mutate(root):
             decision = root / DECISION
             decision.write_text(
@@ -305,7 +315,8 @@ Implement only the cited legacy Product Slice.
             )
 
         result = self.run_project(mutate)
-        self.assertEqual(result.returncode, 3, combined_output(result))
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
 
     def test_missing_adr_blocks(self):
         def mutate(root):
@@ -342,7 +353,7 @@ Implement only the cited legacy Product Slice.
         result = self.run_project(mutate)
         self.assertEqual(result.returncode, 1, combined_output(result))
 
-    def test_invalid_verified_at_requires_refresh(self):
+    def test_invalid_verified_at_is_advisory(self):
         def mutate(root):
             spec = root / FEATURE
             spec.write_text(
@@ -354,10 +365,11 @@ Implement only the cited legacy Product Slice.
             )
 
         result = self.run_project(mutate)
-        self.assertEqual(result.returncode, 3, combined_output(result))
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
         self.assertIn("Verified At", combined_output(result))
 
-    def test_conflicting_applicable_decision_pointers_block(self):
+    def test_conflicting_cached_applicable_decision_pointers_are_advisory(self):
         def mutate(root):
             spec = root / FEATURE
             spec.write_text(
@@ -370,10 +382,11 @@ Implement only the cited legacy Product Slice.
             )
 
         result = self.run_project(mutate)
-        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
         self.assertIn("ambiguous Applicable Decisions", combined_output(result))
 
-    def test_conflicting_product_source_pointers_block(self):
+    def test_conflicting_cached_product_source_pointers_are_advisory(self):
         def mutate(root):
             spec = root / FEATURE
             spec.write_text(
@@ -388,10 +401,65 @@ Implement only the cited legacy Product Slice.
             )
 
         result = self.run_project(mutate)
-        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
         self.assertIn("ambiguous Effective Product Definition", combined_output(result))
 
-    def test_conflicting_product_profiles_block(self):
+    def test_stale_snapshot_requirement_pointer_is_advisory(self):
+        def mutate(root):
+            spec = root / FEATURE
+            text = spec.read_text(encoding="utf-8")
+            before, snapshot = text.split("## Feature Context Snapshot", 1)
+            snapshot = snapshot.replace(
+                README.as_posix(),
+                ".agent-loop/requirements/missing/README.md",
+                1,
+            )
+            spec.write_text(
+                before + "## Feature Context Snapshot" + snapshot,
+                encoding="utf-8",
+            )
+
+        result = self.run_project(mutate)
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
+        self.assertIn("ambiguous Requirement Set", combined_output(result))
+
+    def test_missing_product_requirement_source_pointer_blocks(self):
+        def mutate(root):
+            spec = root / FEATURE
+            text = spec.read_text(encoding="utf-8")
+            before, snapshot = text.split("## Feature Context Snapshot", 1)
+            before = before.replace(f"Requirement Set: {README.as_posix()}\n", "", 1)
+            spec.write_text(
+                before + "## Feature Context Snapshot" + snapshot,
+                encoding="utf-8",
+            )
+
+        result = self.run_project(mutate)
+        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertIn("BLOCKED:", combined_output(result))
+        self.assertIn("Requirement Set pointer is missing", combined_output(result))
+
+    def test_escaping_cached_product_source_pointer_is_advisory(self):
+        def mutate(root):
+            spec = root / FEATURE
+            spec.write_text(
+                spec.read_text(encoding="utf-8").replace(
+                    "Effective Product Definition: "
+                    ".agent-loop/requirements/2026-07-25-example/product.md",
+                    "Effective Product Definition: ../outside/product.md",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+
+        result = self.run_project(mutate)
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
+        self.assertIn("Effective Product Definition", combined_output(result))
+
+    def test_conflicting_cached_product_profiles_are_advisory(self):
         def mutate(root):
             spec = root / FEATURE
             spec.write_text(
@@ -404,10 +472,11 @@ Implement only the cited legacy Product Slice.
             )
 
         result = self.run_project(mutate)
-        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
         self.assertIn("ambiguous Product Definition Profile", combined_output(result))
 
-    def test_unconfirmed_product_requirement_source_evidence_blocks(self):
+    def test_unconfirmed_cached_product_review_evidence_is_advisory(self):
         def mutate(root):
             spec = root / FEATURE
             spec.write_text(
@@ -420,19 +489,61 @@ Implement only the cited legacy Product Slice.
             )
 
         result = self.run_project(mutate)
-        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
         self.assertIn("Product Review Evidence", combined_output(result))
 
-    def test_memory_root_symlink_blocks(self):
+    def test_missing_requirement_readme_blocks(self):
+        def mutate(root):
+            (root / README).unlink()
+
+        result = self.run_project(mutate)
+        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertIn("BLOCKED:", combined_output(result))
+
+    def test_multiple_effective_product_pointers_block(self):
+        def mutate(root):
+            readme = root / README
+            readme.write_text(
+                readme.read_text(encoding="utf-8")
+                + """
+
+## Effective Concept Foundation
+
+Status: accepted
+Effective Source: product.md
+""",
+                encoding="utf-8",
+            )
+
+        result = self.run_project(mutate)
+        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertIn("BLOCKED:", combined_output(result))
+        self.assertIn("multiple effective product source pointers", combined_output(result))
+
+    def test_escaping_applicable_decision_path_blocks(self):
+        def mutate(root):
+            spec = root / FEATURE
+            text = spec.read_text(encoding="utf-8").replace(
+                ".agent-loop/decisions/0001-example.md",
+                "../outside-decision.md",
+            )
+            spec.write_text(text, encoding="utf-8")
+
+        result = self.run_project(mutate)
+        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertIn("BLOCKED:", combined_output(result))
+
+    def test_internal_memory_root_alias_is_accepted(self):
         def mutate(root):
             memory_root = root / ".agent-loop"
             real_memory = root / "real-memory"
             memory_root.rename(real_memory)
-            memory_root.symlink_to(real_memory, target_is_directory=True)
+            memory_root.symlink_to("real-memory", target_is_directory=True)
 
         result = self.run_project(mutate)
-        self.assertEqual(result.returncode, 1, combined_output(result))
-        self.assertIn("memory root", combined_output(result))
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CURRENT:", combined_output(result))
 
     def test_utf8_bom_and_crlf_are_accepted(self):
         def mutate(root):

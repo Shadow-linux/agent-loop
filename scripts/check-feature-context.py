@@ -12,6 +12,7 @@ from pathlib import Path
 from checker_support import (
     CheckFailure,
     configure_utf8_stdio,
+    discover_memory_root_authority,
     optional_section,
     read_text,
     require_supported_python,
@@ -19,6 +20,7 @@ from checker_support import (
 )
 from requirement_product_support import (
     CONCEPT_ID_PATTERN,
+    EffectiveProductSource,
     MODEL_ID_PATTERN,
     ProductDefinitionError,
     normalized,
@@ -28,7 +30,7 @@ from requirement_product_support import (
 
 CURRENT = 0
 BLOCKED = 1
-REFRESH_REQUIRED = 3
+CHANGED = 0
 COMPATIBLE_REQUIREMENT_STATUS = {
     "accepted",
     "in-progress",
@@ -67,9 +69,13 @@ class ContextResult:
     def exit_code(self) -> int:
         return {
             "current": CURRENT,
-            "refresh-required": REFRESH_REQUIRED,
+            "changed": CHANGED,
             "blocked": BLOCKED,
         }[self.status]
+
+
+class AuthorityFailure(ValueError):
+    """Physical or uniqueness contradiction that prevents safe source resolution."""
 
 
 def field(text: str, name: str) -> str | None:
@@ -84,12 +90,12 @@ def project_path(project_root: Path, value: str) -> Path:
     cleaned = normalized(value).replace("\\", "/")
     candidate = Path(cleaned)
     if candidate.is_absolute():
-        raise ValueError(f"path must be project-root-relative: {value}")
+        raise AuthorityFailure(f"path must be project-root-relative: {value}")
     resolved = (project_root / candidate).resolve()
     try:
         resolved.relative_to(project_root.resolve())
     except ValueError as error:
-        raise ValueError(f"path escapes project root: {value}") from error
+        raise AuthorityFailure(f"path escapes project root: {value}") from error
     return resolved
 
 
@@ -113,57 +119,109 @@ def heading_anchors(content: str) -> set[str]:
 
 
 def memory_root_for(project_root: Path, feature_spec: Path) -> Path:
-    roots = [
-        project_root / name
-        for name in (".agent-loop", "agent-loop")
-        if (project_root / name).exists()
-    ]
-    if len(roots) != 1:
-        raise ValueError("project must contain exactly one accepted memory root")
-    memory_root_entry = roots[0]
-    if memory_root_entry.is_symlink() or not memory_root_entry.is_dir():
-        raise ValueError("accepted memory root must be one real directory")
-    memory_root = memory_root_entry.resolve()
     try:
-        feature_relative = feature_spec.resolve().relative_to(memory_root)
+        authority = discover_memory_root_authority(project_root)
+    except CheckFailure as error:
+        raise AuthorityFailure(error.detail) from error
+    if authority is None:
+        raise AuthorityFailure("project must contain exactly one accepted memory root")
+    try:
+        feature_relative = feature_spec.resolve().relative_to(authority.resolved)
     except ValueError as error:
-        raise ValueError("Feature spec is outside the accepted memory root") from error
+        raise AuthorityFailure(
+            "Feature spec is outside the accepted memory root"
+        ) from error
     if len(feature_relative.parts) < 3 or feature_relative.parts[0] != "features":
-        raise ValueError("Feature spec must be inside the memory root features directory")
-    return memory_root
+        raise AuthorityFailure(
+            "Feature spec must be inside the memory root features directory"
+        )
+    return authority.logical
 
 
 def require_within(path: Path, boundary: Path, label: str) -> None:
     try:
         path.resolve().relative_to(boundary.resolve())
     except ValueError as error:
-        raise ValueError(f"{label} escapes accepted boundary") from error
+        raise AuthorityFailure(f"{label} escapes accepted boundary") from error
 
 
 def relative_project_path(project_root: Path, path: Path) -> str:
-    return path.resolve().relative_to(project_root.resolve()).as_posix()
+    resolved = path.resolve()
+    try:
+        authority = discover_memory_root_authority(project_root)
+    except CheckFailure:
+        authority = None
+    if authority is not None:
+        try:
+            within_memory = resolved.relative_to(authority.resolved)
+        except ValueError:
+            pass
+        else:
+            return (
+                authority.logical.relative_to(project_root) / within_memory
+            ).as_posix()
+    try:
+        return path.relative_to(project_root).as_posix()
+    except ValueError:
+        return resolved.relative_to(project_root.resolve()).as_posix()
 
 
 def effective_source_path(readme_path: Path, readme_text: str) -> Path:
     new_pointer = optional_section(readme_text, "Effective Product Definition")
     legacy_pointer = optional_section(readme_text, "Effective Concept Foundation")
     if new_pointer is not None and legacy_pointer is not None:
-        raise ProductDefinitionError("multiple effective product source pointers")
+        raise AuthorityFailure("multiple effective product source pointers")
     if new_pointer is not None:
         source_value = field(new_pointer, "Source")
     elif legacy_pointer is not None:
         source_value = field(legacy_pointer, "Effective Source")
     else:
-        raise ProductDefinitionError("missing effective product source pointer")
+        raise AuthorityFailure("missing effective product source pointer")
     if not normalized(source_value):
-        raise ProductDefinitionError("effective product source pointer is missing")
+        raise AuthorityFailure("effective product source pointer is missing")
     cleaned = normalized(source_value).replace("\\", "/")
     candidate = Path(cleaned)
     if candidate.is_absolute():
-        raise ProductDefinitionError("effective product source must be Requirement-relative")
+        raise AuthorityFailure(
+            "effective product source must be Requirement-relative"
+        )
     source_path = (readme_path.parent / candidate).resolve()
     require_within(source_path, readme_path.parent, "effective product source")
     return source_path
+
+
+def best_effort_source_facts(
+    readme_path: Path,
+    source_path: Path,
+) -> tuple[EffectiveProductSource, str | None]:
+    """Read objective source facts even when strict product semantics need review."""
+
+    try:
+        return resolve_effective_product_definition(readme_path, source_path), None
+    except (CheckFailure, ProductDefinitionError) as error:
+        content = read_text(source_path)
+        readme_text = read_text(readme_path)
+        legacy = optional_section(readme_text, "Effective Concept Foundation") is not None
+        profile = None if legacy else normalized(field(content, "Product Definition Profile"))
+        review = normalized(
+            field(
+                content,
+                "Concept Foundation Status" if legacy else "Product Review",
+            )
+        )
+        return (
+            EffectiveProductSource(
+                path=source_path.resolve(),
+                content=content,
+                kind="concept-foundation" if legacy else "product-definition",
+                profile=profile or None,
+                review=review,
+                legacy=legacy,
+                concept_ids=frozenset(CONCEPT_ID_PATTERN.findall(content)),
+                model_ids=frozenset(MODEL_ID_PATTERN.findall(content)),
+            ),
+            str(error),
+        )
 
 
 def validate_references(
@@ -204,7 +262,7 @@ def decision_paths(
         path = project_path(project_root, value)
         require_within(path, decisions_root, "Applicable Decision")
         if path.suffix.lower() != ".md":
-            raise ValueError(f"Applicable Decision is not Markdown: {value}")
+            raise AuthorityFailure(f"Applicable Decision is not Markdown: {value}")
         result.append((relative_project_path(project_root, path), path))
     return result
 
@@ -243,7 +301,7 @@ def classify(
     feature_spec: Path,
 ) -> ContextResult:
     blocked_reasons: list[str] = []
-    refresh_reasons: list[str] = []
+    changed_reasons: list[str] = []
 
     try:
         require_within(feature_spec, project_root, "Feature spec")
@@ -262,7 +320,7 @@ def classify(
             ("Feature spec is missing Product Requirement Source",),
         )
     if snapshot is None:
-        refresh_reasons.append("Feature Context Snapshot is missing")
+        changed_reasons.append("Feature Context Snapshot is missing")
         snapshot_fields: dict[str, str | None] = {}
     else:
         snapshot_fields = {
@@ -271,19 +329,19 @@ def classify(
         }
         for name, value in snapshot_fields.items():
             if value is None:
-                refresh_reasons.append(f"Snapshot field is missing: {name}")
+                changed_reasons.append(f"Snapshot field is missing: {name}")
         for heading in REQUIRED_SNAPSHOT_SECTIONS:
             content = optional_section(snapshot, heading, level=3)
             if content is None or not content.strip():
-                refresh_reasons.append(f"Snapshot section is incomplete: {heading}")
+                changed_reasons.append(f"Snapshot section is incomplete: {heading}")
 
     source_requirement = normalized(field(source_section, "Requirement Set"))
     snapshot_requirement = snapshot_fields.get("Requirement Set")
     if snapshot_requirement and source_requirement:
         if snapshot_requirement.replace("\\", "/") != source_requirement.replace("\\", "/"):
-            blocked_reasons.append("Feature contains ambiguous Requirement Set pointers")
-    requirement_value = snapshot_requirement or source_requirement
-    if not requirement_value:
+            changed_reasons.append("Feature contains ambiguous Requirement Set pointers")
+    requirement_value = source_requirement
+    if not source_requirement:
         blocked_reasons.append("Requirement Set pointer is missing")
 
     readme_path: Path | None = None
@@ -295,13 +353,15 @@ def classify(
             readme_path = project_path(project_root, requirement_value)
             require_within(readme_path, memory_root / "requirements", "Requirement Set")
             if readme_path.name != "README.md":
-                raise ValueError("Requirement Set must point to README.md")
+                raise AuthorityFailure("Requirement Set must point to README.md")
             if not readme_path.is_file():
-                raise ValueError(f"Requirement README is missing: {requirement_value}")
+                raise AuthorityFailure(
+                    f"Requirement README is missing: {requirement_value}"
+                )
             readme_text = read_text(readme_path)
             actual_lifecycle = normalized(field(readme_text, "Status"))
             if actual_lifecycle not in COMPATIBLE_REQUIREMENT_STATUS:
-                raise ValueError(
+                changed_reasons.append(
                     "Requirement lifecycle is incompatible: "
                     f"{actual_lifecycle or 'missing'}"
                 )
@@ -316,16 +376,22 @@ def classify(
                 memory_root,
                 "resolved Product Definition",
             )
-            source = resolve_effective_product_definition(
+            if not resolved_source.is_file():
+                raise AuthorityFailure(
+                    f"resolved Product Definition is missing: {resolved_source}"
+                )
+            source, source_issue = best_effort_source_facts(
                 readme_path,
                 resolved_source,
             )
+            if source_issue:
+                changed_reasons.append(
+                    f"Product authority needs Agent review: {source_issue}"
+                )
         except (
-            CheckFailure,
+            AuthorityFailure,
             OSError,
-            ProductDefinitionError,
             UnicodeError,
-            ValueError,
         ) as error:
             blocked_reasons.append(str(error))
 
@@ -354,36 +420,39 @@ def classify(
                         resolved_value,
                     )
                     if source_product_path != snapshot_product_path:
-                        blocked_reasons.append(
+                        changed_reasons.append(
                             "Feature contains ambiguous "
                             "Effective Product Definition pointers"
                         )
                 if source_product_path != source.path:
-                    refresh_reasons.append(
+                    changed_reasons.append(
                         "Product Requirement Source Product Definition changed"
                     )
-            except ValueError as error:
-                blocked_reasons.append(str(error))
+            except AuthorityFailure as error:
+                changed_reasons.append(
+                    "Product Requirement Source Effective Product Definition "
+                    f"is invalid cached evidence: {error}"
+                )
         else:
-            refresh_reasons.append(
+            changed_reasons.append(
                 "Product Requirement Source Effective Product Definition is missing"
             )
 
-        expected_profile = source.profile or "legacy"
+        expected_profile = source.profile or ("legacy" if source.legacy else "unknown")
         source_profile = normalized(
             field(source_section, "Product Definition Profile")
         )
         if source_profile:
             if recorded_profile and source_profile != recorded_profile:
-                blocked_reasons.append(
+                changed_reasons.append(
                     "Feature contains ambiguous Product Definition Profile values"
                 )
             if source_profile != expected_profile:
-                refresh_reasons.append(
+                changed_reasons.append(
                     "Product Requirement Source Product Definition Profile changed"
                 )
         else:
-            refresh_reasons.append(
+            changed_reasons.append(
                 "Product Requirement Source Product Definition Profile is missing"
             )
 
@@ -392,21 +461,21 @@ def classify(
         )
         expected_review = source.review
         if not source_review_evidence:
-            refresh_reasons.append(
+            changed_reasons.append(
                 "Product Requirement Source Product Review Evidence is missing"
             )
         elif recorded_review and not re.search(
             rf"(?i)(?<![a-z]){re.escape(recorded_review)}(?![a-z])",
             source_review_evidence,
         ):
-            blocked_reasons.append(
+            changed_reasons.append(
                 "Product Requirement Source Product Review Evidence "
                 f"does not confirm {recorded_review}"
             )
 
         recorded_lifecycle = snapshot_fields.get("Requirement Lifecycle")
         if recorded_lifecycle and recorded_lifecycle != actual_lifecycle:
-            refresh_reasons.append("Requirement Lifecycle changed")
+            changed_reasons.append("Requirement Lifecycle changed")
 
         resolved_relative = relative_project_path(project_root, source.path)
         if resolved_value:
@@ -422,28 +491,30 @@ def classify(
                     memory_root,
                     "recorded Product Source",
                 )
-                if recorded_source != source.path:
-                    refresh_reasons.append("Resolved Product Source changed")
-            except ValueError as error:
-                blocked_reasons.append(str(error))
+                if recorded_source.resolve() != source.path.resolve():
+                    changed_reasons.append("Resolved Product Source changed")
+            except AuthorityFailure as error:
+                changed_reasons.append(
+                    f"recorded Product Source is invalid cached evidence: {error}"
+                )
         elif snapshot is not None:
-            refresh_reasons.append("Resolved Product Source is missing")
+            changed_reasons.append("Resolved Product Source is missing")
 
         if recorded_profile and recorded_profile != expected_profile:
-            refresh_reasons.append("Product Definition Profile changed")
+            changed_reasons.append("Product Definition Profile changed")
         if recorded_review and recorded_review != source.review:
-            refresh_reasons.append("Product Review evidence changed")
+            changed_reasons.append("Product Review evidence changed")
 
         product_digest = snapshot_fields.get("Product Source SHA-256")
         if product_digest:
             if not SHA256.fullmatch(product_digest):
-                refresh_reasons.append("Product Source SHA-256 is malformed")
+                changed_reasons.append("Product Source SHA-256 is malformed")
             elif product_digest not in compatible_text_digests(source.path):
-                refresh_reasons.append("Product Source SHA-256 changed")
+                changed_reasons.append("Product Source SHA-256 changed")
 
         verified_at = snapshot_fields.get("Verified At")
         if verified_at and not valid_verified_at(verified_at):
-            refresh_reasons.append(
+            changed_reasons.append(
                 "Verified At must be an ISO-8601 timestamp with a timezone"
             )
 
@@ -470,45 +541,52 @@ def classify(
                     or MODEL_ID_PATTERN.search(snapshot_references)
                     or re.search(r"product\.md#[a-z0-9-]+", snapshot_references)
                 ):
-                    refresh_reasons.append(
+                    changed_reasons.append(
                         "Product Slice References contains no resolvable reference"
                     )
         except (CheckFailure, ValueError) as error:
-            blocked_reasons.append(str(error))
+            changed_reasons.append(str(error))
 
         source_decisions = (
             normalized(field(source_section, "Applicable Decisions")) or "none"
         )
         raw_decisions = snapshot_fields.get("Applicable Decisions") or source_decisions
         try:
-            decisions = decision_paths(project_root, memory_root, raw_decisions)
             source_decision_paths = decision_paths(
                 project_root,
                 memory_root,
                 source_decisions,
             )
+            snapshot_decision_paths = decision_paths(
+                project_root,
+                memory_root,
+                raw_decisions,
+            )
             if snapshot_fields.get("Applicable Decisions") is not None and {
-                display_path for display_path, _ in decisions
+                display_path for display_path, _ in snapshot_decision_paths
             } != {
                 display_path for display_path, _ in source_decision_paths
             }:
-                raise ValueError(
+                changed_reasons.append(
                     "Feature contains ambiguous Applicable Decisions pointers"
                 )
+            decisions = source_decision_paths
             for display_path, decision_path in decisions:
                 if not decision_path.is_file():
-                    raise ValueError(f"Applicable Decision is missing: {display_path}")
+                    raise AuthorityFailure(
+                        f"Applicable Decision is missing: {display_path}"
+                    )
                 decision_text = read_text(decision_path)
                 status = normalized(field(decision_text, "Status"))
                 compatibility = normalized(
                     field(decision_text, "Upstream Compatibility")
                 )
                 if status != "accepted":
-                    raise ValueError(
+                    changed_reasons.append(
                         f"Applicable Decision is not accepted: {display_path}"
                     )
                 if compatibility != "current":
-                    raise ValueError(
+                    changed_reasons.append(
                         "Applicable Decision Upstream Compatibility is not current: "
                         f"{display_path}"
                     )
@@ -518,38 +596,40 @@ def classify(
                 evidence = recorded_decision_digests(raw_evidence)
                 decision_names = {display for display, _ in decisions}
                 if set(evidence) != decision_names:
-                    raise ValueError(
+                    changed_reasons.append(
                         "Decision Source SHA-256 paths differ from Applicable Decisions"
                     )
                 for display_path, decision_path in decisions:
-                    if evidence[display_path] not in compatible_text_digests(
-                        decision_path
-                    ):
-                        refresh_reasons.append(
+                    if display_path in evidence and evidence[display_path] not in compatible_text_digests(decision_path):
+                        changed_reasons.append(
                             f"Decision Source SHA-256 changed: {display_path}"
                         )
             elif snapshot is not None:
-                refresh_reasons.append("Decision Source SHA-256 is missing")
-        except (OSError, UnicodeError, ValueError) as error:
+                changed_reasons.append("Decision Source SHA-256 is missing")
+        except AuthorityFailure as error:
             blocked_reasons.append(str(error))
+        except (OSError, UnicodeError) as error:
+            blocked_reasons.append(str(error))
+        except ValueError as error:
+            changed_reasons.append(str(error))
 
         if resolved_value and resolved_value.replace("\\", "/") != resolved_relative:
-            refresh_reasons.append("recorded Product Source path is stale")
+            changed_reasons.append("recorded Product Source path is stale")
 
     recorded_freshness = snapshot_fields.get("Freshness")
     if recorded_freshness == "blocked":
-        blocked_reasons.append("Snapshot Freshness is blocked")
-    elif recorded_freshness == "refresh-required":
-        refresh_reasons.append("Snapshot Freshness requires refresh")
+        changed_reasons.append("Snapshot Freshness records legacy blocked")
+    elif recorded_freshness in {"refresh-required", "changed"}:
+        changed_reasons.append("Snapshot Freshness records changed facts")
     elif recorded_freshness not in {None, "current"}:
-        refresh_reasons.append("Snapshot Freshness value is unsupported")
+        changed_reasons.append("Snapshot Freshness value is unsupported")
 
     if blocked_reasons:
         return ContextResult("blocked", tuple(sorted(set(blocked_reasons))))
-    if refresh_reasons:
+    if changed_reasons:
         return ContextResult(
-            "refresh-required",
-            tuple(sorted(set(refresh_reasons))),
+            "changed",
+            tuple(sorted(set(changed_reasons))),
         )
     return ContextResult("current", ("authority and digests match",))
 
@@ -576,7 +656,7 @@ def main(argv: list[str] | None = None) -> int:
     result = classify(project_root, feature_spec)
     prefix = {
         "current": "CURRENT",
-        "refresh-required": "REFRESH_REQUIRED",
+        "changed": "CHANGED",
         "blocked": "BLOCKED",
     }[result.status]
     print(f"{prefix}: {'; '.join(result.reasons)}")

@@ -22,7 +22,7 @@ AGENTS.md / CLAUDE.md = agent startup guidance
 .agent-loop/memory-merges/MM-<short-sha>/README.md = explicitly authorized Full Memory Audit / Recovery; never a default empty directory
 ```
 
-Default memory root is `.agent-loop/` because it is workflow metadata, not product code. Reuse legacy `agent-loop/` only when it is the single real accepted root, and ask before migration. If both `.agent-loop/` and legacy `agent-loop/` exist, fail closed and route to Recovery.
+Default logical memory root is `.agent-loop/` because it is workflow metadata, not product code. Reuse legacy `agent-loop/` only when it is the single accepted root, and ask before migration. One verified internal alias may preserve either logical name. If both `.agent-loop/` and legacy `agent-loop/` exist, fail closed and route to Recovery. Broken/cyclic/external/file aliases also fail closed.
 
 Do not use `AGENTS.md` as a task log. Do not use `project.md` as the startup instruction file for every agent.
 
@@ -68,7 +68,7 @@ Every time `agent-loop` is used inside a target project, check root guidance bef
 - Agent Ownership: agents own the project outcome as well as the loop, inspect safely available evidence before asking, and continue through authorized scope until verified completion or a concrete Human Gate
 - Stage Helper Capability Scan: agents actively check available skills/plugins/helpers before fallback stage guidance
 - Gate Modes: normal Feature construction has Gate 1 Feature Definition Review for Goal/Scope/Acceptance/Exclusions and Gate 2 Implementation Readiness Review for Execution Boundary/Verification/Risk/Rollback/start choice; AI evaluates Package Files completeness, Gate/action/time consistency, all semantic drift and Task/Plan binding without a local Feature Gate Checker; Feature Auto-Loop starts from Gate 2 approve-and-start or a valid separate later-start transition that preserves a package-only Gate 2 baseline, and Task Auto-Run remains one accepted task/story
-- Feature Context startup invariant: before Task/Test/Plan/Execute/Resume relies on a Feature, load `spec.md`, run the Requirement/ADR freshness check, and require the Feature Context Snapshot to be current
+- Feature Context startup invariant: before Task/Test/Plan/Execute/Resume relies on a Feature, load `spec.md` and run the Requirement/ADR fact scanner; `CURRENT` permits reliance, `CHANGED` requires Agent impact assessment/refresh, and only physical authority contradictions return `BLOCKED`
 - Required Stops: all six visible classes — Semantic, Scope And Risk, Execution, Evidence, External Mutation, and Git And Lifecycle — plus explicit Auto Mode non-bypass
 - Checker Recovery Gateway: exact rerun routes a canonical Agent Loop checker failure to `references/checker-recovery.md`; isolated repair is Human-authorized and cannot be presented as canonical pass
 - Completion Rules: code changes alone are not done; fresh verification, Review, Drift Check, project-memory evidence, Feature Completion Check, and Feature Close Review remain visible
@@ -160,7 +160,7 @@ Rules:
 - Managed block maintenance rules belong here and in refresh tooling; do not require the target root `AGENTS.md` to include a separate Managed Block Rule prose section.
 - If an existing `AGENTS.md` has no managed blocks, propose adding the minimal needed managed blocks instead of replacing the whole file.
 - If a block-version is missing or older than the current template, treat that block as stale.
-- Treat bare skill-version-only block revisions such as `block-version:1.5.2` as stale because they cannot distinguish same-version template revisions.
+- Treat bare skill-version-only block revisions such as `block-version:1.5.3` as stale because they cannot distinguish same-version template revisions.
 - If a managed block exists in the current template but is missing from root AGENTS.md, treat it as a missing managed block and propose adding it.
 - If a managed block source is missing, stale, or contradictory, classify the block as stale and propose either source correction or block refresh through Human Review Summary.
 - If marker pairs are broken, duplicated, nested, or ambiguous, stop and ask before editing.
@@ -177,9 +177,9 @@ Managed block detection checklist:
 6. Check that each start marker has `section`; check `source` when the block claims to mirror a stable artifact.
 7. Parse `block-version` from each managed block when present and compare it with the matching section in the current root AGENTS template.
 8. Check whether each `source` path exists or is intentionally external/deferred before relying on it.
-9. If any check fails, classify root guidance as `stale-marker` and stop before editing `AGENTS.md`.
+9. Classify malformed, duplicate, nested, orphan, or escaping-source structure as `STRUCTURAL_INVALID / 1`. Classify missing/stale revision, missing source, unexpected section, or Agent Loop-owned body drift as `STRUCTURAL_CHANGED / 0`; the Agent reviews its impact before proposing a Human-gated refresh.
 
-If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as the first read-only managed-block drift check. The script validates section presence, marker integrity, per-section `block-version`, unexpected managed sections, and local `source` paths. Its output is evidence for the Human Review Summary; it must not be treated as approval to write. Missing or unsupported Python is a capability blocker for checker-backed evidence, not permission to fall back to the old Bash/Ruby rules.
+If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as the first read-only managed-block drift check. It returns `STRUCTURAL_CURRENT / 0`, `STRUCTURAL_CHANGED / 0`, or `STRUCTURAL_INVALID / 1`. The script checks marker structure, section/revision/source facts, and normalized bodies only for `source:agent-loop-skill` blocks; project-owned block meaning remains an Agent comparison against its source. Its output is evidence for the Human Review Summary, never approval to write or a claim that all project-owned prose is current. Missing or unsupported Python is a capability blocker for checker-backed evidence, not permission to fall back to old rules.
 
 Managed block update flow:
 
@@ -261,7 +261,7 @@ Keep it short and long-lived:
 - Feature construction normally stops at two reviews: Gate 1 confirms Goal, Scope, Acceptance, and Explicit Exclusions and authorizes package preparation; Gate 2 confirms Execution Boundary, Verification, Risk/Rollback, and start choice. AI directly evaluates Package Files completeness, Gate/action/time consistency, later boundary drift, and current Story/Task/Plan meaning; no local Feature Gate Checker or digest is required. A new Task ID inside the accepted boundary does not itself repeat Gate 2. Ask before each stage only in human-selected Strict Mode.
 - use table-first Human Review Summary for non-trivial confirmations
 - Autonomous Execution After Approval: Gate 1 preparation continues across internal quality stages without target implementation; Gate 2 approve-and-start enables Feature Auto-Loop; Task Auto-Run continues one accepted execution unit; none bypass the six Gate classes
-- before Task/Test/Plan/Execute/Resume relies on a Feature, load its Feature Context Snapshot and require the Requirement/ADR freshness check to be current; non-current context stops Auto Mode
+- before Task/Test/Plan/Execute/Resume relies on a Feature, load its Feature Context Snapshot and run the Requirement/ADR fact scanner; `CHANGED` is advisory evidence requiring Agent assessment and refresh to `CURRENT`, while physical `BLOCKED` stops Auto Mode for Recovery/source repair
 - completion and submit projection: fresh verification, Review, Drift Check, Project Memory evidence, Feature Completion Check, Feature Close Review, intended-file-only submit scope, and independent lifecycle/Git confirmations
 - stable project commands and hard constraints, only if every agent should know them immediately
 - managed block markers for `agent-loop` maintained sections, so future updates do not overwrite human-owned content

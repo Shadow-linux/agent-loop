@@ -51,26 +51,57 @@ class RootAgentsBlocksTests(unittest.TestCase):
     def assert_invalid(self, text: str, expected: str) -> None:
         result = self.check(text)
         self.assertEqual(result.returncode, 1, combined_output(result))
-        self.assertIn("FAIL root AGENTS drift found", result.stdout)
+        self.assertIn("STRUCTURAL_INVALID", result.stdout)
+        self.assertIn(expected, result.stdout)
+
+    def assert_changed(self, text: str, expected: str) -> None:
+        result = self.check(text)
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("STRUCTURAL_CHANGED", result.stdout)
         self.assertIn(expected, result.stdout)
 
     def test_current_template_passes(self) -> None:
         result = self.check(self.template_text)
         self.assertEqual(result.returncode, 0, combined_output(result))
-        self.assertIn("PASS root AGENTS managed blocks are current", result.stdout)
+        self.assertIn("STRUCTURAL_CURRENT", result.stdout)
 
-    def test_missing_required_sections_fail(self) -> None:
+    def test_agent_loop_skill_body_drift_is_reported_without_becoming_a_hard_gate(self) -> None:
+        changed = self.template_text.replace(
+            "Classify the latest human message before project-state routing:",
+            "Skip classification and start implementation immediately:",
+            1,
+        )
+        self.assertNotEqual(changed, self.template_text)
+
+        result = self.check(changed)
+
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("STRUCTURAL_CHANGED", result.stdout)
+        self.assertIn("message-intent | body-drift", result.stdout)
+        self.assertNotIn("managed blocks are current", result.stdout)
+
+    def test_missing_required_sections_report_changed(self) -> None:
         for section in ("message-intent", "workflow-stage-map"):
             with self.subTest(section=section):
-                self.assert_invalid(self.remove_section(section), f"{section} | missing")
+                self.assert_changed(self.remove_section(section), f"{section} | missing")
 
-    def test_stale_block_version_fails(self) -> None:
+    def test_stale_block_version_reports_changed(self) -> None:
         stale = self.template_text.replace(
-            "block-version:1.5.2-20260728",
+            "block-version:1.5.3-20260728.1",
             "block-version:1.4.0",
             1,
         )
-        self.assert_invalid(stale, "stale-block-version")
+        self.assert_changed(stale, "stale-block-version")
+
+    def test_project_owned_body_change_remains_agent_reviewed(self) -> None:
+        changed = self.template_text.replace(
+            "Read this file first.",
+            "Read this file and the project-specific bootstrap facts first.",
+            1,
+        )
+        result = self.check(changed)
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("STRUCTURAL_CURRENT", result.stdout)
 
     def test_broken_end_marker_fails(self) -> None:
         broken = self.template_text.replace(
@@ -84,7 +115,7 @@ class RootAgentsBlocksTests(unittest.TestCase):
         nested = (
             self.template_text[:line_end]
             + "<!-- agent-loop:managed-start section:nested "
-            + "source:.agent-loop/project.md block-version:1.5.2-20260728 -->\n"
+            + "source:.agent-loop/project.md block-version:1.5.3-20260728.1 -->\n"
             + "nested\n<!-- agent-loop:managed-end section:nested -->\n"
             + self.template_text[line_end:]
         )
@@ -94,7 +125,7 @@ class RootAgentsBlocksTests(unittest.TestCase):
         marker = "<!-- agent-loop:managed-end section:ownership -->"
         duplicate = (
             f"{marker}\n<!-- agent-loop:managed-start section:ownership "
-            "source:.agent-loop/project.md block-version:1.5.2-20260728 -->\n"
+            "source:.agent-loop/project.md block-version:1.5.3-20260728.1 -->\n"
             f"duplicate\n{marker}"
         )
         self.assert_invalid(self.template_text.replace(marker, duplicate, 1), "duplicate-section")

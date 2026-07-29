@@ -27,12 +27,12 @@ current Feature Context Snapshot
 + relevant code facts
 ```
 
-Run `scripts/check-feature-context.py` before construction planning and require `CURRENT`. Accepted product meaning, ADR landing, and code reality remain separate evidence layers; code facts cannot rewrite the Snapshot.
+Run `scripts/check-feature-context.py` before construction planning and read the prefix. `CURRENT` permits planning; `CHANGED` requires Agent impact assessment, derived repair, and a rerun to `CURRENT`; `BLOCKED` means physical authority resolution failed. Exit `0` alone is insufficient. Accepted product meaning, ADR landing, and code reality remain separate evidence layers; code facts cannot rewrite the Snapshot.
 
 - Every Task maps to a Product Slice responsibility/acceptance, accepted ADR Design Slice, or explicit technical prerequisite for a named later vertical slice.
 - Tests cover every applicable acceptance criterion, actor/permission boundary, state transition/terminal, Product Rule/invariant, exception/recovery path, and accepted ADR verification obligation.
 - Every active Plan names its Product Slice and Task, preserves applicable product/ADR invariants, identifies code facts separately, and includes exact verification for mapped acceptance.
-- `refresh-required | blocked` stops Task/Test/Plan creation, approval, and execution until semantic refresh or the owning existing Gate resolves it.
+- unresolved `CHANGED` or physical `BLOCKED` prevents Task/Test/Plan reliance; the Agent may repair fact-determined derived context without a new Gate, but semantic impact returns to the owning existing Gate.
 
 ## Two-Gate Package Preparation
 

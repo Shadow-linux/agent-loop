@@ -6,7 +6,7 @@ from datetime import date
 from pathlib import Path
 from typing import Literal, Sequence
 
-from checker_support import read_text
+from checker_support import CheckFailure, discover_memory_root_authority, read_text
 
 
 ChangeStatus = Literal["in-progress", "completed", "stopped"]
@@ -170,8 +170,11 @@ def _error(category: str, path: str, rule: str) -> LightweightChangeContractErro
 def _relative(project_root: Path, path: Path) -> str:
     try:
         return path.relative_to(project_root).as_posix()
-    except ValueError as error:
-        raise _error("layout", path.name, "path escapes project root") from error
+    except ValueError:
+        try:
+            return path.resolve().relative_to(project_root.resolve()).as_posix()
+        except ValueError as error:
+            raise _error("layout", path.name, "path escapes project root") from error
 
 
 def _real_directory(path: Path) -> bool:
@@ -194,21 +197,11 @@ def discover_memory_root(project_root: Path) -> Path | None:
         raise LightweightChangeContractError(
             "memory-root", "project root symlink is outside the requested boundary", exit_code=2
         )
-    project_root = project_root.resolve()
-    candidates = (project_root / ".agent-loop", project_root / "agent-loop")
-    present: list[Path] = []
-    for candidate in candidates:
-        if candidate.is_symlink():
-            raise _error("memory-root", candidate.name, "accepted root must not be a symlink")
-        if candidate.exists() and not candidate.is_dir():
-            raise _error("memory-root", candidate.name, "accepted root must be a directory")
-        if _real_directory(candidate):
-            present.append(candidate)
-    if len(present) == 2:
-        raise LightweightChangeContractError(
-            "memory-root", "both .agent-loop and agent-loop exist; root ownership is ambiguous"
-        )
-    return present[0] if present else None
+    try:
+        authority = discover_memory_root_authority(project_root, allow_missing=True)
+    except CheckFailure as error:
+        raise LightweightChangeContractError("memory-root", error.detail) from error
+    return authority.logical if authority is not None else None
 
 
 def _parse_date(value: str, path: str, field: str) -> date:
