@@ -1,5 +1,30 @@
 # Agent Loop Changelog
 
+## 1.5.3 — 2026-07-28
+
+_当前状态：开发中；已获准同步版本，尚未 commit、push、tag 或发布。_
+
+### 轻 Gate Authority Alias 与 Root Guidance 漂移修复
+- Feature entry symlink 现在作为 `feature-entry-symlink` 确定性事实返回，不再进入普通 Archive/Rehydrate move；Apply 会在创建 transaction 前复核 Feature container、source 与 target 的真实路径形态。
+- 单一、可解析且位于项目内的 memory-root alias 可保留 `.agent-loop/...` 或 legacy 逻辑路径，并以 `memory-root-alias` 目标证据参与 plan SHA-256；断裂、循环、外部、文件、双根与重定向漂移继续物理拒绝。
+- Windows 对有效相对 symlink 的 `resolve(strict=True)` 异常会回退到 link-target 链解析，因此内部 Markdown alias 与循环 alias 在 macOS/Windows 都产生相同的确定性事实分类。
+- Feature Archive、Feature Context 和 Lightweight Change 统一使用同一 memory-root authority 规则，避免一个 surface 接受而另一个 surface 阻断。
+- Root AGENTS checker 改为 `STRUCTURAL_CURRENT / 0`、`STRUCTURAL_CHANGED / 0`、`STRUCTURAL_INVALID / 1`；只比较 Agent Loop-owned block 正文，项目自有 block 由 Agent 对照 source 审核，写入仍走既有 Human Review。
+
+### Feature Archive Reference Scan 软 Gate
+- Scanner 不再跟随 symlink，也不因项目内兼容别名、外部/断裂/循环链接或不确定引用直接阻断计划；这些事实以确定性 `skipped_references` 行进入 plan SHA-256。
+- Agent 负责检查规范路径、引用覆盖、冲突、风险和恢复条件，并决定推荐 exact-plan Batch Human Gate 或询问一个阻塞问题；普通 finding 不触发 Checker Recovery。
+- `unsupported` 引用不再由 check/apply 作为授权拒绝条件；原始文件保持不变，Agent 与人类在最终计划中审阅其风险。
+- Apply 仍只接受人类批准的 exact plan SHA-256，保留项目边界、transaction journal、post-check、rollback、stale-plan 和 stranded transaction 保护。
+- 新增 internal/external/broken/cyclic/file symlink、advisory apply、链接重定向 stale-plan 和跨 surface 合同回归。
+
+### Feature Context Fact Scan 软 Gate
+- 保留 Feature Context Snapshot 和 Requirement/ADR 新鲜度不变量，把 checker 结果收敛为 `CURRENT / 0`、`CHANGED / 0`、`BLOCKED / 1`。
+- 摘要、缓存字段、Product Slice 引用、生命周期/Product Review 和 ADR 状态变化改为事实报告，由 Agent 判断刷新、返回既有 Gate 或询问一个阻塞问题。
+- `BLOCKED` 仅保留给缺失、双权威、路径越界、非真实 memory root、不可读 Requirement/Product/ADR 等物理权威矛盾。
+- `CHANGED` 的成功退出码不代表执行授权；Task/Test/Plan/Execute/Verify 等阶段仍需 Agent 评估并刷新到 `CURRENT` 后才能依赖上下文。
+- 新增 changed-fact 正例和物理边界负例，保留只读、CRLF/BOM 与 legacy Snapshot 兼容。
+
 ## 1.5.2 — 2026-07-28
 
 _当前状态：正式稳定版；已完成 focused RED/GREEN、双 Agent 混沌测试、全量 Shell/Python、机械检查与六域语义验证。正式 tag 为 `stable-v1.5.2`；默认安装通道 `main` 的同步仍保留独立 Human Gate。_

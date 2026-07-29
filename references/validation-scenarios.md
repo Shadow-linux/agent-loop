@@ -1291,15 +1291,15 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.5.2`, while the current root AGENTS template uses `block-version:1.5.2-20260728`.
+Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.5.3`, while the current root AGENTS template uses `block-version:1.5.3-20260728.1`.
 ```
 
 Expected:
 
 - read root `AGENTS.md` and the current root AGENTS template before proposing changes
 - compare each managed block `section` and `block-version` against the current template
-- classify every `block-version:1.5.2` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
-- propose replacing stale block revisions with the full current template revision such as `block-version:1.5.2-20260728`
+- classify every `block-version:1.5.3` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
+- propose replacing stale block revisions with the full current template revision such as `block-version:1.5.3-20260728.1`
 - copy the current template start marker metadata for each refreshed section unless `source` must point at the target project's active memory root or artifact source
 - preserve all human-owned content outside managed blocks
 - ask for human confirmation before writing
@@ -1309,7 +1309,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.5.2-20260728`.
+Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.5.3-20260728.1`.
 ```
 
 Expected:
@@ -1336,7 +1336,22 @@ Expected:
 - preserve content outside managed blocks
 - continue normal root guidance checks
 
-## 15a-5f. Root Workflow Gateway Map Routes To Detailed References
+## 15a-5f. Same Revision Body Drift Is A Soft Structural Fact
+
+Prompt:
+
+```text
+Use agent-loop. Root AGENTS.md keeps the current block-version, but the source:agent-loop-skill Message Intent body was edited to skip classification.
+```
+
+Expected:
+
+- checker returns `STRUCTURAL_CHANGED / 0` with `body-drift`, not a false current result and not an authorization failure
+- Agent reviews the exact body diff and presents any refresh through the existing root-guidance Human Review
+- project-owned block prose is not declared semantically current by template-body comparison; the Agent compares it to its declared project source
+- malformed/duplicate/nested markers or an escaping source remain `STRUCTURAL_INVALID / 1`
+
+## 15a-5g. Root Workflow Gateway Map Routes To Detailed References
 
 Prompt:
 
@@ -3292,7 +3307,37 @@ Expected: allow read-only discussion only; do not scan/apply, write `features/ar
 
 Prompt: the reference scanner finds an ambiguous old path encoding that cannot be updated deterministically.
 
-Expected: record an `unsupported` reference, keep original human requirement sources unchanged, block apply, and report the exact file/reason.
+Expected: record an `unsupported` reference, keep original human requirement sources unchanged, and let the Agent inspect coverage and explain the exact file/reason. The finding alone does not block check/apply or authorize it; the human may approve only the final exact plan after the Agent recommends continue.
+
+### K. Internal Compatibility Alias
+
+Prompt: `.claude` is a project-local symlink to `.agents`, whose real Markdown files contain an old Feature path.
+
+Expected: do not traverse `.claude`; record a project-relative `reference-scan-symlink` finding, scan `.agents` through its ordinary canonical path exactly once, include the finding in the plan hash, and let the Agent judge coverage before offering the Batch Human Gate.
+
+### L. External, Broken, Or Cyclic Alias
+
+Prompt: the project contains external, broken, and cyclic symlinks during Archive scan.
+
+Expected: emit deterministic advisory findings without exposing an external absolute target or following any link. The Agent reports residual coverage risk and either recommends the existing exact-plan Gate or asks one blocking question; ordinary findings do not trigger Checker Recovery.
+
+### M. Advisory Drift And Executor Boundary
+
+Prompt: after review, a symlink target changes; another attempt tries to add an out-of-project reference edit to the approved plan.
+
+Expected: the changed finding invalidates the old plan SHA-256 before mutation. The executor rejects any out-of-plan or out-of-project write, retains journal/rollback, and never treats soft reference review as permission to widen the exact plan.
+
+### N. Feature Entry Is An Internal Symlink
+
+Prompt: an archived or flat Feature path is itself a symlink to another directory inside the project.
+
+Expected: scan exits successfully, reports `feature-entry-symlink` with project-relative target evidence, and does not generate an ordinary move. The Agent decides whether to normalize or stop; it does not invoke Checker Recovery. If a reviewed real source later becomes a symlink, Apply returns `stale-plan` before transaction creation or any move.
+
+### O. Verified Internal Memory Root Alias
+
+Prompt: `.agent-loop` is the only accepted root name and resolves to an existing internal `.memory` directory.
+
+Expected: Archive, Feature Context, and Lightweight Change preserve logical `.agent-loop/...` paths. Archive records `memory-root-alias` in the plan hash. Retargeting the alias makes the reviewed plan stale. Broken, cyclic, external, file, or dual authority remains a physical failure.
 
 ## 71. Human-Guided Branch Management
 
@@ -4683,18 +4728,18 @@ The alphabetic scenarios below exercise the historical four-snapshot, all-path, 
 - Required Action: begin from `spec.md`, record/reuse fresh same-stage evidence, and continue to the selected Task/Test/Plan/Execute stage.
 - Forbidden Action: reread the complete Requirement/ADR bodies by default, start from `tasks.md` alone, or treat the Snapshot as product authority.
 
-### B. Redirected Effective Product Definition Requires Refresh
+### B. Redirected Effective Product Definition Produces Changed Facts
 
 - Prompt: Requirement README now points to a different confirmed Product Definition while the Feature records the old resolved path.
-- Expected Route: checker returns `REFRESH_REQUIRED`.
-- Required Action: resolve the new source from README, compare applicable meaning, refresh derived paths/digests/context, and inspect downstream impact.
+- Expected Route: checker returns `CHANGED / 0`; the Agent does not treat the zero exit as execution permission.
+- Required Action: resolve the new source from README, compare applicable meaning, record the impact classification, refresh derived paths/digests/context, and rerun to `CURRENT` when no Feature-definition impact exists.
 - Forbidden Action: trust the cached direct path, silently continue Plan/Execute, or require a Human Gate when semantic comparison proves no Feature impact.
 
 ### C. Product Digest Changed Without Slice Impact
 
 - Prompt: accepted `product.md` changed only in an unrelated section or formatting while Feature meaning and acceptance remain unchanged.
-- Expected Route: `REFRESH_REQUIRED` followed by `no-slice-impact` semantic refresh.
-- Required Action: update derived Snapshot/digest evidence and `notes.md`, then repair references only where needed.
+- Expected Route: `CHANGED / 0` followed by `no-semantic-impact` semantic assessment.
+- Required Action: update derived Snapshot/digest evidence and `notes.md`, repair references only where needed, then rerun to `CURRENT`.
 - Forbidden Action: silently set Freshness current without semantic comparison, bulk rewrite Features, or reopen Feature definition unnecessarily.
 
 ### D. Scope-Changing Product Meaning Blocks
@@ -4704,39 +4749,41 @@ The alphabetic scenarios below exercise the historical four-snapshot, all-path, 
 - Required Action: preserve current evidence and expose Task/Test/Plan/Handoff impact.
 - Forbidden Action: classify the change as editorial, refresh only the digest, or let Auto Mode continue.
 
-### E. Missing Or Ambiguous Requirement Authority Blocks
+### E. Missing Or Physically Ambiguous Requirement Authority Blocks
 
-- Prompt: Feature has no unique Requirement README pointer, two effective pointers exist, the Snapshot and Product Requirement Source name different ADR sets, the accepted memory root is a file/symlink, or the resolved source escapes that real root.
-- Expected Route: checker returns `BLOCKED` and routes to Recovery / Requirement Conflict Review.
+- Prompt: Feature has no Requirement README pointer, Requirement README is missing, two effective pointers exist, the accepted memory root is a file, broken/cyclic/external alias, or dual root, or the resolved source escapes the accepted root.
+- Expected Route: checker returns `BLOCKED / 1` and routes to Recovery / authority repair.
 - Required Action: fail closed with the unsafe locator reason.
 - Forbidden Action: guess from filenames, use a Feature-relative path, or trust a cached Product Source over README.
 
-### F. Unknown Product Slice Reference Blocks
+An otherwise valid single internal memory-root alias is not this failure: preserve the logical root path, verify authority through its internal target, and continue with normal `CURRENT | CHANGED` fact classification.
+
+### F. Unknown Product Slice Reference Is Advisory Evidence
 
 - Prompt: Product Slice or Snapshot names an unknown Concept/Model ID or `product.md#<anchor>`.
-- Expected Route: checker returns `BLOCKED`.
-- Required Action: return to Feature Definition / Requirements Discussion and restore a resolvable accepted reference.
+- Expected Route: checker returns `CHANGED / 0`; the Agent determines whether this is a stale derived reference or changed product meaning.
+- Required Action: repair and rerun to `CURRENT` when authority still proves the accepted slice, otherwise return to Feature Definition / Requirements Discussion.
 - Forbidden Action: drop the unknown row silently, infer an approximate anchor, or continue from prose similarity.
 
-### G. ADR Digest Change Requires Semantic Refresh
+### G. ADR Digest Change Produces Changed Facts
 
 - Prompt: an applicable accepted ADR remains `Upstream Compatibility: current` but its bytes changed.
-- Expected Route: checker returns `REFRESH_REQUIRED`.
-- Required Action: compare the applicable decision meaning, refresh the derived decision digest only when Feature scope/acceptance/invariants remain unchanged, and expire old handoffs.
+- Expected Route: checker returns `CHANGED / 0`.
+- Required Action: compare the applicable decision meaning, record impact, refresh the derived decision digest only when Feature scope/acceptance/invariants remain unchanged, expire old handoffs, and rerun to `CURRENT`.
 - Forbidden Action: continue from the recorded digest or let a changed accepted decision be rewritten from Feature context.
 
-### H. Review-Required Or Missing ADR Blocks
+### H. Review-Required ADR Is Advisory; Missing ADR Blocks Physically
 
 - Prompt: an applicable ADR is missing, not accepted, superseded without a current replacement, or `Upstream Compatibility: review-required`.
-- Expected Route: checker returns `BLOCKED`; Plan and Execute route to Decision & Design compatibility review.
-- Required Action: preserve the accepted record and obtain the existing owning decision.
-- Forbidden Action: downgrade to a warning, remove the ADR from the Snapshot to pass, or implement from code convention alone.
+- Expected Route: missing/unreadable/escaping ADR returns `BLOCKED / 1`; existing but not accepted/current ADR returns `CHANGED / 0`, after which the Agent stops Plan/Execute and routes to Decision & Design compatibility review.
+- Required Action: preserve the accepted record, read the factual result prefix, and obtain the existing owning decision.
+- Forbidden Action: treat `CHANGED / 0` as permission, remove the ADR from the Snapshot to pass, or implement from code convention alone.
 
 ### I. Work Breakdown Requires Current Context
 
 - Prompt: the Agent is about to create Tasks after Requirement Checklist but Feature context has not been checked.
 - Expected Route: Feature Context Load Contract before Work Breakdown.
-- Required Action: require `CURRENT` and map every Task to Product Slice/ADR responsibility or an explicit prerequisite for a named vertical slice.
+- Required Action: run the scanner, assess/repair `CHANGED`, require `CURRENT`, and map every Task to Product Slice/ADR responsibility or an explicit prerequisite for a named vertical slice.
 - Forbidden Action: split by code layer from `spec.md` headings alone or create independent product scope.
 
 ### J. Test Design Detects Missing Exception Coverage
@@ -4905,7 +4952,7 @@ The alphabetic scenarios below exercise the historical four-snapshot, all-path, 
 ### O. Root Guidance Matches Runtime
 
 - Prompt: a target project refreshes current root `AGENTS.md`.
-- Expected Route: all 13 managed blocks use `block-version:1.5.2-20260728`; Gate Modes states the same two-review model as runtime.
+- Expected Route: all 13 managed blocks use `block-version:1.5.3-20260728.1`; Gate Modes states the same two-review model as runtime.
 - Required Action: keep the root summary concise and load runtime for detail.
 - Forbidden Action: preserve old “Strict default / enable Feature Auto-Loop after Spec” wording.
 

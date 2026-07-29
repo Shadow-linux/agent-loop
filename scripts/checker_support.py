@@ -19,6 +19,60 @@ class CheckFailure(Exception):
         return f"{self.category}: {self.detail}"
 
 
+@dataclass(frozen=True)
+class MemoryRootAuthority:
+    logical: Path
+    resolved: Path
+    alias_target: str | None
+
+
+def discover_memory_root_authority(
+    project_root: Path, *, allow_missing: bool = False
+) -> MemoryRootAuthority | None:
+    """Resolve one accepted memory root while preserving its logical project path."""
+    if not project_root.exists() or not project_root.is_dir():
+        raise CheckFailure("memory-root", "project root must be an existing directory")
+    boundary = project_root.resolve()
+    candidates = (boundary / ".agent-loop", boundary / "agent-loop")
+    present = [path for path in candidates if path.exists() or path.is_symlink()]
+    if len(present) > 1:
+        raise CheckFailure(
+            "memory-root", "both .agent-loop and legacy agent-loop exist"
+        )
+    if not present:
+        if allow_missing:
+            return None
+        raise CheckFailure("memory-root", "no agent-loop memory root exists")
+
+    logical = present[0]
+    if logical.is_symlink():
+        try:
+            resolved = logical.resolve(strict=True)
+        except RuntimeError as error:
+            raise CheckFailure("memory-root", f"{logical.name} alias is cyclic") from error
+        except FileNotFoundError as error:
+            raise CheckFailure("memory-root", f"{logical.name} alias is broken") from error
+        except OSError as error:
+            raise CheckFailure(
+                "memory-root", f"{logical.name} alias cannot be resolved"
+            ) from error
+        try:
+            target = resolved.relative_to(boundary)
+        except ValueError as error:
+            raise CheckFailure(
+                "memory-root", f"{logical.name} alias resolves outside project"
+            ) from error
+        if resolved == boundary or not resolved.is_dir():
+            raise CheckFailure(
+                "memory-root", f"{logical.name} alias must resolve to an internal directory"
+            )
+        return MemoryRootAuthority(logical, resolved, target.as_posix())
+
+    if not logical.is_dir():
+        raise CheckFailure("memory-root", f"{logical.name} must be a directory")
+    return MemoryRootAuthority(logical, logical.resolve(), None)
+
+
 def configure_utf8_stdio() -> None:
     """Make CLI output deterministic on hosts with a non-UTF-8 console code page."""
     for stream in (sys.stdout, sys.stderr):

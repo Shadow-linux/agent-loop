@@ -196,9 +196,10 @@ Before using an external skill or plugin inside a stage:
 - [ ] Check root `AGENTS.md` / `CLAUDE.md` and any obvious directory-level guidance.
 - [ ] Treat root `AGENTS.md` as stale if it lacks Bootstrap Protocol, project-outcome Agent Ownership, Message Intent Guard, Workflow Gateway Map, Gate Modes, all six Required Stop classes with Auto Mode non-bypass, Completion Rules, Submit And Commit Rules, Artifact Authority, root/directory guidance boundaries, or exact published-reference first hops.
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
+- [ ] Read `STRUCTURAL_CURRENT | STRUCTURAL_CHANGED | STRUCTURAL_INVALID` explicitly. A zero exit for `STRUCTURAL_CHANGED` still requires Agent impact review; compare project-owned block meaning to its declared source instead of treating the checker as semantic proof.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.2-20260728`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.3-20260728.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -282,9 +283,10 @@ Before using an external skill or plugin inside a stage:
 - [ ] Check whether root `AGENTS.md` exists, is stale, or must be created.
 - [ ] If root `AGENTS.md` exists, verify it contains Bootstrap Protocol, project-outcome Agent Ownership, Message Intent Guard, Workflow Gateway Map, Gate Modes, all six Required Stop classes with Auto Mode non-bypass, Completion Rules, Submit And Commit Rules, and Artifact Authority.
 - [ ] If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.
+- [ ] Read `STRUCTURAL_CURRENT | STRUCTURAL_CHANGED | STRUCTURAL_INVALID` explicitly. A zero exit for `STRUCTURAL_CHANGED` still requires Agent impact review; compare project-owned block meaning to its declared source instead of treating the checker as semantic proof.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.2-20260728`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.3-20260728.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -404,10 +406,12 @@ Before using an external skill or plugin inside a stage:
 - [ ] Run scan read-only with explicit operation, selected months or Feature IDs, and `--as-of`.
 - [ ] Confirm every eligible archive candidate is `closed` with concrete `Archive Readiness`, complete close/tasks/verification/review/drift/memory evidence, and `Open Follow-up: none`.
 - [ ] Keep active / blocked / paused features flat and show blocked candidates without suppressing eligible candidates in the same month.
-- [ ] Show exact moves, archive-index rows, reference edits, immutable requirement sources, historical evidence, unsupported references, and unchanged content.
+- [ ] Show exact moves, archive-index rows, reference edits, immutable requirement sources, historical evidence, symlink/unsupported reference findings, and unchanged content; findings are evidence rather than Checker authorization.
+- [ ] Treat a Feature-entry symlink as `feature-entry-symlink` evidence and exclude it from ordinary move planning. For a verified internal memory-root alias, show `memory-root-alias`, retain logical root paths, and bind target evidence into the plan hash.
+- [ ] Inspect canonical targets and likely reference coverage; record conflict, residual risk, and recovery conditions, then recommend the Batch Gate or ask one blocking question.
 - [ ] Stop for the expected plan SHA-256 Batch Human Gate before apply; auto modes do not authorize archive or rehydrate.
-- [ ] Reject malformed/stale hashes, ambiguous references, path collisions/escapes, and any manual-move or `--force` request.
-- [ ] Create the transaction journal and backups before mutation; use exact precomputed edits only.
+- [ ] Reject malformed/stale hashes, physical path collisions/escapes, and any manual-move or `--force` request. Do not reject merely because a reference is ambiguous or a scan path is a symlink.
+- [ ] Before transaction creation, recheck that the Feature container and every move source/target path have real non-symlink move shape; then create the journal/backups and use exact precomputed edits only.
 - [ ] Run post-check after archive/rehydrate; on failure restore exact bytes and every confined journal move whose source/target state shows the rename occurred, including the pre-record crash window.
 - [ ] Route incomplete restore to Recovery with the exact transaction ID and keep the journal fail-closed.
 - [ ] Rehydrate before reopened execution and keep lifecycle `closed` until Feature Follow-up separately confirms flow-back.
@@ -446,11 +450,11 @@ Before using an external skill or plugin inside a stage:
 ## Feature Context Load / Resume
 
 - [ ] Start from Feature `spec.md`; do not reconstruct Resume, controller re-entry, or context-compaction recovery from `tasks.md`, `plan.md`, or conversation memory alone.
-- [ ] Run `python3 <skill-root>/scripts/check-feature-context.py --project-root <target-project-root> <feature-spec-path>`; on Windows use the equivalent `py -3` command.
+- [ ] Run `python3 <skill-root>/scripts/check-feature-context.py --project-root <target-project-root> <feature-spec-path>`; on Windows use the equivalent `py -3` command. Read the prefix because `CURRENT` and `CHANGED` both exit `0`.
 - [ ] Exit `0` / `CURRENT` permits the local Snapshot fast path and stage-relevant ledger loading.
-- [ ] Exit `3` / `REFRESH_REQUIRED` stops downstream generation for semantic comparison, derived Snapshot refresh, downstream impact repair, and `notes.md` evidence.
-- [ ] Exit `1` / `BLOCKED` routes to the owning Requirements Discussion, Decision & Design, Feature Definition Review, or Recovery Gate.
-- [ ] Auto Mode cannot continue on `refresh-required | blocked`.
+- [ ] Exit `0` / `CHANGED` exposes factual drift; record Agent impact assessment, repair derived evidence when fact-determined, rerun to `CURRENT`, and return semantic impact to the existing owning Gate.
+- [ ] Exit `1` / `BLOCKED` is limited to physical/authority-resolution contradictions and routes to Recovery or source repair.
+- [ ] Auto Mode cannot rely on unresolved `CHANGED` or physical `BLOCKED`; exit `0` alone is insufficient.
 - [ ] Recheck after Requirement/ADR change, long-running uncertainty, archive rehydrate, and before Plan/Execute/Verify/Review/Drift/Close reliance.
 
 ## Feature Construction Two-Gate Review
@@ -488,7 +492,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Add Product Requirement Source and Product Slice from the effective source; cite Concept/Model IDs and Product Rule anchors without a Feature Product Brief intermediary.
 - [ ] Create the default Feature Context Snapshot in `spec.md` from one current Requirement README/Product Definition/accepted-ADR baseline, using project-root-relative paths and SHA-256 evidence computed after Markdown newline canonicalization (`CRLF` / lone `CR` -> `LF`).
 - [ ] Include product outcome, actors/core journey, applicable rules/invariants, states/exceptions/recovery, and Feature boundary/acceptance context without creating independent product truth.
-- [ ] Require the checker to return `CURRENT` before Requirement Checklist acceptance.
+- [ ] When the scanner returns `CHANGED`, record Agent impact assessment, repair derived evidence when fact-determined, and rerun to `CURRENT` before Requirement Checklist acceptance; physical `BLOCKED` routes to Recovery/source repair.
 - [ ] Reject feature-local redefinition of accepted concept name, identity, owner, lifecycle, relationship, invariant, state, terminal meaning, or product fact.
 - [ ] Feature Spec visuals may explain only the accepted Product Slice and its feature-local implementation or acceptance path; rewrite feature-local clarification into `spec.md`, and return any new product meaning to Requirements Discussion.
 - [ ] Do not enter Feature Spec while required shared design is unresolved or any required design slice is unassigned.
@@ -509,7 +513,7 @@ Before using an external skill or plugin inside a stage:
 
 ## Requirement Checklist
 
-- [ ] Confirm the Feature Context Snapshot is complete, its source references resolve, paths are project-root-relative, and freshness is `CURRENT`.
+- [ ] Confirm the Feature Context Snapshot is complete, its source references resolve, paths are project-root-relative, and the scanner is `CURRENT` after any `CHANGED` assessment/repair.
 - [ ] Confirm the Feature Spec references an accepted requirement set and its exact Delivery Phase or phase slice when applicable.
 - [ ] Confirm Design Readiness is `design-not-needed` or `completed`.
 - [ ] Confirm no major ambiguity remains.
@@ -685,7 +689,7 @@ Checklist:
 ## Analyze Consistency
 
 - [ ] Run before Gate 2 and again before Execute Task / Story when execution does not start immediately; in Strict Mode run after Plan approval, and always run before subagent dispatch.
-- [ ] Rerun Feature Context freshness and stop unless it is `CURRENT`.
+- [ ] Rerun Feature Context facts; assess/repair `CHANGED`, stop on physical `BLOCKED`, and require `CURRENT` before downstream reliance.
 - [ ] Trace Product Slice through Tasks, Tests, and Plan, including roles, states, rules, exceptions, recovery, acceptance, and ADR obligations.
 - [ ] Compare accepted `spec.md` and, when present, the legacy Feature `product.md` against `tasks.md`, `tests.md`, and the active `plan.md`; resolve the current Requirement `product.md` through Product Requirement Source.
 - [ ] Confirm each planned implementation step maps to an accepted task/story and acceptance criterion.
@@ -723,7 +727,7 @@ Checklist:
 
 ## Execute Task / Story
 
-- [ ] Reject execution when Feature Context is missing, `refresh-required`, or `blocked`.
+- [ ] Reject execution when Feature Context is physically `BLOCKED` or when `CHANGED` lacks completed Agent assessment/derived repair and a rerun to `CURRENT`.
 - [ ] Confirm execution scope: task by default, story only by explicit choice.
 - [ ] Confirm Plan Gate passed: accepted `plan.md` / `plans/*`, or recorded No-Plan Decision for a trivial task.
 - [ ] If Task Auto-Run is enabled, confirm an accepted plan exists; No-Plan Decision is insufficient.
@@ -766,7 +770,7 @@ Checklist:
 
 ## Verify
 
-- [ ] Recheck Feature Context freshness before relying on Snapshot acceptance references; stop completion claims on a non-current result.
+- [ ] Recheck Feature Context facts before relying on Snapshot acceptance references; stop completion claims on unresolved `CHANGED` or physical `BLOCKED`, and rerun repaired evidence to `CURRENT`.
 - [ ] Resolve and load `superpowers:verification-before-completion` or `verification-before-completion` before any completion claim; record Stage Helper Resolution, or record `unavailable` / `load-failed` before fallback.
 - [ ] If Superpowers `verification-before-completion` or another verification helper is available, use it through `external-skill-adapters.md` while recording evidence in agent-loop `notes.md`.
 - [ ] Identify what command or action proves the claim.
@@ -934,7 +938,7 @@ Pause:
 
 Close:
 
-- [ ] Feature Context freshness is freshly `CURRENT`; `refresh-required | blocked` stops Close.
+- [ ] Feature Context is freshly `CURRENT`; unresolved `CHANGED` or physical `BLOCKED` stops Close.
 - [ ] Fresh verification evidence exists.
 - [ ] Drift check completed.
 - [ ] Feature Close Review completed.

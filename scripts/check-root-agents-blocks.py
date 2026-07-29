@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import argparse
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from checker_support import (
@@ -26,6 +26,7 @@ class ManagedBlock:
     block_version: str | None
     start_line: int
     end_line: int | None = None
+    body: list[str] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
@@ -149,6 +150,10 @@ def parse_blocks(path: Path) -> tuple[dict[str, ManagedBlock], list[MarkerError]
                     f"malformed managed-end marker at line {line_no}",
                 )
             )
+            continue
+
+        if active:
+            active.body.append(line)
 
     if active:
         errors.append(
@@ -173,6 +178,15 @@ def local_source(source: str | None) -> bool:
 
 def escape_cell(value: object) -> str:
     return str(value).replace("|", r"\|")
+
+
+def normalized_body(block: ManagedBlock) -> str:
+    lines = [line.rstrip() for line in block.body]
+    while lines and not lines[0]:
+        lines.pop(0)
+    while lines and not lines[-1]:
+        lines.pop()
+    return "\n".join(lines)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -201,23 +215,21 @@ def main() -> int:
 
     template_blocks, template_errors = parse_blocks(template)
     target_blocks, target_errors = parse_blocks(target)
-    findings: list[list[object]] = []
+    findings: list[tuple[str, list[object]]] = []
+
+    def add(severity: str, row: list[object]) -> None:
+        findings.append((severity, row))
 
     for error in template_errors:
-        findings.append(
-            [
-                error.section,
-                error.status,
-                "-",
-                "-",
-                error.detail,
-                "fix template markers",
-            ]
+        add(
+            "invalid",
+            [error.section, error.status, "-", "-", error.detail, "fix template markers"],
         )
 
     for error in target_errors:
         expected = template_blocks.get(error.section)
-        findings.append(
+        add(
+            "invalid",
             [
                 error.section,
                 error.status,
@@ -225,13 +237,14 @@ def main() -> int:
                 "-",
                 error.detail,
                 "repair target managed markers before refresh",
-            ]
+            ],
         )
 
     for section_name, expected in template_blocks.items():
         actual = target_blocks.get(section_name)
         if not actual:
-            findings.append(
+            add(
+                "changed",
                 [
                     section_name,
                     "missing",
@@ -239,11 +252,12 @@ def main() -> int:
                     "none",
                     "template section is absent from target AGENTS.md",
                     "add managed block after human review",
-                ]
+                ],
             )
             continue
         if not actual.block_version:
-            findings.append(
+            add(
+                "changed",
                 [
                     section_name,
                     "missing-block-version",
@@ -251,10 +265,11 @@ def main() -> int:
                     "none",
                     f"expected {expected.block_version}",
                     "refresh marker metadata after human review",
-                ]
+                ],
             )
         elif actual.block_version != expected.block_version:
-            findings.append(
+            add(
+                "changed",
                 [
                     section_name,
                     "stale-block-version",
@@ -262,15 +277,42 @@ def main() -> int:
                     actual.block_version,
                     f"expected {expected.block_version}, found {actual.block_version}",
                     "refresh managed block after human review",
-                ]
+                ],
             )
+
+        if expected.source == "agent-loop-skill":
+            if actual.source != "agent-loop-skill":
+                add(
+                    "changed",
+                    [
+                        section_name,
+                        "source-drift",
+                        expected.block_version,
+                        actual.block_version,
+                        f"expected source agent-loop-skill, found {actual.source or 'none'}",
+                        "review and refresh the Agent Loop-owned block",
+                    ],
+                )
+            elif normalized_body(actual) != normalized_body(expected):
+                add(
+                    "changed",
+                    [
+                        section_name,
+                        "body-drift",
+                        expected.block_version,
+                        actual.block_version,
+                        "Agent Loop-owned block body differs from the template",
+                        "Agent reviews the diff before proposing refresh",
+                    ],
+                )
 
         if args.no_source_check or not local_source(actual.source):
             continue
         try:
             source_path = confined_path(target.parent, str(actual.source))
         except CheckFailure:
-            findings.append(
+            add(
+                "invalid",
                 [
                     section_name,
                     "source-outside-workspace",
@@ -278,11 +320,12 @@ def main() -> int:
                     actual.block_version,
                     f"source {actual.source} escapes {target.parent}",
                     "move source inside the project before human review",
-                ]
+                ],
             )
             continue
         if not source_path.exists():
-            findings.append(
+            add(
+                "changed",
                 [
                     section_name,
                     "source-missing",
@@ -290,12 +333,13 @@ def main() -> int:
                     actual.block_version,
                     f"source {actual.source} does not exist relative to {target.parent}",
                     "verify source path or update block source after human review",
-                ]
+                ],
             )
 
     for section_name, actual in target_blocks.items():
         if section_name not in template_blocks:
-            findings.append(
+            add(
+                "changed",
                 [
                     section_name,
                     "unexpected-managed-section",
@@ -303,19 +347,29 @@ def main() -> int:
                     actual.block_version,
                     "target section is not present in template",
                     "ask whether to keep, migrate, or remove",
-                ]
+                ],
             )
 
     if not findings:
-        print("PASS root AGENTS managed blocks are current")
+        print(
+            "STRUCTURAL_CURRENT: root AGENTS markers, revisions, sources, and "
+            "Agent Loop-owned block bodies align"
+        )
         return 0
 
-    print("FAIL root AGENTS drift found\n")
+    invalid = any(severity == "invalid" for severity, _ in findings)
+    if invalid:
+        print("STRUCTURAL_INVALID: root AGENTS structure requires repair\n")
+    else:
+        print(
+            "STRUCTURAL_CHANGED: root AGENTS facts changed; "
+            "Agent review is required before any refresh\n"
+        )
     print("| Section | Status | Template Block | Target Block | Detail | Action |")
     print("|---|---|---|---|---|---|")
-    for row in findings:
+    for _, row in findings:
         print(f"| {' | '.join(escape_cell(cell) for cell in row)} |")
-    return 1
+    return 1 if invalid else 0
 
 
 if __name__ == "__main__":

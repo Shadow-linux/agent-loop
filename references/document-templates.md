@@ -842,7 +842,7 @@ Applicable Decisions: none | .agent-loop/decisions/<decision>.md
 Decision Source SHA-256: none | .agent-loop/decisions/<decision>.md=<sha256>
 Product Slice References:
 Verified At: <ISO-8601 timestamp with timezone>
-Freshness: current | refresh-required | blocked
+Freshness: current | changed | blocked
 
 ### Product Outcome
 
@@ -975,7 +975,7 @@ Applicable Decisions: none | .agent-loop/decisions/<decision>.md
 Decision Source SHA-256: none | .agent-loop/decisions/<decision>.md=<sha256>
 Product Slice References:
 Verified At: <ISO-8601 timestamp with timezone>
-Freshness: current | refresh-required | blocked
+Freshness: current | changed | blocked
 ```
 
 Keep exact source/digest parity with `spec.md`. This file expands derived context only; it owns no independent product, lifecycle, approval, Task, Test, Plan, code-fact, or execution meaning.

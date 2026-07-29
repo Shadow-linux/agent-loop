@@ -152,14 +152,14 @@ feat, fix, docs, refactor, test, chore
 For the `agent-loop` skill repository:
 
 - prefer Chinese in the summary and body
-- include the current skill version scope, for example `docs(v1.5.2): 调整 Project Entry Scan 文档结构`
+- include the current skill version scope, for example `docs(v1.5.3): 调整 Project Entry Scan 文档结构`
 - use 3-7 concrete bullet lines for behavior, gate, artifact, template, reference, validation scenario, or documentation changes
 - keep version numbers unchanged unless the human explicitly approves a version bump
 
 Example:
 
 ```text
-docs(v1.5.2): 调整 Project Entry Scan 文档结构
+docs(v1.5.3): 调整 Project Entry Scan 文档结构
 
 - 移除旧 onboarding-db 生成入口
 - 统一旧项目入口为 Project Entry Scan

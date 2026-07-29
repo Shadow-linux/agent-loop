@@ -221,7 +221,7 @@ class LightweightChangeScanTests(unittest.TestCase):
                 self.assert_invalid(run_scan(root), {"memory-root", "layout"})
                 self.assertEqual(tree_snapshot(root), before)
 
-        for case in ("memory-root-symlink", "changes-root-symlink"):
+        for case in ("changes-root-symlink",):
             with self.subTest(case=case), tempfile.TemporaryDirectory() as temp:
                 root = Path(temp)
                 target = root / "real"
@@ -238,6 +238,38 @@ class LightweightChangeScanTests(unittest.TestCase):
                 before = tree_snapshot(root)
                 self.assert_invalid(run_scan(root), {"memory-root", "layout"})
                 self.assertEqual(tree_snapshot(root), before)
+
+    def test_internal_memory_root_alias_is_reused_with_logical_paths(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = ChangeWorkspace(Path(temp))
+            workspace.change("2026-07-18", "aliased-memory")
+            real_memory = workspace.project_root / ".memory"
+            workspace.memory_root.rename(real_memory)
+            try:
+                workspace.memory_root.symlink_to(".memory", target_is_directory=True)
+            except OSError as error:
+                self.skipTest(f"host denies symlink creation: {error}")
+
+            result = run_scan(workspace.project_root)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            payload = json_output(result)
+            self.assertEqual(payload["memory_root"], ".agent-loop")
+            self.assertEqual(payload["changes_root"], ".agent-loop/changes")
+            self.assertEqual(payload["counts"]["total"], 1)
+
+    def test_broken_and_external_memory_root_aliases_remain_invalid(self) -> None:
+        for case in ("broken", "external"):
+            with self.subTest(case=case), tempfile.TemporaryDirectory() as temp, tempfile.TemporaryDirectory() as outside:
+                root = Path(temp)
+                try:
+                    (root / ".agent-loop").symlink_to(
+                        ".missing" if case == "broken" else Path(outside),
+                        target_is_directory=True,
+                    )
+                except OSError as error:
+                    self.skipTest(f"host denies symlink creation: {error}")
+                payload = self.assert_invalid(run_scan(root), {"memory-root"})
+                self.assertEqual(payload["error"]["category"], "memory-root")
 
     def test_directory_enumeration_error_is_normalized_without_absolute_path(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

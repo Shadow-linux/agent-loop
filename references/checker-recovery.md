@@ -6,6 +6,8 @@ Feature Definition Review and Implementation Readiness Review do not use a local
 
 Human decision provenance is not a Checker input that can be repaired. The Agent checks current conversation or preserved Human decision evidence and asks one blocking confirmation only when provenance is genuinely unavailable. Checker Recovery must not manufacture approval or add a local authorization issuer.
 
+Feature Monthly Archive scan output is advisory evidence: ordinary Archive reference findings do not trigger Checker Recovery. The Agent reviews symlink, unsupported-reference, canonical-target, conflict, risk, and recovery evidence directly. Checker Recovery remains available only for an actual canonical implementation contradiction or execution-environment failure, while stranded transactions route to Recovery.
+
 Checker Self-Repair is an internal method of `Diagnose Failure` and `Verify`. It is not a canonical stage, lifecycle, status, Auto Mode, artifact family, or permission to bypass validation.
 
 ## Core Rule

@@ -771,11 +771,11 @@ Next: Chat/report when complete; Ask Human for stale plan/scope; Recovery for st
 Procedure:
 
 1. Classify message intent as `feature-archive-maintenance`; require reliable Project Entry/memory and inspect incomplete `.archive-txn` before planning.
-2. Run `scripts/scan-feature-monthly-archive.py` only. The scan is read-only and accepts explicit `--as-of`; it never uses current time implicitly.
-3. Resolve stable Feature IDs through flat paths and `features/archive.md`. Active / blocked / paused features stay flat. Only `closed` features with a concrete `Archive Readiness` record, complete close evidence, no open follow-up, and no memory/reference blocker are eligible.
-4. Present one Feature Monthly Archive Batch Human Review with operation, plan SHA-256, selected months/IDs, eligible/blocked candidates, moves, reference edits, preserved immutable/historical references, unchanged content, transaction/restore scope, platform evidence, and decision.
+2. Run `scripts/scan-feature-monthly-archive.py` only. The scan is read-only, accepts explicit `--as-of`, never uses current time implicitly, never follows ordinary symlinks, and reports symlink/unsupported reference observations as deterministic advisory findings. One verified internal memory-root alias may be read through its logical root while its target fact remains hash-bound.
+3. Resolve stable Feature IDs through flat paths and `features/archive.md`. Active / blocked / paused features stay flat. Only `closed` real directories with a concrete `Archive Readiness` record, complete close evidence, and no open follow-up enter the move plan. Report `feature-entry-symlink` without an ordinary move and `memory-root-alias` with logical paths. The Agent—not the scanner—inspects advisory paths, canonical targets, reference coverage, conflicts, residual risk, and recovery conditions, then recommends continue or one blocking question.
+4. Present one Feature Monthly Archive Batch Human Review with operation, plan SHA-256, selected months/IDs, eligible/blocked candidates, moves, reference edits, advisory findings and Agent coverage judgment, preserved immutable/historical references, unchanged content, transaction/restore scope, platform evidence, and decision. The exact plan SHA-256 Batch Human Gate remains the only Archive/Rehydrate action authorization.
 5. After exact confirmation, call apply with `--expected-plan-sha256`. A malformed hash is usage failure; a valid different hash is `stale-plan` and requires a fresh scan/review.
-6. Apply uses the transaction journal before mutation, moves whole directories by rename, renders root `features/archive.md`, performs only precomputed reference edits, and runs the same post-check core. Original human requirement sources are not rewritten.
+6. Apply first rechecks that the Feature container and every move source/target have real non-symlink move shape. Only then does it create the transaction journal, move whole directories by rename, render root `features/archive.md`, perform precomputed reference edits, and run the same post-check core. It cannot widen the approved plan or write outside the project. Original human requirement sources are not rewritten.
 7. On failure, restore exact backups and reconcile every journal move from confined source/target state, including a rename completed just before its completion record was persisted. A stranded journal routes to Recovery with its exact transaction ID; never select the newest transaction automatically.
 8. Rehydrate uses its own plan and Batch Human Gate, keeps `spec.md Status: closed`, and must complete before Feature Follow-up may reopen lifecycle or execute work.
 
@@ -864,7 +864,7 @@ For every current Feature, bootstrap from `spec.md`, not `tasks.md` or `plan.md`
 python3 <skill-root>/scripts/check-feature-context.py --project-root <target-project-root> <feature-spec-path>
 ```
 
-`CURRENT` (`0`) permits the local Snapshot fast path. `REFRESH_REQUIRED` (`3`) stops downstream generation while the Agent reads only changed/applicable Requirement and ADR meaning, compares semantic impact, refreshes derived Snapshot evidence, and repairs affected Tasks/Tests/Plan/Handoffs. `BLOCKED` (`1`) routes to Requirements Discussion, Decision & Design compatibility review, Feature Definition Review, or Recovery. Auto Mode cannot continue on either non-current result. On Windows use `py -3`.
+`CURRENT` (`0`) permits the local Snapshot fast path. `CHANGED` (`0`) reports factual drift: the Agent reads the reasons and only changed/applicable Requirement and ADR meaning, records `no-semantic-impact | derived-context-update | feature-definition-impact | decision-impact | unresolved`, repairs derived Snapshot/Tasks/Tests/Plan/Handoffs when fact-determined, and reruns to `CURRENT` before downstream reliance. `BLOCKED` (`1`) is limited to physical/authority-resolution contradictions and routes to Recovery or source repair. Exit `0` alone is insufficient, and `CHANGED` never authorizes execution or selects a Human Gate. On Windows use `py -3`.
 
 ## Feature Construction Two-Gate Review
 
@@ -929,7 +929,7 @@ Rules:
 - use the dual reader: new `Effective Product Definition` requires Profile/Product Review `confirmed`; legacy `Effective Concept Foundation` / reviewed Requirement remains valid without migration
 - add Product Requirement Source and Product Slice to `spec.md`; do not require or create Feature `product.md`
 - create the default Snapshot inside `spec.md`; optional `context.md` is expanded derived context only for a Human-confirmed complex Feature and must keep exact source/digest parity
-- run the checker after writing the Snapshot and require `CURRENT` before Requirement Checklist acceptance
+- run the scanner after writing the Snapshot; `CHANGED` requires Agent assessment/repair and a rerun to `CURRENT` before Requirement Checklist acceptance, while physical `BLOCKED` routes to Recovery/source repair
 - Product Slice references source Concept/Model IDs and `product.md#<rule-anchor>`; it may narrow scope but cannot redefine accepted product meaning
 - do not let Feature Spec introduce a new meaning, state, invariant, role boundary, relationship, or product object for an accepted Concept ID; return to Requirements Discussion when product semantics must change
 - when Feature Spec uses Optional Visual Communication, limit the view to the accepted Product Slice, feature responsibility, or feature-local implementation and acceptance path; rewrite accepted feature-local clarification into `spec.md`; if the view reveals new product meaning, stop and return to Requirements Discussion instead of adding it to `spec.md` or editing Requirement `product.md`
@@ -979,7 +979,7 @@ Entry: draft spec exists.
 
 Check:
 
-- Feature Context Snapshot is complete, paths are project-root-relative, its source references resolve through one Requirement README, and the checker returns `CURRENT`
+- Feature Context Snapshot is complete, paths are project-root-relative, its source references resolve through one Requirement README, and the scanner returns `CURRENT` after any `CHANGED` assessment/derived repair
 - no major ambiguity
 - stories independently testable
 - acceptance criteria measurable
@@ -1104,7 +1104,7 @@ Include:
 
 Rules:
 
-- load and require a current Feature Context Snapshot before designing tests
+- load and run the Feature Context fact scanner before designing tests; assess/repair `CHANGED` and obtain `CURRENT` evidence before relying on the Snapshot
 - cover every applicable acceptance criterion, actor/permission boundary, state transition/terminal, Product Rule/invariant, exception/recovery path, and accepted ADR verification obligation; uncovered applicable meaning blocks readiness or needs the existing Human-approved substitute path
 - do not assume an E2E framework, local URL, account, seed, or browser tool
 - if web-visible behavior exists, run E2E Discovery first
@@ -1206,7 +1206,7 @@ Write one of:
 
 Rules:
 
-- require Feature Context Snapshot `Freshness: current` before accepting a Plan or No-Plan Decision
+- require Feature Context Snapshot `Freshness: current` before accepting a Plan or No-Plan Decision; `CHANGED` is Agent-reviewed evidence rather than checker authorization and must be assessed/refreshed first
 - require every active Plan to name its Product Slice and Task, preserve applicable product/ADR invariants, separate code facts from product intent, and verify the mapped acceptance without implementing nearby out-of-scope Requirement meaning
 - decide whether a plan is required before any code implementation
 - create `plan.md` when the task/story is complex, multi-file, changes behavior, changes tests, touches interfaces, crosses module boundaries, involves data/API/async/security/deployment behavior, needs TDD design, needs subagents, or the human asks for a plan
@@ -1248,7 +1248,7 @@ Entry: before implementation when spec/tasks/tests and either plan or a recorded
 
 Check:
 
-- rerun Feature Context freshness and require `CURRENT`
+- rerun Feature Context facts; assess/repair `CHANGED` and require `CURRENT` before consistency reliance
 - trace Product Slice through Tasks, Tests, and the active Plan; stop when any accepted role, state, rule, exception, recovery, acceptance, or ADR obligation is lost
 - each accepted requirement has task coverage
 - each task maps to spec or explicit technical need
@@ -1325,7 +1325,7 @@ Mandatory helper: Execute Task / Story resolves and loads `superpowers:test-driv
 
 Rules:
 
-- rerun or reuse only fresh same-stage checker evidence and reject Execute when Feature Context is missing, `refresh-required`, or `blocked`
+- rerun or reuse only fresh same-stage scanner evidence; reject Execute when physical `BLOCKED` remains or when `CHANGED` has not been assessed/repaired and rerun to `CURRENT`
 - default unit is task
 - story execution requires explicit human choice
 - whole-feature execution requires explicit human confirmation and only for tiny features
@@ -1407,7 +1407,7 @@ Load:
 
 Rules:
 
-- rerun Feature Context freshness before verification relies on Snapshot acceptance references; non-current context stops verification claims
+- rerun Feature Context facts before verification relies on Snapshot acceptance references; unresolved `CHANGED` or physical `BLOCKED` stops verification claims, while fact-determined repair must rerun to `CURRENT`
 - after mandatory helper resolution, use the loaded verification adapter; use fallback only for recorded `unavailable` or `load-failed`, while completion remains controlled by agent-loop
 - identify proof command/action
 - run fresh verification
@@ -1695,7 +1695,7 @@ Pause writes:
 
 Close requires:
 
-- Feature Context freshness rechecked as `CURRENT`; `refresh-required | blocked` stops Close and Auto Mode
+- Feature Context facts rechecked as `CURRENT`; unresolved `CHANGED` or physical `BLOCKED` stops Close and Auto Mode
 - fresh verification evidence
 - Feature Close Review
 - drift check

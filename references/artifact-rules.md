@@ -198,7 +198,7 @@ features/archive.md                    root locator and move ledger
 
 Archive state is `archived | rehydrated`; archive state is not feature lifecycle. Lifecycle remains `draft | active | blocked | paused | closed`, and active / blocked / paused features stay flat.
 
-Feature Monthly Archive moves the complete eligible directory without content compression. The scan is read-only. Apply requires the expected plan SHA-256 Batch Human Gate, transaction journal, exact precomputed reference edits, post-check, and restore. Original human requirement source files are never rewritten.
+Feature Monthly Archive moves the complete eligible real directory without content compression. The scan is read-only, never follows ordinary symlinks, records uncertain/unsupported reference facts as advisory plan evidence, and marks a Feature-entry symlink without producing a normal directory move. A verified internal memory-root alias preserves its logical `.agent-loop/...` or legacy paths and contributes target evidence to the plan hash. The Agent reviews path, reference, conflict, risk, and recovery coverage; scan/check findings do not authorize or reject the operation. Apply requires the expected plan SHA-256 Batch Human Gate and rechecks real container/source/target shape before transaction creation, then retains the journal, exact precomputed reference edits, post-check, and restore. Apply cannot write outside the reviewed plan or project. Original human requirement source files are never rewritten.
 
 Scope boundaries are explicit: no per-feature archive summary, no historical/ directory, no Deep Archive, no deletion/packing/scheduled archive, and No `--force`. A closed archived feature must rehydrate before reopened execution.
 
@@ -371,7 +371,7 @@ stable plan.md
 
 ```text
 current feature behavior changed -> update spec.md
-Feature Context source or digest changed -> rerun the read-only freshness checker, semantically refresh derived spec.md Snapshot and optional context.md only when authority remains valid, and keep both in exact source/digest parity
+Feature Context source or digest changed -> read the fact scanner's `CHANGED` reasons, perform Agent semantic impact assessment, refresh derived spec.md Snapshot and optional context.md only when authority remains valid and meaning is unchanged, keep both in exact source/digest parity, and rerun to `CURRENT`
 accepted Requirement product meaning changed -> Human-gated append-only Product Definition follow-up, advance README pointer, then recheck ADR / open Feature compatibility
 legacy feature product intent conflict found -> stop for Requirement Conflict / Recovery; do not rewrite legacy product.md silently
 cross-feature product consensus changed -> update project.md Product Context or Domain Language in simple mode, or project/product-context.md and project/domain-language.md in enterprise mode
