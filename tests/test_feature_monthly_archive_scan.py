@@ -2,8 +2,11 @@ from __future__ import annotations
 
 import tempfile
 import unittest
+import sys
+from unittest import mock
 from pathlib import Path
 
+from tests.checker_test_support import ROOT
 from tests.feature_archive_test_support import (
     ArchiveWorkspace,
     json_output,
@@ -17,6 +20,68 @@ TRANSACTION_ID = "20260714T120000Z-0123456789ab"
 
 
 class FeatureMonthlyArchiveScanTests(unittest.TestCase):
+    def _archive_support(self):
+        scripts_dir = str(ROOT / "scripts")
+        if scripts_dir not in sys.path:
+            sys.path.insert(0, scripts_dir)
+        import feature_archive_support
+
+        return feature_archive_support
+
+    def test_windows_resolve_error_falls_back_to_relative_internal_link_target(self) -> None:
+        support = self._archive_support()
+        with tempfile.TemporaryDirectory() as temp:
+            project_root = Path(temp)
+            target = project_root / ".agents" / "guide.md"
+            target.parent.mkdir()
+            target.write_text("# Guide\n", encoding="utf-8")
+            alias = project_root / "docs" / "guide.md"
+            alias.parent.mkdir()
+            try:
+                alias.symlink_to("../.agents/guide.md")
+            except OSError as error:
+                self.skipTest(f"file symlink unavailable: {error}")
+
+            original_resolve = Path.resolve
+
+            def windows_like_resolve(path: Path, strict: bool = False) -> Path:
+                if path == alias and strict:
+                    raise OSError("simulated Windows relative-link resolution failure")
+                return original_resolve(path, strict=strict)
+
+            with mock.patch.object(Path, "resolve", new=windows_like_resolve):
+                finding = support._symlink_reference_finding(
+                    project_root, alias, "markdown-file"
+                )
+
+            self.assertEqual(
+                finding.matched_value, "markdown-file:internal:.agents/guide.md"
+            )
+
+    def test_windows_resolve_error_falls_back_to_cycle_detection(self) -> None:
+        support = self._archive_support()
+        with tempfile.TemporaryDirectory() as temp:
+            project_root = Path(temp)
+            first = project_root / ".cycle-a"
+            second = project_root / ".cycle-b"
+            try:
+                first.symlink_to(".cycle-b", target_is_directory=True)
+                second.symlink_to(".cycle-a", target_is_directory=True)
+            except OSError as error:
+                self.skipTest(f"directory symlink unavailable: {error}")
+
+            original_resolve = Path.resolve
+
+            def windows_like_resolve(path: Path, strict: bool = False) -> Path:
+                if path == first and strict:
+                    raise OSError("simulated Windows cycle resolution failure")
+                return original_resolve(path, strict=strict)
+
+            with mock.patch.object(Path, "resolve", new=windows_like_resolve):
+                finding = support._symlink_reference_finding(project_root, first, "entry")
+
+            self.assertEqual(finding.matched_value, "entry:cycle")
+
     def scan(self, workspace: ArchiveWorkspace, *args: str):
         return run_archive_command(
             "scan-feature-monthly-archive.py",

@@ -674,6 +674,31 @@ def discover_flat_features(memory_root: Path) -> Sequence[FeatureLocation]:
     return tuple(locations)
 
 
+def _resolve_link_target_after_platform_error(candidate: Path) -> Path:
+    """Resolve a relative link target without relying on the link's own resolve().
+
+    Windows can raise an ``OSError`` while resolving a valid relative symlink.
+    Read each link target from its containing directory first so factual scan output
+    stays deterministic across platforms.
+    """
+
+    current = candidate
+    seen: set[str] = set()
+    while True:
+        marker = os.path.normcase(os.path.normpath(os.path.abspath(current)))
+        if marker in seen:
+            raise RuntimeError(f"symlink cycle: {candidate}")
+        seen.add(marker)
+        raw_target = os.readlink(current)
+        target = Path(raw_target)
+        current = target if target.is_absolute() else current.parent / target
+        if current.is_symlink():
+            continue
+        if not current.exists():
+            raise FileNotFoundError(current)
+        return current.resolve(strict=True)
+
+
 def _symlink_reference_finding(
     project_root: Path,
     candidate: Path,
@@ -685,13 +710,28 @@ def _symlink_reference_finding(
     try:
         resolved = candidate.resolve(strict=True)
     except RuntimeError:
+        resolved = None
         resolution, target = "cycle", ""
     except FileNotFoundError:
+        resolved = None
         resolution, target = "broken", ""
     except OSError as error:
-        resolution = "cycle" if error.errno == errno.ELOOP else "unresolved"
-        target = ""
-    else:
+        if error.errno == errno.ELOOP:
+            resolved = None
+            resolution, target = "cycle", ""
+        else:
+            try:
+                resolved = _resolve_link_target_after_platform_error(candidate)
+            except RuntimeError:
+                resolved = None
+                resolution, target = "cycle", ""
+            except FileNotFoundError:
+                resolved = None
+                resolution, target = "broken", ""
+            except OSError:
+                resolved = None
+                resolution, target = "unresolved", ""
+    if resolved is not None:
         try:
             target = resolved.relative_to(project_root.resolve()).as_posix()
         except ValueError:

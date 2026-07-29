@@ -7,6 +7,7 @@ _当前状态：开发中；已获准同步版本，尚未 commit、push、tag �
 ### 轻 Gate Authority Alias 与 Root Guidance 漂移修复
 - Feature entry symlink 现在作为 `feature-entry-symlink` 确定性事实返回，不再进入普通 Archive/Rehydrate move；Apply 会在创建 transaction 前复核 Feature container、source 与 target 的真实路径形态。
 - 单一、可解析且位于项目内的 memory-root alias 可保留 `.agent-loop/...` 或 legacy 逻辑路径，并以 `memory-root-alias` 目标证据参与 plan SHA-256；断裂、循环、外部、文件、双根与重定向漂移继续物理拒绝。
+- Windows 对有效相对 symlink 的 `resolve(strict=True)` 异常会回退到 link-target 链解析，因此内部 Markdown alias 与循环 alias 在 macOS/Windows 都产生相同的确定性事实分类。
 - Feature Archive、Feature Context 和 Lightweight Change 统一使用同一 memory-root authority 规则，避免一个 surface 接受而另一个 surface 阻断。
 - Root AGENTS checker 改为 `STRUCTURAL_CURRENT / 0`、`STRUCTURAL_CHANGED / 0`、`STRUCTURAL_INVALID / 1`；只比较 Agent Loop-owned block 正文，项目自有 block 由 Agent 对照 source 审核，写入仍走既有 Human Review。
 
