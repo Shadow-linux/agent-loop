@@ -31,7 +31,7 @@ Applicable Decisions: none | .agent-loop/decisions/<decision>.md
 Decision Source SHA-256: none | .agent-loop/decisions/<decision>.md=<sha256>
 Product Slice References:
 Verified At: <ISO-8601 timestamp with timezone>
-Freshness: current | refresh-required | blocked
+Freshness: current | changed | blocked
 
 ### Product Outcome
 
@@ -43,7 +43,7 @@ Freshness: current | refresh-required | blocked
 
 ### Feature Boundary And Acceptance Context
 
-This Snapshot is derived execution context, not product authority. The Requirement README resolves the current Effective Product Definition; every Requirement, product, and decision path above is project-root-relative. Generate Product and Decision Markdown SHA-256 values after canonicalizing `CRLF` and lone `CR` to `LF`; legacy raw LF/CRLF digests remain reader-compatible. Run the read-only `scripts/check-feature-context.py` before relying on the Snapshot. `## Product Slice` remains the Feature responsibility and coverage table.
+This Snapshot is derived execution context, not product authority. The Requirement README resolves the current Effective Product Definition; every Requirement, product, and decision path above is project-root-relative. Generate Product and Decision Markdown SHA-256 values after canonicalizing `CRLF` and lone `CR` to `LF`; legacy raw LF/CRLF digests remain reader-compatible. Run the read-only `scripts/check-feature-context.py` before relying on the Snapshot and read its prefix: `CURRENT` permits reliance, `CHANGED` requires Agent impact assessment/refresh, and `BLOCKED` means physical authority resolution failed. Exit `0` alone is not execution permission. `## Product Slice` remains the Feature responsibility and coverage table.
 
 ## Product Slice
 

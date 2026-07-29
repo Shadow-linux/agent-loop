@@ -1,6 +1,6 @@
 # Agent Loop
 
-**Current version:** 1.5.2 (stable)
+**Current version:** 1.5.3 (development)
 
 Agent Loop is a reusable controller skill for single-human, CLI-agent software development. It lets the Agent own project diagnosis, workflow sequencing, implementation, verification, and memory maintenance while the human keeps control of goals, product meaning, consequential decisions, and external actions.
 
@@ -68,7 +68,7 @@ During requirements discussion, the agent records Design Readiness evidence and 
 
 New Feature work creates no Feature `product.md`; Feature `spec.md` selects a bounded Product Slice from the effective Requirement Product Definition.
 
-Feature work now starts from a local **Feature Context Snapshot** in `spec.md`. Agent Loop first checks the real Requirement `product.md` selected by Requirement README plus applicable ADR digests. Unchanged sources use the fast path; changed sources are semantically refreshed or blocked before downstream work continues. The Snapshot is derived context, never a second product truth.
+Feature work now starts from a local **Feature Context Snapshot** in `spec.md`. Agent Loop first scans objective facts for the real Requirement `product.md` selected by Requirement README plus applicable ADRs. `CURRENT` uses the fast path; `CHANGED` lets the Agent assess semantic impact and refresh derived evidence without turning ordinary drift into a checker failure; only physical authority contradictions return `BLOCKED`. The Snapshot is derived context, never a second product truth.
 
 ### Deliver with the smallest safe workflow
 
@@ -120,7 +120,7 @@ The Agent checks implementation, tests, requirement and decision coverage, unrel
 | Human-Guided Branch Management | Recommend an optional branch strategy when project conventions are unclear; preserve existing clear rules. See [Usage](Usage.md#我想让-agent-推荐分支管理方式). |
 | Human-Guided Bug Management | Maintain Bug identity, report provenance, lifecycle, Resolution Path, reopen history, and independent close |
 | Feature Follow-up / Flow-back | Locate responsible recent or archived Features; default ownership scan is 90 days and extends on evidence |
-| Feature Monthly Archive / Rehydrate | Move eligible closed Feature directories intact into month buckets and locate them through `features/archive.md` |
+| Feature Monthly Archive / Rehydrate | Scan reference, Feature-entry symlink, and memory-root alias facts without a hard Checker Gate; the Agent reviews coverage, the human authorizes one exact plan, and the executor preflights then moves eligible real closed Feature directories with journal/rollback confinement |
 | Post-Merge Memory Reconciliation | After code merge and verification, do nothing when no memory conflict is observed; otherwise repair only the conflicting current meaning from the latest verified facts |
 | Drift and Recovery | Detect stale or contradictory claims and backfill from current code, environment, accepted product meaning, and human authority |
 

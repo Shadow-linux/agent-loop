@@ -45,7 +45,7 @@ If message intent is `requirements-discussion`, do not create a Feature workspac
 
 If message intent is `project-skill-management`, load `references/project-skills.md`. Do not create a requirement set or feature workspace. Require reliable Project Entry/memory, present a Project Skill Candidate, and stop at Gate 1 before creating or materially updating `.agent-loop/skills/`.
 
-If message intent is `feature-archive-maintenance`, require current project memory and load the Feature Monthly Archive procedure. The scan is read-only. It resolves Feature IDs through `features/archive.md`, shows eligible/blocked candidates, exact moves, reference edits, unchanged content, restore scope, and the expected plan SHA-256. Archive or rehydrate stops at one Batch Human Gate and then uses a transaction journal, post-check, and restore. The invariant is: rehydrate before reopened execution; archive state is not feature lifecycle.
+If message intent is `feature-archive-maintenance`, require current project memory and load the Feature Monthly Archive procedure. The scan is read-only. It resolves Feature IDs through `features/archive.md`, shows eligible/blocked candidates, exact moves, reference edits, advisory reference findings, unchanged content, restore scope, and the expected plan SHA-256. Scan/check never authorize or reject Archive from symlink, unsupported-reference, or unrelated-layout findings: the Agent decides whether reference coverage is sufficient, explains evidence and residual risk, and recommends either the Batch Human Gate or one blocking question. Archive or rehydrate stops at that exact-plan Gate and then uses a transaction journal, post-check, and restore. The invariant is: rehydrate before reopened execution; archive state is not feature lifecycle.
 
 Requirement/Product Grill may be used inside Requirements Discussion and its Brainstorm / Clarify work when terminology, roles, business flows, exception paths, prior Feature behavior, or decision signals are unclear. It does not create a new stage. Product Definition Depth Scan, Product Completeness Scan, Concept Foundation, Requirement Product Model, and derived visual generation are internal Requirements Discussion methods, not canonical stages or message intents. They write only through the reviewed Requirement `product.md` and send shared design signals to Design Readiness Check.
 
@@ -116,7 +116,7 @@ Explicit Bug Management wins before assessment. An active Feature that clearly o
 
 After Project Entry classification, perform only the minimum root-guidance, Git/dirty-state, target-scope, nearby-reference, safety, verification-entry, active-Feature, branch, sealed-release, and relied-on-memory checks needed for the route. A stale or conflicting memory claim that the route relies on stops for Recovery, Feature Construction, or Human Choice.
 
-Discover the accepted memory root before card creation. Reuse exactly one real `.agent-loop/` or legacy `agent-loop/` root. Dual roots, root files, or root symlinks fail closed. When neither exists, the first clearly eligible Change may create only `.agent-loop/changes/YYYY-MM/`; a changes-only root is not reliable project initialization and must not create `project.md`, enterprise memory, root guidance, or a Feature workspace by implication.
+Discover the accepted memory root before card creation. Reuse exactly one logical `.agent-loop/` or legacy `agent-loop/` root. One internal alias is allowed only when it resolves to an existing project directory without cycle or dual authority; keep generated paths under the logical root name. Dual roots, root files, broken/cyclic/external aliases, or alias retarget drift fail closed. When neither exists, the first clearly eligible Change may create only `.agent-loop/changes/YYYY-MM/`; a changes-only root is not reliable project initialization and must not create `project.md`, enterprise memory, root guidance, or a Feature workspace by implication.
 
 `clearly eligible` requires a clear goal and completion criteria, enumerable scope, no new product/technical decision, no public/data/state/permission/security/dependency/migration/architecture boundary, exact targeted verification, concrete rollback, no Bug/Feature long-term tracking need, no planned multi-session/handoff/subagent/long-observation need, and sufficient current evidence. Any missing condition produces `Feature trigger` or `uncertain`.
 
@@ -352,7 +352,7 @@ Rules:
 1. Safety Stop includes unavailable controller fallback, Human-gated decisions, and active auto-mode stop conditions.
 2. Remote Discovery runs before local existing-project handling.
 3. `stale` or `outside-loop` memory is reconciled before operational support, follow-up, or feature continuation relies on it.
-4. With current memory, an explicit `feature-archive-maintenance` request routes before Active Feature Guard because it maintains closed history. Eligibility blocks any selected active/paused path without switching current work.
+4. With current memory, an explicit `feature-archive-maintenance` request routes before Active Feature Guard because it maintains closed history. Declared lifecycle/readiness facts keep selected active/paused or incomplete candidates out of the move plan without switching current work; reference findings remain Agent-reviewed evidence rather than Checker authorization.
 5. Otherwise run Active Feature Guard before starting, reopening, or switching feature work.
 6. Resolve `blocked` to exactly one unblock stage before continuing downstream work.
 7. Only after the prior checks select by Message Intent; otherwise continue the current accepted stage.
@@ -419,7 +419,7 @@ Formal repair belongs in the Agent Loop source repository with the regression te
 Use this order:
 
 1. Apply Bootstrap skill loading. After context compaction, long-running sessions, or stage-boundary uncertainty, do not continue from memory alone.
-2. Discover exactly one real memory root before relying on project memory. If both `.agent-loop/` and legacy `agent-loop/` exist, fail closed and route to Recovery. If neither exists, continue entry classification without inventing reliable memory.
+2. Discover exactly one accepted logical memory root before relying on project memory. A verified internal alias may preserve the `.agent-loop/` or legacy name. If both `.agent-loop/` and legacy `agent-loop/` exist, fail closed and route to Recovery. Broken/cyclic/external/file aliases also fail closed. If neither exists, continue entry classification without inventing reliable memory.
 3. If the accepted root contains `project.md`, read it. If it contains only `changes/`, treat project memory as absent/unreliable, run the Change scanner, and do not manufacture `project.md`.
 4. If `project.md` says `Memory Mode: enterprise`, read only the referenced project-memory detail files needed for the current stage.
 5. If `project.md` says `Status: remote-entry`, read `<memory-root>/remote.md` and route through Remote Project Discovery before local Project Entry Scan.
@@ -428,8 +428,8 @@ Use this order:
 6b. If `.agent-loop/skills/INDEX.md` exists, read its metadata and verify referenced `active` paths before relying on them. Re-match active `bootstrap` / `on-demand` rows for each applicable actionable intent before stage-specific helper or fallback action; load and verify only the matched body. Do not load `proposed`, `disabled`, or `deprecated` skills into normal routing.
 6c. For explicit Bug management, read `bugs/INDEX.md` metadata before creating a Bug or scanning Feature ownership. Resolve current Bug README, duplicate/reopen pointers, and related flat/archived Feature locators before relying on lifecycle or target claims.
 6d. When `<memory-root>/changes/` exists, run the read-only Lightweight Change scanner across every month before relying on Change status, pending thresholds, or human-review inventory. A changes-only root does not prove reliable `project.md` or completed Project Entry.
-7. Read current Feature `spec.md` as the bootstrap. Run `python3 <skill-root>/scripts/check-feature-context.py --project-root <target-project-root> <feature-spec-path>` before relying on downstream Feature context. Exit `0 / CURRENT` permits loading stage-relevant ledgers; exit `3 / REFRESH_REQUIRED` stops for semantic refresh; exit `1 / BLOCKED` routes to the owning Requirement, Decision & Design, Feature Definition, or Recovery Gate. On Windows use the equivalent `py -3` command.
-8. Only after Feature Context is `current`, read stage-relevant current Feature `tasks.md`, `tests.md`, `plan.md`, `notes.md`, and `contracts.md` if present. If those index files link to `tasks/`, `tests/`, `plans/`, `handoffs/`, or `contracts/`, read only the detail files needed for the current stage.
+7. Read current Feature `spec.md` as the bootstrap. Run `python3 <skill-root>/scripts/check-feature-context.py --project-root <target-project-root> <feature-spec-path>` before relying on downstream Feature context. Exit `0 / CURRENT` permits the local fast path. Exit `0 / CHANGED` reports factual drift for Agent impact assessment; it is not execution authorization and does not itself choose a Human Gate. Exit `1 / BLOCKED` is reserved for physical or authority-resolution contradictions and routes to Recovery or the owning source repair. On Windows use the equivalent `py -3` command.
+8. Only after the result is `CURRENT`, or after the Agent has assessed `CHANGED`, repaired derived evidence, and rerun to `CURRENT`, read stage-relevant current Feature `tasks.md`, `tests.md`, `plan.md`, `notes.md`, and `contracts.md` if present. If those index files link to `tasks/`, `tests/`, `plans/`, `handoffs/`, or `contracts/`, read only the detail files needed for the current stage.
 9. Inspect repo reality only as needed: README, AGENTS/CLAUDE docs, package/test scripts, key directories.
 10. If local repo reality points to remote execution, or the human says this is a remote project, load `references/remote-project-discovery.md`. An empty local directory alone is not enough; if there are no remote hints, classify as `new-project`.
 11. Verify long-term memory index targets before trusting them. If `project.md`, root guidance, or current artifacts point to onboarding-db, enterprise `project/*.md`, feature docs, contracts, or guidance files, check that the referenced path exists before relying on it.
@@ -439,7 +439,7 @@ Use this order:
 
 This Feature Context Load Contract also runs after context compaction, Resume, controller re-entry, long-running uncertainty, Requirement/ADR source change, archive rehydrate before reopened execution, and before Plan or Execute reliance. Conversation summaries, `tasks.md`, and `plan.md` cannot replace `spec.md` bootstrap plus freshness evidence.
 
-When the checker returns `refresh-required`, read the changed Requirement README and only applicable Product Definition/ADR sections, compare current accepted meaning with the Snapshot and Product Slice, refresh derived context and downstream trace only when scope/acceptance/decision meaning is unchanged, and record evidence in `notes.md`. Scope, behavior, acceptance, role, state, rule, invariant, exception, recovery, or accepted-decision impact returns to the existing Human Gate.
+When the checker returns `CHANGED`, read its reasons plus the changed Requirement README and only applicable Product Definition/ADR sections. Record `no-semantic-impact | derived-context-update | feature-definition-impact | decision-impact | unresolved`. Refresh derived context and downstream trace without another Human Gate only for the first two results, then rerun the scanner to `CURRENT`. Feature-definition impact returns to Requirements Discussion or Gate 1; decision impact returns to Decision & Design; unresolved meaning asks one blocking Human question. `CHANGED` never authorizes target implementation, Auto Mode continuation, or another independently gated action merely because its exit code is zero.
 
 If `project.md` declares a Decisions index, list decision files before Decision & Design or Feature Spec. Read decisions already linked by the active Requirement Product Definition, legacy Feature Product Brief, or `spec.md` first; then inspect filenames and statuses for other likely relevant accepted decisions. Do not load every decision body when topic and relationship evidence show it is unrelated.
 
@@ -469,7 +469,7 @@ If explicit defect/regression/QA/post-close evidence or clear recent Feature own
 
 `maintenance-fix` is not a bypass. It uses the standard feature workspace under `.agent-loop/features/YYYY-MM-DD-fix-<slug>/` and must still pass spec, tasks, tests, plan, verification, review, drift, project memory update when needed, Feature Completion Check, and close.
 
-Default memory root for new projects is `.agent-loop/`. Reuse legacy `agent-loop/` only when it is the single real accepted root, and ask before migrating it.
+Default memory root for new projects is `.agent-loop/`. Reuse legacy `agent-loop/` only when it is the single accepted logical root, and ask before migrating it. A verified internal alias is an observable layout fact, not migration authorization; keep artifact paths logical and stop if its target becomes broken, cyclic, external, or ambiguous.
 
 For existing projects without reliable memory, load `references/project-entry-scan.md`. Run Project Entry Scan: build a shallow, evidence-backed project map before feature work. Do not do a whole-repo deep read unless a targeted feature scan requires it.
 
@@ -754,7 +754,7 @@ Do not offer an auto mode as a substitute for missing clarification. If scope, a
 
 Auto modes do not remove stop conditions. Stop and ask when:
 
-- Feature Context Snapshot freshness is `refresh-required | blocked`; Auto Mode cannot continue until semantic refresh succeeds or the owning Gate resolves the blocker
+- Feature Context scanner reports `CHANGED` without a completed Agent assessment/current refresh, or reports `BLOCKED`; Auto Mode cannot rely on the context until changed facts are assessed and refreshed to `CURRENT`, while physical authority failure routes to Recovery/source repair
 - a task is `Human-gated`
 - product, design, architecture, security, data, approval, or public-interface decisions are needed
 - a stage would modify human original requirements
@@ -768,10 +768,10 @@ Auto modes do not remove stop conditions. Stop and ask when:
 - directory-level `AGENTS.md` creation/update is recommended
 - Complex Artifact Mode detail directories (`tasks/`, `tests/`, `plans/`) would be created or the feature would switch from simple to complex artifact mode
 - the work would require first-version exclusions
-- Feature Monthly Archive or rehydrate is requested; scan may remain read-only, but exact plan SHA-256 confirmation is required before apply
+- Feature Monthly Archive or rehydrate is requested; scan may remain read-only and advisory reference findings do not create a Checker Gate, but exact plan SHA-256 confirmation is required before apply
 - a Bug needs Resolution Path confirmation, close/reopen, Feature creation/reopen, Requirement creation/reconciliation, or another action-specific Human Gate
 - Bug Index/README, duplicate/reopen, Status/Resolution, Resolution Target, Expected Behavior authority, or Fix Feature locator evidence is invalid or contradictory
-- an archive row target is missing, an archived directory lacks a row, a flat/month Feature ID collides, a `rehydrated` row points to a month path, an incomplete `.archive-txn` exists, or verified apply leaves an old durable path
+- an archive row target is missing, an archived directory lacks a row, a flat/month Feature ID collides, a `rehydrated` row points to a month path, an incomplete `.archive-txn` exists, or verified apply leaves an old durable path; these physical/locator contradictions stop their owning operation, while ordinary scan findings are reviewed by the Agent
 - TDD cannot be followed or verification repeatedly fails
 - a canonical Agent Loop checker failure needs a temporary patch but the exact Temporary Checker Repair Review or one-Gate substitute decision is missing, expired, or being widened
 - review finds behavior/scope/architecture changes

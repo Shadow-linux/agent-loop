@@ -14,7 +14,7 @@ The core constraints are:
 - human controls goals, source requirements, and stage gates
 - A new Effective Product Definition cannot bypass Product Human Review confirmation. That confirmation remains separate from Requirement lifecycle, ADR, Feature start, implementation, and Git authorization.
 - agent controls workflow mechanics, artifacts, implementation, verification, and backfill
-- `.agent-loop/` is the default workflow memory root; legacy `agent-loop/` may be read and migrated only after confirmation. If both `.agent-loop/` and legacy `agent-loop/` exist, fail closed and route to Recovery.
+- `.agent-loop/` is the default logical workflow memory root; legacy `agent-loop/` may be read and migrated only after confirmation. One verified internal alias may preserve either logical name. If both `.agent-loop/` and legacy `agent-loop/` exist, fail closed and route to Recovery. Broken/cyclic/external/file aliases also fail closed.
 - local remote-entry directories use thin local `.agent-loop/remote.md` and `project.md`; full memory should live with the remote source of truth when possible
 - root `AGENTS.md` / `CLAUDE.md` are startup guidance artifacts that teach agents to use `agent-loop`
 - root `AGENTS.md` is a compact startup contract and first-hop Gateway projection; `runtime.md` owns the complete executable Stage Order and owning references hold detailed algorithms
@@ -62,7 +62,7 @@ The core constraints are:
 - future/deferred work belongs in requirement sets and optional `requirements/INDEX.md`, not in `project.md`
 - new `product.md` is Requirement-level Brief/Standard product definition; Feature-level `product.md` is legacy reader-only compatibility
 - each feature has stable `spec.md`, `tasks.md`, `tests.md`, `plan.md`, `notes.md`; `contracts.md` is added only after human confirmation when producer-consumer boundaries need explicit handoff
-- Feature Monthly Archive is explicit closed-history maintenance: Feature ID is stable, eligible whole directories move to `features/YYYY-MM/<feature-id>/`, and root `features/archive.md` is only the locator/ledger
+- Feature Monthly Archive is explicit closed-history maintenance: Feature ID is stable, eligible real whole directories move to `features/YYYY-MM/<feature-id>/`, and root `features/archive.md` is only the locator/ledger; symlink/reference findings are evidence, not Checker authorization, a symlinked Feature entry is not planned as a normal move, and Apply rechecks physical move shape before transaction creation
 - archive state is not feature lifecycle; active / blocked / paused features stay flat, and archived closed features rehydrate before reopened execution
 - feature type may be `normal`, `maintenance-fix`, or `follow-up`; all use the same feature workspace model
 - maintenance fixes are narrow feature workspaces under `.agent-loop/features/YYYY-MM-DD-fix-<slug>/`, not naked code edits and not a separate `.agent-loop/maintenance/` tree
@@ -121,10 +121,10 @@ Feature Context Snapshot is a derived execution cache inside Feature `spec.md` b
 Freshness is exactly:
 
 ```text
-current | refresh-required | blocked
+current | changed | blocked
 ```
 
-Freshness is a dependency judgment, not Feature lifecycle, Requirement lifecycle, Product Review, ADR status, execution permission, or a new Human Gate. Requirement, product, and ADR locators in the Snapshot are project-root-relative so archive and rehydrate cannot invalidate them.
+Freshness records facts, not workflow authorization. `CURRENT` and `CHANGED` both use checker exit `0`; the Agent must read the prefix, assess changed Requirement/ADR facts, repair derived context when needed, and obtain current evidence before downstream reliance. `BLOCKED / 1` is limited to physical, uniqueness, containment, existence, or readability contradictions that prevent safe authority resolution. Freshness is not Feature lifecycle, Requirement lifecycle, Product Review, ADR status, execution permission, or a new Human Gate. Requirement, product, and ADR locators in the Snapshot are project-root-relative so archive and rehydrate cannot invalidate them.
 
 The authority and execution chain is:
 
@@ -138,7 +138,7 @@ Requirement README
 -> Execute / Verify / Review
 ```
 
-Before Task, Test, Plan, Resume, Execute, Subagent Handoff, Verify, Review, Drift Check, or Close relies on Feature context, the read-only checker must resolve the Requirement authority and require current Product/ADR evidence. `refresh-required` stops downstream generation for semantic refresh; `blocked` routes to the existing owning Requirement, Decision & Design, Feature Definition, or Recovery Gate. Auto Mode cannot continue on either result.
+Before Task, Test, Plan, Resume, Execute, Subagent Handoff, Verify, Review, Drift Check, or Close relies on Feature context, the read-only scanner resolves Requirement/ADR facts. `CURRENT / 0` permits the local fast path. `CHANGED / 0` requires Agent impact assessment and a derived refresh/rerun before reliance; semantic impact returns to the existing owning Gate. `BLOCKED / 1` is reserved for physical authority-resolution contradictions. Auto Mode cannot treat either a changed prefix or exit `0` alone as current authorization.
 
 ## Feature Construction Two-Gate Invariant
 
@@ -251,7 +251,7 @@ One coherent Feature may resolve several Bugs. Each Bug retains independent iden
 
 **Feature Context Snapshot**: a compact, derived execution cache in Feature `spec.md` that records project-root-relative Requirement/ADR authority, source digests, Product Slice references, and the product outcome, journey, rules, states, exceptions, recovery, boundary, and acceptance context needed for downstream work. Product and Decision Markdown digests canonicalize `CRLF` and lone `CR` to `LF`, so checkout-only newline changes do not create false drift; legacy raw LF/CRLF digests remain reader-compatible. It cannot redefine accepted product or ADR meaning.
 
-**Feature Monthly Archive**: An explicit, Human-gated maintenance capability that moves an eligible closed feature directory intact to `.agent-loop/features/YYYY-MM/<feature-id>/`, updates `features/archive.md` and approved references, post-checks, and restores on failure. The scan is read-only and apply requires the exact expected plan SHA-256 Batch Human Gate plus transaction journal. It creates no per-feature archive summary, no `historical/`, no Deep Archive, and no `--force`.
+**Feature Monthly Archive**: An explicit, Human-gated maintenance capability that moves an eligible closed real feature directory intact to `.agent-loop/features/YYYY-MM/<feature-id>/`, updates `features/archive.md` and approved references, post-checks, and restores on failure. The scan is read-only; it records Feature-entry symlinks as facts instead of normal moves. A verified internal memory-root alias keeps its logical root name and hash-bound target evidence. Apply requires the exact expected plan SHA-256 Batch Human Gate, rechecks real move paths before transaction creation, and retains the journal. It creates no per-feature archive summary, no `historical/`, no Deep Archive, and no `--force`.
 
 **Feature Locator**: The root `features/archive.md` mapping from stable Feature ID to current flat or month path. It locates history but does not own product, requirement, decision, lifecycle, test, or delivery facts.
 
@@ -494,7 +494,9 @@ Project memory and feature close evidence are reliable
 Action:
 
 ```text
-Run read-only scan and show one deterministic Batch Review.
+Run read-only scan, report deterministic reference findings, and do not follow symlinks.
+Agent judges reference coverage and recommends continue or one blocking question.
+Show one deterministic Batch Review only when the Agent can explain residual risk.
 Wait for confirmation of the exact plan SHA-256.
 Apply only eligible moves through the transaction journal.
 Update the root locator and approved references, then post-check.
@@ -586,7 +588,7 @@ Explicit Bug Management / active Feature ownership first
 
 Eligibility is all-of; Feature hard triggers are any-of. The lane reduces ceremony and document depth, not accuracy, scope control, verification strength, rollback, fact review, or Human Gates. Fact/config/path/domain/docs changes use failure-matched targeted verification, while isolated behavior logic uses the smallest meaningful RED/GREEN. Scope expansion stops before broader edits and returns to Human Review.
 
-The card is created under the one accepted memory root at `changes/YYYY-MM/YYYY-MM-DD-<topic>.md` before the first target write. A changes-only root does not prove initialization; a unique legacy root is reused; dual roots fail closed. The creation month is stable and not Archive. Same-day collisions use the first unused numeric topic suffix without overwrite. There is no Change README, INDEX, archive, move, rehydrate, restore transaction, scheduler, shared counter, new canonical stage, or helper-native document tree.
+The card is created under the one accepted logical memory root at `changes/YYYY-MM/YYYY-MM-DD-<topic>.md` before the first target write. A verified internal root alias keeps that logical path; broken/cyclic/external/file aliases and dual roots fail closed. A changes-only root does not prove initialization; a unique legacy root is reused. The creation month is stable and not Archive. Same-day collisions use the first unused numeric topic suffix without overwrite. There is no Change README, INDEX, archive, move, rehydrate, restore transaction, scheduler, shared counter, new canonical stage, or helper-native document tree.
 
 Accidental interruption may resume one `in-progress` card only after full branch, HEAD, dirty-work, Scope/Plan/progress, eligibility, verification, and rollback revalidation. Planned multi-session work, pause/resume, handoff, Subagent execution, long observation, and complex evidence remain Feature hard triggers.
 

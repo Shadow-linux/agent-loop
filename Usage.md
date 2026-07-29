@@ -1,6 +1,6 @@
 # Agent Loop Usage
 
-**版本：** 1.5.2（正式稳定版）
+**版本：** 1.5.3（开发版）
 
 这是一份给人类使用的触发指南。你不需要记住 Agent Loop 的阶段名；只要说明目标、边界和你希望 Agent 自主推进到哪里，Agent 负责判断项目状态、选择流程、维护产物并在真正的 Human Gate 停下。
 
@@ -135,7 +135,7 @@ Auto-Loop 不是无限授权。Agent 仍然必须停在需求变化、关键设�
 帮我接管这个已有项目，先看看现在的真实状态，再告诉我从哪里继续。
 ```
 
-Agent 会区分新项目、已有项目、远程项目、恢复、re-adopt 和 stale-memory，并只接受一个真实 memory root。`.agent-loop/` 与 legacy `agent-loop/` 同时存在时会停止并要求处理双根冲突。
+Agent 会区分新项目、已有项目、远程项目、恢复、re-adopt 和 stale-memory，并只接受一个逻辑 memory root。唯一的项目内目录别名可以保留 `.agent-loop/` 或 legacy 逻辑路径；断裂、循环、项目外、文件别名或双根冲突仍会停止。
 
 ### 恢复中断的工作
 
@@ -166,8 +166,8 @@ Agent 会检查核心流程完整性，并按需要使用架构/边界图、ASCI
 这些说法都会路由到人类文档，而不是凭 Agent 记忆回答：
 
 ```text
-1.5.2 更新了什么？
-当前 1.5.2 使用的是什么流程？
+1.5.3 更新了什么？
+当前 1.5.3 使用的是什么流程？
 和 1.2.2 比有什么变化？
 现在 agent-loop 怎么用？
 ```
@@ -308,7 +308,7 @@ Feature `spec.md` 只选择产品切片，不重新定义产品。复杂任务�
 
 Feature 已经有明确的 Product Slice、适用 ADR、范围、排除项和验收时，Agent 不会为了形式调用 brainstorming，而是直接整理 Feature Spec。只有仍存在一个具体的 Feature-local 范围、验收或实施边界问题时才使用它；它只能辅助收敛局部定义，不能重新设计产品或改写已接受 ADR。
 
-Feature 工作从 `spec.md` 里的本地 **Feature Context Snapshot** 开始。Agent 会自动从 Requirement README 找到真正的 `product.md`，检查适用 ADR 和摘要是否仍然一致；来源未变时走快速路径，来源变化时先刷新语义或停在已有 Human Gate。人类不需要手动定位、重开或反复指定 `product.md`。Snapshot 只是派生执行上下文，不是第二份产品真相；只有复杂且长期运行的 Feature 才会在现有 Complex Artifact Human Gate 后增加可选 `context.md`。
+Feature 工作从 `spec.md` 里的本地 **Feature Context Snapshot** 开始。Scanner 自动收集 Requirement README、真实 `product.md`、适用 ADR、路径和摘要事实：`CURRENT` 走快速路径，`CHANGED` 由 Agent 判断是缓存刷新还是产品/决策影响，只有来源缺失、双指针、越界等物理权威矛盾才返回 `BLOCKED`。`CHANGED` 的退出码虽然是 0，但不会授权实施；Agent 必须评估并刷新到 `CURRENT`，或返回已有 Human Gate。人类不需要为格式或摘要刷新单独授权。Snapshot 只是派生执行上下文，不是第二份产品真相；只有复杂且长期运行的 Feature 才会在现有 Complex Artifact Human Gate 后增加可选 `context.md`。
 
 你不需要记住 Feature 的内部阶段。正常只会在两个时点找你：
 
@@ -585,7 +585,9 @@ hotfix/v1.0.0/login-security
 .agent-loop/features/YYYY-MM/<feature-id>/
 ```
 
-`features/archive.md` 用稳定 Feature ID 定位当前位置。Archive 不压缩、不删除、不改变产品或决策权威。需要再次修复时先独立 rehydrate scan 和 Human Gate；rehydrate 不自动 reopen Feature。
+`features/archive.md` 用稳定 Feature ID 定位当前位置。Scanner 只读收集普通 Markdown 引用和未跟随的 symlink/不确定引用事实，不会因为这些发现自行判定“允许”或“禁止”归档。Feature 入口本身是 symlink 时只报告 `feature-entry-symlink`，不生成普通移动；安全的内部 memory-root alias 保留 `.agent-loop/...` 逻辑路径，并把目标事实绑定进 plan hash。Agent 检查真实路径、引用覆盖、冲突、风险和恢复条件，再推荐继续到精确 plan SHA-256 Human Gate，或只问一个阻塞问题。人类批准后，执行器先复核真实 move shape，再创建 transaction，只应用这一份 exact plan，并保留 rollback 和项目写边界。
+
+Archive 不压缩、不删除、不改变产品或决策权威。需要再次修复时先独立 rehydrate scan 和 Human Gate；rehydrate 不自动 reopen Feature。普通引用 finding 不进入 Checker Recovery；只有真实的 checker 实现矛盾、执行环境失败或事务恢复问题才进入各自恢复路径。
 
 ## 代码合并后校准项目记忆
 
@@ -669,7 +671,7 @@ Feature Close Review 先确认所有任务、验收、测试、决策切片、Bu
 帮我看看项目根目录的 AGENTS.md 有没有落后。先告诉我差异，不要直接覆盖。
 ```
 
-当脚本可用时，Agent 使用 Python 3.10+ 运行 `scripts/check-root-agents-blocks.py`，把结果作为 Human Review Summary 证据；写入仍需单独确认。
+当脚本可用时，Agent 使用 Python 3.10+ 运行 `scripts/check-root-agents-blocks.py`。`STRUCTURAL_CURRENT / 0` 表示 marker、revision、source 与 Agent Loop-owned 正文一致；`STRUCTURAL_CHANGED / 0` 仍需 Agent 判断；`STRUCTURAL_INVALID / 1` 只表示 marker 或路径结构不可安全解释。项目自有 block 的语义由 Agent 对照 source 审核，任何写入仍需单独确认。
 
 ## 你不需要记住阶段名
 

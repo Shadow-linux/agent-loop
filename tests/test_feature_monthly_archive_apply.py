@@ -5,6 +5,7 @@ import json
 import sys
 import tempfile
 import unittest
+from datetime import date
 from pathlib import Path
 
 from tests.feature_archive_test_support import (
@@ -104,6 +105,208 @@ class FeatureMonthlyArchiveCheckTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("PASS", result.stdout)
             self.assertEqual(tree_snapshot(workspace.project_root), before)
+
+    def test_unsupported_reference_is_advisory_for_exact_plan_apply(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = ArchiveWorkspace(Path(temp))
+            feature_id = "2026-05-08-login"
+            source = workspace.feature(feature_id)
+            ambiguous = workspace.write(
+                "docs/ambiguous.md",
+                f"# Ambiguous\n\nencoded=.agent-loop/features/{feature_id}%2Fspec.md\n",
+            )
+            original = ambiguous.read_bytes()
+            payload = self.scanned_plan(workspace)
+            self.assertTrue(
+                any(
+                    item["path"] == "docs/ambiguous.md"
+                    and item["classification"] == "unsupported"
+                    for item in payload["skipped_references"]
+                )
+            )
+
+            result = self.apply(workspace, payload)
+
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertFalse(source.exists())
+            self.assertTrue(
+                (workspace.features_root / "2026-05" / feature_id).is_dir()
+            )
+            self.assertEqual(ambiguous.read_bytes(), original)
+
+    def test_symlink_retarget_invalidates_previous_exact_plan(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = ArchiveWorkspace(Path(temp))
+            feature_id = "2026-05-08-login"
+            source = workspace.feature(feature_id)
+            (workspace.project_root / ".agents-a").mkdir()
+            (workspace.project_root / ".agents-b").mkdir()
+            alias = workspace.project_root / ".claude"
+            try:
+                alias.symlink_to(".agents-a", target_is_directory=True)
+            except OSError as error:
+                self.skipTest(f"directory symlink unavailable: {error}")
+            payload = self.scanned_plan(workspace)
+
+            alias.unlink()
+            alias.symlink_to(".agents-b", target_is_directory=True)
+            before = tree_snapshot(workspace.project_root)
+            result = self.apply(workspace, payload)
+
+            self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+            self.assertIn("stale-plan", result.stdout + result.stderr)
+            self.assertEqual(tree_snapshot(workspace.project_root), before)
+            self.assertTrue(source.is_dir())
+
+    def test_apply_rejects_feature_entry_symlink_before_transaction_or_move(self) -> None:
+        scripts_dir = str(Path(__file__).resolve().parents[1] / "scripts")
+        if scripts_dir not in sys.path:
+            sys.path.insert(0, scripts_dir)
+        from feature_archive_support import (
+            ArchiveContractError,
+            apply_archive_plan,
+            build_archive_plan,
+        )
+
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = ArchiveWorkspace(Path(temp))
+            feature_id = "2026-05-08-login"
+            feature = workspace.feature(feature_id)
+            plan = build_archive_plan(
+                workspace.project_root,
+                operation="archive",
+                selected_months=("2026-05",),
+                selected_feature_ids=(),
+                as_of=date.fromisoformat("2026-07-14"),
+            )
+            payload_root = workspace.project_root / ".feature-payloads" / feature_id
+            payload_root.parent.mkdir()
+            feature.rename(payload_root)
+            try:
+                feature.symlink_to(payload_root, target_is_directory=True)
+            except OSError as error:
+                self.skipTest(f"directory symlink unavailable: {error}")
+
+            with self.assertRaisesRegex(ArchiveContractError, "stale-plan"):
+                apply_archive_plan(
+                    workspace.project_root,
+                    plan,
+                    expected_plan_sha256=plan.computed_sha256(),
+                )
+
+            self.assertTrue(feature.is_symlink())
+            self.assertTrue(payload_root.is_dir())
+            self.assertFalse((workspace.features_root / ".archive-txn").exists())
+
+    def test_internal_memory_root_alias_applies_using_logical_plan_paths(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = ArchiveWorkspace(Path(temp))
+            feature_id = "2026-05-08-login"
+            workspace.feature(feature_id)
+            real_memory = workspace.project_root / ".memory"
+            workspace.memory_root.rename(real_memory)
+            try:
+                workspace.memory_root.symlink_to(".memory", target_is_directory=True)
+            except OSError as error:
+                self.skipTest(f"directory symlink unavailable: {error}")
+
+            payload = self.scanned_plan(workspace)
+            result = self.apply(workspace, payload)
+
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertTrue(
+                (real_memory / "features" / "2026-05" / feature_id).is_dir()
+            )
+            self.assertFalse((real_memory / "features" / feature_id).exists())
+
+    def test_memory_root_alias_retarget_invalidates_the_reviewed_plan(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = ArchiveWorkspace(Path(temp))
+            feature_id = "2026-05-08-login"
+            workspace.feature(feature_id)
+            first_memory = workspace.project_root / ".memory-a"
+            second_memory = workspace.project_root / ".memory-b"
+            workspace.memory_root.rename(first_memory)
+            try:
+                workspace.memory_root.symlink_to(
+                    ".memory-a", target_is_directory=True
+                )
+            except OSError as error:
+                self.skipTest(f"directory symlink unavailable: {error}")
+            payload = self.scanned_plan(workspace)
+
+            workspace.memory_root.unlink()
+            first_memory.rename(second_memory)
+            workspace.memory_root.symlink_to(
+                ".memory-b", target_is_directory=True
+            )
+            before = tree_snapshot(workspace.project_root)
+            result = self.apply(workspace, payload)
+
+            self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+            self.assertIn("stale-plan", result.stdout + result.stderr)
+            self.assertEqual(tree_snapshot(workspace.project_root), before)
+            self.assertFalse((second_memory / "features" / ".archive-txn").exists())
+
+    def test_internal_memory_root_alias_restores_after_injected_failure(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = ArchiveWorkspace(Path(temp))
+            feature_id = "2026-05-08-login"
+            workspace.feature(feature_id)
+            workspace.write(
+                ".agent-loop/project.md",
+                f"# Project\n\nOwner: `.agent-loop/features/{feature_id}/spec.md`\n",
+            )
+            real_memory = workspace.project_root / ".memory"
+            workspace.memory_root.rename(real_memory)
+            try:
+                workspace.memory_root.symlink_to(".memory", target_is_directory=True)
+            except OSError as error:
+                self.skipTest(f"directory symlink unavailable: {error}")
+            payload = self.scanned_plan(workspace)
+            before = tree_snapshot(workspace.project_root)
+
+            result = self.apply(
+                workspace,
+                payload,
+                env={
+                    "AGENT_LOOP_ARCHIVE_TEST_MODE": "1",
+                    "AGENT_LOOP_ARCHIVE_FAIL_AFTER": "2",
+                },
+            )
+
+            self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+            self.assertIn("restore=complete", result.stdout + result.stderr)
+            self.assertEqual(tree_snapshot(workspace.project_root), before)
+            self.assertTrue(workspace.memory_root.is_symlink())
+            self.assertFalse((real_memory / "features" / ".archive-txn").exists())
+
+    def test_reference_file_replaced_by_external_symlink_cannot_be_written(self) -> None:
+        with tempfile.TemporaryDirectory() as temp, tempfile.TemporaryDirectory() as outside:
+            workspace = ArchiveWorkspace(Path(temp))
+            feature_id = "2026-05-08-login"
+            source = workspace.feature(feature_id)
+            reference = workspace.write(
+                "docs/reference.md",
+                f"# Reference\n\n.agent-loop/features/{feature_id}/spec.md\n",
+            )
+            payload = self.scanned_plan(workspace)
+            external = Path(outside) / "external.md"
+            external.write_text("must stay unchanged\n", encoding="utf-8")
+            reference.unlink()
+            try:
+                reference.symlink_to(external)
+            except OSError as error:
+                self.skipTest(f"file symlink unavailable: {error}")
+            before_external = external.read_bytes()
+
+            result = self.apply(workspace, payload)
+
+            self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+            self.assertIn("stale-plan", result.stdout + result.stderr)
+            self.assertEqual(external.read_bytes(), before_external)
+            self.assertTrue(reference.is_symlink())
+            self.assertTrue(source.is_dir())
 
     def test_pre_check_rejects_snapshot_drift_without_mutation(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

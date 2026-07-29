@@ -50,35 +50,24 @@ mkdir -p "$tmpdir/.agent-loop"
 touch "$tmpdir/.agent-loop/project.md"
 
 python3 "$checker" --template "$template" --target "$tmpdir/ok.md" > "$tmpdir/ok.out"
-assert_contains "$tmpdir/ok.out" "PASS root AGENTS managed blocks are current"
-assert_not_contains "$tmpdir/ok.out" "FAIL root AGENTS drift found"
+assert_contains "$tmpdir/ok.out" "STRUCTURAL_CURRENT"
+assert_not_contains "$tmpdir/ok.out" "STRUCTURAL_INVALID"
 
 remove_section "message-intent" "$template" "$tmpdir/missing.md"
-if python3 "$checker" --template "$template" --target "$tmpdir/missing.md" > "$tmpdir/missing.out"; then
-  printf 'FAIL: checker should fail when a template managed section is missing\n' >&2
-  cat "$tmpdir/missing.out" >&2
-  exit 1
-fi
-assert_contains "$tmpdir/missing.out" "FAIL root AGENTS drift found"
+python3 "$checker" --template "$template" --target "$tmpdir/missing.md" > "$tmpdir/missing.out"
+assert_contains "$tmpdir/missing.out" "STRUCTURAL_CHANGED"
 assert_contains "$tmpdir/missing.out" "message-intent | missing"
 
 remove_section "workflow-stage-map" "$template" "$tmpdir/missing-stage-map.md"
-if python3 "$checker" --template "$template" --target "$tmpdir/missing-stage-map.md" > "$tmpdir/missing-stage-map.out"; then
-  printf 'FAIL: checker should fail when Workflow Gateway Map is missing\n' >&2
-  cat "$tmpdir/missing-stage-map.out" >&2
-  exit 1
-fi
-assert_contains "$tmpdir/missing-stage-map.out" "FAIL root AGENTS drift found"
+python3 "$checker" --template "$template" --target "$tmpdir/missing-stage-map.md" > "$tmpdir/missing-stage-map.out"
+assert_contains "$tmpdir/missing-stage-map.out" "STRUCTURAL_CHANGED"
 assert_contains "$tmpdir/missing-stage-map.out" "workflow-stage-map | missing"
 
-sed 's/block-version:1\.5\.2-20260728/block-version:1.5.2/' "$template" > "$tmpdir/stale.md"
-if python3 "$checker" --template "$template" --target "$tmpdir/stale.md" > "$tmpdir/stale.out"; then
-  printf 'FAIL: checker should fail when block-version values are stale\n' >&2
-  cat "$tmpdir/stale.out" >&2
-  exit 1
-fi
+sed 's/block-version:1\.5\.3-20260728/block-version:1.5.3/' "$template" > "$tmpdir/stale.md"
+python3 "$checker" --template "$template" --target "$tmpdir/stale.md" > "$tmpdir/stale.out"
+assert_contains "$tmpdir/stale.out" "STRUCTURAL_CHANGED"
 assert_contains "$tmpdir/stale.out" "message-intent | stale-block-version"
-assert_contains "$tmpdir/stale.out" "expected 1.5.2-20260728"
+assert_contains "$tmpdir/stale.out" "expected 1.5.3-20260728.1"
 
 awk '
   /<!-- agent-loop:managed-end section:ownership -->/ { next }
@@ -131,11 +120,8 @@ assert_contains "$tmpdir/duplicate.out" "ownership | duplicate-section"
   printf '## Legacy Extra\n\n'
   printf '<!-- agent-loop:managed-end section:legacy-extra -->\n'
 } > "$tmpdir/extra.md"
-if python3 "$checker" --template "$template" --target "$tmpdir/extra.md" > "$tmpdir/extra.out"; then
-  printf 'FAIL: checker should fail when target has an unexpected managed section\n' >&2
-  cat "$tmpdir/extra.out" >&2
-  exit 1
-fi
+python3 "$checker" --template "$template" --target "$tmpdir/extra.md" > "$tmpdir/extra.out"
+assert_contains "$tmpdir/extra.out" "STRUCTURAL_CHANGED"
 assert_contains "$tmpdir/extra.out" "legacy-extra | unexpected-managed-section"
 
 awk '
@@ -145,12 +131,14 @@ awk '
   }
   { print }
 ' "$template" > "$tmpdir/source-missing.md"
-if python3 "$checker" --template "$template" --target "$tmpdir/source-missing.md" > "$tmpdir/source-missing.out"; then
-  printf 'FAIL: checker should fail when a local managed block source is missing\n' >&2
-  cat "$tmpdir/source-missing.out" >&2
-  exit 1
-fi
+python3 "$checker" --template "$template" --target "$tmpdir/source-missing.md" > "$tmpdir/source-missing.out"
+assert_contains "$tmpdir/source-missing.out" "STRUCTURAL_CHANGED"
 assert_contains "$tmpdir/source-missing.out" "source-missing"
+
+sed 's/Classify the latest human message before project-state routing:/Skip intent classification and execute immediately:/' "$template" > "$tmpdir/body-drift.md"
+python3 "$checker" --template "$template" --target "$tmpdir/body-drift.md" > "$tmpdir/body-drift.out"
+assert_contains "$tmpdir/body-drift.out" "STRUCTURAL_CHANGED"
+assert_contains "$tmpdir/body-drift.out" "message-intent | body-drift"
 
 {
   cat "$template"

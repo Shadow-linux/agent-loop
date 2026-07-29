@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import errno
 import json
 import os
 import re
@@ -16,6 +17,8 @@ from urllib.parse import unquote, urlsplit, urlunsplit
 from checker_support import (
     atomic_write_bytes,
     canonical_json_bytes,
+    CheckFailure,
+    discover_memory_root_authority,
     metadata,
     optional_section,
     read_text,
@@ -113,7 +116,12 @@ class ReferenceEdit:
 class SkippedReference:
     path: str
     classification: Literal[
-        "immutable-requirement-source", "historical-evidence", "unsupported"
+        "immutable-requirement-source",
+        "historical-evidence",
+        "unsupported",
+        "reference-scan-symlink",
+        "feature-entry-symlink",
+        "memory-root-alias",
     ]
     matched_value: str
     reason: str
@@ -247,19 +255,14 @@ class ArchivePlan:
 
 
 def discover_memory_root(project_root: Path) -> Path:
-    hidden = project_root / ".agent-loop"
-    legacy = project_root / "agent-loop"
-    if hidden.is_dir() and legacy.is_dir():
-        raise ArchiveContractError(
-            "memory-root", "both .agent-loop and legacy agent-loop exist"
-        )
-    if hidden.is_dir():
-        return hidden.resolve()
-    if legacy.is_dir():
-        return legacy.resolve()
-    raise ArchiveContractError(
-        "memory-root", "no agent-loop memory root exists", 2
-    )
+    try:
+        authority = discover_memory_root_authority(project_root)
+    except CheckFailure as error:
+        exit_code = 2 if "no agent-loop memory root" in error.detail else 1
+        raise ArchiveContractError("memory-root", error.detail, exit_code) from error
+    if authority is None:
+        raise AssertionError("required memory root discovery returned none")
+    return authority.logical
 
 
 def _split_row(line: str) -> list[str]:
@@ -573,6 +576,10 @@ def inspect_feature(
     project = _read_optional(memory_root / "project.md")
     lifecycle = (metadata(spec, "Status") or "missing").strip()
     blockers: list[str] = []
+    if root.is_symlink():
+        blockers.append("feature-entry-symlink")
+    if (memory_root / "features").is_symlink():
+        blockers.append("features-container-symlink")
     if lifecycle != "closed":
         blockers.append(f"lifecycle:{lifecycle}")
     if month == as_of.strftime("%Y-%m"):
@@ -660,8 +667,6 @@ def discover_flat_features(memory_root: Path) -> Sequence[FeatureLocation]:
         return ()
     locations: list[FeatureLocation] = []
     for child in sorted(root.iterdir(), key=lambda item: item.name):
-        if child.is_symlink():
-            raise ArchiveContractError("path-escape", f"symlinked feature path: {child}")
         if child.is_dir() and FEATURE_ID_RE.fullmatch(child.name):
             locations.append(
                 FeatureLocation(child.name, f"features/{child.name}", "flat", None)
@@ -669,40 +674,165 @@ def discover_flat_features(memory_root: Path) -> Sequence[FeatureLocation]:
     return tuple(locations)
 
 
-def _markdown_files(project_root: Path) -> Sequence[Path]:
-    files: list[Path] = []
-    boundary = project_root.resolve()
-    for current, directories, names in os.walk(project_root, followlinks=False):
-        current_path = Path(current)
-        kept: list[str] = []
-        for name in sorted(directories):
-            candidate = current_path / name
-            if name in EXCLUDED_SCAN_DIRS:
-                continue
-            if candidate.is_symlink():
-                raise ArchiveContractError(
-                    "path-escape",
-                    f"symlinked directory cannot be reference-scanned: {candidate.relative_to(project_root).as_posix()}",
-                )
-            kept.append(name)
-        directories[:] = kept
-        for name in sorted(names):
-            if not name.lower().endswith(".md"):
-                continue
-            candidate = current_path / name
-            if candidate.is_symlink():
-                raise ArchiveContractError(
-                    "path-escape",
-                    f"symlinked Markdown cannot be reference-scanned: {candidate.relative_to(project_root).as_posix()}",
-                )
+def _resolve_link_target_after_platform_error(candidate: Path) -> Path:
+    """Resolve a relative link target without relying on the link's own resolve().
+
+    Windows can raise an ``OSError`` while resolving a valid relative symlink.
+    Read each link target from its containing directory first so factual scan output
+    stays deterministic across platforms.
+    """
+
+    current = candidate
+    seen: set[str] = set()
+    while True:
+        marker = os.path.normcase(os.path.normpath(os.path.abspath(current)))
+        if marker in seen:
+            raise RuntimeError(f"symlink cycle: {candidate}")
+        seen.add(marker)
+        raw_target = os.readlink(current)
+        target = Path(raw_target)
+        current = target if target.is_absolute() else current.parent / target
+        if current.is_symlink():
+            continue
+        if not current.exists():
+            raise FileNotFoundError(current)
+        return current.resolve(strict=True)
+
+
+def _symlink_reference_finding(
+    project_root: Path,
+    candidate: Path,
+    kind: str,
+    *,
+    memory_root: Path | None = None,
+) -> SkippedReference:
+    relative = candidate.relative_to(project_root).as_posix()
+    try:
+        resolved = candidate.resolve(strict=True)
+    except RuntimeError:
+        resolved = None
+        resolution, target = "cycle", ""
+    except FileNotFoundError:
+        resolved = None
+        resolution, target = "broken", ""
+    except OSError as error:
+        if error.errno == errno.ELOOP:
+            resolved = None
+            resolution, target = "cycle", ""
+        else:
             try:
-                candidate.resolve().relative_to(boundary)
-            except ValueError as error:
-                raise ArchiveContractError(
-                    "path-escape", candidate.relative_to(project_root).as_posix()
-                ) from error
-            files.append(candidate)
-    return tuple(sorted(files))
+                resolved = _resolve_link_target_after_platform_error(candidate)
+            except RuntimeError:
+                resolved = None
+                resolution, target = "cycle", ""
+            except FileNotFoundError:
+                resolved = None
+                resolution, target = "broken", ""
+            except OSError:
+                resolved = None
+                resolution, target = "unresolved", ""
+    if resolved is not None:
+        try:
+            target = resolved.relative_to(project_root.resolve()).as_posix()
+        except ValueError:
+            resolution, target = "external", ""
+        else:
+            resolution = "internal"
+    matched = f"{kind}:{resolution}" + (f":{target}" if target else "")
+    classification = "reference-scan-symlink"
+    reason = "not-followed"
+    if memory_root is not None and candidate == memory_root and resolution == "internal":
+        classification = "memory-root-alias"
+        reason = "verified-logical-alias"
+    else:
+        parts = PurePosixPath(relative).parts
+        offset = 1 if parts and parts[0] in {".agent-loop", "agent-loop"} else 0
+        feature_parts = parts[offset:]
+        if (
+            len(feature_parts) == 2
+            and feature_parts[0] == "features"
+            and FEATURE_ID_RE.fullmatch(feature_parts[1])
+        ) or (
+            len(feature_parts) == 3
+            and feature_parts[0] == "features"
+            and MONTH_RE.fullmatch(feature_parts[1])
+            and FEATURE_ID_RE.fullmatch(feature_parts[2])
+        ):
+            classification = "feature-entry-symlink"
+            reason = "not-a-movable-directory-entry"
+    return SkippedReference(relative, classification, matched, reason)
+
+
+def _markdown_files(
+    project_root: Path, memory_root: Path
+) -> tuple[Sequence[Path], Sequence[SkippedReference]]:
+    files: list[Path] = []
+    findings: list[SkippedReference] = []
+    boundary = project_root.resolve()
+    memory_target = memory_root.resolve()
+
+    def collect(scan_root: Path, *, logical_memory_walk: bool) -> None:
+        for current, directories, names in os.walk(scan_root, followlinks=False):
+            current_path = Path(current)
+            kept: list[str] = []
+            for name in sorted(directories):
+                candidate = current_path / name
+                if name in EXCLUDED_SCAN_DIRS:
+                    continue
+                if candidate.is_symlink():
+                    findings.append(
+                        _symlink_reference_finding(
+                            project_root,
+                            candidate,
+                            "directory",
+                            memory_root=memory_root,
+                        )
+                    )
+                    continue
+                if (
+                    memory_root.is_symlink()
+                    and not logical_memory_walk
+                    and candidate.resolve() == memory_target
+                ):
+                    continue
+                kept.append(name)
+            directories[:] = kept
+            for name in sorted(names):
+                candidate = current_path / name
+                if candidate.is_symlink():
+                    findings.append(
+                        _symlink_reference_finding(
+                            project_root,
+                            candidate,
+                            "markdown-file" if name.lower().endswith(".md") else "entry",
+                            memory_root=memory_root,
+                        )
+                    )
+                    continue
+                if not name.lower().endswith(".md"):
+                    continue
+                try:
+                    candidate.resolve().relative_to(boundary)
+                except ValueError as error:
+                    raise ArchiveContractError(
+                        "path-escape", candidate.relative_to(project_root).as_posix()
+                    ) from error
+                files.append(candidate)
+
+    collect(project_root, logical_memory_walk=False)
+    if memory_root.is_symlink():
+        collect(memory_root, logical_memory_walk=True)
+    return tuple(sorted(files)), tuple(
+        sorted(
+            findings,
+            key=lambda item: (
+                item.path,
+                item.classification,
+                item.matched_value,
+                item.reason,
+            ),
+        )
+    )
 
 
 def _preserved_reference_class(relative: str) -> str | None:
@@ -807,11 +937,12 @@ def _relative_link_replacements(
 
 
 def _discover_reference_impact(
-    project_root: Path, moves: Sequence[Move]
+    project_root: Path, moves: Sequence[Move], memory_root: Path
 ) -> tuple[Sequence[ReferenceEdit], Sequence[SkippedReference]]:
     planned: dict[str, list[tuple[str, str, str]]] = {}
-    skipped: list[SkippedReference] = []
-    for path in _markdown_files(project_root):
+    markdown_files, symlink_findings = _markdown_files(project_root, memory_root)
+    skipped: list[SkippedReference] = list(symlink_findings)
+    for path in markdown_files:
         relative = path.relative_to(project_root).as_posix()
         if relative in {
             ".agent-loop/features/archive.md",
@@ -920,7 +1051,9 @@ def _discover_reference_impact(
 def discover_reference_impacts(
     project_root: Path, moves: Sequence[Move]
 ) -> Sequence[ReferenceEdit]:
-    edits, _ = _discover_reference_impact(project_root, moves)
+    edits, _ = _discover_reference_impact(
+        project_root, moves, discover_memory_root(project_root)
+    )
     return edits
 
 
@@ -950,6 +1083,8 @@ def _snapshot_plan_inputs(
     paths: set[Path] = set()
     for candidate in candidates:
         root = memory_root / PurePosixPath(candidate.current_path)
+        if root.is_symlink():
+            continue
         if root.is_dir():
             for path in root.rglob("*"):
                 if path.is_symlink():
@@ -967,7 +1102,11 @@ def _snapshot_plan_inputs(
         paths.add(project_root / PurePosixPath(item.path))
     for item in skipped_references:
         path = project_root / PurePosixPath(item.path)
-        if path.is_file() and path.stat().st_size <= MAX_MARKDOWN_BYTES:
+        if (
+            not path.is_symlink()
+            and path.is_file()
+            and path.stat().st_size <= MAX_MARKDOWN_BYTES
+        ):
             paths.add(path)
     return MappingProxyType(
         {
@@ -1076,7 +1215,7 @@ def build_archive_plan(
         )
 
     reference_edits, skipped_references = _discover_reference_impact(
-        project_root, moves
+        project_root, moves, memory_root
     )
     snapshots = _snapshot_plan_inputs(
         project_root,
@@ -1153,6 +1292,49 @@ def _hash_at(path: Path) -> str:
     return sha256_bytes(path.read_bytes())
 
 
+def _assert_pre_transaction_move_paths(
+    project_root: Path, memory_root: Path, moves: Sequence[Move]
+) -> None:
+    memory_prefix = PurePosixPath(
+        _project_relative_prefix(project_root, memory_root)
+    ).parts
+    required_prefix = memory_prefix + ("features",)
+    for move in moves:
+        source_relative = PurePosixPath(move.source)
+        target_relative = PurePosixPath(move.target)
+        for label, relative in (("source", source_relative), ("target", target_relative)):
+            if relative.parts[: len(required_prefix)] != required_prefix:
+                raise ArchiveContractError(
+                    "stale-plan",
+                    f"move {label} is outside logical Feature storage: {relative.as_posix()}",
+                )
+            cursor = memory_root / "features"
+            if cursor.is_symlink():
+                raise ArchiveContractError(
+                    "stale-plan", "features container became a symlink"
+                )
+            for part in relative.parts[len(required_prefix) :]:
+                cursor = cursor / part
+                if cursor.is_symlink():
+                    raise ArchiveContractError(
+                        "stale-plan",
+                        f"move {label} became a symlink: {relative.as_posix()}",
+                    )
+                if not cursor.exists():
+                    break
+
+        source = _confined_path(project_root, move.source)
+        target = _confined_path(project_root, move.target)
+        if source.is_symlink() or not source.is_dir():
+            raise ArchiveContractError(
+                "stale-plan", f"move source is not a real directory: {move.source}"
+            )
+        if target.exists() or target.is_symlink():
+            raise ArchiveContractError(
+                "stale-plan", f"move target is no longer absent: {move.target}"
+            )
+
+
 def validate_archive_plan_state(
     project_root: Path, plan: ArchivePlan, operation: str
 ) -> str:
@@ -1161,15 +1343,6 @@ def validate_archive_plan_state(
         raise ArchiveContractError(
             "usage", f"plan operation is {plan.operation}, requested {operation}", 2
         )
-    unsupported = [
-        item for item in plan.skipped_references if item.classification == "unsupported"
-    ]
-    if unsupported:
-        raise ArchiveContractError(
-            "reference-impact",
-            f"unsupported references remain: {', '.join(item.path for item in unsupported)}",
-        )
-
     sources = [_confined_path(project_root, move.source) for move in plan.moves]
     targets = [_confined_path(project_root, move.target) for move in plan.moves]
     pre = not plan.moves or (
@@ -1185,6 +1358,8 @@ def validate_archive_plan_state(
         )
 
     if pre:
+        memory_root = discover_memory_root(project_root)
+        _assert_pre_transaction_move_paths(project_root, memory_root, plan.moves)
         try:
             rebuilt = build_archive_plan(
                 project_root,
@@ -1614,19 +1789,14 @@ def apply_archive_plan(
 ) -> str:
     project_root = project_root.resolve()
     plan.assert_hash(expected_plan_sha256)
-    unsupported = [
-        item for item in plan.skipped_references if item.classification == "unsupported"
-    ]
-    if unsupported:
-        raise ArchiveContractError(
-            "reference-impact",
-            f"unsupported references block apply: {', '.join(item.path for item in unsupported)}",
-        )
     memory_root = discover_memory_root(project_root)
     _assert_no_stranded_transactions(memory_root)
+    validate_archive_plan_state(project_root, plan, plan.operation)
     failure_limit = _failure_limit()
     if not plan.moves:
         return "no-op"
+
+    _assert_pre_transaction_move_paths(project_root, memory_root, plan.moves)
 
     features_root = memory_root / "features"
     transaction_id = _new_transaction_id(features_root)
