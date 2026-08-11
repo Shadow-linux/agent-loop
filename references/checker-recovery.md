@@ -1,6 +1,6 @@
 # Checker Failure Recovery
 
-Use this reference when a canonical Agent Loop checker fails and the failure may come from the checked artifact, the execution environment, or the checker implementation itself.
+Use this reference when a canonical Agent Loop Checker still fails after the exact command is rerun and the result may come from applicability, the checked artifact, the execution environment, stale Agent-owned evidence, or the Checker implementation itself.
 
 Feature Definition Review and Implementation Readiness Review do not use a local Feature review Checker. Checker Recovery applies only to other canonical Agent Loop checkers that remain published for structural or freshness contracts; it must never be inserted into the Feature Gate path as a replacement authorization mechanism.
 
@@ -8,22 +8,61 @@ Human decision provenance is not a Checker input that can be repaired. The Agent
 
 Feature Monthly Archive scan output is advisory evidence: ordinary Archive reference findings do not trigger Checker Recovery. The Agent reviews symlink, unsupported-reference, canonical-target, conflict, risk, and recovery evidence directly. Checker Recovery remains available only for an actual canonical implementation contradiction or execution-environment failure, while stranded transactions route to Recovery.
 
-Checker Self-Repair is an internal method of `Diagnose Failure` and `Verify`. It is not a canonical stage, lifecycle, status, Auto Mode, artifact family, or permission to bypass validation.
+Agent Checker Rescue runs before Checker Self-Repair. Both are internal methods of `Diagnose Failure` and `Verify`, not canonical stages, message intents, lifecycles, statuses, Auto Modes, artifact families, or permissions to bypass validation.
 
-## Core Rule
+## Agent Checker Rescue First
 
-The published semantic authority can reveal a defect in its checker implementation, but a modified checker cannot silently approve itself.
+Preserve the exact canonical command, result, exit status, Checker path/version, target, and current input evidence, then rerun the exact command once without changing inputs. Classify applicability and objective facts before deciding whether executable Checker repair is needed.
 
-The Agent may diagnose a checker defect read-only. Writing or using a temporary checker patch requires an exact Human authorization. The default repair target is an isolated temporary copy, never the installed/global Agent Loop Skill.
+Use exactly one response-local level:
+
+| Level | Conditions | Route |
+|---|---|---|
+| Level 1 — Agent automatic rescue | independent evidence covers every required fact; safety is intact; product/Feature/acceptance/risk/dependency/implementation meaning is unchanged; continuation is wholly inside existing authorization | record the canonical failure and `continue-within-existing-authorization`; no extra Human prompt solely for the limitation |
+| Level 2 — Human one-Gate substitute | direct evidence explains the limitation but one small disclosed residual remains | request `accepted-for-this-gate` or `declined` for one exact target, command, and existing named Gate |
+| Level 3 — non-rescuable | physical/path, exact executor, transaction/rollback, real verification, semantic, effective-authority, or prior-authorization uncertainty remains | stop and route to the owning workflow |
+
+Level 1 may repair a deterministic Agent-owned cache/derived field only when that write is already inside the accepted boundary. It may not rewrite Human originals or accepted meaning. Level 2 does not create a new Gate; the existing Gate consumes the substitute evidence only for its exact scope. Both expire when the Gate ends or the Checker, command, target, input, authority, evidence digest, safety condition, or authorization boundary changes.
+
+Neither level changes `Canonical validation: failed` to `PASS`, creates execution authority, satisfies Product/ADR/Feature Gate 1/2/Task Done/Verification/Submit/Close/Git/Release/External Action gates, or survives changed evidence. `CURRENT`, `CHANGED`, `NOT_APPLICABLE`, exit `0`, and Human Authority provenance are also facts rather than authorization.
+
+Level 3 always includes project/memory path escape; dual/broken/external/cyclic authority that prevents safe resolution; exact Archive/Rehydrate or Full Memory Audit plan hash/target/preimage mismatch; transaction journal, post-check, restore, or rollback uncertainty; failed required validation; unresolved product/design/scope/security/data/destructive/production/credential/external meaning; conflicting effective authorities; sealed/customer isolation; and missing existing Human authorization.
+
+Compact Rescue evidence may remain in the current response or be recorded in an existing owning Feature, Bug, Change, Requirement, ADR, Onboarding, or guidance artifact when it must cross sessions or later Gates:
+
+```text
+Canonical Checker Result:
+Agent Classification:
+Applicable Authority:
+Independent Evidence:
+Safety Boundary:
+Semantic Impact:
+Agent Rescue Decision: continue-within-existing-authorization | human-substitute-required | stop
+Residual Risk:
+Human Substitute Decision: accepted-for-this-gate | declined | not-required
+Expiry:
+Developer Feedback: prepared | declined | not-applicable
+```
+
+Do not create a default checker-exception or checker-feedback directory. A likely Checker limitation produces a sanitized read-only feedback draft. Creating a public Issue still requires the independent Issue Reporting Human Gate and grants no repair, Git, installation, synchronization, release, publish, Feature, or later-Gate authority.
+
+Proceed to Checker Self-Repair only when direct evidence is incomplete or reliable evaluation requires a corrected executable Checker. An ordinary applicability mismatch, supported legacy shape, or fact-determined derived-evidence repair does not require a temporary patch.
+
+## Checker Self-Repair Core Rule
+
+The published semantic authority can reveal a defect in its Checker implementation, but a modified Checker cannot silently approve itself.
+
+The Agent may diagnose a Checker defect read-only. Writing or using a temporary Checker patch requires an exact Human authorization. The default repair target is an isolated temporary copy, never the installed/global Agent Loop Skill.
 
 ## Entry
 
-Enter only after:
+Enter Checker Self-Repair only after:
 
 1. an exact canonical Agent Loop checker command has run;
 2. the same command has been rerun without changing inputs;
 3. the Agent has preserved the command, exit status, stdout, stderr, checker path, and checked target;
-4. ordinary input/path mistakes are not already sufficient to explain the result.
+4. ordinary input/path/applicability mistakes are not already sufficient to explain the result;
+5. Agent Checker Rescue cannot provide complete direct evidence, or corrected executable Checker behavior is required for reliable evaluation.
 
 Then classify:
 

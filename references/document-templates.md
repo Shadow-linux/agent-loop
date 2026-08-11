@@ -822,7 +822,19 @@ Source Requirements:
 - Delivery Phase / Phase Slice:
 - Phase Note:
 
+## Feature Authority
+
+Authority Type: <descriptive authority label>
+Primary Authority Reference: <project-relative artifact, stable external/ticket locator, or Human decision locator>
+Supporting Authority References: none | <semicolon-separated references>
+Authority Summary:
+Agent Authority Assessment: current | changed | unresolved
+
+Requirement Product Definition is a compatible Feature Authority sub-adapter. An explicit Requirement Product Definition primary authority must identify the same Requirement Set README; applicable ADRs and contracts remain supporting evidence. Existing Product Requirement Source-only Features remain readable; Bug, Human, and custom authorities do not fabricate Requirement fields or execution authorization.
+
 ## Product Requirement Source
+
+Use only when Requirement Product Definition applies.
 
 - Requirement Set:
 - Effective Product Definition:
@@ -831,6 +843,16 @@ Source Requirements:
 - Applicable Decisions:
 
 ## Feature Context Snapshot
+
+Authority Type:
+Authority Adapter: <detected open family or named custom adapter>
+Primary Authority Reference:
+Supporting Authority References: none | <references>
+Authority Applicability: applicable | advisory | not-applicable
+Authority Facts: <resolver-emitted facts in deterministic semicolon-separated order, including Authority Summary>
+Authority Source SHA-256: none | <project-local source>=<sha256>
+
+Requirement Product Definition fields when applicable:
 
 Requirement Set: .agent-loop/requirements/<requirement-id>/README.md
 Requirement Lifecycle: accepted | in-progress | partially-implemented | implemented
@@ -841,6 +863,19 @@ Product Source SHA-256:
 Applicable Decisions: none | .agent-loop/decisions/<decision>.md
 Decision Source SHA-256: none | .agent-loop/decisions/<decision>.md=<sha256>
 Product Slice References:
+
+Bug Authority fields when applicable:
+
+Bug ID:
+Expected Behavior Evidence Locator:
+Resolution Path / Fix Feature Locator:
+Feature Location: flat | archived:<YYYY-MM>
+
+Human/custom authority fields when applicable:
+
+Evidence Locator:
+Agent Review Required: yes | no
+
 Verified At: <ISO-8601 timestamp with timezone>
 Freshness: current | changed | blocked
 
@@ -854,15 +889,17 @@ Freshness: current | changed | blocked
 
 ### Feature Boundary And Acceptance Context
 
-This Snapshot is derived execution context. Requirement README resolves authority; Requirement, product, and ADR paths are project-root-relative; `scripts/check-feature-context.py` is read-only; and Product Slice remains the responsibility/coverage table.
+This Snapshot is derived execution context, not authority or authorization. Declared local paths are project-root-relative; external/ticket/Human locators remain evidence strings. `scripts/check-feature-context.py` reports objective `CURRENT | CHANGED | NOT_APPLICABLE | BLOCKED` facts for Agent assessment.
 
 ## Product Slice
+
+Use only when Requirement Product Definition applies.
 
 | Source Section / Model ID | Feature Responsibility | Acceptance Mapping | Coverage |
 |---|---|---|---|
 | FLOW-... / STATE-... / product.md#... |  |  | in-scope / out-of-scope / not-applicable |
 
-The Product Slice narrows Feature responsibility without redefining Requirement product meaning. Legacy Feature `product.md` remains reader-only when already present.
+The Product Slice narrows Feature responsibility without redefining Requirement product meaning. Bug/Human/custom authorities use their accepted Feature boundary without inventing Product IDs. Legacy Feature `product.md` remains reader-only when already present.
 
 Related Bugs:
 Bug Resolution Path: none | flow-back | linked-feature | maintenance-fix
@@ -962,8 +999,18 @@ Use `templates/feature-context.md` only for a complex Feature whose complete Sna
 
 ```md
 Derived Context: yes
-Authority: Requirement README -> Effective Product Definition -> accepted ADRs
+Authority: resolved Feature Authority -> applicable source facts
 Independent Product Truth: no
+
+Authority Type:
+Authority Adapter: <detected open family or named custom adapter>
+Primary Authority Reference:
+Supporting Authority References: none | <references>
+Authority Applicability: applicable | advisory | not-applicable
+Authority Facts: <resolver-emitted facts in deterministic semicolon-separated order, including Authority Summary>
+Authority Source SHA-256: none | <project-local source>=<sha256>
+
+Requirement Product Definition fields when applicable:
 
 Requirement Set: .agent-loop/requirements/<requirement-id>/README.md
 Requirement Lifecycle: accepted | in-progress | partially-implemented | implemented
@@ -974,12 +1021,25 @@ Product Source SHA-256:
 Applicable Decisions: none | .agent-loop/decisions/<decision>.md
 Decision Source SHA-256: none | .agent-loop/decisions/<decision>.md=<sha256>
 Product Slice References:
+
+Bug Authority fields when applicable:
+
+Bug ID:
+Expected Behavior Evidence Locator:
+Resolution Path / Fix Feature Locator:
+Feature Location: flat | archived:<YYYY-MM>
+
+Human/custom authority fields when applicable:
+
+Evidence Locator:
+Agent Review Required: yes | no
+
 Verified At: <ISO-8601 timestamp with timezone>
 Freshness: current | changed | blocked
 ```
 
-Keep exact source/digest parity with `spec.md`. This file expands derived context only; it owns no independent product, lifecycle, approval, Task, Test, Plan, code-fact, or execution meaning.
-Generate Product and Decision Markdown SHA-256 values after canonicalizing `CRLF` and lone `CR` to `LF`; reader compatibility with legacy raw LF/CRLF digests does not permit any other content drift.
+Keep exact applicable authority/source/digest parity with `spec.md`. This file expands derived context only; it owns no independent product, Requirement/Bug lifecycle, approval, Task, Test, Plan, code-fact, or execution meaning.
+Generate applicable local Markdown SHA-256 values after canonicalizing `CRLF` and lone `CR` to `LF`; reader compatibility with legacy raw LF/CRLF digests does not permit any other content drift.
 
 ## `tasks.md`
 

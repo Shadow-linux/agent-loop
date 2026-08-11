@@ -65,7 +65,16 @@ class AdrRequirementModelTraceTests(unittest.TestCase):
         self, readme: str, source: str, decision: str, expected: str
     ) -> None:
         result = self.run_documents(readme, source, decision)
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
+        self.assertIn(expected, combined_output(result))
+
+    def assert_blocked(
+        self, readme: str, source: str, decision: str, expected: str
+    ) -> None:
+        result = self.run_documents(readme, source, decision)
         self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertIn("BLOCKED:", combined_output(result))
         self.assertIn(expected, combined_output(result))
 
     def run_archived_feature_owner(
@@ -160,6 +169,62 @@ class AdrRequirementModelTraceTests(unittest.TestCase):
         )
         self.assertEqual(result.returncode, 0, combined_output(result))
         self.assertIn("reasoned concept-foundation-not-needed ADR proposed gate", result.stdout)
+
+    def test_non_requirement_adr_is_not_applicable(self) -> None:
+        decision = """# ADR-OPS-0001: Runtime log rotation
+
+Status: proposed
+
+## Context
+
+The runtime log file needs an operational rotation policy.
+
+## Decision
+
+Use the existing platform rotation facility without changing product meaning.
+
+## Consequences
+
+Operations owns the retention setting and its verification.
+"""
+        result = self.run_documents(self.readme, self.source, decision)
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("NOT_APPLICABLE:", result.stdout)
+        self.assertIn("requirement-model landing", result.stdout)
+
+    def test_adding_requirement_trace_intent_expires_prior_not_applicable_result(self) -> None:
+        generic = """# ADR-OPS-0001: Runtime log rotation
+
+Status: proposed
+
+## Context
+
+Operational policy only.
+
+## Decision
+
+Use platform rotation.
+"""
+        first = self.run_documents(self.readme, self.source, generic)
+        self.assertEqual(first.returncode, 0, combined_output(first))
+        self.assertIn("NOT_APPLICABLE:", first.stdout)
+
+        applicable_but_malformed = generic + """
+
+## Effective Requirement Snapshot
+
+Effective Product Source: requirement.md
+Trace Applicability: required
+"""
+        second = self.run_documents(
+            self.readme,
+            self.source,
+            applicable_but_malformed,
+        )
+        self.assertEqual(second.returncode, 0, combined_output(second))
+        self.assertIn("CHANGED:", combined_output(second))
+        self.assertNotIn("NOT_APPLICABLE:", combined_output(second))
+        self.assertIn("ADR snapshot", combined_output(second))
 
     def test_legacy_source_accepts_the_current_unified_gate_template(self) -> None:
         unified_gate = re.search(
@@ -312,7 +377,12 @@ class AdrRequirementModelTraceTests(unittest.TestCase):
         )
         for decision, expected in cases:
             with self.subTest(expected=expected):
-                self.assert_rejected(self.readme, self.source, decision, expected)
+                assertion = (
+                    self.assert_blocked
+                    if expected == "missing file:"
+                    else self.assert_rejected
+                )
+                assertion(self.readme, self.source, decision, expected)
 
     def test_existing_invalid_decisions_and_sources_are_rejected(self) -> None:
         cases = (
@@ -345,13 +415,14 @@ class AdrRequirementModelTraceTests(unittest.TestCase):
         for readme, source, decision in cases:
             with self.subTest(decision=decision[:40]):
                 result = self.run_documents(readme, source, decision)
-                self.assertEqual(result.returncode, 1, combined_output(result))
+                self.assertEqual(result.returncode, 0, combined_output(result))
+                self.assertIn("CHANGED:", combined_output(result))
 
     def test_workspace_escape_is_rejected(self) -> None:
         decision = self.decision.replace(
             "decisions/8999-shared.md (ADR-8999)", "../outside.md (ADR-OUTSIDE)"
         )
-        self.assert_rejected(
+        self.assert_blocked(
             self.readme, self.source, decision, "reference escapes workspace root"
         )
 
@@ -536,7 +607,8 @@ class ProductDefinitionAdrTraceTests(unittest.TestCase):
                 flags=re.MULTILINE,
             )
         )
-        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
         self.assertIn(
             "ADR scope must name accepted Concept IDs", combined_output(result)
         )
@@ -550,7 +622,8 @@ class ProductDefinitionAdrTraceTests(unittest.TestCase):
                 flags=re.MULTILINE,
             )
         )
-        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
         self.assertIn(
             "ADR scope must name accepted Requirement Model IDs",
             combined_output(result),
@@ -588,7 +661,8 @@ class ProductDefinitionAdrTraceTests(unittest.TestCase):
                         "## Operational Landing Trigger Assessment",
                     )
                 )
-                self.assertEqual(result.returncode, 1, combined_output(result))
+                self.assertEqual(result.returncode, 0, combined_output(result))
+                self.assertIn("CHANGED:", combined_output(result))
                 self.assertIn(
                     f"reasoned no-model ADR must omit {heading}",
                     combined_output(result),
@@ -621,7 +695,8 @@ class ProductDefinitionAdrTraceTests(unittest.TestCase):
                 str(root / "decision.md"),
                 str(root),
             )
-        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
         self.assertIn(
             "reasoned no-model ADR must omit Requirement Model Scope Inventory",
             combined_output(result),
@@ -636,7 +711,8 @@ class ProductDefinitionAdrTraceTests(unittest.TestCase):
                 "Concept Foundation Status: accepted",
             )
         )
-        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
         self.assertIn(
             "ADR snapshot must not mix Product Definition and legacy Concept Foundation metadata",
             combined_output(result),
@@ -648,7 +724,8 @@ class ProductDefinitionAdrTraceTests(unittest.TestCase):
                 "product.md#approval-authority", "product.md#unknown-authority"
             )
         )
-        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
         self.assertIn(
             "unknown Product Rule references", combined_output(result)
         )
@@ -660,7 +737,8 @@ class ProductDefinitionAdrTraceTests(unittest.TestCase):
                 "Upstream Compatibility: review-required",
             )
         )
-        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
         self.assertIn("Upstream Compatibility must be current", combined_output(result))
 
     def test_new_adr_rejects_unconfirmed_product_source(self) -> None:
@@ -669,8 +747,71 @@ class ProductDefinitionAdrTraceTests(unittest.TestCase):
                 "Product Review: confirmed", "Product Review: pending"
             )
         )
-        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
         self.assertIn("Product Review must be confirmed", combined_output(result))
+
+    def test_readable_missing_scope_inventory_is_changed_not_blocked(self) -> None:
+        decision = re.sub(
+            r"^## Requirement Model Scope Inventory\n.*?(?=^## |\Z)",
+            "",
+            (PRODUCT_VALID / "decision.md").read_text(encoding="utf-8"),
+            flags=re.MULTILINE | re.DOTALL,
+        )
+        result = self.run_product_decision(
+            decision_mutation=lambda _value: decision
+        )
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
+        self.assertIn(
+            "missing section: ## Requirement Model Scope Inventory",
+            combined_output(result),
+        )
+
+    def test_invalid_utf8_decision_is_stable_blocked_without_traceback(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            for name in ("README.md", "product.md"):
+                (root / name).write_text(
+                    (PRODUCT_VALID / name).read_text(encoding="utf-8"),
+                    encoding="utf-8",
+                )
+            decision = root / "decision.md"
+            decision.write_bytes(b"\xff\xfeinvalid")
+            result = run_checker(
+                SCRIPT,
+                str(root / "README.md"),
+                str(root / "product.md"),
+                str(decision),
+                str(root),
+            )
+        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertIn("BLOCKED:", combined_output(result))
+        self.assertNotIn("Traceback", combined_output(result))
+
+    def test_dangling_decision_is_stable_blocked_not_usage_error(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            for name in ("README.md", "product.md"):
+                (root / name).write_text(
+                    (PRODUCT_VALID / name).read_text(encoding="utf-8"),
+                    encoding="utf-8",
+                )
+            decision = root / "decision.md"
+            try:
+                decision.symlink_to("missing-decision.md")
+            except OSError as error:
+                self.skipTest(f"symlink unavailable: {error}")
+            result = run_checker(
+                SCRIPT,
+                str(root / "README.md"),
+                str(root / "product.md"),
+                str(decision),
+                str(root),
+            )
+        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertIn("BLOCKED:", combined_output(result))
+        self.assertNotIn("usage:", combined_output(result).lower())
 
 
 if __name__ == "__main__":

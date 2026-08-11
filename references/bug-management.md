@@ -199,6 +199,8 @@ Use one current path:
 
 All code repairs use an existing/reopened Feature, linked new Feature, or `Feature Type: maintenance-fix`. Feature artifacts own spec, tasks, tests, plan, TDD, implementation, verification, Review, Drift Check, and close. Bug confirmation and Resolution Path selection never authorize Feature creation/reopen.
 
+After the Resolution Path and the separate Feature create/reopen decision are confirmed, a repair Feature may declare the Bug README as its primary `Feature Authority`. The Bug adapter reads only objective Bug ID, Expected Behavior locator, confirmed Resolution Path/Fix Feature locator, archive locator, and source freshness facts. It may cite accepted Requirement, ADR, contract, test, or runtime evidence as supporting authorities, but it never decides product meaning, confirms the Bug, selects a Resolution Path, creates/reopens the Feature, changes Bug lifecycle, or authorizes implementation. A Bug Feature therefore does not fabricate `Product Requirement Source` or `Product Slice`; add the Requirement Product Definition sub-adapter only when a real accepted Requirement also governs the repair.
+
 ## Bug Identity Scan And 90-Day Feature Ownership Scan
 
 Bug identity and Feature ownership use different discovery bounds:

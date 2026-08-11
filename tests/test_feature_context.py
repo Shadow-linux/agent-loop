@@ -48,6 +48,178 @@ class FeatureContextCheckerTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, combined_output(result))
         self.assertIn("CURRENT:", result.stdout)
 
+    def test_explicit_requirement_feature_authority_passes(self):
+        def mutate(root):
+            spec = root / FEATURE
+            text = spec.read_text(encoding="utf-8")
+            authority = """## Feature Authority
+
+Authority Type: Feature Authority / Requirement Product Definition
+Primary Authority Reference: .agent-loop/requirements/2026-07-25-example/README.md
+Supporting Authority References: .agent-loop/decisions/0001-example.md
+Authority Summary: implement only the accepted recharge Product Slice
+Agent Authority Assessment: current
+
+"""
+            spec.write_text(
+                text.replace(
+                    "## Product Requirement Source",
+                    authority + "## Product Requirement Source",
+                    1,
+                ).replace(
+                    "## Feature Context Snapshot\n\n",
+                    f"""## Feature Context Snapshot
+
+Authority Type: Feature Authority / Requirement Product Definition
+Authority Adapter: requirement-product-definition
+Primary Authority Reference: .agent-loop/requirements/2026-07-25-example/README.md
+Supporting Authority References: .agent-loop/decisions/0001-example.md
+Authority Applicability: applicable
+Authority Facts: Authority Type Feature Authority / Requirement Product Definition; Authority Summary implement only the accepted recharge Product Slice; Primary Authority Reference .agent-loop/requirements/2026-07-25-example/README.md; Supporting Authority Reference .agent-loop/decisions/0001-example.md
+Authority Source SHA-256: .agent-loop/requirements/2026-07-25-example/README.md={hashlib.sha256((root / README).read_bytes()).hexdigest()}
+
+""",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+
+        result = self.run_project(mutate)
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CURRENT:", result.stdout)
+
+    def test_explicit_requirement_authority_primary_must_match_requirement_set(self):
+        def mutate(root):
+            spec = root / FEATURE
+            text = spec.read_text(encoding="utf-8")
+            authority = f"""## Feature Authority
+
+Authority Type: Feature Authority / Requirement Product Definition
+Primary Authority Reference: {DECISION.as_posix()}
+Supporting Authority References: {README.as_posix()}
+Authority Summary: conflicting effective primary pointers must fail closed
+Agent Authority Assessment: current
+
+"""
+            spec.write_text(
+                text.replace(
+                    "## Product Requirement Source",
+                    authority + "## Product Requirement Source",
+                    1,
+                ).replace(
+                    "## Feature Context Snapshot\n\n",
+                    f"""## Feature Context Snapshot
+
+Authority Type: Feature Authority / Requirement Product Definition
+Authority Adapter: requirement-product-definition
+Primary Authority Reference: {DECISION.as_posix()}
+Supporting Authority References: {README.as_posix()}
+Authority Applicability: applicable
+Authority Facts: conflicting primary pointers must not be cached as current
+Authority Source SHA-256: {DECISION.as_posix()}={hashlib.sha256((root / DECISION).read_bytes()).hexdigest()}
+
+""",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+
+        result = self.run_project(mutate)
+        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertIn("BLOCKED:", combined_output(result))
+        self.assertIn(
+            "Feature Authority primary reference conflicts with "
+            "Product Requirement Source Requirement Set",
+            combined_output(result),
+        )
+
+    def test_equivalent_dotted_requirement_authority_path_is_current(self):
+        def mutate(root):
+            primary = f"./{README.as_posix()}"
+            spec = root / FEATURE
+            text = spec.read_text(encoding="utf-8")
+            authority = f"""## Feature Authority
+
+Authority Type: Feature Authority / Requirement Product Definition
+Primary Authority Reference: {primary}
+Supporting Authority References: {DECISION.as_posix()}
+Authority Summary: implement only the accepted recharge Product Slice
+Agent Authority Assessment: current
+
+"""
+            spec.write_text(
+                text.replace(
+                    "## Product Requirement Source",
+                    authority + "## Product Requirement Source",
+                    1,
+                ).replace(
+                    "## Feature Context Snapshot\n\n",
+                    f"""## Feature Context Snapshot
+
+Authority Type: Feature Authority / Requirement Product Definition
+Authority Adapter: requirement-product-definition
+Primary Authority Reference: {primary}
+Supporting Authority References: {DECISION.as_posix()}
+Authority Applicability: applicable
+Authority Facts: Authority Type Feature Authority / Requirement Product Definition; Authority Summary implement only the accepted recharge Product Slice; Primary Authority Reference {primary}; Supporting Authority Reference {DECISION.as_posix()}
+Authority Source SHA-256: {primary}={hashlib.sha256((root / README).read_bytes()).hexdigest()}
+
+""",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+
+        result = self.run_project(mutate)
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CURRENT:", combined_output(result))
+
+    def test_safe_symlink_to_same_requirement_authority_is_current(self):
+        def mutate(root):
+            alias = Path(".agent-loop/requirements/accepted-README.md")
+            alias_path = root / alias
+            try:
+                alias_path.symlink_to("2026-07-25-example/README.md")
+            except OSError as error:
+                self.skipTest(f"symlink unavailable: {error}")
+            spec = root / FEATURE
+            text = spec.read_text(encoding="utf-8")
+            authority = f"""## Feature Authority
+
+Authority Type: Feature Authority / Requirement Product Definition
+Primary Authority Reference: {alias.as_posix()}
+Supporting Authority References: {DECISION.as_posix()}
+Authority Summary: implement only the accepted recharge Product Slice
+Agent Authority Assessment: current
+
+"""
+            spec.write_text(
+                text.replace(
+                    "## Product Requirement Source",
+                    authority + "## Product Requirement Source",
+                    1,
+                ).replace(
+                    "## Feature Context Snapshot\n\n",
+                    f"""## Feature Context Snapshot
+
+Authority Type: Feature Authority / Requirement Product Definition
+Authority Adapter: requirement-product-definition
+Primary Authority Reference: {alias.as_posix()}
+Supporting Authority References: {DECISION.as_posix()}
+Authority Applicability: applicable
+Authority Facts: Authority Type Feature Authority / Requirement Product Definition; Authority Summary implement only the accepted recharge Product Slice; Primary Authority Reference {alias.as_posix()}; Supporting Authority Reference {DECISION.as_posix()}
+Authority Source SHA-256: {alias.as_posix()}={hashlib.sha256((root / README).read_bytes()).hexdigest()}
+
+""",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+
+        result = self.run_project(mutate)
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CURRENT:", combined_output(result))
+
     def test_current_snapshot_survives_crlf_checkout(self):
         def mutate(root):
             for path in (root / ".agent-loop").rglob("*.md"):

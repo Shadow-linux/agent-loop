@@ -88,6 +88,7 @@ Before using an external skill or plugin inside a stage:
 
 ## ADR Requirement Model Technical Landing
 
+- [ ] Determine specialized Checker applicability from the ADR itself before resolving Requirement/Product inputs; a generic non-requirement ADR is `NOT_APPLICABLE`, while any declared Snapshot/trace ownership makes structural defects applicable and visible.
 - [ ] Resolve README `Effective Product Definition` or legacy `Effective Concept Foundation` and record the dual-reader Effective Requirement Snapshot before technical landing.
 - [ ] Require new Product Review `confirmed` and any triggered internal Concept Foundation accepted; return pending / `candidate` / `reopened` to Requirements Discussion.
 - [ ] Declare only source-backed accepted Concept IDs, in-scope Requirement Model IDs, and Product Rule anchors without copying or redefining product meaning; use `none` for an ID kind only when the effective source declares none.
@@ -155,6 +156,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Stop before broader edits on scope expansion and recommend exactly one Bug Management, Requirements Discussion, or Feature Construction route.
 - [ ] Before completion, close/explain Plan items, replace initial Memory markers, run fresh targeted verification, and review diff, disclosed scope, durable-memory impact, sensitive evidence, and rollback.
 - [ ] After completion, run `scripts/scan-lightweight-changes.py`; keep `human-review` visible and start Agent semantic consolidation for three pending or oldest age greater than seven days.
+- [ ] Read `validation_result` and deterministic `record_findings` separately from `triggered | not-triggered`; preserve valid pending/human-review inventory when one bounded card is malformed, while unsafe root/layout authority remains hard.
 - [ ] Allow accidental resume only after branch/full-HEAD/dirty-diff/Scope/Plan/eligibility/verification/rollback revalidation; route planned cross-session/handoff/Subagent/long-observation work to Feature.
 - [ ] Before high-evidence memory sync, require an existing reliable owner and disclose exact target path, fact, evidence, impact, and rollback; restore only this Agent's memory edit on failure.
 - [ ] Confirm branch, submit, production, external, paid, configuration-write, destructive, Feature/Bug lifecycle, and Git gates remain separate.
@@ -199,7 +201,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Read `STRUCTURAL_CURRENT | STRUCTURAL_CHANGED | STRUCTURAL_INVALID` explicitly. A zero exit for `STRUCTURAL_CHANGED` still requires Agent impact review; compare project-owned block meaning to its declared source instead of treating the checker as semantic proof.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.3-20260728.1`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.4-20260810.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -286,7 +288,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Read `STRUCTURAL_CURRENT | STRUCTURAL_CHANGED | STRUCTURAL_INVALID` explicitly. A zero exit for `STRUCTURAL_CHANGED` still requires Agent impact review; compare project-owned block meaning to its declared source instead of treating the checker as semantic proof.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.3-20260728.1`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.4-20260810.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -318,6 +320,8 @@ Before using an external skill or plugin inside a stage:
 - [ ] State that Markdown is source of truth and website generation is out of scope.
 - [ ] Build `08-review/evidence-graph.md` before formal onboarding docs.
 - [ ] Build Core Flow Inventory from entries, state writes, async handlers, recovery paths, tests/contracts/logs/config, and verified business outcomes.
+- [ ] Determine Onboarding Checker applicability before coverage; no recognizable scope is `NOT_APPLICABLE`, safely enumerable missing/stale facts are `CHANGED`, and only unreadable/unsafe/ambiguous physical authority is `BLOCKED`.
+- [ ] Treat fixed wording and recorded `covered` / `PASS` as facts only; the Agent owns semantic completeness and newcomer-readiness judgment.
 - [ ] Give every `critical` / `important` flow a stable Flow ID, business success/failure terminals, variants, owners, side effects, recovery responsibility, evidence chain, and planned/deferred decision.
 - [ ] Do not treat `accepted` / `pending` / `processing` as a business terminal when callback, consumer, job, or reconciler owns the final state.
 - [ ] Draft `onboarding-spec.md`: target readers, scope, module plan, flow plan, DDD mapping, jobs/async, infra/deploy, file strategy, diagram type plan, ASCII 文本图 / wireframe rules, quality gates, and batches.
@@ -450,9 +454,11 @@ Before using an external skill or plugin inside a stage:
 ## Feature Context Load / Resume
 
 - [ ] Start from Feature `spec.md`; do not reconstruct Resume, controller re-entry, or context-compaction recovery from `tasks.md`, `plan.md`, or conversation memory alone.
+- [ ] Resolve the descriptive Feature Authority, effective primary reference, supporting references, and adapter applicability before interpreting Requirement-, Bug-, Human-, or custom-specific fields.
 - [ ] Run `python3 <skill-root>/scripts/check-feature-context.py --project-root <target-project-root> <feature-spec-path>`; on Windows use the equivalent `py -3` command. Read the prefix because `CURRENT` and `CHANGED` both exit `0`.
 - [ ] Exit `0` / `CURRENT` permits the local Snapshot fast path and stage-relevant ledger loading.
 - [ ] Exit `0` / `CHANGED` exposes factual drift; record Agent impact assessment, repair derived evidence when fact-determined, rerun to `CURRENT`, and return semantic impact to the existing owning Gate.
+- [ ] Exit `0` / `NOT_APPLICABLE` from a specialized Checker selects another adapter/direct evidence; it is neither PASS nor authorization.
 - [ ] Exit `1` / `BLOCKED` is limited to physical/authority-resolution contradictions and routes to Recovery or source repair.
 - [ ] Auto Mode cannot rely on unresolved `CHANGED` or physical `BLOCKED`; exit `0` alone is insufficient.
 - [ ] Recheck after Requirement/ADR change, long-running uncertainty, archive rehydrate, and before Plan/Execute/Verify/Review/Drift/Close reliance.
@@ -488,9 +494,12 @@ Before using an external skill or plugin inside a stage:
 - [ ] If `project.md` declares a Decisions index, read decision links already named by the Effective Product Definition, legacy Product Brief when present, or active Feature Spec, then inspect other likely relevant accepted decisions by domain/boundary overlap.
 - [ ] Propose missing Applicable Decision references for human confirmation; do not create a duplicate ADR because a link is missing.
 - [ ] Confirm Design Readiness is `design-not-needed` or `completed`; run Decision & Design before Feature Spec when shared design is required.
-- [ ] Resolve new `Effective Product Definition` or legacy `Effective Concept Foundation`; require confirmed/accepted source and block pending, ambiguous, stale, `candidate`, or `reopened` input.
-- [ ] Add Product Requirement Source and Product Slice from the effective source; cite Concept/Model IDs and Product Rule anchors without a Feature Product Brief intermediary.
-- [ ] Create the default Feature Context Snapshot in `spec.md` from one current Requirement README/Product Definition/accepted-ADR baseline, using project-root-relative paths and SHA-256 evidence computed after Markdown newline canonicalization (`CRLF` / lone `CR` -> `LF`).
+- [ ] Write `Feature Authority` with a descriptive type, one primary reference, optional supporting references, Authority Summary, and Agent assessment; do not treat Feature/Bug/Human as a closed enum.
+- [ ] Use Requirement Product Definition as the compatibility sub-adapter only when product authority applies; preserve Product Requirement Source-only legacy specs without migration.
+- [ ] For Requirement Product Definition, resolve new `Effective Product Definition` or legacy `Effective Concept Foundation`; require confirmed/accepted source and block pending, ambiguous, stale, `candidate`, or `reopened` input.
+- [ ] Add Product Requirement Source and Product Slice only for the Requirement Product Definition sub-adapter; cite Concept/Model IDs and Product Rule anchors without a Feature Product Brief intermediary.
+- [ ] Create the default authority-neutral Feature Context Snapshot in `spec.md`; copy the resolver-emitted deterministic semicolon-separated Authority Facts including Authority Summary, use project-root-relative paths and normalized SHA-256 evidence for declared local sources, and keep external/ticket/Human locators as evidence strings.
+- [ ] For Bug Authority, record objective Bug ID, Expected Behavior locator, Resolution Path/Fix Feature locator, archive locator, and freshness without merging Bug confirmation, Resolution Path, Feature create/reopen, Gate 1, or Gate 2.
 - [ ] Include product outcome, actors/core journey, applicable rules/invariants, states/exceptions/recovery, and Feature boundary/acceptance context without creating independent product truth.
 - [ ] When the scanner returns `CHANGED`, record Agent impact assessment, repair derived evidence when fact-determined, and rerun to `CURRENT` before Requirement Checklist acceptance; physical `BLOCKED` routes to Recovery/source repair.
 - [ ] Reject feature-local redefinition of accepted concept name, identity, owner, lifecycle, relationship, invariant, state, terminal meaning, or product fact.
@@ -513,8 +522,8 @@ Before using an external skill or plugin inside a stage:
 
 ## Requirement Checklist
 
-- [ ] Confirm the Feature Context Snapshot is complete, its source references resolve, paths are project-root-relative, and the scanner is `CURRENT` after any `CHANGED` assessment/repair.
-- [ ] Confirm the Feature Spec references an accepted requirement set and its exact Delivery Phase or phase slice when applicable.
+- [ ] Confirm the Feature Context Snapshot is complete, declared local authority references resolve inside project boundaries, and every Checker outcome has the applicable Agent assessment/route.
+- [ ] Confirm the Feature Spec references an accepted requirement set and its exact Delivery Phase or phase slice only when Requirement Product Definition applies.
 - [ ] Confirm Design Readiness is `design-not-needed` or `completed`.
 - [ ] Confirm no major ambiguity remains.
 - [ ] Confirm stories are independently testable.

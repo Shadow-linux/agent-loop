@@ -22,16 +22,17 @@ Task/Test/Plan derive from:
 
 ```text
 current Feature Context Snapshot
-+ current Product Slice
++ current resolved Feature Authority and accepted Feature boundary
++ current Product Slice when the Requirement Product Definition sub-adapter applies
 + applicable accepted ADRs
 + relevant code facts
 ```
 
-Run `scripts/check-feature-context.py` before construction planning and read the prefix. `CURRENT` permits planning; `CHANGED` requires Agent impact assessment, derived repair, and a rerun to `CURRENT`; `BLOCKED` means physical authority resolution failed. Exit `0` alone is insufficient. Accepted product meaning, ADR landing, and code reality remain separate evidence layers; code facts cannot rewrite the Snapshot.
+Run `scripts/check-feature-context.py` before construction planning and read the prefix. `CURRENT` permits reliance on applicable facts; `CHANGED` requires Agent impact assessment, derived repair or routing, and a rerun when fact-determined; `NOT_APPLICABLE` from a specialized Checker selects another adapter/direct evidence; `BLOCKED` means physical authority resolution failed. Exit `0` alone is insufficient. Accepted authority meaning, Product meaning when applicable, ADR landing, and code reality remain separate evidence layers; code facts cannot rewrite the Snapshot.
 
-- Every Task maps to a Product Slice responsibility/acceptance, accepted ADR Design Slice, or explicit technical prerequisite for a named later vertical slice.
+- Every Task maps to the accepted Feature boundary/acceptance, an applicable Product Slice responsibility, accepted ADR Design Slice, or explicit technical prerequisite for a named later vertical slice.
 - Tests cover every applicable acceptance criterion, actor/permission boundary, state transition/terminal, Product Rule/invariant, exception/recovery path, and accepted ADR verification obligation.
-- Every active Plan names its Product Slice and Task, preserves applicable product/ADR invariants, identifies code facts separately, and includes exact verification for mapped acceptance.
+- Every active Plan names its resolved Feature Authority, Task, and Product Slice when applicable, preserves accepted authority/product/ADR invariants, identifies code facts separately, and includes exact verification for mapped acceptance.
 - unresolved `CHANGED` or physical `BLOCKED` prevents Task/Test/Plan reliance; the Agent may repair fact-determined derived context without a new Gate, but semantic impact returns to the owning existing Gate.
 
 ## Two-Gate Package Preparation
@@ -91,7 +92,7 @@ If the needed signature, parameter, return shape, or dependency is unknown after
 
 Every `plan.md` with implementation content must include:
 
-- current Feature Context Snapshot digest/freshness, mapped Product Slice IDs/anchors, applicable ADRs, and the accepted product/ADR invariants this execution unit must preserve
+- current Feature Context Snapshot authority/freshness, mapped accepted Feature boundary, applicable Product Slice IDs/anchors, applicable ADRs, and the accepted authority/product/ADR invariants this execution unit must preserve
 - goal and architecture summary
 - tech context
 - files to create/modify/test/read with exact paths
@@ -206,7 +207,7 @@ Expected 403, received 201
 Before asking the human to approve the plan, verify:
 
 - every accepted spec behavior maps to a step or explicit out-of-scope note
-- every Task/Test/Plan mapping remains traceable to the current Product Slice and applicable accepted ADRs
+- every Task/Test/Plan mapping remains traceable to the resolved Feature Authority, accepted Feature boundary, applicable Product Slice, and accepted ADRs
 - every referenced function/type/path exists or is created earlier in the plan
 - signatures, parameters, and property names are consistent across steps
 - no placeholder language remains

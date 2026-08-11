@@ -16,7 +16,10 @@ from lightweight_change_support import (
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Scan persistent Lightweight Change cards without mutation"
+        description=(
+            "Scan persistent Lightweight Change cards and report trigger plus "
+            "per-record facts without mutation"
+        )
     )
     parser.add_argument("--project-root", required=True)
     parser.add_argument("--as-of", required=True)

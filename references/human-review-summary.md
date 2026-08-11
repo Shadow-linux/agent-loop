@@ -139,6 +139,29 @@ AI judges whether a reliable Human decision exists, whether Package Files are co
 
 After a reliable Human choice, record the durable Gate 2 baseline fields directly. On later package-only start, the Agent re-reads that baseline and current Feature artifacts, checks the accepted boundary and Human instruction, preserves the original Gate 2 values, records separate Later Start decision/time/Human evidence, and updates current project `Gate Mode` only when reliable. If context loss leaves Human provenance uncertain, ask one blocking confirmation. Feature Gate acceptance and continuation require no local Feature review Checker.
 
+### Optional Agent Checker Rescue Evidence
+
+This is an optional evidence block inside the current response or an existing owning Feature, Bug, Change, Requirement, ADR, Onboarding, or guidance artifact. It is not a standalone report, lifecycle, stage, status, Gate, authorization record, or default directory.
+
+| Field | Required content |
+|---|---|
+| Canonical Checker / Result | exact Checker/version/command/target plus unchanged rerun; canonical failure remains visible |
+| Agent Classification | checker-limitation / not-applicable / supported-legacy-shape / derived-evidence-mismatch / artifact-invalid / environment-invalid / unresolved |
+| Applicable Authority | current published rule plus one effective primary authority and relevant supporting facts |
+| Independent Evidence | direct current facts used to evaluate the owning step |
+| Safety Boundary | intact / not-intact, including path/executor/transaction/rollback constraints |
+| Semantic Impact | none / changed / unresolved across product, Feature scope, acceptance, risk, dependency, and implementation boundary |
+| Agent Rescue Decision | continue-within-existing-authorization / human-substitute-required / stop |
+| Residual Risk | none or one concrete disclosed residual |
+| Human Substitute Decision | not-required / accepted-for-this-gate / declined |
+| Authorized Scope | existing authorization or one exact target/command/named Gate; never broader action authority |
+| Expiry | Gate end or any checker/command/target/input/authority/evidence/safety/authorization change |
+| Developer Feedback | prepared / declined / not-applicable; Issue creation remains separately gated |
+
+Level 1 uses `not-required` and does not interrupt the Human solely for the Checker limitation. Level 2 presents the block within the existing named Human Gate and requests one exact `accepted-for-this-gate` decision. Level 3 records `stop`; path escape, exact plan hash, transaction/restore/rollback uncertainty, failed real verification, semantic/effective-authority conflict, or missing existing authorization cannot be substituted. Rescue never changes the canonical result to `PASS`, creates execution authorization, or replaces Product, ADR, Feature Gate 1/2, Task Done, Verification, Submit, Close, Git, Release, or External Action Human Gates.
+
+For Onboarding or Lightweight Change fact Checkers, present `CHANGED` item findings inside the existing owning review rather than inventing a new Gate. Show the unaffected readable inventory alongside each affected flow/card, identify whether the fact is deterministic Agent-repairable or semantic, and keep self-declared coverage/status values separate from the Agent recommendation. `NOT_APPLICABLE` routes to the correct owner; it is not an acceptance choice.
+
 ### Checker Issue Reporting Review
 
 Use only after a canonical checker defect candidate is evidenced and a sanitized upstream draft exists. This review is independent from Temporary Checker Repair and one-Gate substitute decisions.

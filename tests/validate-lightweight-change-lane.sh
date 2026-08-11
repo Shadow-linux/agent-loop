@@ -102,6 +102,13 @@ assert_file scripts/lightweight_change_support.py
 assert_file scripts/scan-lightweight-changes.py
 assert_file tests/lightweight_change_test_support.py
 assert_file tests/test_lightweight_change_scan.py
+assert_contains scripts/lightweight_change_support.py 'validation_result'
+assert_contains scripts/lightweight_change_support.py 'record_findings'
+assert_contains scripts/lightweight_change_support.py 'NOT_APPLICABLE'
+assert_contains references/lightweight-change-lane.md 'per-record findings'
+assert_contains references/lightweight-change-lane.md 'safe enumeration'
+assert_contains references/lightweight-change-lane.md 'filename, date, field, section, state, or placeholder'
+assert_contains references/lightweight-change-lane.md 'dual, broken, external, or cyclic'
 
 ruby - "$root/references/runtime.md" <<'RUBY'
 content = File.read(ARGV.fetch(0))
@@ -210,11 +217,11 @@ for scenario in \
   assert_contains references/validation-scenarios.md "### $scenario"
 done
 
-assert_contains SKILL.md 'Version: 1.5.3'
-assert_contains plugin.json '"version": "1.5.3"'
-assert_contains README.md '**Current version:** 1.5.3'
-assert_contains Usage.md '**版本：** 1.5.3'
-assert_contains CHANGELOG.md '## 1.5.3 — 2026-07-28'
+assert_contains SKILL.md 'Version: 1.5.4'
+assert_contains plugin.json '"version": "1.5.4"'
+assert_contains README.md '**Current version:** 1.5.4'
+assert_contains Usage.md '**版本：** 1.5.4'
+assert_contains CHANGELOG.md '## 1.5.4 — 2026-08-11'
 assert_contains CHANGELOG.md '## 1.5.0 — 2026-07-17'
 
 ruby - "$root/templates/root-AGENTS.md" <<'RUBY'
@@ -223,12 +230,14 @@ blocks = content.scan(/<!-- agent-loop:managed-start section:([^ ]+) .*?block-ve
 abort 'FAIL: root AGENTS managed blocks missing' if blocks.empty?
 abort "FAIL: expected 13 managed blocks, found #{blocks.length}" unless blocks.length == 13
 blocks.each do |section, revision|
-  expected = '1.5.3-20260728.1'
+  expected = '1.5.4-20260810.1'
   abort "FAIL: #{section} expected #{expected}, found #{revision}" unless revision == expected
 end
 RUBY
 
 [ ! -d "$root/.agent-loop" ] || fail 'source repository must not contain target-project .agent-loop artifacts'
 [ ! -d "$root/templates/.agent-loop" ] || fail 'templates must not introduce a default target-project .agent-loop change tree'
+
+(cd "$root" && PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_lightweight_change_scan)
 
 printf 'PASS: Lightweight Change routing, card, Bug/Feature boundary, adaptive verification, root, version, and gate contract is complete\n'

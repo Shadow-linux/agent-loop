@@ -29,6 +29,20 @@ assert_file_exists() {
   fi
 }
 
+assert_changed() {
+  local label=$1
+  shift
+  local output
+  if ! output=$("$@" 2>&1); then
+    printf 'FAIL: %s must be readable CHANGED / 0, got hard failure\n%s\n' "$label" "$output" >&2
+    exit 1
+  fi
+  if [[ "$output" != *"CHANGED:"* || "$output" == *"PASS:"* ]]; then
+    printf 'FAIL: %s must report CHANGED without PASS\n%s\n' "$label" "$output" >&2
+    exit 1
+  fi
+}
+
 # Published authority and stage placement.
 assert_contains "SKILL.md" "Effective Requirement Snapshot"
 assert_contains "SKILL.md" "Requirement Model Technical Landing Trace"
@@ -128,6 +142,8 @@ done
 
 # Behavioral validation, not keyword-only assertions.
 assert_file_exists "scripts/check-adr-requirement-model-trace.py"
+assert_contains "scripts/check-adr-requirement-model-trace.py" "NOT_APPLICABLE:"
+assert_contains "references/project-decisions.md" "applicability"
 valid="$root/tests/fixtures/adr-technical-landing/valid"
 python3 "$root/scripts/check-adr-requirement-model-trace.py" "$valid/README.md" "$valid/requirement.md" "$valid/decision.md"
 (python3 "$root/scripts/check-adr-requirement-model-trace.py" \
@@ -140,31 +156,29 @@ python3 "$root/scripts/check-adr-requirement-model-trace.py" "$valid/README.md" 
 not_needed="$root/tests/fixtures/adr-technical-landing/valid-not-needed"
 python3 "$root/scripts/check-adr-requirement-model-trace.py" "$not_needed/README.md" "$not_needed/requirement.md" "$not_needed/decision.md"
 
-if python3 "$root/scripts/check-adr-requirement-model-trace.py" "$valid/README.md" "$valid/requirement.md" "$root/tests/fixtures/adr-technical-landing/invalid-missing-coverage/decision.md" >/dev/null 2>&1; then
-  printf 'FAIL: missing-coverage ADR fixture unexpectedly passed\n' >&2
-  exit 1
-fi
+assert_changed "missing-coverage ADR fixture" \
+  python3 "$root/scripts/check-adr-requirement-model-trace.py" \
+  "$valid/README.md" "$valid/requirement.md" \
+  "$root/tests/fixtures/adr-technical-landing/invalid-missing-coverage/decision.md"
 
-if python3 "$root/scripts/check-adr-requirement-model-trace.py" "$valid/README.md" "$valid/requirement.md" "$root/tests/fixtures/adr-technical-landing/invalid-empty-landing/decision.md" >/dev/null 2>&1; then
-  printf 'FAIL: empty-landing ADR fixture unexpectedly passed\n' >&2
-  exit 1
-fi
+assert_changed "empty-landing ADR fixture" \
+  python3 "$root/scripts/check-adr-requirement-model-trace.py" \
+  "$valid/README.md" "$valid/requirement.md" \
+  "$root/tests/fixtures/adr-technical-landing/invalid-empty-landing/decision.md"
 
 unaccepted="$root/tests/fixtures/adr-technical-landing/invalid-unaccepted-source"
-if python3 "$root/scripts/check-adr-requirement-model-trace.py" "$unaccepted/README.md" "$unaccepted/requirement.md" "$valid/decision.md" >/dev/null 2>&1; then
-  printf 'FAIL: unaccepted-source ADR fixture unexpectedly passed\n' >&2
-  exit 1
-fi
+assert_changed "unaccepted-source ADR fixture" \
+  python3 "$root/scripts/check-adr-requirement-model-trace.py" \
+  "$unaccepted/README.md" "$unaccepted/requirement.md" "$valid/decision.md"
 
 reopened="$root/tests/fixtures/adr-technical-landing/invalid-reopened-source"
-if python3 "$root/scripts/check-adr-requirement-model-trace.py" "$reopened/README.md" "$reopened/requirement.md" "$valid/decision.md" >/dev/null 2>&1; then
-  printf 'FAIL: reopened-source ADR fixture unexpectedly passed\n' >&2
-  exit 1
-fi
+assert_changed "reopened-source ADR fixture" \
+  python3 "$root/scripts/check-adr-requirement-model-trace.py" \
+  "$reopened/README.md" "$reopened/requirement.md" "$valid/decision.md"
 
-if python3 "$root/scripts/check-adr-requirement-model-trace.py" "$valid/README.md" "$valid/requirement.md" "$root/tests/fixtures/adr-technical-landing/invalid-review-required/decision.md" >/dev/null 2>&1; then
-  printf 'FAIL: review-required ADR fixture unexpectedly passed\n' >&2
-  exit 1
-fi
+assert_changed "review-required ADR fixture" \
+  python3 "$root/scripts/check-adr-requirement-model-trace.py" \
+  "$valid/README.md" "$valid/requirement.md" \
+  "$root/tests/fixtures/adr-technical-landing/invalid-review-required/decision.md"
 
 printf 'PASS: ADR Requirement Model Technical Landing Trace contract is complete\n'

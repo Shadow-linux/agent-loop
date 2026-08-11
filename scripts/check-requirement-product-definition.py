@@ -10,12 +10,18 @@ from pathlib import Path
 
 from checker_support import (
     CheckFailure,
+    configure_utf8_stdio,
+    is_blocking_checker_failure,
     metadata,
     optional_section,
     read_text,
     require_supported_python,
     section,
     table,
+)
+from feature_authority_support import (
+    AuthorityResolutionError,
+    requirement_product_applicability,
 )
 from requirement_product_support import (
     CONCEPT_ID_PATTERN,
@@ -361,6 +367,7 @@ def validate(readme_path: Path, source_path: Path, spec_path: Path | None) -> st
 
 
 def main() -> int:
+    configure_utf8_stdio()
     require_supported_python()
     parser = argparse.ArgumentParser(
         description="Validate one effective Requirement Product Definition and optional Product Slice."
@@ -369,17 +376,42 @@ def main() -> int:
     parser.add_argument("effective_product_source", type=Path)
     parser.add_argument("feature_spec", nargs="?", type=Path)
     args = parser.parse_args()
+    if args.feature_spec is not None:
+        if not args.feature_spec.is_file():
+            print(f"BLOCKED: missing file: {args.feature_spec}", file=sys.stderr)
+            return 1
+        try:
+            applies, reason = requirement_product_applicability(
+                read_text(args.feature_spec)
+            )
+        except (AuthorityResolutionError, OSError, UnicodeError) as error:
+            print(
+                f"BLOCKED: Feature Authority applicability is unresolved: {error}",
+                file=sys.stderr,
+            )
+            return 1
+        if not applies:
+            print(f"NOT_APPLICABLE: {reason}")
+            return 0
     required = (args.requirement_readme, args.effective_product_source)
     for path in required:
         if not path.is_file():
-            parser.error(f"missing file: {path}")
-    if args.feature_spec is not None and not args.feature_spec.is_file():
-        parser.error(f"missing file: {args.feature_spec}")
+            print(f"BLOCKED: missing file: {path}", file=sys.stderr)
+            return 1
     try:
         print(validate(*required, args.feature_spec))
-    except (DefinitionCheckError, ProductDefinitionError, CheckFailure) as error:
-        print(error, file=sys.stderr)
-        return 1
+    except (
+        DefinitionCheckError,
+        ProductDefinitionError,
+        CheckFailure,
+        OSError,
+        UnicodeError,
+    ) as error:
+        if is_blocking_checker_failure(error):
+            print(f"BLOCKED: {error}", file=sys.stderr)
+            return 1
+        print(f"CHANGED: {error}")
+        return 0
     return 0
 
 

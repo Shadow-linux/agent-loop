@@ -373,17 +373,82 @@ Apply the blocked routing matrix in order and choose the first matching row:
 
 Diagnosis and available read-only verification may proceed before requesting access or approval for a later mutation. Ask Human first only when the missing human input is required for the next safe diagnostic or verification action itself.
 
+## Open Feature Authority And Checker Outcomes
+
+Feature Context resolves the authority shape before any Requirement-, Product-, ADR-, Contract-, Bug-, or existing-Feature-specific path handling. Every Feature has one effective primary authority description and may have supporting authorities. Known open adapter families are Feature Authority, Bug Authority, and Human Authority; they are adapters, not a closed `Authority Type` enum. Requirement Product Definition is the compatible Feature Authority sub-adapter; when explicitly declared, its primary authority reference and the Product Requirement Source Requirement Set must resolve inside the project to the same README, while applicable ADRs and contracts remain supporting evidence. Equivalent project-relative spelling or a safe internal symlink to that same file is one authority, not a conflict. An existing `spec.md` with only `## Product Requirement Source` remains readable without migration.
+
+An unknown but inspectable authority is preserved verbatim and returns advisory facts for Agent assessment. It is not rejected merely because its wording is unfamiliar. External URLs, ticket identifiers, and Human conversation or decision locators are evidence locators, not project paths. A reference declared as local remains subject to exact project/memory-root confinement, existence, readability, and symlink checks.
+
+Canonical conceptual outcomes are:
+
+| Result | Exit | Mechanical meaning | Agent responsibility |
+|---|---:|---|---|
+| `CURRENT` | `0` | applicable objective facts resolve and match | rely on the facts only inside existing authorization |
+| `CHANGED` | `0` | facts differ, are incomplete/custom, or need review | assess semantic impact, repair derived evidence, or route to its owner |
+| `NOT_APPLICABLE` | `0` | this specialized Checker does not own the current authority/artifact | select the applicable adapter or direct evidence |
+| `BLOCKED` | `1` | safe evaluation or exact execution is objectively impossible | repair the owning physical/safety condition; never infer permission |
+
+Checkers report objective facts and applicability. The Agent owns semantic sufficiency, impact, repair, workflow routing, recommendation, and whether an existing Human Gate must be shown. None of `CURRENT`, `CHANGED`, `NOT_APPLICABLE`, exit `0`, or a recorded Human locator authorizes execution or another gated action.
+
+For explicit Feature Authority, Snapshot `Authority Facts` is the resolver's deterministic semicolon-separated fact sequence, including `Authority Summary`, primary/supporting locators, and adapter-specific facts. A changed summary, missing fact, stale fact, or reordered/rewritten fact sequence is `CHANGED / 0`; the Agent compares meaning and refreshes the derived Snapshot before reliance. External ticket identifiers are case-insensitive evidence locators when they use a stable ticket-key plus numeric identifier shape, such as `JIRA-431` or `jira-431`; they are not guessed as local files.
+
+## Agent Checker Rescue
+
+Agent Checker Rescue is a response-local internal method of Diagnose Failure and Verify after a canonical Checker still fails on one exact rerun. It is not a canonical stage, message intent, lifecycle status, Auto Mode, default artifact family, persistent exception, generic force/skip parameter, or new Human Gate.
+
+Apply this order before Checker Self-Repair:
+
+```text
+exact canonical failure and one exact rerun
+-> preserve checker/command/result/target/current inputs
+-> classify objective facts and applicability
+-> Level 1 only with complete independent evidence + intact safety + unchanged semantics + existing authorization
+-> Level 2 only for one named Gate with a visible residual and accepted-for-this-gate
+-> Level 3 stop for physical/safety/semantic/verification/authorization uncertainty
+-> Checker Self-Repair only when corrected executable Checker evaluation is actually necessary
+```
+
+### Level 1 — Agent automatic rescue
+
+The Agent may continue without another Human interruption solely for the Checker limitation when the exact failure and rerun are preserved, independent current evidence proves every needed fact, the safety boundary is intact, product/Feature/acceptance/risk/dependency/implementation meaning is unchanged, no authority or verification conflict remains, and continuation plus any deterministic Agent-owned repair stays wholly inside existing authorization.
+
+Record at least:
+
+```text
+Canonical Checker Result: BLOCKED
+Agent Classification: checker-limitation | not-applicable | supported-legacy-shape | derived-evidence-mismatch
+Independent Evidence: <current source and result>
+Safety Boundary: intact
+Semantic Impact: none
+Agent Rescue Decision: continue-within-existing-authorization
+Expiry: <Gate end or relevant checker/input/authority/evidence/safety/authorization change>
+Developer Feedback: prepared | not-applicable
+```
+
+Level 1 does not add a Human prompt. It also does not change the canonical result to `PASS`, create execution authorization, consume or replace a normal later Human Gate, rewrite Human originals, or alter accepted meaning.
+
+### Level 2 — Human one-Gate substitute
+
+When direct evidence explains the Checker limitation but one small disclosed residual prevents Level 1, present one existing Human Gate with the exact Checker/command/target, applicable authority, independent evidence, residual risk, authorized scope, expiry, and recommendation. Record `Agent Rescue Decision: human-substitute-required` and `Human Substitute Decision: accepted-for-this-gate | declined`.
+
+`accepted-for-this-gate` is evidence wording only. It applies to one exact target, command, and named Gate and expires when that Gate ends or any relevant checker/input/authority/evidence/safety/authorization fact changes. It cannot authorize Feature execution, Requirement/Bug mutation, Git, release, external action, a later Gate, or a wider target.
+
+### Level 3 — non-rescuable
+
+Do not rescue project or memory path escape; unsafe symlink or root authority; exact Archive/Rehydrate or Full Memory Audit plan-hash, target, preimage, journal, post-check, restore, or rollback mismatch; real required verification failure; unresolved product/design/scope/security/data/destructive/production/credential/external meaning; conflicting effective authorities; sealed/customer-isolation conflict; continuation outside the accepted boundary; or missing existing Human authorization. Repair or decide these through their owning workflow.
+
+Every Rescue expires on Gate end or checker/command/target/input/authority/evidence digest/safety/authorization change. Changed evidence requires a fresh classification. A likely Checker limitation also produces a sanitized read-only developer-feedback draft; creating an Issue remains behind the independent Issue Reporting Human Gate.
+
 ## Checker Failure Recovery
 
-Checker Failure Recovery is an internal method of Diagnose Failure and Verify, not a canonical stage, status, lifecycle, artifact family, or Auto Mode. Load `references/checker-recovery.md` when a canonical Agent Loop checker still fails after the exact command is rerun with unchanged inputs.
+Checker Self-Repair is the existing internal method of Diagnose Failure and Verify for the narrower case where reliable evaluation actually requires a corrected executable Checker. It is not a canonical stage, status, lifecycle, artifact family, Auto Mode, or bypass. Load `references/checker-recovery.md` after Agent Checker Rescue has shown that direct evidence is incomplete or executable correction is necessary.
 
-Apply this order:
+Apply the existing repair order without weakening it:
 
 ```text
 preserve canonical command/output/path/digest
 -> artifact-invalid | environment-invalid | checker-defect-candidate | unresolved
--> artifact or environment repair when those facts decide the cause
--> minimal authority-backed positive fixture plus negative controls for a checker candidate
+-> minimal authority-backed positive fixture plus negative controls
 -> Temporary Checker Repair Review
 -> exact Human authorization before checker/support writes
 -> isolated temporary copy by default
@@ -400,9 +465,9 @@ preserve canonical command/output/path/digest
 
 Read-only reproduction, reduction, and authority comparison may proceed before asking. The Agent must not rewrite a valid artifact to satisfy a known-wrong checker, silently modify an installed/global Skill, add a general bypass, or present temporary evidence as a canonical pass.
 
-Preparing a sanitized upstream Issue Draft is read-only. Public GitHub Issue creation is an external mutation with its own review of exact repository, title, body, redactions, labels/method, and effect. If authenticated capability is absent, return the draft and blocker; do not install tools or disclose credentials. Issue authorization, repair authorization, one-Gate substitute evidence, Git, installation, synchronization, and release remain independent.
+Preparing a sanitized upstream Issue Draft is read-only. Public GitHub Issue creation is an external mutation with its own exact review. Issue authorization, repair authorization, one-Gate substitute evidence, Git, installation, synchronization, and release remain independent.
 
-The Human may accept a fresh temporary result as substitute verification for one exact Gate only when the defect proof, source digests, RED/GREEN, negative controls, target command, expiry, rollback, and residual canonical failure are visible. Record:
+The temporary repair path retains dual evidence:
 
 ```text
 Canonical validation: failed
@@ -410,9 +475,9 @@ Temporary checker recovery: passed | failed
 Human substitute decision: accepted-for-this-gate | declined
 ```
 
-This decision grants no later Gate or action. Any checker/support/input/authority digest change, different target or command, Gate exit, context loss without persisted evidence, or failed negative control expires it. Short same-session evidence may remain response-local; cross-session, handoff, or later action reliance records the compact evidence in the existing owning artifact without creating a mandatory recovery directory.
+This decision grants no later Gate or action. Any checker/support/input/authority digest change, different target or command, Gate exit, context loss without persisted evidence, or failed negative control expires it. Short same-session evidence may remain response-local; cross-session, handoff, or later-action reliance records compact evidence in the existing owning artifact without creating a mandatory recovery directory.
 
-Formal repair belongs in the Agent Loop source repository with the regression test and canonical checker change. Agent Loop itself cannot claim a released checker fix from an isolated patched copy; focused and required full validation must pass on the formal source.
+Formal repair belongs in the Agent Loop source repository with the regression test and canonical Checker change. Agent Loop itself cannot claim a released Checker fix from an isolated patched copy; focused and required full validation must pass on the formal source.
 
 ## Inspection Order
 
@@ -428,8 +493,9 @@ Use this order:
 6b. If `.agent-loop/skills/INDEX.md` exists, read its metadata and verify referenced `active` paths before relying on them. Re-match active `bootstrap` / `on-demand` rows for each applicable actionable intent before stage-specific helper or fallback action; load and verify only the matched body. Do not load `proposed`, `disabled`, or `deprecated` skills into normal routing.
 6c. For explicit Bug management, read `bugs/INDEX.md` metadata before creating a Bug or scanning Feature ownership. Resolve current Bug README, duplicate/reopen pointers, and related flat/archived Feature locators before relying on lifecycle or target claims.
 6d. When `<memory-root>/changes/` exists, run the read-only Lightweight Change scanner across every month before relying on Change status, pending thresholds, or human-review inventory. A changes-only root does not prove reliable `project.md` or completed Project Entry.
-7. Read current Feature `spec.md` as the bootstrap. Run `python3 <skill-root>/scripts/check-feature-context.py --project-root <target-project-root> <feature-spec-path>` before relying on downstream Feature context. Exit `0 / CURRENT` permits the local fast path. Exit `0 / CHANGED` reports factual drift for Agent impact assessment; it is not execution authorization and does not itself choose a Human Gate. Exit `1 / BLOCKED` is reserved for physical or authority-resolution contradictions and routes to Recovery or the owning source repair. On Windows use the equivalent `py -3` command.
-8. Only after the result is `CURRENT`, or after the Agent has assessed `CHANGED`, repaired derived evidence, and rerun to `CURRENT`, read stage-relevant current Feature `tasks.md`, `tests.md`, `plan.md`, `notes.md`, and `contracts.md` if present. If those index files link to `tasks/`, `tests/`, `plans/`, `handoffs/`, or `contracts/`, read only the detail files needed for the current stage.
+The scanner preserves `triggered | not-triggered` separately from `validation_result`. It returns deterministic per-record `CHANGED` findings for safely bounded filename/date/field/section/state/placeholder defects while preserving every readable valid record and trigger; unsafe memory-root, path, symlink, enumeration, month-depth, or artifact-kind authority remains hard.
+7. Read current Feature `spec.md` as the bootstrap and resolve `## Feature Authority` before adapter-specific paths. Use the Requirement Product Definition compatibility sub-adapter when only legacy `## Product Requirement Source` exists. Run `python3 <skill-root>/scripts/check-feature-context.py --project-root <target-project-root> <feature-spec-path>` before relying on downstream Feature context. Exit `0 / CURRENT` permits factual reliance inside existing authorization. Exit `0 / CHANGED` reports drift, custom authority, or Agent-review facts. Exit `0 / NOT_APPLICABLE` from a specialized Checker means select the applicable adapter/direct evidence. Exit `1 / BLOCKED` is reserved for physical or authority-resolution contradictions. On Windows use the equivalent `py -3` command.
+8. Only after `CURRENT`, or after the Agent has assessed `CHANGED`/`NOT_APPLICABLE` and completed the applicable authority route, read stage-relevant current Feature `tasks.md`, `tests.md`, `plan.md`, `notes.md`, and `contracts.md` if present. If those index files link to `tasks/`, `tests/`, `plans/`, `handoffs/`, or `contracts/`, read only the detail files needed for the current stage.
 9. Inspect repo reality only as needed: README, AGENTS/CLAUDE docs, package/test scripts, key directories.
 10. If local repo reality points to remote execution, or the human says this is a remote project, load `references/remote-project-discovery.md`. An empty local directory alone is not enough; if there are no remote hints, classify as `new-project`.
 11. Verify long-term memory index targets before trusting them. If `project.md`, root guidance, or current artifacts point to onboarding-db, enterprise `project/*.md`, feature docs, contracts, or guidance files, check that the referenced path exists before relying on it.
@@ -444,6 +510,8 @@ When the checker returns `CHANGED`, read its reasons plus the changed Requiremen
 If `project.md` declares a Decisions index, list decision files before Decision & Design or Feature Spec. Read decisions already linked by the active Requirement Product Definition, legacy Feature Product Brief, or `spec.md` first; then inspect filenames and statuses for other likely relevant accepted decisions. Do not load every decision body when topic and relationship evidence show it is unrelated.
 
 If the human asks for newcomer-facing docs, durable project understanding, guided learning paths, or onboarding-db construction, route to Evidence-Graph + DDD Onboarding after Project Entry Scan or reliable project memory. Load `references/onboarding-knowledge-base.md`. Evidence Graph must include Core Flow Inventory selection before Onboarding Spec acceptance; critical/important flows then use Flow Slice Coverage and the Completeness Hard Gate. Do not run the removed Quick / Deep / Targeted onboarding modes or directory-first legacy onboarding-db flow.
+
+The Onboarding coverage Checker classifies applicability before coverage. No recognizable current-format scope is `NOT_APPLICABLE`; a recognizable scope with safely enumerable missing/stale file, slice, Diagram ID, section, evidence, source/render, digest, status, or placeholder facts is `CHANGED`; only unreadable/unsafe/physically ambiguous authority is `BLOCKED`. Fixed English wording and self-declared `covered` / `PASS` are recorded facts, not semantic completeness. The Agent owns repair, newcomer-readiness judgment, and routing to the existing two Onboarding Human Gates.
 
 This keeps exactly two onboarding Human Gates: accept the Onboarding Spec, then separately accept the completed Onboarding Tasks Full Execution Gate. Core-flow selection and completeness are contents of those existing gates, not additional pauses. Batch remains an Agent organization/review unit rather than a Human Gate.
 
@@ -600,7 +668,7 @@ Submit / Integrate
 Pause / Close
 ```
 
-Feature Spec enters Brainstorm / Clarify only when concrete feature-local scope, acceptance, or implementation-boundary uncertainty remains after loading the accepted Product Slice and applicable ADRs. If the Product Slice, assigned ADR Design Slices, scope, exclusions, and measurable acceptance are already clear, classify the method response-locally as `brainstorm-not-needed` and proceed directly to Feature Spec. This label is not a lifecycle status or artifact field. Helper availability alone never triggers the method. Brainstorming may compare or clarify Feature-local alternatives, but it cannot reopen Requirement product meaning, rewrite an accepted ADR, or add scope; product ambiguity returns to Requirements Discussion and ADR incompatibility returns to Decision & Design Human Review.
+Feature Spec enters Brainstorm / Clarify only when concrete feature-local scope, acceptance, or implementation-boundary uncertainty remains after loading the resolved Feature Authority, accepted Feature boundary, applicable Product Slice, and applicable ADRs. If those applicable sources, scope, exclusions, and measurable acceptance are already clear, classify the method response-locally as `brainstorm-not-needed` and proceed directly to Feature Spec. This label is not a lifecycle status or artifact field. Helper availability alone never triggers the method. Brainstorming may compare or clarify Feature-local alternatives, but it cannot reopen source-authority, Requirement product, Bug Expected Behavior, or accepted ADR meaning or add scope; ambiguity returns to the owning existing Human Review.
 
 ## Stage Entry And Exit
 

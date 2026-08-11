@@ -10,7 +10,9 @@ from pathlib import Path, PurePosixPath
 
 from checker_support import (
     CheckFailure,
+    configure_utf8_stdio,
     confined_path,
+    is_blocking_checker_failure,
     metadata,
     optional_section,
     read_text,
@@ -88,6 +90,12 @@ ADR_VISUAL_COLUMNS = (
     "Status",
 )
 
+ADR_TRACE_APPLICABILITY_MARKERS = (
+    "Effective Requirement Snapshot",
+    "Requirement Model Scope Inventory",
+    "Requirement Model Technical Landing Trace",
+)
+
 
 class TraceError(Exception):
     pass
@@ -160,6 +168,13 @@ def read_artifact(path: Path) -> str:
     if not path.is_file():
         raise TraceError(f"missing file: {path}")
     return read_text(path)
+
+
+def requirement_trace_applicable(decision: str) -> bool:
+    headings = set(re.findall(r"^##\s+(.+?)\s*$", decision, re.MULTILINE))
+    if headings.intersection(ADR_TRACE_APPLICABILITY_MARKERS):
+        return True
+    return bool(re.search(r"^Trace Applicability:\s*", decision, re.MULTILINE))
 
 
 def markdown_path(value: str) -> str | None:
@@ -423,11 +438,16 @@ def validate(
     decision_path: Path,
     workspace_root: Path,
 ) -> str:
+    decision = read_artifact(decision_path)
+    if not requirement_trace_applicable(decision):
+        return (
+            "NOT_APPLICABLE: ADR does not declare requirement-model landing "
+            "ownership"
+        )
     effective_source = resolve_effective_product_definition(
         readme_path, source_path
     )
     source = effective_source.content
-    decision = read_artifact(decision_path)
     pointer_source = source_path.resolve().relative_to(readme_path.parent.resolve()).as_posix()
     source_status = effective_source.review
 
@@ -804,6 +824,7 @@ def validate(
 
 
 def main() -> int:
+    configure_utf8_stdio()
     require_supported_python()
     parser = argparse.ArgumentParser(
         description="Validate ADR requirement-model scope and technical landing trace."
@@ -813,16 +834,46 @@ def main() -> int:
     parser.add_argument("decision", type=Path)
     parser.add_argument("workspace_root", nargs="?", type=Path)
     args = parser.parse_args()
-    paths = (args.requirement_readme, args.effective_source, args.decision)
-    for path in paths:
+    if not args.decision.is_file():
+        print(f"BLOCKED: missing file: {args.decision}", file=sys.stderr)
+        return 1
+    try:
+        decision = read_text(args.decision)
+    except (OSError, UnicodeError) as error:
+        print(f"BLOCKED: cannot read decision {args.decision}: {error}", file=sys.stderr)
+        return 1
+    if not requirement_trace_applicable(decision):
+        print(
+            "NOT_APPLICABLE: ADR does not declare requirement-model landing ownership"
+        )
+        return 0
+    for path in (args.requirement_readme, args.effective_source):
         if not path.is_file():
-            parser.error(f"missing file: {path}")
+            print(f"BLOCKED: missing file: {path}", file=sys.stderr)
+            return 1
     workspace_root = (args.workspace_root or args.requirement_readme.parent).resolve()
     try:
-        print(validate(*paths, workspace_root))
-    except (TraceError, CheckFailure, ProductDefinitionError, VisualArtifactError) as error:
-        print(error, file=sys.stderr)
-        return 1
+        print(
+            validate(
+                args.requirement_readme,
+                args.effective_source,
+                args.decision,
+                workspace_root,
+            )
+        )
+    except (
+        TraceError,
+        CheckFailure,
+        ProductDefinitionError,
+        VisualArtifactError,
+        OSError,
+        UnicodeError,
+    ) as error:
+        if is_blocking_checker_failure(error):
+            print(f"BLOCKED: {error}", file=sys.stderr)
+            return 1
+        print(f"CHANGED: {error}")
+        return 0
     return 0
 
 

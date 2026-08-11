@@ -18,6 +18,16 @@ from checker_support import (
     require_supported_python,
     table,
 )
+from feature_authority_support import (
+    BUG_ADAPTER,
+    CUSTOM_ADAPTER,
+    FEATURE_ADAPTER,
+    HUMAN_ADAPTER,
+    REQUIREMENT_ADAPTER,
+    AuthorityResolution,
+    is_external_locator,
+    resolve_feature_authority,
+)
 from requirement_product_support import (
     CONCEPT_ID_PATTERN,
     EffectiveProductSource,
@@ -31,6 +41,7 @@ from requirement_product_support import (
 CURRENT = 0
 BLOCKED = 1
 CHANGED = 0
+NOT_APPLICABLE = 0
 COMPATIBLE_REQUIREMENT_STATUS = {
     "accepted",
     "in-progress",
@@ -58,6 +69,17 @@ REQUIRED_SNAPSHOT_SECTIONS = (
     "Applicable States, Exceptions, And Recovery",
     "Feature Boundary And Acceptance Context",
 )
+COMMON_AUTHORITY_SNAPSHOT_FIELDS = (
+    "Authority Type",
+    "Authority Adapter",
+    "Primary Authority Reference",
+    "Supporting Authority References",
+    "Authority Applicability",
+    "Authority Facts",
+    "Authority Source SHA-256",
+    "Verified At",
+    "Freshness",
+)
 
 
 @dataclass(frozen=True)
@@ -70,6 +92,7 @@ class ContextResult:
         return {
             "current": CURRENT,
             "changed": CHANGED,
+            "not_applicable": NOT_APPLICABLE,
             "blocked": BLOCKED,
         }[self.status]
 
@@ -296,6 +319,199 @@ def valid_verified_at(value: str) -> bool:
     return parsed.tzinfo is not None
 
 
+def normalized_reference(value: str | None) -> str:
+    return normalized(value).replace("\\", "/")
+
+
+def supporting_reference_set(value: str | None) -> set[str]:
+    cleaned = normalized(value)
+    if not cleaned or cleaned.casefold() == "none":
+        return set()
+    return {
+        normalized_reference(item)
+        for item in cleaned.split(";")
+        if normalized(item)
+    }
+
+
+def same_local_authority_reference(
+    project_root: Path,
+    left: str | None,
+    right: str | None,
+) -> bool:
+    left_value = normalized_reference(left)
+    right_value = normalized_reference(right)
+    if left_value == right_value:
+        return True
+    if not left_value or not right_value:
+        return False
+    if is_external_locator(left_value, REQUIREMENT_ADAPTER) or is_external_locator(
+        right_value,
+        REQUIREMENT_ADAPTER,
+    ):
+        return False
+    try:
+        return project_path(project_root, left_value) == project_path(
+            project_root,
+            right_value,
+        )
+    except AuthorityFailure:
+        return False
+
+
+def adapter_label_matches(recorded: str, authority: AuthorityResolution) -> bool:
+    slug = re.sub(r"[^a-z0-9]+", "-", recorded.casefold()).strip("-")
+    aliases = {
+        REQUIREMENT_ADAPTER: {
+            REQUIREMENT_ADAPTER,
+            "feature-authority-requirement-product-definition",
+        },
+        FEATURE_ADAPTER: {FEATURE_ADAPTER, "feature-authority"},
+        BUG_ADAPTER: {BUG_ADAPTER, "bug-authority"},
+        HUMAN_ADAPTER: {HUMAN_ADAPTER, "human-authority"},
+    }
+    if authority.adapter == CUSTOM_ADAPTER:
+        return bool(slug)
+    return slug in aliases[authority.adapter]
+
+
+def authority_fact(authority: AuthorityResolution, prefix: str) -> str:
+    for fact in authority.facts:
+        if fact.startswith(prefix):
+            return fact[len(prefix) :]
+    return ""
+
+
+def common_authority_snapshot_reasons(
+    project_root: Path,
+    snapshot: str | None,
+    authority: AuthorityResolution,
+) -> list[str]:
+    if authority.compatibility_shape != "explicit-feature-authority":
+        return []
+    if snapshot is None:
+        return ["Feature Context Snapshot is missing for explicit Feature Authority"]
+
+    values = {
+        name: normalized(field(snapshot, name)) or None
+        for name in COMMON_AUTHORITY_SNAPSHOT_FIELDS
+    }
+    reasons = [
+        f"Snapshot field is missing: {name}"
+        for name, value in values.items()
+        if value is None
+    ]
+
+    recorded_type = values["Authority Type"]
+    if recorded_type and recorded_type != authority.authority_type:
+        reasons.append("Snapshot Authority Type differs from Feature Authority")
+
+    recorded_adapter = values["Authority Adapter"]
+    if recorded_adapter and not adapter_label_matches(recorded_adapter, authority):
+        reasons.append("Snapshot Authority Adapter differs from resolved adapter")
+
+    recorded_primary = values["Primary Authority Reference"]
+    if recorded_primary and normalized_reference(recorded_primary) != normalized_reference(
+        authority.primary_reference
+    ):
+        reasons.append("Snapshot Primary Authority Reference changed")
+
+    recorded_supporting = values["Supporting Authority References"]
+    if recorded_supporting and supporting_reference_set(recorded_supporting) != {
+        normalized_reference(item) for item in authority.supporting_references
+    }:
+        reasons.append("Snapshot Supporting Authority References changed")
+
+    recorded_applicability = values["Authority Applicability"]
+    if recorded_applicability and recorded_applicability != authority.applicability:
+        reasons.append("Snapshot Authority Applicability changed")
+
+    recorded_facts = values["Authority Facts"]
+    if recorded_facts and normalized(recorded_facts) != "; ".join(authority.facts):
+        reasons.append("Snapshot Authority Facts differ from resolved authority facts")
+
+    raw_digest = values["Authority Source SHA-256"]
+    primary_external = is_external_locator(
+        authority.primary_reference,
+        authority.adapter,
+    )
+    if raw_digest:
+        if primary_external:
+            if raw_digest.casefold() != "none":
+                reasons.append(
+                    "external Authority Source SHA-256 must be none and remain advisory"
+                )
+        elif raw_digest.casefold() == "none":
+            reasons.append("local Authority Source SHA-256 is missing")
+        elif "=" not in raw_digest:
+            reasons.append("Authority Source SHA-256 contains malformed evidence")
+        else:
+            raw_path, raw_value = raw_digest.split("=", 1)
+            recorded_path = normalized_reference(raw_path)
+            digest_value = normalized(raw_value)
+            if recorded_path != normalized_reference(authority.primary_reference):
+                reasons.append("Authority Source SHA-256 path differs from primary authority")
+            elif not SHA256.fullmatch(digest_value):
+                reasons.append("Authority Source SHA-256 is malformed")
+            else:
+                try:
+                    source_path = project_path(project_root, authority.primary_reference)
+                    if digest_value not in compatible_text_digests(source_path):
+                        reasons.append("Authority Source SHA-256 changed")
+                except (AuthorityFailure, OSError) as error:
+                    reasons.append(
+                        f"Authority Source SHA-256 cached path is invalid: {error}"
+                    )
+
+    verified_at = values["Verified At"]
+    if verified_at and not valid_verified_at(verified_at):
+        reasons.append("Verified At must be an ISO-8601 timestamp with a timezone")
+
+    freshness = values["Freshness"]
+    if freshness == "blocked":
+        reasons.append("Snapshot Freshness records blocked authority facts")
+    elif freshness in {"refresh-required", "changed"}:
+        reasons.append("Snapshot Freshness records changed authority facts")
+    elif freshness not in {None, "current"}:
+        reasons.append("Snapshot Freshness value is unsupported")
+
+    if authority.adapter == BUG_ADAPTER:
+        bug_fields = {
+            "Bug ID": authority_fact(authority, "Bug ID "),
+            "Expected Behavior Evidence Locator": authority_fact(
+                authority,
+                "Expected Behavior evidence ",
+            ),
+            "Feature Location": authority_fact(authority, "Feature Location "),
+        }
+        for name, expected in bug_fields.items():
+            recorded = normalized(field(snapshot, name))
+            if not recorded:
+                reasons.append(f"Bug Snapshot field is missing: {name}")
+            elif expected and recorded != expected:
+                reasons.append(f"Bug Snapshot field changed: {name}")
+        route = normalized(field(snapshot, "Resolution Path / Fix Feature Locator"))
+        expected_path = authority_fact(authority, "Resolution Path ")
+        expected_feature = authority_fact(authority, "Fix Feature ")
+        if not route:
+            reasons.append(
+                "Bug Snapshot field is missing: Resolution Path / Fix Feature Locator"
+            )
+        elif expected_path not in route or expected_feature not in route:
+            reasons.append("Bug Snapshot Resolution Path / Fix Feature Locator changed")
+
+    if authority.adapter in {HUMAN_ADAPTER, CUSTOM_ADAPTER}:
+        evidence_locator = normalized_reference(field(snapshot, "Evidence Locator"))
+        if not evidence_locator:
+            reasons.append("advisory Snapshot Evidence Locator is missing")
+        elif evidence_locator != normalized_reference(authority.primary_reference):
+            reasons.append("advisory Snapshot Evidence Locator changed")
+        if normalized(field(snapshot, "Agent Review Required")).casefold() != "yes":
+            reasons.append("advisory Snapshot must record Agent Review Required: yes")
+
+    return reasons
+
+
 def classify(
     project_root: Path,
     feature_spec: Path,
@@ -312,7 +528,22 @@ def classify(
     except (OSError, UnicodeError, ValueError) as error:
         return ContextResult("blocked", (str(error),))
 
+    authority = resolve_feature_authority(project_root, feature_spec, spec_text)
+    if authority.status == "blocked":
+        return ContextResult("blocked", authority.reasons)
     snapshot = optional_section(spec_text, "Feature Context Snapshot")
+    changed_reasons.extend(
+        common_authority_snapshot_reasons(project_root, snapshot, authority)
+    )
+    if authority.adapter != REQUIREMENT_ADAPTER:
+        if authority.status == "changed":
+            changed_reasons.extend(authority.reasons)
+        if changed_reasons:
+            return ContextResult("changed", tuple(sorted(set(changed_reasons))))
+        return ContextResult("current", authority.reasons)
+    if authority.status == "changed":
+        changed_reasons.extend(authority.reasons)
+
     source_section = optional_section(spec_text, "Product Requirement Source")
     if source_section is None:
         return ContextResult(
@@ -336,6 +567,19 @@ def classify(
                 changed_reasons.append(f"Snapshot section is incomplete: {heading}")
 
     source_requirement = normalized(field(source_section, "Requirement Set"))
+    if (
+        authority.compatibility_shape == "explicit-feature-authority"
+        and source_requirement
+        and not same_local_authority_reference(
+            project_root,
+            authority.primary_reference,
+            source_requirement,
+        )
+    ):
+        blocked_reasons.append(
+            "Feature Authority primary reference conflicts with "
+            "Product Requirement Source Requirement Set"
+        )
     snapshot_requirement = snapshot_fields.get("Requirement Set")
     if snapshot_requirement and source_requirement:
         if snapshot_requirement.replace("\\", "/") != source_requirement.replace("\\", "/"):
@@ -657,6 +901,7 @@ def main(argv: list[str] | None = None) -> int:
     prefix = {
         "current": "CURRENT",
         "changed": "CHANGED",
+        "not_applicable": "NOT_APPLICABLE",
         "blocked": "BLOCKED",
     }[result.status]
     print(f"{prefix}: {'; '.join(result.reasons)}")

@@ -1,5 +1,23 @@
 # Agent Loop Changelog
 
+## 1.5.4 — 2026-08-11
+
+_当前状态：正式稳定版；最终 Human Review 与精确 Release Gate 已接受，focused、全量 Shell/Python、机械检查及六域语义验证通过。正式 tag 为 `stable-v1.5.4`；默认安装通道 `main` 的同步仍保留独立 Human Gate。_
+
+### 开放 Feature Authority 与 Agent-owned Checker 轻门禁
+- Feature Authority、Bug Authority、Human Authority 改为开放适配器族；Requirement Product Definition 保留为兼容子适配器，历史 Product Requirement Source-only Feature 无需批量迁移。
+- 新增标准库 `feature_authority_support.py`，先解析真实 Authority，再检查本地路径边界、Bug Expected Behavior、Resolution Path/Fix Feature、归档 locator 与支持证据；未知但可检查来源返回 `CHANGED`，不直接硬阻断。
+- Requirement Product Definition 与 Concept 专用 Checker 在非 Requirement Authority 上先返回 `NOT_APPLICABLE`，避免伪造缺失的 Requirement/Product 字段。
+- 显式 Requirement Product Definition 的 primary authority 与 Product Requirement Source 必须指向同一 Requirement README；可识别但断链的 Onboarding symlink 保持 `BLOCKED`，且 Onboarding Python 入口继续支持直接执行。
+- Feature Context Snapshot 的 Authority Facts 现在确定性绑定 Authority Summary 与 resolver 事实；摘要/缓存事实陈旧返回 `CHANGED`，等价相对路径或安全内部 symlink 指向同一 README 时保持单一权威，小写外部 ticket 不再误判为本地文件。
+- Product、Concept 与 ADR 专用 Checker 把可读、可定位的结构/字段/语义缺口报告为 `CHANGED / 0`；非法 UTF-8、断链文件、路径越界、主源冲突与归档定位异常仍稳定返回 `BLOCKED / 1`，不再泄露 traceback 或 argparse exit 2。
+- 新增三级 Agent Checker Rescue：Level 1 仅在已有授权和完整独立证据内自动继续；Level 2 只允许一次 `accepted-for-this-gate`；Level 3 对路径、计划哈希、事务/回滚、真实验证、语义和授权问题保持不可解救。
+- Rescue 保留 canonical failure，不生成授权、不替代任何既有 Human Gate；只有确需修正可执行验证器时才进入原 Checker Self-Repair。
+- Onboarding Checker 先判适用性，再逐 Flow 报告 Slice、Diagram、章节、证据、source/render、digest、状态与 placeholder 事实；等价措辞不因缺少固定英文 token 失败，`covered/PASS` 也不再充当语义证明。
+- Lightweight Change scanner 将 bounded filename/date/field/section/state/placeholder 缺陷改为确定性的逐记录 findings，同时保留其余正常 pending/human-review 清单与触发器；memory-root、路径、symlink、枚举和不可界定布局仍硬阻断。
+- ADR Requirement Model Checker 对普通非需求 ADR 返回 `NOT_APPLICABLE`，但任何已声明 Snapshot/Trace 的结构、引用、digest、coverage 或 Human Review 缺陷继续可见且不通过。
+- 补齐 Feature/Bug/Human/custom/mixed/legacy、BOM/CRLF/Windows 路径、路径/符号链接越界、错域适用性与 Rescue 正反向回归，并把 Authority/Requirement Product Checker 加入 macOS/Windows CI 定义。
+
 ## 1.5.3 — 2026-07-28
 
 _当前状态：开发中；已获准同步版本，尚未 commit、push、tag 或发布。_

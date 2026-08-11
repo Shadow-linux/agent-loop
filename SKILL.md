@@ -5,7 +5,7 @@ description: Use when starting, continuing, resuming, structuring, testing, impl
 
 # Agent Loop
 
-Version: 1.5.3
+Version: 1.5.4
 
 Run a single-human, CLI-agent development loop from goal intake to verified close. This skill is a controller: it decides the current stage, loads the right reference, produces or updates `agent-loop` artifacts, and stops at human gates.
 
@@ -120,7 +120,7 @@ references/recovery-and-backfill.md code-reality recovery and document backfill 
 references/feature-completion-check.md proactive close/pause/continue checks for active features
 references/human-review-summary.md table-first approval summaries for human gates
 references/stage-guides.md         stage-by-stage procedures
-references/checker-recovery.md     Human-authorized isolated recovery for a defective canonical Agent Loop checker
+references/checker-recovery.md     Agent Checker Rescue plus Human-authorized isolated repair for a defective canonical Agent Loop checker
 references/artifact-rules.md       artifact ownership, drift, status, and naming
 references/skill-routing.md        optional preferred skills and fallback behavior
 references/external-skill-adapters.md stage plugin rules for Superpowers and other external skills
@@ -134,7 +134,7 @@ scripts/check-root-agents-blocks.py read-only root AGENTS managed-block drift ch
 scripts/check-onboarding-core-flow-coverage.py onboarding core-flow coverage checker
 scripts/check-concept-foundation-trace.py accepted concept/model trace checker
 scripts/check-adr-requirement-model-trace.py ADR requirement-model landing checker
-scripts/check-feature-context.py read-only Feature Context fact scanner; CURRENT/CHANGED are factual results and BLOCKED is physical authority failure
+scripts/check-feature-context.py read-only open Feature authority fact scanner; CURRENT/CHANGED/NOT_APPLICABLE are factual routing results and BLOCKED is physical authority failure
 scripts/scan-feature-monthly-archive.py read-only deterministic archive/rehydrate plan
 scripts/check-feature-monthly-archive.py read-only pre/post archive contract checker
 scripts/apply-feature-monthly-archive.py exact-hash Human-gated archive/rehydrate apply
@@ -156,7 +156,7 @@ CHANGELOG.md                        version-change source of truth for "what cha
 1. Discover exactly one accepted memory root before relying on project memory. Prefer a real `.agent-loop/` or accepted legacy `agent-loop/` directory; a single verified internal alias to an existing project directory may preserve that logical root name. If both `.agent-loop/` and legacy `agent-loop/` exist, fail closed and route to Recovery. Broken, cyclic, external, or file aliases also fail closed. If neither root exists, continue with the applicable new-project, existing-project, or clearly eligible changes-only path without inventing reliable memory.
 2. Check root `AGENTS.md` / `CLAUDE.md` as the Root Agent Bootstrap Gate; if either is missing or stale, load `references/project-guidance.md` and include the guidance repair in the recommended Project Entry action unless the human has explicitly deferred it.
 2a. Canonical `scripts/check-*.py` validation requires Python 3.10+ and only the Python standard library. Run the `.py` entrypoints natively on macOS or Windows; if a required checker cannot run because Python is missing or unsupported, fail closed and report the capability gap instead of silently using an obsolete implementation.
-2b. When a canonical Agent Loop checker fails after an exact rerun, load `references/checker-recovery.md` inside Diagnose Failure / Verify. Classify the failure as artifact, environment, checker candidate, or unresolved before proposing a fix. A temporary checker write requires an exact Human authorization, uses an isolated copy by default, preserves RED/GREEN and negative-control evidence, and may substitute only for one named Gate after a separate Human decision; the canonical result remains failed until formal source repair.
+2b. When a canonical Agent Loop checker fails after an exact rerun, load `references/checker-recovery.md` inside Diagnose Failure / Verify. Apply Agent Checker Rescue Level 1/2/3 first: complete independent facts may continue only inside existing authorization; small residual risk may use `accepted-for-this-gate` inside one already-required Human Gate; safety, semantic, real-verification, or authorization uncertainty stops. Rescue never changes the canonical result to PASS or creates permission. Enter Checker Self-Repair only when corrected executable evaluation is actually required.
 3. Classify the latest message intent: `chat`, `requirements-discussion`, `project-skill-management`, `feature-archive-maintenance`, `feature-request`, `operational-support`, `feature-follow-up`, `deferred-requirement`, or `unknown`.
 3a. For `chat`, answer or discuss only; do not create requirement sets, feature workspaces, tasks, tests, or plans.
 3b. For `requirements-discussion`, load `references/requirement-management.md` and `references/product-definition.md`, use Brainstorm / Clarify, choose `brief | standard`, produce a human-reviewed Requirement `product.md`, and write it under `.agent-loop/requirements/<record-date>-<topic>/` only after Product Human Review plus Requirement Record / Archive confirmation before any Feature construction.
@@ -265,7 +265,7 @@ If the local directory is only a remote-project entry point, create only thin lo
 - Whole-feature execution requires explicit human confirmation and only fits tiny features.
 - A feature may contain many stories and many tasks; `tasks.md` is the feature task ledger.
 - Use Requirement `product.md` as the new product-semantics owner and Feature `spec.md` Product Slice as the implementation view. Existing Feature `product.md` is legacy reader-only evidence.
-- Use Feature `spec.md` as the execution bootstrap. Before Task, Test, Plan, Resume, Execute, Handoff, Verify, Review, Drift, or Close relies on a Feature, run `scripts/check-feature-context.py` and read its prefix: `CURRENT / 0` permits the fast path, `CHANGED / 0` requires Agent impact assessment and derived refresh before downstream reliance, and `BLOCKED / 1` is limited to physical/authority-resolution contradictions. `CHANGED` is not execution permission and routes to an existing Gate only when Agent assessment finds semantic impact. The Snapshot and optional `context.md` are derived caches, never product authority.
+- Use Feature `spec.md` as the execution bootstrap and resolve its open Feature authority before adapter-specific fields. Requirement Product Definition is the compatible Feature Authority sub-adapter; Bug, Human, and unknown-but-inspectable authorities do not fabricate Requirement paths. Before Task, Test, Plan, Resume, Execute, Handoff, Verify, Review, Drift, or Close relies on a Feature, run `scripts/check-feature-context.py` and read its prefix: `CURRENT / 0` permits applicable fact reliance, `CHANGED / 0` requires Agent impact assessment/repair/routing, `NOT_APPLICABLE / 0` selects another adapter/direct evidence, and `BLOCKED / 1` is limited to physical/authority-resolution contradictions. No Checker result is execution permission. The Snapshot and optional `context.md` are derived caches, never authority.
 - Do not create `contracts.md` or `contracts/` by default. Use them only for durable producer-consumer delivery boundaries such as API, event, public data, UI state/behavior, SDK/library, or runtime interfaces.
 - Create or update Delivery Contract files only after human confirmation. The agent may proactively recommend one when it detects downstream impact, but simple single-person tasks, pure internal logic, and changes with no downstream consumer should skip contracts.
 - During Work Breakdown, Technical Design / Code Context, Plan, Review, and Drift Check, detect whether a Delivery Contract should be recommended.
@@ -380,7 +380,7 @@ Stop when:
 - Project Skill Discovery Guard finds `project-skill-drift`, or an active match has not been resolved before an equivalent generic action
 - an active project skill is about to execute without a current bounded Execution Gate grant or with undisclosed planned actions/effects
 - TDD cannot be followed or verification repeatedly fails
-- a canonical Agent Loop checker may be defective but its failure has not been classified, an exact Temporary Checker Repair Review has not been accepted before patch writes, or a temporary result is being reused outside its named Gate
+- a canonical Agent Loop checker failure has not completed exact rerun and Agent Checker Rescue Level 1/2/3 classification; a suspected executable defect lacks the exact Temporary Checker Repair Review before patch writes; or a one-Gate substitute is being reused after its exact checker/command/target/input/authority/evidence/safety/authorization scope expires
 - review finds behavior, scope, or architecture changes
 - unrelated dirty work blocks progress
 - subagents are needed but not yet approved

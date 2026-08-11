@@ -9,6 +9,16 @@ Source Requirements:
 - Requirement:
 - Prototype:
 
+## Feature Authority
+
+Authority Type: <descriptive authority label>
+Primary Authority Reference: <project-relative artifact, stable external/ticket locator, or Human decision locator>
+Supporting Authority References: none | <semicolon-separated references>
+Authority Summary: <behavior and boundary established by this authority>
+Agent Authority Assessment: current | changed | unresolved
+
+`Authority Type` is descriptive metadata, not a closed enum. Feature Authority, Bug Authority, and Human Authority are known open adapter families. Requirement Product Definition is the compatible Feature Authority sub-adapter. Existing Features with only `## Product Requirement Source` remain readable without migration. This block defines evidence to inspect; it never accepts itself or authorizes Feature construction, implementation, Bug/Requirement mutation, Git, release, or external action.
+
 ## Product Requirement Source
 
 - Requirement Set:
@@ -17,9 +27,19 @@ Source Requirements:
 - Product Review Evidence:
 - Applicable Decisions:
 
-Resolve the Requirement Set README before Feature Spec. New work uses exactly one confirmed `Effective Product Definition`; legacy work may resolve `Effective Concept Foundation` without migration. Product Review is product-definition evidence only and does not authorize Feature start, implementation, or Git actions.
+Use this section only when the Requirement Product Definition sub-adapter applies. Resolve the Requirement Set README before Feature Spec. An explicit Requirement Product Definition primary authority must identify the same Requirement Set README; applicable ADRs and contracts remain supporting evidence. New Requirement-driven work uses exactly one confirmed `Effective Product Definition`; legacy work may resolve `Effective Concept Foundation` without migration. Bug/Human/custom authority does not invent these fields. Product Review is product-definition evidence only and does not authorize Feature start, implementation, or Git actions.
 
 ## Feature Context Snapshot
+
+Authority Type: <same descriptive value as Feature Authority or inferred legacy Requirement Product Definition>
+Authority Adapter: <detected open family or named custom adapter>
+Primary Authority Reference:
+Supporting Authority References: none | <references>
+Authority Applicability: applicable | advisory | not-applicable
+Authority Facts: <resolver-emitted facts in deterministic semicolon-separated order, including Authority Summary>
+Authority Source SHA-256: none | <project-local source>=<sha256>
+
+Requirement Product Definition fields when applicable:
 
 Requirement Set: .agent-loop/requirements/<requirement-id>/README.md
 Requirement Lifecycle: accepted | in-progress | partially-implemented | implemented
@@ -30,6 +50,19 @@ Product Source SHA-256:
 Applicable Decisions: none | .agent-loop/decisions/<decision>.md
 Decision Source SHA-256: none | .agent-loop/decisions/<decision>.md=<sha256>
 Product Slice References:
+
+Bug Authority fields when applicable:
+
+Bug ID:
+Expected Behavior Evidence Locator:
+Resolution Path / Fix Feature Locator:
+Feature Location: flat | archived:<YYYY-MM>
+
+Human/custom authority fields when applicable:
+
+Evidence Locator:
+Agent Review Required: yes | no
+
 Verified At: <ISO-8601 timestamp with timezone>
 Freshness: current | changed | blocked
 
@@ -43,7 +76,7 @@ Freshness: current | changed | blocked
 
 ### Feature Boundary And Acceptance Context
 
-This Snapshot is derived execution context, not product authority. The Requirement README resolves the current Effective Product Definition; every Requirement, product, and decision path above is project-root-relative. Generate Product and Decision Markdown SHA-256 values after canonicalizing `CRLF` and lone `CR` to `LF`; legacy raw LF/CRLF digests remain reader-compatible. Run the read-only `scripts/check-feature-context.py` before relying on the Snapshot and read its prefix: `CURRENT` permits reliance, `CHANGED` requires Agent impact assessment/refresh, and `BLOCKED` means physical authority resolution failed. Exit `0` alone is not execution permission. `## Product Slice` remains the Feature responsibility and coverage table.
+This Snapshot is derived execution context, not product or authorization authority. Include only fields applicable to the resolved adapter; do not write `none` as a fake local path. Copy `Authority Facts` from the resolver in deterministic semicolon-separated order; do not paraphrase it, and rerun the scanner after `Authority Summary` or any resolved fact changes. Project-local paths are project-root-relative, while external/ticket/Human locators remain evidence strings. Generate applicable Markdown SHA-256 values after canonicalizing `CRLF` and lone `CR` to `LF`; legacy raw LF/CRLF digests remain reader-compatible. Run the read-only `scripts/check-feature-context.py` before relying on the Snapshot and read its prefix: `CURRENT` reports matching applicable facts, `CHANGED` requires Agent impact assessment/repair/route, `NOT_APPLICABLE` from a specialized Checker selects another adapter/direct evidence, and `BLOCKED` means safe authority resolution failed. Exit `0` alone is not execution permission. `## Product Slice` remains conditional Requirement Product Definition responsibility and coverage.
 
 ## Product Slice
 
@@ -51,7 +84,7 @@ This Snapshot is derived execution context, not product authority. The Requireme
 |---|---|---|---|
 | FLOW-... / STATE-... / product.md#... |  |  | in-scope / out-of-scope / not-applicable |
 
-The Product Slice selects this Feature's responsibility and acceptance mapping. It must not redefine the Requirement Product Definition. Return to Requirements Discussion when product meaning must change.
+Use Product Slice only when the Requirement Product Definition sub-adapter applies. It selects this Feature's responsibility and acceptance mapping and must not redefine the Requirement Product Definition. Return to Requirements Discussion when product meaning must change. Bug/Human/custom Feature authorities use their accepted Feature boundary and acceptance evidence without fabricating Product model IDs.
 
 Related Bugs:
 Bug Resolution Path: none | flow-back | linked-feature | maintenance-fix

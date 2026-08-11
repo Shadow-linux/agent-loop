@@ -140,6 +140,8 @@ The decision file status cannot become `accepted` without explicit human confirm
 
 ## Effective Requirement Snapshot
 
+ADR requirement-model Checker applicability is established before resolving the Requirement source. A generic operational or technical ADR with no Effective Requirement Snapshot and no requirement-model landing ownership signal returns `NOT_APPLICABLE / 0`. Once the ADR declares an Effective Requirement Snapshot, Trace Applicability, Requirement Model Scope Inventory, or Requirement Model Technical Landing Trace, it is applicable: missing fields, IDs, references, digests, coverage, and Human Review evidence remain visible under the normal proposed/accepted contract and cannot be hidden by falling back to not-applicable. `NOT_APPLICABLE` means only that this specialized Checker owns another domain; it does not mean `Trace Applicability: not-applicable`, accept the ADR, or replace Decision & Design Human Review.
+
 Every ADR driven by accepted product semantics resolves exactly one Requirement Set README source before technical design. New sets use `Effective Product Definition`; older sets retain the `Effective Concept Foundation` / reviewed `requirement.md` reader. Never add both pointers or migrate a legacy source just to start ADR work.
 
 Record this snapshot near the ADR header:

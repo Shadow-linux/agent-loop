@@ -93,6 +93,7 @@ class PythonCheckerContractTests(unittest.TestCase):
         allowed_local = {
             "checker_support",
             "feature_archive_support",
+            "feature_authority_support",
             "requirement_product_support",
             "visual_artifact_support",
         }
@@ -252,6 +253,8 @@ class PythonCheckerContractTests(unittest.TestCase):
             "tests.test_concept_foundation_trace",
             "tests.test_adr_requirement_model_trace",
             "tests.test_feature_context",
+            "tests.test_feature_authority",
+            "tests.test_requirement_product_definition",
             "tests.test_feature_review",
             "tests.test_feature_archive_support",
             "tests.test_feature_monthly_archive_scan",

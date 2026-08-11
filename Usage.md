@@ -1,6 +1,6 @@
 # Agent Loop Usage
 
-**版本：** 1.5.3（开发版）
+**版本：** 1.5.4（正式稳定版）
 
 这是一份给人类使用的触发指南。你不需要记住 Agent Loop 的阶段名；只要说明目标、边界和你希望 Agent 自主推进到哪里，Agent 负责判断项目状态、选择流程、维护产物并在真正的 Human Gate 停下。
 
@@ -36,12 +36,12 @@ npx skills list -g
 
 ```bash
 # Public GitHub
-git clone --branch stable-v1.5.2 --depth 1 \
+git clone --branch stable-v1.5.4 --depth 1 \
   https://github.com/Shadow-linux/agent-loop.git \
   ~/.local/share/agent-loop-source
 
 # Private Git mirror
-git clone --branch stable-v1.5.2 --depth 1 \
+git clone --branch stable-v1.5.4 --depth 1 \
   <git-mirror-url> \
   ~/.local/share/agent-loop-source
 ```
@@ -166,8 +166,8 @@ Agent 会检查核心流程完整性，并按需要使用架构/边界图、ASCI
 这些说法都会路由到人类文档，而不是凭 Agent 记忆回答：
 
 ```text
-1.5.3 更新了什么？
-当前 1.5.3 使用的是什么流程？
+1.5.4 更新了什么？
+当前 1.5.4 使用的是什么流程？
 和 1.2.2 比有什么变化？
 现在 agent-loop 怎么用？
 ```
@@ -306,9 +306,11 @@ ADR 先用 `Effective Requirement Snapshot` 锁定已确认的 Product Definitio
 
 Feature `spec.md` 只选择产品切片，不重新定义产品。复杂任务可按触发条件使用 `tasks/`、`tests/`、`plans/`、`handoffs/` 和 `contracts/` 子目录；不要默认展开。
 
-Feature 已经有明确的 Product Slice、适用 ADR、范围、排除项和验收时，Agent 不会为了形式调用 brainstorming，而是直接整理 Feature Spec。只有仍存在一个具体的 Feature-local 范围、验收或实施边界问题时才使用它；它只能辅助收敛局部定义，不能重新设计产品或改写已接受 ADR。
+Feature 已经有明确的 Feature Authority、已接受 Feature 边界、适用 Product Slice / ADR、范围、排除项和验收时，Agent 不会为了形式调用 brainstorming，而是直接整理 Feature Spec。只有仍存在一个具体的 Feature-local 范围、验收或实施边界问题时才使用它；它只能辅助收敛局部定义，不能改写来源权威、产品、Bug Expected Behavior 或已接受 ADR。
 
-Feature 工作从 `spec.md` 里的本地 **Feature Context Snapshot** 开始。Scanner 自动收集 Requirement README、真实 `product.md`、适用 ADR、路径和摘要事实：`CURRENT` 走快速路径，`CHANGED` 由 Agent 判断是缓存刷新还是产品/决策影响，只有来源缺失、双指针、越界等物理权威矛盾才返回 `BLOCKED`。`CHANGED` 的退出码虽然是 0，但不会授权实施；Agent 必须评估并刷新到 `CURRENT`，或返回已有 Human Gate。人类不需要为格式或摘要刷新单独授权。Snapshot 只是派生执行上下文，不是第二份产品真相；只有复杂且长期运行的 Feature 才会在现有 Complex Artifact Human Gate 后增加可选 `context.md`。
+Feature 工作从 `spec.md` 里的开放 **Feature Authority** 和本地 **Feature Context Snapshot** 开始。Scanner 先识别 Requirement Product Definition、Bug、Human、existing Feature 或自定义来源，再收集适用路径、ID、locator、摘要与新鲜度事实。Snapshot 的 `Authority Facts` 必须按 resolver 输出的确定性分号顺序记录（包含 Authority Summary）；摘要或事实变化会得到 `CHANGED`，而指向同一 Requirement README 的等价安全路径不会被误判为双权威。`CURRENT` 可依赖适用事实，`CHANGED` 交给 Agent 判断影响，专用 Checker 错域时返回 `NOT_APPLICABLE`，只有来源缺失、双指针、路径/符号链接越界等物理权威矛盾才返回 `BLOCKED`。退出码 0 不授权实施；Agent 负责修复或返回已有 Human Gate。Snapshot 只是派生执行上下文，不是第二份产品真相；只有复杂且长期运行的 Feature 才会在现有 Complex Artifact Human Gate 后增加可选 `context.md`。
+
+同样的边界也用于 Onboarding、Lightweight Change 和 ADR 专用检查。Onboarding 没有可识别的当前结构时是 `NOT_APPLICABLE`；可安全枚举但缺少 Slice、图、章节、证据、source/render 或 digest 时是 `CHANGED`；只有不可读、路径越界或 source/render 权威冲突才是 `BLOCKED`。`covered`、`PASS` 和固定英文标题只是记录事实。轻量 Change 扫描会保留所有正常卡片的 pending/human-review 与触发器，只把有 filename/date/field/section/state/placeholder 问题的卡片逐条列出。普通非需求 ADR 不跑需求模型落地检查；一旦声明 Snapshot/Trace，缺陷就不能再退回“不适用”。
 
 你不需要记住 Feature 的内部阶段。正常只会在两个时点找你：
 
@@ -395,7 +397,15 @@ Operational Support 默认先只读检查代码、配置、脚本、部署流程
 我确认后只用于当前 Gate。
 ```
 
-Agent 会先重跑原命令并缩小问题。确认为 Checker 缺陷后，它会展示原 Checker 路径和 digest、最小复现、规则依据、补丁范围、RED/GREEN、反例检查、临时目录、回滚和失效条件。人类确认前不会写补丁；默认只修改隔离副本，不会静默改全局 Agent Loop。
+Agent 会先原样重跑并保留命令、结果、目标与当前输入，再做三级 Agent Checker Rescue：
+
+- Level 1：独立证据完整、安全边界完好、语义不变且仍在已有授权内，Agent 记录判断后继续，不额外打断人类；
+- Level 2：只有少量残余风险时，在本来就需要的人类 Gate 内请求一次 `accepted-for-this-gate`；
+- Level 3：路径越界、计划哈希、事务/回滚、真实验证失败、语义冲突或缺少已有授权时停止，不能解救。
+
+Rescue 不会把 canonical Checker 改成 PASS，不会生成执行授权，也不会替代 Product、ADR、Feature Gate 1/2、Task Done、Verification、Submit、Close、Git、Release 或 External Action Gate。Checker 不适用于当前 Authority 时会返回 `NOT_APPLICABLE`，未知但可检查的 Authority 会返回 `CHANGED`，由 Agent 判断影响和下一条路。
+
+只有可靠判断确实需要修正可执行 Checker 时，才进入 Checker Self-Repair。此时 Agent 会展示原 Checker 路径和 digest、最小复现、规则依据、补丁范围、RED/GREEN、反例检查、临时目录、回滚和失效条件。人类确认前不会写补丁；默认只修改隔离副本，不会静默改全局 Agent Loop。
 
 临时结果只能作为当前指定 Gate 的人类批准替代证据。原始 canonical 结果仍记录为失败，换了文件、Checker、命令或 Gate 就失效；正式修复仍需回到 Agent Loop 源码、补回归测试并通过正式验证。
 

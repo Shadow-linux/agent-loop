@@ -64,8 +64,10 @@ assert_contains "references/submit-and-integrate.md" "## Ordered Exit Decision"
 assert_contains "references/stage-guides.md" "human-reviewed and recorded"
 assert_not_contains "references/stage-guides.md" "requirement document accepted and archived"
 
-# Every Feature Spec has a requirement-owned Design Readiness record.
-assert_contains "references/stage-guides.md" "Every Feature start must reference an accepted Requirement Set with a confirmed Effective Product Definition, or an explicitly supported legacy effective source."
-assert_contains "references/stage-guides.md" "For a narrow direct Feature request, create/review the minimum Brief before Feature Spec."
+# Every Feature resolves one open authority; Requirement-driven work keeps its Product/Design contract.
+assert_contains "references/stage-guides.md" "Every Feature start must declare one effective primary Feature Authority and may cite supporting authorities."
+assert_contains "references/stage-guides.md" "Requirement Product Definition is the compatible Feature Authority sub-adapter for Requirement-driven product work"
+assert_contains "references/stage-guides.md" "A confirmed Bug repair, direct Human decision, or inspectable custom source may instead be primary without inventing a Requirement."
+assert_not_contains "references/stage-guides.md" "Every Feature start must reference an accepted Requirement Set"
 
 printf 'PASS: v1.2.4 routing and lifecycle repairs are enforced\n'

@@ -98,6 +98,8 @@ Use this table:
 
 For an explicit Bug, this Feature classification feeds one Bug Resolution Path recommendation: `investigate-first | flow-back | linked-feature | maintenance-fix | requirement | no-fix`. Do not create/reopen a Feature or change a Requirement until the named Resolution Path and subsequent action gate are confirmed.
 
+After those decisions, the owning Feature records the resolved Feature Authority rather than assuming a Requirement path. A confirmed Bug repair normally uses the Bug README as primary authority and cites applicable Requirement/ADR/test evidence as support. A direct Human decision or an inspectable custom source remains its own descriptive authority. This evidence never merges Bug confirmation, Resolution Path, Feature create/reopen, Gate 1, or Gate 2 into one decision.
+
 ## Requirement-change Ambiguity
 
 Human wording such as "这个字段改一下", "规则微调", "小改动", or "不是新功能" is useful evidence, but it is not enough by itself.
@@ -247,6 +249,9 @@ Add this to `notes.md`:
 - Related Bugs:
 - Bug Status At Start:
 - Bug Resolution Path:
+- Resolved Feature Authority:
+- Primary Authority Reference:
+- Supporting Authority References:
 - Classification: same-feature-bug | same-feature-adjustment | regression-from-feature | new-feature | maintenance-fix | unclear
 - Lookback Window: 90 days | outside-default-window
 - Match Evidence:

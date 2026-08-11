@@ -534,8 +534,9 @@ Flow:
 9. Write flow docs as `03-flows/<flow-name>.md` by default, not many small files.
 10. Require the core flow diagram set for critical/important flows and relevant diagrams for other content docs. Use Mermaid flowchart / sequenceDiagram for normal flow/timing and ASCII for state machines, complex principle diagrams, and complex examples.
 11. Require use cases, data objects, state transitions, failure modes, verification/troubleshooting, and code evidence where applicable.
-12. Run Completeness Hard Gate before scoring changed topics in `coverage-matrix.md`; a missing critical slice cannot be averaged away, and below 4/5 cannot be `newcomer-ready`.
-13. Record each batch in `batch-review.md`.
+12. Run the coverage Checker as a fact reader: `NOT_APPLICABLE` for no recognizable current-format scope, `CHANGED` for safely enumerable missing/stale per-flow facts, and `BLOCKED` only for unreadable/unsafe/ambiguous physical authority. Do not treat fixed wording or self-declared `covered` / `PASS` as semantic proof.
+13. Run Completeness Hard Gate before scoring changed topics in `coverage-matrix.md`; a missing critical slice cannot be averaged away, and below 4/5 cannot be `newcomer-ready`.
+14. Record each batch in `batch-review.md`.
 
 Exit:
 
@@ -864,7 +865,7 @@ For every current Feature, bootstrap from `spec.md`, not `tasks.md` or `plan.md`
 python3 <skill-root>/scripts/check-feature-context.py --project-root <target-project-root> <feature-spec-path>
 ```
 
-`CURRENT` (`0`) permits the local Snapshot fast path. `CHANGED` (`0`) reports factual drift: the Agent reads the reasons and only changed/applicable Requirement and ADR meaning, records `no-semantic-impact | derived-context-update | feature-definition-impact | decision-impact | unresolved`, repairs derived Snapshot/Tasks/Tests/Plan/Handoffs when fact-determined, and reruns to `CURRENT` before downstream reliance. `BLOCKED` (`1`) is limited to physical/authority-resolution contradictions and routes to Recovery or source repair. Exit `0` alone is insufficient, and `CHANGED` never authorizes execution or selects a Human Gate. On Windows use `py -3`.
+Resolve the Feature Authority shape before interpreting any adapter-specific path. `CURRENT` (`0`) permits reliance on matching applicable facts. `CHANGED` (`0`) reports factual drift or an unknown-but-inspectable adapter: the Agent reads the reasons and applicable authority/Product/ADR meaning, records `no-semantic-impact | derived-context-update | feature-definition-impact | decision-impact | unresolved`, repairs derived Snapshot/Tasks/Tests/Plan/Handoffs when fact-determined, and reruns when the selected adapter can become `CURRENT`. `NOT_APPLICABLE` (`0`) from a specialized Checker selects another adapter or direct evidence without treating it as failure. `BLOCKED` (`1`) is limited to physical/authority-resolution contradictions and routes to Recovery or source repair. Exit `0` alone is insufficient, and neither `CHANGED` nor `NOT_APPLICABLE` authorizes execution or selects a Human Gate. On Windows use `py -3`.
 
 ## Feature Construction Two-Gate Review
 
@@ -888,9 +889,9 @@ Strict Mode remains available when the human explicitly requests stage-by-stage 
 
 ## Feature Spec
 
-Entry: goal and source requirements are clear enough.
+Entry: goal, accepted Feature boundary, and authority evidence are clear enough.
 
-Every Feature start must reference an accepted Requirement Set with a confirmed Effective Product Definition, or an explicitly supported legacy effective source. For a narrow direct Feature request, create/review the minimum Brief before Feature Spec. This keeps product meaning, Design Readiness, lifecycle, and Feature Mapping in one Requirement-owned location without forcing Standard modeling.
+Every Feature start must declare one effective primary Feature Authority and may cite supporting authorities. Requirement Product Definition is the compatible Feature Authority sub-adapter for Requirement-driven product work; existing specs with only Product Requirement Source remain readable. A confirmed Bug repair, direct Human decision, or inspectable custom source may instead be primary without inventing a Requirement. Authority resolution never replaces the separate Feature create/reopen decision or Gate 1/2.
 
 Load:
 
@@ -907,11 +908,13 @@ Write:
 Include:
 
 - feature type: normal, maintenance-fix, or follow-up
+- Feature Authority: descriptive Authority Type, one Primary Authority Reference, optional Supporting Authority References, Authority Summary, and Agent Authority Assessment
+- An explicit Requirement Product Definition primary authority must identify the same Requirement Set README; applicable ADRs and contracts remain supporting evidence.
 - `Related Bugs` and the Human-confirmed Bug Resolution Path source when this Feature repairs Bugs; do not copy full Bug report/evidence
 - problem/goal
-- Product Requirement Source: Requirement Set, Effective Product Definition, Profile, Product Review Evidence, and Applicable Decisions
-- Feature Context Snapshot derived from that one resolved authority: project-root-relative Requirement/product/ADR paths, current lifecycle/review/profile, Product and Decision SHA-256 values generated after Markdown newline canonicalization (`CRLF` / lone `CR` -> `LF`), Product Slice references, verification time, Freshness, and the outcome/journey/rules/states/exceptions/recovery/boundary context needed downstream; legacy raw LF/CRLF digests remain reader-compatible
-- Product Slice rows mapping source sections/IDs/rules to Feature responsibility, acceptance, and `in-scope | out-of-scope | not-applicable` coverage
+- authority-neutral Feature Context Snapshot with detected adapter, primary/supporting locators, resolver-emitted deterministic semicolon-separated Authority Facts (including Authority Summary), verification time, Freshness, and the boundary/acceptance context needed downstream
+- when Requirement Product Definition applies: Product Requirement Source, lifecycle/review/profile, Product and Decision SHA-256 values generated after Markdown newline canonicalization (`CRLF` / lone `CR` -> `LF`), Product Slice references, and Product Slice rows mapping source sections/IDs/rules to Feature responsibility, acceptance, and coverage; legacy raw LF/CRLF digests remain reader-compatible
+- when Bug Authority applies: Bug identity, Expected Behavior locator, Resolution Path/Fix Feature locator, archive locator, and source freshness facts without deciding their meaning
 - requirement Delivery Phase reference when the feature implements a phase or phase slice
 - scope
 - stories
@@ -924,23 +927,23 @@ Include:
 Rules:
 
 - before fallback spec writing, run Stage Helper Capability Scan for applicable spec-writing support; helper availability alone does not trigger Brainstorm / Clarify
-- When Product Slice, applicable accepted ADR Design Slices, scope, exclusions, and acceptance are already clear, skip Brainstorm / Clarify and proceed directly with Feature Spec. Use brainstorming only for a named unresolved Feature-local scope, acceptance, or implementation-boundary question; route product or accepted-ADR changes back to their owning Human Review.
-- inspect the Effective Product Definition, original source links as needed, and Applicable Decisions before writing behavior and acceptance
-- use the dual reader: new `Effective Product Definition` requires Profile/Product Review `confirmed`; legacy `Effective Concept Foundation` / reviewed Requirement remains valid without migration
-- add Product Requirement Source and Product Slice to `spec.md`; do not require or create Feature `product.md`
-- create the default Snapshot inside `spec.md`; optional `context.md` is expanded derived context only for a Human-confirmed complex Feature and must keep exact source/digest parity
-- run the scanner after writing the Snapshot; `CHANGED` requires Agent assessment/repair and a rerun to `CURRENT` before Requirement Checklist acceptance, while physical `BLOCKED` routes to Recovery/source repair
-- Product Slice references source Concept/Model IDs and `product.md#<rule-anchor>`; it may narrow scope but cannot redefine accepted product meaning
+- When the accepted Feature boundary, applicable Product Slice/ADR Design Slices, scope, exclusions, and acceptance are already clear, skip Brainstorm / Clarify and proceed directly with Feature Spec. Use brainstorming only for a named unresolved Feature-local scope, acceptance, or implementation-boundary question; route source-authority, product, or accepted-ADR changes back to their owning Human Review.
+- resolve explicit Feature Authority before interpreting adapter-specific fields; preserve the descriptive type rather than validating against a closed enum
+- for Requirement Product Definition, inspect the Effective Product Definition, original source links as needed, and Applicable Decisions; new pointers require Profile/Product Review `confirmed`, while legacy `Effective Concept Foundation` / reviewed Requirement remains valid without migration
+- add Product Requirement Source and Product Slice only when that sub-adapter applies; do not require or create Feature `product.md` for Bug/Human/custom authority
+- create the default Snapshot inside `spec.md`; optional `context.md` is expanded derived context only for a Human-confirmed complex Feature and must keep exact applicable authority/source/digest parity
+- run the scanner after writing the Snapshot; `CHANGED` requires Agent assessment/repair/routing, `NOT_APPLICABLE` selects another adapter/direct evidence, and physical `BLOCKED` routes to Recovery/source repair
+- when applicable, Product Slice references source Concept/Model IDs and `product.md#<rule-anchor>`; it may narrow scope but cannot redefine accepted product meaning
 - do not let Feature Spec introduce a new meaning, state, invariant, role boundary, relationship, or product object for an accepted Concept ID; return to Requirements Discussion when product semantics must change
 - when Feature Spec uses Optional Visual Communication, limit the view to the accepted Product Slice, feature responsibility, or feature-local implementation and acceptance path; rewrite accepted feature-local clarification into `spec.md`; if the view reveals new product meaning, stop and return to Requirements Discussion instead of adding it to `spec.md` or editing Requirement `product.md`
-- block Feature Spec when Product Review is pending, the effective pointer is ambiguous/stale, or a triggered internal/legacy foundation is `candidate` or `reopened`
-- confirm Design Readiness is `design-not-needed` or `completed` before writing the Feature Spec
+- block a Requirement-driven Feature Spec when Product Review is pending, the effective pointer is ambiguous/stale, or a triggered internal/legacy foundation is `candidate` or `reopened`
+- confirm Design Readiness is `design-not-needed` or `completed` when Requirement Product Definition or shared design applies
 - for each applicable requirement-driven ADR, confirm its Effective Requirement Snapshot still resolves, `Upstream Compatibility` is `current`, and Requirement Model Technical Landing Trace coverage is complete
 - include `Applicable Decisions`, assigned Design Slice IDs in `Implements Decisions`, and feature-local `Design Decisions`
 - use Decision & Design before Feature Spec if the requirement needs shared business-flow, domain, data, architecture, recovery, or non-functional design
 - do not enter Feature Spec when shared design is unresolved or any required design slice is unassigned
 - do not treat `Applicable Decisions` alone as coverage; block when an in-scope Requirement Model ID lacks disposition, technical ownership, or verification
-- a Bug relationship does not replace the accepted Requirement/Expected Behavior source and does not authorize Feature creation, Requirement change, or Bug close
+- a Bug Authority may be primary only after its Expected Behavior and Resolution Path/Fix Feature evidence exist; it does not authorize Feature creation/reopen, Requirement change, Bug close, Gate 1, or Gate 2
 
 Exit:
 
@@ -979,7 +982,7 @@ Entry: draft spec exists.
 
 Check:
 
-- Feature Context Snapshot is complete, paths are project-root-relative, its source references resolve through one Requirement README, and the scanner returns `CURRENT` after any `CHANGED` assessment/derived repair
+- Feature Context Snapshot is complete, declared local paths remain project-root-relative, its primary/supporting authority references resolve for the selected adapter, and every `CHANGED`/`NOT_APPLICABLE` result has an Agent assessment and safe route before reliance
 - no major ambiguity
 - stories independently testable
 - acceptance criteria measurable
@@ -1010,7 +1013,7 @@ Write:
 Rules:
 
 - load `spec.md` and require a current Feature Context Snapshot before creating or revising Tasks
-- map every Task to a Product Slice responsibility/acceptance, an accepted ADR Design Slice, or an explicit technical prerequisite for a named later vertical Product Slice
+- map every Task to the accepted Feature boundary/acceptance, an applicable Product Slice responsibility, an accepted ADR Design Slice, or an explicit technical prerequisite for a named later vertical slice
 - default to vertical slices / tracer bullets
 - each normal task should form a narrow verifiable loop through the necessary layers
 - allow horizontal foundation tasks only when a verifiable product slice is not yet possible
@@ -1377,6 +1380,7 @@ Rules:
 - form one hypothesis at a time
 - write regression test when possible
 - for a canonical checker failure, preserve its exact command/output/path/digest and classify `artifact-invalid | environment-invalid | checker-defect-candidate | unresolved` before changing checker or artifact logic
+- before proposing Checker repair, apply Agent Checker Rescue Level 1/2/3 to the exact canonical failure and exact rerun: continue only inside existing authorization with complete independent evidence, use `accepted-for-this-gate` only inside one already-required Human Gate, and stop on every Level 3 safety/semantic/verification/authorization boundary
 - reduce a checker candidate to a published-authority-backed positive fixture and negative controls; read-only diagnosis may continue without interruption
 - present the exact Temporary Checker Repair Review before any checker/support-file write; use an isolated temporary copy by default and require a separate in-place installed-Skill authorization
 - verify the unmodified copied checker produces RED, then the minimal patch produces GREEN while negative controls still fail
