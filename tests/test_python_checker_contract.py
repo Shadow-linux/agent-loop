@@ -3,6 +3,7 @@ from __future__ import annotations
 import ast
 import hashlib
 import io
+import os
 import shutil
 import sys
 import tempfile
@@ -68,6 +69,26 @@ class PythonCheckerContractTests(unittest.TestCase):
 
     def test_python_runtime_is_supported(self) -> None:
         self.assertGreaterEqual(sys.version_info[:2], (3, 10))
+
+    def test_run_checker_forces_utf8_child_output(self) -> None:
+        previous = os.environ.get("PYTHONIOENCODING")
+        os.environ["PYTHONIOENCODING"] = "latin-1"
+        try:
+            try:
+                result = run_checker(
+                    "scripts/check-onboarding-core-flow-coverage.py",
+                    ROOT / "tests/fixtures/onboarding-core-flow/invalid-detached-trace",
+                )
+            except UnicodeDecodeError as error:
+                self.fail(f"run_checker did not force UTF-8 child output: {error}")
+        finally:
+            if previous is None:
+                os.environ.pop("PYTHONIOENCODING", None)
+            else:
+                os.environ["PYTHONIOENCODING"] = previous
+
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("§", result.stdout)
 
     def test_canonical_checker_files_exist(self) -> None:
         for relative in CHECKERS:

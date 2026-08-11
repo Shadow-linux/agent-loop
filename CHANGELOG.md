@@ -17,6 +17,7 @@ _当前状态：正式稳定版；最终 Human Review 与精确 Release Gate 已
 - Lightweight Change scanner 将 bounded filename/date/field/section/state/placeholder 缺陷改为确定性的逐记录 findings，同时保留其余正常 pending/human-review 清单与触发器；memory-root、路径、symlink、枚举和不可界定布局仍硬阻断。
 - ADR Requirement Model Checker 对普通非需求 ADR 返回 `NOT_APPLICABLE`，但任何已声明 Snapshot/Trace 的结构、引用、digest、coverage 或 Human Review 缺陷继续可见且不通过。
 - 补齐 Feature/Bug/Human/custom/mixed/legacy、BOM/CRLF/Windows 路径、路径/符号链接越界、错域适用性与 Rescue 正反向回归，并把 Authority/Requirement Product Checker 加入 macOS/Windows CI 定义。
+- Windows CI 测试启动器现在强制子 Python 以 UTF-8 输出，避免 `§` 等诊断文本按本地代码页编码后被 UTF-8 解码器误报；新增 legacy-codepage RED/GREEN 回归。
 
 ## 1.5.3 — 2026-07-28
 
