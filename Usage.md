@@ -1,6 +1,8 @@
 # Agent Loop Usage
 
-**版本：** 1.5.4（正式稳定版）
+**版本：** 1.5.5（正式稳定版）
+
+Agent Loop 1.5.5 已转为正式稳定版，稳定 tag 为 `stable-v1.5.5`。将该精确 release commit 同步到 `main` 仍保留独立 Human Gate。
 
 这是一份给人类使用的触发指南。你不需要记住 Agent Loop 的阶段名；只要说明目标、边界和你希望 Agent 自主推进到哪里，Agent 负责判断项目状态、选择流程、维护产物并在真正的 Human Gate 停下。
 
@@ -36,12 +38,12 @@ npx skills list -g
 
 ```bash
 # Public GitHub
-git clone --branch stable-v1.5.4 --depth 1 \
+git clone --branch stable-v1.5.5 --depth 1 \
   https://github.com/Shadow-linux/agent-loop.git \
   ~/.local/share/agent-loop-source
 
 # Private Git mirror
-git clone --branch stable-v1.5.4 --depth 1 \
+git clone --branch stable-v1.5.5 --depth 1 \
   <git-mirror-url> \
   ~/.local/share/agent-loop-source
 ```
@@ -166,8 +168,8 @@ Agent 会检查核心流程完整性，并按需要使用架构/边界图、ASCI
 这些说法都会路由到人类文档，而不是凭 Agent 记忆回答：
 
 ```text
-1.5.4 更新了什么？
-当前 1.5.4 使用的是什么流程？
+1.5.5 更新了什么？
+当前 1.5.5 使用的是什么流程？
 和 1.2.2 比有什么变化？
 现在 agent-loop 怎么用？
 ```
@@ -280,7 +282,19 @@ ADR 先用 `Effective Requirement Snapshot` 锁定已确认的 Product Definitio
 .agent-loop/changes/YYYY-MM/YYYY-MM-DD-<topic>.md
 ```
 
-它必须在第一次目标写入前记录背景、完成标准、范围、旁路理由、风险、Plan、进度、验证、回滚、Human Gates、结果和 Memory Review。事实/路径/域名/文档变更优先做语法、解析、引用、旧值残留和限定 dry-run；可隔离行为逻辑仍做最小有意义 RED/GREEN。
+它必须在第一次目标写入前记录背景、完成标准、范围、旁路理由、风险、Plan、进度、验证、回滚、Human Gates、结果和 Memory Review。明确符合轻量边界后，Agent 先应用披露的有限变更，再做新鲜、failure-matched 的 targeted verification，重跑受影响的既有检查，并复核 diff、范围、风险、回滚和记忆影响；不会为了制造 RED 而新建测试。
+
+初始 Feature 实现和显式 Bug 修复仍使用 TDD。Feature Review 中已经属于 accepted boundary 的实现修正，以及明确 eligible 的 Lightweight Change，默认 repair first、fresh verify，再给出具体回归覆盖建议。Required Verification 和 Existing Test Obligation 始终是完成硬要求；只有 Additional Regression Test 是建议。
+
+例如，Agent 可以在同一轮结果中报告，不需要为建议另开 Gate：
+
+```text
+已完成边界内修复：旧域名已替换，限定 dry-run、配置解析和受影响的部署脚本检查均以新鲜结果通过。
+建议补两项回归保护：
+1. 在配置解析单元测试中覆盖旧域名输入，防止兼容映射回退；优先级高。
+2. 在部署脚本集成测试中断言生成产物不含旧域名，防止模板回归；优先级中。
+这些 Additional Regression Tests 不替代上述 Required Verification，也不会自行创建新 Gate。
+```
 
 以下任一情况升级 Feature：公共接口、数据、状态、权限、安全、架构、依赖、迁移、未知消费者、跨会话计划、handoff/subagent、长期观察、复杂证据或范围扩大。
 
@@ -463,7 +477,7 @@ flowchart TB
         R1["release/v1.0.0<br/>同一发布分支<br/>已聚合全部目标功能"]
 
         VERIFY{"Verification + Review<br/>测试、审查、漂移检查"}
-        RELEASE_GATE{"Human Release Gate<br/>人类确认是否正式发布"}
+        RELEASE_GATE{"Batch Human Review<br/>Tag / Push / Release / Publish / Seal<br/>各自独立决定"}
         STABLE["v1.0.0 正式发布快照<br/>Tag / Release 标记"]
         KEEP_R["保留 release/v1.0.0<br/>用于追溯和版本维护"]
         DELETE_S["删除已经合并的<br/>feature / bugfix / hotfix 分支"]
@@ -509,7 +523,7 @@ flowchart TB
         C1["customer/acme/v1.0.0<br/>同一客户发布分支<br/>已聚合全部客户能力"]
 
         CVERIFY{"客户版本验证与审查"}
-        CRELEASE{"Human Release Gate<br/>人类批准客户版本"}
+        CRELEASE{"Batch Human Review<br/>Tag / Push / Release / Publish / Seal<br/>各自独立决定"}
         CSTABLE["acme v1.0.0<br/>客户正式发布快照"]
         KEEP_C["保留 customer/acme/v1.0.0<br/>用于客户维护和追溯"]
         DELETE_C["删除已经合并的<br/>客户临时开发分支"]
@@ -581,7 +595,7 @@ hotfix/v1.0.0/login-security
 
 `release` 和 `customer` 是长期聚合/发布分支；`feature`、`bugfix`、`hotfix` 是合入目标版本后删除的临时开发分支。Agent 只在现有规范混乱、目标版本不清或客户隔离有风险时推荐；清晰的既有规范优先。
 
-采用策略、创建、切换、merge、删除、push、tag、release 和 publish 都是不同 Human Gate。
+采用策略、创建、切换、merge、删除、push、tag、release、publish 和版本 sealed 都是不同 Human Gate。同一张 Batch Human Review 可以一次展示这些动作，但每个动作仍须独立决定，并且只授权表格中精确列出的对象、目标、顺序和前置条件；前一项失败时，依赖它的后续动作不会继续。
 
 ## 按月份归档已关闭功能
 
@@ -646,7 +660,7 @@ Target 是当前理解的起点，不是永远正确的一方；Source 经验已
 确认，提交刚才审阅过的这些改动。
 ```
 
-第二句话只有在前面的精确范围仍然有效时才授权 commit；push、PR、merge、tag、release 和 publish 仍需分别授权。
+第二句话只有在前面的精确范围仍然有效时才授权 commit；push、PR、merge、tag、release、publish 和 seal 仍需分别授权。
 
 ```text
 帮我看看这个功能是不是真的可以关闭，还有没有风险或后续工作。
@@ -718,7 +732,7 @@ Agent 的责任是把人类目标翻译为正确的下一步，并保持项目�
 - 创建或实质更新 project-local Skill，以及每次实际执行
 - 生产、预发、secret、付费、外部调用、配置写入或破坏性操作
 - branch create/switch/merge/delete
-- commit、push、PR、tag、release、publish
+- commit、push、PR、tag、release、publish、seal
 - Feature pause/close、Bug close、archive/rehydrate Apply、Full Memory Audit / Recovery Apply/Restore
 
 Agent 可以完成安全检查、形成推荐并准备精确计划；人类只处理真正需要判断或授权的部分。

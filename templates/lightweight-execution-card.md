@@ -33,7 +33,8 @@ Git Context: <replace-with-no-git-or-branch-at-full-sha>
 
 - [ ] Inspect and confirm the exact change point.
 - [ ] Apply only the disclosed bounded change.
-- [ ] Run failure-matched targeted verification.
+- [ ] Run fresh failure-matched targeted verification after the write.
+- [ ] Run affected existing checks when available.
 - [ ] Review diff, scope, memory impact, sensitive evidence, and rollback.
 
 ## Current Progress
@@ -54,7 +55,7 @@ Git Context: <replace-with-no-git-or-branch-at-full-sha>
 
 ## Result / Residuals
 
-<replace with completed result, unchanged boundaries, and remaining risk>
+<replace with completed result, unchanged boundaries, and remaining risk. Record a specific Regression Test Advisory or a concrete not-needed reason; do not create a pending test-debt status.>
 
 ## Memory
 

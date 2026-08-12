@@ -44,7 +44,7 @@ Expiry:
 Developer Feedback: prepared | declined | not-applicable
 ```
 
-Do not create a default checker-exception or checker-feedback directory. A likely Checker limitation produces a sanitized read-only feedback draft. Creating a public Issue still requires the independent Issue Reporting Human Gate and grants no repair, Git, installation, synchronization, release, publish, Feature, or later-Gate authority.
+Do not create a default checker-exception or checker-feedback directory. A likely Checker limitation produces a sanitized read-only feedback draft. Creating a public Issue still requires the independent Issue Reporting Human Gate and grants no repair, Git, installation, synchronization, release, publish, seal, Feature, or later-Gate authority.
 
 Proceed to Checker Self-Repair only when direct evidence is incomplete or reliable evaluation requires a corrected executable Checker. An ordinary applicability mismatch, supported legacy shape, or fact-determined derived-evidence repair does not require a temporary patch.
 
@@ -148,7 +148,7 @@ Read-only diagnosis and fixture reduction do not need an extra Gate. Before the 
 | Rollback | delete isolated copy, or restore a separately authorized in-place preimage |
 | Residual | canonical checker remains failed until formal source repair |
 
-The Human decision authorizes only the disclosed write and test scope. It does not authorize Feature, Requirement, ADR, Delivery Contract, project-skill, branch, commit, push, PR, merge, tag, release, publish, installation, production, external, paid, destructive, pause, or close actions.
+The Human decision authorizes only the disclosed write and test scope. It does not authorize Feature, Requirement, ADR, Delivery Contract, project-skill, branch, commit, push, PR, merge, tag, release, publish, seal, installation, production, external, paid, destructive, pause, or close actions.
 
 ## Isolation
 
@@ -254,7 +254,7 @@ Before creation, present:
 | Redactions | list of removed credentials, private repository/host/customer names, private absolute paths, payloads, and unnecessary project data |
 | Labels / method | exact labels when known and authenticated creation method |
 | External effect | one public Issue will be created |
-| Explicitly not authorized | repair writes, installed Skill mutation, Feature execution, Git branch/commit/push/tag, PR, release, publish, installation, or synchronization |
+| Explicitly not authorized | repair writes, installed Skill mutation, Feature execution, Git branch/commit/push/tag, PR, release, publish, seal, installation, or synchronization |
 
 Only `create exact issue` authorizes that disclosed submission. `Revise draft` and `keep draft only` do not. Repair authorization does not authorize submission; submission does not authorize repair or any later repository action.
 
@@ -283,7 +283,7 @@ Formal repair must:
 3. update the canonical checker and any genuinely mismatched published authority;
 4. run focused and required full validation;
 5. pass normal Review and Drift Check;
-6. keep commit, push, tag, release, publish, and installation/update as independent Human Gates;
+6. keep commit, push, tag, release, publish, seal, and installation/update as independent Human Gates;
 7. rerun the original target with the newly installed canonical checker.
 
 The Agent Loop source repository cannot release a checker fix using only its own isolated temporary patched result. Canonical source tests and the formally changed checker must pass.

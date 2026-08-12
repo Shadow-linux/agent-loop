@@ -321,7 +321,7 @@ flowchart TB
         R1["release/v1.0.0<br/>同一发布分支<br/>已聚合全部目标功能"]
 
         VERIFY{"Verification + Review<br/>测试、审查、漂移检查"}
-        RELEASE_GATE{"Human Release Gate<br/>人类确认是否正式发布"}
+        RELEASE_GATE{"Batch Human Review<br/>Tag / Push / Release / Publish / Seal<br/>各自独立决定"}
         STABLE["v1.0.0 正式发布快照<br/>Tag / Release 标记"]
         KEEP_R["保留 release/v1.0.0<br/>用于追溯和版本维护"]
         DELETE_S["删除已经合并的<br/>feature / bugfix / hotfix 分支"]
@@ -367,7 +367,7 @@ flowchart TB
         C1["customer/acme/v1.0.0<br/>同一客户发布分支<br/>已聚合全部客户能力"]
 
         CVERIFY{"客户版本验证与审查"}
-        CRELEASE{"Human Release Gate<br/>人类批准客户版本"}
+        CRELEASE{"Batch Human Review<br/>Tag / Push / Release / Publish / Seal<br/>各自独立决定"}
         CSTABLE["acme v1.0.0<br/>客户正式发布快照"]
         KEEP_C["保留 customer/acme/v1.0.0<br/>用于客户维护和追溯"]
         DELETE_C["删除已经合并的<br/>客户临时开发分支"]
@@ -698,10 +698,14 @@ Blocking question:
 | Target Branch Gate | 开发分支唯一允许的合并目标 |
 | Integration Gate | merge / PR / commit 的具体范围 |
 | Cleanup Gate | 删除本地或远端临时分支 |
-| Release Gate | tag、release、push、publish 和版本 sealed |
+| Tag Gate | 创建一个指向精确 commit 的精确 tag |
+| Push Gate | 将精确 refs 推送到一个精确 remote |
+| Release Gate | 创建或完成一个精确版本的 release record |
+| Publish Gate | 将一个精确 package / artifact 发布到精确 channel / destination |
+| Seal Gate | 所需发布证据通过后，将一个精确版本转为 `released / sealed` |
 | Upgrade Gate | 客户是否升级到新的标准基线 |
 
-已有 Submit / Integrate 两阶段确认继续生效。人类说“按这个策略开发”不等于授权未来所有 branch create、switch、merge、delete、push、tag、release 或 publish 动作。
+已有 Submit / Integrate 两阶段确认继续生效。人类说“按这个策略开发”不等于授权未来所有 branch create、switch、merge、delete、push、tag、release 或 publish 动作。Tag、Push、Release、Publish、Seal 可在同一张 Batch Human Review 中展示，但每行保持独立决定、精确范围与前置条件；一行被接受或执行成功不授权其他行，前置动作失败时停止依赖的后续动作。
 
 ## Fail-Closed 条件
 

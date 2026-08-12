@@ -14,11 +14,11 @@ Submit packages code for integration.
 Close ends the feature in agent-loop.
 ```
 
-Never commit, open a PR, merge, release, publish, or claim submission readiness without human confirmation.
+Never commit, open a PR, merge, release, publish, seal, or claim submission readiness without human confirmation.
 
 A completed Lightweight Execution Card authorizes no submit or integration action.
 
-At Submit / Integrate, re-read the persisted card's fresh verification, diff, scope, memory result, sensitive-evidence review, and rollback evidence as input only. Run the read-only Change scanner and surface pending or `human-review` memory candidates before a release recommendation. Card execution approval cannot become commit, push, PR, merge, tag, release, or publish approval; every requested action keeps the existing two-stage confirmation and Branch Strategy checks.
+At Submit / Integrate, re-read the persisted card's fresh verification, diff, scope, memory result, sensitive-evidence review, and rollback evidence as input only. Run the read-only Change scanner and surface pending or `human-review` memory candidates before a release recommendation. Card execution approval cannot become commit, push, PR, merge, tag, release, publish, or seal approval; every requested action keeps the existing two-stage confirmation and Branch Strategy checks.
 
 Code integration completes and is verified before Target memory reconciliation consumes Change evidence. Source-branch cards, including `Memory Result: synced`, cannot update Target memory or authorize a later Git action by themselves.
 
@@ -82,7 +82,9 @@ A human request such as `commit this` or `prepare PR` authorizes entry into Subm
 
 After diff inspection, feature/requirement artifact review, verification check, review check, drift check, project-memory/guidance impact check, and unrelated-change check, present a Human Review Summary and ask again for the exact submit action.
 
-Strategy adoption and plan approval are context only. They never authorize branch creation, switching, merge, deletion, push, tag, release, or publish. List every requested action and every explicitly non-authorized action in the Branch Strategy And Action Review.
+Strategy adoption and plan approval are context only. They never authorize branch creation, switching, merge, deletion, push, tag, release, publish, or seal. List every requested action and every explicitly non-authorized action in the Branch Strategy And Action Review.
+
+A Batch Human Review may present Tag, Push, Release, Publish, and Seal together, but every action remains an independent decision row with its exact object, destination, evidence, preconditions, external effect, and rollback. Execute only accepted rows in the displayed order; if one action fails, stop dependent later rows and return with current evidence rather than reusing the batch as blanket permission.
 
 Bug confirmation, Resolution Path, successful tests, Feature close, and Bug Close decisions are also context only. Submit/commit/push approval must not be reused as Bug close, and Bug Close approval must not authorize Submit / Integrate or any Git mutation.
 
@@ -99,8 +101,11 @@ Code Merge Gate
       -> Human Review only if semantic alternatives remain
       -> targeted verification / restore if needed
 -> Memory Commit Gate
+-> Tag Gate when required
 -> Push Gate
--> Release Gate
+-> Release Gate when required
+-> Publish Gate when required
+-> Seal Gate
 -> Source Branch Cleanup Gate
 ```
 
@@ -112,7 +117,7 @@ Code Merge Gate
 | targeted rewrite verification or restore fails | block later mutation and enter Recovery |
 | broad corruption or explicit forensic request | offer Full Memory Audit / Recovery; run it only after explicit authorization |
 
-Unresolved observed memory conflicts block push, release, publish, and Source cleanup because Target memory is not trustworthy. `reconciliation-not-needed` does not block a separately authorized later action. Code commit/merge authorization cannot be reused as a Memory Human Decision, Memory Commit, Push, Release, publish, or Cleanup authorization. A Memory Conflict Report or Full Memory Audit report authorizes no Git mutation.
+Unresolved observed memory conflicts block tag, push, release, publish, seal, and Source cleanup because Target memory is not trustworthy. `reconciliation-not-needed` does not block a separately authorized later action. Code commit/merge authorization cannot be reused as a Memory Human Decision, Memory Commit, Tag, Push, Release, Publish, Seal, or Cleanup authorization. A Memory Conflict Report or Full Memory Audit report authorizes no Git mutation.
 
 ## Commit Behavior
 
@@ -152,14 +157,14 @@ feat, fix, docs, refactor, test, chore
 For the `agent-loop` skill repository:
 
 - prefer Chinese in the summary and body
-- include the current skill version scope, for example `docs(v1.5.4): 调整 Project Entry Scan 文档结构`
+- include the current skill version scope, for example `docs(v1.5.5): 调整 Project Entry Scan 文档结构`
 - use 3-7 concrete bullet lines for behavior, gate, artifact, template, reference, validation scenario, or documentation changes
 - keep version numbers unchanged unless the human explicitly approves a version bump
 
 Example:
 
 ```text
-docs(v1.5.4): 调整 Project Entry Scan 文档结构
+docs(v1.5.5): 调整 Project Entry Scan 文档结构
 
 - 移除旧 onboarding-db 生成入口
 - 统一旧项目入口为 Project Entry Scan
@@ -189,7 +194,7 @@ Append to `notes.md`:
 
 - Date:
 - Scope:
-- Action: prepare only | commit | PR text | merge note | release note | publish/release action | skipped
+- Action: prepare only | commit | push | PR text | merge | tag | release | publish | seal | cleanup | skipped
 - Diff Summary:
 - Verification:
 - Drift Check:

@@ -1,6 +1,8 @@
 # Agent Loop
 
-**Current version:** 1.5.4 (stable)
+**Current version:** 1.5.5 (stable)
+
+Agent Loop 1.5.5 is the current formal stable release. Its stable tag is `stable-v1.5.5`; synchronizing this exact release commit to `main` remains a separate Human Gate.
 
 Agent Loop is a reusable controller skill for single-human, CLI-agent software development. It lets the Agent own project diagnosis, workflow sequencing, implementation, verification, and memory maintenance while the human keeps control of goals, product meaning, consequential decisions, and external actions.
 
@@ -80,16 +82,18 @@ Onboarding and Lightweight Change scanners follow the same fact boundary. Onboar
 |---|---|---|
 | Chat | Questions, explanation, status, or discussion with no requested workflow action | No Requirement or Feature created by default |
 | Operational Support | Code-guided testing, diagnosis, rollout planning, or environment help | Read-only first; production/external actions remain gated |
-| Lightweight Change Lane | Bounded, reversible, ordinary non-Bug work with exact verification | Persistent monthly Change card, adaptive Plan, targeted checks, diff review, rollback, Memory Review |
-| Feature | Behavior, API, state, data, permission, security, architecture, migration, broad impact, or uncertain consumers | Product Slice, spec, tasks, tests, Plan, TDD, verification, review, drift, memory |
-| Bug Follow-up | Explicit Bug identity, evidence, deduplication, expected behavior, ownership, repair, and close | `bugs/YYYY-MM-DD-<bug-slug>/` plus a Feature-owned code repair |
+| Lightweight Change Lane | Bounded, reversible, ordinary non-Bug work with exact verification | Persistent monthly Change card, adaptive Plan, Repair-First Verification, diff review, rollback, Memory Review |
+| Feature | Behavior, API, state, data, permission, security, architecture, migration, broad impact, or uncertain consumers | Product Slice, spec, tasks, tests, Plan, initial TDD, verification, review, drift, memory |
+| Bug Follow-up | Explicit Bug identity, evidence, deduplication, expected behavior, ownership, repair, and close | `bugs/YYYY-MM-DD-<bug-slug>/` plus a Feature-owned TDD repair |
+
+Initial Feature implementation and explicit Bug repair keep TDD. A Review correction already inside the accepted boundary, or a clearly eligible Lightweight Change, repairs first, verifies the changed behavior with fresh evidence, reruns affected existing checks, and then recommends specific regression coverage. Fresh Required Verification and every Existing Test Obligation remain mandatory; only an Additional Regression Test is advisory.
 
 Feature delivery includes:
 
 - open Feature Authority, with Product Requirement Source and bounded Product Slice only when that sub-adapter applies
 - authority/freshness-checked Feature Context Snapshot for Task, Test, Plan, Resume, Execute, Handoff, Verify, Review, Drift, and Close
 - story/task breakdown, test design, Web E2E discovery, and construction-grade planning
-- TDD with real RED/GREEN evidence for behavior changes
+- TDD with real RED/GREEN evidence for initial Feature execution and explicit Bug repair
 - optional Delivery Contracts for durable producer-consumer boundaries
 - optional project-local Skills for repeatable, verified project operations
 - mandatory helper resolution for Project Skill Creation / Update, Brainstorm, Plan Gate, execution, diagnosis, verification, and review
@@ -147,7 +151,9 @@ The human owns:
 - unresolved product or technical choices with material consequences
 - changes to human-authored source material
 - production, paid, secret-bearing, destructive, or external-service actions
-- branch mutation, commit, push, PR, merge, tag, release, and publish
+- branch mutation, commit, push, PR, merge, tag, release, publish, and seal
+
+Tag, Push, Release, Publish, and Seal remain independent Human Gate decisions. Agent may present them together in one Batch Human Review, but approval and execution remain exact-action, row-specific, ordered, and conditional on each row's disclosed preconditions.
 - acceptance of ADRs, Delivery Contracts, Feature close, Bug close, and other explicit lifecycle gates
 
 Approving one gate never approves another.
@@ -195,14 +201,14 @@ Use this route when `npx` is unavailable or the environment must install from a 
 ```bash
 # Public GitHub
 git clone \
-  --branch stable-v1.5.4 \
+  --branch stable-v1.5.5 \
   --depth 1 \
   https://github.com/Shadow-linux/agent-loop.git \
   ~/.local/share/agent-loop-source
 
 # Private Git mirror
 git clone \
-  --branch stable-v1.5.4 \
+  --branch stable-v1.5.5 \
   --depth 1 \
   <git-mirror-url> \
   ~/.local/share/agent-loop-source
@@ -234,7 +240,7 @@ For a later clone-based upgrade, fetch tags, check out the new stable tag explic
 
 ```bash
 git -C ~/.local/share/agent-loop-source fetch --tags origin
-git -C ~/.local/share/agent-loop-source checkout --detach stable-v1.5.4
+git -C ~/.local/share/agent-loop-source checkout --detach stable-v1.5.5
 ```
 
 `~/.agents/skills/agent-loop` is the preferred shared location. If an Agent runtime does not discover it, synchronize the same verified source into that runtime's configured Skill directory rather than maintaining divergent copies.

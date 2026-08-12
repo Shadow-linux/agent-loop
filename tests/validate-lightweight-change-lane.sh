@@ -58,7 +58,7 @@ for text in \
   'code merge completes before Target memory reconciliation' \
   'A Plan is always required, but its depth is adaptive.' \
   'Scope expansion stops the lane before broader edits.' \
-  'Card completion authorizes no Git, release, publish, production, or Bug lifecycle action.'; do
+  'Card completion authorizes no Git, release, publish, seal, production, or Bug lifecycle action.'; do
   assert_contains references/lightweight-change-lane.md "$text"
 done
 
@@ -151,8 +151,8 @@ assert_contains references/stage-guides.md 'If code or configuration changes are
 assert_contains references/feature-follow-up.md 'Generic “small tweak” wording does not by itself enter Bug Management or Feature Follow-up.'
 assert_not_contains references/design.md 'Human reports bug, regression, post-close correction, field/schema/algorithm/API change, test failure, screenshot issue, QA/user feedback, or small tweak'
 assert_contains references/design.md 'Generic adjustment wording alone does not enter Feature Follow-up; route an actionable ordinary non-Bug change through Lightweight Change Assessment first.'
-assert_contains references/design.md 'For explicit Bug management, create/update/reopen the Bug Record, verify Expected Behavior, and recommend exactly one Resolution Path.'
-assert_not_line references/design.md 'Create/update/reopen the Bug Record, verify Expected Behavior, and recommend exactly one Resolution Path.'
+assert_contains references/design.md 'For explicit Bug management, create/update a new or non-closed Bug Record. A matched closed Bug stays closed while the Agent prepares the named reopen evidence; the Bug Reopen Gate must be accepted before the Reopen Record, `Resolution: unresolved`, and return Status are written. Then verify Expected Behavior and recommend exactly one Resolution Path.'
+assert_not_line references/design.md 'For explicit Bug management, create/update/reopen the Bug Record, verify Expected Behavior, and recommend exactly one Resolution Path.'
 assert_not_contains references/concepts.md 'behavior tweak, "small tweak", test failure, or QA/user feedback belongs to an existing Feature'
 assert_contains references/concepts.md 'Generic adjustment wording alone routes an actionable ordinary non-Bug change through Lightweight Change Assessment before ownership scanning.'
 assert_not_contains references/workflow-checklists.md 'behavior tweak, "small tweak", test failure, or QA/user feedback.'
@@ -189,7 +189,7 @@ for scenario in \
   'Generic Fix Wording Does Not Automatically Create Bug' \
   'Uncertain Impact Stops For Human Choice' \
   'Fact Change Uses Targeted Verification Without Invented Unit Test' \
-  'Small Isolated Logic Change Uses Minimal RED GREEN' \
+  'Lightweight Logic Change Repairs Before Verification' \
   'Active Feature Ownership Blocks Lane Escape' \
   'Repository Without Agent Loop Memory Uses Minimum Entry Check' \
   'Sealed Release Cannot Use Lightweight Lane' \
@@ -217,10 +217,11 @@ for scenario in \
   assert_contains references/validation-scenarios.md "### $scenario"
 done
 
-assert_contains SKILL.md 'Version: 1.5.4'
-assert_contains plugin.json '"version": "1.5.4"'
-assert_contains README.md '**Current version:** 1.5.4'
-assert_contains Usage.md '**版本：** 1.5.4'
+assert_contains SKILL.md 'Version: 1.5.5'
+assert_contains plugin.json '"version": "1.5.5"'
+assert_contains README.md '**Current version:** 1.5.5'
+assert_contains Usage.md '**版本：** 1.5.5'
+assert_contains CHANGELOG.md '## 1.5.5 — 2026-08-12'
 assert_contains CHANGELOG.md '## 1.5.4 — 2026-08-11'
 assert_contains CHANGELOG.md '## 1.5.0 — 2026-07-17'
 
@@ -230,7 +231,7 @@ blocks = content.scan(/<!-- agent-loop:managed-start section:([^ ]+) .*?block-ve
 abort 'FAIL: root AGENTS managed blocks missing' if blocks.empty?
 abort "FAIL: expected 13 managed blocks, found #{blocks.length}" unless blocks.length == 13
 blocks.each do |section, revision|
-  expected = '1.5.4-20260810.1'
+  expected = '1.5.5-20260812.2'
   abort "FAIL: #{section} expected #{expected}, found #{revision}" unless revision == expected
 end
 RUBY

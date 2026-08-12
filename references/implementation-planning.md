@@ -107,7 +107,7 @@ Every `plan.md` with implementation content must include:
 - `Branch Context Evidence` when applicable, citing the complete Current Branch Context in `notes.md` and repeating only Branch Strategy status/profile, Target Release Context, Target Branch, sealed/customer-isolation results, and `Git actions authorized by this plan: none`
 - `Bug Context Evidence: none | .agent-loop/bugs/YYYY-MM-DD-<bug-slug>/README.md` and `Related Bug IDs` when repair work applies; repeat no Bug lifecycle and keep all tasks/tests/implementation in the Feature workspace
 
-Branch context is evidence, not permission. A plan must stop when the target release is `released / sealed`, when accepted policy and Git reality disagree, or when customer isolation would be crossed. Plan approval never authorizes branch creation, switching, merge, deletion, push, tag, release, or publish.
+Branch context is evidence, not permission. A plan must stop when the target release is `released / sealed`, when accepted policy and Git reality disagree, or when customer isolation would be crossed. Plan approval never authorizes branch creation, switching, merge, deletion, push, tag, release, publish, or seal.
 
 Bug context is also evidence, not permission. Plan approval never confirms a Bug Resolution Path, creates/reopens a Feature, changes a Requirement, closes/reopens a Bug, or authorizes a Git action. If Expected Behavior, Bug identity, Resolution Target, or archived Feature locator is unresolved, stop before implementation and return to Bug Management / Recovery.
 

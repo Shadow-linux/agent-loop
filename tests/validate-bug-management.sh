@@ -138,11 +138,18 @@ RUBY
 
 ruby - "$root/references/runtime.md" "$root/references/stage-guides.md" <<'RUBY'
 files = ARGV
-tokens = [
+intake_tokens = [
   'complete Bug Index metadata',
   '90-day Feature metadata scan',
-  'evidence-ranked',
-  'create/update/reopen Bug Record'
+  'evidence-ranked'
+]
+reopen_tokens = [
+  'matched closed Bug remains `closed`',
+  'Bug Reopen Gate',
+  'append the Reopen Record',
+  'restore `Resolution: unresolved`',
+  'resolve Expected Behavior',
+  'Resolution Path Human Gate'
 ]
 
 files.each do |path|
@@ -150,21 +157,32 @@ files.each do |path|
   heading = path.end_with?('runtime.md') ? 'Human-Guided Bug Management' : 'Feature Follow-up And Flow-back'
   section = content[/^## #{Regexp.escape(heading)}\n(.*?)(?=^## |\z)/m, 1]
   abort "FAIL: #{path} missing #{heading} section" unless section
-  sequence = section.scan(/```text\n(.*?)```/m).flatten.find { |block| tokens.all? { |token| block.include?(token) } }
+  sequence = section.scan(/```text\n(.*?)```/m).flatten.find { |block| intake_tokens.all? { |token| block.include?(token) } }
   abort "FAIL: #{path} missing canonical Bug intake sequence block" unless sequence
-  positions = tokens.map { |token| sequence.index(token) }
+  positions = intake_tokens.map { |token| sequence.index(token) }
   abort "FAIL: #{path} missing canonical Bug intake sequence token" if positions.any?(&:nil?)
   abort "FAIL: #{path} reorders canonical Bug intake sequence" unless positions == positions.sort
+
+  reopen_positions = reopen_tokens.map { |token| sequence.index(token) }
+  abort "FAIL: #{path} does not keep a matched closed Bug unchanged until the Bug Reopen Gate" if reopen_positions.any?(&:nil?)
+  abort "FAIL: #{path} reorders Bug Reopen Gate, lifecycle write, or Resolution Path Gate" unless reopen_positions == reopen_positions.sort
+  abort "FAIL: #{path} still merges create/update/reopen before the Bug Reopen Gate" if sequence.include?('create/update/reopen Bug Record')
 end
 RUBY
-assert_contains references/design.md 'Bug intake order is complete Bug Index metadata scan -> 90-day Feature metadata scan -> evidence-ranked deep read / evidence-driven extended scan -> create/update/reopen Bug Record'
+assert_contains references/design.md 'A matched closed Bug remains `closed` until the Bug Reopen Gate is explicitly accepted.'
+assert_contains references/design.md 'Only after that acceptance may the Agent append the Reopen Record, restore `Resolution: unresolved`, and continue to a new Resolution Path recommendation and its separate Gate.'
+assert_contains SKILL.md 'A matched closed Bug remains closed until its separate Bug Reopen Gate is explicitly accepted.'
+assert_contains references/bug-management.md 'Before that decision, do not append a Reopen Record, restore `unresolved`, or change the closed Status.'
+assert_contains references/workflow-checklists.md 'Keep a matched closed Bug unchanged while preparing the named Bug Reopen Review.'
+assert_contains references/human-review-summary.md '### Bug Reopen Review'
+assert_contains references/human-review-summary.md '| Requested Authorization | Bug Reopen Gate only |'
 
 ruby - "$root/templates/root-AGENTS.md" <<'RUBY'
 content = File.read(ARGV.fetch(0))
 blocks = content.scan(/<!-- agent-loop:managed-start section:([^ ]+) .*?block-version:([^ ]+) -->/)
 abort 'FAIL: root managed blocks missing' if blocks.empty?
 blocks.each do |section, revision|
-  expected = '1.5.4-20260810.1'
+  expected = '1.5.5-20260812.2'
   abort "FAIL: #{section} expected #{expected}, found #{revision}" unless revision == expected
 end
 RUBY

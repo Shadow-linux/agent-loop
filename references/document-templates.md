@@ -1442,7 +1442,7 @@ Source Evidence:
 Last Checked:
 Human Decision:
 
-This context does not authorize create, switch, merge, delete, push, tag, release, or publish.
+This context does not authorize create, switch, merge, delete, push, tag, release, publish, or seal.
 
 ## Follow-up Intake
 

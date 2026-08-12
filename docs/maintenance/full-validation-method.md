@@ -42,7 +42,7 @@
 | Logic Correctness | 20% | 规则冲突、循环依赖、路由优先级、状态机、Auto Mode 与 Stop And Ask、Gate 绕过 |
 | Autonomy | 15% | Agent Ownership、唯一下一阶段、主动调查、Helper fallback、阻塞时的可执行建议 |
 | Project Entry / Evidence Graph + DDD Onboarding | 15% | Project Entry 边界、可靠记忆前置条件、Spec/Tasks Gate、legacy evidence、跨文件一致性 |
-| Development / Test Workflow | 20% | Plan Gate、TDD RED/GREEN、Task Done、Review/Drift/Memory 闭环、Completion 与 Follow-up |
+| Development / Test Workflow | 20% | Plan Gate、初始 Feature/显式 Bug TDD、Review/Lightweight Repair-First、Required Verification 与 Existing Test Obligation、Task Done、Review/Drift/Memory 闭环、Completion 与 Follow-up |
 | Memory | 15% | Simple/Enterprise、stale-memory、Active Feature、Phase 汇总、root guidance、code reality wins |
 | Recommendation | 15% | 阶段退出完整性、模糊目标处理、blocked 处理、推荐唯一性、Human Gate 表达 |
 
@@ -107,6 +107,8 @@
    - Requirement Product Definition ownership、Product Human Review 和 Feature Product Slice Gate
    - Delivery Contract Human Gate
    - TDD RED 与非行为型 `N/A`
+   - 初始 Feature / 显式 Bug 的 TDD 与 Review Repair / Lightweight Repair-First 的适用边界
+   - fresh current proof、Existing Test Obligation 与 Additional Regression Test Advisory 的完成边界
    - Active Feature、Pause、Resume、Close、Reopen
    - 多 Phase requirement 的 `partially-implemented` 汇总
    - accepted ADR 与实现 drift
@@ -128,11 +130,12 @@
 - 新 Feature 不创建 Product Brief；Feature Spec 必须解析 confirmed Effective Product Definition（或 legacy effective source）并记录不重定义产品含义的 Product Slice。
 - accepted ADR、Decision Candidate 与实现不一致时，必须回到 Drift Check / Decision Scan。
 - Delivery Contract 不能在 Human Gate 之前创建、接受或发生 breaking change。
-- 行为变更不能跳过 TDD RED；非行为变更的 `N/A` 必须有理由。
+- Initial Feature behavior implementation and explicit Bug repair cannot skip required TDD RED. A `within-approved-boundary` Review Repair and a `clearly eligible` Lightweight Change use Repair-First Verification, but no completion claim may skip fresh targeted evidence or an Existing Test Obligation.
+- Additional Regression Test advice is non-blocking only after current Required Verification and every Existing Test Obligation are complete.
 - 同一时刻只允许一个 Active Feature，生命周期变化同步更新项目记忆。
 - 部分 Feature 或 Phase 完成不能错误关闭整个 Requirement。
 - Agent 先调查可获得的事实，再请求人类裁决真正的 blocker。
-- Feature Completion、Submit、Commit、PR、Merge、Release、Publish 和 Tag 保持各自的人类 Gate。
+- Feature Completion、Submit、Commit、PR、Merge、Tag、Push、Release、Publish 和 Seal 保持各自的人类 Gate。
 
 ## Commit 压力测试
 

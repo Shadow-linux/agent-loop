@@ -30,7 +30,9 @@ Root guidance may navigate a user Agent to the Feature Monthly Archive procedure
 
 Root guidance may also route an observed post-code-integration memory conflict, but the targeted fact-resolution rules and optional Full Memory Audit / Recovery stay in `memory-reconciliation.md`. Root guidance must say no observed conflict is `reconciliation-not-needed`, with no whole-memory scan or extra gate. Refresh the root submit managed block when this concise route is absent or its full template block revision is stale; do not copy the detailed procedure into the target root file.
 
-The Workflow Gateway Map contains one exact first-hop row for an already-defined actionable ordinary non-Bug change, pointing to `Lightweight Change Assessment` and `references/lightweight-change-lane.md`. Product meaning that is still being shaped remains in Requirements Discussion. Eligibility, Feature hard triggers, card fields, Adaptive Plan/TDD, scope expansion, completion, and gate details belong in that reference, not root `AGENTS.md`.
+The Workflow Gateway Map contains one exact first-hop row for an already-defined actionable ordinary non-Bug change, pointing to `Lightweight Change Assessment` and `references/lightweight-change-lane.md`. Product meaning that is still being shaped remains in Requirements Discussion. Eligibility, Feature hard triggers, card fields, Adaptive Plan/Repair-First Verification, scope expansion, completion, and gate details belong in that reference, not root `AGENTS.md`.
+
+Root Agent Ownership projects only one concise Repair-First reminder: during Review, correct an authorized `within-approved-boundary` implementation first, verify it fresh, and surface specific optional regression protection. Detailed Review Repair ordering, current-proof versus advisory rules, Lightweight eligibility, evidence, and exit conditions remain owned by `references/runtime.md`, `references/stage-guides.md`, and `references/lightweight-change-lane.md`.
 
 The Checker Recovery Gateway contains one concise row for a remaining canonical Agent Loop checker that still contradicts published authority after an exact rerun. Reproducible contradictions route to `Diagnose Failure / Checker Recovery` and `references/checker-recovery.md`; root guidance must not copy the detailed classification, fixture, RED/GREEN, isolation, substitute-evidence, expiry, or formal-repair algorithm. The Evidence Gate must keep suspected checker repair Human-authorized and forbid silent bypass or canonical-pass claims. Feature Definition Review and Implementation Readiness Review do not use this gateway as a precondition.
 
@@ -72,7 +74,7 @@ Every time `agent-loop` is used inside a target project, check root guidance bef
 - Required Stops: all six visible classes — Semantic, Scope And Risk, Execution, Evidence, External Mutation, and Git And Lifecycle — plus explicit Auto Mode non-bypass
 - Checker Recovery Gateway: exact rerun routes a canonical Agent Loop checker failure to `references/checker-recovery.md`; isolated repair is Human-authorized and cannot be presented as canonical pass
 - Completion Rules: code changes alone are not done; fresh verification, Review, Drift Check, project-memory evidence, Feature Completion Check, and Feature Close Review remain visible
-- Submit And Commit Rules: submit/commit/push/PR/merge/tag/release/publish/pause/close/cleanup remain independent Human Gates and only intended files are included
+- Submit And Commit Rules: submit/commit/push/PR/merge/tag/release/publish/seal/pause/close/cleanup remain independent Human Gates and only intended files are included
 - Artifact Authority: Requirement, Decision / ADR, Feature, Bug, Lightweight Execution Card, and project memory retain distinct ownership
 - Submit And Commit Rules lack the concise post-code-integration reminder to reconcile changed Agent Loop memory before push/release/Source cleanup
 - root/directory guidance boundaries and requirement archive rules
@@ -160,7 +162,7 @@ Rules:
 - Managed block maintenance rules belong here and in refresh tooling; do not require the target root `AGENTS.md` to include a separate Managed Block Rule prose section.
 - If an existing `AGENTS.md` has no managed blocks, propose adding the minimal needed managed blocks instead of replacing the whole file.
 - If a block-version is missing or older than the current template, treat that block as stale.
-- Treat bare skill-version-only block revisions such as `block-version:1.5.4` as stale because they cannot distinguish same-version template revisions.
+- Treat bare skill-version-only block revisions such as `block-version:1.5.5` as stale because they cannot distinguish same-version template revisions.
 - If a managed block exists in the current template but is missing from root AGENTS.md, treat it as a missing managed block and propose adding it.
 - If a managed block source is missing, stale, or contradictory, classify the block as stale and propose either source correction or block refresh through Human Review Summary.
 - If marker pairs are broken, duplicated, nested, or ambiguous, stop and ask before editing.

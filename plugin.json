@@ -1,6 +1,6 @@
 {
   "name": "agent-loop",
-  "version": "1.5.4",
+  "version": "1.5.5",
   "description": "Agent-guided single-human development loop with adaptive lightweight changes, full Feature workflows, and explicit human gates.",
   "author": {
     "name": "Shadow-linux",
@@ -21,7 +21,7 @@
   "interface": {
     "displayName": "Agent Loop",
     "shortDescription": "Agent-guided development loop from goal intake to verified close",
-    "longDescription": "The agent acts as controller: inspects project state, classifies the entry scenario, loads stage-specific references, produces or updates agent-loop artifacts, and stops at human gates. Feature behavior uses the full TDD workflow; bounded ordinary non-Bug changes use an adaptive response-local card and targeted verification.",
+    "longDescription": "The agent acts as controller: inspects project state, classifies the entry scenario, loads stage-specific references, produces or updates agent-loop artifacts, and stops at human gates. Initial Feature and explicit Bug execution use TDD; bounded Review repairs and clearly eligible Lightweight Changes repair first, verify fresh, and recommend specific regression coverage while preserving required verification and Human Gates.",
     "developerName": "Shadow-linux",
     "category": "Coding",
     "capabilities": [

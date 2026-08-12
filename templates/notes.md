@@ -46,7 +46,7 @@ Source Evidence:
 Last Checked:
 Human Decision:
 
-This context does not authorize create, switch, merge, delete, push, tag, release, or publish.
+This context does not authorize create, switch, merge, delete, push, tag, release, publish, or seal.
 
 ## Stage Helper Resolutions
 
@@ -131,6 +131,11 @@ Feature verification does not close a Bug automatically. Bug Close and Feature C
 ## Diagnosis
 
 ## Review
+
+## Review Repair Evidence
+
+| Date | Finding / Source | Authority / Boundary | Changed Files | Fresh Verification | Existing Test Obligations | Regression Test Advisory / Not-Needed Reason | Residual Risk | Human Decision |
+|---|---|---|---|---|---|---|---|---|
 
 ### Spec Review
 

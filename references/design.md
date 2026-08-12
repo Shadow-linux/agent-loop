@@ -24,6 +24,7 @@ The core constraints are:
 - Human-Guided Branch Management is an optional internal Branch Strategy Check, not a canonical stage and not a mandatory Git Flow migration
 - a durable Branch Strategy is recorded in `project.md` only after explicit human acceptance; `declined` uses `Profile: not-applicable` plus a concrete reason, not-needed keeps the lightweight existing-project profile, and an unconfirmed recommendation is never `accepted`
 - a Branch Action Gate confirms creation or switching of one exact development branch; strategy adoption, plan acceptance, and auto modes never satisfy it
+- Tag, Push, Release, Publish, and Seal remain independent action gates. One Batch Human Review may display several rows, but every row keeps its own exact scope, preconditions, decision, and result.
 - `project.md` owns the accepted long-term strategy and current Target Release Context pointer; mutable per-feature branch state belongs in feature notes, plan, or Submit / Integrate evidence
 - standard and customer release aggregation branches are retained; formally released versions are sealed; customer customization cannot flow wholesale into the standard product line
 - branch-specific Target Release Context and Target Branch stops apply only to an adopted strategy or versioned/customer delivery; a confirmed simple `not-needed` path continues without those fields
@@ -43,12 +44,15 @@ The core constraints are:
 - Human-Guided Bug Management is an internal method of `Feature Follow-up / Flow-back`, not a canonical stage or message intent
 - Lightweight Change Lane is an internal route before Feature construction for bounded ordinary non-Bug changes; it is not a canonical stage, message intent, Feature Type, Bug Resolution Path, lifecycle, status, or Auto Mode
 - Lightweight Execution Card is one persistent per-change execution source under `<memory-root>/changes/YYYY-MM/YYYY-MM-DD-<topic>.md`, with required background, adaptive Plan, progress, targeted verification, rollback, gate, result, and Memory Review fields; it creates no shared backlog or Archive lifecycle
-- Adaptive Depth lets the Agent vary Plan and test detail by real risk while fresh verification, diff review, rollback, scope control, memory impact, and Human Gates stay fixed
+- Repair-First Verification is the default internal method for a `within-approved-boundary` Review correction and a `clearly eligible` Lightweight Change; it changes implementation order without creating authorization, a stage, status, mode, Gate, Checker result, or artifact family
+- Required Verification proves the current result, Existing Test Obligation preserves accepted tests and Human commitments, and Additional Regression Test is future protection advised only after current proof exists
+- Adaptive Depth lets the Agent vary Plan and test detail by real risk while fresh verification, affected existing checks, diff review, rollback, scope control, memory impact, and Human Gates stay fixed
 - `bugs/INDEX.md` owns Bug inventory/backlog/locator state, while each Bug README owns stable identity, facts, evidence, lifecycle, Resolution Path, verification, close, and reopen history
 - Bug Report, Bug Record, Report Origin, Expected Behavior Evidence, Status, Resolution, and Reopen are distinct; Bug Status and Resolution form independent axes
 - Requirement owns product meaning, Bug Record owns defect coordination, and Feature owns every code repair; Bug-to-Requirement links are optional `0..N` and never auto-change Requirement lifecycle
 - Bug identity scans all Bug Index metadata without a cutoff; Feature ownership defaults to a 90-day metadata scan, evidence-ranked deep reads, and evidence-driven extension beyond 90 days
-- Bug intake order is complete Bug Index metadata scan -> 90-day Feature metadata scan -> evidence-ranked deep read / evidence-driven extended scan -> create/update/reopen Bug Record
+- Bug intake order is complete Bug Index metadata scan -> 90-day Feature metadata scan -> evidence-ranked deep read / evidence-driven extended scan -> create/update a new or non-closed Bug Record, or prepare a closed-Bug reopen candidate without changing lifecycle
+- A matched closed Bug remains `closed` until the Bug Reopen Gate is explicitly accepted. Only after that acceptance may the Agent append the Reopen Record, restore `Resolution: unresolved`, and continue to a new Resolution Path recommendation and its separate Gate.
 - archive changes Feature location, not identity or ownership; discovery and Human Review read archived evidence without rehydrate, while confirmed flow-back rehydrates before reopened execution
 - Report Origin introduces no Owner, Assignee, personnel permission, staffing, workload, or automatic Priority system
 - Adaptive Product Definition belongs inside Requirements Discussion and has only `brief | standard` depth; it is not a lifecycle or new canonical stage
@@ -91,6 +95,9 @@ Human Goal
 → Execute / Verify
   → [internal] Agent Checker Rescue Level 1 / 2 / 3 classification
   → [internal] Checker Self-Repair only when corrected executable Checker evaluation is necessary
+→ Review
+  → [internal] Review Repair Fast Path for a within-approved-boundary correction
+  → fresh targeted proof, affected existing checks, and specific Regression Test Advisory
 → Drift Check
 → Feature Follow-up / Flow-back with internal Bug Management when explicit defect management appears
 → Feature Monthly Archive when the human explicitly asks to compact closed-history discovery
@@ -175,6 +182,8 @@ Gate 1 freezes what will be built and authorizes package preparation only. Packa
 
 Human Gate provenance remains an Agent-owned conversation judgment. The Agent writes the durable Gate decision pair and timestamp only after reliable Human evidence and independently verifies package completeness, current artifacts, Plan/No-Plan evidence, readiness, and action consistency. The Gate 2 pair remains the immutable original review baseline rather than the live execution-mode pointer. After package-only acceptance, later start records a separate decision/time/Human-evidence transition and updates current project `Gate Mode` without rewriting the Gate 2 baseline. Pause clears the current mode in project state and records the transition without rewriting accepted Gate or later-start evidence, while Resume requires a newly confirmed applicable mode. No local Feature Gate script or digest is required for Gate acceptance, later start, task rotation, or continuation. On context loss or uncertain provenance, the Agent asks one blocking confirmation.
 
+After Gate 2 accepts the execution boundary and supplies a current Feature write grant, Review may correct a `within-approved-boundary` implementation mismatch through Repair-First Verification without reopening Gate 1/2 merely to manufacture RED. This does not authorize a write outside the current grant. Product/Feature-definition drift returns to Gate 1; implementation-boundary drift returns to Gate 2; public interface, ADR, Contract, security, data, permission, dependency, migration, architecture, external action, or unresolved verification returns to its existing owner.
+
 ## Definitions
 
 **Project**: current codebase or repository. Long-term memory lives in `.agent-loop/project.md` by default.
@@ -189,7 +198,19 @@ Human Gate provenance remains an Agent-owned conversation judgment. The Agent wr
 
 **Lightweight Execution Card**: persistent per-change background, goal, scope, rationale, risk, Plan, progress, verification, rollback, Human Gate, result, and Memory Review control under the active memory root's `changes/YYYY-MM/YYYY-MM-DD-<topic>.md`. The card file is the execution source of truth; it is not a Feature `plan.md`, shared backlog, long-term project-memory owner, or authorization for later actions.
 
-**Adaptive Depth**: Agent-owned risk-based selection of card detail, Plan steps, targeted verification, and the smallest meaningful RED/GREEN for isolated behavior. It never reduces safety, scope, rollback, evidence, memory, or action-specific gate invariants.
+**Repair-First Verification**: the default implementation order for a bounded Review correction and a clearly eligible Lightweight Change: write within existing authorization, run fresh targeted proof and affected existing checks, review scope/risk/rollback, record evidence, then recommend specific future regression protection.
+
+**Review Repair Fast Path**: an internal Review method for correcting implementation to match accepted authority and acceptance without reopening Gate 1/2. It exits when definition, boundary, risk, verification, or authorization changes.
+
+**Regression Test Advisory**: a concrete post-repair recommendation describing scenario, layer/location, prevented regression, residual risk, and priority. It is not a test-debt lifecycle or completion Gate.
+
+**Required Verification**: fresh failure-matched evidence needed to prove the current result. Without it, no `fixed`, `done`, `completed`, or `closed` claim is valid.
+
+**Existing Test Obligation**: a test or verification requirement already accepted in `tests.md`, Gate 2, acceptance, ADR, Delivery Contract, Bug Verification Matrix, or current Human instruction. It cannot be downgraded into advice.
+
+**Additional Regression Test**: future automated protection proposed after Required Verification and Existing Test Obligations prove the current result. An unaccepted recommendation does not by itself block Task Done, Lightweight completion, or Feature Close.
+
+**Adaptive Depth**: Agent-owned risk-based selection of card detail, Plan steps, targeted verification, and future regression protection. It never reduces safety, scope, fresh proof, affected existing checks, rollback, evidence, memory, or action-specific gate invariants.
 
 **Change Memory Consolidation**: internal Agent semantic review triggered by `completed + pending >= 3`, the oldest pending age being greater than seven full calendar days, known memory drift, or pre-release review. The cross-platform scanner validates and inventories only; it never chooses meaning or writes memory. A post-merge conflict reads one relevant Change directly when needed and does not trigger global Change consolidation.
 
@@ -250,6 +271,8 @@ One coherent Feature may resolve several Bugs. Each Bug retains independent iden
 **Branch Strategy Check**: an internal method used at Project Entry, planning, drift, and submit boundaries. It preserves a clear existing strategy, recommends the optional Human-Guided profile only when rules are confused, target release is unclear, or customer boundaries are risky, and stops before adoption until the human decides. Branch-specific target-context stops do not apply to a human-confirmed simple `not-needed` path.
 
 **Branch Action Gate**: the action-specific Human Gate for creating or switching one exact development branch. Strategy adoption, target selection, plan acceptance, and auto modes do not authorize it.
+
+**Release Action Gates**: the independent Tag, Push, Release, Publish, and Seal Human Gates. A Batch Human Review may present several exact actions at once, but approval is row-specific and ordered; one action's approval, success, or failure never supplies another action's authorization.
 
 **Current Branch Context**: the volatile feature-level evidence for branch class, work type, target kind/version/customer/topic, source/target, lifecycle, and last human decision. It does not replace Requirement, Feature, Task, ADR, verification, or lifecycle authority.
 
@@ -502,8 +525,8 @@ Load bug-management.md for explicit Bug management and feature-follow-up.md for 
 Scan all Bug Index metadata for duplicate/reopen identity before Feature candidates; without explicit Bug management intent, do not create or update a Bug Record.
 Inspect Active / Paused / Closed Feature metadata in the default 90-day window, then deep-read evidence-ranked candidates and extend beyond 90 days when evidence points there.
 Resolve archived candidates through `features/archive.md`; discovery and Human Review are read-only and do not require rehydrate.
-For explicit Bug management, create/update/reopen the Bug Record, verify Expected Behavior, and recommend exactly one Resolution Path.
-Wait for the Resolution Path Gate only for explicit Bug management; every Feature create/reopen action keeps its separate gate. Rehydrate a confirmed archived owner only before reopened execution.
+For explicit Bug management, create/update a new or non-closed Bug Record. A matched closed Bug stays closed while the Agent prepares the named reopen evidence; the Bug Reopen Gate must be accepted before the Reopen Record, `Resolution: unresolved`, and return Status are written. Then verify Expected Behavior and recommend exactly one Resolution Path.
+Wait for the new Resolution Path Gate after any accepted Bug reopen; every Feature create/reopen action keeps its separate gate. Rehydrate a confirmed archived owner only before reopened execution.
 ```
 
 ### Feature Monthly Archive
@@ -605,12 +628,12 @@ For an actionable ordinary non-Bug local change before Feature construction, use
 ```text
 Explicit Bug Management / active Feature ownership first
 → Lightweight Change Assessment
-  → clearly eligible: persistent monthly card before target writes, bounded edit, targeted verification, diff/rollback/memory review
+  → clearly eligible: persistent monthly card before target writes, bounded edit first, fresh targeted verification, affected existing checks, diff/rollback/memory review, then specific regression advice
   → Feature trigger: normal Feature construction
   → uncertain: Human Choice with one Agent recommendation and zero writes
 ```
 
-Eligibility is all-of; Feature hard triggers are any-of. The lane reduces ceremony and document depth, not accuracy, scope control, verification strength, rollback, fact review, or Human Gates. Fact/config/path/domain/docs changes use failure-matched targeted verification, while isolated behavior logic uses the smallest meaningful RED/GREEN. Scope expansion stops before broader edits and returns to Human Review.
+Eligibility is all-of; Feature hard triggers are any-of. The lane reduces ceremony and document depth, not accuracy, scope control, verification strength, rollback, fact review, or Human Gates. Affected existing checks remain required when available. Clearly eligible work applies the disclosed bounded change first, runs failure-matched fresh proof, reviews scope/risk/rollback/memory impact, and records a specific Regression Test Advisory or not-needed reason. Scope expansion stops before broader edits and returns to Human Review. Promotion to initial Feature execution or explicit Bug repair restores normal TDD.
 
 The card is created under the one accepted logical memory root at `changes/YYYY-MM/YYYY-MM-DD-<topic>.md` before the first target write. A verified internal root alias keeps that logical path; broken/cyclic/external/file aliases and dual roots fail closed. A changes-only root does not prove initialization; a unique legacy root is reused. The creation month is stable and not Archive. Same-day collisions use the first unused numeric topic suffix without overwrite. There is no Change README, INDEX, archive, move, rehydrate, restore transaction, scheduler, shared counter, new canonical stage, or helper-native document tree.
 
@@ -681,7 +704,8 @@ tdd-guard
 complex ADR system
 automatic or unscoped global skill installation
 automatic directory-level AGENTS.md generation without human confirmation
-automatic commit, PR, merge, release, or publish action without human confirmation
+automatic commit, PR, merge, release, publish, or seal action without human confirmation
+test-debt lifecycle, Review Repair artifact tree, or automatic completion without Required Verification
 ```
 
 Roadmap Skill remains a future multiplayer visualization reference only.

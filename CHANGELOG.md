@@ -1,5 +1,21 @@
 # Agent Loop Changelog
 
+## 1.5.5 — 2026-08-12
+
+_当前状态：正式稳定版；最终 Human Review 与精确 Release Gate 已接受，focused、全量 Shell/Python、机械检查及六域语义验证通过。人类明确接受发布前定向复核披露的 memory-root 名称碰撞、legacy Project Skill 双 root、Post-Merge 摘要 Gate 顺序及其测试覆盖风险，并决定不在本版修复。正式 tag 为 `stable-v1.5.5`；默认安装通道 `main` 的同步仍保留独立 Human Gate。_
+
+### Review Repair 与 Lightweight Repair-First
+- Feature Review 对已授权且分类为 `within-approved-boundary` 的实现修正默认使用 Review Repair Fast Path：先修实现，再做新鲜 targeted verification、受影响既有检查以及 diff/scope/risk/rollback 复核。
+- 明确 eligible 的 Lightweight Change 同样 repair first，并继续保留 persistent Card、adaptive Plan、fresh verification、diff/scope/risk/rollback 与 Memory Review；不为制造 RED 而新建测试。
+- Required Verification 与 Existing Test Obligation 仍是完成硬要求；只有 Additional Regression Test 作为具体 Regression Test Advisory，不会自行阻塞 Task Done、Lightweight completion 或 Feature Close。
+- 初始 Feature 实现、显式 Bug 修复、人类要求 TDD 或 accepted Plan 要求 RED/GREEN 时继续 TDD；所有 Product、Requirement、ADR、Contract、Feature、Task Done、Submit、Close、Git、Release 与 Human Gates 保持不变。
+- 本次变更不新增 canonical stage、message intent、status、mode、Gate、Checker outcome、artifact tree 或依赖。
+
+### 发布前审计修复
+- 修正 closed Bug 的 Reopen 顺序：准备 Reopen Review 时保持 `closed` 且不写生命周期；只有独立 Bug Reopen Gate 明确接受后，才追加 Reopen Record、恢复 `Resolution: unresolved` 并进入新的 Resolution Path Gate。
+- 修正 Feature Monthly Archive 测试名称，使其准确表达 ambiguous reference 是供 Agent 判断的 advisory，不再误称为 Apply 硬阻断。
+- 拆分原先合并表达的发布动作授权：Tag、Push、Release、Publish、Seal 保持独立 Human Gate；允许用一张 Batch Human Review 展示，但每行分别决定、按前置条件顺序执行，失败不会自动授权后续动作；13 个 root managed blocks 同步到 `1.5.5-20260812.2`。
+
 ## 1.5.4 — 2026-08-11
 
 _当前状态：正式稳定版；最终 Human Review 与精确 Release Gate 已接受，focused、全量 Shell/Python、机械检查及六域语义验证通过。正式 tag 为 `stable-v1.5.4`；默认安装通道 `main` 的同步仍保留独立 Human Gate。_

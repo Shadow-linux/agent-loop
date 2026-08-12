@@ -160,7 +160,7 @@ Severity: unknown | low | medium | high | critical
 Priority: unset | low | medium | high | urgent
 ```
 
-The Agent may recommend Severity and uses `unknown` when evidence is insufficient. Priority defaults to `unset`; `urgent` requires an explicit human decision. Severity, Priority, report tone, customer identity, or source type never authorizes hotfix, branch, deploy, release, or publish actions.
+The Agent may recommend Severity and uses `unknown` when evidence is insufficient. Priority defaults to `unset`; `urgent` requires an explicit human decision. Severity, Priority, report tone, customer identity, or source type never authorizes hotfix, branch, deploy, release, publish, or seal actions.
 
 ## Requirement Relationships
 
@@ -240,7 +240,7 @@ Failed Bug-specific verification returns to `in-progress` when the repair is sti
 
 The Bug Close Gate requires complete evidence plus an explicit human decision for the named Bug and Resolution. Feature close and Bug close are separate decisions; one is not inferred from the other. A Bug may remain `verifying` while the human asks for more evidence.
 
-The Bug Reopen Gate requires a named closed Bug, trigger report, new evidence, return status (`triaging` or already-proven `confirmed`), and explicit human decision. Append the Reopen Record, restore `Resolution: unresolved`, and retain the original Close Record and Status History.
+The Bug Reopen Gate requires a named closed Bug, trigger report, new evidence, return status (`triaging` or already-proven `confirmed`), and explicit human decision. The matched Bug remains closed while this review is prepared. Before that decision, do not append a Reopen Record, restore `unresolved`, or change the closed Status. Only after acceptance append the Reopen Record, restore `Resolution: unresolved`, apply the accepted return Status, and retain the original Close Record and Status History. Reassess and separately gate the new Resolution Path; never inherit the prior repair authorization.
 
 ## Human Gates And Auto Mode Stops
 
@@ -254,11 +254,11 @@ Keep these action-specific gates:
 | Delivery Contract Gate | create, accept, or breaking-change a contract |
 | Bug Close Gate | accept Resolution and close one named Bug |
 | Bug Reopen Gate | reopen one named closed Bug and restore `unresolved` |
-| Branch / Submit / Integration / Cleanup / Release gates | create, switch, merge, delete, push, tag, commit, PR, release, or publish |
+| Branch / Submit / Integration / Cleanup / Release gates | create, switch, merge, delete, push, tag, commit, PR, release, publish, or seal |
 
 One Human Review Summary may present several named decisions, but each authorization is separate. “Fix it”, “continue”, Bug confirmation, accepted Requirement, plan acceptance, successful tests, Feature close, commit/push approval, or Auto Mode must not be reused as another gate.
 
-Strict Mode, Feature Auto-Loop, and Task Auto-Run all stop for Bug close/reopen, Feature create/reopen, Requirement creation/lifecycle change, Delivery Contract actions, archive/rehydrate apply, and every Git/release/publish action.
+Strict Mode, Feature Auto-Loop, and Task Auto-Run all stop for Bug close/reopen, Feature create/reopen, Requirement creation/lifecycle change, Delivery Contract actions, archive/rehydrate apply, and every Git/release/publish/seal action.
 
 ## Project Memory And Recovery
 
@@ -305,7 +305,7 @@ First-version Bug Management does not add:
 - Bug-owned `tasks.md`, `tests.md`, `plan.md`, execution directories, or code workflow;
 - Owner, Assignee, personnel permissions, staffing, SLA, sprint, workload, story points, or performance reporting;
 - an executable YAML/JSON schema, database, mandatory checker, or third-party runtime dependency;
-- automatic Priority, hotfix, branch, Feature, Requirement, lifecycle, close, reopen, commit, PR, merge, release, tag, or publish decisions;
+- automatic Priority, hotfix, branch, Feature, Requirement, lifecycle, close, reopen, commit, PR, merge, release, tag, publish, or seal decisions;
 - external Issue Tracker creation or bidirectional synchronization;
 - Bug archive, compaction, retention, deletion, or scheduled maintenance;
 - Security Incident, Production Incident, or Customer Support management;

@@ -13,7 +13,7 @@ First version excludes:
 - complex ADR system
 - automatic or unscoped global installation
 - automatic directory-level AGENTS.md generation without human confirmation
-- automatic commit, PR, merge, release, or publish action without human confirmation
+- automatic commit, PR, merge, release, publish, or seal action without human confirmation
 
 ## Definitions
 

@@ -57,7 +57,7 @@ Reading a legacy Product Brief needs no new gate. Any write still uses its ownin
 - Feature Spec Product Slice: Feature Spec Human Review;
 - ADR compatibility/technical landing: Decision & Design Human Review;
 - source movement or migration: explicit bounded migration approval;
-- commit, push, tag, release, or publish: each independent Git/release gate.
+- commit, push, tag, release, publish, or seal: each independent Git/release-lifecycle gate.
 
 Legacy Product Brief presence, status, or earlier human acceptance grants none of these actions.
 

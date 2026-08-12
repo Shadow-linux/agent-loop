@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import unittest
 from pathlib import Path
 
@@ -103,6 +104,141 @@ def assert_bounded_contract(
         testcase.assertNotIn(text, owner)
 
 
+def assert_ordered_contract(
+    testcase: unittest.TestCase,
+    content: str,
+    tokens: tuple[str, ...],
+) -> None:
+    positions = tuple(content.find(token) for token in tokens)
+    testcase.assertNotIn(-1, positions, f"missing ordered token in {tokens!r}")
+    testcase.assertEqual(tuple(sorted(positions)), positions)
+
+
+def universal_review_confirmation(section: str) -> bool:
+    for line in section.splitlines():
+        normalized = line.lower()
+        confirmation = re.search(
+            r"(?:ask|obtain|require).{0,30}human.{0,30}(?:confirmation|approval)"
+            r"|human.{0,20}(?:confirmation|approval).{0,20}(?:required|before)",
+            normalized,
+        )
+        universal = re.search(
+            r"\b(?:all|any|every)\b|before (?:applying|repairing|changing)",
+            normalized,
+        )
+        behavior_change = re.search(
+            r"behaviou?r(?:-altering|\s+(?:change|correction))|alter behaviou?r",
+            normalized,
+        )
+        review_context = re.search(
+            r"review(?:-driven|\s+(?:finding|repair|change))", normalized
+        )
+        if confirmation and universal and behavior_change and review_context:
+            return True
+    return False
+
+
+def assert_review_authorization_boundary(
+    testcase: unittest.TestCase,
+    section: str,
+) -> None:
+    testcase.assertTrue(
+        any(
+            "within-approved-boundary" in line
+            and "implementation behavior correction" in line
+            and "no new per-finding Human confirmation" in line
+            for line in section.splitlines()
+        ),
+        "ordinary within-boundary behavior correction must not add per-finding confirmation",
+    )
+    for owner in (
+        "product meaning",
+        "Feature definition",
+        "accepted implementation boundary",
+        "public interface",
+        "ADR",
+        "Contract",
+        "security",
+        "data",
+        "permission",
+        "dependency",
+        "migration",
+        "architecture",
+        "authorization",
+        "rollback",
+        "reliable verification",
+    ):
+        testcase.assertIn(owner, section)
+    testcase.assertFalse(
+        universal_review_confirmation(section),
+        "Review must not require confirmation for every behavior correction",
+    )
+
+
+def existing_obligation_is_advisory(section: str) -> bool:
+    return any(
+        re.search(
+            r"Existing Test Obligations?.{0,80}"
+            r"(?:is|are|becomes?|became|treated as).{0,20}(?:advisory|optional)"
+            r"|Existing Test Obligations?.{0,80}does not (?:by itself )?block",
+            line,
+            re.I,
+        )
+        for line in section.splitlines()
+    )
+
+
+def assert_task_done_evidence_split(
+    testcase: unittest.TestCase,
+    section: str,
+) -> None:
+    testcase.assertIn("Required Verification", section)
+    testcase.assertIn("proves the current result", section)
+    testcase.assertTrue(
+        any(
+            "Existing Test Obligation" in line and "remains required" in line
+            for line in section.splitlines()
+        )
+    )
+    testcase.assertIn("Additional Regression Test", section)
+    testcase.assertIn("future protection", section)
+    testcase.assertTrue(
+        any(
+            "Additional Regression Test Advisory" in line
+            and "does not by itself block Task Done" in line
+            for line in section.splitlines()
+        )
+    )
+    testcase.assertFalse(existing_obligation_is_advisory(section))
+
+
+def assert_completion_evidence_split(
+    testcase: unittest.TestCase,
+    section: str,
+) -> None:
+    testcase.assertIn("fresh verification evidence exists", section)
+    testcase.assertTrue(
+        any(
+            "every Existing Test Obligation" in line and "is recorded" in line
+            for line in section.splitlines()
+        )
+    )
+    testcase.assertTrue(
+        any(
+            "every Additional Regression Test Advisory" in line and "is visible" in line
+            for line in section.splitlines()
+        )
+    )
+    testcase.assertTrue(
+        any(
+            "unaccepted advisory" in line
+            and "does not by itself block Feature Close" in line
+            for line in section.splitlines()
+        )
+    )
+    testcase.assertFalse(existing_obligation_is_advisory(section))
+
+
 class FeatureReviewContractTests(unittest.TestCase):
     def test_feature_gate_checker_is_removed(self) -> None:
         self.assertFalse((ROOT / "scripts/check-feature-review.py").exists())
@@ -129,6 +265,77 @@ class FeatureReviewContractTests(unittest.TestCase):
         ):
             with self.subTest(required=required):
                 self.assertIn(required, runtime)
+
+    def test_review_repair_fast_path_is_ordered_inside_existing_review(self) -> None:
+        stage_guides = (ROOT / "references/stage-guides.md").read_text(encoding="utf-8")
+        checklists = (ROOT / "references/workflow-checklists.md").read_text(
+            encoding="utf-8"
+        )
+        review = markdown_h2_section(stage_guides, "Review")
+        review_checklist = markdown_h2_section(checklists, "Review")
+        assert_ordered_contract(
+            self,
+            review,
+            (
+                "within-approved-boundary",
+                "repair the implementation first",
+                "fresh targeted verification",
+                "affected existing checks",
+                "Regression Test Advisory",
+            ),
+        )
+        self.assertIn("inside the current accepted execution boundary", review)
+        self.assertNotIn("Gate 3", review)
+        self.assertFalse((ROOT / "scripts/check-review-repair.py").exists())
+        assert_review_authorization_boundary(self, review_checklist)
+
+        confirmation_mutation = (
+            review_checklist
+            + "\n- [ ] Obtain Human approval before every behavior-altering Review repair."
+        )
+        with self.assertRaises(AssertionError):
+            assert_review_authorization_boundary(self, confirmation_mutation)
+
+    def test_task_done_keeps_existing_obligations_hard_and_advice_nonblocking(self) -> None:
+        runtime = (ROOT / "references/runtime.md").read_text(encoding="utf-8")
+        task_done = markdown_h2_section(runtime, "Task Done Gate")
+        completion = markdown_h2_section(runtime, "Completion Gate")
+        assert_task_done_evidence_split(self, task_done)
+        assert_completion_evidence_split(self, completion)
+
+        task_done_advisory_mutation = "\n".join(
+            "Existing Test Obligations are advisory and do not block Task Done."
+            if "Existing Test Obligation" in line and "remains required" in line
+            else line
+            for line in task_done.splitlines()
+        )
+        with self.assertRaises(AssertionError):
+            assert_task_done_evidence_split(self, task_done_advisory_mutation)
+
+        completion_advisory_mutation = "\n".join(
+            "- Existing Test Obligations are advisory and do not block Feature Close."
+            if "every Existing Test Obligation" in line and "is recorded" in line
+            else line
+            for line in completion.splitlines()
+        )
+        with self.assertRaises(AssertionError):
+            assert_completion_evidence_split(self, completion_advisory_mutation)
+
+        separation_mutation = task_done.replace(
+            "Required Verification", "Verification"
+        ).replace("Additional Regression Test", "Regression Test")
+        with self.assertRaises(AssertionError):
+            assert_task_done_evidence_split(self, separation_mutation)
+
+    def test_feature_completion_rejects_review_repair_without_fresh_proof(self) -> None:
+        completion = (ROOT / "references/feature-completion-check.md").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("Does each Review Repair have fresh targeted verification and evidence?", completion)
+        self.assertIn(
+            "An unaccepted Additional Regression Test Advisory does not by itself block Feature close.",
+            completion,
+        )
 
     def test_only_approval_choices_set_readiness_accepted(self) -> None:
         stage_guides = (ROOT / "references/stage-guides.md").read_text(encoding="utf-8")
@@ -265,7 +472,7 @@ class FeatureReviewContractTests(unittest.TestCase):
             required=(
                 "Delivery Contract creation and acceptance",
                 "subagent dispatch",
-                "commit, push, PR, merge, tag, release, publish",
+                "commit, push, PR, merge, tag, release, publish, seal",
                 "Submit / Integrate",
                 "Pause / Close",
             ),
@@ -286,7 +493,7 @@ class FeatureReviewContractTests(unittest.TestCase):
             "subagent dispatch",
             "external mutation",
             "Submit / Integrate",
-            "commit, push, PR, merge, tag, release, publish",
+            "commit, push, PR, merge, tag, release, publish, seal",
             "Pause / Close",
         )
         auto_loop_start = "In this mode, the agent may continue through Analyze Consistency"

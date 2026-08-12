@@ -23,7 +23,7 @@ The mandatory helper-backed stages are Brainstorm / Clarify, Project Skill Creat
 
 Lightweight Change Lane does not enter mandatory Plan Gate / Plan or Execute Task / Story helper resolution.
 
-The controller writes the persisted monthly card Plan and selects failure-matched targeted verification or the smallest meaningful RED/GREEN. Card persistence does not enter Plan Gate or make `writing-plans` mandatory. Do not add Lightweight Change Lane to the mandatory stage table. If scope promotion creates or reopens a Feature, normal `writing-plans` and `test-driven-development` helper resolution resumes before Feature execution.
+Review Repair Fast Path and Lightweight Change Lane do not invoke the TDD helper by default. The Review helper remains active for Review ownership, while the controller selects fresh failure-matched verification. Card persistence does not enter Plan Gate or make `writing-plans` mandatory. Do not add Lightweight Change Lane or Review Repair Fast Path to the mandatory stage table. Promotion to initial Feature execution or explicit Bug repair restores normal `writing-plans` and `test-driven-development` helper resolution before Feature execution.
 
 For each mandatory stage:
 
@@ -112,7 +112,7 @@ If Superpowers is available, these map cleanly:
 - Requirement/Product Grill and mattpocock `grill-with-docs`: clarification inside Requirements Discussion and Feature-local Brainstorm / Clarify; translate accepted product meaning to the Requirement `product.md`, keep Requirement README to pointer/lifecycle/mapping summaries, write Feature-local output to `spec.md` or `notes.md`, and route Decision Candidates without creating native `CONTEXT.md` or `docs/adr/`.
 - `archify`: optional visual communication after a Visual Trigger. Resolve a matching active project-local visual skill first, then installed Archify. If absent but materially useful, recommend exact installation/use before fallback. It is preferred inside the bounded Visual Scope only, is never added to the Mandatory Helper Resolution table, and falls back to Markdown/Mermaid/ASCII without blocking the stage when unjustified, declined, unsupported, or failed.
 - `writing-plans`: Plan Gate / Plan If Needed; translate into construction-grade `plan.md` or `plans/*`, or record a justified No-Plan Decision for a trivial task, not `docs/superpowers/plans/`.
-- `test-driven-development`: Execute Task / Story; evidence still goes to `notes.md` and task status still follows Task Done Gate.
+- `test-driven-development`: initial Feature Execute Task / Story and explicit Bug repair; Review Repair Fast Path and clearly eligible Lightweight Change use Repair-First Verification instead. Evidence still goes to `notes.md` and task status still follows Task Done Gate.
 - `systematic-debugging`: Diagnose Failure; root cause and fix evidence go to `notes.md`.
 - `verification-before-completion`: Verify and Close; completion still requires agent-loop evidence, review, drift, memory, and human gates.
 - `requesting-code-review`: Review; findings go to `notes.md` and cannot directly mark tasks `done`.

@@ -132,4 +132,4 @@ Restore status: not-needed | required | restored | failed
 Restored transaction ID:
 Restore evidence:
 Remaining blocker / risk:
-Explicitly unauthorized: commit, push, tag, release, publish, merge, branch deletion, Source branch cleanup, or any Git action outside a separate Human Gate.
+Explicitly unauthorized: commit, push, tag, release, publish, seal, merge, branch deletion, Source branch cleanup, or any Git action outside a separate Human Gate.

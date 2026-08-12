@@ -139,7 +139,7 @@ Evidence: <concrete review statement>
 Implementation Authorized: no | separately-confirmed
 ```
 
-Product Review confirmation does not authorize Requirement acceptance, Feature start, ADR acceptance, code execution, or Git actions. Requirement lifecycle, ADR acceptance, Feature Spec, Plan/Execute, submit, commit, push, release, and publish keep their own gates.
+Product Review confirmation does not authorize Requirement acceptance, Feature start, ADR acceptance, code execution, or Git actions. Requirement lifecycle, ADR acceptance, Feature Spec, Plan/Execute, submit, commit, push, release, publish, and seal keep their own gates.
 
 ## Source Preservation And Append-Only Follow-up
 

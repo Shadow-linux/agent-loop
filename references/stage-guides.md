@@ -109,14 +109,14 @@ Rules:
 - Eligibility is all-of and Feature hard triggers are any-of. A missing fact becomes `Feature trigger` or `uncertain`, never an optimistic lane assumption.
 - When uncertain, present few real options, one Agent recommendation, evidence/unknowns, and perform zero writes before the human answer.
 - The persisted card Plan always exists and never uses No-Plan Decision. Adapt its detail to risk without turning it into Feature `plan.md`.
-- Fact/config/path/domain/docs changes use targeted syntax/parse/reference/residual/dry-run evidence. A small isolatable behavior branch uses the smallest meaningful RED/GREEN plus focused regression.
+- Clearly eligible fact/config/path/domain/docs or isolated behavior changes use Repair-First Verification: apply only the disclosed bounded change, then run fresh failure-matched syntax/parse/reference/residual/dry-run or behavior proof and affected existing checks.
 - If reliable memory exists, run Project Skill Discovery Guard before generic action fallback and preserve the matched Project Skill Execution Gate.
 - Scope expansion stops before broader edits. Preserve current evidence, recommend exactly one Bug/Requirement/Feature route, and ask before keeping, reverting, or extending partial edits.
 - Completion requires fresh verification, diff and disclosed-scope review, rollback, durable-memory impact review, and Result / Residuals.
 - A changes-only root does not prove initialization. Reuse one legacy root, fail closed on dual roots, keep the creation month stable, use a collision suffix without overwrite, and run the read-only scanner after completion.
 - Resume accidental interruption only after branch/full-HEAD/dirty-diff/Scope/Plan/eligibility/verification/rollback revalidation. Planned durable continuation remains Feature work.
 - Three pending or an oldest pending age greater than seven days triggers Agent semantic consolidation; high-evidence sync requires an existing reliable owner and exact pre-write disclosure, while uncertain meaning remains visible for Human Review.
-- The card grants no branch, submit, commit, push, PR, merge, tag, release, publish, production, external, paid-call, configuration-write, destructive, Feature close, or Bug lifecycle action.
+- The card grants no branch, submit, commit, push, PR, merge, tag, release, publish, seal, production, external, paid-call, configuration-write, destructive, Feature close, or Bug lifecycle action.
 
 Write:
 
@@ -809,11 +809,14 @@ Bug Management internal sequence:
 complete Bug Index metadata scan
 -> 90-day Feature metadata scan
 -> evidence-ranked deep read / evidence-driven extended scan
--> create/update/reopen Bug Record
--> Expected Behavior check
+-> new or non-closed Bug: create/update the Bug Record
+-> matched closed Bug remains `closed`; prepare a named reopen candidate without a lifecycle write
+-> Bug Reopen Gate for the matched closed Bug
+-> after explicit acceptance, append the Reopen Record and restore `Resolution: unresolved`
+-> resolve Expected Behavior
 -> Status/Resolution validation
 -> one Resolution Path recommendation
--> Human Gate
+-> Resolution Path Human Gate
 ```
 
 Rules:
@@ -821,6 +824,8 @@ Rules:
 - Bug Management is internal to this stage; do not add a canonical stage or message intent
 - ordinary Chat or read-only error explanation does not create a Bug artifact
 - Bug identity / duplicate / reopen scans all Bug Index metadata without a time cutoff
+- a matched closed Bug remains closed while the Agent presents the named trigger, new evidence, proposed return Status, preserved history, and exact Bug Reopen Gate; no Reopen Record or lifecycle field changes before explicit acceptance
+- after an accepted reopen, append the Reopen Record, preserve the prior Close/Status history, restore `Resolution: unresolved`, apply only the accepted return Status, and require a new Resolution Path recommendation and separate Gate
 - default Feature ownership is a 90-calendar-day metadata/summary scan; deep-read only evidence-overlapping candidates and extend beyond 90 days with `outside-default-window` evidence
 - calculate age from Feature `Last Updated / Closed`, not archive month, directory mtime, or archive operation time
 - code reality is current fact base for defect evidence
@@ -885,7 +890,7 @@ When the package is complete, the Agent verifies complete Package Files coverage
 
 After package-only acceptance, a later explicit instruction to start this Feature may enable Feature Auto-Loop without repeating the full Gate 2 review only when Feature Context is still `CURRENT`, the Agent re-reads the recorded Package Files and current Feature artifacts, confirms the complete accepted package and execution boundary, assesses any change, verifies that the Human instruction is still reliable, and finds no new stop condition or Human-gated item. Preserve the original `package-only` Gate 2 decision/Auto-Loop/time baseline; record `Later Start Decision: approved`, the timezone-aware `Later Start Authorized At`, concrete `Later Start Evidence`, and current project `Gate Mode: Feature Auto-Loop` together before target implementation. Otherwise route `feature-definition-change` to Gate 1, `implementation-boundary-change` to Gate 2, and `unresolved` or uncertain Human provenance to one blocking Human question. No local Feature Gate preflight is required.
 
-Strict Mode remains available when the human explicitly requests stage-by-stage control. Delivery Contract creation/acceptance must be separately named with exact content inside Gate 2 or stop at its own gate; breaking changes always stop separately. Human-gated tasks, subagent dispatch, branch/Git actions, external mutation, production, credentials, submit, pause, close, release, and publish retain their independent gates.
+Strict Mode remains available when the human explicitly requests stage-by-stage control. Delivery Contract creation/acceptance must be separately named with exact content inside Gate 2 or stop at its own gate; breaking changes always stop separately. Human-gated tasks, subagent dispatch, branch/Git actions, external mutation, production, credentials, submit, pause, close, release, publish, and seal retain their independent gates.
 
 ## Feature Spec
 
@@ -1181,7 +1186,7 @@ Rules:
 - if technical design changes shared or project-level design, repeat Design Readiness and return to Decision & Design before plan execution
 - if the effective requirement source changed or an applicable ADR is `review-required`, stop before Plan and return to Decision & Design compatibility review
 - if an adopted branch strategy applies, resolve Current Branch Context from the accepted Target Release Context and Git evidence; stop rather than inventing target kind, version, customer slug, source branch, or target branch
-- a planned branch name or target does not authorize create, switch, merge, delete, push, tag, release, or publish
+- a planned branch name or target does not authorize create, switch, merge, delete, push, tag, release, publish, or seal
 
 Exit:
 
@@ -1340,7 +1345,8 @@ Rules:
 - Task Auto-Run requires an accepted plan for the selected task/story
 - in Feature Auto-Loop, execute only Agent-ready tasks and stop at Human-gated tasks
 - in Task Auto-Run, execute only the selected task/story and stop after evidence/review/drift updates and Task Done Gate status update
-- behavior-changing execution requires TDD; non-behavior work records TDD as `not-applicable`
+- initial Feature behavior execution and explicit Bug behavior execution require TDD; Human-requested TDD and an accepted Plan that requires RED/GREEN remain binding, while non-behavior work records TDD as `not-applicable`
+- Review Repair remains owned by Review and does not re-enter Execute Task / Story merely to manufacture RED after the implementation already exists
 - after mandatory helper resolution, use the loaded TDD Adapter; use fallback only for recorded `unavailable` or `load-failed`, while task status and evidence remain controlled by agent-loop
 - verify RED before implementation
 - verify GREEN after implementation
@@ -1379,6 +1385,7 @@ Rules:
 - find root cause
 - form one hypothesis at a time
 - write regression test when possible
+- a failed Required Verification or Existing Test Obligation remains current diagnosis evidence and is never downgraded into a future Regression Test Advisory
 - for a canonical checker failure, preserve its exact command/output/path/digest and classify `artifact-invalid | environment-invalid | checker-defect-candidate | unresolved` before changing checker or artifact logic
 - before proposing Checker repair, apply Agent Checker Rescue Level 1/2/3 to the exact canonical failure and exact rerun: continue only inside existing authorization with complete independent evidence, use `accepted-for-this-gate` only inside one already-required Human Gate, and stop on every Level 3 safety/semantic/verification/authorization boundary
 - reduce a checker candidate to a published-authority-backed positive fixture and negative controls; read-only diagnosis may continue without interruption
@@ -1417,6 +1424,8 @@ Rules:
 - run fresh verification
 - read output
 - record evidence
+- after a Repair-First write, run failure-matched fresh targeted verification and affected existing checks; proof collected before the write is stale for the repaired behavior
+- distinguish proof required for the current claim from an Additional Regression Test that would add future protection; missing current proof or an Existing Test Obligation blocks completion, while the additional recommendation is advisory
 - when the Feature resolves Bugs, execute the Bug Verification Matrix against the original reproduction or accepted substitute and regression/safety paths
 - after Feature evidence exists, move a related repair Bug from `in-progress` to `verifying`; do not set `closed`
 - failed Bug-specific verification returns the Bug to `in-progress` when the repair remains valid or `triaging` when Expected Behavior/diagnosis was invalidated; append the failure evidence
@@ -1446,6 +1455,14 @@ Load:
 
 - `skill-routing.md` for Stage Helper Capability Scan
 - `external-skill-adapters.md` when Stage Helper Capability Scan finds Superpowers or another code-review skill
+
+### Review Repair Fast Path
+
+For a Review finding, first classify the finding against current product, Feature, ADR, Contract, task, test, and implementation authority plus the current write authorization. When it is `within-approved-boundary`, repair the implementation first, then run fresh targeted verification and affected existing checks. Review the diff / scope / risk / rollback, record evidence in the existing Feature notes, and present a specific Regression Test Advisory or a concrete not-needed reason before continuing Review / Drift Check / Task Done / Feature Close.
+
+This fast path can write only inside the current accepted execution boundary and current authorization. A reviewer calling a local implementation issue a “bug” does not itself create Bug Management intent; explicit Bug recording, tracking, triage, or resolution intent still wins and routes to Bug Management.
+
+If product meaning, Feature definition, implementation boundary, public interface, ADR, Contract, security, data, permission, dependency, migration, architecture, authorization, rollback, or reliable verification changes, return to Gate 1, Gate 2, Decision & Design, Delivery Contract, Bug Management, Diagnose Failure, or the applicable Human Gate.
 
 Check:
 
@@ -1503,6 +1520,7 @@ Check:
 - when an adopted Branch Strategy or versioned/customer delivery applies, compare accepted Branch Strategy and Target Release Context vs feature Current Branch Context and current Git reality
 - in that applicable context, check sealed-release immutability, customer isolation, and whether any proposed cleanup has merge evidence plus separate human authorization; a confirmed simple `not-needed` path records these branch-specific checks as `not-applicable`
 - related Bug Expected Behavior, Resolution Path, Fix Feature, Status/Resolution, and verification/close evidence against Feature and Requirement/ADR/Contract authorities
+- whether every Review Repair classified `within-approved-boundary` preserves the accepted product, Feature, ADR, Contract, and execution meanings; a local implementation correction does not rewrite those accepted meanings, and any larger change returns to its owning Gate or stage
 
 Write after confirmation:
 
@@ -1591,12 +1609,13 @@ Rules:
 - separate product code changes from `agent-loop` artifact changes
 - identify unrelated dirty work
 - if using an external finishing skill, use it only for completion options and branch hygiene; agent-loop still owns the submit gate
-- never commit, create final PR text, merge, release, publish, or claim submission readiness without human confirmation
+- never commit, create final PR text, merge, release, publish, seal, or claim submission readiness without human confirmation
 - a human saying "commit" starts Submit / Integrate but is not final commit approval; ask again after diff, verification, review, and drift summary
 - default to prepare-only if the human has not explicitly requested commit/PR/merge
 - when an adopted Branch Strategy or versioned/customer delivery applies, run Branch Strategy Check and verify Source Branch, Branch Class, Target Release Context, Target Branch, sealed state, customer isolation, and requested Git action before asking for the final submit decision
 - for a confirmed simple `not-needed` path, record branch-specific fields as `not-applicable` and do not block Submit / Integrate because Target Release Context or Target Branch is absent
-- accepted strategy, an accepted plan, and a submit request never imply authorization for create, switch, merge, delete, push, tag, release, or publish
+- accepted strategy, an accepted plan, and a submit request never imply authorization for create, switch, merge, delete, push, tag, release, publish, or seal
+- Tag, Push, Release, Publish, and Seal keep separate Human Gate decisions. A batch review may present multiple exact Git/release actions together, but each action keeps an independent decision and precondition. A failed prerequisite stops dependent later actions.
 - temporary development-branch deletion requires merge evidence and a separate human cleanup decision; retained standard/customer aggregation branches are not cleanup candidates
 - when the Feature resolves Bugs, show Bug IDs, current Status, Bug-specific verification evidence, unresolved Bug Close Decisions, Target Release Context, and branch isolation
 - Submit/commit/push approval never closes a Bug, and Bug Close approval never authorizes Submit / Integrate
@@ -1648,6 +1667,9 @@ Check:
 - all remaining in-scope tasks are done; skipped or deferred work was first removed through human-approved scope reconciliation
 - required tests or substitute verification recorded
 - fresh verification evidence exists
+- all Existing Test Obligations are complete
+- each Review Repair has fresh targeted verification and recorded evidence
+- Additional Regression Test recommendations and residual risk are visible; an unaccepted advisory alone does not block completion
 - Feature Close Review completed
 - feature-level Spec Review confirms product/spec/tasks/tests/acceptance and out-of-scope boundaries
 - feature-level Standards Review completed when triggered by large project, broad diff, directory or durable boundary change, security/data change, architecture change, or human request
@@ -1701,6 +1723,8 @@ Close requires:
 
 - Feature Context facts rechecked as `CURRENT`; unresolved `CHANGED` or physical `BLOCKED` stops Close and Auto Mode
 - fresh verification evidence
+- every Existing Test Obligation complete and every Review Repair supported by reliable fresh current proof
+- Additional Regression Test advice and residual risk visible when present; an unaccepted Additional Regression Test Advisory alone does not block Close
 - Feature Close Review
 - drift check
 - submit/integration status recorded if the human requested submission
