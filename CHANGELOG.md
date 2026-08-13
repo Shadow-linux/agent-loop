@@ -16,6 +16,11 @@ _当前状态：正式稳定版；最终 Human Review 与精确 Release Gate 已
 - 修正 Feature Monthly Archive 测试名称，使其准确表达 ambiguous reference 是供 Agent 判断的 advisory，不再误称为 Apply 硬阻断。
 - 拆分原先合并表达的发布动作授权：Tag、Push、Release、Publish、Seal 保持独立 Human Gate；允许用一张 Batch Human Review 展示，但每行分别决定、按前置条件顺序执行，失败不会自动授权后续动作；13 个 root managed blocks 同步到 `1.5.5-20260812.2`。
 
+### Nested Product Definition Checker 修复（2026-08-13 重建）
+- 修复 `check-feature-context.py` 把已确认的 `Effective Product Definition` basename 错误按项目根解析的问题；Requirement README 指向 `design-package/product.md` 等 Requirement-local 嵌套位置时，匹配的 `product.md` 现在复用已解析并完成边界检查的 source。
+- 错误 basename、`./product.md` 等显式路径和越界路径仍进入原有 `CHANGED` / boundary 检查，不放宽 Requirement、memory-root 或项目路径保护。
+- 新增合法嵌套、错误 basename、显式 dotted path 与越界路径回归，并以同一修复提交重建 `stable-v1.5.5`。
+
 ## 1.5.4 — 2026-08-11
 
 _当前状态：正式稳定版；最终 Human Review 与精确 Release Gate 已接受，focused、全量 Shell/Python、机械检查及六域语义验证通过。正式 tag 为 `stable-v1.5.4`；默认安装通道 `main` 的同步仍保留独立 Human Gate。_

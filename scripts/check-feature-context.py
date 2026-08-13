@@ -649,10 +649,19 @@ def classify(
         )
         if source_product_value:
             try:
-                source_product_path = project_path(
-                    project_root,
-                    source_product_value,
+                source_product_candidate = Path(
+                    source_product_value.replace("\\", "/")
                 )
+                if (
+                    source_product_value == source_product_candidate.name
+                    and source_product_candidate.name == source.path.name
+                ):
+                    source_product_path = source.path
+                else:
+                    source_product_path = project_path(
+                        project_root,
+                        source_product_value,
+                    )
                 require_within(
                     source_product_path,
                     readme_path.parent,

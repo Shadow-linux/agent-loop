@@ -4883,6 +4883,13 @@ An otherwise valid single internal memory-root alias is not this failure: preser
 - Required Action: compare current authority meaning, refresh the semicolon-separated Authority Facts including Authority Summary when safe, then rerun to `CURRENT` before reliance.
 - Forbidden Action: keep `CURRENT` from matching source digests alone, silently paraphrase resolver facts, or treat `CHANGED / 0` as execution permission.
 
+### E1a. Nested Requirement Product Definition Basename Reuses The Resolved Source
+
+- Prompt: Requirement README points to `design-package/product.md`; Product Definition Checker has accepted the Feature field `Effective Product Definition: product.md`; Snapshot records the full resolved Requirement-local path.
+- Expected Route: Feature Context recognizes the matching pure basename, reuses the README-resolved and boundary-checked source, and returns `CURRENT / 0` when the remaining authority/digest facts match.
+- Required Action: keep Product Requirement Source basename semantics aligned with Product Definition Checker while retaining the full resolved path in Feature Context Snapshot.
+- Forbidden Action: resolve the matching basename as `<project-root>/product.md`, or reuse a different basename, `./product.md`, or an escaping explicit path as if it named the confirmed source.
+
 ### E3. Lowercase External Ticket Is Evidence, Not A Local File Guess
 
 - Prompt: a custom or external Authority uses a stable numeric ticket locator such as `jira-431`.

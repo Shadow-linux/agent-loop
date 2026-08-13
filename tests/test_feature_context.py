@@ -43,10 +43,73 @@ class FeatureContextCheckerTests(unittest.TestCase):
         self.assertEqual(self.snapshot(root), before, "checker mutated target artifacts")
         return result
 
+    @staticmethod
+    def nest_product_definition(root: Path, source_value: str = "product.md") -> None:
+        nested_product = (root / README).parent / "design-package/product.md"
+        nested_product.parent.mkdir()
+        (root / PRODUCT).rename(nested_product)
+        readme = root / README
+        readme.write_text(
+            readme.read_text(encoding="utf-8").replace(
+                "Source: product.md",
+                "Source: design-package/product.md",
+            ),
+            encoding="utf-8",
+        )
+        spec = root / FEATURE
+        spec.write_text(
+            spec.read_text(encoding="utf-8")
+            .replace(
+                f"Effective Product Definition: {PRODUCT.as_posix()}",
+                f"Effective Product Definition: {source_value}",
+                1,
+            )
+            .replace(
+                f"Resolved Product Source: {PRODUCT.as_posix()}",
+                "Resolved Product Source: "
+                ".agent-loop/requirements/2026-07-25-example/"
+                "design-package/product.md",
+                1,
+            ),
+            encoding="utf-8",
+        )
+
     def test_current_snapshot_passes(self):
         result = self.run_project()
         self.assertEqual(result.returncode, 0, combined_output(result))
         self.assertIn("CURRENT:", result.stdout)
+
+    def test_nested_effective_product_basename_is_current(self):
+        result = self.run_project(self.nest_product_definition)
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CURRENT:", combined_output(result))
+
+    def test_nested_effective_product_wrong_basename_is_advisory(self):
+        def mutate(root):
+            self.nest_product_definition(root, "another-product.md")
+
+        result = self.run_project(mutate)
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
+        self.assertIn("Effective Product Definition", combined_output(result))
+
+    def test_nested_effective_product_explicit_dotted_path_is_advisory(self):
+        def mutate(root):
+            self.nest_product_definition(root, "./product.md")
+
+        result = self.run_project(mutate)
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
+        self.assertIn("Effective Product Definition", combined_output(result))
+
+    def test_nested_effective_product_escape_is_advisory(self):
+        def mutate(root):
+            self.nest_product_definition(root, "../../outside/product.md")
+
+        result = self.run_project(mutate)
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
+        self.assertIn("Effective Product Definition", combined_output(result))
 
     def test_explicit_requirement_feature_authority_passes(self):
         def mutate(root):
