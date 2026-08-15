@@ -1,6 +1,6 @@
 # Proposal: Progressive Verification + Proof First
 
-状态：draft；awaiting Human design review
+状态：implemented on alpha/v1.5.7；awaiting Human release review and the archived full-validation report
 
 目标版本：v1.5.7（alpha/v1.5.7 分支）
 

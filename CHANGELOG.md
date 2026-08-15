@@ -33,7 +33,15 @@ _当前状态：开发中；在 `alpha/v1.5.7` 分支实施 Progressive Verifica
 ### 减税落地与 mutation 测试（独立复核后补齐）
 - Work Breakdown、Plan Gate、Review 三个 stage guide 章节分别定义三档可执行差异：focused 收窄分解粒度/Plan 周边分析/Review 深度，full 维持标准，high-assurance 强制回归安全任务、完整接口细节与 Standards Review；`plan.md` 的 construction-grade 核心（精确路径、证明命令、预期 RED/GREEN、回滚）任何档位不可削减，档位只缩广度不减精确度。
 - `high-assurance` Feature 的 No-Plan 仅限文档型任务规则同步进 Plan Gate 章节，消除 runtime 单点。
-- 新增 mutation 测试段：沙箱对照组 + 10 个语义翻转/删除变异（降直升高档为升一档、删硬下限、旧日志当 RED、删 notes Profile 字段、删三处档位差异、删 No-Plan 同步、翻转车道排除条款），每个变异必须被契约测试捕获，防止断言空转。
+- 新增 mutation 测试段：沙箱对照组 + 13 个语义翻转/删除变异（降直升高档为升一档、删硬下限、旧日志当 RED、删 notes Profile 字段、删三处档位差异、删 No-Plan 同步、翻转车道排除条款、翻转升档重绑、legacy 默认档降档、删 Plan owner 同步、删 Lightweight permission 触发），每个变异必须被契约测试捕获，防止断言空转；另加反语义断言禁止"可忽略既有义务"类措辞。
+
+### 二轮独立复核修复（2026-08-16）
+- 升档重绑包：执行期档位提升后必须先刷新受影响 Test Design、Plan 验证/回滚覆盖与回归范围至新档要求、补缺失回归/安全任务并重跑 Analyze Consistency 再继续；`data schema` 加入硬下限清单，与 Lightweight 硬触发对齐。
+- 旧 Feature 兼容：pre-1.5.7 无 Profile 字段的 Feature 保持 reader-compatible——有效档位默认 `full`、立即核对硬下限、首个 Escalation Log 行可不重写历史 Gate 记录、字段在下次授权刷新时补记且永不回填历史。
+- `focused` 的 Plan 收窄措辞改为"最小必要 proof paths，且必须包含全部 Existing Test Obligation"，消除与既有义务的张力。
+- `implementation-planning.md` Construction-Grade Plan Requirements 与 workflow-checklists Plan Gate 清单同步三档差异与 No-Plan 限制，消除 owning surface 单点。
+- GitHub Actions `cross-platform-checkers.yml` 在 macOS 腿新增运行 `validate-progressive-verification.sh`，契约损坏不再对 CI 不可见。
+- 新增"升档重绑包"与"旧 Feature 默认 full"两个场景。
 
 ### 本版不包含
 - 不引入 `state.json` / `evidence.json` / `run.jsonl` 或任何第二套状态源；Markdown 保持单一状态源。Evidence-driven Runtime 保留为后续独立研究议题。

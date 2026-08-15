@@ -92,6 +92,7 @@ If the needed signature, parameter, return shape, or dependency is unknown after
 
 Every `plan.md` with implementation content must include:
 
+- the recorded Feature Verification Profile tier: it scales Plan breadth, never exactness — `focused` contracts the surrounding analysis to the named files and the minimum necessary proof paths (still including every Existing Test Obligation), `full` keeps standard breadth, and `high-assurance` adds complete interface/parameter detail, boundary and precision test code, integration steps, and explicit rollback notes; the construction-grade core below is mandatory at every tier
 - current Feature Context Snapshot authority/freshness, mapped accepted Feature boundary, applicable Product Slice IDs/anchors, applicable ADRs, and the accepted authority/product/ADR invariants this execution unit must preserve
 - goal and architecture summary
 - tech context

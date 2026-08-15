@@ -1240,7 +1240,7 @@ Rules:
 - reject a plan that targets a `released / sealed` version, crosses customer isolation, or assumes an unauthorized Git action
 - include actual test code for RED steps when possible
 - include exact function/class/endpoint/component signatures, parameters, return values, errors, and side effects for new or changed interfaces
-- Profile tier scales Plan breadth, never its exactness: any created `plan.md` keeps the construction-grade core — exact paths, code context, proof commands, expected RED/GREEN output, and rollback — while `focused` contracts the surrounding analysis to the named files and one proof path, `full` keeps the standard breadth, and `high-assurance` adds complete interface/parameter detail, boundary and precision test code, integration steps, and explicit rollback notes
+- Profile tier scales Plan breadth, never its exactness: any created `plan.md` keeps the construction-grade core — exact paths, code context, proof commands, expected RED/GREEN output, and rollback — while `focused` contracts the surrounding analysis to the named files and the minimum necessary proof paths (which must still include every Existing Test Obligation), `full` keeps the standard breadth, and `high-assurance` adds complete interface/parameter detail, boundary and precision test code, integration steps, and explicit rollback notes
 - include exact commands and expected RED/GREEN output
 - implementation steps must be bite-sized and executable
 - no placeholders such as TBD, TODO, "add proper error handling", "write tests", or "similar to previous task"

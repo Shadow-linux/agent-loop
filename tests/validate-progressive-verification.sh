@@ -71,6 +71,26 @@ assert_contains references/stage-guides.md 'Package preparation first records th
 assert_contains references/stage-guides.md 'Gate 2 presents the Profile tier, rationale, applicable hard floor, and escalation triggers as part of the Verification decision row'
 assert_contains references/runtime.md 'list the recorded Feature Verification Profile tier, rationale, applicable hard floor, and escalation triggers'
 
+assert_contains references/runtime.md 'A tier raise re-binds the consuming package before work continues: refresh the affected Test Design, Plan verification/rollback coverage, and regression scope to the new tier'
+assert_contains references/runtime.md 'Existing Feature notes without Profile fields remain reader-compatible (pre-1.5.7 Features)'
+assert_contains references/runtime.md 'treat the effective tier as `full`, check the hard-floor categories from current artifacts immediately'
+assert_contains references/runtime.md 'never backfill them into history'
+assert_contains references/implementation-planning.md 'it scales Plan breadth, never exactness'
+assert_contains references/workflow-checklists.md 'Scale Plan breadth by the recorded Feature Verification Profile tier'
+assert_contains references/workflow-checklists.md 'A `high-assurance` Feature allows No-Plan only for documentation-only tasks'
+assert_contains references/lightweight-change-lane.md 'public API, event, schema, persistence, product data, state flow, permission, security, credential, or trust-boundary change'
+
+# cross-surface floor anchors: shared safety categories stay routable in both surfaces
+assert_contains references/runtime.md 'auth, permission, payment, data deletion, data schema, migration, public API, security-sensitive code, or cross-module core logic'
+
+# anti-semantic guards: known-dangerous contradictory phrasings must not appear
+for file in SKILL.md references/runtime.md references/design.md references/stage-guides.md references/implementation-planning.md; do
+  assert_not_contains "$file" 'may ignore Existing Test Obligations'
+  assert_not_contains "$file" 'Existing Test Obligations are optional'
+  assert_not_contains "$file" 'Profile tier does not apply'
+  assert_not_contains "$file" 'without re-running'
+done
+
 # --- execution/verification stage coverage and helper boundary ---
 
 assert_contains references/stage-guides.md 'Profile tier scales breakdown breadth'
@@ -173,6 +193,8 @@ done
 # --- scenarios ---
 
 for scenario in \
+  'Tier Raise Re-binds The Package' \
+  'Legacy Feature Defaults To Full' \
   'Profile Recorded After Gate 1' \
   'Hard Floor Blocks Agent Downgrade' \
   'Execution Auto-Escalates With Evidence' \
@@ -217,7 +239,7 @@ build_sandbox() {
   mkdir -p "$dir/references" "$dir/templates" "$dir/tests"
   cp "$root/SKILL.md" "$root/plugin.json" "$root/README.md" "$root/Usage.md" "$root/CHANGELOG.md" "$dir/"
   local f
-  for f in runtime design stage-guides concepts document-templates validation-scenarios human-review-summary workflow-checklists skill-routing; do
+  for f in runtime design stage-guides concepts document-templates validation-scenarios human-review-summary workflow-checklists skill-routing implementation-planning lightweight-change-lane; do
     cp "$root/references/$f.md" "$dir/references/"
   done
   for f in tests notes root-AGENTS; do
@@ -257,5 +279,9 @@ run_mutation 'tier-difference-removed-from-breakdown' references/stage-guides.md
 run_mutation 'tier-difference-removed-from-review' references/stage-guides.md 's|Profile tier scales review depth|Profile tier does not affect review depth|'
 run_mutation 'noplan-sync-removed' references/stage-guides.md '/a `high-assurance` Feature allows No-Plan Decisions only for documentation-only tasks/d'
 run_mutation 'exclusion-flipped' references/runtime.md 's|it never governs Lightweight Change Lane or Review Repair Fast Path|it always governs Lightweight Change Lane and Review Repair Fast Path|'
+run_mutation 'rebind-removed' references/runtime.md 's|A tier raise re-binds the consuming package before work continues|A tier raise only records the new tier and work continues unchanged|'
+run_mutation 'legacy-default-lowered' references/runtime.md 's|treat the effective tier as `full`|treat the effective tier as `focused`|'
+run_mutation 'plan-owner-sync-removed' references/implementation-planning.md '/the recorded Feature Verification Profile tier: it scales Plan breadth, never exactness/d'
+run_mutation 'lightweight-permission-trigger-deleted' references/lightweight-change-lane.md 's|public API, event, schema, persistence, product data, state flow, permission, security, credential, or trust-boundary change|public API, event, schema, persistence, product data, state flow, security, credential, or trust-boundary change|'
 
 printf 'PASS: Progressive Verification + Proof First contract is complete\n'

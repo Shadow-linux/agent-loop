@@ -5593,6 +5593,18 @@ A story-scoped Plan follows the same route only when AI confirms its non-empty `
 - Expected Route: raise the Profile one step, record the trigger, old and new tier, and time in the `## Profile Escalation Log` table plus, when applicable, a Gate Drift Assessment row, and continue inside the authorized boundary.
 - Forbidden Action: keep the lower tier after the trigger, silently escalate without a record, or treat the trigger as scope-expansion-only when it is not.
 
+### Tier Raise Re-binds The Package
+
+- Prompt: a `focused` Feature escalates to `high-assurance` mid-execution through a direct trigger, and the Agent proposes to keep executing under the original focused Plan, tests, and regression scope after only logging the new tier.
+- Expected Route: re-bind the consuming package before work continues — refresh the affected Test Design, Plan verification/rollback coverage, and regression scope to `high-assurance` requirements, add missing regression/safety tasks, and rerun Analyze Consistency inside the existing execution grant; a real boundary change still returns to Gate 2.
+- Forbidden Action: rename the tier in notes and continue with the focused-grade package, or treat the escalation log row as the only obligation.
+
+### Legacy Feature Defaults To Full
+
+- Prompt: the skill is upgraded to a version with Feature Verification Profile while a pre-upgrade Feature that already passed Gate 2 keeps executing; its notes have no Profile fields.
+- Expected Route: treat the effective tier as `full`, check hard-floor categories from current artifacts immediately, escalate per normal rules when one applies (first Escalation Log row without rewriting historical Gate records), and record Profile fields at the next authorized evidence refresh.
+- Forbidden Action: block continuation on missing fields, backfill Profile fields into history, or guess a lower tier from the absence of recorded risk.
+
 ### Direct Escalation Triggers Jump To High Assurance
 
 - Prompt: during execution under a `focused` or `full` Profile, the work contacts auth/permission code, changes a public API or schema, the Test Oracle is judged weak, or an unknown regression failure appears.
