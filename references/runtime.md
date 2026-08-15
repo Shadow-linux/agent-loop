@@ -165,6 +165,36 @@ If the change cannot be reliably verified without a new test, do not claim `fixe
 
 TDD remains the default method for initial Feature Execute Task / Story, explicit Human-Guided Bug Management repair, Human-requested TDD, and an accepted Plan that requires RED/GREEN. Review Repair Fast Path and clearly eligible Lightweight Change do not invoke the TDD helper by default. If either path leaves its accepted boundary or enters Feature/Bug execution, normal TDD routing resumes.
 
+Proof First widens only the RED evidence definition and never renames or bypasses TDD: RED accepts any credible, reviewable failure-matched proof — a newly written failing test, an existing test's failing run, a reproduction script with its failure output, or API/UI reproduction evidence (DOM/assertion/console-text facts, not pixel-level subjective judgment). A new test is never manufactured solely to produce RED. New Feature work prefers Behavior Proof First; explicit Bug repair prefers Reproduction First, where the original reproduction satisfies RED. GREEN still requires fresh failure-matched proof after the change; Required Verification, Existing Test Obligations, and the Bug Verification Matrix regression/safety columns are unchanged, and only protection beyond those obligations becomes an Additional Regression Test advisory.
+
+## Feature Verification Profile
+
+Feature Verification Profile is the Feature lane's internal verification strategy, recorded during package preparation after Gate 1 and before Work Breakdown / Test Design consume it. It is not a canonical stage, message intent, status, Mode, Gate, Checker result, or artifact family, and it never governs Lightweight Change Lane or Review Repair Fast Path, which keep their existing rules.
+
+```text
+Gate 1 accepted
+-> record Feature Verification Profile + rationale + hard floor check
+-> Work Breakdown / Test Design / Plan / Review intensity consume the tier
+-> Gate 2 presents the Profile fields in the Verification decision row
+-> execution escalates on triggers; downgrade returns to the Human
+```
+
+The three tiers are `focused | full | high-assurance`:
+
+| Tier | Use | Effect |
+|---|---|---|
+| `focused` | low-risk Feature work: clear boundary, no interface/state/data/security change | contracted Plan depth, minimal effective test set covering invariants and boundaries, affected existing checks, lightweight Review |
+| `full` | ordinary Feature work (default) | standard Plan, standard Test Design, impacted regression, standard Review |
+| `high-assurance` | hard-floor categories or escalated work | complete Plan, complete Test Design with boundary/precision coverage, extended regression, mandatory Standards Review |
+
+Hard floors: work touching auth, permission, payment, data deletion, migration, public API, security-sensitive code, or cross-module core logic can never be rated below `high-assurance`, regardless of Agent self-assessment. Keep this floor list aligned with the Lightweight Change Assessment Feature hard triggers: when either list changes, update both in the same change, so no safety-relevant category becomes freely ratable in one surface while routing away from Feature construction in the other.
+
+Feature `notes.md` persists the decision as top-level fields: `Verification Profile`; `Profile Rationale` citing concrete evidence; `Profile Floor` naming applicable hard-floor categories; `Escalation Triggers` listing the Feature-specific trigger subset; optional `Profile Recomputed At` when Gate 2 has not yet accepted a recomputation.
+
+Escalation during execution is automatic and must be recorded in Feature `notes.md`: unexpected files or cross-module modification, repeated same failure, or multiple speculative patches raise the tier one step; auth/permission contact, public API or schema change, weak Test Oracle (which also redoes the affected Test Design part before continuing), and unknown regression failure raise the tier directly to `high-assurance`. Each escalation records the trigger, the old and new tier, and the time in the `## Profile Escalation Log` table, and adds a Gate Drift Assessment row when applicable. Scope expansion still stops broader edits and returns to Human Review.
+
+Time-bounded tier movement: before Gate 2 acceptance, the Agent may recompute the Profile from new evidence, including a reasoned downgrade, recording `Profile Recomputed At`; after Gate 2 acceptance, the Agent may only auto-escalate during execution, and any downgrade requires presenting the changed risk evidence to the Human and recording the accepted decision before it takes effect. Human-approved substitute verification keeps its existing rules.
+
 ## Adaptive Product Definition Internal Routing
 
 During Requirements Discussion, load `product-definition.md` and choose exactly one documentation depth:
@@ -737,7 +767,7 @@ explicit implementation request
 
 For non-trivial gates, the approval prompt must include a Human Review Summary. The summary is the human-facing approval view; the full artifact files remain the source of truth.
 
-Gate 1 acceptance authorizes package preparation only and does not authorize target implementation. During package preparation, the Agent completes Work Breakdown, Delivery Contract assessment, Test Design, E2E Discovery if applicable, Technical Design / Code Context, Plan Gate / Plan, coverage review, and Analyze Consistency without separate Work Breakdown, Test Design, E2E Discovery, Technical Design, or Plan approval prompts. Target implementation is forbidden until Gate 2.
+Gate 1 acceptance authorizes package preparation only and does not authorize target implementation. During package preparation, the Agent first records the Feature Verification Profile with rationale and hard-floor check, then completes Work Breakdown, Delivery Contract assessment, Test Design, E2E Discovery if applicable, Technical Design / Code Context, Plan Gate / Plan, coverage review, and Analyze Consistency without separate Work Breakdown, Test Design, E2E Discovery, Technical Design, or Plan approval prompts. Target implementation is forbidden until Gate 2.
 
 Record this compact derived state in current Feature notes:
 
@@ -751,11 +781,11 @@ Implementation Readiness: preparing | review-ready | accepted
 
 The state is not Feature lifecycle or authorization for Git, external mutation, submit, release, or close.
 
-Feature `notes.md` must persist the Gate decisions and review baseline: `Gate 1 Decision`; `Gate 2 Decision` / `Gate 2 Reviewed At`; `Gate 2 Package Files`; `Gate 2 Agent-ready Tasks`; `Gate 2 Accepted Stories`; `Active Plan Scope`; `Gate 2 Plan Evidence`; `No-Plan Decision`; the Gate 2 `Feature Auto-Loop` decision value enabled/disabled; `Later Start Decision` / `Later Start Authorized At` / `Later Start Evidence`; and, when later evidence is assessed, a row under `## Gate Drift Assessments`. The Agent owns every field's completeness, meaning, timing, and consistency. Current top-level fields are authoritative; fenced examples and later history sections never supply current Gate evidence. The Gate 2 decision/Auto-Loop/time fields are the original durable review baseline, not the live execution-mode pointer. A package-only later start records the separate Later Start transition while preserving the original Gate 2 review baseline. Pause clears the current project `Gate Mode` and records the transition without rewriting either accepted baseline or later-start evidence; Resume requires a newly confirmed applicable mode.
+Feature `notes.md` must persist the Gate decisions and review baseline: `Gate 1 Decision`; the `Verification Profile`, `Profile Rationale`, `Profile Floor`, and `Escalation Triggers` fields with optional `Profile Recomputed At`; `Gate 2 Decision` / `Gate 2 Reviewed At`; `Gate 2 Package Files`; `Gate 2 Agent-ready Tasks`; `Gate 2 Accepted Stories`; `Active Plan Scope`; `Gate 2 Plan Evidence`; `No-Plan Decision`; the Gate 2 `Feature Auto-Loop` decision value enabled/disabled; `Later Start Decision` / `Later Start Authorized At` / `Later Start Evidence`; and, when later evidence is assessed, a row under `## Gate Drift Assessments`. The Agent owns every field's completeness, meaning, timing, and consistency. Current top-level fields are authoritative; fenced examples and later history sections never supply current Gate evidence. The Gate 2 decision/Auto-Loop/time fields are the original durable review baseline, not the live execution-mode pointer. A package-only later start records the separate Later Start transition while preserving the original Gate 2 review baseline. Pause clears the current project `Gate Mode` and records the transition without rewriting either accepted baseline or later-start evidence; Resume requires a newly confirmed applicable mode.
 
 Existing Feature notes without Later Start fields remain reader-compatible. Their absence means no recorded later-start transition and never authorizes execution; it does not invalidate a truthful historical Gate 2 approve-and-start record. Add the three fields only when the Agent next performs an authorized Gate evidence refresh or records a valid package-only later start. Never infer or backfill Human approval from history, urgency, or current mode.
 
-The Agent verifies the complete implementation package directly from current Feature artifacts. `Gate 2 Package Files` must inventory `spec.md`, `tasks.md`, `tests.md`, `plan.md` when present, optional `context.md` / `contracts.md`, and every current file under triggered `tasks/`, `tests/`, `plans/`, and `contracts/` directories. The Agent also verifies Story/Task/Plan bindings, required roots, risk, rollback, verification, placeholders, and consistency before presenting Gate 2. This review is semantic and evidence-backed; no digest or local Feature Gate Checker is part of the authorization path.
+The Agent verifies the complete implementation package directly from current Feature artifacts. `Gate 2 Package Files` must inventory `spec.md`, `tasks.md`, `tests.md`, `plan.md` when present, optional `context.md` / `contracts.md`, and every current file under triggered `tasks/`, `tests/`, `plans/`, and `contracts/` directories. The Agent also verifies the recorded Feature Verification Profile fields, Story/Task/Plan bindings, required roots, risk, rollback, verification, placeholders, and consistency before presenting Gate 2. This review is semantic and evidence-backed; no digest or local Feature Gate Checker is part of the authorization path.
 
 Human authorization provenance is an Agent responsibility. At Gate 2, the Agent records `accepted`, the exact Gate 2 decision, matching Gate 2 Auto-Loop state, and a timezone-aware review time only after the corresponding Human choice is present in the current reliable conversation or preserved Human decision evidence. A later-start transition separately records its decision, authorization time, and Human instruction evidence. After context loss or when decision provenance is genuinely uncertain, the Agent asks one blocking Human confirmation instead of manufacturing evidence.
 
@@ -795,7 +825,7 @@ Feature Auto-Loop means:
 Feature Auto-Loop = give one feature a bounded release lane.
 ```
 
-In this mode, the agent may continue through Analyze Consistency, Execute Agent-ready Tasks, Verify, Review, Drift Check, and Project Memory Update for the current accepted package. It must not skip Plan Gate before execution. It must stop before Bug Resolution Path decisions, Bug close/reopen, Feature creation/reopen, Requirement creation/lifecycle reconciliation, Feature Monthly Archive or rehydrate and their Batch Human Gates, branch creation, switching, deletion, push, or tag, creating or materially updating a project-local skill, executing a project-local skill without a current invocation grant, Delivery Contract creation and acceptance not separately named in Gate 2, breaking contract changes, subagent dispatch, external mutation, Submit / Integrate, commit, push, PR, merge, tag, release, publish, seal, and Pause / Close.
+In this mode, the agent may continue through Analyze Consistency, Execute Agent-ready Tasks, Verify, Review, Drift Check, and Project Memory Update for the current accepted package. It must not skip Plan Gate before execution. It must stop before a Feature Verification Profile downgrade after Gate 2 that lacks a recorded Human acceptance, Bug Resolution Path decisions, Bug close/reopen, Feature creation/reopen, Requirement creation/lifecycle reconciliation, Feature Monthly Archive or rehydrate and their Batch Human Gates, branch creation, switching, deletion, push, or tag, creating or materially updating a project-local skill, executing a project-local skill without a current invocation grant, Delivery Contract creation and acceptance not separately named in Gate 2, breaking contract changes, subagent dispatch, external mutation, Submit / Integrate, commit, push, PR, merge, tag, release, publish, seal, and Pause / Close.
 
 Within Review, Feature Auto-Loop may apply a `within-approved-boundary` Review Repair without a new Gate when the Feature Authority, accepted Product Slice/Acceptance, implementation boundary, risk, verification path, rollback, and current execution grant remain valid. This is use of existing authorization, not a new write grant; definition or implementation-boundary drift returns to Gate 1 or Gate 2, and any independently Human-gated action still stops.
 
@@ -845,6 +875,7 @@ Before Gate 2 may start Feature Auto-Loop, or before enabling Task Auto-Run, per
 - list remaining assumptions
 - list Human-gated tasks or decisions
 - list likely risk points
+- list the recorded Feature Verification Profile tier, rationale, applicable hard floor, and escalation triggers
 - list stop conditions
 - include these facts in the Gate 2 choice or Task Auto-Run request and obtain the corresponding explicit confirmation; do not add a third generic Feature Auto-Loop prompt after approve-and-start
 

@@ -1,5 +1,28 @@
 # Agent Loop Changelog
 
+## 1.5.7 — 2026-08-15
+
+_当前状态：开发中；在 `alpha/v1.5.7` 分支实施 Progressive Verification + Proof First 提案（`docs/proposal/v1.5.x/progressive-verification-proof-first.md`），尚未 Human Review、全量验证、tag 或发布。_
+
+### Progressive Verification（Feature Verification Profile）
+- 新增 Feature 通道内部验证策略 Feature Verification Profile（`focused | full | high-assurance`）：Gate 1 后 package 准备期记录档位、理由、硬下限与升级触发器，Work Breakdown / Test Design / Plan / Review 强度消费档位；不是 canonical stage、message intent、status、Mode、Gate 或 artifact tree，也不治理 Lightweight Change 与 Review Repair。
+- 硬下限：auth、permission、payment、数据删除、migration、public API、安全敏感代码、跨模块核心逻辑无论 Agent 自评不得低于 `high-assurance`；下限清单与 Lightweight Change Assessment 的 Feature hard trigger 同源维护。
+- 升降时间边界：Gate 2 接受前可凭新证据重算（含合理降档并记录 `Profile Recomputed At`）；执行期间只自动升档并留痕；Gate 2 后降档必须向人类展示理由并记录接受后生效。Auto-Loop 在无人类接受的 Gate 2 后降档前停止。
+- Gate 2 审查表的 Verification 决策行呈现 Profile 字段（档位、理由、硬下限、升级触发器）；`notes.md` 顶层新增 `Verification Profile` / `Profile Rationale` / `Profile Floor` / `Escalation Triggers` / `Profile Recomputed At` 字段并同步两个 notes 模板。
+- 档位命名在 `concepts.md` 显式消歧：与 Strict Mode（逐阶段控制）、Standard Product Definition（brief | standard）均不同义。
+
+### Proof First
+- RED 证据定义放宽为任意可信、可复核的 failure-matched 证明：新写测试、既有失败测试、复现脚本、API/UI 复现证据（DOM/断言/控制台文本事实，非像素主观判断）；不为制造 RED 形式化新建测试。TDD 方法名、helper 路由与触发条件不变。
+- 新 Feature 偏好 Behavior Proof First；显式 Bug 修复偏好 Reproduction First，原始复现即合法 RED。
+- GREEN、Required Verification、Existing Test Obligation、Bug Verification Matrix 回归/安全列全部不变；只有义务之外的额外自动化保护进入 Additional Regression Test advisory。
+
+### Test Oracle 增强
+- `templates/tests.md` 与 `document-templates.md` 的 Test Design 模板新增 Core Invariants 与 Test Oracle 两节（深度随 Profile 档位自适应，`focused` 可并入最小有效集，`high-assurance` 要求完整覆盖）；Oracle Quality Check 显式检查"测试通过但核心需求未被验证"的缺口。
+
+### 本版不包含
+- 不引入 `state.json` / `evidence.json` / `run.jsonl` 或任何第二套状态源；Markdown 保持单一状态源。Evidence-driven Runtime 保留为后续独立研究议题。
+- 不取消、不弱化 Review、Drift、Notes 的授权/范围/恢复证据职责。
+
 ## 1.5.6 — 2026-08-15
 
 _当前状态：正式稳定版；Human Review 已接受，Full-Worktree Git Fast Path 的 focused、全量 Shell/Python、机械检查及六域语义验证通过。正式 tag 为 `stable-v1.5.6`；默认安装通道 `main` 的同步仍保留独立 Human Gate。_

@@ -120,7 +120,7 @@ Use this as Gate 2 only after the complete package passes self-review and Analyz
 | Area | Agent Recommendation | Evidence | Human Decision Needed |
 |---|---|---|---|
 | Execution Boundary | accepted Story/Product Slice/Acceptance, Agent-ready work, interfaces/dependencies, excluded Human-gated work | complete package trace | accept / revise |
-| Verification | exact RED/GREEN, focused, integration, E2E/manual commands and substitute needs | tasks/tests/Plan | accept / named decision |
+| Verification | recorded Verification Profile (`focused | full | high-assurance`) with rationale, applicable hard floor, and escalation triggers; exact RED/GREEN, targeted, integration, E2E/manual commands and substitute needs | tests/Plan + notes Profile fields | accept / named decision |
 | Risk / Rollback | architecture/data/security/migration/dependency/external risk and bounded rollback | code context + Plan | accept / revise |
 | Execution Choice | package only or package and start; separately gated actions listed explicitly | notes + conditional candidates | choose / revise / pause |
 

@@ -1,8 +1,8 @@
 # Agent Loop
 
-**Current version:** 1.5.6 (stable)
+**Current version:** 1.5.7 (in development)
 
-Agent Loop 1.5.6 is the current formal stable release. Its stable tag is `stable-v1.5.6`; synchronizing this exact release commit to `main` remains a separate Human Gate.
+Agent Loop 1.5.7 is the current in-development version on `alpha/v1.5.7`, adding Progressive Verification (Feature Verification Profile) and Proof First. The current formal stable release remains 1.5.6; its stable tag is `stable-v1.5.6`.
 
 Agent Loop is a reusable controller skill for single-human, CLI-agent software development. It lets the Agent own project diagnosis, workflow sequencing, implementation, verification, and memory maintenance while the human keeps control of goals, product meaning, consequential decisions, and external actions.
 

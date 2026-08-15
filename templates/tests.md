@@ -12,6 +12,22 @@ AI reviews current top-level `Updated` / `Status`, Design Slice matrix `Status`,
 - [ ] Success criteria are measurable.
 - [ ] Edge cases are identified.
 
+## Core Invariants
+
+One row per stable invariant the Feature must preserve. Depth follows the recorded Feature Verification Profile tier: `focused` may merge this into the minimum effective set; `high-assurance` requires complete coverage with boundary cases.
+
+| Invariant ID | Invariant | Source (Spec / Requirement / ADR) | Verified By |
+|---|---|---|---|
+| INV-00 |  |  |  |
+
+## Test Oracle
+
+Each case names its expected result, the authority that expectation comes from, and an oracle quality check that it maps to an invariant or acceptance item with no pass-green-but-core-unverified gap (for example, testing only the positive path while the invariant forbids an actor-specific action).
+
+| Case | Expected (Oracle) | Oracle Source | Oracle Quality Check |
+|---|---|---|---|
+|  |  |  |  |
+
 ## Design Slice Verification Matrix
 
 | Design Slice ID | Required Verification | Test / Evidence | Status |

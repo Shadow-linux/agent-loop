@@ -1,0 +1,183 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+root=$(cd "$(dirname "$0")/.." && pwd)
+
+fail() {
+  printf 'FAIL: %s\n' "$1" >&2
+  exit 1
+}
+
+assert_file() {
+  [ -f "$root/$1" ] || fail "missing required file: $1"
+}
+
+assert_contains() {
+  local file=$1 text=$2
+  grep -Fq -- "$text" "$root/$file" || fail "$file missing Progressive Verification contract: $text"
+}
+
+assert_not_contains() {
+  local file=$1 text=$2
+  if grep -Fq -- "$text" "$root/$file"; then
+    fail "$file contains forbidden Progressive Verification behavior: $text"
+  fi
+}
+
+for file in \
+  SKILL.md \
+  references/runtime.md \
+  references/design.md \
+  references/stage-guides.md \
+  references/concepts.md \
+  references/document-templates.md \
+  references/validation-scenarios.md \
+  references/human-review-summary.md \
+  references/workflow-checklists.md \
+  templates/tests.md \
+  templates/notes.md \
+  templates/root-AGENTS.md; do
+  assert_file "$file"
+done
+
+# --- Feature Verification Profile: definition surfaces ---
+
+trio='focused | full | high-assurance'
+assert_contains references/runtime.md "$trio"
+assert_contains references/design.md "$trio"
+assert_contains references/concepts.md "$trio"
+assert_contains SKILL.md "$trio"
+assert_contains templates/root-AGENTS.md "$trio"
+
+assert_contains references/runtime.md '## Feature Verification Profile'
+assert_contains references/runtime.md 'not a canonical stage, message intent, status, Mode, Gate, Checker result, or artifact family'
+assert_contains references/runtime.md 'never governs Lightweight Change Lane or Review Repair Fast Path'
+
+assert_contains references/design.md '**Feature Verification Profile**'
+assert_contains references/design.md '**Proof First**'
+assert_contains references/design.md 'the recorded, auditable application of Adaptive Depth inside the Feature lane'
+
+assert_contains references/concepts.md 'they are not Modes, stages, statuses, lifecycles, or Gates, and they are distinct from Strict Mode (stage-by-stage control) and from Standard Product Definition depth (`brief | standard`)'
+
+# --- decision point and persistence ---
+
+assert_contains references/runtime.md 'first records the Feature Verification Profile with rationale and hard-floor check'
+assert_contains references/runtime.md '`Verification Profile`; `Profile Rationale`'
+assert_contains references/runtime.md '`Profile Floor` naming applicable hard-floor categories; `Escalation Triggers` listing the Feature-specific trigger subset'
+assert_contains references/runtime.md 'optional `Profile Recomputed At`'
+assert_contains references/runtime.md 'the recorded Feature Verification Profile fields, Story/Task/Plan bindings'
+
+assert_contains references/stage-guides.md 'Package preparation first records the Feature Verification Profile tier with rationale, hard-floor check, and escalation triggers'
+assert_contains references/stage-guides.md 'Gate 2 presents the Profile tier, rationale, applicable hard floor, and escalation triggers as part of the Verification decision row'
+assert_contains references/runtime.md 'list the recorded Feature Verification Profile tier, rationale, applicable hard floor, and escalation triggers'
+
+# --- hard floors ---
+
+assert_contains references/runtime.md 'can never be rated below `high-assurance`, regardless of Agent self-assessment'
+assert_contains references/runtime.md 'Keep this floor list aligned with the Lightweight Change Assessment Feature hard triggers: when either list changes, update both in the same change'
+
+# --- escalation and time-bounded movement ---
+
+assert_contains references/runtime.md 'Escalation during execution is automatic and must be recorded in Feature `notes.md`'
+assert_contains references/runtime.md 'auth/permission contact, public API or schema change, weak Test Oracle (which also redoes the affected Test Design part before continuing), and unknown regression failure raise the tier directly to `high-assurance`'
+assert_contains references/runtime.md 'the `## Profile Escalation Log` table'
+assert_contains references/runtime.md 'after Gate 2 acceptance, the Agent may only auto-escalate during execution, and any downgrade requires presenting the changed risk evidence to the Human'
+assert_contains references/runtime.md 'before Gate 2 acceptance, the Agent may recompute the Profile from new evidence, including a reasoned downgrade'
+assert_contains references/runtime.md 'It must stop before a Feature Verification Profile downgrade after Gate 2 that lacks a recorded Human acceptance'
+
+# --- notes.md template persistence (both template surfaces) ---
+
+for file in templates/notes.md references/document-templates.md; do
+  assert_contains "$file" 'Verification Profile: pending | focused | full | high-assurance'
+  assert_contains "$file" 'Profile Rationale: pending | <risk judgment citing concrete evidence>'
+  assert_contains "$file" 'Profile Floor: none | <applicable hard-floor categories>'
+  assert_contains "$file" 'Escalation Triggers: <Feature-specific trigger subset>'
+  assert_contains "$file" 'Profile Recomputed At: none | <ISO-8601, only before Gate 2 acceptance>'
+  assert_contains "$file" '## Profile Escalation Log'
+  assert_contains "$file" '| Trigger | Old Tier | New Tier | Evidence | Recorded At |'
+done
+
+# unified Gate 2 presentation wording; the divergent short form must not survive
+for file in references/runtime.md references/stage-guides.md references/validation-scenarios.md templates/root-AGENTS.md; do
+  assert_not_contains "$file" 'presents the Profile row'
+done
+
+# --- Gate 2 human-facing presentation ---
+
+assert_contains references/human-review-summary.md 'recorded Verification Profile (`focused | full | high-assurance`) with rationale, applicable hard floor, and escalation triggers'
+assert_contains references/workflow-checklists.md 'the recorded Feature Verification Profile fields with hard-floor check'
+assert_contains references/runtime.md 'Gate 2 presents the Profile fields in the Verification decision row'
+assert_contains templates/root-AGENTS.md 'Gate 2 shows the Profile fields in the Verification decision row'
+
+# --- Proof First ---
+
+assert_contains references/runtime.md 'Proof First widens only the RED evidence definition and never renames or bypasses TDD'
+assert_contains references/runtime.md 'an existing test'"'"'s failing run, a reproduction script with its failure output, or API/UI reproduction evidence'
+assert_contains references/runtime.md 'A new test is never manufactured solely to produce RED'
+assert_contains references/runtime.md 'explicit Bug repair prefers Reproduction First, where the original reproduction satisfies RED'
+assert_contains references/runtime.md 'Required Verification, Existing Test Obligations, and the Bug Verification Matrix regression/safety columns are unchanged'
+assert_contains SKILL.md 'Proof First widens only the RED evidence definition'
+
+# --- tests.md template sections ---
+
+assert_contains templates/tests.md '## Core Invariants'
+assert_contains templates/tests.md '| Invariant ID | Invariant | Source (Spec / Requirement / ADR) | Verified By |'
+assert_contains templates/tests.md '## Test Oracle'
+assert_contains templates/tests.md '| Case | Expected (Oracle) | Oracle Source | Oracle Quality Check |'
+assert_contains references/document-templates.md '## Core Invariants'
+assert_contains references/document-templates.md '## Test Oracle'
+assert_contains references/stage-guides.md 'Core Invariants table: one row per stable invariant'
+assert_contains references/stage-guides.md 'Test Oracle table: expected result per case with its oracle source and an oracle quality check'
+
+# --- root guidance blocks ---
+
+assert_contains templates/root-AGENTS.md 'Package preparation first records the Feature Verification Profile'
+assert_contains templates/root-AGENTS.md 'execution only auto-escalates, and a post-Gate 2 downgrade requires Human acceptance'
+assert_contains templates/root-AGENTS.md 'RED accepts any credible failure-matched proof'
+
+# --- rejected directions stay rejected ---
+
+for file in SKILL.md references/runtime.md references/design.md references/stage-guides.md references/concepts.md; do
+  assert_not_contains "$file" 'evidence.json'
+  assert_not_contains "$file" 'run.jsonl'
+  assert_not_contains "$file" 'FAST | NORMAL | STRICT'
+done
+
+# --- scenarios ---
+
+for scenario in \
+  'Profile Recorded After Gate 1' \
+  'Hard Floor Blocks Agent Downgrade' \
+  'Execution Auto-Escalates With Evidence' \
+  'Direct Escalation Triggers Jump To High Assurance' \
+  'Post-Gate-2 Downgrade Returns To Human' \
+  'Bug Reproduction Satisfies RED' \
+  'API Or UI Evidence Counts As RED' \
+  'Focused Profile Does Not Govern Other Lanes' \
+  'Profile Is Not A New Stage Or Mode'; do
+  assert_contains references/validation-scenarios.md "### $scenario"
+done
+assert_contains references/validation-scenarios.md '## 83. Progressive Verification + Proof First'
+
+# --- version sync ---
+
+assert_contains SKILL.md 'Version: 1.5.7'
+assert_contains plugin.json '"version": "1.5.7"'
+assert_contains README.md '**Current version:** 1.5.7'
+assert_contains Usage.md '**版本：** 1.5.7'
+assert_contains CHANGELOG.md '## 1.5.7 — 2026-08-15'
+
+ruby - "$root/templates/root-AGENTS.md" <<'RUBY'
+content = File.read(ARGV.fetch(0))
+blocks = content.scan(/<!-- agent-loop:managed-start section:([^ ]+) .*?block-version:([^ ]+) -->/)
+abort "FAIL: expected 13 root managed blocks, found #{blocks.length}" unless blocks.length == 13
+blocks.each do |section, revision|
+  expected = '1.5.7-20260815.1'
+  abort "FAIL: #{section} expected #{expected}, found #{revision}" unless revision == expected
+end
+abort 'FAIL: root AGENTS exceeds 190 lines' if content.lines.length > 190
+RUBY
+
+[ ! -d "$root/.agent-loop" ] || fail 'source repository must not contain target-project .agent-loop artifacts'
+
+printf 'PASS: Progressive Verification + Proof First contract is complete\n'

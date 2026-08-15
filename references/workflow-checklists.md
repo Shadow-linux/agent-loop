@@ -201,7 +201,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Read `STRUCTURAL_CURRENT | STRUCTURAL_CHANGED | STRUCTURAL_INVALID` explicitly. A zero exit for `STRUCTURAL_CHANGED` still requires Agent impact review; compare project-owned block meaning to its declared source instead of treating the checker as semantic proof.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.6-20260815.1`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.7-20260815.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -288,7 +288,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Read `STRUCTURAL_CURRENT | STRUCTURAL_CHANGED | STRUCTURAL_INVALID` explicitly. A zero exit for `STRUCTURAL_CHANGED` still requires Agent impact review; compare project-owned block meaning to its declared source instead of treating the checker as semantic proof.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.6-20260815.1`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.7-20260815.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -474,7 +474,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Prepare Work Breakdown, Delivery Contract assessment/exact candidate, Tests, E2E, technical code context, Plan, coverage, verification, risk, rollback, and consistency without separate stage prompts.
 - [ ] Stop package preparation only for a genuine human decision, incoherent package, or preserved hard gate; resolve fact-determined findings autonomously.
 - [ ] Set `Implementation Readiness: review-ready` only after package completeness, placeholder, trace, real-code-context, verification, risk, rollback, and consistency checks pass.
-- [ ] Before Gate 2, have AI verify complete Package Files coverage and record the inventory, initial Agent-ready task IDs, `Gate 2 Accepted Stories`, initial Active Plan Scope, matching Plan/No-Plan evidence, and `Implementation Readiness: review-ready`; leave review time pending until the reliable Human decision.
+- [ ] Before Gate 2, have AI verify complete Package Files coverage and record the inventory, initial Agent-ready task IDs, `Gate 2 Accepted Stories`, initial Active Plan Scope, matching Plan/No-Plan evidence, the recorded Feature Verification Profile fields with hard-floor check, and `Implementation Readiness: review-ready`; leave review time pending until the reliable Human decision.
 - [ ] Gate 2 `Implementation Readiness Review` presents one compact decision table for Execution Boundary, Verification, Risk/Rollback, and execution choice; keep the complete package available and separately name every conditional action.
 - [ ] Gate 2 choices are `Approve package and start implementation`, `Approve package only; do not implement yet`, `Revise package`, or `Pause`.
 - [ ] `Approve package only` sets readiness accepted but never authorizes execution.

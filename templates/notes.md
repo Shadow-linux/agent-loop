@@ -5,6 +5,11 @@ Updated: YYYY-MM-DD
 Status: active | blocked | paused | closed
 Implementation Readiness: preparing | review-ready | accepted
 Gate 1 Decision: pending | accepted | revise | pause
+Verification Profile: pending | focused | full | high-assurance
+Profile Rationale: pending | <risk judgment citing concrete evidence>
+Profile Floor: none | <applicable hard-floor categories>
+Escalation Triggers: <Feature-specific trigger subset>
+Profile Recomputed At: none | <ISO-8601, only before Gate 2 acceptance>
 Gate 2 Decision: pending | package-only | approve-and-start | revise | pause
 Gate 2 Package Files: pending | <comma-separated Feature-relative paths>
 Gate 2 Agent-ready Tasks: pending | <comma-separated task IDs>
@@ -26,6 +31,13 @@ The Gate records preserve review evidence, and AI owns their completeness and me
 
 | Feature ID | Gate | Classification | Changed Areas | Evidence | Reason | Assessed At |
 |---|---|---|---|---|---|---|
+
+## Profile Escalation Log
+
+| Trigger | Old Tier | New Tier | Evidence | Recorded At |
+|---|---|---|---|---|
+
+Add one row per automatic execution-time escalation and per Human-accepted post-Gate 2 downgrade. Direct triggers (auth/permission contact, public API/schema change, weak Test Oracle, unknown regression failure) always land on `high-assurance`.
 
 Add a row only after AI Semantic Review. `Classification` is `within-approved-boundary | feature-definition-change | implementation-boundary-change | unresolved`. Bind every row to this Feature directory name, Gate, concrete changed areas, direct evidence, reason, and a timezone-aware ISO-8601 time. Product or execution-boundary changes still return to their owning Human Gate; unresolved meaning asks one blocking Human question.
 

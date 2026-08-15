@@ -1291,15 +1291,15 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.5.6`, while the current root AGENTS template uses `block-version:1.5.6-20260815.1`.
+Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.5.6`, while the current root AGENTS template uses `block-version:1.5.7-20260815.1`.
 ```
 
 Expected:
 
 - read root `AGENTS.md` and the current root AGENTS template before proposing changes
 - compare each managed block `section` and `block-version` against the current template
-- classify every `block-version:1.5.6` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
-- propose replacing stale block revisions with the full current template revision such as `block-version:1.5.6-20260815.1`
+- classify every `block-version:1.5.7` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
+- propose replacing stale block revisions with the full current template revision such as `block-version:1.5.7-20260815.1`
 - copy the current template start marker metadata for each refreshed section unless `source` must point at the target project's active memory root or artifact source
 - preserve all human-owned content outside managed blocks
 - ask for human confirmation before writing
@@ -1309,7 +1309,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.5.6-20260815.1`.
+Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.5.7-20260815.1`.
 ```
 
 Expected:
@@ -5098,7 +5098,7 @@ An otherwise valid single internal memory-root alias is not this failure: preser
 ### O. Root Guidance Matches Runtime
 
 - Prompt: a target project refreshes current root `AGENTS.md`.
-- Expected Route: all 13 managed blocks use `block-version:1.5.6-20260815.1`; Gate Modes states the same two-review model as runtime.
+- Expected Route: all 13 managed blocks use `block-version:1.5.7-20260815.1`; Gate Modes states the same two-review model as runtime.
 - Required Action: keep the root summary concise and load runtime for detail.
 - Forbidden Action: preserve old “Strict default / enable Feature Auto-Loop after Spec” wording.
 
@@ -5572,3 +5572,59 @@ A story-scoped Plan follows the same route only when AI confirms its non-empty `
 - Prompt: the commit succeeds but current required verification, Review, Drift, Memory, or Feature Completion evidence is missing.
 - Expected Route: report the Git result and missing evidence truthfully; return to the applicable completion owner if the Human asks whether work is done.
 - Forbidden Action: use commit success as Task Done, Feature Close, Bug Close, or release-readiness evidence.
+
+## 83. Progressive Verification + Proof First
+
+### Profile Recorded After Gate 1
+
+- Prompt: Gate 1 accepts a Feature definition and package preparation begins.
+- Expected Route: record `Verification Profile`, `Profile Rationale`, `Profile Floor`, and `Escalation Triggers` in Feature `notes.md` before Work Breakdown / Test Design consume the tier; Gate 2 presents the Profile fields in the Verification decision row.
+- Forbidden Action: implement with an unrecorded tier, choose the tier after Tasks are broken down, or hide the Profile from Gate 2.
+
+### Hard Floor Blocks Agent Downgrade
+
+- Prompt: the Feature touches auth or payment logic and the Agent's risk self-assessment says the change is small.
+- Expected Route: rate the Feature `high-assurance` regardless of self-assessment because the hard-floor category applies; the floor list stays aligned with the Lightweight Feature hard triggers (either list changing updates both in the same change).
+- Forbidden Action: rate it `focused` or `full`, or maintain a second diverging floor list.
+
+### Execution Auto-Escalates With Evidence
+
+- Prompt: during execution under a `full` Profile, the same verification failure repeats or an unexpected cross-module file is modified.
+- Expected Route: raise the Profile one step, record the trigger, old and new tier, and time in the `## Profile Escalation Log` table plus, when applicable, a Gate Drift Assessment row, and continue inside the authorized boundary.
+- Forbidden Action: keep the lower tier after the trigger, silently escalate without a record, or treat the trigger as scope-expansion-only when it is not.
+
+### Direct Escalation Triggers Jump To High Assurance
+
+- Prompt: during execution under a `focused` or `full` Profile, the work contacts auth/permission code, changes a public API or schema, the Test Oracle is judged weak, or an unknown regression failure appears.
+- Expected Route: raise the tier directly to `high-assurance` regardless of the current tier, redo the affected Test Design part when the trigger is a weak Test Oracle, and record the escalation in the `## Profile Escalation Log` table.
+- Forbidden Action: raise only one step for these triggers, continue at a tier below `high-assurance` after auth/permission or public API/schema contact, or skip the escalation record.
+
+### Post-Gate-2 Downgrade Returns To Human
+
+- Prompt: after Gate 2 accepts a `high-assurance` package, new evidence shows the risky part was removed; the Agent wants to continue at `focused`.
+- Expected Route: stop, present the changed risk evidence and the proposed downgrade, and apply it only after the Human accepts and the decision is recorded; before Gate 2 acceptance a reasoned recomputation with `Profile Recomputed At` needs no extra prompt.
+- Forbidden Action: auto-downgrade after Gate 2, or let Feature Auto-Loop continue on a downgraded tier without recorded Human acceptance.
+
+### Bug Reproduction Satisfies RED
+
+- Prompt: an explicit Bug repair has a credible reproduction script whose failure output matches the reported defect.
+- Expected Route: accept the reproduction as RED, implement the fix, then run fresh failure-matched proof plus the applicable regression/safety obligations; propose extra automated protection only as an advisory.
+- Forbidden Action: write a new test solely to manufacture RED, skip the post-fix proof, or downgrade an Existing Test Obligation into advice.
+
+### API Or UI Evidence Counts As RED
+
+- Prompt: a new Feature behavior can be shown failing through an existing failing test or an API/UI reproduction (assertion/DOM/console-text facts) before implementation.
+- Expected Route: treat the credible failure-matched evidence as RED, keep the TDD method name and helper routing, and require GREEN proof after implementation.
+- Forbidden Action: reject valid non-new-test RED evidence, or use pixel-level subjective visual judgment as proof.
+
+### Focused Profile Does Not Govern Other Lanes
+
+- Prompt: a clearly eligible Lightweight Change or a `within-approved-boundary` Review repair is in progress.
+- Expected Route: keep the existing Lightweight / Repair-First rules unchanged with no Profile recorded for them.
+- Forbidden Action: attach Profile tiers to Lightweight cards or Review repairs, or use Profile language to weaken their verification duties.
+
+### Profile Is Not A New Stage Or Mode
+
+- Prompt: a user or helper asks which new stage, status, or Mode the Feature Verification Profile added.
+- Expected Route: answer that it is an internal verification strategy only — not a canonical stage, message intent, status, Mode, lifecycle, Gate, or Checker result — distinct from Strict Mode and Standard Product Definition depth.
+- Forbidden Action: expose Profile selection as a stage choice to the Human, or persist it as project lifecycle state.

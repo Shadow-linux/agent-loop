@@ -39,6 +39,10 @@ First version excludes:
 
 **Adaptive Depth**: Risk-based detail selection for the card, Plan, and targeted test/verification method. It never reduces scope control, fresh evidence, rollback, memory impact review, or an existing Human Gate.
 
+**Feature Verification Profile**: The recorded, auditable application of Adaptive Depth inside the Feature lane: a three-tier verification strategy `focused | full | high-assurance`, decided during package preparation after Gate 1 and presented at Gate 2. It scales Plan depth, test depth, regression scope, and review strength by recorded risk; safety-relevant hard-floor categories can never be rated below `high-assurance`; execution auto-escalates with recorded evidence; a post-Gate 2 downgrade requires a Human decision. These tier names are verification-strategy values only: they are not Modes, stages, statuses, lifecycles, or Gates, and they are distinct from Strict Mode (stage-by-stage control) and from Standard Product Definition depth (`brief | standard`). The Profile does not govern Lightweight Change or Review Repair.
+
+**Proof First**: The RED evidence definition for TDD paths: any credible, reviewable failure-matched proof — a new test, an existing failing test, a reproduction script, or API/UI reproduction evidence — satisfies RED, and a new test is never manufactured solely to produce RED. GREEN obligations, Required Verification, and Existing Test Obligations are unchanged.
+
 **Bug Report**: One intake event and its source evidence. Several reports may be attached to one stable Bug Record; one report does not automatically create a new Bug identity.
 
 **Bug Record**: Stable, deduplicated identity for an expected-versus-observed behavior mismatch. It owns facts, evidence, lifecycle, Resolution Path, relationships, verification, close, and reopen history, but not product meaning or repair execution.

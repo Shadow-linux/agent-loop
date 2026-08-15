@@ -5,7 +5,7 @@ description: Use when starting, continuing, resuming, structuring, testing, impl
 
 # Agent Loop
 
-Version: 1.5.6
+Version: 1.5.7
 
 Run a single-human, CLI-agent development loop from goal intake to verified close. This skill is a controller: it decides the current stage, loads the right reference, produces or updates `agent-loop` artifacts, and stops at human gates.
 
@@ -339,7 +339,8 @@ If the local directory is only a remote-project entry point, create only thin lo
 - Human confirmations should use table-first Human Review Summary by default; full artifacts remain the source of truth. When multiple documents, facts, or long-term memory entries will change, use Batch Human Review.
 - Root `AGENTS.md` / `CLAUDE.md` guidance must tell future agents to own the workflow: classify the stage, recommend one next action, propose missing artifacts, and keep responsibility for sequencing, diagnosis, verification, drift checks, and project-memory updates.
 - Root guidance must also explain the two Feature construction reviews: Gate 1 authorizes package preparation only; Gate 2 may accept documents only or accept and start Feature Auto-Loop. Task Auto-Run must run Analyze Consistency before completing one accepted task/story plan through TDD, implementation, verification, bug fixing, review, drift, status update, and final report.
-- TDD remains default for initial Feature execution, explicit Bug repair, Human-requested TDD, and accepted Plans that require RED/GREEN.
+- TDD remains default for initial Feature execution, explicit Bug repair, Human-requested TDD, and accepted Plans that require RED/GREEN. Proof First widens only the RED evidence definition: a credible failure-matched proof from a new test, an existing failing test, a reproduction script, or API/UI reproduction evidence satisfies RED, and no test is manufactured solely for RED; GREEN, Required Verification, and Existing Test Obligations are unchanged.
+- Normal Feature construction records a Feature Verification Profile (`focused | full | high-assurance`) with rationale, hard floors, and escalation triggers during package preparation after Gate 1; Gate 2 presents it, execution only auto-escalates with recorded evidence, and a post-Gate 2 downgrade requires Human acceptance. The Profile is an internal verification strategy, not a stage, status, Mode, or Gate, and never governs Lightweight Change or Review Repair.
 - A `within-approved-boundary` Review repair and a `clearly eligible` Lightweight Change default to Repair-First Verification: modify, verify fresh, review scope/risk/rollback, then present a specific Regression Test Advisory.
 - Additional Regression Test advice never replaces Required Verification or an Existing Test Obligation.
 - No completion claim without fresh verification evidence.

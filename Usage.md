@@ -1,8 +1,8 @@
 # Agent Loop Usage
 
-**版本：** 1.5.6（正式稳定版）
+**版本：** 1.5.7（开发中）
 
-Agent Loop 1.5.6 已转为正式稳定版，稳定 tag 为 `stable-v1.5.6`。将该精确 release commit 同步到 `main` 仍保留独立 Human Gate。
+Agent Loop 1.5.7 正在 `alpha/v1.5.7` 分支开发，新增 Progressive Verification（Feature Verification Profile）与 Proof First。当前正式稳定版仍为 1.5.6，稳定 tag 为 `stable-v1.5.6`。
 
 这是一份给人类使用的触发指南。你不需要记住 Agent Loop 的阶段名；只要说明目标、边界和你希望 Agent 自主推进到哪里，Agent 负责判断项目状态、选择流程、维护产物并在真正的 Human Gate 停下。
 
@@ -168,8 +168,8 @@ Agent 会检查核心流程完整性，并按需要使用架构/边界图、ASCI
 这些说法都会路由到人类文档，而不是凭 Agent 记忆回答：
 
 ```text
-1.5.6 更新了什么？
-当前 1.5.6 使用的是什么流程？
+1.5.7 更新了什么？
+当前 1.5.7 使用的是什么流程？
 和 1.2.2 比有什么变化？
 现在 agent-loop 怎么用？
 ```
