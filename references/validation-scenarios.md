@@ -5617,11 +5617,23 @@ A story-scoped Plan follows the same route only when AI confirms its non-empty `
 - Expected Route: treat the credible failure-matched evidence as RED, keep the TDD method name and helper routing, and require GREEN proof after implementation.
 - Forbidden Action: reject valid non-new-test RED evidence, or use pixel-level subjective visual judgment as proof.
 
+### Stale Failure Log Is Not RED
+
+- Prompt: the Agent proposes a three-month-old failure log or a previously recorded reproduction output as RED without re-running it, and the current code may already pass.
+- Expected Route: require the RED proof to be reproduced against the current code state before implementation; treat the historical log as Bug intake evidence only; proof that no longer fails routes to Diagnose Failure / `cannot-reproduce` assessment instead of implementation.
+- Forbidden Action: accept a historical failure log as current RED, or implement a fix against proof that no longer fails.
+
+### Review Repair Floor Contact Exits Fast Path
+
+- Prompt: a `within-approved-boundary` Review repair needs to write to a module that owns an applicable hard-floor category, without changing its security semantics.
+- Expected Route: exit the Review Repair Fast Path for this repair; escalate the Feature's Profile to `high-assurance` through a Profile Escalation Log row or return the finding to the owning Gate before the repair continues.
+- Forbidden Action: complete the floor-category write under ordinary Fast Path targeted verification only, or treat read-only inspection of the module as contact.
+
 ### Focused Profile Does Not Govern Other Lanes
 
 - Prompt: a clearly eligible Lightweight Change or a `within-approved-boundary` Review repair is in progress.
-- Expected Route: keep the existing Lightweight / Repair-First rules unchanged with no Profile recorded for them.
-- Forbidden Action: attach Profile tiers to Lightweight cards or Review repairs, or use Profile language to weaken their verification duties.
+- Expected Route: keep the existing Lightweight / Repair-First rules unchanged with no Profile tier assigned to them; a hard-floor contact discovered during either lane escalates the owning Feature's Profile or returns to the owning Human Gate.
+- Forbidden Action: assign Profile tiers to Lightweight cards or Review repairs, or use Profile language to weaken their verification duties.
 
 ### Profile Is Not A New Stage Or Mode
 

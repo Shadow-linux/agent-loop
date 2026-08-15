@@ -1466,6 +1466,8 @@ For a Review finding, first classify the finding against current product, Featur
 
 This fast path can write only inside the current accepted execution boundary and current authorization. A reviewer calling a local implementation issue a “bug” does not itself create Bug Management intent; explicit Bug recording, tracking, triage, or resolution intent still wins and routes to Bug Management.
 
+A repair that contacts an applicable Feature Verification Profile hard-floor category is not an ordinary within-boundary correction: it exits the Fast Path, and the Feature's Profile escalates to `high-assurance` through a Profile Escalation Log row — or the finding returns to the owning Gate — before the repair continues. The Profile assigns no tier to Review Repair itself; this exit only keeps floor-category contact from receiving weaker verification inside Review than the same contact would receive inside Execute.
+
 If product meaning, Feature definition, implementation boundary, public interface, ADR, Contract, security, data, permission, dependency, migration, architecture, authorization, rollback, or reliable verification changes, return to Gate 1, Gate 2, Decision & Design, Delivery Contract, Bug Management, Diagnose Failure, or the applicable Human Gate.
 
 Check:

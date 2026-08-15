@@ -116,6 +116,22 @@ assert_contains references/human-review-summary.md 'recorded Verification Profil
 assert_contains references/workflow-checklists.md 'the recorded Feature Verification Profile fields with hard-floor check'
 assert_contains references/runtime.md 'Gate 2 presents the Profile fields in the Verification decision row'
 assert_contains templates/root-AGENTS.md 'Gate 2 shows the Profile fields in the Verification decision row'
+assert_contains templates/root-AGENTS.md 'a post-Gate 2 downgrade requires presented changed-risk evidence and Human acceptance'
+assert_contains SKILL.md 'a post-Gate 2 downgrade requires presented changed-risk evidence plus recorded Human acceptance'
+assert_contains SKILL.md 'Hard floors are never lowered by human urgency, acceptance, or responsibility claims'
+
+# --- pressure-test hardening (A1/A3/A4/A5/A7/A9/A10) ---
+
+assert_contains references/runtime.md 'Floor contact is operational, not impressionistic: contact means any write to, or a new runtime dependency on, a module, file, or configuration that owns a hard-floor category; read-only inspection never counts as contact'
+assert_contains references/runtime.md 'Ambiguous contact is treated as contact'
+assert_contains references/runtime.md 'Human acceptance, urgency, or responsibility claims never rate work below an applicable hard floor; only a changed floor-category fact'
+assert_contains references/runtime.md 'Multiple simultaneous triggers record one Profile Escalation Log row per trigger and converge on the highest resulting tier'
+assert_contains references/runtime.md 'A `high-assurance` Feature allows No-Plan Decisions only for documentation-only tasks'
+assert_contains references/runtime.md 'the Profile recording itself remains an Agent-owned automatic record presented at Gate 2'
+assert_contains references/runtime.md 'RED proof must be reproduced against the current code state before implementation'
+assert_contains references/runtime.md 'a historical failure log alone is Bug intake evidence, not RED'
+assert_contains references/design.md 'RED proof must be re-executed against the current code state before implementation'
+assert_contains references/stage-guides.md 'A repair that contacts an applicable Feature Verification Profile hard-floor category is not an ordinary within-boundary correction: it exits the Fast Path'
 
 # --- Proof First ---
 
@@ -140,7 +156,6 @@ assert_contains references/stage-guides.md 'Test Oracle table: expected result p
 # --- root guidance blocks ---
 
 assert_contains templates/root-AGENTS.md 'Package preparation first records the Feature Verification Profile'
-assert_contains templates/root-AGENTS.md 'execution only auto-escalates, and a post-Gate 2 downgrade requires Human acceptance'
 assert_contains templates/root-AGENTS.md 'RED accepts any credible failure-matched proof'
 
 # --- rejected directions stay rejected ---
@@ -161,6 +176,8 @@ for scenario in \
   'Post-Gate-2 Downgrade Returns To Human' \
   'Bug Reproduction Satisfies RED' \
   'API Or UI Evidence Counts As RED' \
+  'Stale Failure Log Is Not RED' \
+  'Review Repair Floor Contact Exits Fast Path' \
   'Focused Profile Does Not Govern Other Lanes' \
   'Profile Is Not A New Stage Or Mode'; do
   assert_contains references/validation-scenarios.md "### $scenario"

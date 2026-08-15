@@ -22,6 +22,14 @@ _当前状态：开发中；在 `alpha/v1.5.7` 分支实施 Progressive Verifica
 ### Test Oracle 增强
 - `templates/tests.md` 与 `document-templates.md` 的 Test Design 模板新增 Core Invariants 与 Test Oracle 两节（深度随 Profile 档位自适应，`focused` 可并入最小有效集，`high-assurance` 要求完整覆盖）；Oracle Quality Check 显式检查"测试通过但核心需求未被验证"的缺口。
 
+### 压测加固（对抗性子 Agent 压测后修复）
+- 硬下限接触改为可操作定义：写入或新增运行时依赖即 contact，只读检查不算；跨模块核心逻辑与歧义接触（视为接触）一并定义；人类接受/紧迫/担责措辞不得压低下限，只有 floor 类目事实变化才可重算。
+- RED 新鲜度：RED 证据必须在实现前对当前代码状态重新执行；历史失败日志仅为 Bug intake 证据，不再失败的证据使 RED 失效并转 Diagnose Failure / `cannot-reproduce` 评估。
+- Review Repair Fast Path 出口：接触硬下限类目的修复退出 Fast Path，Feature Profile 经 Escalation Log 升至 `high-assurance` 或回到所属 Gate，堵住"接触级安全修改在 Review 内弱于 Execute"的盲区。
+- 多触发器同时命中按每触发器一行记录并收敛至最高档；`high-assurance` 档再触发仅记录不升档。
+- `high-assurance` Feature 的 No-Plan 仅限文档型任务；Strict Mode 下 Profile 记录仍为 Agent 自动记账并经 Gate 2 呈现。
+- SKILL.md / root-AGENTS.md 的降档摘要补回"呈现变化后的风险证据"前置条件，防社工程引用缩写版。
+
 ### 本版不包含
 - 不引入 `state.json` / `evidence.json` / `run.jsonl` 或任何第二套状态源；Markdown 保持单一状态源。Evidence-driven Runtime 保留为后续独立研究议题。
 - 不取消、不弱化 Review、Drift、Notes 的授权/范围/恢复证据职责。
