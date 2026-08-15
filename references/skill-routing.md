@@ -25,6 +25,8 @@ Lightweight Change Lane does not enter mandatory Plan Gate / Plan or Execute Tas
 
 Review Repair Fast Path and Lightweight Change Lane do not invoke the TDD helper by default. The Review helper remains active for Review ownership, while the controller selects fresh failure-matched verification. Card persistence does not enter Plan Gate or make `writing-plans` mandatory. Do not add Lightweight Change Lane or Review Repair Fast Path to the mandatory stage table. Promotion to initial Feature execution or explicit Bug repair restores normal `writing-plans` and `test-driven-development` helper resolution before Feature execution.
 
+Proof First applies inside the loaded TDD helper as well. When a helper treats RED as authoring a new test by default, agent-loop's RED evidence definition controls: an existing failing test's failing run, a reproduction script with its failure output, or API/UI reproduction evidence is a valid RED, and a new test is never manufactured solely to produce RED. Helper defaults never override the controller's artifact, gate, or evidence rules.
+
 For each mandatory stage:
 
 1. Identify the required helper from the table below.

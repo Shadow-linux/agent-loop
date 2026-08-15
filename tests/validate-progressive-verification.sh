@@ -71,6 +71,14 @@ assert_contains references/stage-guides.md 'Package preparation first records th
 assert_contains references/stage-guides.md 'Gate 2 presents the Profile tier, rationale, applicable hard floor, and escalation triggers as part of the Verification decision row'
 assert_contains references/runtime.md 'list the recorded Feature Verification Profile tier, rationale, applicable hard floor, and escalation triggers'
 
+# --- execution/verification stage coverage and helper boundary ---
+
+assert_contains references/stage-guides.md 'during execution, watch the recorded Feature Verification Profile escalation triggers'
+assert_contains references/stage-guides.md 'during verification, recheck the recorded Feature Verification Profile escalation triggers'
+assert_contains references/stage-guides.md 'a reproduction script with failure output, or API/UI reproduction evidence, and a new test is never manufactured solely for RED'
+assert_contains references/skill-routing.md 'Proof First applies inside the loaded TDD helper as well'
+assert_contains references/skill-routing.md "Helper defaults never override the controller's artifact, gate, or evidence rules"
+
 # --- hard floors ---
 
 assert_contains references/runtime.md 'can never be rated below `high-assurance`, regardless of Agent self-assessment'

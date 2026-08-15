@@ -10,6 +10,9 @@ _当前状态：开发中；在 `alpha/v1.5.7` 分支实施 Progressive Verifica
 - 升降时间边界：Gate 2 接受前可凭新证据重算（含合理降档并记录 `Profile Recomputed At`）；执行期间只自动升档并留痕；Gate 2 后降档必须向人类展示理由并记录接受后生效。Auto-Loop 在无人类接受的 Gate 2 后降档前停止。
 - Gate 2 审查表的 Verification 决策行呈现 Profile 字段（档位、理由、硬下限、升级触发器）；`notes.md` 顶层新增 `Verification Profile` / `Profile Rationale` / `Profile Floor` / `Escalation Triggers` / `Profile Recomputed At` 字段并同步两个 notes 模板。
 - 档位命名在 `concepts.md` 显式消歧：与 Strict Mode（逐阶段控制）、Standard Product Definition（brief | standard）均不同义。
+- Execute Task / Story 与 Verify 阶段指南复述升级触发器检查与 `Profile Escalation Log` 双记录义务（含与 Gate Drift Assessment 同时记录的易错提示）；Execute 段同步 Proof First 的 RED 证据适用。
+- `skill-routing.md` 明确 Proof First 的 RED 证据定义对已加载的 TDD helper 同样生效，helper 默认不得强制为 RED 新写测试。
+- `examples/` 维持历史快照惯例，不随模板演进回填（与 v1.5.1 双 Gate 字段以来的处理一致）。
 
 ### Proof First
 - RED 证据定义放宽为任意可信、可复核的 failure-matched 证明：新写测试、既有失败测试、复现脚本、API/UI 复现证据（DOM/断言/控制台文本事实，非像素主观判断）；不为制造 RED 形式化新建测试。TDD 方法名、helper 路由与触发条件不变。
