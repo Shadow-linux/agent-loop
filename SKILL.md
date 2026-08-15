@@ -5,7 +5,7 @@ description: Use when starting, continuing, resuming, structuring, testing, impl
 
 # Agent Loop
 
-Version: 1.5.5
+Version: 1.5.6
 
 Run a single-human, CLI-agent development loop from goal intake to verified close. This skill is a controller: it decides the current stage, loads the right reference, produces or updates `agent-loop` artifacts, and stops at human gates.
 
@@ -343,7 +343,7 @@ If the local directory is only a remote-project entry point, create only thin lo
 - A `within-approved-boundary` Review repair and a `clearly eligible` Lightweight Change default to Repair-First Verification: modify, verify fresh, review scope/risk/rollback, then present a specific Regression Test Advisory.
 - Additional Regression Test advice never replaces Required Verification or an Existing Test Obligation.
 - No completion claim without fresh verification evidence.
-- Submit requires fresh verification, drift check, diff review, human confirmation, and a recorded submit note.
+- Normal Submit readiness requires fresh verification, drift check, diff review, human confirmation, and a recorded submit note. An explicit commit or commit-and-push request may instead use the Full-Worktree Git Fast Path: one lightweight confirmation of the entire-worktree summary and Agent-proposed commit message, no tests or code-quality Review merely for Git, then `git add -A`; this packaging path cannot make a completion or release-readiness claim.
 - The agent must proactively run Feature Completion Check after likely completion, before starting a new feature with an active feature present, and on resume when an active feature may already be done.
 - Feature Close Review is required before recommending or performing close: feature-level Spec Review must confirm product/spec/tasks/tests/acceptance are satisfied; feature-level Standards Review is required for large projects, broad diffs, directory or durable boundary changes, security/data changes, architecture changes, or human request.
 - Close requires verification, Feature Close Review, drift check, project memory update, optional submit status, and explicit human confirmation.
@@ -385,7 +385,7 @@ Stop when:
 - TDD cannot be followed on an initial Feature, explicit Bug repair, Human-requested TDD, or accepted RED/GREEN Plan; or Required Verification repeatedly fails or cannot reliably prove the current result
 - a canonical Agent Loop checker failure has not completed exact rerun and Agent Checker Rescue Level 1/2/3 classification; a suspected executable defect lacks the exact Temporary Checker Repair Review before patch writes; or a one-Gate substitute is being reused after its exact checker/command/target/input/authority/evidence/safety/authorization scope expires
 - review finds product meaning, Feature definition, implementation boundary, public interface, architecture, security, data, permission, authorization, rollback, or reliable-verification drift; a `within-approved-boundary` implementation correction stays inside Review Repair Fast Path
-- unrelated dirty work blocks progress
+- unrelated dirty work blocks normal scoped progress; an explicit Full-Worktree Git Fast Path includes and discloses the entire dirty worktree after Human confirmation rather than excluding it
 - subagents are needed but not yet approved
 - submit, commit, PR, merge, release, publish, seal, pause, or close is requested
 - the work would require first-version exclusions

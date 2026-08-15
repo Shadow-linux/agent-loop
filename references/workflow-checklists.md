@@ -201,7 +201,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Read `STRUCTURAL_CURRENT | STRUCTURAL_CHANGED | STRUCTURAL_INVALID` explicitly. A zero exit for `STRUCTURAL_CHANGED` still requires Agent impact review; compare project-owned block meaning to its declared source instead of treating the checker as semantic proof.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.5-20260812.2`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.6-20260815.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -288,7 +288,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Read `STRUCTURAL_CURRENT | STRUCTURAL_CHANGED | STRUCTURAL_INVALID` explicitly. A zero exit for `STRUCTURAL_CHANGED` still requires Agent impact review; compare project-owned block meaning to its declared source instead of treating the checker as semantic proof.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.5-20260812.2`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.6-20260815.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -885,6 +885,8 @@ Checklist:
 
 ## Submit / Integrate
 
+The following checklist is normal-submit only; skip it entirely for Full-Worktree Git Fast Path.
+
 - [ ] Load `submit-and-integrate.md`.
 - [ ] Run Stage Helper Capability Scan before fallback submit/integrate preparation.
 - [ ] If Superpowers `finishing-a-development-branch` or another finishing/branch helper is available, use it through `external-skill-adapters.md`.
@@ -916,6 +918,19 @@ Checklist:
 - [ ] Only perform the exact commit, push, PR, merge, tag, release, publish, seal, or cleanup action after its explicit Human Gate decision.
 - [ ] Record submit/integrate result in `notes.md`.
 - [ ] Apply the ordered exit decision: prepare-only not performed -> Pause; explicitly skipped -> Feature Completion Check if done or next task/story; performed and done -> Feature Completion Check; performed with work remaining -> next task/story; failed/blocked -> one unblock stage.
+
+## Full-Worktree Git Fast Path
+
+- [ ] Confirm the Human explicitly requested `commit` or `commit and push`; a readiness question stays on normal Submit.
+- [ ] Inspect repository, branch, HEAD, unresolved Git operation/conflict state, and the entire staged/unstaged/untracked/deleted worktree.
+- [ ] Present one lightweight Commit Confirmation with the complete worktree file/change summary, proposed commit message, verification truth, and exact remote/ref when Push was requested.
+- [ ] Do not run tests or perform code/quality Review, Feature Review, verification Review, Drift Review, or Completion Review merely for this Git action; ask no second confirmation.
+- [ ] Do not exclude, restore, clean, stash, split, or discard content.
+- [ ] State `not run for this Git action; no completion or release-readiness claim` unless the Human supplied an exact verification precondition.
+- [ ] After confirmation, run `git add -A`, confirm the index represents the entire worktree, and commit immediately with the confirmed message.
+- [ ] Plain `commit` authorizes Commit only; `commit and push` authorizes both in order. Use the unique upstream; if absent/ambiguous, finish Commit and ask only for Push destination.
+- [ ] Preserve the worktree/index and report facts after any conflict, ambiguity, policy stop, index mismatch, commit failure, or push failure.
+- [ ] Do not use Git packaging permission as evidence for fixed, verified, done, completed, closed, or release-ready claims.
 
 ## Feature Completion Check
 

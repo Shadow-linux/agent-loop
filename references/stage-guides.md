@@ -1594,7 +1594,7 @@ Exit:
 
 ## Submit / Integrate
 
-Entry: after Verify, Review, Drift Check, and Project Memory Update when human asks to submit, commit, prepare PR text, or package work for integration.
+Entry: after Verify, Review, Drift Check, and Project Memory Update when human asks for normal submit readiness, PR/merge/release preparation, or integration packaging. An explicit `commit` or `commit and push` request may enter the internal Full-Worktree Git Fast Path without first manufacturing those quality results, provided the Agent makes no completion or release-readiness claim.
 
 Load:
 
@@ -1607,10 +1607,10 @@ Rules:
 - before fallback submit/integrate preparation, run Stage Helper Capability Scan; when Superpowers finishing or another branch helper is available, use it only for completion options and branch hygiene
 - inspect diff and untracked files
 - separate product code changes from `agent-loop` artifact changes
-- identify unrelated dirty work
+- identify unrelated dirty work on the normal path; on Full-Worktree Git Fast Path disclose every worktree path and warning without Agent-controlled exclusion
 - if using an external finishing skill, use it only for completion options and branch hygiene; agent-loop still owns the submit gate
 - never commit, create final PR text, merge, release, publish, seal, or claim submission readiness without human confirmation
-- a human saying "commit" starts Submit / Integrate but is not final commit approval; ask again after diff, verification, review, and drift summary
+- an explicit commit or commit-and-push request directly enters Full-Worktree Git Fast Path; present one lightweight Commit Confirmation of the entire-worktree summary and proposed message, without tests or code/quality Review merely for Git
 - default to prepare-only if the human has not explicitly requested commit/PR/merge
 - when an adopted Branch Strategy or versioned/customer delivery applies, run Branch Strategy Check and verify Source Branch, Branch Class, Target Release Context, Target Branch, sealed state, customer isolation, and requested Git action before asking for the final submit decision
 - for a confirmed simple `not-needed` path, record branch-specific fields as `not-applicable` and do not block Submit / Integrate because Target Release Context or Target Branch is absent
@@ -1624,6 +1624,17 @@ Rules:
 - for a conflict, inspect only its owner/direct dependencies and minimum evidence; let the Agent rewrite fact-determined meaning and ask the human only when multiple meanings remain legitimate
 - broad four-snapshot accounting and exact Plan Hash/transaction/restore gates are explicit Full Memory Audit / Recovery only
 - a resolved conflict permits only the next separately authorized Memory Commit or later Git gate; code merge, submit, auto-mode, or helper approval does not satisfy any Git gate
+
+### Full-Worktree Git Fast Path
+
+- use only for an explicit `commit` or `commit and push` request, never a readiness question or another lifecycle action
+- inspect repository/branch/HEAD/conflict/worktree facts, then show one lightweight Commit Confirmation with the complete worktree summary and proposed commit message; this is not a code/quality/Feature/verification/Drift/Completion Review
+- state `not run for this Git action; no completion or release-readiness claim` unless the Human explicitly conditioned the Git action on fresh checks
+- do not automatically run tests, Verify, code/quality Review, Drift Check, Project Memory Update, or Feature Completion Check merely for Git packaging; ask no second confirmation
+- after confirmation, run `git add -A` and confirm the index represents the entire worktree; do not exclude, restore, clean, stash, split, or discard files
+- plain `commit` authorizes Commit only; `commit and push` authorizes both in order, using the unique upstream after Commit succeeds
+- when Push destination is absent/ambiguous, finish Commit and ask only for remote/ref; stop on repository ambiguity, unresolved conflict, applicable sealed/customer policy violation, index mismatch, or command failure
+- Git permission does not prove fixed, verified, done, closed, completed, or release-ready status
 
 Write after confirmation:
 

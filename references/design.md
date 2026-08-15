@@ -45,6 +45,7 @@ The core constraints are:
 - Lightweight Change Lane is an internal route before Feature construction for bounded ordinary non-Bug changes; it is not a canonical stage, message intent, Feature Type, Bug Resolution Path, lifecycle, status, or Auto Mode
 - Lightweight Execution Card is one persistent per-change execution source under `<memory-root>/changes/YYYY-MM/YYYY-MM-DD-<topic>.md`, with required background, adaptive Plan, progress, targeted verification, rollback, gate, result, and Memory Review fields; it creates no shared backlog or Archive lifecycle
 - Repair-First Verification is the default internal method for a `within-approved-boundary` Review correction and a `clearly eligible` Lightweight Change; it changes implementation order without creating authorization, a stage, status, mode, Gate, Checker result, or artifact family
+- Full-Worktree Git Fast Path is an internal Submit / Integrate method for an explicit `commit` or `commit and push` request: after one lightweight confirmation of the entire current worktree and proposed commit message, package it with `git add -A`, with no code/quality Review or tests merely for Git and no conversion of Git permission into completion evidence
 - Required Verification proves the current result, Existing Test Obligation preserves accepted tests and Human commitments, and Additional Regression Test is future protection advised only after current proof exists
 - Adaptive Depth lets the Agent vary Plan and test detail by real risk while fresh verification, affected existing checks, diff review, rollback, scope control, memory impact, and Human Gates stay fixed
 - `bugs/INDEX.md` owns Bug inventory/backlog/locator state, while each Bug README owns stable identity, facts, evidence, lifecycle, Resolution Path, verification, close, and reopen history
@@ -103,9 +104,20 @@ Human Goal
 → Feature Monthly Archive when the human explicitly asks to compact closed-history discovery
 → Project Memory Update
 → Submit / Integrate if requested
+  → [internal] Full-Worktree Git Fast Path for an explicit commit or commit-and-push request
   → [internal] Post-Merge Memory Reconciliation after verified code integration and before later Git gates only when an observed memory conflict exists
 → Resume / Pause / Close
 ```
+
+## Full-Worktree Git Fast Path Invariant
+
+**Full-Worktree Git Fast Path** is an internal Submit / Integrate method, not a canonical stage, message intent, lifecycle, status, artifact family, or blanket Git authorization. When the Human explicitly asks for `commit` or `commit and push`, the Agent presents exactly one lightweight Commit Confirmation containing the entire-worktree summary and proposed commit message. It is not a code/quality/Feature/verification/Drift/Completion Review, and no second confirmation is added.
+
+The Commit scope includes staged, unstaged, untracked, and deleted Git-visible content. The Agent does not exclude, restore, clean, stash, split, or discard files on its own. It runs `git add -A`, checks that the index represents the entire worktree, and commits with a supplied or repository-compliant generated message.
+
+The path does not automatically run tests, Verify, code/quality Review, Drift Check, Feature Completion Check, or Project Memory Update merely because Git was requested. Existing evidence may be reported with its real age, and the default truth is `not run for this Git action; no completion or release-readiness claim`. Git packaging permission is not completion evidence: Task Done, Feature Close, release readiness, and claims such as fixed, verified, or complete retain every existing evidence obligation. A Human condition such as “commit after tests pass” becomes an exact precondition and must be satisfied before the lightweight confirmation.
+
+Plain `commit` authorizes Commit only; `commit and push` authorizes both operations in order. Commit failure stops Push, while an ambiguous upstream blocks only Push and asks for its destination after the local Commit. An ambiguous repository, unresolved Git conflict, applicable sealed/customer-isolation violation, index mismatch, or failed Git command stops without reset, clean, restore, stash, or silent scope repair.
 
 ## Post-Merge Memory Reconciliation Invariant
 

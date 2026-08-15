@@ -1,5 +1,16 @@
 # Agent Loop Changelog
 
+## 1.5.6 — 2026-08-15
+
+_当前状态：正式稳定版；Human Review 已接受，Full-Worktree Git Fast Path 的 focused、全量 Shell/Python、机械检查及六域语义验证通过。正式 tag 为 `stable-v1.5.6`；默认安装通道 `main` 的同步仍保留独立 Human Gate。_
+
+### Full-Worktree Git Fast Path
+- 明确 commit / commit-and-push 请求只需一次轻量 Commit Confirmation：展示整个工作区变更摘要和 Agent 拟定的 commit message，不执行代码/质量 Review，也不因 Git 动作运行测试、Verify、Drift 或 Completion。
+- 人类确认后 Commit 立即使用 `git add -A` 纳入 staged、unstaged、untracked 和 deleted 内容；Agent 不得擅自排除、恢复、清理、stash、拆分或丢弃人类工作。
+- 缓存、生成物、疑似敏感文件和其他可疑内容只做显著提示，由人类接受全部或要求新范围；执行前发现 branch、冲突状态或工作区事实变化时重新确认。
+- Commit 与被明确请求的 Push 可在同一次轻量确认中授权，Push 必须绑定精确 remote/ref 且只在 Commit 成功后执行；Git 成功不替代验证、完成、关闭或发布证据。
+- 13 个 root managed blocks 同步到 `1.5.6-20260815.1`。
+
 ## 1.5.5 — 2026-08-12
 
 _当前状态：正式稳定版；最终 Human Review 与精确 Release Gate 已接受，focused、全量 Shell/Python、机械检查及六域语义验证通过。人类明确接受发布前定向复核披露的 memory-root 名称碰撞、legacy Project Skill 双 root、Post-Merge 摘要 Gate 顺序及其测试覆盖风险，并决定不在本版修复。正式 tag 为 `stable-v1.5.5`；默认安装通道 `main` 的同步仍保留独立 Human Gate。_

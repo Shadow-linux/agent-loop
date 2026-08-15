@@ -272,11 +272,11 @@ When `Submit / Integrate` starts and Superpowers is available:
 1. Use `superpowers:finishing-a-development-branch` only for completion options, branch hygiene, and integration decision support.
 2. Load `submit-and-integrate.md` and follow the agent-loop submit gate.
 3. Inspect diff and untracked files before any integration action.
-4. Confirm fresh verification evidence, required review, drift check, and project memory update status.
-5. Separate product code changes from `agent-loop` artifact changes and unrelated dirty work.
+4. On normal Submit, confirm fresh verification evidence, required review, drift check, and project memory update status. For an explicit commit or commit-and-push request, defer to the Full-Worktree Git Fast Path without invoking those checks merely for Git.
+5. On normal Submit, separate product code changes from `agent-loop` artifact changes and unrelated dirty work. On Full-Worktree Git Fast Path, disclose the entire staged/unstaged/untracked/deleted worktree and do not let the helper exclude files.
 6. Resolve Source Branch, Branch Class, Target Release Context, Target Branch, sealed state, customer isolation, and any cleanup evidence through `branch-management.md` when the optional strategy applies.
-7. Present a Branch Strategy And Action Review before commit, PR text, merge note, branch deletion, tag, push, release, publish, seal, or any final submission claim.
-8. Treat a human saying "commit" as permission to enter Submit / Integrate, not final commit approval.
+7. Present a Branch Strategy And Action Review before normal-path commit, PR text, merge note, branch deletion, tag, push, release, publish, seal, or any final submission claim. Full-Worktree Git Fast Path uses its own single lightweight Commit Confirmation instead.
+8. For a human saying `commit` or `commit and push`, show one lightweight confirmation of the entire-worktree summary and proposed commit message; do not let the helper run tests, add code/quality Review, or add a second confirmation. Plain commit excludes Push; commit-and-push authorizes both in order after confirmation.
 9. When the Feature resolves Bugs, show Bug IDs, current Status, verification evidence, and unresolved Bug Close Decisions; finishing evidence cannot close/reopen a Bug or satisfy a Feature/Requirement/Bug Human Gate.
 10. Do not let the external finishing skill create/switch/delete branches, commit, push, publish PR text, merge, tag, release, publish, seal, close the Feature, close/reopen a Bug, or mark submission ready without the matching agent-loop confirmation.
 11. After code integration, an external finishing helper cannot invent or bypass an observed memory conflict, resolve an unresolved semantic choice, satisfy the Memory Commit Gate, inherit Git authority, or recommend Source cleanup while a real conflict/restore remains unresolved. It must accept `reconciliation-not-needed` when no conflict exists. Full Memory Audit / Recovery and its Plan Hash/transaction controls require their own explicit Human authorization.

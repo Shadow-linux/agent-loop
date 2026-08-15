@@ -451,6 +451,10 @@ Batch multiple repairs into this one existing summary. Each Regression Test Advi
 | Unrelated Changes | none / present |  |
 | Action | prepare / commit / PR text / skip | human decision needed |
 
+### Full-Worktree Git Fast Path
+
+Full-Worktree Git Fast Path uses a lightweight Commit Confirmation, not a Human Review Summary. Show repository/branch/HEAD, the complete staged/unstaged/untracked/deleted file/change summary, warnings, the proposed commit message, `Verification: not run for this Git action; no completion or release-readiness claim`, and exact remote/ref only when Push was requested. This confirmation does not trigger tests or code/quality/Feature/verification/Drift/Completion Review. After acceptance, act immediately and do not add a second confirmation. Report the resulting commit SHA, Push result when requested, and any remaining Git state or blocker.
+
 ### Branch Strategy And Action Review
 
 | Item | Status / Value | Evidence | Human Decision |
@@ -461,14 +465,14 @@ Batch multiple repairs into this one existing summary. Each Regression Test Advi
 | Target Release Context / Target Branch |  | accepted policy + plan | acknowledge / revise |
 | Sealed Check | open / released / sealed / unknown | release evidence | proceed / stop |
 | Customer Isolation | pass / fail / unknown | branch ancestry and policy | proceed / stop |
-| Verification / Review / Drift | pass / fail / missing | current feature evidence | proceed / stop |
+| Verification / Review / Drift | pass / fail / missing | current feature evidence; normal Submit prerequisite, Git Fast Path disclosure | normal: proceed / stop; fast path: acknowledge truth |
 | Merge Evidence / Deletion Policy | complete / missing / not-applicable | merge/submit evidence | delete / retain / stop |
 | Requested Authorization | prepare / create / switch / commit / push / merge / delete / tag / release / publish / seal | latest human request | human only |
 | Explicitly Not Authorized | every action outside the request | review summary | acknowledge |
 | Remaining Risk / Blocker | none / exact blocker | evidence and impact | accept / resolve / stop |
 | Human Decision | exact bounded action or no action | current review | human only |
 
-For one or more Git/release mutations, add this action-decision table below the context table:
+For one or more normal-path Git/release mutations, add this action-decision table below the context table. Full-Worktree Git Fast Path uses its separate lightweight Commit Confirmation and must not be duplicated here.
 
 | Gate / Action | Exact Scope | Preconditions | Evidence | Human Decision |
 |---|---|---|---|---|

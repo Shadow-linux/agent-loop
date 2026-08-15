@@ -74,7 +74,7 @@ Every time `agent-loop` is used inside a target project, check root guidance bef
 - Required Stops: all six visible classes — Semantic, Scope And Risk, Execution, Evidence, External Mutation, and Git And Lifecycle — plus explicit Auto Mode non-bypass
 - Checker Recovery Gateway: exact rerun routes a canonical Agent Loop checker failure to `references/checker-recovery.md`; isolated repair is Human-authorized and cannot be presented as canonical pass
 - Completion Rules: code changes alone are not done; fresh verification, Review, Drift Check, project-memory evidence, Feature Completion Check, and Feature Close Review remain visible
-- Submit And Commit Rules: submit/commit/push/PR/merge/tag/release/publish/seal/pause/close/cleanup remain independent Human Gates and only intended files are included
+- Submit And Commit Rules: normal submit keeps intended-file review; an explicit commit or commit-and-push request enters Full-Worktree Git Fast Path, which shows one lightweight confirmation of the entire-worktree summary and Agent-proposed commit message, runs no tests or quality Review merely for Git, and never infers Push from plain commit
 - Artifact Authority: Requirement, Decision / ADR, Feature, Bug, Lightweight Execution Card, and project memory retain distinct ownership
 - Submit And Commit Rules lack the concise post-code-integration reminder to reconcile changed Agent Loop memory before push/release/Source cleanup
 - root/directory guidance boundaries and requirement archive rules
@@ -162,7 +162,7 @@ Rules:
 - Managed block maintenance rules belong here and in refresh tooling; do not require the target root `AGENTS.md` to include a separate Managed Block Rule prose section.
 - If an existing `AGENTS.md` has no managed blocks, propose adding the minimal needed managed blocks instead of replacing the whole file.
 - If a block-version is missing or older than the current template, treat that block as stale.
-- Treat bare skill-version-only block revisions such as `block-version:1.5.5` as stale because they cannot distinguish same-version template revisions.
+- Treat bare skill-version-only block revisions such as `block-version:1.5.6` as stale because they cannot distinguish same-version template revisions.
 - If a managed block exists in the current template but is missing from root AGENTS.md, treat it as a missing managed block and propose adding it.
 - If a managed block source is missing, stale, or contradictory, classify the block as stale and propose either source correction or block refresh through Human Review Summary.
 - If marker pairs are broken, duplicated, nested, or ambiguous, stop and ask before editing.

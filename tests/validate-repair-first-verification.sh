@@ -263,18 +263,18 @@ for forbidden in \
   done
 done
 
-assert_contains SKILL.md 'Version: 1.5.5'
-assert_contains plugin.json '"version": "1.5.5"'
-assert_contains README.md '**Current version:** 1.5.5'
-assert_contains Usage.md '**版本：** 1.5.5'
-assert_contains CHANGELOG.md '## 1.5.5 — 2026-08-12'
+assert_contains SKILL.md 'Version: 1.5.6'
+assert_contains plugin.json '"version": "1.5.6"'
+assert_contains README.md '**Current version:** 1.5.6'
+assert_contains Usage.md '**版本：** 1.5.6'
+assert_contains CHANGELOG.md '## 1.5.6 — 2026-08-15'
 
 ruby - "$root/templates/root-AGENTS.md" <<'RUBY'
 content = File.read(ARGV.fetch(0))
 blocks = content.scan(/<!-- agent-loop:managed-start section:([^ ]+) .*?block-version:([^ ]+) -->/)
 abort "FAIL: expected 13 root managed blocks, found #{blocks.length}" unless blocks.length == 13
 blocks.each do |section, revision|
-  expected = '1.5.5-20260812.2'
+  expected = '1.5.6-20260815.1'
   abort "FAIL: #{section} expected #{expected}, found #{revision}" unless revision == expected
 end
 abort 'FAIL: root AGENTS exceeds 190 lines' if content.lines.length > 190

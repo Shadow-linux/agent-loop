@@ -640,6 +640,18 @@ Human gate:
 
 Do not end an action report with only "done". Always include the next recommended stage or a concrete stop reason.
 
+## Full-Worktree Git Fast Path
+
+This is an internal Submit / Integrate method for when the Human explicitly asks for `commit` or `commit and push`. It is not a canonical stage, message intent, completion route, or reusable permission.
+
+For this method, inspect repository/branch/HEAD/conflict facts, derive a repository-compliant commit message when none was supplied, then present one lightweight Commit Confirmation. It contains the complete worktree file/change summary, the proposed commit message, `Verification: not run for this Git action; no completion or release-readiness claim`, and, only when Push was requested, the exact remote/ref. This is not a code, quality, Feature, verification, Drift, or Completion Review. Do not run tests or perform those reviews merely because Git was requested, and do not ask a second confirmation.
+
+After Human confirmation, run `git add -A` immediately from the repository root and verify that the index represents staged, unstaged, untracked, and deleted Git-visible content. Do not exclude, restore, clean, stash, split, or discard content on the Agent's initiative. A plain `commit` confirmation authorizes Commit only. Push remains an independent requested action: an explicit `commit and push` confirmation authorizes Commit and Push in order; Push uses the confirmed remote/ref, and Commit failure stops Push. If no unique push target exists, the confirmation may authorize the local Commit only; after it succeeds, ask only for the missing Push destination.
+
+The path does not run Verify, Review, Drift Check, Feature Completion Check, or tests merely because Git was requested. Git packaging permission is not completion evidence. Existing evidence may be disclosed truthfully, but without fresh required proof the Agent cannot claim `fixed`, `verified`, `done`, `completed`, `closed`, or release-ready. A Human condition such as “only after tests pass” remains a required precondition.
+
+Stop without reset/clean/restore/stash when the repository is ambiguous; a merge/rebase/cherry-pick conflict is unresolved; an applicable sealed/customer-isolation/branch policy forbids the action; `git add -A` produces an inconsistent index; or commit/push fails. Remote/ref ambiguity blocks only Push, not an already authorized Commit. Preserve and report the resulting worktree and index.
+
 ## Memory After Code Integration
 
 ```text

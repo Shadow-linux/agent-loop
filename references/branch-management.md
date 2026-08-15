@@ -362,7 +362,7 @@ Auto modes and external branch helpers do not cross these gates.
 - Execute Task / Story: recheck recorded context; branch creation or switching is never an implied execution step and requires its own Branch Action Gate.
 - Drift Check: compare native policy, accepted strategy, feature context, and Git reality; strategy changes require Human Review.
 - Project Memory Update: persist accepted/declined/not-needed durable results only after confirmation.
-- Submit / Integrate: load this reference when triggered or adopted; apply branch-specific fail-closed conditions only to an adopted strategy or versioned/customer delivery, record them as `not-applicable` for a confirmed simple path, show the exact requested action, and ask the applicable Human Gate.
+- Submit / Integrate: load this reference when triggered or adopted; apply branch-specific fail-closed conditions only to an adopted strategy or versioned/customer delivery, record them as `not-applicable` for a confirmed simple path, show the exact requested action, and ask the applicable Human Gate. Full-Worktree Git Fast Path preserves branch-policy facts without restoring normal Submit quality prerequisites: one lightweight Commit Confirmation authorizes only the listed Commit/Push action after showing the entire-worktree summary and proposed message, while sealed/customer isolation, repository/target ambiguity, conflict, and unrequested actions still stop.
 
 ## Fail-Closed Conditions
 
@@ -375,8 +375,8 @@ Stop dependent integration/release work only when an adopted Branch Strategy or 
 - the target release is `released / sealed`;
 - customer code would enter main, standard release, or another customer line without a separate product/generalization decision;
 - native policy conflicts with the recommended or recorded profile;
-- required verification, Review, Drift Check, or Human Gate is missing;
-- unrelated dirty work may be included;
+- required verification, Review, or Drift Check is missing for a normal Submit/readiness/release claim, or the exact applicable Human Gate is missing; Full-Worktree Git Fast Path may package unverified state only with its explicit no-completion claim;
+- unrelated dirty work may be unintentionally included on a normal scoped action; Full-Worktree Git Fast Path instead enumerates and Human-confirms the entire worktree;
 - worktree ownership of source/target is unclear;
 - branch creation, switch, merge, deletion, push, tag, release, publish, or seal lacks exact authorization.
 

@@ -1,8 +1,8 @@
 # Agent Loop Usage
 
-**版本：** 1.5.5（正式稳定版）
+**版本：** 1.5.6（正式稳定版）
 
-Agent Loop 1.5.5 已转为正式稳定版，稳定 tag 为 `stable-v1.5.5`。将该精确 release commit 同步到 `main` 仍保留独立 Human Gate。
+Agent Loop 1.5.6 已转为正式稳定版，稳定 tag 为 `stable-v1.5.6`。将该精确 release commit 同步到 `main` 仍保留独立 Human Gate。
 
 这是一份给人类使用的触发指南。你不需要记住 Agent Loop 的阶段名；只要说明目标、边界和你希望 Agent 自主推进到哪里，Agent 负责判断项目状态、选择流程、维护产物并在真正的 Human Gate 停下。
 
@@ -38,12 +38,12 @@ npx skills list -g
 
 ```bash
 # Public GitHub
-git clone --branch stable-v1.5.5 --depth 1 \
+git clone --branch stable-v1.5.6 --depth 1 \
   https://github.com/Shadow-linux/agent-loop.git \
   ~/.local/share/agent-loop-source
 
 # Private Git mirror
-git clone --branch stable-v1.5.5 --depth 1 \
+git clone --branch stable-v1.5.6 --depth 1 \
   <git-mirror-url> \
   ~/.local/share/agent-loop-source
 ```
@@ -168,8 +168,8 @@ Agent 会检查核心流程完整性，并按需要使用架构/边界图、ASCI
 这些说法都会路由到人类文档，而不是凭 Agent 记忆回答：
 
 ```text
-1.5.5 更新了什么？
-当前 1.5.5 使用的是什么流程？
+1.5.6 更新了什么？
+当前 1.5.6 使用的是什么流程？
 和 1.2.2 比有什么变化？
 现在 agent-loop 怎么用？
 ```
@@ -654,13 +654,19 @@ Target 是当前理解的起点，不是永远正确的一方；Source 经验已
 这些改动准备提交了，先帮我完整检查一遍，暂时不要提交。
 ```
 
-提交前 Agent 应同时复核 feature 文档、requirement 记录、代码 diff、验证证据、drift、project memory、root/directory guidance 影响和 unrelated changes。
+这是普通 Submit/readiness 检查。Agent 会复核 feature 文档、requirement 记录、代码 diff、验证证据、drift、project memory、root/directory guidance 影响和 unrelated changes，但不会执行 Git mutation。
 
 ```text
-确认，提交刚才审阅过的这些改动。
+把当前工作区全部 commit，不要自动跑测试，也不要丢掉或排除任何文件。
 ```
 
-第二句话只有在前面的精确范围仍然有效时才授权 commit；push、PR、merge、tag、release、publish 和 seal 仍需分别授权。
+### 整个工作区 Git 快速路径
+
+明确要求 commit 或 commit and push 时，Agent 只展示一次轻量 Commit Confirmation：仓库、branch/HEAD、全部 staged/unstaged/untracked/deleted 变更摘要、风险提示、Agent 拟定的 commit message，以及 Push 被请求时的精确 remote/ref。这不是代码或质量 Review，也不会触发测试。人类接受后，Commit 使用 `git add -A` 纳入整个工作区；Agent 不会自行 exclude、restore、clean、stash、split 或 discard 文件。缓存、生成物或疑似敏感文件只会被显著提示，是否调整范围由人类决定。
+
+如果没有附加条件，本次 Git 动作不会运行测试，记录为 `not run for this Git action; no completion or release-readiness claim`。如果人类明确说“测试通过后提交”，测试才成为精确前置条件。Commit 和 Push 可以在同一次轻量确认中授权，但仍按 Commit 成功后再 Push 的顺序执行；Commit 不自动授权未请求的 Push，任何未列出的 PR、merge、tag、release、publish、seal、deploy、close 或 cleanup 也不获授权。
+
+确认后立即执行 `git add -A`；若执行前发现 branch、冲突状态或工作区事实已经变化，则停止并刷新轻量确认。Commit/Push 失败时保留 worktree/index 并报告，不通过 reset/clean/restore/stash 隐藏问题。Git 成功也不等于 Feature 已验证、完成、关闭或可发布。
 
 ```text
 帮我看看这个功能是不是真的可以关闭，还有没有风险或后续工作。

@@ -1,8 +1,8 @@
 # Agent Loop
 
-**Current version:** 1.5.5 (stable)
+**Current version:** 1.5.6 (stable)
 
-Agent Loop 1.5.5 is the current formal stable release. Its stable tag is `stable-v1.5.5`; synchronizing this exact release commit to `main` remains a separate Human Gate.
+Agent Loop 1.5.6 is the current formal stable release. Its stable tag is `stable-v1.5.6`; synchronizing this exact release commit to `main` remains a separate Human Gate.
 
 Agent Loop is a reusable controller skill for single-human, CLI-agent software development. It lets the Agent own project diagnosis, workflow sequencing, implementation, verification, and memory maintenance while the human keeps control of goals, product meaning, consequential decisions, and external actions.
 
@@ -87,6 +87,8 @@ Onboarding and Lightweight Change scanners follow the same fact boundary. Onboar
 | Bug Follow-up | Explicit Bug identity, evidence, deduplication, expected behavior, ownership, repair, and close | `bugs/YYYY-MM-DD-<bug-slug>/` plus a Feature-owned TDD repair |
 
 Initial Feature implementation and explicit Bug repair keep TDD. A Review correction already inside the accepted boundary, or a clearly eligible Lightweight Change, repairs first, verifies the changed behavior with fresh evidence, reruns affected existing checks, and then recommends specific regression coverage. Fresh Required Verification and every Existing Test Obligation remain mandatory; only an Additional Regression Test is advisory.
+
+An explicit commit or commit-and-push request may use the **Full-Worktree Git Fast Path**. The Agent presents the entire staged/unstaged/untracked/deleted worktree, warnings, exact commit message, and separate Commit/Push rows once; after Human confirmation it uses `git add -A` and does not silently drop files. Tests are not run merely for this Git action unless the Human makes them a condition. An unverified commit is reported as packaging only and never proves completion, close, or release readiness.
 
 Feature delivery includes:
 
@@ -201,14 +203,14 @@ Use this route when `npx` is unavailable or the environment must install from a 
 ```bash
 # Public GitHub
 git clone \
-  --branch stable-v1.5.5 \
+  --branch stable-v1.5.6 \
   --depth 1 \
   https://github.com/Shadow-linux/agent-loop.git \
   ~/.local/share/agent-loop-source
 
 # Private Git mirror
 git clone \
-  --branch stable-v1.5.5 \
+  --branch stable-v1.5.6 \
   --depth 1 \
   <git-mirror-url> \
   ~/.local/share/agent-loop-source
@@ -240,7 +242,7 @@ For a later clone-based upgrade, fetch tags, check out the new stable tag explic
 
 ```bash
 git -C ~/.local/share/agent-loop-source fetch --tags origin
-git -C ~/.local/share/agent-loop-source checkout --detach stable-v1.5.5
+git -C ~/.local/share/agent-loop-source checkout --detach stable-v1.5.6
 ```
 
 `~/.agents/skills/agent-loop` is the preferred shared location. If an Agent runtime does not discover it, synchronize the same verified source into that runtime's configured Skill directory rather than maintaining divergent copies.

@@ -1527,6 +1527,9 @@ Feature verification does not close a Bug automatically. Bug Close and Feature C
 
 ## Submit / Integrate
 
+- Git Path: full-worktree-fast-path | normal-submit
+- Worktree Scope: entire current worktree | selected normal-submit scope
+- Verification Truth: not run for this Git action; no completion or release-readiness claim | <exact fresh evidence / Human precondition>
 - Source Branch:
 - Branch Class:
 - Target Release Context:
@@ -1535,6 +1538,8 @@ Feature verification does not close a Bug automatically. Bug Close and Feature C
 - Customer Isolation Check:
 - Requested Authorization:
 - Explicitly Not Authorized:
+- Commit Decision:
+- Push Decision / Remote / Ref:
 - Merge Evidence / Cleanup Decision:
 
 ## Spec Drift

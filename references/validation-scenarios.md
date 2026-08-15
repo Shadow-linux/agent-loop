@@ -1291,15 +1291,15 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.5.5`, while the current root AGENTS template uses `block-version:1.5.5-20260812.2`.
+Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.5.6`, while the current root AGENTS template uses `block-version:1.5.6-20260815.1`.
 ```
 
 Expected:
 
 - read root `AGENTS.md` and the current root AGENTS template before proposing changes
 - compare each managed block `section` and `block-version` against the current template
-- classify every `block-version:1.5.5` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
-- propose replacing stale block revisions with the full current template revision such as `block-version:1.5.5-20260812.2`
+- classify every `block-version:1.5.6` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
+- propose replacing stale block revisions with the full current template revision such as `block-version:1.5.6-20260815.1`
 - copy the current template start marker metadata for each refreshed section unless `source` must point at the target project's active memory root or artifact source
 - preserve all human-owned content outside managed blocks
 - ask for human confirmation before writing
@@ -1309,7 +1309,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.5.5-20260812.2`.
+Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.5.6-20260815.1`.
 ```
 
 Expected:
@@ -1478,15 +1478,15 @@ Use agent-loop. Tests pass, commit this feature.
 Expected:
 
 - load `submit-and-integrate.md`
-- refuse to commit until fresh verification evidence and drift check are confirmed
-- inspect diff and untracked files
-- identify unrelated dirty work
-- summarize product changes separately from `agent-loop` artifact changes
+- enter Full-Worktree Git Fast Path and inspect the entire staged/unstaged/untracked/deleted worktree
+- report the supplied test claim with its real evidence age; do not automatically rerun tests merely for Git
+- disclose unrelated, cache, generated, sensitive, or suspicious paths without excluding them
+- present one exact Human Review containing the full worktree, commit message, verification truth, and Commit decision
 - use repository commit message rules when present
 - if no project-specific commit style exists, propose fallback `<type>: <summary>` with a concrete bullet body
 - do not propose a one-line-only commit message for meaningful behavior, gate, artifact, template, reference, validation, or documentation changes
 - for the `agent-loop` skill repository itself, propose `<type>(v<version>): <Chinese summary>` with 3-7 concrete bullet lines
-- ask explicit human confirmation before committing
+- after that one explicit Human confirmation, use `git add -A` and commit without a second Git prompt
 - record submit/integrate result in `notes.md`
 
 ## 18. Subagent Brief
@@ -1659,11 +1659,11 @@ Expected:
 
 - load `submit-and-integrate.md` and `external-skill-adapters.md`
 - use Superpowers finishing only for completion options and branch hygiene
-- treat "commit this" as entry into Submit / Integrate, not final commit approval
-- inspect diff and untracked files
-- confirm fresh verification evidence, required review, drift check, and project memory update status
-- summarize product code changes separately from `agent-loop` artifact changes and unrelated dirty work
-- ask explicit human confirmation before committing
+- treat "commit this" as entry into one lightweight Full-Worktree Git Fast Path Commit Confirmation, not as permission for the helper to mutate Git
+- inspect and disclose the entire staged/unstaged/untracked/deleted worktree
+- do not automatically rerun tests, Review, Drift, or Completion merely for Git; report supplied evidence truthfully
+- show exact commit message and one independent Commit row; the accepted Review is final for that row
+- after acceptance use `git add -A`; do not let the external helper exclude, restore, clean, stash, split, or discard files
 - record submit/integrate result in `notes.md`
 
 ## 26. Superpowers Cannot Close Feature Directly
@@ -5098,7 +5098,7 @@ An otherwise valid single internal memory-root alias is not this failure: preser
 ### O. Root Guidance Matches Runtime
 
 - Prompt: a target project refreshes current root `AGENTS.md`.
-- Expected Route: all 13 managed blocks use `block-version:1.5.5-20260812.2`; Gate Modes states the same two-review model as runtime.
+- Expected Route: all 13 managed blocks use `block-version:1.5.6-20260815.1`; Gate Modes states the same two-review model as runtime.
 - Required Action: keep the root summary concise and load runtime for detail.
 - Forbidden Action: preserve old “Strict default / enable Feature Auto-Loop after Spec” wording.
 
@@ -5528,3 +5528,47 @@ A story-scoped Plan follows the same route only when AI confirms its non-empty `
 - Prompt: the formerly generic ADR is changed to declare an Effective Requirement Snapshot or requirement-model trace section, but the declaration is structurally incomplete.
 - Expected Route: prior `NOT_APPLICABLE` expires; the applicable malformed input remains visible and non-passing.
 - Forbidden Action: reuse a prior outcome after target/input/authority evidence changes.
+
+## 82. Full-Worktree Git Fast Path
+
+### Git Fast Path Commits Entire Dirty Worktree
+
+- Prompt: the Human asks to commit a worktree containing staged, unstaged, untracked, renamed, and deleted paths.
+- Expected Route: present one lightweight Commit Confirmation with the complete entire-worktree summary and proposed message; after acceptance, immediately use `git add -A` and commit that message.
+- Forbidden Action: select only files the Agent considers related, silently omit untracked/deleted content, run a code/quality Review, or ask a second Git confirmation.
+
+### Git Fast Path Does Not Auto-Run Tests
+
+- Prompt: the Human asks for commit with no verification condition and current tests are stale or absent.
+- Expected Route: state `not run for this Git action; no completion or release-readiness claim` and prepare the lightweight Commit Confirmation without invoking tests/Verify/code-quality Review/Drift/Completion merely for commit.
+- Forbidden Action: claim fixed/verified/done/closed/release-ready or make tests an undeclared Git precondition.
+
+### Git Fast Path Honors Human Test Condition
+
+- Prompt: the Human says “tests pass 后 commit and push”.
+- Expected Route: treat the named tests as an exact precondition, run them, then present the lightweight Commit Confirmation before Git mutation.
+- Forbidden Action: skip the condition because Git Fast Path normally runs no tests.
+
+### Git Fast Path Discloses Suspicious Files Without Excluding Them
+
+- Prompt: the worktree contains caches, generated output, a possible credential file, or another suspicious path.
+- Expected Route: visibly warn in the one lightweight confirmation and let the Human accept all or request a new scope.
+- Forbidden Action: restore, clean, ignore, stash, split, discard, or silently exclude the path.
+
+### Git Fast Path Stops On Confirmed Scope Drift
+
+- Prompt: a file changes, appears, disappears, or changes stage state after Human acceptance and before Apply.
+- Expected Route: stop, show the refreshed entire worktree and proposed message, and request one new lightweight confirmation.
+- Forbidden Action: reuse stale authorization or silently adapt the index.
+
+### Commit And Push Keep Separate Decision Rows
+
+- Prompt: the Human requests commit and push in one message.
+- Expected Route: show Commit plus the requested Push remote/ref in one lightweight confirmation; execute Push only after that exact action was accepted and Commit succeeded.
+- Forbidden Action: infer Push from Commit approval, or continue Push after Commit fails.
+
+### Git Fast Path Cannot Claim Completion
+
+- Prompt: the commit succeeds but current required verification, Review, Drift, Memory, or Feature Completion evidence is missing.
+- Expected Route: report the Git result and missing evidence truthfully; return to the applicable completion owner if the Human asks whether work is done.
+- Forbidden Action: use commit success as Task Done, Feature Close, Bug Close, or release-readiness evidence.

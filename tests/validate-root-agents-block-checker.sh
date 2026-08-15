@@ -63,11 +63,11 @@ python3 "$checker" --template "$template" --target "$tmpdir/missing-stage-map.md
 assert_contains "$tmpdir/missing-stage-map.out" "STRUCTURAL_CHANGED"
 assert_contains "$tmpdir/missing-stage-map.out" "workflow-stage-map | missing"
 
-sed 's/block-version:1\.5\.5-20260812\.2/block-version:1.5.5/' "$template" > "$tmpdir/stale.md"
+sed 's/block-version:1\.5\.6-20260815\.1/block-version:1.5.6/' "$template" > "$tmpdir/stale.md"
 python3 "$checker" --template "$template" --target "$tmpdir/stale.md" > "$tmpdir/stale.out"
 assert_contains "$tmpdir/stale.out" "STRUCTURAL_CHANGED"
 assert_contains "$tmpdir/stale.out" "message-intent | stale-block-version"
-assert_contains "$tmpdir/stale.out" "expected 1.5.5-20260812.2"
+assert_contains "$tmpdir/stale.out" "expected 1.5.6-20260815.1"
 
 awk '
   /<!-- agent-loop:managed-end section:ownership -->/ { next }
