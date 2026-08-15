@@ -30,6 +30,11 @@ _当前状态：开发中；在 `alpha/v1.5.7` 分支实施 Progressive Verifica
 - `high-assurance` Feature 的 No-Plan 仅限文档型任务；Strict Mode 下 Profile 记录仍为 Agent 自动记账并经 Gate 2 呈现。
 - SKILL.md / root-AGENTS.md 的降档摘要补回"呈现变化后的风险证据"前置条件，防社工程引用缩写版。
 
+### 减税落地与 mutation 测试（独立复核后补齐）
+- Work Breakdown、Plan Gate、Review 三个 stage guide 章节分别定义三档可执行差异：focused 收窄分解粒度/Plan 周边分析/Review 深度，full 维持标准，high-assurance 强制回归安全任务、完整接口细节与 Standards Review；`plan.md` 的 construction-grade 核心（精确路径、证明命令、预期 RED/GREEN、回滚）任何档位不可削减，档位只缩广度不减精确度。
+- `high-assurance` Feature 的 No-Plan 仅限文档型任务规则同步进 Plan Gate 章节，消除 runtime 单点。
+- 新增 mutation 测试段：沙箱对照组 + 10 个语义翻转/删除变异（降直升高档为升一档、删硬下限、旧日志当 RED、删 notes Profile 字段、删三处档位差异、删 No-Plan 同步、翻转车道排除条款），每个变异必须被契约测试捕获，防止断言空转。
+
 ### 本版不包含
 - 不引入 `state.json` / `evidence.json` / `run.jsonl` 或任何第二套状态源；Markdown 保持单一状态源。Evidence-driven Runtime 保留为后续独立研究议题。
 - 不取消、不弱化 Review、Drift、Notes 的授权/范围/恢复证据职责。

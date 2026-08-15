@@ -73,6 +73,10 @@ assert_contains references/runtime.md 'list the recorded Feature Verification Pr
 
 # --- execution/verification stage coverage and helper boundary ---
 
+assert_contains references/stage-guides.md 'Profile tier scales breakdown breadth'
+assert_contains references/stage-guides.md 'Profile tier scales Plan breadth, never its exactness'
+assert_contains references/stage-guides.md 'Profile tier scales review depth'
+assert_contains references/stage-guides.md 'a `high-assurance` Feature allows No-Plan Decisions only for documentation-only tasks; behavior-affecting tasks always require an accepted plan'
 assert_contains references/stage-guides.md 'during execution, watch the recorded Feature Verification Profile escalation triggers'
 assert_contains references/stage-guides.md 'during verification, recheck the recorded Feature Verification Profile escalation triggers'
 assert_contains references/stage-guides.md 'a reproduction script with failure output, or API/UI reproduction evidence, and a new test is never manufactured solely for RED'
@@ -204,5 +208,54 @@ abort 'FAIL: root AGENTS exceeds 190 lines' if content.lines.length > 190
 RUBY
 
 [ ! -d "$root/.agent-loop" ] || fail 'source repository must not contain target-project .agent-loop artifacts'
+
+# --- mutation tests: semantic corruptions of the source must break this contract ---
+
+build_sandbox() {
+  local dir=$1
+  rm -rf "$dir"
+  mkdir -p "$dir/references" "$dir/templates" "$dir/tests"
+  cp "$root/SKILL.md" "$root/plugin.json" "$root/README.md" "$root/Usage.md" "$root/CHANGELOG.md" "$dir/"
+  local f
+  for f in runtime design stage-guides concepts document-templates validation-scenarios human-review-summary workflow-checklists skill-routing; do
+    cp "$root/references/$f.md" "$dir/references/"
+  done
+  for f in tests notes root-AGENTS; do
+    cp "$root/templates/$f.md" "$dir/templates/"
+  done
+  cp "$root/tests/validate-progressive-verification.sh" "$dir/tests/"
+  sed -i '' '/^# --- mutation tests/,$d' "$dir/tests/validate-progressive-verification.sh"
+}
+
+control_sandbox=$(mktemp -d)
+build_sandbox "$control_sandbox"
+if ! bash "$control_sandbox/tests/validate-progressive-verification.sh" >/dev/null 2>&1; then
+  rm -rf "$control_sandbox"
+  fail 'mutation harness control failed: unmutated sandbox must pass'
+fi
+rm -rf "$control_sandbox"
+
+run_mutation() {
+  local name=$1 file=$2 expr=$3
+  local sb
+  sb=$(mktemp -d)
+  build_sandbox "$sb"
+  sed -i '' "$expr" "$sb/$file" || { rm -rf "$sb"; fail "mutation $name: sed failed"; }
+  if bash "$sb/tests/validate-progressive-verification.sh" >/dev/null 2>&1; then
+    rm -rf "$sb"
+    fail "mutation $name was NOT caught by the contract"
+  fi
+  rm -rf "$sb"
+}
+
+run_mutation 'direct-escalation-downgraded-to-one-step' references/runtime.md 's|raise the tier directly to `high-assurance`|raise the tier one step|'
+run_mutation 'hard-floor-removed' references/runtime.md 's|can never be rated below `high-assurance`|may be rated `focused` when the diff is small|'
+run_mutation 'stale-log-accepted-as-red' references/runtime.md 's|RED proof must be reproduced against the current code state before implementation|RED proof may be any historical failure log|'
+run_mutation 'notes-profile-field-deleted' templates/notes.md '/Verification Profile: pending/d'
+run_mutation 'tier-difference-removed-from-plan' references/stage-guides.md 's|Profile tier scales Plan breadth, never its exactness|Profile tier does not affect Plan content|'
+run_mutation 'tier-difference-removed-from-breakdown' references/stage-guides.md 's|Profile tier scales breakdown breadth|Profile tier does not affect breakdown|'
+run_mutation 'tier-difference-removed-from-review' references/stage-guides.md 's|Profile tier scales review depth|Profile tier does not affect review depth|'
+run_mutation 'noplan-sync-removed' references/stage-guides.md '/a `high-assurance` Feature allows No-Plan Decisions only for documentation-only tasks/d'
+run_mutation 'exclusion-flipped' references/runtime.md 's|it never governs Lightweight Change Lane or Review Repair Fast Path|it always governs Lightweight Change Lane and Review Repair Fast Path|'
 
 printf 'PASS: Progressive Verification + Proof First contract is complete\n'

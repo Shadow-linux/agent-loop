@@ -1028,6 +1028,7 @@ Rules:
 - use linear/parallel/barrier only
 - include verification hints
 - mark each task `Agent-ready` or `Human-gated`
+- Profile tier scales breakdown breadth: `focused` keeps coarse single-granularity tasks that cover the bounded write without forced story splits; `full` applies the ordinary vertical-slice decomposition; `high-assurance` decomposes boundary, permission/state, and rollback concerns into explicit tasks and always includes a regression/safety verification task
 - use `Human-gated` when product, design, architecture, security, data, or approval decisions are still needed
 - use `Agent-ready` only when acceptance, boundaries, and verification are clear enough for autonomous execution
 - for large projects, group tasks by stage and barrier in a single `tasks.md`
@@ -1221,6 +1222,7 @@ Rules:
 - decide whether a plan is required before any code implementation
 - create `plan.md` when the task/story is complex, multi-file, changes behavior, changes tests, touches interfaces, crosses module boundaries, involves data/API/async/security/deployment behavior, needs TDD design, needs subagents, or the human asks for a plan
 - a No-Plan Decision is allowed only for a trivial, low-risk, single-file or documentation-only task with clear acceptance, exact files, and exact verification command
+- a `high-assurance` Feature allows No-Plan Decisions only for documentation-only tasks; behavior-affecting tasks always require an accepted plan
 - in human-selected Strict Mode, ask human confirmation before executing from a No-Plan Decision
 - in Feature Auto-Loop, a No-Plan Decision may proceed only if the task is Agent-ready and no plan trigger applies
 - Task Auto-Run always requires an accepted task/story plan; No-Plan Decision cannot enable Task Auto-Run
@@ -1238,6 +1240,7 @@ Rules:
 - reject a plan that targets a `released / sealed` version, crosses customer isolation, or assumes an unauthorized Git action
 - include actual test code for RED steps when possible
 - include exact function/class/endpoint/component signatures, parameters, return values, errors, and side effects for new or changed interfaces
+- Profile tier scales Plan breadth, never its exactness: any created `plan.md` keeps the construction-grade core — exact paths, code context, proof commands, expected RED/GREEN output, and rollback — while `focused` contracts the surrounding analysis to the named files and one proof path, `full` keeps the standard breadth, and `high-assurance` adds complete interface/parameter detail, boundary and precision test code, integration steps, and explicit rollback notes
 - include exact commands and expected RED/GREEN output
 - implementation steps must be bite-sized and executable
 - no placeholders such as TBD, TODO, "add proper error handling", "write tests", or "similar to previous task"
@@ -1473,6 +1476,7 @@ If product meaning, Feature definition, implementation boundary, public interfac
 Check:
 
 - current Feature Context Snapshot and authoritative acceptance references; code disagreement is implementation drift and must not be copied into the Snapshot
+- Profile tier scales review depth: `focused` needs a lightweight Spec Review with Standards Review only when its ordinary triggers apply; `full` applies the standard review set; `high-assurance` makes Standards Review mandatory and extends regression scope accordingly
 - Spec Review: implementation matches the current Requirement Product Definition through the Snapshot/Product Slice, legacy Feature `product.md` only when present, `spec.md`, acceptance criteria, scope, and out-of-scope
 - Decision & Design Review: implementation matches accepted Decision & Design records and every design slice assigned to this feature has current evidence
 - Standards Review: implementation follows root/directory `AGENTS.md`, `project.md` rules, directory boundaries, testing rules, and local code conventions
