@@ -9,11 +9,17 @@ from pathlib import Path
 
 from checker_support import (
     CheckFailure,
+    configure_utf8_stdio,
+    is_blocking_checker_failure,
     metadata,
     read_text,
     require_supported_python,
     section,
     table,
+)
+from feature_authority_support import (
+    AuthorityResolutionError,
+    requirement_product_applicability,
 )
 from requirement_product_support import (
     CONCEPT_ID_PATTERN,
@@ -483,6 +489,7 @@ def validate(requirement: str, product: str, spec: str) -> str:
 
 
 def main() -> int:
+    configure_utf8_stdio()
     require_supported_python()
     parser = argparse.ArgumentParser(
         description="Validate Concept Foundation and downstream product-model traceability."
@@ -497,9 +504,25 @@ def main() -> int:
     parser.add_argument("spec", type=Path)
     args = parser.parse_args()
     paths = (args.requirement, args.product, args.spec)
+    if args.requirement_product:
+        if not args.spec.is_file():
+            print(f"BLOCKED: missing file: {args.spec}", file=sys.stderr)
+            return 1
+        try:
+            applies, reason = requirement_product_applicability(read_text(args.spec))
+        except (AuthorityResolutionError, OSError, UnicodeError) as error:
+            print(
+                f"BLOCKED: Feature Authority applicability is unresolved: {error}",
+                file=sys.stderr,
+            )
+            return 1
+        if not applies:
+            print(f"NOT_APPLICABLE: {reason}")
+            return 0
     for path in paths:
         if not path.is_file():
-            parser.error(f"missing file: {path}")
+            print(f"BLOCKED: missing file: {path}", file=sys.stderr)
+            return 1
     try:
         if args.requirement_product:
             print(validate_requirement_product(*paths))
@@ -508,9 +531,18 @@ def main() -> int:
         for content, path in zip(contents, paths, strict=True):
             reject_placeholders(content, path)
         print(validate(*contents))
-    except (TraceError, CheckFailure, ProductDefinitionError) as error:
-        print(error, file=sys.stderr)
-        return 1
+    except (
+        TraceError,
+        CheckFailure,
+        ProductDefinitionError,
+        OSError,
+        UnicodeError,
+    ) as error:
+        if is_blocking_checker_failure(error):
+            print(f"BLOCKED: {error}", file=sys.stderr)
+            return 1
+        print(f"CHANGED: {error}")
+        return 0
     return 0
 
 

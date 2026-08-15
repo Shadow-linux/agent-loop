@@ -46,7 +46,7 @@ Source Evidence:
 Last Checked:
 Human Decision:
 
-This context does not authorize create, switch, merge, delete, push, tag, release, or publish.
+This context does not authorize create, switch, merge, delete, push, tag, release, publish, or seal.
 
 ## Stage Helper Resolutions
 
@@ -132,6 +132,11 @@ Feature verification does not close a Bug automatically. Bug Close and Feature C
 
 ## Review
 
+## Review Repair Evidence
+
+| Date | Finding / Source | Authority / Boundary | Changed Files | Fresh Verification | Existing Test Obligations | Regression Test Advisory / Not-Needed Reason | Residual Risk | Human Decision |
+|---|---|---|---|---|---|---|---|---|
+
 ### Spec Review
 
 - Date:
@@ -168,10 +173,15 @@ Feature verification does not close a Bug automatically. Bug Close and Feature C
 - Date:
 - Scope:
 - Action:
+- Git Path: full-worktree-fast-path | normal-submit
+- Worktree Scope: entire current worktree | selected normal-submit scope
+- Verification Truth: not run for this Git action; no completion or release-readiness claim | <exact fresh evidence / Human precondition>
 - Diff Summary:
 - Verification:
 - Drift Check:
 - Commit:
+- Commit Decision:
+- Push Decision / Remote / Ref:
 - PR:
 - Remaining Risk:
 - Source Branch:

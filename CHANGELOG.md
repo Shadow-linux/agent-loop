@@ -1,5 +1,56 @@
 # Agent Loop Changelog
 
+## 1.5.6 — 2026-08-15
+
+_当前状态：正式稳定版；Human Review 已接受，Full-Worktree Git Fast Path 的 focused、全量 Shell/Python、机械检查及六域语义验证通过。正式 tag 为 `stable-v1.5.6`；默认安装通道 `main` 的同步仍保留独立 Human Gate。_
+
+### Full-Worktree Git Fast Path
+- 明确 commit / commit-and-push 请求只需一次轻量 Commit Confirmation：展示整个工作区变更摘要和 Agent 拟定的 commit message，不执行代码/质量 Review，也不因 Git 动作运行测试、Verify、Drift 或 Completion。
+- 人类确认后 Commit 立即使用 `git add -A` 纳入 staged、unstaged、untracked 和 deleted 内容；Agent 不得擅自排除、恢复、清理、stash、拆分或丢弃人类工作。
+- 缓存、生成物、疑似敏感文件和其他可疑内容只做显著提示，由人类接受全部或要求新范围；执行前发现 branch、冲突状态或工作区事实变化时重新确认。
+- Commit 与被明确请求的 Push 可在同一次轻量确认中授权，Push 必须绑定精确 remote/ref 且只在 Commit 成功后执行；Git 成功不替代验证、完成、关闭或发布证据。
+- 13 个 root managed blocks 同步到 `1.5.6-20260815.1`。
+
+## 1.5.5 — 2026-08-12
+
+_当前状态：正式稳定版；最终 Human Review 与精确 Release Gate 已接受，focused、全量 Shell/Python、机械检查及六域语义验证通过。人类明确接受发布前定向复核披露的 memory-root 名称碰撞、legacy Project Skill 双 root、Post-Merge 摘要 Gate 顺序及其测试覆盖风险，并决定不在本版修复。正式 tag 为 `stable-v1.5.5`；默认安装通道 `main` 的同步仍保留独立 Human Gate。_
+
+### Review Repair 与 Lightweight Repair-First
+- Feature Review 对已授权且分类为 `within-approved-boundary` 的实现修正默认使用 Review Repair Fast Path：先修实现，再做新鲜 targeted verification、受影响既有检查以及 diff/scope/risk/rollback 复核。
+- 明确 eligible 的 Lightweight Change 同样 repair first，并继续保留 persistent Card、adaptive Plan、fresh verification、diff/scope/risk/rollback 与 Memory Review；不为制造 RED 而新建测试。
+- Required Verification 与 Existing Test Obligation 仍是完成硬要求；只有 Additional Regression Test 作为具体 Regression Test Advisory，不会自行阻塞 Task Done、Lightweight completion 或 Feature Close。
+- 初始 Feature 实现、显式 Bug 修复、人类要求 TDD 或 accepted Plan 要求 RED/GREEN 时继续 TDD；所有 Product、Requirement、ADR、Contract、Feature、Task Done、Submit、Close、Git、Release 与 Human Gates 保持不变。
+- 本次变更不新增 canonical stage、message intent、status、mode、Gate、Checker outcome、artifact tree 或依赖。
+
+### 发布前审计修复
+- 修正 closed Bug 的 Reopen 顺序：准备 Reopen Review 时保持 `closed` 且不写生命周期；只有独立 Bug Reopen Gate 明确接受后，才追加 Reopen Record、恢复 `Resolution: unresolved` 并进入新的 Resolution Path Gate。
+- 修正 Feature Monthly Archive 测试名称，使其准确表达 ambiguous reference 是供 Agent 判断的 advisory，不再误称为 Apply 硬阻断。
+- 拆分原先合并表达的发布动作授权：Tag、Push、Release、Publish、Seal 保持独立 Human Gate；允许用一张 Batch Human Review 展示，但每行分别决定、按前置条件顺序执行，失败不会自动授权后续动作；13 个 root managed blocks 同步到 `1.5.5-20260812.2`。
+
+### Nested Product Definition Checker 修复（2026-08-13 重建）
+- 修复 `check-feature-context.py` 把已确认的 `Effective Product Definition` basename 错误按项目根解析的问题；Requirement README 指向 `design-package/product.md` 等 Requirement-local 嵌套位置时，匹配的 `product.md` 现在复用已解析并完成边界检查的 source。
+- 错误 basename、`./product.md` 等显式路径和越界路径仍进入原有 `CHANGED` / boundary 检查，不放宽 Requirement、memory-root 或项目路径保护。
+- 新增合法嵌套、错误 basename、显式 dotted path 与越界路径回归，并以同一修复提交重建 `stable-v1.5.5`。
+
+## 1.5.4 — 2026-08-11
+
+_当前状态：正式稳定版；最终 Human Review 与精确 Release Gate 已接受，focused、全量 Shell/Python、机械检查及六域语义验证通过。正式 tag 为 `stable-v1.5.4`；默认安装通道 `main` 的同步仍保留独立 Human Gate。_
+
+### 开放 Feature Authority 与 Agent-owned Checker 轻门禁
+- Feature Authority、Bug Authority、Human Authority 改为开放适配器族；Requirement Product Definition 保留为兼容子适配器，历史 Product Requirement Source-only Feature 无需批量迁移。
+- 新增标准库 `feature_authority_support.py`，先解析真实 Authority，再检查本地路径边界、Bug Expected Behavior、Resolution Path/Fix Feature、归档 locator 与支持证据；未知但可检查来源返回 `CHANGED`，不直接硬阻断。
+- Requirement Product Definition 与 Concept 专用 Checker 在非 Requirement Authority 上先返回 `NOT_APPLICABLE`，避免伪造缺失的 Requirement/Product 字段。
+- 显式 Requirement Product Definition 的 primary authority 与 Product Requirement Source 必须指向同一 Requirement README；可识别但断链的 Onboarding symlink 保持 `BLOCKED`，且 Onboarding Python 入口继续支持直接执行。
+- Feature Context Snapshot 的 Authority Facts 现在确定性绑定 Authority Summary 与 resolver 事实；摘要/缓存事实陈旧返回 `CHANGED`，等价相对路径或安全内部 symlink 指向同一 README 时保持单一权威，小写外部 ticket 不再误判为本地文件。
+- Product、Concept 与 ADR 专用 Checker 把可读、可定位的结构/字段/语义缺口报告为 `CHANGED / 0`；非法 UTF-8、断链文件、路径越界、主源冲突与归档定位异常仍稳定返回 `BLOCKED / 1`，不再泄露 traceback 或 argparse exit 2。
+- 新增三级 Agent Checker Rescue：Level 1 仅在已有授权和完整独立证据内自动继续；Level 2 只允许一次 `accepted-for-this-gate`；Level 3 对路径、计划哈希、事务/回滚、真实验证、语义和授权问题保持不可解救。
+- Rescue 保留 canonical failure，不生成授权、不替代任何既有 Human Gate；只有确需修正可执行验证器时才进入原 Checker Self-Repair。
+- Onboarding Checker 先判适用性，再逐 Flow 报告 Slice、Diagram、章节、证据、source/render、digest、状态与 placeholder 事实；等价措辞不因缺少固定英文 token 失败，`covered/PASS` 也不再充当语义证明。
+- Lightweight Change scanner 将 bounded filename/date/field/section/state/placeholder 缺陷改为确定性的逐记录 findings，同时保留其余正常 pending/human-review 清单与触发器；memory-root、路径、symlink、枚举和不可界定布局仍硬阻断。
+- ADR Requirement Model Checker 对普通非需求 ADR 返回 `NOT_APPLICABLE`，但任何已声明 Snapshot/Trace 的结构、引用、digest、coverage 或 Human Review 缺陷继续可见且不通过。
+- 补齐 Feature/Bug/Human/custom/mixed/legacy、BOM/CRLF/Windows 路径、路径/符号链接越界、错域适用性与 Rescue 正反向回归，并把 Authority/Requirement Product Checker 加入 macOS/Windows CI 定义。
+- Windows CI 测试启动器现在强制子 Python 以 UTF-8 输出，避免 `§` 等诊断文本按本地代码页编码后被 UTF-8 解码器误报；新增 legacy-codepage RED/GREEN 回归。
+
 ## 1.5.3 — 2026-07-28
 
 _当前状态：开发中；已获准同步版本，尚未 commit、push、tag 或发布。_

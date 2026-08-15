@@ -85,6 +85,8 @@ Hard caps：
 
 记录每次 `PASS | FAIL`、剩余合理化和具体 source 行。发现漏洞后进入 RED -> GREEN -> REFACTOR，使用相同提示复测到稳定结果。
 
+当被审计功能涉及 Repair-First 时，专项验证必须区分当前完成证明与未来回归保护：初始 Feature/显式 Bug 仍按适用规则保留真实 TDD RED；Review Repair/clearly eligible Lightweight Change 先修复后 fresh targeted verification；Existing Test Obligation 不得降级为 advisory；Additional Regression Test Advisory 只有在当前可靠证明和既有义务都完成后才不阻塞。
+
 ### 6. Feature-Scoped Test Boundary
 
 最小必跑集合：

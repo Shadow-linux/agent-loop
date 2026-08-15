@@ -139,7 +139,7 @@ Evidence: <concrete review statement>
 Implementation Authorized: no | separately-confirmed
 ```
 
-Product Review confirmation does not authorize Requirement acceptance, Feature start, ADR acceptance, code execution, or Git actions. Requirement lifecycle, ADR acceptance, Feature Spec, Plan/Execute, submit, commit, push, release, and publish keep their own gates.
+Product Review confirmation does not authorize Requirement acceptance, Feature start, ADR acceptance, code execution, or Git actions. Requirement lifecycle, ADR acceptance, Feature Spec, Plan/Execute, submit, commit, push, release, publish, and seal keep their own gates.
 
 ## Source Preservation And Append-Only Follow-up
 
@@ -195,18 +195,19 @@ Archify unavailable does not block Product Human Review. If installation would m
 
 ## Downstream Product Slice Handoff
 
-After Product Review and Requirement lifecycle gates pass, run Design Readiness. ADR consumes the Effective Product Definition and owns only technical landing. Feature `spec.md` then records:
+After Product Review and Requirement lifecycle gates pass, run Design Readiness. ADR consumes the Effective Product Definition and owns only technical landing. A Requirement-driven Feature records Requirement Product Definition as the compatible Feature Authority sub-adapter; this Product handoff does not make Requirement authority mandatory for Bug-, Human-, or custom-authority Features. Its `spec.md` records:
 
+- the descriptive Feature Authority type, one primary reference, supporting references, and Agent assessment;
 - Requirement Set path;
 - Effective Product Definition path;
 - Product Definition Profile and review evidence;
 - Applicable Decisions;
-- a derived Feature Context Snapshot with Requirement lifecycle, resolved product source, Product/Decision SHA-256 evidence, Product Slice references, verification time, and `current | changed | blocked` Freshness;
+- an authority-neutral derived Feature Context Snapshot plus the applicable Requirement lifecycle, resolved product source, Product/Decision SHA-256 evidence, Product Slice references, verification time, and `current | changed | blocked` Freshness;
 - a Product Slice mapping source sections/IDs to Feature responsibility, acceptance, and coverage.
 
-Requirement, product, and ADR locators are project-root-relative. Before downstream work relies on the Snapshot or Product Slice, run the read-only `scripts/check-feature-context.py` fact scanner and read its prefix. `CURRENT / 0` uses the local fast path. `CHANGED / 0` exposes factual drift for Agent semantic comparison and derived repair; it does not decide authorization. `BLOCKED / 1` is limited to physical/authority-resolution contradictions. After `CHANGED`, only actual product/decision impact returns to the owning Requirement, Decision & Design, or Feature Definition Gate.
+Requirement, product, ADR, and other declared local locators are project-root-relative; external, ticket, and Human decision locators remain evidence strings. Before downstream work relies on the Snapshot or Product Slice, run the read-only `scripts/check-feature-context.py` fact scanner and read its prefix. `CURRENT / 0` uses the local fast path. `CHANGED / 0` exposes factual drift for Agent semantic comparison and derived repair; it does not decide authorization. `NOT_APPLICABLE / 0` from a specialized Product checker selects another authority adapter or direct evidence. `BLOCKED / 1` is limited to physical/authority-resolution contradictions. After `CHANGED`, only actual product/decision impact returns to the owning Requirement, Decision & Design, or Feature Definition Gate.
 
-The Product Slice can narrow implementation scope but cannot rename, reverse, or locally redefine accepted product meaning. Out-of-scope items keep a visible Requirement Phase, another Feature, accepted Decision, or concrete not-applicable owner.
+When the Requirement Product Definition sub-adapter applies, the Product Slice can narrow implementation scope but cannot rename, reverse, or locally redefine accepted product meaning. Out-of-scope items keep a visible Requirement Phase, another Feature, accepted Decision, or concrete not-applicable owner. Other authority adapters use their accepted Feature boundary and acceptance evidence without inventing Product model IDs.
 
 ## Legacy Compatibility
 

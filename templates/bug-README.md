@@ -32,7 +32,7 @@ Resolution: unresolved | fixed | duplicate | not-a-bug | cannot-reproduce | acce
 - Priority: unset | low | medium | high | urgent
 - Reproduction Status: not-attempted | reproducible | intermittent | cannot-reproduce
 
-Severity, Priority, and Origin do not authorize hotfix, branch, deploy, release, or publish actions.
+Severity, Priority, and Origin do not authorize hotfix, branch, deploy, release, publish, or seal actions.
 
 ## Relationships
 

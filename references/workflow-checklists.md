@@ -88,6 +88,7 @@ Before using an external skill or plugin inside a stage:
 
 ## ADR Requirement Model Technical Landing
 
+- [ ] Determine specialized Checker applicability from the ADR itself before resolving Requirement/Product inputs; a generic non-requirement ADR is `NOT_APPLICABLE`, while any declared Snapshot/trace ownership makes structural defects applicable and visible.
 - [ ] Resolve README `Effective Product Definition` or legacy `Effective Concept Foundation` and record the dual-reader Effective Requirement Snapshot before technical landing.
 - [ ] Require new Product Review `confirmed` and any triggered internal Concept Foundation accepted; return pending / `candidate` / `reopened` to Requirements Discussion.
 - [ ] Declare only source-backed accepted Concept IDs, in-scope Requirement Model IDs, and Product Rule anchors without copying or redefining product meaning; use `none` for an ID kind only when the effective source declares none.
@@ -113,7 +114,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Keep durable strategy and current Target Release Context pointer in `project.md`; keep mutable Current Branch Context in feature notes, plan, or Submit / Integrate evidence.
 - [ ] Block same-version work against a `released / sealed` target; repair uses a new patch version and new capability uses a human-confirmed new version.
 - [ ] Do not flow a customer release branch wholesale into `main` or a standard release line.
-- [ ] Do not treat recommendation, adoption, plan acceptance, or auto mode as permission to create, switch, merge, delete, push, tag, release, or publish.
+- [ ] Do not treat recommendation, adoption, plan acceptance, or auto mode as permission to create, switch, merge, delete, push, tag, release, publish, or seal.
 - [ ] Require a Branch Action Gate before creating or switching one exact development branch.
 - [ ] Require merge evidence plus separate human confirmation before deleting a temporary development branch; retain release aggregation branches.
 - [ ] Do not create a default `.agent-loop/branches/` directory.
@@ -151,10 +152,11 @@ Before using an external skill or plugin inside a stage:
 - [ ] Reuse the one accepted root, fail closed on dual roots, treat changes-only as not initialized, and allocate the first unused same-day topic suffix without overwrite.
 - [ ] Keep a Plan in every card and adapt depth to risk; never use No-Plan Decision.
 - [ ] When a reliable memory root exists, run Project Skill Discovery Guard and preserve the matched Project Skill Execution Gate.
-- [ ] Record why the change uses targeted verification or the smallest meaningful RED/GREEN.
+- [ ] Record why the change is clearly eligible for Repair-First Verification; apply only the disclosed bounded change, then run fresh failure-matched targeted verification and affected existing checks.
 - [ ] Stop before broader edits on scope expansion and recommend exactly one Bug Management, Requirements Discussion, or Feature Construction route.
 - [ ] Before completion, close/explain Plan items, replace initial Memory markers, run fresh targeted verification, and review diff, disclosed scope, durable-memory impact, sensitive evidence, and rollback.
 - [ ] After completion, run `scripts/scan-lightweight-changes.py`; keep `human-review` visible and start Agent semantic consolidation for three pending or oldest age greater than seven days.
+- [ ] Read `validation_result` and deterministic `record_findings` separately from `triggered | not-triggered`; preserve valid pending/human-review inventory when one bounded card is malformed, while unsafe root/layout authority remains hard.
 - [ ] Allow accidental resume only after branch/full-HEAD/dirty-diff/Scope/Plan/eligibility/verification/rollback revalidation; route planned cross-session/handoff/Subagent/long-observation work to Feature.
 - [ ] Before high-evidence memory sync, require an existing reliable owner and disclose exact target path, fact, evidence, impact, and rollback; restore only this Agent's memory edit on failure.
 - [ ] Confirm branch, submit, production, external, paid, configuration-write, destructive, Feature/Bug lifecycle, and Git gates remain separate.
@@ -199,7 +201,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Read `STRUCTURAL_CURRENT | STRUCTURAL_CHANGED | STRUCTURAL_INVALID` explicitly. A zero exit for `STRUCTURAL_CHANGED` still requires Agent impact review; compare project-owned block meaning to its declared source instead of treating the checker as semantic proof.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.3-20260728.1`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.6-20260815.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -286,7 +288,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Read `STRUCTURAL_CURRENT | STRUCTURAL_CHANGED | STRUCTURAL_INVALID` explicitly. A zero exit for `STRUCTURAL_CHANGED` still requires Agent impact review; compare project-owned block meaning to its declared source instead of treating the checker as semantic proof.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.3-20260728.1`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.6-20260815.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -318,6 +320,8 @@ Before using an external skill or plugin inside a stage:
 - [ ] State that Markdown is source of truth and website generation is out of scope.
 - [ ] Build `08-review/evidence-graph.md` before formal onboarding docs.
 - [ ] Build Core Flow Inventory from entries, state writes, async handlers, recovery paths, tests/contracts/logs/config, and verified business outcomes.
+- [ ] Determine Onboarding Checker applicability before coverage; no recognizable scope is `NOT_APPLICABLE`, safely enumerable missing/stale facts are `CHANGED`, and only unreadable/unsafe/ambiguous physical authority is `BLOCKED`.
+- [ ] Treat fixed wording and recorded `covered` / `PASS` as facts only; the Agent owns semantic completeness and newcomer-readiness judgment.
 - [ ] Give every `critical` / `important` flow a stable Flow ID, business success/failure terminals, variants, owners, side effects, recovery responsibility, evidence chain, and planned/deferred decision.
 - [ ] Do not treat `accepted` / `pending` / `processing` as a business terminal when callback, consumer, job, or reconciler owns the final state.
 - [ ] Draft `onboarding-spec.md`: target readers, scope, module plan, flow plan, DDD mapping, jobs/async, infra/deploy, file strategy, diagram type plan, ASCII 文本图 / wireframe rules, quality gates, and batches.
@@ -430,6 +434,8 @@ Before using an external skill or plugin inside a stage:
 - [ ] If an explicit Bug report/title is generic, keep the Bug `triaging` and recommend `investigate-first`; do not merge/reopen the nearest record or Feature by recency/title alone.
 - [ ] Present a Candidate Match Matrix with match evidence and match strength.
 - [ ] When multiple candidates have medium/high match because evidence is incomplete, recommend `investigate-first`; ask the human only when evidence is sufficient and the remaining choice is product/ownership.
+- [ ] Keep a matched closed Bug unchanged while preparing the named Bug Reopen Review. Present trigger evidence, proposed return Status, preserved Close/Status history, and the exact Bug Reopen Gate before any lifecycle write.
+- [ ] Only after explicit Bug Reopen Gate acceptance append the Reopen Record, restore `Resolution: unresolved`, apply the accepted return Status, and proceed to a new Resolution Path recommendation and its separate Gate.
 - [ ] Classify the report as same-feature-bug, same-feature-adjustment, regression-from-feature, new-feature, maintenance-fix, or unclear.
 - [ ] Resolve Expected Behavior evidence. Ambiguity/conflict routes to Requirements Discussion / Requirement Reconciliation / Decision & Design instead of a guessed repair.
 - [ ] Validate Status/Resolution independently; stop on `closed+unresolved`, `deferred=closed`, duplicate cycles, expired-only evidence, or `in-progress` without one valid Resolution Path/Target.
@@ -450,9 +456,11 @@ Before using an external skill or plugin inside a stage:
 ## Feature Context Load / Resume
 
 - [ ] Start from Feature `spec.md`; do not reconstruct Resume, controller re-entry, or context-compaction recovery from `tasks.md`, `plan.md`, or conversation memory alone.
+- [ ] Resolve the descriptive Feature Authority, effective primary reference, supporting references, and adapter applicability before interpreting Requirement-, Bug-, Human-, or custom-specific fields.
 - [ ] Run `python3 <skill-root>/scripts/check-feature-context.py --project-root <target-project-root> <feature-spec-path>`; on Windows use the equivalent `py -3` command. Read the prefix because `CURRENT` and `CHANGED` both exit `0`.
 - [ ] Exit `0` / `CURRENT` permits the local Snapshot fast path and stage-relevant ledger loading.
 - [ ] Exit `0` / `CHANGED` exposes factual drift; record Agent impact assessment, repair derived evidence when fact-determined, rerun to `CURRENT`, and return semantic impact to the existing owning Gate.
+- [ ] Exit `0` / `NOT_APPLICABLE` from a specialized Checker selects another adapter/direct evidence; it is neither PASS nor authorization.
 - [ ] Exit `1` / `BLOCKED` is limited to physical/authority-resolution contradictions and routes to Recovery or source repair.
 - [ ] Auto Mode cannot rely on unresolved `CHANGED` or physical `BLOCKED`; exit `0` alone is insufficient.
 - [ ] Recheck after Requirement/ADR change, long-running uncertainty, archive rehydrate, and before Plan/Execute/Verify/Review/Drift/Close reliance.
@@ -481,16 +489,19 @@ Before using an external skill or plugin inside a stage:
 - [ ] Reject duplicate or history-sourced Task Mode/mapping/No-Plan metadata and duplicate initial Task IDs.
 - [ ] Treat Human decision provenance and Task/Plan semantics as Agent-owned checks. Do not invent approval from Markdown; after context loss, ask one blocking confirmation only when reliable Human evidence is unavailable.
 - [ ] Confirm Feature Gate acceptance and continuation require no local digest or Feature review Checker.
-- [ ] Preserve separate Delivery Contract breaking-change, Human-gated task, subagent, branch/Git, external, production, credentials, submit, commit, push, PR, merge, tag, release, publish, pause, and close gates.
+- [ ] Preserve separate Delivery Contract breaking-change, Human-gated task, subagent, branch/Git, external, production, credentials, submit, commit, push, PR, merge, tag, release, publish, seal, pause, and close gates.
 
 ## Feature Spec
 
 - [ ] If `project.md` declares a Decisions index, read decision links already named by the Effective Product Definition, legacy Product Brief when present, or active Feature Spec, then inspect other likely relevant accepted decisions by domain/boundary overlap.
 - [ ] Propose missing Applicable Decision references for human confirmation; do not create a duplicate ADR because a link is missing.
 - [ ] Confirm Design Readiness is `design-not-needed` or `completed`; run Decision & Design before Feature Spec when shared design is required.
-- [ ] Resolve new `Effective Product Definition` or legacy `Effective Concept Foundation`; require confirmed/accepted source and block pending, ambiguous, stale, `candidate`, or `reopened` input.
-- [ ] Add Product Requirement Source and Product Slice from the effective source; cite Concept/Model IDs and Product Rule anchors without a Feature Product Brief intermediary.
-- [ ] Create the default Feature Context Snapshot in `spec.md` from one current Requirement README/Product Definition/accepted-ADR baseline, using project-root-relative paths and SHA-256 evidence computed after Markdown newline canonicalization (`CRLF` / lone `CR` -> `LF`).
+- [ ] Write `Feature Authority` with a descriptive type, one primary reference, optional supporting references, Authority Summary, and Agent assessment; do not treat Feature/Bug/Human as a closed enum.
+- [ ] Use Requirement Product Definition as the compatibility sub-adapter only when product authority applies; preserve Product Requirement Source-only legacy specs without migration.
+- [ ] For Requirement Product Definition, resolve new `Effective Product Definition` or legacy `Effective Concept Foundation`; require confirmed/accepted source and block pending, ambiguous, stale, `candidate`, or `reopened` input.
+- [ ] Add Product Requirement Source and Product Slice only for the Requirement Product Definition sub-adapter; cite Concept/Model IDs and Product Rule anchors without a Feature Product Brief intermediary.
+- [ ] Create the default authority-neutral Feature Context Snapshot in `spec.md`; copy the resolver-emitted deterministic semicolon-separated Authority Facts including Authority Summary, use project-root-relative paths and normalized SHA-256 evidence for declared local sources, and keep external/ticket/Human locators as evidence strings.
+- [ ] For Bug Authority, record objective Bug ID, Expected Behavior locator, Resolution Path/Fix Feature locator, archive locator, and freshness without merging Bug confirmation, Resolution Path, Feature create/reopen, Gate 1, or Gate 2.
 - [ ] Include product outcome, actors/core journey, applicable rules/invariants, states/exceptions/recovery, and Feature boundary/acceptance context without creating independent product truth.
 - [ ] When the scanner returns `CHANGED`, record Agent impact assessment, repair derived evidence when fact-determined, and rerun to `CURRENT` before Requirement Checklist acceptance; physical `BLOCKED` routes to Recovery/source repair.
 - [ ] Reject feature-local redefinition of accepted concept name, identity, owner, lifecycle, relationship, invariant, state, terminal meaning, or product fact.
@@ -513,8 +524,8 @@ Before using an external skill or plugin inside a stage:
 
 ## Requirement Checklist
 
-- [ ] Confirm the Feature Context Snapshot is complete, its source references resolve, paths are project-root-relative, and the scanner is `CURRENT` after any `CHANGED` assessment/repair.
-- [ ] Confirm the Feature Spec references an accepted requirement set and its exact Delivery Phase or phase slice when applicable.
+- [ ] Confirm the Feature Context Snapshot is complete, declared local authority references resolve inside project boundaries, and every Checker outcome has the applicable Agent assessment/route.
+- [ ] Confirm the Feature Spec references an accepted requirement set and its exact Delivery Phase or phase slice only when Requirement Product Definition applies.
 - [ ] Confirm Design Readiness is `design-not-needed` or `completed`.
 - [ ] Confirm no major ambiguity remains.
 - [ ] Confirm stories are independently testable.
@@ -735,7 +746,8 @@ Checklist:
 - [ ] If Task Auto-Run is enabled, execute only the selected task/story and stop after evidence/review/drift updates and Task Done Gate status update.
 - [ ] Stop at Human-gated tasks or any stop condition.
 - [ ] Resolve and load `superpowers:test-driven-development` or `test-driven-development` before every Execute Task / Story invocation; record Stage Helper Resolution, or record `unavailable` / `load-failed` before fallback.
-- [ ] Use TDD for behavior-changing execution; for non-behavior work record TDD as `not-applicable` with a reason after helper resolution.
+- [ ] Use TDD for initial Feature behavior execution, explicit Bug behavior execution, Human-requested TDD, or an accepted Plan that requires RED/GREEN; for non-behavior work record TDD as `not-applicable` with a reason after helper resolution.
+- [ ] Keep Review Repair in Review; do not re-enter Execute Task / Story merely to manufacture RED for an implementation that already exists.
 - [ ] If Superpowers `test-driven-development` or another TDD helper is available, use it through `external-skill-adapters.md` while keeping evidence and task status under agent-loop.
 - [ ] Verify RED before implementation.
 - [ ] Write minimal GREEN implementation.
@@ -756,6 +768,7 @@ Checklist:
 - [ ] Form a specific hypothesis.
 - [ ] Test one variable at a time.
 - [ ] Write a failing regression test when possible.
+- [ ] Keep any failed Required Verification or Existing Test Obligation as diagnosis evidence; never downgrade it into a Regression Test Advisory.
 - [ ] Fix root cause, not symptom.
 - [ ] Record diagnosis in `notes.md`.
 - [ ] For a canonical Agent Loop checker failure, rerun the exact command unchanged and preserve command, target, exit status, output, checker path/version/commit, and SHA-256.
@@ -777,6 +790,8 @@ Checklist:
 - [ ] Run it fresh.
 - [ ] Read full output and exit status.
 - [ ] Record evidence in `notes.md`.
+- [ ] After a Repair-First write, run fresh targeted verification and affected existing checks; pre-write proof is stale for the repaired behavior.
+- [ ] Do not downgrade an Existing Test Obligation into a Regression Test Advisory.
 - [ ] When Bugs are related, execute the Bug Verification Matrix against original reproduction/substitute and regression/safety paths; update the Bug README and Index row.
 - [ ] Feature evidence may move `in-progress -> verifying`; do not set `closed` without the Bug Close Gate.
 - [ ] Failed Bug-specific verification returns to `in-progress` or `triaging` with append-only evidence.
@@ -792,6 +807,8 @@ Checklist:
 - [ ] Report code/product disagreement as drift; never overwrite the Snapshot from current code behavior.
 - [ ] Resolve and load `superpowers:requesting-code-review` or `requesting-code-review` before each task, submit, or feature-close review scope; record a fresh Stage Helper Resolution, or record `unavailable` / `load-failed` before fallback.
 - [ ] If Superpowers `requesting-code-review` or another review helper is available, use it through `external-skill-adapters.md` while recording findings in agent-loop `notes.md`.
+- [ ] Classify the finding as `within-approved-boundary` before a Review Repair write.
+- [ ] Repair first only inside current authorization, then run fresh targeted verification and affected existing checks.
 - [ ] Perform lightweight Spec Review for every task before marking it `done`.
 - [ ] Perform Spec Review before Submit / Integrate.
 - [ ] Compare implementation against `product.md` when present, `spec.md`, acceptance criteria, scope, and out-of-scope.
@@ -800,13 +817,17 @@ Checklist:
 - [ ] Compare implementation against root/directory `AGENTS.md`, `project.md`, testing rules, directory boundaries, and local conventions.
 - [ ] Record findings, accepted fixes, and rejected fixes in `notes.md`.
 - [ ] Compare producer code and tests against relevant Delivery Contracts.
+- [ ] Batch specific Regression Test Advisory items in the next existing review/completion summary.
 - [ ] Keep task status as `review` if required review is missing.
-- [ ] Ask human confirmation before applying review-driven changes that alter behavior, scope, architecture, data, or public interfaces.
+- [ ] An ordinary `within-approved-boundary` implementation behavior correction inside current authorization requires no new per-finding Human confirmation; repair first and report it in the next existing Review or completion summary.
+- [ ] Ask Human confirmation or return to the owning Gate only when a Review finding changes product meaning, Feature definition or acceptance, the accepted implementation boundary, a public interface, an ADR or Contract, security, data, permission, dependency, migration, architecture, external action, authorization, rollback, or reliable verification.
 
 ## Task Done Gate
 
 - [ ] Implementation scope complete.
 - [ ] Required tests or substitute verification ran fresh.
+- [ ] Do not downgrade an Existing Test Obligation into a Regression Test Advisory.
+- [ ] If current proof is insufficient without a new test, keep the task/change non-terminal and ask at the existing Human Review.
 - [ ] Evidence recorded in `notes.md`.
 - [ ] Lightweight Spec Review recorded.
 - [ ] Standards Review recorded when triggered.
@@ -864,6 +885,8 @@ Checklist:
 
 ## Submit / Integrate
 
+The following checklist is normal-submit only; skip it entirely for Full-Worktree Git Fast Path.
+
 - [ ] Load `submit-and-integrate.md`.
 - [ ] Run Stage Helper Capability Scan before fallback submit/integrate preparation.
 - [ ] If Superpowers `finishing-a-development-branch` or another finishing/branch helper is available, use it through `external-skill-adapters.md`.
@@ -885,15 +908,29 @@ Checklist:
 - [ ] Let the Agent rewrite and target-verify fact-determined current meaning; ask the human only when multiple meanings remain legitimate.
 - [ ] Treat an unresolved observed conflict or failed targeted restore as blocking; a speculative conflict or missing full audit is not blocking.
 - [ ] Use four-snapshot accounting, exact Plan Hash, and transactional Apply/Restore only after explicit Full Memory Audit / Recovery authorization.
-- [ ] Treat resolution only as permission to offer the next independent Memory Commit / Push / Release / Cleanup Human Gate; never inherit code-merge or submit authorization.
+- [ ] Treat resolution only as permission to offer the next independent Memory Commit / Tag / Push / Release / Publish / Seal / Cleanup Human Gate; never inherit code-merge or submit authorization.
 - [ ] When an adopted Branch Strategy or versioned/customer delivery applies, verify Source Branch, Branch Class, Target Release Context, Target Branch, sealed state, customer isolation, and requested action.
 - [ ] Require merge evidence and a separate cleanup decision before deleting a temporary development branch; never treat a retained release aggregation branch as temporary cleanup.
-- [ ] Treat each create/switch/merge/delete/push/tag/release/publish action as separately Human-gated even when the strategy and plan are accepted; create/switch uses the Branch Action Gate.
+- [ ] Treat each create/switch/merge/delete/push/tag/release/publish/seal action as separately Human-gated even when the strategy and plan are accepted; create/switch uses the Branch Action Gate.
+- [ ] When using one Batch Human Review, keep each requested Git/release action as an independent decision row with exact scope and preconditions. Do not infer Tag, Push, Release, Publish, or Seal authorization from another row.
 - [ ] Present submit/integrate decision with Human Review Summary table.
-- [ ] Ask human which action to take: prepare only, commit, PR text, merge note, release note, publish/release note, or skip.
-- [ ] Only commit, publish, release, merge, or create final PR text after explicit human confirmation.
+- [ ] Ask human which action to take: prepare only, commit, PR text, merge note, tag, push, release, publish, seal, cleanup, or skip.
+- [ ] Only perform the exact commit, push, PR, merge, tag, release, publish, seal, or cleanup action after its explicit Human Gate decision.
 - [ ] Record submit/integrate result in `notes.md`.
 - [ ] Apply the ordered exit decision: prepare-only not performed -> Pause; explicitly skipped -> Feature Completion Check if done or next task/story; performed and done -> Feature Completion Check; performed with work remaining -> next task/story; failed/blocked -> one unblock stage.
+
+## Full-Worktree Git Fast Path
+
+- [ ] Confirm the Human explicitly requested `commit` or `commit and push`; a readiness question stays on normal Submit.
+- [ ] Inspect repository, branch, HEAD, unresolved Git operation/conflict state, and the entire staged/unstaged/untracked/deleted worktree.
+- [ ] Present one lightweight Commit Confirmation with the complete worktree file/change summary, proposed commit message, verification truth, and exact remote/ref when Push was requested.
+- [ ] Do not run tests or perform code/quality Review, Feature Review, verification Review, Drift Review, or Completion Review merely for this Git action; ask no second confirmation.
+- [ ] Do not exclude, restore, clean, stash, split, or discard content.
+- [ ] State `not run for this Git action; no completion or release-readiness claim` unless the Human supplied an exact verification precondition.
+- [ ] After confirmation, run `git add -A`, confirm the index represents the entire worktree, and commit immediately with the confirmed message.
+- [ ] Plain `commit` authorizes Commit only; `commit and push` authorizes both in order. Use the unique upstream; if absent/ambiguous, finish Commit and ask only for Push destination.
+- [ ] Preserve the worktree/index and report facts after any conflict, ambiguity, policy stop, index mismatch, commit failure, or push failure.
+- [ ] Do not use Git packaging permission as evidence for fixed, verified, done, completed, closed, or release-ready claims.
 
 ## Feature Completion Check
 
@@ -905,6 +942,10 @@ Checklist:
 - [ ] Confirm all remaining in-scope tasks are `done`; skipped/deferred work must already be removed through human-approved scope reconciliation.
 - [ ] Confirm required tests or substitute verification are recorded.
 - [ ] Confirm fresh verification evidence exists.
+- [ ] Confirm all Existing Test Obligations are complete.
+- [ ] Confirm every Review Repair has fresh targeted verification and evidence.
+- [ ] Confirm Additional Regression Test recommendations and residual risk are visible; an unaccepted advisory alone does not block Feature close.
+- [ ] Batch specific Regression Test Advisory items in the next existing review/completion summary.
 - [ ] Confirm Feature Close Review completed.
 - [ ] Feature close is blocked until all assigned design slices have implementation and verification evidence, or a human-approved decision reassigns, defers, removes, or supersedes the slice.
 - [ ] Confirm feature-level Spec Review covers `product.md` when present, `spec.md`, `tasks.md`, `tests.md`, acceptance criteria, and out-of-scope boundaries.
@@ -940,6 +981,8 @@ Close:
 
 - [ ] Feature Context is freshly `CURRENT`; unresolved `CHANGED` or physical `BLOCKED` stops Close.
 - [ ] Fresh verification evidence exists.
+- [ ] Every Existing Test Obligation is complete; missing required current proof is not an advisory.
+- [ ] Additional Regression Test advice and residual risk are visible when present, without making an unaccepted advisory a new Close gate.
 - [ ] Drift check completed.
 - [ ] Feature Close Review completed.
 - [ ] Submit/integration status recorded if requested.

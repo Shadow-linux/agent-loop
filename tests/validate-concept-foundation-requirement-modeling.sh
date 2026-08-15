@@ -30,6 +30,20 @@ assert_before() {
   ' "$root/$file" "$first" "$second"
 }
 
+assert_changed() {
+  local label=$1
+  shift
+  local output
+  if ! output=$("$@" 2>&1); then
+    printf 'FAIL: %s must be readable CHANGED / 0, got hard failure\n%s\n' "$label" "$output" >&2
+    exit 1
+  fi
+  if [[ "$output" != *"CHANGED:"* || "$output" == *"PASS:"* ]]; then
+    printf 'FAIL: %s must report CHANGED without PASS\n%s\n' "$label" "$output" >&2
+    exit 1
+  fi
+}
+
 assert_contains "SKILL.md" "Concept Foundation"
 assert_contains "SKILL.md" "Requirement Product Model"
 assert_contains "references/design.md" "Concept Foundation is an internal Requirements Discussion / Requirement Product Grill method, not a canonical stage"
@@ -95,12 +109,10 @@ python3 "$root/scripts/check-concept-foundation-trace.py" --requirement-product 
 
 (cd "$root" && python3 -m unittest tests/test_concept_foundation_trace.py)
 
-if python3 "$root/scripts/check-concept-foundation-trace.py" \
+assert_changed "unaccepted legacy Concept Foundation fixture" \
+  python3 "$root/scripts/check-concept-foundation-trace.py" \
   "$root/tests/fixtures/concept-foundation/invalid-unaccepted/requirement.md" \
   "$root/tests/fixtures/concept-foundation/invalid-unaccepted/product.md" \
-  "$root/tests/fixtures/concept-foundation/invalid-unaccepted/spec.md" >/dev/null 2>&1; then
-  printf 'FAIL: unaccepted legacy Concept Foundation fixture unexpectedly passed\n' >&2
-  exit 1
-fi
+  "$root/tests/fixtures/concept-foundation/invalid-unaccepted/spec.md"
 
 printf 'PASS: internal Concept Foundation, adaptive model, new Product Slice, and legacy trace contract is complete\n'

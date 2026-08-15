@@ -69,6 +69,7 @@ class LightweightChangeContractError(Exception):
             "error": {"category": self.category, "detail": self.detail},
             "result": "invalid",
             "schema_version": 1,
+            "validation_result": "BLOCKED",
         }
 
 
@@ -84,6 +85,20 @@ class LightweightChange:
     memory_result: MemoryResult
 
 
+@dataclass(frozen=True, order=True)
+class LightweightChangeFinding:
+    path: str
+    category: str
+    detail: str
+
+    def to_payload(self) -> dict[str, str]:
+        return {
+            "category": self.category,
+            "detail": self.detail,
+            "path": self.path,
+        }
+
+
 @dataclass(frozen=True)
 class LightweightChangeScan:
     schema_version: int
@@ -91,6 +106,7 @@ class LightweightChangeScan:
     memory_root: str | None
     changes_root: str | None
     changes: Sequence[LightweightChange]
+    findings: Sequence[LightweightChangeFinding] = ()
 
     def to_payload(self) -> dict[str, object]:
         ordered = tuple(sorted(self.changes, key=lambda item: item.path))
@@ -125,6 +141,13 @@ class LightweightChangeScan:
             "stopped": sum(item.status == "stopped" for item in ordered),
             "total": len(ordered),
         }
+        ordered_findings = tuple(sorted(self.findings))
+        if self.changes_root is None:
+            validation_result = "NOT_APPLICABLE"
+        elif ordered_findings:
+            validation_result = "CHANGED"
+        else:
+            validation_result = "CURRENT"
         return {
             "as_of": self.as_of.isoformat(),
             "changes_root": self.changes_root,
@@ -133,9 +156,11 @@ class LightweightChangeScan:
             "memory_root": self.memory_root,
             "oldest_pending": self._pending_row(oldest) if oldest is not None else None,
             "pending_changes": pending_rows,
+            "record_findings": [item.to_payload() for item in ordered_findings],
             "result": "triggered" if reasons else "not-triggered",
             "schema_version": self.schema_version,
             "trigger_reasons": reasons,
+            "validation_result": validation_result,
         }
 
     def _completed(self, item: LightweightChange) -> date:
@@ -374,13 +399,13 @@ def parse_change(
     try:
         size = path.stat().st_size
     except OSError as error:
-        raise _error("metadata", relative, "cannot read Change metadata") from error
+        raise _error("read", relative, "cannot read Change metadata") from error
     if size > MAX_CHANGE_BYTES:
         raise _error("size", relative, "Change exceeds 1 MiB")
     try:
         text = read_text(path)
     except (OSError, UnicodeError) as error:
-        raise _error("metadata", relative, "Change must be readable UTF-8 text") from error
+        raise _error("read", relative, "Change must be readable UTF-8 text") from error
     structural_text = _mask_fenced_code(text)
     _validate_no_authoring_markers(structural_text, relative)
 
@@ -488,6 +513,7 @@ def build_scan(project_root: Path, *, as_of: date) -> LightweightChangeScan:
         raise _error("layout", f"{memory_relative}/changes", "changes root must be a directory")
 
     records: list[LightweightChange] = []
+    findings: list[LightweightChangeFinding] = []
     for month_path in _sorted_directory_entries(changes_root, f"{memory_relative}/changes"):
         month_relative = _relative(resolved_project, month_path)
         if month_path.is_symlink() or not month_path.is_dir():
@@ -504,9 +530,22 @@ def build_scan(project_root: Path, *, as_of: date) -> LightweightChangeScan:
                 raise _error("layout", candidate_relative, "unsupported Change artifact kind")
             if candidate.suffix.lower() != ".md":
                 continue
-            if CHANGE_FILE_RE.fullmatch(candidate.name) is None:
-                raise _error("layout", candidate_relative, "invalid Change Markdown filename")
-            records.append(parse_change(memory_root, candidate, as_of=as_of))
+            try:
+                records.append(parse_change(memory_root, candidate, as_of=as_of))
+            except LightweightChangeContractError as error:
+                if error.category not in {"layout", "metadata", "state", "date"}:
+                    raise
+                detail = error.detail
+                prefix = f"{candidate_relative}: "
+                if detail.startswith(prefix):
+                    detail = detail.removeprefix(prefix)
+                findings.append(
+                    LightweightChangeFinding(
+                        candidate_relative,
+                        error.category,
+                        detail,
+                    )
+                )
 
     return LightweightChangeScan(
         schema_version=1,
@@ -514,4 +553,5 @@ def build_scan(project_root: Path, *, as_of: date) -> LightweightChangeScan:
         memory_root=memory_relative,
         changes_root=_relative(resolved_project, changes_root),
         changes=tuple(sorted(records, key=lambda item: item.path)),
+        findings=tuple(sorted(findings)),
     )

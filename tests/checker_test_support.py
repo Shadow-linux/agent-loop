@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -11,6 +12,8 @@ ROOT = Path(__file__).resolve().parents[1]
 def run_checker(
     script: str, *args: str, cwd: Path | None = None
 ) -> subprocess.CompletedProcess[str]:
+    env = os.environ.copy()
+    env["PYTHONIOENCODING"] = "utf-8"
     return subprocess.run(
         [sys.executable, str(ROOT / script), *map(str, args)],
         cwd=str(cwd or ROOT),
@@ -18,6 +21,7 @@ def run_checker(
         capture_output=True,
         text=True,
         encoding="utf-8",
+        env=env,
     )
 
 

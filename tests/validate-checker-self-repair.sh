@@ -23,7 +23,13 @@ assert_contains SKILL.md 'references/checker-recovery.md'
 assert_contains SKILL.md 'canonical Agent Loop checker'
 assert_contains references/runtime.md '## Checker Failure Recovery'
 assert_contains references/runtime.md 'internal method of Diagnose Failure and Verify'
+assert_contains references/runtime.md '## Agent Checker Rescue'
+assert_contains references/runtime.md 'Level 1 — Agent automatic rescue'
+assert_contains references/runtime.md 'Level 2 — Human one-Gate substitute'
+assert_contains references/runtime.md 'Level 3 — non-rescuable'
 assert_contains references/design.md '**Checker Self-Repair**'
+assert_contains references/checker-recovery.md 'Agent Checker Rescue'
+assert_contains references/checker-recovery.md 'corrected executable Checker'
 assert_contains references/checker-recovery.md 'artifact-invalid | environment-invalid | checker-defect-candidate | unresolved'
 assert_contains references/checker-recovery.md 'Canonical validation: failed'
 assert_contains references/checker-recovery.md 'accepted-for-this-gate'
@@ -42,11 +48,18 @@ assert_contains references/validation-scenarios.md '## 76. Checker Self-Repair'
 assert_contains Usage.md '临时修正 Agent Loop Checker'
 assert_contains CHANGELOG.md 'Checker Self-Repair'
 assert_contains references/validation-scenarios.md 'Sanitized Issue Draft Does Not Authorize Submission'
+assert_contains references/validation-scenarios.md 'Agent Checker Rescue Level 1'
+assert_contains references/validation-scenarios.md 'Agent Checker Rescue Level 2'
+assert_contains references/validation-scenarios.md 'Agent Checker Rescue Level 3'
 assert_contains Usage.md '没有可用登录能力时只返回草稿与阻塞'
 
 assert_not_contains references/checker-recovery.md \
   'temporary result changes the canonical checker to pass'
 assert_not_contains references/checker-recovery.md \
   'Auto Mode authorizes temporary checker repair'
+assert_not_contains references/checker-recovery.md \
+  'Agent Checker Rescue changes the canonical result to PASS'
+assert_not_contains references/checker-recovery.md \
+  'Agent Checker Rescue creates execution authorization'
 
 printf 'PASS: checker self-repair classification, isolation, evidence, one-gate authorization, and formal-repair contract is complete\n'

@@ -242,6 +242,34 @@ class RequirementVisualIntegrationTests(unittest.TestCase):
             result = run_checker(PRODUCT_SCRIPT, readme, product, spec)
             self.assertEqual(result.returncode, 0, combined_output(result))
 
+    def test_product_invalid_utf8_visual_source_is_stably_blocked(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary) / "requirement"
+            readme, product, spec = self.prepare(root)
+            product.write_text(self.source_render_product(product), encoding="utf-8")
+            (root / "visuals/approval-flow.workflow.json").write_bytes(
+                b"\xff\xfeinvalid"
+            )
+            result = run_checker(PRODUCT_SCRIPT, readme, product, spec)
+            self.assertEqual(result.returncode, 1, combined_output(result))
+            self.assertIn("BLOCKED:", combined_output(result))
+            self.assertIn("must be UTF-8 JSON", combined_output(result))
+            self.assertNotIn("Traceback", combined_output(result))
+
+    def test_product_readable_malformed_visual_json_is_changed(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary) / "requirement"
+            readme, product, spec = self.prepare(root)
+            product.write_text(self.source_render_product(product), encoding="utf-8")
+            (root / "visuals/approval-flow.workflow.json").write_text(
+                "{not-json}",
+                encoding="utf-8",
+            )
+            result = run_checker(PRODUCT_SCRIPT, readme, product, spec)
+            self.assertEqual(result.returncode, 0, combined_output(result))
+            self.assertIn("CHANGED:", combined_output(result))
+            self.assertIn("must be UTF-8 JSON", combined_output(result))
+
     def test_product_contract_marker_with_legacy_columns_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary) / "requirement"
@@ -263,7 +291,8 @@ class RequirementVisualIntegrationTests(unittest.TestCase):
                 encoding="utf-8",
             )
             result = run_checker(PRODUCT_SCRIPT, readme, product, spec)
-            self.assertEqual(result.returncode, 1, combined_output(result))
+            self.assertEqual(result.returncode, 0, combined_output(result))
+            self.assertIn("CHANGED:", combined_output(result))
             self.assertIn("source-render-v1 columns mismatch", combined_output(result))
 
     def test_legacy_product_visual_row_remains_readable(self) -> None:
@@ -366,7 +395,8 @@ class AdrVisualIntegrationTests(unittest.TestCase):
             accepted = self.prepare(
                 root / "accepted", decision_mode="accepted-without-review"
             )
-            self.assertEqual(accepted.returncode, 1, combined_output(accepted))
+            self.assertEqual(accepted.returncode, 0, combined_output(accepted))
+            self.assertIn("CHANGED:", combined_output(accepted))
             self.assertIn(
                 "missing section: ## Human Review Evidence",
                 combined_output(accepted),
@@ -428,16 +458,19 @@ class OnboardingVisualIntegrationTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             result = self.prepare(Path(temporary) / "onboarding")
             self.assertEqual(result.returncode, 0, combined_output(result))
+            self.assertIn("CURRENT:", result.stdout)
 
-    def test_onboarding_html_only_required_diagram_is_rejected(self) -> None:
+    def test_onboarding_html_only_required_diagram_is_a_changed_fact(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             result = self.prepare(Path(temporary) / "onboarding", omit_source=True)
-            self.assertEqual(result.returncode, 1, combined_output(result))
+            self.assertEqual(result.returncode, 0, combined_output(result))
+            self.assertIn("CHANGED:", result.stdout)
             self.assertIn("source definition file is missing", combined_output(result))
 
     def test_onboarding_embedded_mermaid_and_ascii_remain_valid(self) -> None:
         result = run_checker(ONBOARDING_SCRIPT, ONBOARDING_FIXTURE)
         self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CURRENT:", result.stdout)
 
 if __name__ == "__main__":
     unittest.main()

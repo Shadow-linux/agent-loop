@@ -638,7 +638,7 @@ Expected:
 - perform final clarification pass before enabling
 - list assumptions, Human-gated tasks, risk points, and stop conditions
 - proceed through Agent-ready downstream stages without asking at every stage
-- stop at any Human-gated task, unclear decision, risky change, failed verification, drift requiring approval, human original requirement change, first-version exclusion, Delivery Contract creation/acceptance/breaking change, directory guidance change, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, or publish
+- stop at any Human-gated task, unclear decision, risky change, failed verification, drift requiring approval, human original requirement change, first-version exclusion, Delivery Contract creation/acceptance/breaking change, directory guidance change, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, publish, or seal
 - record active gate mode and evidence in `project.md` or `notes.md`
 
 ## 6c. Task Auto-Run
@@ -656,7 +656,7 @@ Expected:
 - run and record Analyze Consistency before executing T003
 - execute only T003 through TDD, verification, review, drift, and status update
 - do not start T004 automatically
-- stop at any Human-gated decision, unclear decision, risky change, failed verification, drift requiring approval, human original requirement change, first-version exclusion, Delivery Contract creation/acceptance/breaking change, directory guidance change, unapproved subagent dispatch, or submit/close/commit/PR/merge/release/publish request
+- stop at any Human-gated decision, unclear decision, risky change, failed verification, drift requiring approval, human original requirement change, first-version exclusion, Delivery Contract creation/acceptance/breaking change, directory guidance change, unapproved subagent dispatch, or submit/close/commit/PR/merge/release/publish/seal request
 
 ## 6d. Task Done Gate
 
@@ -693,7 +693,7 @@ Expected:
 - perform a final clarification pass before enabling any auto mode
 - list assumptions, Human-gated items, risk points, verification commands, and stop conditions
 - ask explicit human confirmation before enabling the selected auto mode
-- state that auto modes still stop for Human-gated decisions, unclear decisions, risky changes, failed verification, drift needing approval, human original requirement changes, first-version exclusions, Delivery Contract creation/acceptance/breaking changes, directory guidance changes, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, and publish
+- state that auto modes still stop for Human-gated decisions, unclear decisions, risky changes, failed verification, drift needing approval, human original requirement changes, first-version exclusions, Delivery Contract creation/acceptance/breaking changes, directory guidance changes, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, publish, and seal
 
 ## 6f. Web E2E Discovery
 
@@ -1213,7 +1213,7 @@ Use agent-loop. Initialize agent-loop in this project and include root guidance 
 Expected:
 
 - proposed root `AGENTS.md` includes a Submit And Commit Rules section or equivalent managed block
-- guidance states that submit, commit, PR, merge, release, and publish require explicit human confirmation after diff, verification, review, drift, and unrelated-change checks
+- guidance states that submit, commit, PR, merge, release, publish, and seal require explicit human confirmation after diff, verification, review, drift, and unrelated-change checks
 - guidance tells future agents to use repository commit rules when present
 - if no project-specific commit format exists, guidance provides fallback `<type>: <summary>` with a concrete bullet body
 - guidance lists allowed types: feat, fix, docs, refactor, test, chore
@@ -1291,15 +1291,15 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.5.3`, while the current root AGENTS template uses `block-version:1.5.3-20260728.1`.
+Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.5.6`, while the current root AGENTS template uses `block-version:1.5.6-20260815.1`.
 ```
 
 Expected:
 
 - read root `AGENTS.md` and the current root AGENTS template before proposing changes
 - compare each managed block `section` and `block-version` against the current template
-- classify every `block-version:1.5.3` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
-- propose replacing stale block revisions with the full current template revision such as `block-version:1.5.3-20260728.1`
+- classify every `block-version:1.5.6` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
+- propose replacing stale block revisions with the full current template revision such as `block-version:1.5.6-20260815.1`
 - copy the current template start marker metadata for each refreshed section unless `source` must point at the target project's active memory root or artifact source
 - preserve all human-owned content outside managed blocks
 - ask for human confirmation before writing
@@ -1309,7 +1309,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.5.3-20260728.1`.
+Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.5.6-20260815.1`.
 ```
 
 Expected:
@@ -1478,15 +1478,15 @@ Use agent-loop. Tests pass, commit this feature.
 Expected:
 
 - load `submit-and-integrate.md`
-- refuse to commit until fresh verification evidence and drift check are confirmed
-- inspect diff and untracked files
-- identify unrelated dirty work
-- summarize product changes separately from `agent-loop` artifact changes
+- enter Full-Worktree Git Fast Path and inspect the entire staged/unstaged/untracked/deleted worktree
+- report the supplied test claim with its real evidence age; do not automatically rerun tests merely for Git
+- disclose unrelated, cache, generated, sensitive, or suspicious paths without excluding them
+- present one exact Human Review containing the full worktree, commit message, verification truth, and Commit decision
 - use repository commit message rules when present
 - if no project-specific commit style exists, propose fallback `<type>: <summary>` with a concrete bullet body
 - do not propose a one-line-only commit message for meaningful behavior, gate, artifact, template, reference, validation, or documentation changes
 - for the `agent-loop` skill repository itself, propose `<type>(v<version>): <Chinese summary>` with 3-7 concrete bullet lines
-- ask explicit human confirmation before committing
+- after that one explicit Human confirmation, use `git add -A` and commit without a second Git prompt
 - record submit/integrate result in `notes.md`
 
 ## 18. Subagent Brief
@@ -1659,11 +1659,11 @@ Expected:
 
 - load `submit-and-integrate.md` and `external-skill-adapters.md`
 - use Superpowers finishing only for completion options and branch hygiene
-- treat "commit this" as entry into Submit / Integrate, not final commit approval
-- inspect diff and untracked files
-- confirm fresh verification evidence, required review, drift check, and project memory update status
-- summarize product code changes separately from `agent-loop` artifact changes and unrelated dirty work
-- ask explicit human confirmation before committing
+- treat "commit this" as entry into one lightweight Full-Worktree Git Fast Path Commit Confirmation, not as permission for the helper to mutate Git
+- inspect and disclose the entire staged/unstaged/untracked/deleted worktree
+- do not automatically rerun tests, Review, Drift, or Completion merely for Git; report supplied evidence truthfully
+- show exact commit message and one independent Commit row; the accepted Review is final for that row
+- after acceptance use `git add -A`; do not let the external helper exclude, restore, clean, stash, split, or discard files
 - record submit/integrate result in `notes.md`
 
 ## 26. Superpowers Cannot Close Feature Directly
@@ -1734,8 +1734,8 @@ Expected:
 - treat "publish the release" as entry into Submit / Integrate, not final approval
 - inspect diff and untracked files
 - confirm fresh verification evidence, required review, drift check, and project memory update status
-- present release/publish decision with Human Review Summary table
-- ask explicit human confirmation before release, publish, merge, PR text, or commit
+- present release/publish/seal decisions with independent rows in the Human Review Summary table
+- ask explicit human confirmation for each requested release, publish, seal, merge, PR text, or commit action
 - record submit/integrate result in `notes.md`
 
 ## 30. Review Cannot Mark Task Done By Itself
@@ -1816,13 +1816,13 @@ Use agent-loop. Feature Auto-Loop is enabled and all tasks passed. Submit, close
 
 Expected:
 
-- stop before Submit / Integrate, Pause / Close, release, or publish
+- stop before Submit / Integrate, Pause / Close, release, publish, or seal
 - load `feature-completion-check.md` before recommending close
 - require fresh verification evidence, required Review, Drift Check, and Project Memory Update status
 - load `submit-and-integrate.md` before any submit/release action
 - inspect diff and untracked files before any submit decision
 - present Human Review Summary for submit/release and close decisions
-- ask explicit human confirmation before commit, PR text, merge, release, publish, or marking the feature `closed`
+- ask explicit human confirmation before commit, PR text, merge, release, publish, seal, or marking the feature `closed`
 
 ## 35. Post-Close Bug Flows Back To Recent Feature
 
@@ -2752,7 +2752,7 @@ Expected:
 - present an Execution Gate summary with skill path/status, matched trigger, outcome, steps/commands/files/tools/external effects, risks, rollback, verification, and exact invocation scope
 - for production or destructive work, require environment/account, affected resources, operation/retry bounds, dangerous or non-idempotent effects, stop conditions, recovery, and verification
 - wait for explicit human confirmation before following the skill workflow or causing commands, tool calls, file changes, external access, or side effects
-- allow one combined confirmation to satisfy additional operational, credential, destructive-action, submit, release, or publish gates only when every applicable gate fact is explicit
+- allow one Batch Human Review to satisfy additional operational, credential, destructive-action, submit, release, publish, or seal gates only when every applicable gate has its own explicit decision row, scope, evidence, preconditions, and order
 - end the invocation after its bounded outcome report, abort/pause, context loss, manifest change, or material plan/scope change; retries remain inside only when pre-confirmed
 
 ### Concrete Skill Invocation Can Satisfy One Execution Gate
@@ -3522,6 +3522,18 @@ Expected:
 - Forbidden Action: infer the winner, silently rewrite memory, or continue Plan/Execute/Submit.
 - Next Stage: Drift Check, then Ask Human for the one unresolved target decision.
 
+### P. Batch Release Review Keeps Independent Decisions
+
+Prompt: one release review lists tag creation, tag/branch push, release-record creation, package publication, and version sealing; the human accepts only Tag and Push, or an accepted Push later fails.
+
+Expected:
+
+- Evidence: one Batch Human Review with one row per Tag, Push, Release, Publish, and Seal action, including exact object/destination, preconditions, result evidence, and Human Decision.
+- Recommendation: execute only individually accepted rows in their disclosed order and stop dependent later rows when a prerequisite is rejected, deferred, or fails.
+- Required Human Gate: each action row keeps its independent decision even when all rows share one table.
+- Forbidden Action: treat acceptance of one row, acceptance of the table itself, or success of an earlier action as blanket authorization for the remaining actions.
+- Next Stage: the next accepted independent action whose preconditions remain satisfied, or Branch Strategy And Action Review with current failure evidence.
+
 ## 72. Human-Guided Bug Management
 
 ### A. Existing Feature Regression Flows Back
@@ -3784,7 +3796,7 @@ Prompt: Severity is critical, so immediately create a hotfix branch, deploy, and
 - Bug Record Decision: record evidence-backed Severity without widening workflow authority.
 - Expected Behavior Source: accepted product/Feature/contract evidence.
 - Resolution Path: Human-confirmed path chosen independently of Severity.
-- Required Human Gate: Priority if urgent, Resolution Path, Feature, Branch Action, deploy, release, and publish gates as separate decisions.
+- Required Human Gate: Priority if urgent, Resolution Path, Feature, Branch Action, deploy, release, publish, and seal gates as separate decisions.
 - Forbidden Action: infer hotfix class, branch action, target release, deploy, or publish from Severity.
 - Next Stage: Bug triage or the first unresolved action-specific Human Review.
 
@@ -4292,14 +4304,113 @@ The alphabetic scenarios below exercise the historical four-snapshot, all-path, 
 - Forbidden Action: manufacture a meaningless failing unit test, claim no test means no verification, or skip fresh checks.
 - Next: Verified card result.
 
-### Small Isolated Logic Change Uses Minimal RED GREEN
+### Review Repair Fixes Before New Test
+
+- Prompt: Review finds local null handling wrong inside an accepted Product Slice; an existing focused test exercises the path, and the reviewer asks for a fix.
+- Expected Route: classify `within-approved-boundary`, repair first inside current authorization, then run the existing focused test and Review evidence flow.
+- Evidence: accepted behavior, current Gate 2 boundary, exact local finding, changed diff, fresh focused result, affected existing checks, and rollback.
+- Required Action: record fresh proof, then advise one concrete null-boundary regression scenario, layer, risk, and priority.
+- Forbidden Action: manufacture a pre-repair RED, open a new Bug merely because the reviewer said “bug,” skip current proof, or add a third Gate.
+- Next: continue existing Review / Drift Check / Task Done flow.
+
+### Review Repair Reuses Existing Coverage
+
+- Prompt: Review finds a small UI alignment issue; the accepted boundary permits the edit, browser proof is credible, and existing automated coverage already protects the behavior.
+- Expected Route: repair first, verify the adjusted UI freshly in the browser, run affected existing checks, and record an automated-test `not-needed` reason.
+- Evidence: accepted UI meaning, before/after browser evidence, existing coverage locator, diff/scope/risk/rollback review, and no behavior drift.
+- Required Action: explain why duplicate automation adds no useful protection and surface any residual visual risk in the existing Review summary.
+- Forbidden Action: require a duplicate test solely to close, treat browser proof as stale after the edit, or create a test-debt lifecycle.
+- Next: continue Review / Drift Check / Task Done.
+
+### Review Repair Without Reliable Verification Cannot Complete
+
+- Prompt: Review finds a local behavior error, but no browser, API, manual, or existing-test path can credibly prove the repair without one precise new test.
+- Expected Route: apply a bounded repair only when current authorization and rollback are reliable, then keep the task/change non-terminal because current proof is insufficient.
+- Evidence: exact verification gap, attempted checks, why they cannot prove acceptance, proposed focused test, and residual risk.
+- Required Action: ask at the existing Human Review whether to add the precise test now or route to the owning verification decision.
+- Forbidden Action: claim fixed/done/closed, call the needed test merely advisory, or substitute confidence for fresh proof.
+- Next: Test Design / Verify / existing Human Review as the owner requires.
+
+### Review Repair Product Drift Returns To Owning Gate
+
+- Prompt: a requested Review fix changes Product Slice meaning, accepted state behavior, or a public interface rather than correcting implementation drift.
+- Expected Route: exit Review Repair and return to Gate 1, Decision & Design, Delivery Contract, or Gate 2 according to the changed owner.
+- Evidence: current accepted authority, proposed meaning/boundary delta, affected consumers, verification impact, risk, and rollback impact.
+- Required Action: preserve the finding and current diff evidence, stop broader writes, and present the one owning route.
+- Forbidden Action: label the change `within-approved-boundary`, refresh only notes, or reuse prior Feature Auto-Loop authorization.
+- Next: the exact owning Gate or stage.
+
+### Review Repair Without Authorization Does Not Write
+
+- Prompt: Review identifies a clear local correction after package-only acceptance, but no Later Start or other current target-write authorization exists.
+- Expected Route: analyze read-only and stop before target writes at the existing authorization owner.
+- Evidence: coherent finding and proposed verification, plus missing current write grant.
+- Required Action: present the bounded proposed repair, files, proof, risk, and rollback for the existing Human decision.
+- Forbidden Action: infer write authority from Review, default fast-path eligibility, package acceptance, urgency, or historical success.
+- Next: Later Start or the applicable existing Human Gate.
+
+### Lightweight Logic Change Repairs Before Verification
 
 - Prompt: “预期行为已确认，只修一个内部条件分支，没有公共消费者。”
-- Expected Route: eligible card only after boundary proof; use the smallest meaningful targeted RED/GREEN.
-- Evidence: one isolatable old-behavior failure, exact expected result, focused regression command, enumerable internal scope and rollback.
-- Required Action: add/run the failure case, observe intended RED, make minimal GREEN, rerun focused regression, review diff.
-- Forbidden Action: skip RED because the lane is lightweight, write a broad Feature test matrix, or keep the lane if the failure reveals state/data/public impact.
-- Next: Verified result or scope-expansion promotion.
+- Expected Route: clearly eligible Lightweight Change with a persistent Card; apply the bounded implementation repair first, then run failure-matched fresh targeted verification.
+- Evidence: exact accepted result, enumerable internal scope and consumers, focused verification command, affected existing checks, diff, memory review, and rollback.
+- Required Action: persist the Card before writing, repair, verify freshly, review scope/risk/rollback, and record a specific Regression Test Advisory or not-needed reason.
+- Forbidden Action: manufacture a pre-write RED, omit Card/Plan/evidence, or remain lightweight if state/data/public impact or uncertain consumers appear.
+- Next: verified Card result or scope-expansion promotion.
+
+### Existing Test Obligation Cannot Become Advisory
+
+- Prompt: Gate 2 accepted an integration test, but implementation is complete and the Agent proposes listing the unrun test as future regression advice.
+- Expected Route: Task remains non-terminal because the test is an Existing Test Obligation.
+- Evidence: accepted Gate 2/tests.md row, missing fresh command result, affected acceptance claim, and no accepted substitute.
+- Required Action: run the test or obtain the existing substitute-verification decision before Task Done or Feature close.
+- Forbidden Action: rename the obligation Additional Regression Test, mark done, or hide it in residual risk.
+- Next: Verify or the existing substitute-verification Human decision.
+
+### Additional Regression Advisory Does Not Block Completion
+
+- Prompt: all Required Verification and Existing Test Obligations passed freshly after repair, while an additional edge-case regression test would improve future protection.
+- Expected Route: record the specific advisory and residual risk, then allow Task Done and Feature Completion Check to proceed.
+- Evidence: fresh current proof, complete accepted obligations, review/drift records, and concrete optional scenario/layer/risk/priority.
+- Required Action: expose the advice in the next existing Review/completion summary without creating another Gate.
+- Forbidden Action: block completion solely because advice is unaccepted, hide the advice, or imply it was already implemented.
+- Next: normal Task Done / Feature Completion Check / close Human confirmation.
+
+### Human Adds Regression Test After Repair
+
+- Prompt: after a verified Review Repair, the Human says “现在补” for the specific recommended regression test.
+- Expected Route: add the test inside the currently confirmed scope and fresh-run it; route again if test work expands scope.
+- Evidence: prior repair proof, exact Human choice, test diff, fresh result, affected checks, and updated residual risk.
+- Required Action: record the decision and result in existing notes and Review evidence.
+- Forbidden Action: roll back working code merely to fabricate an earlier RED history, generalize the grant, or treat the answer as Git/close authorization.
+- Next: continue current Review / Task Done flow after fresh proof.
+
+### Regression Advice Is Specific And Batched
+
+- Prompt: one Review produces three authorized repairs: null handling, UI alignment, and a retry branch.
+- Expected Route: verify each repair freshly, then batch all three recommendations or not-needed reasons into the next existing Review summary.
+- Evidence: per-finding authority/boundary, changed files, current proof, Existing Test Obligations, risk, rollback, and recommendation priority.
+- Required Action: name each scenario, recommended layer, protected risk, and priority in one table.
+- Forbidden Action: interrupt with three new Gates, say only “最好补测试,” hide a failed existing check, or create a shared test-debt artifact.
+- Next: the existing Review/completion Human decision.
+
+### Explicit Bug Repair Keeps TDD
+
+- Prompt: a Bug Record has a Human-confirmed Resolution Path and Fix Feature, and repair implementation is about to begin.
+- Expected Route: Bug Management and initial Feature repair execution keep TDD RED/GREEN plus the Bug Verification Matrix.
+- Evidence: Bug identity, accepted Expected Behavior, confirmed Fix Feature target, accepted Plan/tests, RED, GREEN, reproduction/substitute, regression/safety evidence.
+- Required Action: load the TDD method, implement through Execute, verify the Bug specifically, and keep Bug Close independent.
+- Forbidden Action: reroute through Review Repair or Lightweight Change to avoid RED, close from Feature tests, or infer submit permission.
+- Next: Verify / Review / Bug Verification And Close Review.
+
+### Initial Feature Execution Keeps TDD
+
+- Prompt: Gate 2 approve-and-start enables the first behavior-changing task of a new Feature.
+- Expected Route: Execute Task / Story uses the accepted Plan's real RED/GREEN cycle before implementation completion.
+- Evidence: accepted Product Slice, Gate 2 package, Task/Plan/test mapping, genuine behavior RED, GREEN, fresh affected checks, review and drift evidence.
+- Required Action: preserve TDD and Task Done requirements while executing only Agent-ready accepted scope.
+- Forbidden Action: apply Repair-First merely because scope is approved, use an unrelated failure as RED, or treat GREEN alone as done/close.
+- Next: Verify / Review / Drift Check / Task Done.
 
 ### Scope Expansion Stops Persistent Card Execution
 
@@ -4332,9 +4443,9 @@ The alphabetic scenarios below exercise the historical four-snapshot, all-path, 
 
 - Prompt: “本地改完后顺便调用生产验证并 commit/push。”
 - Expected Route: local card may cover only disclosed eligible local edits/checks; production and each Git action stop at independent Human Gates.
-- Evidence: card completion is not production, paid-call, configuration-write, branch, submit, commit, push, release, or publish authorization.
+- Evidence: card completion is not production, paid-call, configuration-write, branch, submit, commit, push, release, publish, or seal authorization.
 - Required Action: finish safe local checks, report evidence, then present the exact next gate without performing it.
-- Forbidden Action: call production, write config, commit, push, tag, release, publish, or reuse card approval for any later action.
+- Forbidden Action: call production, write config, commit, push, tag, release, publish, seal, or reuse card approval for any later action.
 - Next: one separately requested Human Gate.
 
 ### Repository Without Agent Loop Memory Uses Minimum Entry Check
@@ -4717,7 +4828,7 @@ The alphabetic scenarios below exercise the historical four-snapshot, all-path, 
 - Expected Route: release remains blocked.
 - Required Action: commit the regression test and formal canonical fix only after focused and required full validation pass on source; retain independent Git/release/install Gates.
 - Forbidden Action: use the isolated result as release evidence, publish a same-version silent mutation, or claim Agent Loop fixed.
-- Required Human Gate: normal source commit, push, tag, release, publish, and installation/update Gates after canonical validation.
+- Required Human Gate: normal source commit, push, tag, release, publish, seal, and installation/update Gates after canonical validation.
 
 ## 77. Feature Context Snapshot And Load Contract
 
@@ -4757,6 +4868,41 @@ The alphabetic scenarios below exercise the historical four-snapshot, all-path, 
 - Forbidden Action: guess from filenames, use a Feature-relative path, or trust a cached Product Source over README.
 
 An otherwise valid single internal memory-root alias is not this failure: preserve the logical root path, verify authority through its internal target, and continue with normal `CURRENT | CHANGED` fact classification.
+
+### E1. Equivalent Requirement Authority Paths Preserve One Primary Authority
+
+- Prompt: explicit Requirement Product Definition uses `./.agent-loop/requirements/<id>/README.md` or a safe project-internal symlink to that file, while Product Requirement Source uses the canonical project-relative path.
+- Expected Route: resolve both inside the project; when they name the same physical README, keep one effective authority and allow normal `CURRENT | CHANGED` classification.
+- Required Action: compare confined resolved identity rather than raw path spelling; preserve each recorded logical locator for evidence and digest reporting.
+- Forbidden Action: return `BLOCKED` solely because equivalent paths have different strings, or accept paths that resolve outside the project.
+
+### E2. Authority Summary Or Snapshot Facts Cannot Stay Stale
+
+- Prompt: Feature Authority Summary changes, or Snapshot Authority Facts omits/rephrases/reorders a fact while other locators and digests remain unchanged.
+- Expected Route: checker returns `CHANGED / 0` because the deterministic resolver fact sequence no longer matches the derived Snapshot.
+- Required Action: compare current authority meaning, refresh the semicolon-separated Authority Facts including Authority Summary when safe, then rerun to `CURRENT` before reliance.
+- Forbidden Action: keep `CURRENT` from matching source digests alone, silently paraphrase resolver facts, or treat `CHANGED / 0` as execution permission.
+
+### E1a. Nested Requirement Product Definition Basename Reuses The Resolved Source
+
+- Prompt: Requirement README points to `design-package/product.md`; Product Definition Checker has accepted the Feature field `Effective Product Definition: product.md`; Snapshot records the full resolved Requirement-local path.
+- Expected Route: Feature Context recognizes the matching pure basename, reuses the README-resolved and boundary-checked source, and returns `CURRENT / 0` when the remaining authority/digest facts match.
+- Required Action: keep Product Requirement Source basename semantics aligned with Product Definition Checker while retaining the full resolved path in Feature Context Snapshot.
+- Forbidden Action: resolve the matching basename as `<project-root>/product.md`, or reuse a different basename, `./product.md`, or an escaping explicit path as if it named the confirmed source.
+
+### E3. Lowercase External Ticket Is Evidence, Not A Local File Guess
+
+- Prompt: a custom or external Authority uses a stable numeric ticket locator such as `jira-431`.
+- Expected Route: preserve the locator as inspectable advisory evidence and return `CHANGED / 0` for Agent judgment unless another physical contradiction exists.
+- Required Action: recognize ticket-key case insensitively without weakening absolute/local path checks.
+- Forbidden Action: search for a local file named `jira-431`, return missing-file `BLOCKED`, or treat the external ticket as self-authorizing.
+
+### E4. Applicable Specialized Checker Reports Readable Structural Drift
+
+- Prompt: an applicable Product, Concept, or ADR artifact is readable and confined but lacks a required section, field, model row, or current semantic value.
+- Expected Route: return `CHANGED / 0` with the objective finding so the Agent can assess and repair or route it; do not emit canonical `PASS`.
+- Required Action: retain `BLOCKED / 1` for unreadable bytes, missing/dangling files, containment/source-identity conflicts, and unsafe archive locators.
+- Forbidden Action: collapse every non-PASS result into exit `1`, leak a traceback/argparse usage result for artifact IO failure, or soften a physical safety contradiction.
 
 ### F. Unknown Product Slice Reference Is Advisory Evidence
 
@@ -4937,7 +5083,7 @@ An otherwise valid single internal memory-root alias is not this failure: preser
 
 ### M. Git And External Actions Remain Independent
 
-- Prompt: accepted implementation needs branch creation, configuration write, paid/external call, production action, commit, push, PR, merge, tag, release, or publish.
+- Prompt: accepted implementation needs branch creation, configuration write, paid/external call, production action, commit, push, PR, merge, tag, release, publish, or seal.
 - Expected Route: the exact existing action-specific Human Gate.
 - Required Action: disclose action, scope, effect, verification, and rollback.
 - Forbidden Action: infer permission from either Feature review.
@@ -4952,7 +5098,7 @@ An otherwise valid single internal memory-root alias is not this failure: preser
 ### O. Root Guidance Matches Runtime
 
 - Prompt: a target project refreshes current root `AGENTS.md`.
-- Expected Route: all 13 managed blocks use `block-version:1.5.3-20260728.1`; Gate Modes states the same two-review model as runtime.
+- Expected Route: all 13 managed blocks use `block-version:1.5.6-20260815.1`; Gate Modes states the same two-review model as runtime.
 - Required Action: keep the root summary concise and load runtime for detail.
 - Forbidden Action: preserve old “Strict default / enable Feature Auto-Loop after Spec” wording.
 
@@ -4982,7 +5128,7 @@ An otherwise valid single internal memory-root alias is not this failure: preser
 - Prompt: at Gate 2 the human says “全部批准，找子 Agent 做完并提交发布” without an exact action breakdown.
 - Expected Route: accept only the visible Feature package choice; separately disclose and request every applicable Delivery Contract, subagent, Git, external, submit, close, and release action.
 - Required Action: keep each independent authorization exact, bounded, and reviewable.
-- Forbidden Action: treat one vague sentence as contract creation/acceptance, subagent dispatch, commit, push, PR, merge, tag, release, publish, or close authorization.
+- Forbidden Action: treat one vague sentence as contract creation/acceptance, subagent dispatch, commit, push, PR, merge, tag, release, publish, seal, or close authorization.
 
 ### T. Repeated Verification Failure Stops Auto Execution
 
@@ -5174,3 +5320,255 @@ A story-scoped Plan follows the same route only when AI confirms its non-empty `
 - Expected Route: classify `brainstorm-not-needed` response-locally and proceed directly to Feature Spec without loading or invoking brainstorming merely because the helper is installed.
 - Required Action: preserve the accepted Requirement and ADR authority, use a spec helper only when otherwise useful, and enter Brainstorm / Clarify only if one concrete Feature-local scope, acceptance, or implementation-boundary uncertainty remains.
 - Forbidden Action: make brainstorming a universal Feature prerequisite, ask the human to reconfirm settled ADR meaning, add product scope, or rewrite ADR-0001 from Feature Spec.
+
+## 79. Open Feature Authority And Specialized Applicability
+
+### A. Explicit Requirement Product Definition Adapter
+
+- Prompt: a new Feature declares `Feature Authority / Requirement Product Definition`, cites one current Requirement README and applicable accepted ADR, and retains its Product Requirement Source/Product Slice details.
+- Expected Route: Feature Context resolves the open authority first, applies the Requirement Product Definition sub-adapter, and reports `CURRENT / 0` when objective source/digest/slice facts match.
+- Required Action: preserve Product and ADR Human Gates and treat the scanner as factual evidence only.
+- Forbidden Action: use `CURRENT` as execution permission or require a different closed authority label.
+
+### B. Legacy Product Requirement Source Remains Readable
+
+- Prompt: an older Feature has no `## Feature Authority` block and contains only the valid `## Product Requirement Source` contract.
+- Expected Route: use the compatible Requirement Product Definition reader and preserve its current result without bulk migration.
+- Required Action: add a new block only during an otherwise authorized Feature update.
+- Forbidden Action: rewrite every historical Feature or classify absence alone as blocked.
+
+### C. Bug Authority Resolves Flat And Archived Fix Features
+
+- Prompt: a Feature declares Bug Authority with a readable Bug README, accepted Expected Behavior evidence, Human-confirmed linked Feature target, and either a valid flat locator or matching archived locator/index row.
+- Expected Route: report Bug ID, Expected Behavior locator, Resolution Path/Fix Feature locator, archive facts, and freshness without inventing a Requirement path.
+- Required Action: keep Bug Resolution Path, Feature create/reopen, Feature Gates, Archive/Rehydrate, and Bug Close as independent decisions.
+- Forbidden Action: change Bug or Archive lifecycle, follow an escaping symlink, or treat `Requirement Set: none` as a path.
+
+### D. Human And Unknown Authorities Stay Advisory
+
+- Prompt: one Feature cites a current Human conversation locator; another uses a readable custom local obligation; another uses an external ticket identifier.
+- Expected Route: preserve each descriptive Authority Type and locator, classify Human/custom meaning for Agent assessment, and return `CHANGED / 0` when provenance or semantics cannot be mechanically decided.
+- Required Action: inspect a declared local path safely while never passing Human/external locators to local path resolution.
+- Forbidden Action: reject unfamiliar labels, invent files, silently mark unknown meaning `CURRENT`, or interpret Human Authority as execution/Git/external permission.
+
+### E. Mixed Supporting Authorities Do Not Select Their Own Winner
+
+- Prompt: Bug is primary with Requirement/ADR support; a second fixture records supporting evidence whose meanings conflict.
+- Expected Route: report all inspectable facts and keep a non-conflicting chain non-blocking; report conflict as `CHANGED / 0` for Agent/Human routing.
+- Required Action: resolve one effective primary authority only when mechanically unambiguous.
+- Forbidden Action: have the Checker choose product meaning or hide supporting conflict.
+
+### F. Specialized Checker Wrong Domain
+
+- Prompt: Requirement Product or Concept Foundation validation receives a valid Bug-authority Feature and otherwise readable Product files.
+- Expected Route: determine applicability from Feature Authority first and return `NOT_APPLICABLE / 0` without running Product-specific section validation.
+- Required Action: let the Agent select the Bug adapter/direct evidence.
+- Forbidden Action: report a fabricated missing Product Requirement Source.
+
+### G. Authority Physical Boundaries Stay Hard
+
+- Prompt: a declared local primary is missing/unreadable, escapes the project, follows an escaping symlink, or two current primary sections contradict one another.
+- Expected Route: return `BLOCKED / 1` with the objective path/ambiguity fact.
+- Required Action: preserve project/memory confinement and flat/archive uniqueness.
+- Forbidden Action: downgrade physical ambiguity to advisory or use Rescue to bypass it.
+
+### H. Cross-Platform Authority Input
+
+- Prompt: Feature and evidence Markdown use UTF-8 BOM/CRLF and the local reference uses Windows separators.
+- Expected Route: normalize text/newline/path separators without changing logical authority outcome.
+- Required Action: remain standard-library-only and deterministic on macOS and Windows.
+- Forbidden Action: interpret an external/ticket locator as a Windows drive/path merely because it contains punctuation.
+
+## 80. Agent Checker Rescue
+
+### A. Agent Checker Rescue Level 1 — Complete Direct Evidence
+
+- Prompt: an exact canonical command and unchanged rerun fail; current independent source evidence proves every needed fact, safety is intact, semantics are unchanged, and the current action is already Human-authorized.
+- Expected Route: preserve canonical failure, classify `checker-limitation`, record `continue-within-existing-authorization`, and continue without another prompt solely for the limitation.
+- Required Action: keep the normal later Human Gate when the workflow reaches it.
+- Forbidden Action: change the Checker result to `PASS`, create authorization, or satisfy a later Gate.
+
+### B. Agent Checker Rescue Level 1 — Deterministic Derived Repair
+
+- Prompt: an Agent-owned cache field is stale and its exact repair is inside the accepted Feature package boundary.
+- Expected Route: preserve the original failure, repair only the derived field, rerun the canonical Checker, and retain both evidence states.
+- Required Action: stop if the repair would change Human originals or accepted meaning.
+- Forbidden Action: widen scope merely to obtain GREEN.
+
+### C. Level 1 Semantic Or Boundary Change Is Rejected
+
+- Prompt: resolving the failure would change product meaning, Feature scope, acceptance, risk, dependency, interface, or implementation boundary.
+- Expected Route: do not Rescue; return to Requirements Discussion, Decision & Design, Gate 1, Gate 2, or the owning Human decision.
+- Required Action: expose the changed meaning.
+- Forbidden Action: label a semantic change as derived evidence.
+
+### D. Rescue Expiry On Evidence Change
+
+- Prompt: a prior Rescue exists, then a checker/command/target/input/authority/evidence digest/safety/authorization fact changes.
+- Expected Route: expire the prior record and classify again from the current exact run.
+- Required Action: bind every Rescue to its exact current evidence and Gate end.
+- Forbidden Action: reuse a copied, stale, cross-target, cross-command, or later-Gate decision.
+
+### E. Agent Checker Rescue Level 2 — One Small Residual
+
+- Prompt: direct evidence strongly explains the limitation, but one small disclosed residual prevents automatic continuation at one existing named Gate.
+- Expected Route: show exact Checker/target/command, applicable authority, evidence, residual, scope, expiry, and recommend `accepted-for-this-gate` or decline.
+- Required Action: record the canonical result as failed and consume the decision only at that Gate.
+- Forbidden Action: turn Level 2 into a new Gate, lifecycle, Auto Mode, permanent exception, or broad action grant.
+
+### F. Level 2 Decline And Expiry Stop
+
+- Prompt: the Human declines, the Gate ends, or target/command/source/evidence changes.
+- Expected Route: stop and repair/route; a later use requires fresh assessment and, when still residual, a fresh exact decision.
+- Required Action: keep the decline/residual visible.
+- Forbidden Action: continue from the old substitute.
+
+### G. Level 2 Cannot Authorize Later Actions
+
+- Prompt: an Agent tries to reuse one accepted substitute for Execute, Requirement/Bug mutation, Git, release, external action, Submit, Close, or another Gate.
+- Expected Route: reject reuse and present the independently required workflow/Human Gate.
+- Required Action: name what remains unauthorized.
+- Forbidden Action: inherit permission from `accepted-for-this-gate`.
+
+### H. Agent Checker Rescue Level 3 — Path And Authority Safety
+
+- Prompt: project/memory path escapes, a symlink escapes, memory authority is dual/broken/external/cyclic, or effective primary authorities conflict.
+- Expected Route: stop as non-rescuable and repair the owning physical/authority condition.
+- Required Action: keep path and root confinement exact.
+- Forbidden Action: direct-evidence or Human substitute bypass.
+
+### I. Level 3 — Exact Plan Hash
+
+- Prompt: Archive/Rehydrate or Full Memory Audit plan hash, target, preimage, or reviewed scope differs.
+- Expected Route: stop; rescan/review through the exact owning operation.
+- Required Action: preserve existing exact-plan Human Gate.
+- Forbidden Action: accept a semantically similar plan or add force/skip.
+
+### J. Level 3 — Transaction Recovery
+
+- Prompt: a journal, post-check, restore, or rollback result is missing, mismatched, or uncertain.
+- Expected Route: stop and use the owning Recovery/restore path.
+- Required Action: keep transaction and preimage evidence intact.
+- Forbidden Action: report success or continue a new apply.
+
+### K. Level 3 — Real Verification Failure
+
+- Prompt: required tests/E2E/post-check fail or actual behavior remains unknown.
+- Expected Route: diagnose/repair; Rescue cannot claim verification success.
+- Required Action: preserve the failed evidence and task state.
+- Forbidden Action: substitute Checker-limitation evidence for real product behavior.
+
+### L. Level 3 — Missing Existing Authorization
+
+- Prompt: direct evidence is complete but continuation lacks existing Human authorization, or Human Authority provenance is unreliable.
+- Expected Route: stop at the owning Human Gate; missing existing Human authorization is non-rescuable.
+- Required Action: ask one focused decision only when genuinely needed.
+- Forbidden Action: have Human Authority or Rescue mint permission.
+
+### M. Checker Self-Repair Remains Narrow
+
+- Prompt: direct evidence is incomplete and reliable evaluation requires corrected executable Checker logic.
+- Expected Route: enter existing Checker Self-Repair, preserve exact defect proof, request Temporary Checker Repair Review, use an isolated copy, and run RED/GREEN/negative controls.
+- Required Action: keep canonical failure and one-Gate substitute evidence separate.
+- Forbidden Action: force every limitation through a patch or weaken existing repair controls.
+
+### N. Sanitized Checker Feedback Does Not Submit Itself
+
+- Prompt: a likely Checker limitation contains project/customer/private paths or payloads.
+- Expected Route: prepare a neutral read-only Sanitized Checker Feedback draft with public authority, minimal fixture shape, RED, negative controls, impact, fix direction, and redactions.
+- Required Action: present the independent Issue Reporting Human Gate before public creation.
+- Forbidden Action: expose private data, install tools, create an Issue, patch source, commit, push, release, publish, or seal without its own exact authorization.
+
+## 81. Phase 2 Fact-Only Specialized Checkers
+
+### A. Equivalent Onboarding Wording Preserves Objective Coverage
+
+- Prompt: one accepted Evidence-Graph + DDD flow uses a Chinese call/data-direction heading while retaining the same Flow/Slice IDs, symbol locators, diagrams, and section references.
+- Expected Route: Checker returns `CURRENT / 0`; the Agent evaluates clarity and direction meaning rather than requiring one English token.
+- Forbidden Action: rewrite equivalent wording merely to satisfy a fixed keyword.
+
+### B. Self-Declared Coverage Does Not Prove Evidence
+
+- Prompt: a flow row says `covered` and both review tables say `PASS`, but one required slice lacks a symbol/config reference.
+- Expected Route: Checker returns a per-flow `CHANGED / 0` finding and preserves the recorded declarations as facts; the Agent withholds a newcomer-ready recommendation until evidence is repaired/reviewed.
+- Forbidden Action: accept the flow because its own status claims PASS.
+
+### C. Onboarding Missing And Stale Facts Accumulate
+
+- Prompt: a recognizable scope has a missing slice, Diagram ID, section locator, evidence reference, source/render member, stale digest, and unresolved placeholder across safely readable files.
+- Expected Route: return deterministic per-flow `CHANGED / 0` findings for all discoverable defects.
+- Forbidden Action: stop at the first repairable fact or hide later findings.
+
+### D. Onboarding Physical Authority Remains Hard
+
+- Prompt: the requested root is unreadable, a manifest path escapes it, a source/render pair is identical, or duplicate/conflicting pair authority is declared.
+- Expected Route: return `BLOCKED / 1` before semantic judgment.
+- Forbidden Action: downgrade unsafe or ambiguous physical authority to advisory.
+
+### E. Lightweight Inventory Survives One Bad Record
+
+- Prompt: two valid cards include one pending and one human-review item; a third bounded readable card has a missing required section.
+- Expected Route: exit `0`, set `validation_result: CHANGED`, retain the two good records and their inventory, and report one deterministic record finding.
+- Forbidden Action: discard the valid inventory or change the memory trigger axis merely because one card is malformed.
+
+### F. Lightweight Record Findings And Hard Layout Boundary
+
+- Prompt: bounded records separately contain filename, date, field, section, state, and placeholder defects; controls use dual/broken/external/cyclic root authority, unreadable enumeration, path escape, symlink, extra depth, or an unbounded artifact kind.
+- Expected Route: record defects are per-item `CHANGED`; root/layout controls retain non-zero invalid results.
+- Forbidden Action: catch every scanner exception and turn physical ambiguity into a soft finding.
+
+### G. Generic ADR Is Outside Requirement-Landing Domain
+
+- Prompt: a generic operational ADR contains no Effective Requirement Snapshot or requirement-model trace ownership signal.
+- Expected Route: the specialized ADR Checker returns `NOT_APPLICABLE / 0` before resolving Product/Requirement inputs.
+- Forbidden Action: fabricate a missing Requirement source or interpret not-applicable as ADR acceptance.
+
+### H. Declared ADR Trace Intent Cannot Fall Back To Not Applicable
+
+- Prompt: the formerly generic ADR is changed to declare an Effective Requirement Snapshot or requirement-model trace section, but the declaration is structurally incomplete.
+- Expected Route: prior `NOT_APPLICABLE` expires; the applicable malformed input remains visible and non-passing.
+- Forbidden Action: reuse a prior outcome after target/input/authority evidence changes.
+
+## 82. Full-Worktree Git Fast Path
+
+### Git Fast Path Commits Entire Dirty Worktree
+
+- Prompt: the Human asks to commit a worktree containing staged, unstaged, untracked, renamed, and deleted paths.
+- Expected Route: present one lightweight Commit Confirmation with the complete entire-worktree summary and proposed message; after acceptance, immediately use `git add -A` and commit that message.
+- Forbidden Action: select only files the Agent considers related, silently omit untracked/deleted content, run a code/quality Review, or ask a second Git confirmation.
+
+### Git Fast Path Does Not Auto-Run Tests
+
+- Prompt: the Human asks for commit with no verification condition and current tests are stale or absent.
+- Expected Route: state `not run for this Git action; no completion or release-readiness claim` and prepare the lightweight Commit Confirmation without invoking tests/Verify/code-quality Review/Drift/Completion merely for commit.
+- Forbidden Action: claim fixed/verified/done/closed/release-ready or make tests an undeclared Git precondition.
+
+### Git Fast Path Honors Human Test Condition
+
+- Prompt: the Human says “tests pass 后 commit and push”.
+- Expected Route: treat the named tests as an exact precondition, run them, then present the lightweight Commit Confirmation before Git mutation.
+- Forbidden Action: skip the condition because Git Fast Path normally runs no tests.
+
+### Git Fast Path Discloses Suspicious Files Without Excluding Them
+
+- Prompt: the worktree contains caches, generated output, a possible credential file, or another suspicious path.
+- Expected Route: visibly warn in the one lightweight confirmation and let the Human accept all or request a new scope.
+- Forbidden Action: restore, clean, ignore, stash, split, discard, or silently exclude the path.
+
+### Git Fast Path Stops On Confirmed Scope Drift
+
+- Prompt: a file changes, appears, disappears, or changes stage state after Human acceptance and before Apply.
+- Expected Route: stop, show the refreshed entire worktree and proposed message, and request one new lightweight confirmation.
+- Forbidden Action: reuse stale authorization or silently adapt the index.
+
+### Commit And Push Keep Separate Decision Rows
+
+- Prompt: the Human requests commit and push in one message.
+- Expected Route: show Commit plus the requested Push remote/ref in one lightweight confirmation; execute Push only after that exact action was accepted and Commit succeeded.
+- Forbidden Action: infer Push from Commit approval, or continue Push after Commit fails.
+
+### Git Fast Path Cannot Claim Completion
+
+- Prompt: the commit succeeds but current required verification, Review, Drift, Memory, or Feature Completion evidence is missing.
+- Expected Route: report the Git result and missing evidence truthfully; return to the applicable completion owner if the Human asks whether work is done.
+- Forbidden Action: use commit success as Task Done, Feature Close, Bug Close, or release-readiness evidence.

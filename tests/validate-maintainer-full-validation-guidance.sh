@@ -44,5 +44,11 @@ assert_contains "$guide" "## GREEN：修复后重新验证"
 assert_contains "$guide" "机械检查通过不等于逻辑验证通过"
 assert_contains "$guide" "docs/reports/"
 assert_contains "$guide" "报告正文使用中文"
+assert_contains "$guide" "发现问题后遵循 RED -> GREEN -> REFACTOR"
+assert_contains "$guide" "Initial Feature behavior implementation and explicit Bug repair cannot skip required TDD RED."
+assert_contains "$guide" 'A `within-approved-boundary` Review Repair and a `clearly eligible` Lightweight Change use Repair-First Verification'
+assert_contains "$guide" "no completion claim may skip fresh targeted evidence or an Existing Test Obligation"
+assert_contains "$guide" "Additional Regression Test advice is non-blocking only after current Required Verification and every Existing Test Obligation are complete."
+assert_contains "$guide" "Feature Completion、Submit、Commit、PR、Merge、Tag、Push、Release、Publish 和 Seal 保持各自的人类 Gate。"
 
 printf 'PASS: maintainer full-validation guidance is durable and correctly scoped\n'

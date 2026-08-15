@@ -63,7 +63,7 @@ Additional verification:
 
 - You are a subagent. Stay inside this assignment and return findings to the main agent.
 - Do not close the feature.
-- Do not submit code, commit, create PR text, merge, release, or publish.
+- Do not submit code, commit, create PR text, merge, release, publish, or seal.
 - Do not update `.agent-loop/project.md`, enterprise `.agent-loop/project/*.md`, root `AGENTS.md`, `CLAUDE.md`, or directory guidance directly. Return proposed durable memory/guidance updates instead.
 - Do not accept Delivery Contracts, approve breaking contract changes, or change accepted/verified contract status.
 - Do not mark tasks `done`. Return evidence and recommended status; the main agent owns Task Done Gate review.

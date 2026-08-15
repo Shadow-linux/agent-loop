@@ -115,6 +115,11 @@ done
   exit 1
 }
 
+[[ ! -e "$root/scripts/check-review-repair.py" ]] || {
+  printf 'FAIL: Review Repair added a local authorization Checker\n' >&2
+  exit 1
+}
+
 removed=(
   'check-feature-review.py'
   'Gate 1 Spec Digest'
@@ -187,6 +192,14 @@ assert_contains references/stage-guides.md '`Revise package` returns readiness t
 assert_contains references/stage-guides.md '`Pause` does not mark readiness accepted'
 assert_contains references/stage-guides.md 'target implementation is forbidden before Gate 2'
 assert_contains references/stage-guides.md 'No local Feature Gate preflight is required'
+assert_section_contains references/stage-guides.md 'Review' '### Review Repair Fast Path'
+assert_section_contains references/stage-guides.md 'Review' 'inside the current accepted execution boundary'
+assert_section_contains references/stage-guides.md 'Review' 'repair the implementation first'
+assert_section_contains references/stage-guides.md 'Review' 'fresh targeted verification'
+assert_section_contains references/stage-guides.md 'Review' 'Regression Test Advisory'
+assert_section_contains references/stage-guides.md 'Review' 'return to Gate 1, Gate 2, Decision & Design, Delivery Contract, Bug Management, Diagnose Failure, or the applicable Human Gate'
+assert_section_not_contains references/stage-guides.md 'Review' 'Gate 3'
+assert_section_not_contains references/stage-guides.md 'Review' 'local authorization Checker'
 assert_contains references/workflow-checklists.md 'Only the two approval choices set `Implementation Readiness: accepted`'
 assert_contains references/workflow-checklists.md '`Revise package` returns readiness to `preparing`'
 assert_contains references/workflow-checklists.md '`Pause` does not mark readiness accepted'
@@ -207,7 +220,7 @@ assert_section_contains references/stage-guides.md 'Analyze Consistency' 'Only t
 assert_section_contains references/stage-guides.md 'Analyze Consistency' 'no local Feature Gate preflight is required'
 assert_section_contains references/runtime.md 'Human Gate Modes' 'Delivery Contract creation and acceptance'
 assert_section_contains references/runtime.md 'Human Gate Modes' 'subagent dispatch'
-assert_section_contains references/runtime.md 'Human Gate Modes' 'commit, push, PR, merge, tag, release, publish'
+assert_section_contains references/runtime.md 'Human Gate Modes' 'commit, push, PR, merge, tag, release, publish, seal'
 assert_section_contains references/runtime.md 'Human Gate Modes' 'Submit / Integrate'
 assert_section_contains references/runtime.md 'Human Gate Modes' 'Pause / Close'
 
@@ -229,7 +242,7 @@ assert_contains references/validation-scenarios.md 'Pause Clears Current Mode Wi
 
 assert_contains references/runtime.md 'Delivery Contract creation and acceptance'
 assert_contains references/runtime.md 'subagent dispatch'
-assert_contains references/runtime.md 'commit, push, PR, merge, tag, release, publish'
+assert_contains references/runtime.md 'commit, push, PR, merge, tag, release, publish, seal'
 assert_contains templates/root-AGENTS.md 'Feature construction normally stops at two reviews'
 assert_contains references/project-guidance.md 'Feature construction normally stops at two reviews'
 assert_not_contains references/stage-guides.md 'after acceptance, explain that Strict Mode asks before each stage and offer Feature Auto-Loop'

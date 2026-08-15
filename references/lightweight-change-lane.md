@@ -73,7 +73,7 @@ Choose exactly one result: `clearly eligible`, `Feature trigger`, or `uncertain`
 9. The work does not require planned multi-session execution, pause/resume lifecycle, handoff, subagent execution, long observation, or complex evidence storage. Accidental context loss may resume one existing card only through the revalidation contract below.
 10. Current evidence is sufficient for the Agent to accept responsibility for the route judgment.
 
-A concrete bounded change request authorizes only the local scope disclosed in the card and its disclosed local verification. It does not authorize external, production, paid, destructive, configuration-write, deployment, Git, submit, release, publish, or Bug lifecycle action.
+A concrete bounded change request authorizes only the local scope disclosed in the card and its disclosed local verification. It does not authorize external, production, paid, destructive, configuration-write, deployment, Git, submit, release, publish, seal, or Bug lifecycle action.
 
 ## Feature Hard Triggers
 
@@ -141,27 +141,29 @@ A Plan is always required, but its depth is adaptive.
 
 - A single confirmed fact replacement usually names the file, exact old/new fact, reference scan, verification, diff review, and rollback in two to four steps.
 - Multi-file mechanical synchronization adds discovery, a complete affected-path list, consistency checks, and residual scans.
-- A small isolated internal logic change adds one meaningful failure case, expected RED/GREEN evidence, and a focused regression.
+- A small isolated internal logic change names the exact branch, bounded write, failure-matched fresh proof, affected existing checks, and a specific future-regression recommendation or not-needed reason.
 - Environment-related work records environment, entrypoint, impact, bounded local checks, and rollback; any real external effect keeps its own Human Gate.
 
 The card Plan is lightweight persisted execution control, not a construction-grade zero-context Feature `plan.md`, and it never uses No-Plan Decision. If reliable execution requires a much longer plan, hidden decisions, or planned durable handoff, use Feature Construction instead.
 
-## Targeted TDD And Verification
+## Repair-First Verification
 
-Choose evidence from the actual failure mode:
+After the parser-valid Card exists and the route remains `clearly eligible`, use this order:
 
 ```text
-behavior logic changed and isolatable
--> targeted RED
--> minimal GREEN
--> focused regression
-
-fact/config/path/domain/docs changed
--> syntax / parse / reference / residual / bounded dry-run checks
--> focused regression when applicable
+clearly eligible Card is current
+-> apply the disclosed bounded change first
+-> run fresh targeted verification after the write
+-> run affected existing checks when available
+-> review diff, scope, rollback and memory impact
+-> record result and a specific Regression Test Advisory or not-needed reason
 ```
 
-Do not invent a unit test for a mechanical string, path, version, domain, documentation, or configuration fact change when parsing, reference, residual, syntax, or dry-run checks prove the risk more directly. Do not use “lightweight” to skip a meaningful RED/GREEN for an isolatable behavior branch.
+Eligibility and every Feature hard trigger remain unchanged. The Card must exist before the target write. Existing tests are rerun when they already cover the changed risk, but the Agent does not invent or reverse implementation only to manufacture RED. Choose fresh proof from the actual failure mode: focused existing test, syntax/parse/reference/residual check, bounded dry-run, build/type/lint, API/integration/browser/manual evidence, or another exact check that directly proves the current result.
+
+Required Verification and every Existing Test Obligation remain hard. A Regression Test Advisory is only future protection after current proof exists; it cannot replace an accepted test, Gate 2/acceptance/ADR/Contract/Bug obligation, or Human instruction. If no reliable proof exists without adding a new test, keep the Card non-terminal, describe the exact test needed, and ask at the existing Human Review. A failed required check is diagnosis evidence, never an advisory.
+
+Scope expansion stops before broader edits. Promotion to initial Feature execution or explicit Bug repair restores normal TDD and mandatory helper routing. Repair-First neither authorizes a wider write nor permits a partial edit to cross a Feature hard trigger.
 
 Production-related facts receive local/static checks first. Any real production read, write, paid call, configuration write, deploy, credential use, or external effect waits for its existing authorization.
 
@@ -169,7 +171,7 @@ Production-related facts receive local/static checks first. Any real production 
 
 When a reliable memory root exists, run Project Skill Discovery Guard before generic action or helper fallback. A matched active Project Skill must pass manifest validation, load, and its per-invocation Execution Gate before use. Project Skill discovery or execution cannot widen the card Scope.
 
-Lightweight Change Lane does not enter the mandatory Plan Gate / Plan or Execute Task / Story helper-backed stages. The controller owns the persisted card Plan and targeted verification selection. Optional method advice may not introduce helper-native directories, a Feature workspace, a construction-grade plan, or a new mode/gate. Promotion to Feature restores all normal mandatory helper protocols.
+Lightweight Change Lane does not enter the mandatory Plan Gate / Plan or Execute Task / Story helper-backed stages and does not invoke the TDD helper by default. The controller owns the persisted card Plan and selects fresh failure-matched verification. Optional method advice may not introduce helper-native directories, a Feature workspace, a construction-grade plan, or a new mode/gate. Promotion to initial Feature execution or explicit Bug repair restores all normal mandatory helper protocols, including TDD.
 
 ## Accidental Recovery
 
@@ -198,16 +200,17 @@ Do not claim completion until all are true:
 
 - every Plan step is completed or its cancellation is explicit;
 - targeted verification ran fresh and its result is reported honestly;
+- affected existing checks ran when available, or the reason none applies is recorded;
 - diff review confirms only the disclosed authorized Scope changed;
 - no unresolved hard trigger or scope expansion remains;
 - rollback remains valid;
 - durable memory impact is checked and is either `none` with reason or a permitted mechanical synchronization of an already accepted fact;
-- Result / Residuals states what changed, what did not, and what remains;
+- Result / Residuals states what changed, what did not, what remains, and a specific Regression Test Advisory or concrete not-needed reason;
 - all later actions remain behind their own Human Gates.
 
 After every completion, run the read-only scanner and record whether pending memory consolidation or unresolved human review remains. Completion does not require every human-review candidate to be decided, but it must remain visible.
 
-If verification fails, diagnose whether the bounded route remains valid. Do not silently widen the fix or declare success.
+If verification fails or current correctness cannot be proved, keep the Card non-terminal and diagnose whether the bounded route remains valid. Do not silently widen the fix, downgrade the failure to advice, or declare success.
 
 ## Memory, Branch, Submit, And External Gates
 
@@ -219,6 +222,12 @@ Windows: py -3 <skill-root>\scripts\scan-lightweight-changes.py --project-root <
 ```
 
 The scanner is read-only, validates all months, and never classifies semantics or writes memory. Count trigger: `pending_count >= 3`. Age trigger: `as_of_date - oldest_completed_at > 7 days`; exactly 7 days does not trigger. `in-progress`, `stopped`, and complete reviews do not count. `human-review` is reported separately and remains visible at relevant Project Entry and pre-release reviews. During post-merge reconciliation, read one such card only when the observed conflict directly identifies it as necessary evidence.
+
+Scanner applicability and memory triggers are separate output axes. The existing `result: triggered | not-triggered`, pending count/age, oldest pending, and human-review inventory keep their meaning. `validation_result` reports `NOT_APPLICABLE` when no accepted memory root has a `changes/` inventory, `CURRENT` when every safely enumerated Markdown card is mechanically current, and `CHANGED` when one or more bounded cards have `record_findings`. Exit `0` on any of these values authorizes no repair, memory write, execution, or later Gate.
+
+Within safe enumeration, scanning continues past Agent-repairable per-record findings. A malformed but readable card contributes one deterministic entry containing its project-relative path, category, and detail; it does not erase valid pending/human-review records or their triggers. Repairable problems include filename, date, field, section, state, or placeholder facts and become per-record findings. A record that cannot be safely bounded or read remains hard. The Agent may repair deterministic Agent-owned card evidence only inside existing authorization; unresolved meaning routes to the existing Human Review.
+
+Root/layout authority stays hard: dual, broken, external, or cyclic memory-root authority, unreadable root/month enumeration, project-root or record path escape, a symlinked root/month/card, invalid or extra month-directory depth, or an unbounded artifact kind returns the existing non-zero invalid result. Do not catch and downgrade these conditions while accumulating record findings. Ordering of months, valid records, findings, pending rows, human-review rows, and trigger reasons is deterministic.
 
 Known memory drift plus relevant Change evidence and pre-release pending/human-review are controller fact events, not scanner flags. They route the Agent into semantic Change Memory Consolidation without a scheduler, background process, canonical stage, or new message intent. Post-merge entry alone does not start consolidation or a full Change scan.
 
@@ -234,16 +243,16 @@ The required order is: code merge completes before Target memory reconciliation.
 
 An adopted Branch Strategy, Target Release Context, sealed-release rule, customer isolation, and exact Branch Action/Cleanup gates still apply. The card authorizes no branch creation, switching, deletion, merge, push, or tag.
 
-Card completion authorizes no Git, release, publish, production, or Bug lifecycle action.
+Card completion authorizes no Git, release, publish, seal, production, or Bug lifecycle action.
 
-Commit, push, PR, merge, tag, release, publish, deployment, production/external reads or writes, paid calls, configuration writes, destructive operations, Feature close, and Bug close/reopen retain their independent Human Gates.
+Commit, push, PR, merge, tag, release, publish, seal, deployment, production/external reads or writes, paid calls, configuration writes, destructive operations, Feature close, and Bug close/reopen retain their independent Human Gates.
 
 ## Forbidden Behavior
 
 - Do not choose the lane because a diff looks small, changes one file, or has few steps.
 - Do not let “simple” override Feature hard triggers.
 - Do not omit Plan, progress, fresh verification, diff review, rollback, or memory-impact review.
-- Do not manufacture meaningless RED evidence for a fact correction.
+- Do not manufacture RED evidence by reversing a completed write, breaking a fixture, using a bad command, or treating an unrelated failure as proof.
 - Do not bypass explicit Bug Management or an owning active Feature.
 - Do not write before an uncertain-route human answer.
 - Do not continue broader edits after scope expansion.

@@ -736,7 +736,7 @@ class FeatureMonthlyArchiveScanTests(unittest.TestCase):
             )
             self.assertEqual(tree_snapshot(workspace.project_root), before)
 
-    def test_ambiguous_old_path_reference_blocks_apply(self) -> None:
+    def test_ambiguous_old_path_reference_is_reported_as_advisory(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             workspace = ArchiveWorkspace(Path(temp))
             feature_id = "2026-05-08-login"

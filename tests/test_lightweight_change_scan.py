@@ -25,6 +25,7 @@ if str(SCRIPTS) not in sys.path:
 from lightweight_change_support import (  # noqa: E402
     LightweightChangeContractError,
     build_scan,
+    parse_change,
 )
 
 
@@ -44,6 +45,20 @@ class LightweightChangeScanTests(unittest.TestCase):
             "size",
         }
         self.assertIn(payload["error"]["category"], allowed)
+        return payload
+
+    def assert_changed(
+        self,
+        result: object,
+        categories: set[str] | None = None,
+    ) -> dict[str, object]:
+        self.assertEqual(result.returncode, 0, result.stderr)
+        payload = json_output(result)
+        self.assertEqual(payload["validation_result"], "CHANGED")
+        findings = payload["record_findings"]
+        self.assertTrue(findings, payload)
+        if categories is not None:
+            self.assertIn(findings[0]["category"], categories)
         return payload
 
     def test_no_memory_root_is_empty_and_read_only(self) -> None:
@@ -72,6 +87,8 @@ class LightweightChangeScanTests(unittest.TestCase):
             self.assertEqual(payload["oldest_pending"], None)
             self.assertEqual(payload["trigger_reasons"], [])
             self.assertEqual(payload["result"], "not-triggered")
+            self.assertEqual(payload["validation_result"], "NOT_APPLICABLE")
+            self.assertEqual(payload["record_findings"], [])
             self.assertEqual(tree_snapshot(root), before)
 
     def test_existing_root_without_changes_is_empty_and_read_only(self) -> None:
@@ -86,6 +103,8 @@ class LightweightChangeScanTests(unittest.TestCase):
             self.assertEqual(payload["memory_root"], ".agent-loop")
             self.assertEqual(payload["changes_root"], None)
             self.assertEqual(payload["counts"]["total"], 0)
+            self.assertEqual(payload["validation_result"], "NOT_APPLICABLE")
+            self.assertEqual(payload["record_findings"], [])
             self.assertFalse((memory_root / "changes").exists())
             self.assertEqual(tree_snapshot(root), before)
 
@@ -96,6 +115,7 @@ class LightweightChangeScanTests(unittest.TestCase):
             workspace.change("2026-07-18", "two")
             payload = json_output(run_scan(workspace.project_root))
             self.assertEqual(payload["counts"]["pending"], 2)
+            self.assertEqual(payload["validation_result"], "CURRENT")
             self.assertEqual(payload["oldest_pending"]["age_days"], 0)
             self.assertNotIn("pending-count", payload["trigger_reasons"])
             self.assertEqual(payload["result"], "not-triggered")
@@ -323,7 +343,7 @@ class LightweightChangeScanTests(unittest.TestCase):
             with self.subTest(overrides=overrides), tempfile.TemporaryDirectory() as temp:
                 workspace = ChangeWorkspace(Path(temp))
                 workspace.change("2026-07-18", "mismatch", **overrides)
-                self.assert_invalid(run_scan(workspace.project_root), {"layout", "date"})
+                self.assert_changed(run_scan(workspace.project_root), {"layout", "date"})
 
     def test_collision_suffix_is_part_of_topic_identity(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -335,8 +355,27 @@ class LightweightChangeScanTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             workspace = ChangeWorkspace(Path(temp))
             path = workspace.change("2026-07-18", "topic", filename="2026-07-18-topic-2.md")
-            self.assert_invalid(run_scan(workspace.project_root), {"metadata"})
+            self.assert_changed(run_scan(workspace.project_root), {"metadata"})
             self.assertTrue(path.is_file())
+
+    def test_invalid_markdown_filename_in_a_bounded_month_is_a_record_finding(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = ChangeWorkspace(Path(temp))
+            path = workspace.change("2026-07-18", "valid")
+            invalid = path.with_name("bad name.md")
+            path.rename(invalid)
+            payload = self.assert_changed(run_scan(workspace.project_root), {"layout"})
+            self.assertEqual(payload["record_findings"][0]["path"], ".agent-loop/changes/2026-07/bad name.md")
+
+    def test_invalid_filename_does_not_bypass_unreadable_record_boundary(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = ChangeWorkspace(Path(temp))
+            path = workspace.change("2026-07-18", "valid")
+            invalid = path.with_name("bad name.md")
+            path.rename(invalid)
+            invalid.write_bytes(b"\xff\xfe\xfa")
+            payload = self.assert_invalid(run_scan(workspace.project_root), {"read"})
+            self.assertEqual(payload["validation_result"], "BLOCKED")
 
     def test_flat_and_extra_nested_markdown_are_invalid(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -396,7 +435,7 @@ class LightweightChangeScanTests(unittest.TestCase):
                 created_at = case.pop("created_at")
                 topic = case.pop("topic")
                 workspace.change(created_at, topic, **case)
-                self.assert_invalid(run_scan(workspace.project_root), {"date"})
+                self.assert_changed(run_scan(workspace.project_root), {"date"})
 
     def test_required_sections_and_memory_combinations_are_validated(self) -> None:
         headings = (
@@ -419,7 +458,7 @@ class LightweightChangeScanTests(unittest.TestCase):
                 path = workspace.change("2026-07-18", "missing-section")
                 content = path.read_text(encoding="utf-8")
                 path.write_text(content.replace(f"## {heading}\n", f"## Removed {heading}\n", 1), encoding="utf-8")
-                self.assert_invalid(run_scan(workspace.project_root), {"metadata"})
+                self.assert_changed(run_scan(workspace.project_root), {"metadata"})
 
         valid_cases = (
             {
@@ -497,7 +536,7 @@ class LightweightChangeScanTests(unittest.TestCase):
             with self.subTest(invalid=index), tempfile.TemporaryDirectory() as temp:
                 workspace = ChangeWorkspace(Path(temp))
                 workspace.change("2026-07-18", f"invalid-{index}", **options)
-                self.assert_invalid(run_scan(workspace.project_root), {"state", "metadata"})
+                self.assert_changed(run_scan(workspace.project_root), {"state", "metadata"})
 
     def test_authoring_markers_are_rejected_outside_code_fences(self) -> None:
         cases = (
@@ -516,7 +555,7 @@ class LightweightChangeScanTests(unittest.TestCase):
                 path = workspace.change("2026-07-18", f"placeholder-{index}")
                 content = path.read_text(encoding="utf-8")
                 path.write_text(content.replace(original, marker, 1), encoding="utf-8")
-                self.assert_invalid(run_scan(workspace.project_root), {"metadata"})
+                self.assert_changed(run_scan(workspace.project_root), {"metadata"})
 
     def test_fenced_markdown_is_ignored_for_structure_and_authoring_markers(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -559,7 +598,57 @@ Memory Target: example only
                 1,
             )
             path.write_text(content, encoding="utf-8")
-            self.assert_invalid(run_scan(workspace.project_root), {"metadata"})
+            self.assert_changed(run_scan(workspace.project_root), {"metadata"})
+
+    def test_one_malformed_record_preserves_good_pending_and_human_review_inventory(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = ChangeWorkspace(Path(temp))
+            pending = workspace.change("2026-07-16", "pending-good")
+            human = workspace.change(
+                "2026-07-17",
+                "human-good",
+                memory_review="complete",
+                memory_result="human-review",
+            )
+            malformed = workspace.change("2026-07-18", "malformed")
+            malformed.write_text(
+                malformed.read_text(encoding="utf-8").replace("## Rollback", "## Missing Rollback", 1),
+                encoding="utf-8",
+            )
+
+            payload = self.assert_changed(run_scan(workspace.project_root), {"metadata"})
+            self.assertEqual(payload["counts"]["total"], 2)
+            self.assertEqual(payload["counts"]["pending"], 1)
+            self.assertEqual(payload["counts"]["human_review"], 1)
+            self.assertEqual(payload["pending_changes"][0]["path"], pending.relative_to(workspace.project_root).as_posix())
+            self.assertEqual(payload["human_review_changes"][0]["path"], human.relative_to(workspace.project_root).as_posix())
+            self.assertEqual(
+                payload["record_findings"],
+                [
+                    {
+                        "category": "metadata",
+                        "detail": "section Rollback must occur exactly once",
+                        "path": malformed.relative_to(workspace.project_root).as_posix(),
+                    }
+                ],
+            )
+
+    def test_record_input_change_expires_a_prior_current_result(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = ChangeWorkspace(Path(temp))
+            path = workspace.change("2026-07-18", "input-change")
+            current = json_output(run_scan(workspace.project_root))
+            self.assertEqual(current["validation_result"], "CURRENT")
+            path.write_text(
+                path.read_text(encoding="utf-8").replace(
+                    "Apply the declared change and pass the declared verification.",
+                    "<replace with current completion criteria>",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+            changed = self.assert_changed(run_scan(workspace.project_root), {"metadata"})
+            self.assertNotEqual(current, changed)
 
     def test_git_context_allows_at_inside_valid_branch_name(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -620,6 +709,28 @@ Memory Target: example only
             path.write_bytes(("\ufeff" + content.replace("\n", "\r\n")).encode("utf-8"))
             result = run_scan(workspace.project_root)
             self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_unreadable_utf8_change_remains_blocked(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = ChangeWorkspace(Path(temp))
+            path = workspace.change("2026-07-18", "unreadable")
+            path.write_bytes(b"\xff\xfe\xfa")
+            payload = self.assert_invalid(run_scan(workspace.project_root), {"read"})
+            self.assertEqual(payload["validation_result"], "BLOCKED")
+            self.assertIn("readable UTF-8", payload["error"]["detail"])
+
+    def test_unreadable_record_metadata_remains_a_hard_read_boundary(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = ChangeWorkspace(Path(temp))
+            path = workspace.change("2026-07-18", "unreadable-metadata")
+            with (
+                mock.patch.object(Path, "is_symlink", return_value=False),
+                mock.patch.object(Path, "is_file", return_value=True),
+                mock.patch.object(Path, "stat", side_effect=PermissionError("denied")),
+                self.assertRaises(LightweightChangeContractError) as raised,
+            ):
+                parse_change(workspace.memory_root, path, as_of=date(2026, 7, 18))
+            self.assertEqual(raised.exception.category, "read")
 
     def test_oversized_change_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

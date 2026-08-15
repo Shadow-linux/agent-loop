@@ -76,7 +76,7 @@ accepted semantic source and stable IDs
 
 Record both paths, both SHA-256 values, exact `archify@<version>` generator, `validate=pass; check=pass` evidence, `Status: current`, and the applicable human confirmation. Validate the pair through `scripts/visual_artifact_support.py`. HTML/PNG/SVG without its typed source, a source without its render, a digest/type/output mismatch, or a stale semantic source is not current evidence.
 
-Installation Authorization, Visual Scope Grant, and durable recording are independent. In particular, installation or generation does not authorize Product Human Review, ADR acceptance, Feature start, Git, release, publish, or future external actions. Onboarding review and the project-skill Execution Gate also remain separate.
+Installation Authorization, Visual Scope Grant, and durable recording are independent. In particular, installation or generation does not authorize Product Human Review, ADR acceptance, Feature start, Git, release, publish, seal, or future external actions. Onboarding review and the project-skill Execution Gate also remain separate.
 
 ## Controller Rule
 
@@ -92,7 +92,7 @@ This ownership is invariant even when a helper is mandatory. A helper may impose
 
 Do not copy an external skill's full workflow into `agent-loop`. Borrow the method, then translate the result into the current `agent-loop` artifact.
 
-For Lightweight Change Lane, the persistent monthly card remains controller-owned and does not enter a mandatory helper-backed stage. Do not expand a Lightweight Execution Card into `docs/superpowers/`, a Feature workspace, or a construction-grade plan. An external helper may advise a method only when already appropriate; it cannot introduce a helper-specific path, artifact, mode, gate, or scope expansion. Promotion to Feature restores the normal helper protocol.
+For Lightweight Change Lane, the persistent monthly card remains controller-owned and does not enter a mandatory helper-backed stage. Review Repair Fast Path remains owned by Review and keeps its Review helper resolution. Neither path invokes the TDD helper by default. Do not expand a Lightweight Execution Card into `docs/superpowers/`, a Feature workspace, or a construction-grade plan. An external helper may advise a method only when already appropriate; it cannot introduce a helper-specific path, artifact, mode, gate, or scope expansion. Promotion to initial Feature execution or explicit Bug repair restores the normal helper protocol.
 
 ## Path Override Rule
 
@@ -153,7 +153,7 @@ External skills may not:
 - create external default directories without explicit human request
 - mark tasks `done`
 - close a feature
-- submit, commit, PR, merge, release, or publish
+- submit, commit, PR, merge, release, publish, or seal
 - update project memory outside the current `agent-loop` stage rules
 - accept Delivery Contracts or approve breaking contract changes
 - execute an active project-local skill without the current invocation Execution Gate
@@ -246,8 +246,10 @@ When Project Skill Creation / Update starts:
 
 When `Execute Task / Story` starts and Superpowers is available:
 
+The TDD Adapter remains mandatory for initial Feature execution and explicit Bug repair, not for Review Repair Fast Path or clearly eligible Lightweight Change.
+
 1. Use `superpowers:test-driven-development` as the preferred method.
-2. Follow RED/GREEN/REFACTOR when applicable.
+2. Follow RED/GREEN/REFACTOR for the formal execution path, Human-requested TDD, and accepted Plans that require it.
 3. If TDD cannot be followed, stop or mark the task `Human-gated`.
 4. Record evidence in `notes.md`.
 5. Move the task to `review`, not `done`, until Task Done Gate passes.
@@ -270,13 +272,13 @@ When `Submit / Integrate` starts and Superpowers is available:
 1. Use `superpowers:finishing-a-development-branch` only for completion options, branch hygiene, and integration decision support.
 2. Load `submit-and-integrate.md` and follow the agent-loop submit gate.
 3. Inspect diff and untracked files before any integration action.
-4. Confirm fresh verification evidence, required review, drift check, and project memory update status.
-5. Separate product code changes from `agent-loop` artifact changes and unrelated dirty work.
+4. On normal Submit, confirm fresh verification evidence, required review, drift check, and project memory update status. For an explicit commit or commit-and-push request, defer to the Full-Worktree Git Fast Path without invoking those checks merely for Git.
+5. On normal Submit, separate product code changes from `agent-loop` artifact changes and unrelated dirty work. On Full-Worktree Git Fast Path, disclose the entire staged/unstaged/untracked/deleted worktree and do not let the helper exclude files.
 6. Resolve Source Branch, Branch Class, Target Release Context, Target Branch, sealed state, customer isolation, and any cleanup evidence through `branch-management.md` when the optional strategy applies.
-7. Present a Branch Strategy And Action Review before commit, PR text, merge note, branch deletion, release note, publish/release action, or any final submission claim.
-8. Treat a human saying "commit" as permission to enter Submit / Integrate, not final commit approval.
+7. Present a Branch Strategy And Action Review before normal-path commit, PR text, merge note, branch deletion, tag, push, release, publish, seal, or any final submission claim. Full-Worktree Git Fast Path uses its own single lightweight Commit Confirmation instead.
+8. For a human saying `commit` or `commit and push`, show one lightweight confirmation of the entire-worktree summary and proposed commit message; do not let the helper run tests, add code/quality Review, or add a second confirmation. Plain commit excludes Push; commit-and-push authorizes both in order after confirmation.
 9. When the Feature resolves Bugs, show Bug IDs, current Status, verification evidence, and unresolved Bug Close Decisions; finishing evidence cannot close/reopen a Bug or satisfy a Feature/Requirement/Bug Human Gate.
-10. Do not let the external finishing skill create/switch/delete branches, commit, push, publish PR text, merge, tag, release, publish, close the Feature, close/reopen a Bug, or mark submission ready without the matching agent-loop confirmation.
+10. Do not let the external finishing skill create/switch/delete branches, commit, push, publish PR text, merge, tag, release, publish, seal, close the Feature, close/reopen a Bug, or mark submission ready without the matching agent-loop confirmation.
 11. After code integration, an external finishing helper cannot invent or bypass an observed memory conflict, resolve an unresolved semantic choice, satisfy the Memory Commit Gate, inherit Git authority, or recommend Source cleanup while a real conflict/restore remains unresolved. It must accept `reconciliation-not-needed` when no conflict exists. Full Memory Audit / Recovery and its Plan Hash/transaction controls require their own explicit Human authorization.
 
 ## Subagent Adapter

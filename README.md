@@ -1,6 +1,8 @@
 # Agent Loop
 
-**Current version:** 1.5.3 (development)
+**Current version:** 1.5.6 (stable)
+
+Agent Loop 1.5.6 is the current formal stable release. Its stable tag is `stable-v1.5.6`; synchronizing this exact release commit to `main` remains a separate Human Gate.
 
 Agent Loop is a reusable controller skill for single-human, CLI-agent software development. It lets the Agent own project diagnosis, workflow sequencing, implementation, verification, and memory maintenance while the human keeps control of goals, product meaning, consequential decisions, and external actions.
 
@@ -66,9 +68,13 @@ Agent Loop uses **Adaptive Product Definition** and an internal Requirement/Prod
 
 During requirements discussion, the agent records Design Readiness evidence and Decision Candidates without creating ADR files. A requirement-driven ADR resolves an Effective Requirement Snapshot and gives every in-scope model ID a Requirement Model Technical Landing Trace before Feature Spec.
 
-New Feature work creates no Feature `product.md`; Feature `spec.md` selects a bounded Product Slice from the effective Requirement Product Definition.
+New Feature work creates no Feature `product.md`. Requirement-driven work selects a bounded Product Slice from the effective Requirement Product Definition; Bug-, Human-, existing-Feature-, and custom-authority work records its actual source without inventing a Requirement.
 
-Feature work now starts from a local **Feature Context Snapshot** in `spec.md`. Agent Loop first scans objective facts for the real Requirement `product.md` selected by Requirement README plus applicable ADRs. `CURRENT` uses the fast path; `CHANGED` lets the Agent assess semantic impact and refresh derived evidence without turning ordinary drift into a checker failure; only physical authority contradictions return `BLOCKED`. The Snapshot is derived context, never a second product truth.
+Feature work now starts from an open **Feature Authority** plus a local **Feature Context Snapshot** in `spec.md`. Feature, Bug, and Human are known adapter families rather than a closed enum; Requirement Product Definition remains a compatible sub-adapter, and an unknown but inspectable source returns `CHANGED` for Agent judgment. Snapshot Authority Facts deterministically mirror the resolver, so a changed Authority Summary or stale fact cannot remain `CURRENT`; equivalent safe paths to the same Requirement README remain one authority. Specialized Product/Concept Checkers return `NOT_APPLICABLE` before applying the wrong domain. Only unreadable/escaping local authority or another physical contradiction returns `BLOCKED`. These are objective facts, never execution permission or a second product truth.
+
+When a canonical Checker still fails after an exact rerun, the Agent first uses three-level **Agent Checker Rescue**: Level 1 may continue only inside existing authorization with complete independent evidence and unchanged semantics; Level 2 asks for one `accepted-for-this-gate` substitute when a small residual risk remains; Level 3 stops on path, plan-hash, transaction/rollback, real-verification, semantic, or authorization uncertainty. Rescue never turns the canonical result into PASS or replaces an existing Human Gate. Checker Self-Repair is used only when corrected executable evaluation is actually required.
+
+Onboarding and Lightweight Change scanners follow the same fact boundary. Onboarding first distinguishes no recognizable scope (`NOT_APPLICABLE`), safely enumerable missing/stale per-flow evidence (`CHANGED`), and unreadable/unsafe/ambiguous authority (`BLOCKED`); fixed wording and self-declared `covered` / `PASS` never prove newcomer readiness. The Change scanner preserves every readable pending/human-review record and trigger while reporting bounded malformed cards individually. Requirement-model ADR validation likewise returns `NOT_APPLICABLE` for a generic non-requirement ADR, but a declared Snapshot/trace with defects remains applicable and visible. Agent and existing Human Gates own the meaning and next action.
 
 ### Deliver with the smallest safe workflow
 
@@ -76,16 +82,20 @@ Feature work now starts from a local **Feature Context Snapshot** in `spec.md`. 
 |---|---|---|
 | Chat | Questions, explanation, status, or discussion with no requested workflow action | No Requirement or Feature created by default |
 | Operational Support | Code-guided testing, diagnosis, rollout planning, or environment help | Read-only first; production/external actions remain gated |
-| Lightweight Change Lane | Bounded, reversible, ordinary non-Bug work with exact verification | Persistent monthly Change card, adaptive Plan, targeted checks, diff review, rollback, Memory Review |
-| Feature | Behavior, API, state, data, permission, security, architecture, migration, broad impact, or uncertain consumers | Product Slice, spec, tasks, tests, Plan, TDD, verification, review, drift, memory |
-| Bug Follow-up | Explicit Bug identity, evidence, deduplication, expected behavior, ownership, repair, and close | `bugs/YYYY-MM-DD-<bug-slug>/` plus a Feature-owned code repair |
+| Lightweight Change Lane | Bounded, reversible, ordinary non-Bug work with exact verification | Persistent monthly Change card, adaptive Plan, Repair-First Verification, diff review, rollback, Memory Review |
+| Feature | Behavior, API, state, data, permission, security, architecture, migration, broad impact, or uncertain consumers | Product Slice, spec, tasks, tests, Plan, initial TDD, verification, review, drift, memory |
+| Bug Follow-up | Explicit Bug identity, evidence, deduplication, expected behavior, ownership, repair, and close | `bugs/YYYY-MM-DD-<bug-slug>/` plus a Feature-owned TDD repair |
+
+Initial Feature implementation and explicit Bug repair keep TDD. A Review correction already inside the accepted boundary, or a clearly eligible Lightweight Change, repairs first, verifies the changed behavior with fresh evidence, reruns affected existing checks, and then recommends specific regression coverage. Fresh Required Verification and every Existing Test Obligation remain mandatory; only an Additional Regression Test is advisory.
+
+An explicit commit or commit-and-push request may use the **Full-Worktree Git Fast Path**. The Agent presents the entire staged/unstaged/untracked/deleted worktree, warnings, exact commit message, and separate Commit/Push rows once; after Human confirmation it uses `git add -A` and does not silently drop files. Tests are not run merely for this Git action unless the Human makes them a condition. An unverified commit is reported as packaging only and never proves completion, close, or release readiness.
 
 Feature delivery includes:
 
-- direct Product Requirement Source and bounded Product Slice in `spec.md`
-- freshness-checked Feature Context Snapshot for Task, Test, Plan, Resume, Execute, Handoff, Verify, Review, Drift, and Close
+- open Feature Authority, with Product Requirement Source and bounded Product Slice only when that sub-adapter applies
+- authority/freshness-checked Feature Context Snapshot for Task, Test, Plan, Resume, Execute, Handoff, Verify, Review, Drift, and Close
 - story/task breakdown, test design, Web E2E discovery, and construction-grade planning
-- TDD with real RED/GREEN evidence for behavior changes
+- TDD with real RED/GREEN evidence for initial Feature execution and explicit Bug repair
 - optional Delivery Contracts for durable producer-consumer boundaries
 - optional project-local Skills for repeatable, verified project operations
 - mandatory helper resolution for Project Skill Creation / Update, Brainstorm, Plan Gate, execution, diagnosis, verification, and review
@@ -143,7 +153,9 @@ The human owns:
 - unresolved product or technical choices with material consequences
 - changes to human-authored source material
 - production, paid, secret-bearing, destructive, or external-service actions
-- branch mutation, commit, push, PR, merge, tag, release, and publish
+- branch mutation, commit, push, PR, merge, tag, release, publish, and seal
+
+Tag, Push, Release, Publish, and Seal remain independent Human Gate decisions. Agent may present them together in one Batch Human Review, but approval and execution remain exact-action, row-specific, ordered, and conditional on each row's disclosed preconditions.
 - acceptance of ADRs, Delivery Contracts, Feature close, Bug close, and other explicit lifecycle gates
 
 Approving one gate never approves another.
@@ -191,14 +203,14 @@ Use this route when `npx` is unavailable or the environment must install from a 
 ```bash
 # Public GitHub
 git clone \
-  --branch stable-v1.5.2 \
+  --branch stable-v1.5.6 \
   --depth 1 \
   https://github.com/Shadow-linux/agent-loop.git \
   ~/.local/share/agent-loop-source
 
 # Private Git mirror
 git clone \
-  --branch stable-v1.5.2 \
+  --branch stable-v1.5.6 \
   --depth 1 \
   <git-mirror-url> \
   ~/.local/share/agent-loop-source
@@ -230,7 +242,7 @@ For a later clone-based upgrade, fetch tags, check out the new stable tag explic
 
 ```bash
 git -C ~/.local/share/agent-loop-source fetch --tags origin
-git -C ~/.local/share/agent-loop-source checkout --detach stable-v1.5.2
+git -C ~/.local/share/agent-loop-source checkout --detach stable-v1.5.6
 ```
 
 `~/.agents/skills/agent-loop` is the preferred shared location. If an Agent runtime does not discover it, synchronize the same verified source into that runtime's configured Skill directory rather than maintaining divergent copies.

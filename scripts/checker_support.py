@@ -94,6 +94,51 @@ def read_text(path: Path) -> str:
         return handle.read()
 
 
+_BLOCKING_CHECKER_FAILURE_MARKERS = (
+    "missing file:",
+    "file is missing:",
+    "does not exist:",
+    "escapes requirement set",
+    "escapes workspace root",
+    "escapes owning root",
+    "outside the accepted",
+    "outside project",
+    "multiple effective product source pointers",
+    "does not resolve to supplied source",
+    "archive-index:",
+    "archive-index does not locate",
+    "month: feature id",
+    "planned feature spec path must be flat",
+    "alias is broken",
+    "alias is cyclic",
+)
+
+
+def is_blocking_checker_failure(error: BaseException) -> bool:
+    """Separate unsafe evaluation failures from safely inspectable drift.
+
+    Specialized Checkers use this only after applicability is established.
+    Readability, containment, source-identity, and physical locator failures are
+    hard. Readable structural or semantic findings remain Agent-owned CHANGED
+    facts instead of becoming execution authorization or a canonical PASS.
+    """
+
+    current: BaseException | None = error
+    seen: set[int] = set()
+    while current is not None and id(current) not in seen:
+        seen.add(id(current))
+        if isinstance(current, (OSError, UnicodeError)):
+            return True
+        current = current.__cause__ or current.__context__
+    if isinstance(error, CheckFailure) and error.category in {
+        "memory-root",
+        "reference escapes workspace root",
+    }:
+        return True
+    message = str(error).casefold()
+    return any(marker in message for marker in _BLOCKING_CHECKER_FAILURE_MARKERS)
+
+
 def strip_code_span(value: str) -> str:
     cleaned = value.strip()
     return (

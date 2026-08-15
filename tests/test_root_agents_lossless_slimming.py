@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE = ROOT / "templates/root-AGENTS.md"
 RUNTIME = ROOT / "references/runtime.md"
-EXPECTED_REVISION = "1.5.3-20260728.1"
+EXPECTED_REVISION = "1.5.6-20260815.1"
 
 EXPECTED_SECTIONS = (
     ("bootstrap", ".agent-loop/project.md"),
@@ -80,7 +80,7 @@ EXPECTED_GATEWAYS = (
     )),
     ("Verified code integration has an observed memory conflict",
      "Post-Merge Memory Reconciliation", ("references/memory-reconciliation.md",)),
-    ("Submit, commit, PR, merge, release, publish, pause, close, or cleanup is requested",
+    ("Submit, commit, PR, merge, release, publish, seal, pause, close, or cleanup is requested",
      "Lifecycle Boundary", (
         "references/submit-and-integrate.md", "references/stage-guides.md",
     )),
@@ -244,7 +244,7 @@ def contract_issues(text: str) -> list[str]:
         if required not in text:
             issues.append(f"missing-completion:{required}")
     if (
-        "Submit, commit, push, PR, merge, tag, release, publish, pause, close, and cleanup remain independent Human Gates."
+        "Submit, commit, push, PR, merge, tag, release, publish, seal, pause, close, and cleanup remain independent Human Gates."
         not in text
     ):
         issues.append("missing-independent-lifecycle-gates")

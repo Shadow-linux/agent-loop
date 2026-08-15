@@ -16,7 +16,7 @@ Verified Code Merge
 
 Memory Reconciliation does not perform the code merge.
 
-No observed conflict means no scan, no Memory Merge Report, no reconciliation Human Gate, and no blocker for a separately authorized commit, push, release, publish, or Source cleanup.
+No observed conflict means no scan, no Memory Merge Report, no reconciliation Human Gate, and no blocker for a separately authorized commit, tag, push, release, publish, seal, or Source cleanup.
 
 ## What Counts As An Observed Memory Conflict
 
@@ -148,7 +148,7 @@ The ordering remains:
 Code Merge Gate -> Post-Merge Memory Reconciliation -> Memory Commit Gate -> Push Gate -> Release Gate -> Source Branch Cleanup Gate
 ```
 
-`reconciliation-not-needed` and a successfully verified targeted resolution allow only presentation of the next independent gate. They do not authorize commit, push, PR, merge, tag, release, publish, branch deletion, or cleanup.
+`reconciliation-not-needed` and a successfully verified targeted resolution allow only presentation of the next independent gate. They do not authorize commit, push, PR, merge, tag, release, publish, seal, branch deletion, or cleanup.
 
 An unresolved observed conflict or failed restore blocks later mutation because Target memory is not trustworthy. A speculative conflict or missing full audit is not a blocker.
 

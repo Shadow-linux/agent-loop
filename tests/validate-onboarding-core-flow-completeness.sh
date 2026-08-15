@@ -60,6 +60,11 @@ assert_contains "references/onboarding-knowledge-base.md" "stateless"
 assert_contains "references/onboarding-knowledge-base.md" "Flow ID"
 assert_contains "references/onboarding-knowledge-base.md" "Slice ID"
 assert_contains "references/onboarding-knowledge-base.md" "Diagram ID"
+assert_contains "references/onboarding-knowledge-base.md" "NOT_APPLICABLE"
+assert_contains "references/onboarding-knowledge-base.md" "CHANGED"
+assert_contains "references/onboarding-knowledge-base.md" "fixed wording"
+assert_contains "references/onboarding-knowledge-base.md" 'self-declared `PASS`'
+assert_contains "references/onboarding-knowledge-base.md" "unsafe local path"
 
 # Stage/checklist alignment and no additional batch gate.
 assert_contains "references/stage-guides.md" "Build Core Flow Inventory"
@@ -120,6 +125,10 @@ assert_contains "CHANGELOG.md" "Core Flow Completeness"
 
 # Executable artifact-level contract.
 assert_file_exists "scripts/check-onboarding-core-flow-coverage.py"
+assert_contains "scripts/check-onboarding-core-flow-coverage.py" 'CURRENT:'
+assert_contains "scripts/check-onboarding-core-flow-coverage.py" 'CHANGED:'
+assert_contains "scripts/check-onboarding-core-flow-coverage.py" 'NOT_APPLICABLE:'
+assert_contains "scripts/check-onboarding-core-flow-coverage.py" 'BLOCKED:'
 assert_file_exists "examples/ai-meeting-minutes-backend/onboarding-db/08-review/evidence-graph.md"
 assert_file_exists "examples/ai-meeting-minutes-backend/onboarding-db/onboarding-spec.md"
 assert_file_exists "examples/ai-meeting-minutes-backend/onboarding-db/onboarding-tasks.md"
@@ -144,19 +153,24 @@ assert_file_exists "tests/fixtures/onboarding-core-flow/valid-deferred/onboardin
 assert_file_exists "tests/fixtures/onboarding-core-flow/valid-deferred/coverage-matrix.md"
 assert_file_exists "tests/fixtures/onboarding-core-flow/valid-deferred/batch-review.md"
 
-python3 "$ROOT/scripts/check-onboarding-core-flow-coverage.py" \
-  "$ROOT/examples/ai-meeting-minutes-backend/onboarding-db"
+current_output="$(python3 "$ROOT/scripts/check-onboarding-core-flow-coverage.py" \
+  "$ROOT/examples/ai-meeting-minutes-backend/onboarding-db")"
+grep -Fq "CURRENT:" <<<"$current_output" || {
+  echo "valid onboarding fixture did not report CURRENT" >&2
+  exit 1
+}
 
 invalid_output="$(mktemp)"
 trap 'rm -f "$invalid_output"' EXIT
-if python3 "$ROOT/scripts/check-onboarding-core-flow-coverage.py" \
+if ! python3 "$ROOT/scripts/check-onboarding-core-flow-coverage.py" \
   "$ROOT/tests/fixtures/onboarding-core-flow/invalid-missing-recovery" \
   >"$invalid_output" 2>&1; then
-  echo "invalid fixture unexpectedly passed" >&2
+  echo "safely enumerable missing slice was incorrectly hard-blocked" >&2
   exit 1
 fi
 
-if ! grep -Fq "missing required slice: CF-ORDER-PAYMENT/S07" "$invalid_output"; then
+if ! grep -Fq "CHANGED:" "$invalid_output" || \
+  ! grep -Fq "missing required slice: CF-ORDER-PAYMENT/S07" "$invalid_output"; then
   echo "invalid fixture failed for the wrong reason" >&2
   cat "$invalid_output" >&2
   exit 1
@@ -164,20 +178,27 @@ fi
 
 detached_output="$(mktemp)"
 trap 'rm -f "$invalid_output" "$detached_output"' EXIT
-if python3 "$ROOT/scripts/check-onboarding-core-flow-coverage.py" \
+if ! python3 "$ROOT/scripts/check-onboarding-core-flow-coverage.py" \
   "$ROOT/tests/fixtures/onboarding-core-flow/invalid-detached-trace" \
   >"$detached_output" 2>&1; then
-  echo "detached-trace fixture unexpectedly passed" >&2
+  echo "safely enumerable detached trace was incorrectly hard-blocked" >&2
   exit 1
 fi
 
-if ! grep -Fq "missing diagram definition: D-RECOVERY" "$detached_output"; then
+if ! grep -Fq "CHANGED:" "$detached_output" || \
+  ! grep -Fq "missing diagram definition: D-RECOVERY" "$detached_output"; then
   echo "detached-trace fixture failed for the wrong reason" >&2
   cat "$detached_output" >&2
   exit 1
 fi
 
-python3 "$ROOT/scripts/check-onboarding-core-flow-coverage.py" \
-  "$ROOT/tests/fixtures/onboarding-core-flow/valid-deferred"
+deferred_output="$(python3 "$ROOT/scripts/check-onboarding-core-flow-coverage.py" \
+  "$ROOT/tests/fixtures/onboarding-core-flow/valid-deferred")"
+grep -Fq "CURRENT:" <<<"$deferred_output" || {
+  echo "valid deferred onboarding fixture did not report CURRENT" >&2
+  exit 1
+}
+
+(cd "$ROOT" && PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_onboarding_core_flow_coverage)
 
 echo "PASS: onboarding core-flow completeness contract is complete"

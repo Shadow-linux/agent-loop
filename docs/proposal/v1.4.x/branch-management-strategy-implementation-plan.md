@@ -12,6 +12,12 @@
 
 ## Plan Status And Execution Boundary
 
+### 2026-08-12 发布前审计维护补充
+
+- 发布前路径审计发现 historical `Release Gate` 表格把 Tag、Push、Release、Publish、Seal 合并表达，与已经实施的“每个 Git/发布动作保持独立 Human Gate”不变量冲突。
+- 人类已确认最小协调修复：允许一张 Batch Human Review 同时展示多个动作，但每行独立决定、绑定精确范围和前置条件；一行不授权另一行，失败停止依赖动作。
+- 此维护补充不改变分支命名、sealed 规则、客户隔离、canonical stage、artifact tree、版本号或 Git 状态，也不重新执行历史 Task 0–12；因 root 生命周期路由新增独立 Seal Gate 投影，13 个 managed blocks 的当前 revision 同步为 `1.5.5-20260812.2`。
+
 - Plan status: human-approved; implementation, Tasks 0-8, and the Task 9-11 Human Review repairs are complete; Task 12 Human Review is pending.
 - Design source: `docs/proposal/v1.4.x/branch-management-strategy.md` plus the immutable constraints in the human implementation request.
 - Repository perspective: Agent Loop skill source maintainer; downstream behavior may be represented only in templates, docs, validation scenarios, and isolated test logic.

@@ -173,7 +173,8 @@ class RequirementProductDefinitionTests(unittest.TestCase):
             return run_checker(SCRIPT, *paths)
 
     def assert_rejected(self, result, expected: str) -> None:
-        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
         self.assertIn(expected, combined_output(result))
 
     def test_confirmed_brief_passes_without_model_placeholders(self) -> None:
@@ -191,6 +192,71 @@ class RequirementProductDefinitionTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, combined_output(result))
         self.assertIn("confirmed standard product definition is valid", result.stdout)
 
+    def test_non_requirement_feature_authority_is_not_applicable(self) -> None:
+        spec = """# Feature Spec: Bug-authority repair
+
+Status: accepted
+Feature Type: maintenance-fix
+
+## Feature Authority
+
+Authority Type: Bug Authority
+Primary Authority Reference: .agent-loop/bugs/2026-08-10-example/README.md
+Supporting Authority References: none
+Authority Summary: restore the accepted behavior recorded by the Bug
+Agent Authority Assessment: current
+"""
+        result = self.run_mutation(spec=spec)
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("NOT_APPLICABLE:", result.stdout)
+        self.assertNotIn(
+            "missing section: ## Product Requirement Source",
+            combined_output(result),
+        )
+
+    def test_authority_input_change_and_conflict_expire_not_applicable(self) -> None:
+        bug_spec = """# Feature Spec: Bug-authority repair
+
+Status: accepted
+Feature Type: maintenance-fix
+
+## Feature Authority
+
+Authority Type: Bug Authority
+Primary Authority Reference: external:BUG-42
+Supporting Authority References: none
+Authority Summary: restore the accepted behavior recorded by the Bug
+Agent Authority Assessment: current
+"""
+        prior = self.run_mutation(spec=bug_spec)
+        self.assertEqual(prior.returncode, 0, combined_output(prior))
+        self.assertIn("NOT_APPLICABLE:", prior.stdout)
+
+        valid_spec = (FIXTURES / "standard-valid/spec.md").read_text(encoding="utf-8")
+        applicable_but_malformed = re.sub(
+            r"^## Product Requirement Source\n.*?(?=^## |\Z)",
+            "",
+            valid_spec,
+            flags=re.MULTILINE | re.DOTALL,
+        )
+        changed = self.run_mutation(spec=applicable_but_malformed)
+        self.assertEqual(changed.returncode, 0, combined_output(changed))
+        self.assertIn("CHANGED:", combined_output(changed))
+        self.assertNotIn("NOT_APPLICABLE:", combined_output(changed))
+        self.assertIn("Product Requirement Source", combined_output(changed))
+
+        conflict = self.run_mutation(
+            spec=bug_spec
+            + "\n## Feature Authority\n\n"
+            + "Authority Type: Human Authority\n"
+            + "Primary Authority Reference: conversation:current\n"
+            + "Supporting Authority References: none\n"
+            + "Authority Summary: conflicting second primary authority\n"
+            + "Agent Authority Assessment: unresolved\n"
+        )
+        self.assertEqual(conflict.returncode, 1, combined_output(conflict))
+        self.assertNotIn("NOT_APPLICABLE:", combined_output(conflict))
+
     def test_profile_complex_is_rejected(self) -> None:
         product = (FIXTURES / "standard-valid/product.md").read_text(encoding="utf-8")
         result = self.run_mutation(
@@ -207,7 +273,9 @@ class RequirementProductDefinitionTests(unittest.TestCase):
 
     def test_new_and_legacy_effective_pointers_cannot_coexist(self) -> None:
         result = self.run_fixture("standard-invalid-dual-source")
-        self.assert_rejected(result, "multiple effective product source pointers")
+        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertIn("BLOCKED:", combined_output(result))
+        self.assertIn("multiple effective product source pointers", combined_output(result))
 
     def test_included_view_requires_section_and_ids(self) -> None:
         product = (FIXTURES / "standard-valid/product.md").read_text(encoding="utf-8")
@@ -326,6 +394,65 @@ class RequirementProductDefinitionTests(unittest.TestCase):
         result = self.run_mutation(readme=readme, bom_crlf=True)
         self.assertEqual(result.returncode, 0, combined_output(result))
         self.assertIn("confirmed standard product definition is valid", result.stdout)
+
+    def test_readable_missing_required_section_is_changed_not_blocked(self) -> None:
+        product = (FIXTURES / "standard-valid/product.md").read_text(
+            encoding="utf-8"
+        )
+        product = re.sub(
+            r"^## Goal / Expected Product Outcome\n.*?(?=^## |\Z)",
+            "",
+            product,
+            flags=re.MULTILINE | re.DOTALL,
+        )
+        result = self.run_mutation(product=product)
+        self.assertEqual(result.returncode, 0, combined_output(result))
+        self.assertIn("CHANGED:", combined_output(result))
+        self.assertIn(
+            "missing section: ## Goal / Expected Product Outcome",
+            combined_output(result),
+        )
+
+    def test_invalid_utf8_is_stable_blocked_without_traceback(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            valid = FIXTURES / "standard-valid"
+            (root / "README.md").write_text(
+                (valid / "README.md").read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+            (root / "product.md").write_bytes(b"\xff\xfeinvalid")
+            (root / "spec.md").write_text(
+                (valid / "spec.md").read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+            result = run_checker(
+                SCRIPT,
+                str(root / "README.md"),
+                str(root / "product.md"),
+                str(root / "spec.md"),
+            )
+        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertIn("BLOCKED:", combined_output(result))
+        self.assertNotIn("Traceback", combined_output(result))
+
+    def test_dangling_required_source_is_stable_blocked_not_usage_error(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            valid = FIXTURES / "brief-valid"
+            (root / "README.md").write_text(
+                (valid / "README.md").read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+            source = root / "product.md"
+            try:
+                source.symlink_to("missing-product.md")
+            except OSError as error:
+                self.skipTest(f"symlink unavailable: {error}")
+            result = run_checker(SCRIPT, str(root / "README.md"), str(source))
+        self.assertEqual(result.returncode, 1, combined_output(result))
+        self.assertIn("BLOCKED:", combined_output(result))
+        self.assertNotIn("usage:", combined_output(result).lower())
 
 
 if __name__ == "__main__":

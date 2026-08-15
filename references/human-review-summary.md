@@ -139,6 +139,29 @@ AI judges whether a reliable Human decision exists, whether Package Files are co
 
 After a reliable Human choice, record the durable Gate 2 baseline fields directly. On later package-only start, the Agent re-reads that baseline and current Feature artifacts, checks the accepted boundary and Human instruction, preserves the original Gate 2 values, records separate Later Start decision/time/Human evidence, and updates current project `Gate Mode` only when reliable. If context loss leaves Human provenance uncertain, ask one blocking confirmation. Feature Gate acceptance and continuation require no local Feature review Checker.
 
+### Optional Agent Checker Rescue Evidence
+
+This is an optional evidence block inside the current response or an existing owning Feature, Bug, Change, Requirement, ADR, Onboarding, or guidance artifact. It is not a standalone report, lifecycle, stage, status, Gate, authorization record, or default directory.
+
+| Field | Required content |
+|---|---|
+| Canonical Checker / Result | exact Checker/version/command/target plus unchanged rerun; canonical failure remains visible |
+| Agent Classification | checker-limitation / not-applicable / supported-legacy-shape / derived-evidence-mismatch / artifact-invalid / environment-invalid / unresolved |
+| Applicable Authority | current published rule plus one effective primary authority and relevant supporting facts |
+| Independent Evidence | direct current facts used to evaluate the owning step |
+| Safety Boundary | intact / not-intact, including path/executor/transaction/rollback constraints |
+| Semantic Impact | none / changed / unresolved across product, Feature scope, acceptance, risk, dependency, and implementation boundary |
+| Agent Rescue Decision | continue-within-existing-authorization / human-substitute-required / stop |
+| Residual Risk | none or one concrete disclosed residual |
+| Human Substitute Decision | not-required / accepted-for-this-gate / declined |
+| Authorized Scope | existing authorization or one exact target/command/named Gate; never broader action authority |
+| Expiry | Gate end or any checker/command/target/input/authority/evidence/safety/authorization change |
+| Developer Feedback | prepared / declined / not-applicable; Issue creation remains separately gated |
+
+Level 1 uses `not-required` and does not interrupt the Human solely for the Checker limitation. Level 2 presents the block within the existing named Human Gate and requests one exact `accepted-for-this-gate` decision. Level 3 records `stop`; path escape, exact plan hash, transaction/restore/rollback uncertainty, failed real verification, semantic/effective-authority conflict, or missing existing authorization cannot be substituted. Rescue never changes the canonical result to `PASS`, creates execution authorization, or replaces Product, ADR, Feature Gate 1/2, Task Done, Verification, Submit, Close, Git, Release, or External Action Human Gates.
+
+For Onboarding or Lightweight Change fact Checkers, present `CHANGED` item findings inside the existing owning review rather than inventing a new Gate. Show the unaffected readable inventory alongside each affected flow/card, identify whether the fact is deterministic Agent-repairable or semantic, and keep self-declared coverage/status values separate from the Agent recommendation. `NOT_APPLICABLE` routes to the correct owner; it is not an acceptance choice.
+
 ### Checker Issue Reporting Review
 
 Use only after a canonical checker defect candidate is evidenced and a sanitized upstream draft exists. This review is independent from Temporary Checker Repair and one-Gate substitute decisions.
@@ -150,7 +173,7 @@ Use only after a canonical checker defect candidate is evidenced and a sanitized
 | Evidence | public authority/checker paths, minimal neutral fixture, RED/negative controls |
 | Redactions | credentials, private repositories/hosts/customers, private absolute paths, payloads, unnecessary project data removed |
 | Labels / method | exact labels when known; authenticated creation method or no-auth blocker |
-| External effect | one public Issue will be created; no repair, Git, install, release, or publish authority is implied |
+| External effect | one public Issue will be created; no repair, Git, install, release, publish, or seal authority is implied |
 | Human decision | create exact issue / revise draft / keep draft only |
 
 ### Product Definition Approval
@@ -354,10 +377,25 @@ Include `feature-entry-symlink` and `memory-root-alias` rows when present. A Fea
 | Recommended Resolution Path | investigate-first / flow-back / linked-feature / maintenance-fix / requirement / no-fix | Candidate Match Matrix + rationale | confirm / revise / stop |
 | Target | exact Feature / Requirement / investigation / candidate Resolution | resolved locator/source | confirm / revise |
 | Requested Authorization | exact Resolution Path only, plus separately named Feature/Requirement action if requested | current review | human only |
-| Explicitly Not Authorized | Bug close/reopen, other Feature/Requirement actions, archive apply, branch, submit, commit, push, tag, release, publish unless separately named | gate inventory | acknowledge |
+| Explicitly Not Authorized | Bug close/reopen, other Feature/Requirement actions, archive apply, branch, submit, commit, push, tag, release, publish, seal unless separately named | gate inventory | acknowledge |
 | Human Decision | exact bounded decision | current review | human only |
 
 Unknown Origin does not block progress. Similar titles do not prove duplicate identity. Resolution Path approval cannot be reused as Feature creation/reopen, Requirement change, Bug close, or Git authorization.
+
+### Bug Reopen Review
+
+| Item | Proposed Value | Evidence | Human Decision |
+|---|---|---|---|
+| Closed Bug | exact Bug ID; current `Status: closed` and prior Resolution | Bug Index + README + Close Record | acknowledge / investigate |
+| Trigger / New Evidence | recurrence report and new evidence | bounded report / reproduction / runtime evidence | acknowledge / revise |
+| Return Status | `triaging` or evidence-proven `confirmed` | why this status is justified now | accept / revise |
+| Preserved History | prior Close Record and Status History remain append-only | current README sections | acknowledge |
+| Proposed Lifecycle Write | append Reopen Record; restore `Resolution: unresolved`; apply accepted return Status | exact before/after summary | accept / reject |
+| Requested Authorization | Bug Reopen Gate only | named Bug and exact lifecycle write | human only |
+| Explicitly Not Authorized | Resolution Path, Feature create/reopen, Requirement/Contract, archive/rehydrate, Git or release actions | gate inventory | acknowledge |
+| Human Decision | exact bounded reopen decision | current review | human only |
+
+Until this Gate is explicitly accepted, the matched Bug remains closed and no Reopen Record or lifecycle field is changed. After acceptance, reassess Expected Behavior and request a new, separate Resolution Path Gate; never reuse the old repair authorization.
 
 ### Bug Verification And Close Review
 
@@ -372,7 +410,7 @@ Unknown Origin does not block progress. Similar titles do not prove duplicate id
 | Remaining Risk | none / concrete risk | evidence and impact | accept / resolve |
 | Bug Close Decision | confirm / revise / keep-verifying | Bug-specific closure evidence | human only |
 | Feature Close Decision | confirm / continue / pause / revise-scope | Feature Completion Check | human only |
-| Explicitly Not Authorized | Feature close, submit, branch, commit, push, tag, release, publish unless separately confirmed | gate inventory | acknowledge |
+| Explicitly Not Authorized | Feature close, submit, branch, commit, push, tag, release, publish, seal unless separately confirmed | gate inventory | acknowledge |
 
 Bug Close and Feature Close may appear in one summary but remain separate decisions. Passing Feature tests is not the Bug Close Gate, and commit/push approval is not a close decision.
 
@@ -394,6 +432,15 @@ Recommendation: close | continue | pause before new feature | update scope
 Human Decision:
 ```
 
+## Review Repair And Regression Test Advisory
+
+Use this inside the next existing Review or completion summary after one or more authorized, `within-approved-boundary` Review repairs. It reports current proof and future protection without creating another approval stage.
+
+| Finding | Accepted boundary | Changed files/behavior | Fresh verification | Existing obligations | Regression Test Advisory | Residual risk |
+|---|---|---|---|---|---|---|
+
+Batch multiple repairs into this one existing summary. Each Regression Test Advisory must name the concrete scenario, recommended test layer, risk it protects, and priority, or give a concrete not-needed reason when existing coverage is sufficient. A Human response such as “now,” “later,” or “do not add” is recorded in the owning notes, but no response creates a new Gate, lifecycle, status, or default backlog.
+
 ### Submit / Integrate
 
 | Item | Status | Evidence |
@@ -403,6 +450,10 @@ Human Decision:
 | Diff Review | clean / issues |  |
 | Unrelated Changes | none / present |  |
 | Action | prepare / commit / PR text / skip | human decision needed |
+
+### Full-Worktree Git Fast Path
+
+Full-Worktree Git Fast Path uses a lightweight Commit Confirmation, not a Human Review Summary. Show repository/branch/HEAD, the complete staged/unstaged/untracked/deleted file/change summary, warnings, the proposed commit message, `Verification: not run for this Git action; no completion or release-readiness claim`, and exact remote/ref only when Push was requested. This confirmation does not trigger tests or code/quality/Feature/verification/Drift/Completion Review. After acceptance, act immediately and do not add a second confirmation. Report the resulting commit SHA, Push result when requested, and any remaining Git state or blocker.
 
 ### Branch Strategy And Action Review
 
@@ -414,12 +465,25 @@ Human Decision:
 | Target Release Context / Target Branch |  | accepted policy + plan | acknowledge / revise |
 | Sealed Check | open / released / sealed / unknown | release evidence | proceed / stop |
 | Customer Isolation | pass / fail / unknown | branch ancestry and policy | proceed / stop |
-| Verification / Review / Drift | pass / fail / missing | current feature evidence | proceed / stop |
+| Verification / Review / Drift | pass / fail / missing | current feature evidence; normal Submit prerequisite, Git Fast Path disclosure | normal: proceed / stop; fast path: acknowledge truth |
 | Merge Evidence / Deletion Policy | complete / missing / not-applicable | merge/submit evidence | delete / retain / stop |
-| Requested Authorization | prepare / create / switch / commit / push / merge / delete / tag / release / publish | latest human request | human only |
+| Requested Authorization | prepare / create / switch / commit / push / merge / delete / tag / release / publish / seal | latest human request | human only |
 | Explicitly Not Authorized | every action outside the request | review summary | acknowledge |
 | Remaining Risk / Blocker | none / exact blocker | evidence and impact | accept / resolve / stop |
 | Human Decision | exact bounded action or no action | current review | human only |
+
+For one or more normal-path Git/release mutations, add this action-decision table below the context table. Full-Worktree Git Fast Path uses its separate lightweight Commit Confirmation and must not be duplicated here.
+
+| Gate / Action | Exact Scope | Preconditions | Evidence | Human Decision |
+|---|---|---|---|---|
+| Branch / Integration / Cleanup | exact branch, commit/PR/merge, or local/remote branch deletion | applicable strategy, verification/review/drift, merge/deletion evidence | current Git/diff/feature evidence | accept / reject / defer |
+| Tag Gate / Tag | exact tag + exact commit | required verification/review/release-candidate evidence | current commit and tag plan | accept / reject / defer |
+| Push Gate / Push | exact refs + exact remote | accepted local refs/actions and current remote evidence | refspec, remote, divergence, expected effect | accept / reject / defer |
+| Release Gate / Release | exact version + release record | accepted required refs plus current release evidence | release title/body/assets/target | accept / reject / defer |
+| Publish Gate / Publish | exact package/artifact + channel/destination | successful required build/release checks | artifact digest, destination, external effect | accept / reject / defer |
+| Seal Gate / Seal | exact version -> `released / sealed` | required release/publish results and immutable-version checks | completed release evidence and version state | accept / reject / defer |
+
+Each row is an independent Human Gate decision. A Batch Human Review may show several rows together, but an accepted row authorizes only its exact action; a failed prerequisite prevents dependent later rows from executing and returns to Human Review.
 
 An accepted Branch Strategy, Target Release Context, plan, or auto mode is never action authorization. Creation or switching of one exact development branch uses the Branch Action Gate. Ask for the exact mutation after current evidence is shown; a cleanup decision must name the temporary branch and its merge evidence.
 
@@ -433,7 +497,7 @@ Use only when targeted evidence cannot determine one current meaning. Do not use
 | Option A | concrete current meaning | supporting authority/facts | affected owner/references |  |
 | Option B | concrete current meaning | supporting authority/facts | affected owner/references |  |
 | Agent Recommendation | one recommended option | evidence and remaining uncertainty | expected rewrite/verification | accept / revise |
-| Explicitly Not Authorized | commit, push, tag, release, publish, merge, branch delete, Source cleanup | independent gates | no later action follows | acknowledge |
+| Explicitly Not Authorized | commit, push, tag, release, publish, seal, merge, branch delete, Source cleanup | independent gates | no later action follows | acknowledge |
 
 Recommendation: decide only the unresolved semantic choice; let the Agent perform and verify the resulting targeted rewrite.
 
@@ -446,7 +510,7 @@ Use only when the human explicitly requests a repository-wide audit/forensic rec
 | Start scope | exact reason normal targeted reconciliation is insufficient | corruption/forensic evidence | authorize audit / stop |
 | Snapshot context | Base, Source, Target-before, Result and accepted memory root | full SHAs and branch context | confirm / revise |
 | Exact plan | all changed/unchanged guards, plan hash, post-check, restore | generated Full Audit report | approve exact hash / reject |
-| Explicitly Not Authorized | commit, push, tag, release, publish, merge, branch delete, Source cleanup | independent gates | acknowledge |
+| Explicitly Not Authorized | commit, push, tag, release, publish, seal, merge, branch delete, Source cleanup | independent gates | acknowledge |
 
 The scanner must receive `--full-audit-authorized`. A changed plan requires a new hash and a new review.
 

@@ -73,7 +73,10 @@ explicit bug intent
 -> complete Bug Index metadata duplicate/reopen scan
 -> 90-day Feature metadata scan
 -> evidence-ranked deep read / evidence-driven extended scan
--> create/update/reopen Bug Record as reported/triaging
+-> new or non-closed Bug: create/update the Bug Record as reported/triaging
+-> matched closed Bug remains `closed`; prepare a named reopen candidate without a lifecycle write
+-> Bug Reopen Gate for the matched closed Bug
+-> after explicit acceptance, append the Reopen Record and restore `Resolution: unresolved`
 -> resolve Expected Behavior evidence
 -> confirmed or non-fix disposition candidate
 -> recommend one Resolution Path
@@ -120,7 +123,7 @@ Discover the accepted memory root before card creation. Reuse exactly one logica
 
 `clearly eligible` requires a clear goal and completion criteria, enumerable scope, no new product/technical decision, no public/data/state/permission/security/dependency/migration/architecture boundary, exact targeted verification, concrete rollback, no Bug/Feature long-term tracking need, no planned multi-session/handoff/subagent/long-observation need, and sufficient current evidence. Any missing condition produces `Feature trigger` or `uncertain`.
 
-After `clearly eligible` routing and before the first target code/configuration/documentation write, create one parser-valid card at `<memory-root>/changes/YYYY-MM/YYYY-MM-DD-<topic>.md`. The card file is the execution source of truth; response summaries are derived views. The month, filename date, H1 topic, and `Created At` must agree. Existing paths use the first unused `-2`, `-3`, or later suffix and are never overwritten. A Plan is always required but its depth is adaptive. Fact/config/path/domain/docs changes use failure-matched parsing, reference, residual, syntax, or bounded dry-run checks; isolated behavior logic uses the smallest meaningful RED/GREEN and focused regression. The lane does not enter mandatory Plan Gate / Plan or Execute Task / Story helper stages.
+After `clearly eligible` routing and before the first target code/configuration/documentation write, create one parser-valid card at `<memory-root>/changes/YYYY-MM/YYYY-MM-DD-<topic>.md`. The card file is the execution source of truth; response summaries are derived views. The month, filename date, H1 topic, and `Created At` must agree. Existing paths use the first unused `-2`, `-3`, or later suffix and are never overwritten. A Plan is always required but its depth is adaptive. The Plan names the bounded write, failure-matched verification, affected existing checks, diff/scope/risk/rollback review, and scope-expansion triggers. The lane does not enter mandatory Plan Gate / Plan or Execute Task / Story helper stages.
 
 The monthly partition is stable and is not Archive. Status is exactly `in-progress | completed | stopped`; Memory Review and Memory Result are separate axes. Completion requires Plan closure/explanation, fresh targeted verification, diff/scope review, concrete rollback, Result / Residuals, and valid actual Memory Evidence/Target. Do not add Change README/INDEX/archive/move/rehydrate/restore lifecycle, scheduler, shared counter, new stage, message intent, Feature Type, Bug path, or Auto Mode.
 
@@ -132,13 +135,35 @@ When route evidence is uncertain, stop with few real options, one Agent recommen
 
 Scope expansion stops the lane before broader edits. Preserve the current investigation, diff, and verification evidence; name the trigger; recommend exactly one Bug Management, Requirements Discussion, or Feature Construction route; and ask before keeping, reverting, or extending partial edits.
 
-Completion requires executed-or-explained Plan steps, fresh targeted verification, diff/scope review, valid rollback, durable-memory impact review, and Result / Residuals. After completion, run `scripts/scan-lightweight-changes.py` and keep pending/human-review results visible. Card completion grants no Feature/Bug lifecycle, branch, submit, commit, push, PR, merge, tag, release, publish, production, paid-call, configuration-write, deployment, destructive, or external action.
+Completion requires executed-or-explained Plan steps, fresh targeted verification, diff/scope review, valid rollback, durable-memory impact review, and Result / Residuals. After completion, run `scripts/scan-lightweight-changes.py` and keep pending/human-review results visible. Card completion grants no Feature/Bug lifecycle, branch, submit, commit, push, PR, merge, tag, release, publish, seal, production, paid-call, configuration-write, deployment, destructive, or external action.
 
 Run the read-only Python 3.10+ standard-library scanner at Project Entry when Changes exist, after every Change completion, and before release. Use `python3 <skill-root>/scripts/scan-lightweight-changes.py --project-root <target-project-root> --as-of <current-local-date>` on macOS/POSIX and `py -3 <skill-root>\scripts\scan-lightweight-changes.py --project-root <target-project-root> --as-of <current-local-date>` on Windows. Scanner `pending-count` or `pending-age` starts proactive Change Memory Consolidation; exactly seven days does not trigger. Known memory drift and pre-release pending/human-review are controller fact events, not scanner flags. Post-merge reconciliation does not trigger this scanner unless the observed conflict directly involves Change evidence.
 
 The scanner validates and inventories only. The Agent owns semantic grouping and may directly sync a Change-derived fact only when the source has fresh verification, the fact is implemented and stable, one existing reliable memory target owns it, authorities do not conflict, no new decision is created, branch/release/customer scope is clear, exact target/fact/evidence/impact/rollback is disclosed before write, post-check is possible, and rollback touches only the Agent's edit. A changes-only root cannot create `project.md`, enterprise memory, or switch modes. Uncertain candidates become visible `human-review`; project memory never copies card history, pending backlog, or command logs.
 
 Consolidation validates, groups by fact, changes only owning memory files, post-checks format/reference/fact/residual consistency, restores only its own memory writes on failure, leaves source Changes pending after failure, updates their Memory fields only after success, and never creates a recursive Change. Code merge completes before Target memory reconciliation. If an observed conflict directly involves a Change-derived fact, read only that card and minimum direct evidence to recheck its Source `synced` claim.
+
+## Repair-First Verification
+
+Repair-First Verification is the default internal method for a `within-approved-boundary` Review repair and a `clearly eligible` Lightweight Change. The Review-owned use is the Review Repair Fast Path. Neither name is a canonical stage, message intent, status, Auto Mode, Human Gate, or new authorization.
+
+The Agent uses the current Feature execution grant or exact Lightweight Card scope, repairs the bounded implementation first, then runs fresh targeted verification, affected existing checks, diff/scope/risk/rollback review, records evidence, and presents a specific Regression Test Advisory.
+
+```text
+within-approved-boundary Review repair or clearly eligible Lightweight Change
+-> bounded write inside existing authorization
+-> fresh targeted verification
+-> affected existing checks
+-> diff / scope / risk / rollback review
+-> evidence
+-> specific Regression Test Advisory
+```
+
+Required Verification proves the current result. Existing Test Obligation comes from accepted tests.md, Gate 2, acceptance, ADR, Delivery Contract, Bug Verification Matrix, or current Human instruction. Additional Regression Test is future protection proposed after current proof exists. An Additional Regression Test Advisory does not by itself block Task Done, Lightweight Change completion, or Feature Close.
+
+If the change cannot be reliably verified without a new test, do not claim `fixed`, `done`, `completed`, or `closed`; present the exact test and ask whether to add it now, adjust the repair, roll back, or pause. A failed required check is never an advisory.
+
+TDD remains the default method for initial Feature Execute Task / Story, explicit Human-Guided Bug Management repair, Human-requested TDD, and an accepted Plan that requires RED/GREEN. Review Repair Fast Path and clearly eligible Lightweight Change do not invoke the TDD helper by default. If either path leaves its accepted boundary or enters Feature/Bug execution, normal TDD routing resumes.
 
 ## Adaptive Product Definition Internal Routing
 
@@ -237,7 +262,9 @@ accepted | declined | not-needed
 
 `accepted` records the human-confirmed `existing-project` or `human-guided-release` profile. `declined` records `Profile: not-applicable` plus a concrete Decline Reason so a rejected recommendation cannot appear to be current policy. `not-needed` records `Profile: existing-project` and the reason the project remains lightweight.
 
-An unconfirmed recommendation is not `accepted`. Recommendation and adoption do not authorize branch creation, switching, merge, deletion, push, tag, release, or publish. A Branch Action Gate confirms creation or switching of one exact development branch; every other Git mutation keeps its existing action-specific Human Gate.
+An unconfirmed recommendation is not `accepted`. Recommendation and adoption do not authorize branch creation, switching, merge, deletion, push, tag, release, publish, or seal. A Branch Action Gate confirms creation or switching of one exact development branch; every other Git or release-lifecycle mutation keeps its existing action-specific Human Gate.
+
+Tag, Push, Release, Publish, and Seal remain independent action gates. They may be presented together in one Batch Human Review for convenience, but each exact action keeps its own decision, scope, evidence, preconditions, and result; one accepted row never supplies another row's authorization.
 
 The optional profile uses retained aggregation branches:
 
@@ -373,17 +400,82 @@ Apply the blocked routing matrix in order and choose the first matching row:
 
 Diagnosis and available read-only verification may proceed before requesting access or approval for a later mutation. Ask Human first only when the missing human input is required for the next safe diagnostic or verification action itself.
 
+## Open Feature Authority And Checker Outcomes
+
+Feature Context resolves the authority shape before any Requirement-, Product-, ADR-, Contract-, Bug-, or existing-Feature-specific path handling. Every Feature has one effective primary authority description and may have supporting authorities. Known open adapter families are Feature Authority, Bug Authority, and Human Authority; they are adapters, not a closed `Authority Type` enum. Requirement Product Definition is the compatible Feature Authority sub-adapter; when explicitly declared, its primary authority reference and the Product Requirement Source Requirement Set must resolve inside the project to the same README, while applicable ADRs and contracts remain supporting evidence. Equivalent project-relative spelling or a safe internal symlink to that same file is one authority, not a conflict. The Product Requirement Source `Effective Product Definition` field remains the validated source basename; when it matches the already resolved Requirement source filename, Feature Context reuses that confined resolved source even if README points to a nested Requirement-local file such as `design-package/product.md`. A different basename or any explicit path remains cached evidence subject to the normal project/Requirement boundary and drift checks. An existing `spec.md` with only `## Product Requirement Source` remains readable without migration.
+
+An unknown but inspectable authority is preserved verbatim and returns advisory facts for Agent assessment. It is not rejected merely because its wording is unfamiliar. External URLs, ticket identifiers, and Human conversation or decision locators are evidence locators, not project paths. A reference declared as local remains subject to exact project/memory-root confinement, existence, readability, and symlink checks.
+
+Canonical conceptual outcomes are:
+
+| Result | Exit | Mechanical meaning | Agent responsibility |
+|---|---:|---|---|
+| `CURRENT` | `0` | applicable objective facts resolve and match | rely on the facts only inside existing authorization |
+| `CHANGED` | `0` | facts differ, are incomplete/custom, or need review | assess semantic impact, repair derived evidence, or route to its owner |
+| `NOT_APPLICABLE` | `0` | this specialized Checker does not own the current authority/artifact | select the applicable adapter or direct evidence |
+| `BLOCKED` | `1` | safe evaluation or exact execution is objectively impossible | repair the owning physical/safety condition; never infer permission |
+
+Checkers report objective facts and applicability. The Agent owns semantic sufficiency, impact, repair, workflow routing, recommendation, and whether an existing Human Gate must be shown. None of `CURRENT`, `CHANGED`, `NOT_APPLICABLE`, exit `0`, or a recorded Human locator authorizes execution or another gated action.
+
+For explicit Feature Authority, Snapshot `Authority Facts` is the resolver's deterministic semicolon-separated fact sequence, including `Authority Summary`, primary/supporting locators, and adapter-specific facts. A changed summary, missing fact, stale fact, or reordered/rewritten fact sequence is `CHANGED / 0`; the Agent compares meaning and refreshes the derived Snapshot before reliance. External ticket identifiers are case-insensitive evidence locators when they use a stable ticket-key plus numeric identifier shape, such as `JIRA-431` or `jira-431`; they are not guessed as local files.
+
+## Agent Checker Rescue
+
+Agent Checker Rescue is a response-local internal method of Diagnose Failure and Verify after a canonical Checker still fails on one exact rerun. It is not a canonical stage, message intent, lifecycle status, Auto Mode, default artifact family, persistent exception, generic force/skip parameter, or new Human Gate.
+
+Apply this order before Checker Self-Repair:
+
+```text
+exact canonical failure and one exact rerun
+-> preserve checker/command/result/target/current inputs
+-> classify objective facts and applicability
+-> Level 1 only with complete independent evidence + intact safety + unchanged semantics + existing authorization
+-> Level 2 only for one named Gate with a visible residual and accepted-for-this-gate
+-> Level 3 stop for physical/safety/semantic/verification/authorization uncertainty
+-> Checker Self-Repair only when corrected executable Checker evaluation is actually necessary
+```
+
+### Level 1 — Agent automatic rescue
+
+The Agent may continue without another Human interruption solely for the Checker limitation when the exact failure and rerun are preserved, independent current evidence proves every needed fact, the safety boundary is intact, product/Feature/acceptance/risk/dependency/implementation meaning is unchanged, no authority or verification conflict remains, and continuation plus any deterministic Agent-owned repair stays wholly inside existing authorization.
+
+Record at least:
+
+```text
+Canonical Checker Result: BLOCKED
+Agent Classification: checker-limitation | not-applicable | supported-legacy-shape | derived-evidence-mismatch
+Independent Evidence: <current source and result>
+Safety Boundary: intact
+Semantic Impact: none
+Agent Rescue Decision: continue-within-existing-authorization
+Expiry: <Gate end or relevant checker/input/authority/evidence/safety/authorization change>
+Developer Feedback: prepared | not-applicable
+```
+
+Level 1 does not add a Human prompt. It also does not change the canonical result to `PASS`, create execution authorization, consume or replace a normal later Human Gate, rewrite Human originals, or alter accepted meaning.
+
+### Level 2 — Human one-Gate substitute
+
+When direct evidence explains the Checker limitation but one small disclosed residual prevents Level 1, present one existing Human Gate with the exact Checker/command/target, applicable authority, independent evidence, residual risk, authorized scope, expiry, and recommendation. Record `Agent Rescue Decision: human-substitute-required` and `Human Substitute Decision: accepted-for-this-gate | declined`.
+
+`accepted-for-this-gate` is evidence wording only. It applies to one exact target, command, and named Gate and expires when that Gate ends or any relevant checker/input/authority/evidence/safety/authorization fact changes. It cannot authorize Feature execution, Requirement/Bug mutation, Git, release, external action, a later Gate, or a wider target.
+
+### Level 3 — non-rescuable
+
+Do not rescue project or memory path escape; unsafe symlink or root authority; exact Archive/Rehydrate or Full Memory Audit plan-hash, target, preimage, journal, post-check, restore, or rollback mismatch; real required verification failure; unresolved product/design/scope/security/data/destructive/production/credential/external meaning; conflicting effective authorities; sealed/customer-isolation conflict; continuation outside the accepted boundary; or missing existing Human authorization. Repair or decide these through their owning workflow.
+
+Every Rescue expires on Gate end or checker/command/target/input/authority/evidence digest/safety/authorization change. Changed evidence requires a fresh classification. A likely Checker limitation also produces a sanitized read-only developer-feedback draft; creating an Issue remains behind the independent Issue Reporting Human Gate.
+
 ## Checker Failure Recovery
 
-Checker Failure Recovery is an internal method of Diagnose Failure and Verify, not a canonical stage, status, lifecycle, artifact family, or Auto Mode. Load `references/checker-recovery.md` when a canonical Agent Loop checker still fails after the exact command is rerun with unchanged inputs.
+Checker Self-Repair is the existing internal method of Diagnose Failure and Verify for the narrower case where reliable evaluation actually requires a corrected executable Checker. It is not a canonical stage, status, lifecycle, artifact family, Auto Mode, or bypass. Load `references/checker-recovery.md` after Agent Checker Rescue has shown that direct evidence is incomplete or executable correction is necessary.
 
-Apply this order:
+Apply the existing repair order without weakening it:
 
 ```text
 preserve canonical command/output/path/digest
 -> artifact-invalid | environment-invalid | checker-defect-candidate | unresolved
--> artifact or environment repair when those facts decide the cause
--> minimal authority-backed positive fixture plus negative controls for a checker candidate
+-> minimal authority-backed positive fixture plus negative controls
 -> Temporary Checker Repair Review
 -> exact Human authorization before checker/support writes
 -> isolated temporary copy by default
@@ -400,9 +492,9 @@ preserve canonical command/output/path/digest
 
 Read-only reproduction, reduction, and authority comparison may proceed before asking. The Agent must not rewrite a valid artifact to satisfy a known-wrong checker, silently modify an installed/global Skill, add a general bypass, or present temporary evidence as a canonical pass.
 
-Preparing a sanitized upstream Issue Draft is read-only. Public GitHub Issue creation is an external mutation with its own review of exact repository, title, body, redactions, labels/method, and effect. If authenticated capability is absent, return the draft and blocker; do not install tools or disclose credentials. Issue authorization, repair authorization, one-Gate substitute evidence, Git, installation, synchronization, and release remain independent.
+Preparing a sanitized upstream Issue Draft is read-only. Public GitHub Issue creation is an external mutation with its own exact review. Issue authorization, repair authorization, one-Gate substitute evidence, Git, installation, synchronization, and release remain independent.
 
-The Human may accept a fresh temporary result as substitute verification for one exact Gate only when the defect proof, source digests, RED/GREEN, negative controls, target command, expiry, rollback, and residual canonical failure are visible. Record:
+The temporary repair path retains dual evidence:
 
 ```text
 Canonical validation: failed
@@ -410,9 +502,9 @@ Temporary checker recovery: passed | failed
 Human substitute decision: accepted-for-this-gate | declined
 ```
 
-This decision grants no later Gate or action. Any checker/support/input/authority digest change, different target or command, Gate exit, context loss without persisted evidence, or failed negative control expires it. Short same-session evidence may remain response-local; cross-session, handoff, or later action reliance records the compact evidence in the existing owning artifact without creating a mandatory recovery directory.
+This decision grants no later Gate or action. Any checker/support/input/authority digest change, different target or command, Gate exit, context loss without persisted evidence, or failed negative control expires it. Short same-session evidence may remain response-local; cross-session, handoff, or later-action reliance records compact evidence in the existing owning artifact without creating a mandatory recovery directory.
 
-Formal repair belongs in the Agent Loop source repository with the regression test and canonical checker change. Agent Loop itself cannot claim a released checker fix from an isolated patched copy; focused and required full validation must pass on the formal source.
+Formal repair belongs in the Agent Loop source repository with the regression test and canonical Checker change. Agent Loop itself cannot claim a released Checker fix from an isolated patched copy; focused and required full validation must pass on the formal source.
 
 ## Inspection Order
 
@@ -428,8 +520,9 @@ Use this order:
 6b. If `.agent-loop/skills/INDEX.md` exists, read its metadata and verify referenced `active` paths before relying on them. Re-match active `bootstrap` / `on-demand` rows for each applicable actionable intent before stage-specific helper or fallback action; load and verify only the matched body. Do not load `proposed`, `disabled`, or `deprecated` skills into normal routing.
 6c. For explicit Bug management, read `bugs/INDEX.md` metadata before creating a Bug or scanning Feature ownership. Resolve current Bug README, duplicate/reopen pointers, and related flat/archived Feature locators before relying on lifecycle or target claims.
 6d. When `<memory-root>/changes/` exists, run the read-only Lightweight Change scanner across every month before relying on Change status, pending thresholds, or human-review inventory. A changes-only root does not prove reliable `project.md` or completed Project Entry.
-7. Read current Feature `spec.md` as the bootstrap. Run `python3 <skill-root>/scripts/check-feature-context.py --project-root <target-project-root> <feature-spec-path>` before relying on downstream Feature context. Exit `0 / CURRENT` permits the local fast path. Exit `0 / CHANGED` reports factual drift for Agent impact assessment; it is not execution authorization and does not itself choose a Human Gate. Exit `1 / BLOCKED` is reserved for physical or authority-resolution contradictions and routes to Recovery or the owning source repair. On Windows use the equivalent `py -3` command.
-8. Only after the result is `CURRENT`, or after the Agent has assessed `CHANGED`, repaired derived evidence, and rerun to `CURRENT`, read stage-relevant current Feature `tasks.md`, `tests.md`, `plan.md`, `notes.md`, and `contracts.md` if present. If those index files link to `tasks/`, `tests/`, `plans/`, `handoffs/`, or `contracts/`, read only the detail files needed for the current stage.
+The scanner preserves `triggered | not-triggered` separately from `validation_result`. It returns deterministic per-record `CHANGED` findings for safely bounded filename/date/field/section/state/placeholder defects while preserving every readable valid record and trigger; unsafe memory-root, path, symlink, enumeration, month-depth, or artifact-kind authority remains hard.
+7. Read current Feature `spec.md` as the bootstrap and resolve `## Feature Authority` before adapter-specific paths. Use the Requirement Product Definition compatibility sub-adapter when only legacy `## Product Requirement Source` exists. Run `python3 <skill-root>/scripts/check-feature-context.py --project-root <target-project-root> <feature-spec-path>` before relying on downstream Feature context. Exit `0 / CURRENT` permits factual reliance inside existing authorization. Exit `0 / CHANGED` reports drift, custom authority, or Agent-review facts. Exit `0 / NOT_APPLICABLE` from a specialized Checker means select the applicable adapter/direct evidence. Exit `1 / BLOCKED` is reserved for physical or authority-resolution contradictions. On Windows use the equivalent `py -3` command.
+8. Only after `CURRENT`, or after the Agent has assessed `CHANGED`/`NOT_APPLICABLE` and completed the applicable authority route, read stage-relevant current Feature `tasks.md`, `tests.md`, `plan.md`, `notes.md`, and `contracts.md` if present. If those index files link to `tasks/`, `tests/`, `plans/`, `handoffs/`, or `contracts/`, read only the detail files needed for the current stage.
 9. Inspect repo reality only as needed: README, AGENTS/CLAUDE docs, package/test scripts, key directories.
 10. If local repo reality points to remote execution, or the human says this is a remote project, load `references/remote-project-discovery.md`. An empty local directory alone is not enough; if there are no remote hints, classify as `new-project`.
 11. Verify long-term memory index targets before trusting them. If `project.md`, root guidance, or current artifacts point to onboarding-db, enterprise `project/*.md`, feature docs, contracts, or guidance files, check that the referenced path exists before relying on it.
@@ -444,6 +537,8 @@ When the checker returns `CHANGED`, read its reasons plus the changed Requiremen
 If `project.md` declares a Decisions index, list decision files before Decision & Design or Feature Spec. Read decisions already linked by the active Requirement Product Definition, legacy Feature Product Brief, or `spec.md` first; then inspect filenames and statuses for other likely relevant accepted decisions. Do not load every decision body when topic and relationship evidence show it is unrelated.
 
 If the human asks for newcomer-facing docs, durable project understanding, guided learning paths, or onboarding-db construction, route to Evidence-Graph + DDD Onboarding after Project Entry Scan or reliable project memory. Load `references/onboarding-knowledge-base.md`. Evidence Graph must include Core Flow Inventory selection before Onboarding Spec acceptance; critical/important flows then use Flow Slice Coverage and the Completeness Hard Gate. Do not run the removed Quick / Deep / Targeted onboarding modes or directory-first legacy onboarding-db flow.
+
+The Onboarding coverage Checker classifies applicability before coverage. No recognizable current-format scope is `NOT_APPLICABLE`; a recognizable scope with safely enumerable missing/stale file, slice, Diagram ID, section, evidence, source/render, digest, status, or placeholder facts is `CHANGED`; only unreadable/unsafe/physically ambiguous authority is `BLOCKED`. Fixed English wording and self-declared `covered` / `PASS` are recorded facts, not semantic completeness. The Agent owns repair, newcomer-readiness judgment, and routing to the existing two Onboarding Human Gates.
 
 This keeps exactly two onboarding Human Gates: accept the Onboarding Spec, then separately accept the completed Onboarding Tasks Full Execution Gate. Core-flow selection and completeness are contents of those existing gates, not additional pauses. Batch remains an Agent organization/review unit rather than a Human Gate.
 
@@ -465,7 +560,7 @@ If `project.md` claims a legacy onboarding layout, lists onboarding-db files, or
 
 Project Entry has priority over feature-follow-up. If no .agent-loop/ or legacy agent-loop/ memory exists, do not classify directly as feature-follow-up; classify as `existing-project` or `new-project` first, preserve the bug/change report as intake context, and establish or confirm project memory before running Feature Follow-up.
 
-If explicit defect/regression/QA/post-close evidence or clear recent Feature ownership exists and reliable agent-loop memory is available, classify as `feature-follow-up` before deciding to create a new Feature. For explicit Bug management, load `references/bug-management.md` and `references/feature-follow-up.md`; scan complete Bug Index metadata for duplicate/reopen identity first, then inspect Feature metadata using the project-configured 90-day default plus evidence-driven extended scan. Create/update/reopen the Bug Record, resolve Expected Behavior, and recommend exactly one of `investigate-first | flow-back | linked-feature | maintenance-fix | requirement | no-fix`. Wait for the Resolution Path Gate and any separate Feature/Requirement action gate. Generic “small tweak”, `fix`, “修一下”, or “改一下” wording alone routes an actionable non-Bug change through Lightweight Change Assessment before Feature construction.
+If explicit defect/regression/QA/post-close evidence or clear recent Feature ownership exists and reliable agent-loop memory is available, classify as `feature-follow-up` before deciding to create a new Feature. For explicit Bug management, load `references/bug-management.md` and `references/feature-follow-up.md`; scan complete Bug Index metadata for duplicate/reopen identity first, then inspect Feature metadata using the project-configured 90-day default plus evidence-driven extended scan. Create or update a new/non-closed Bug Record as appropriate. When the match is closed, keep it closed while preparing the named reopen evidence, wait for the separate Bug Reopen Gate, and only after explicit acceptance append the Reopen Record, restore `Resolution: unresolved`, and set the accepted return Status. Then resolve Expected Behavior and recommend exactly one of `investigate-first | flow-back | linked-feature | maintenance-fix | requirement | no-fix`. Wait for the new Resolution Path Gate and any separate Feature/Requirement action gate. Generic “small tweak”, `fix`, “修一下”, or “改一下” wording alone routes an actionable non-Bug change through Lightweight Change Assessment before Feature construction.
 
 `maintenance-fix` is not a bypass. It uses the standard feature workspace under `.agent-loop/features/YYYY-MM-DD-fix-<slug>/` and must still pass spec, tasks, tests, plan, verification, review, drift, project memory update when needed, Feature Completion Check, and close.
 
@@ -545,6 +640,18 @@ Human gate:
 
 Do not end an action report with only "done". Always include the next recommended stage or a concrete stop reason.
 
+## Full-Worktree Git Fast Path
+
+This is an internal Submit / Integrate method for when the Human explicitly asks for `commit` or `commit and push`. It is not a canonical stage, message intent, completion route, or reusable permission.
+
+For this method, inspect repository/branch/HEAD/conflict facts, derive a repository-compliant commit message when none was supplied, then present one lightweight Commit Confirmation. It contains the complete worktree file/change summary, the proposed commit message, `Verification: not run for this Git action; no completion or release-readiness claim`, and, only when Push was requested, the exact remote/ref. This is not a code, quality, Feature, verification, Drift, or Completion Review. Do not run tests or perform those reviews merely because Git was requested, and do not ask a second confirmation.
+
+After Human confirmation, run `git add -A` immediately from the repository root and verify that the index represents staged, unstaged, untracked, and deleted Git-visible content. Do not exclude, restore, clean, stash, split, or discard content on the Agent's initiative. A plain `commit` confirmation authorizes Commit only. Push remains an independent requested action: an explicit `commit and push` confirmation authorizes Commit and Push in order; Push uses the confirmed remote/ref, and Commit failure stops Push. If no unique push target exists, the confirmation may authorize the local Commit only; after it succeeds, ask only for the missing Push destination.
+
+The path does not run Verify, Review, Drift Check, Feature Completion Check, or tests merely because Git was requested. Git packaging permission is not completion evidence. Existing evidence may be disclosed truthfully, but without fresh required proof the Agent cannot claim `fixed`, `verified`, `done`, `completed`, `closed`, or release-ready. A Human condition such as “only after tests pass” remains a required precondition.
+
+Stop without reset/clean/restore/stash when the repository is ambiguous; a merge/rebase/cherry-pick conflict is unresolved; an applicable sealed/customer-isolation/branch policy forbids the action; `git add -A` produces an inconsistent index; or commit/push fails. Remote/ref ambiguity blocks only Push, not an already authorized Commit. Preserve and report the resulting worktree and index.
+
 ## Memory After Code Integration
 
 ```text
@@ -557,7 +664,7 @@ First determine whether a concrete memory conflict was observed. When none exist
 
 When a conflict exists, inspect only its semantic owner, directly affected references/indexes, and minimum direct evidence. Resolve fact-determined current meaning, capture exact preimages and intended postimages, use bounded same-directory atomic replacement, run targeted verification, and retain rollback only for changed files until verification passes. Ask the human only when facts leave multiple legitimate meanings; unresolved observed conflicts and failed restore block later mutations.
 
-Full Base/Source/Target-before/Result inventory, Start review, exact Plan Hash, transactional Apply/Post-check/Restore, and all-path checks are Full Memory Audit / Recovery only and require explicit Human authorization. A resolved conflict or `reconciliation-not-needed` permits only presentation of the next independent Human Gate; neither authorizes commit, push, tag, release, publish, merge, branch deletion, or cleanup.
+Full Base/Source/Target-before/Result inventory, Start review, exact Plan Hash, transactional Apply/Post-check/Restore, and all-path checks are Full Memory Audit / Recovery only and require explicit Human authorization. A resolved conflict or `reconciliation-not-needed` permits only presentation of the next independent Human Gate; neither authorizes commit, push, tag, release, publish, seal, merge, branch deletion, or cleanup.
 
 ## Stage Order
 
@@ -600,7 +707,7 @@ Submit / Integrate
 Pause / Close
 ```
 
-Feature Spec enters Brainstorm / Clarify only when concrete feature-local scope, acceptance, or implementation-boundary uncertainty remains after loading the accepted Product Slice and applicable ADRs. If the Product Slice, assigned ADR Design Slices, scope, exclusions, and measurable acceptance are already clear, classify the method response-locally as `brainstorm-not-needed` and proceed directly to Feature Spec. This label is not a lifecycle status or artifact field. Helper availability alone never triggers the method. Brainstorming may compare or clarify Feature-local alternatives, but it cannot reopen Requirement product meaning, rewrite an accepted ADR, or add scope; product ambiguity returns to Requirements Discussion and ADR incompatibility returns to Decision & Design Human Review.
+Feature Spec enters Brainstorm / Clarify only when concrete feature-local scope, acceptance, or implementation-boundary uncertainty remains after loading the resolved Feature Authority, accepted Feature boundary, applicable Product Slice, and applicable ADRs. If those applicable sources, scope, exclusions, and measurable acceptance are already clear, classify the method response-locally as `brainstorm-not-needed` and proceed directly to Feature Spec. This label is not a lifecycle status or artifact field. Helper availability alone never triggers the method. Brainstorming may compare or clarify Feature-local alternatives, but it cannot reopen source-authority, Requirement product, Bug Expected Behavior, or accepted ADR meaning or add scope; ambiguity returns to the owning existing Human Review.
 
 ## Stage Entry And Exit
 
@@ -688,7 +795,9 @@ Feature Auto-Loop means:
 Feature Auto-Loop = give one feature a bounded release lane.
 ```
 
-In this mode, the agent may continue through Analyze Consistency, Execute Agent-ready Tasks, Verify, Review, Drift Check, and Project Memory Update for the current accepted package. It must not skip Plan Gate before execution. It must stop before Bug Resolution Path decisions, Bug close/reopen, Feature creation/reopen, Requirement creation/lifecycle reconciliation, Feature Monthly Archive or rehydrate and their Batch Human Gates, branch creation, switching, deletion, push, or tag, creating or materially updating a project-local skill, executing a project-local skill without a current invocation grant, Delivery Contract creation and acceptance not separately named in Gate 2, breaking contract changes, subagent dispatch, external mutation, Submit / Integrate, commit, push, PR, merge, tag, release, publish, and Pause / Close.
+In this mode, the agent may continue through Analyze Consistency, Execute Agent-ready Tasks, Verify, Review, Drift Check, and Project Memory Update for the current accepted package. It must not skip Plan Gate before execution. It must stop before Bug Resolution Path decisions, Bug close/reopen, Feature creation/reopen, Requirement creation/lifecycle reconciliation, Feature Monthly Archive or rehydrate and their Batch Human Gates, branch creation, switching, deletion, push, or tag, creating or materially updating a project-local skill, executing a project-local skill without a current invocation grant, Delivery Contract creation and acceptance not separately named in Gate 2, breaking contract changes, subagent dispatch, external mutation, Submit / Integrate, commit, push, PR, merge, tag, release, publish, seal, and Pause / Close.
+
+Within Review, Feature Auto-Loop may apply a `within-approved-boundary` Review Repair without a new Gate when the Feature Authority, accepted Product Slice/Acceptance, implementation boundary, risk, verification path, rollback, and current execution grant remain valid. This is use of existing authorization, not a new write grant; definition or implementation-boundary drift returns to Gate 1 or Gate 2, and any independently Human-gated action still stops.
 
 For multiple Agent-ready tasks, Feature Auto-Loop may rotate `plan.md` and Active Plan Scope without repeating Gate 2 when the Agent confirms the current task/story Plan passes Plan Gate and Analyze Consistency and interfaces/risk/rollback/verification obligations remain inside the accepted execution boundary. `Gate 2 Agent-ready Tasks` is the initial reviewed decomposition, not an immutable whitelist, while `Gate 2 Accepted Stories` is the durable semantic snapshot derived at Gate 2 and is not rebuilt from current Task rows. A new Task ID does not by itself repeat Gate 2. A new Agent-ready Task may execute only when the Agent verifies that it exists in `tasks.md`, maps to the accepted Story/Product Slice/Acceptance, any `Derived From` value is valid trace rather than substitute authorization, and the current delta is `within-approved-boundary`. A new Story/Product Slice/Acceptance, Human-gated Task, missing Task identity, story mismatch, changed interface/risk/rollback/verification boundary, or classified implementation-boundary change returns to Gate 2.
 
@@ -715,10 +824,14 @@ todo | in-progress -> skipped only after human-approved scope removal
 
 Record the prior non-terminal status and unblock evidence whenever entering or leaving `blocked`. `skipped` is terminal only for work already removed from current scope; it is never an in-scope completion substitute.
 
-The task may enter `review` after implementation and all applicable fresh verification for the accepted scope has run, or after a human-approved substitute verification is recorded. If required verification is missing, keep the task `in-progress` or `blocked`. The task may enter `done` only when all required items are true:
+The task may enter `review` after implementation and all applicable fresh verification for the accepted scope has run, or after a human-approved substitute verification is recorded. If required verification is missing, keep the task `in-progress` or `blocked`.
+
+Required Verification proves the current result, while every Existing Test Obligation from accepted `tests.md`, Gate 2, acceptance, ADR, Delivery Contract, Bug Verification Matrix, or current Human instruction remains required. An Additional Regression Test is future protection proposed after current proof exists. An unaccepted Additional Regression Test Advisory does not by itself block Task Done when Required Verification and every Existing Test Obligation are complete.
+
+The task may enter `done` only when all required items are true:
 
 - accepted implementation scope is complete
-- required tests or substitute verification ran fresh
+- Required Verification and every Existing Test Obligation or applicable Human-approved substitute ran fresh
 - verification evidence is recorded in `notes.md`
 - lightweight Spec Review is recorded for the task
 - Standards Review is recorded when triggered by large project, broad diff, directory or durable boundary change, security/data change, architecture change, or human request
@@ -772,12 +885,12 @@ Auto modes do not remove stop conditions. Stop and ask when:
 - a Bug needs Resolution Path confirmation, close/reopen, Feature creation/reopen, Requirement creation/reconciliation, or another action-specific Human Gate
 - Bug Index/README, duplicate/reopen, Status/Resolution, Resolution Target, Expected Behavior authority, or Fix Feature locator evidence is invalid or contradictory
 - an archive row target is missing, an archived directory lacks a row, a flat/month Feature ID collides, a `rehydrated` row points to a month path, an incomplete `.archive-txn` exists, or verified apply leaves an old durable path; these physical/locator contradictions stop their owning operation, while ordinary scan findings are reviewed by the Agent
-- TDD cannot be followed or verification repeatedly fails
+- TDD cannot be followed on an initial Feature, explicit Bug repair, Human-requested TDD, or accepted RED/GREEN Plan; or Required Verification repeatedly fails or cannot reliably prove the current result
 - a canonical Agent Loop checker failure needs a temporary patch but the exact Temporary Checker Repair Review or one-Gate substitute decision is missing, expired, or being widened
-- review finds behavior/scope/architecture changes
+- review finds product meaning, Feature definition, accepted implementation boundary, public interface, architecture, security, data, permission, authorization, rollback, or reliable-verification drift; a `within-approved-boundary` implementation correction remains inside Review Repair Fast Path
 - subagents are needed but not yet approved
 - branch creation, switching, deletion, push, or tag is requested
-- submit, commit, PR, merge, release, publish, pause, or close is requested
+- submit, commit, PR, merge, release, publish, seal, pause, or close is requested
 
 Allowed replies:
 
@@ -835,10 +948,12 @@ Feature close is forbidden unless all are true:
 
 - accepted feature spec exists
 - tasks are done or explicitly removed from scope
-- tests or substitute verification are recorded
+- every Existing Test Obligation or applicable Human-approved substitute is recorded
 - Delivery Contracts are implemented and verified when downstream consumers rely on them
 - accepted Delivery Contracts match producer code/tests and have no unapproved breaking changes
 - fresh verification evidence exists in `notes.md`
+- every Review Repair has fresh targeted verification and evidence in `notes.md`
+- every Additional Regression Test Advisory and its residual risk is visible; an unaccepted advisory does not by itself block Feature Close
 - Feature Close Review completed and recorded in `notes.md`
 - drift check completed
 - long-term changes reflected in `project.md`

@@ -47,8 +47,8 @@ New human source material should be archived inside a requirement set directory.
 | `bugs/YYYY-MM-DD-<bug-slug>/README.md` | stable Bug identity, Report Origin, observed/expected evidence, Status, Resolution, relationships, Resolution Path, verification, close, and reopen history | product meaning, Requirement lifecycle, Feature tasks/tests/plan, personnel assignment, or Git authorization |
 | `bugs/YYYY-MM-DD-<bug-slug>/evidence/*` | optional bounded screenshots, redacted logs, failed tests, reproduction, and verification evidence | secrets, complete production payloads, implementation plans, or executable state database |
 | legacy Feature `product.md` | historical feature-level product intent retained for Resume, Follow-up, Review, Close, and Recovery only | new Product Definition authoring, Requirement lifecycle, or silent migration |
-| Feature `spec.md` | intended feature behavior, Product Requirement Source, derived Feature Context Snapshot, and Product Slice | Requirement product meaning, execution logs, or a second PRD |
-| optional Feature `context.md` | expanded derived execution context for a complex or long-running Feature, with exact source/digest parity to `spec.md` | independent product truth, Requirement lifecycle, approval, task/test/plan, code-fact, or execution authority |
+| Feature `spec.md` | intended feature behavior, open Feature Authority evidence, authority-neutral derived Feature Context Snapshot, and conditional Requirement Product Source/Product Slice | Requirement/Bug product meaning, execution logs, authority creation, or a second PRD |
+| optional Feature `context.md` | expanded derived execution context for a complex or long-running Feature, with exact applicable authority/source/digest parity to `spec.md` | independent product truth, Requirement/Bug lifecycle, approval, task/test/plan, code-fact, or execution authority |
 | `tasks.md` | work breakdown, status, and links to task details | full test evidence |
 | `tests.md` | test design, matrix, and links to test details | raw test output |
 | `plan.md` | active execution plan pointer or compact plan, including Branch Context Evidence when applicable | historical execution record or Git action authorization |
@@ -64,6 +64,8 @@ New human source material should be archived inside a requirement set directory.
 | `memory-merges/MM-<collision-safe-short-sha>/README.md` | explicitly authorized Full Memory Audit / Recovery ledger, exact plan, transaction, post-check, and restore evidence | the normal no-conflict or targeted conflict path |
 
 The persisted Lightweight Execution Card is created under the one accepted memory root after clearly-eligible routing and before the first target write. Its month is the creation partition and never changes. The Agent checks the exact path before creation and uses the first free `-2`, `-3`, or later suffix in both filename and H1; it never truncates or overwrites an existing Change.
+
+Agent Checker Rescue evidence remains response-local unless it must cross a session, handoff, or later action-specific Gate; then keep only a compact block in the existing owning Feature, Bug, Change, Requirement, ADR, Onboarding, or guidance artifact. Rescue creates no default artifact directory, exception registry, lifecycle, status, authorization, or reusable bypass.
 
 Do not add a Change README, INDEX, archive locator, per-change summary, move, rehydrate, restore transaction, scheduler, or shared counter. Planned multi-session work, pause/resume lifecycle, handoff, Subagent execution, long observation, complex evidence, or Feature-level tracking still requires Feature construction.
 
@@ -371,7 +373,7 @@ stable plan.md
 
 ```text
 current feature behavior changed -> update spec.md
-Feature Context source or digest changed -> read the fact scanner's `CHANGED` reasons, perform Agent semantic impact assessment, refresh derived spec.md Snapshot and optional context.md only when authority remains valid and meaning is unchanged, keep both in exact source/digest parity, and rerun to `CURRENT`
+Feature Context authority fact, source, locator, or digest changed -> read the fact scanner's `CHANGED` reasons, perform Agent semantic impact assessment, refresh derived spec.md Snapshot and optional context.md only when authority remains valid and meaning is unchanged, keep both in exact applicable fact/source/digest parity, and rerun when the selected adapter supports `CURRENT`
 accepted Requirement product meaning changed -> Human-gated append-only Product Definition follow-up, advance README pointer, then recheck ADR / open Feature compatibility
 legacy feature product intent conflict found -> stop for Requirement Conflict / Recovery; do not rewrite legacy product.md silently
 cross-feature product consensus changed -> update project.md Product Context or Domain Language in simple mode, or project/product-context.md and project/domain-language.md in enterprise mode

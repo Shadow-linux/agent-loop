@@ -64,4 +64,4 @@ Remaining risk:
 
 Unrelated drift observed but not needed to resolve this conflict:
 
-Explicitly unauthorized: commit, push, tag, release, publish, merge, branch deletion, Source branch cleanup, or any Git action outside a separate Human Gate.
+Explicitly unauthorized: commit, push, tag, release, publish, seal, merge, branch deletion, Source branch cleanup, or any Git action outside a separate Human Gate.

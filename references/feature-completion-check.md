@@ -40,6 +40,9 @@ Check:
 - Were skipped or deferred items first removed from current scope through human-approved spec/tasks/tests/requirement reconciliation?
 - Are all required tests or substitute verification recorded?
 - Is there fresh verification evidence in `notes.md`?
+- Are all Existing Test Obligations complete?
+- Does each Review Repair have fresh targeted verification and evidence?
+- Are Additional Regression Test recommendations and residual risk visible?
 - Did Feature Close Review complete?
 - Did feature-level Spec Review confirm the Requirement Product Definition, Feature Spec Product Slice, `tasks.md`, `tests.md`, acceptance criteria, and out-of-scope boundaries are satisfied, plus any existing legacy Feature `product.md` when present?
 - Does every Product Slice row still resolve to the effective source without redefining product meaning, and is any source change routed through compatibility/drift review?
@@ -55,6 +58,8 @@ Check:
 - Is every related Bug expected to be fixed in `verifying` with fresh Bug-specific reproduction/substitute and regression/safety evidence?
 - Are Bug Status/Resolution/Resolution Path and the Fix Feature consistent with the current Index, Feature, Requirement, ADR, Contract, and archive locator evidence?
 - Are there unresolved Human-gated decisions, blockers, or open questions?
+
+An unaccepted Additional Regression Test Advisory does not by itself block Feature close. If the proposed test is needed to prove acceptance, a Bug fix, a Delivery Contract, security/data correctness, or another Existing Test Obligation, it is not advisory and completion remains blocked until the current proof or an accepted substitute exists.
 
 Feature close is blocked until all assigned design slices have implementation and verification evidence, or a human-approved decision explicitly reassigns, defers, removes, or supersedes the slice.
 

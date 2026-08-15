@@ -85,7 +85,7 @@ Profile: existing-project | human-guided-release | not-applicable
 
 An unanswered recommendation stays response-local or in feature evidence. It must not be recorded as `accepted`.
 
-Recommendation and adoption do not authorize branch creation, switching, merge, deletion, push, tag, release, or publish.
+Recommendation and adoption do not authorize branch creation, switching, merge, deletion, push, tag, release, publish, or seal.
 
 ## Branch Classes And Naming Grammar
 
@@ -180,7 +180,7 @@ proposed | open | aggregating | release-candidate
 - `proposed`: recommended but not created or human-confirmed.
 - `open`: human confirmed the target release; branch creation remains a separate Long-Lived Branch Gate.
 - `aggregating`: one or more matching development branches are being integrated.
-- `release-candidate`: intended scope is aggregated and awaiting verification, review, drift, and Release Gate.
+- `release-candidate`: intended scope is aggregated and awaiting verification, Review, Drift Check, and the applicable independent Tag, Push, Release, Publish, and Seal Gates.
 - `released / sealed`: formal release is immutable and accepts no more work for the same version.
 - `retained`: release branch and release marker remain available for traceability.
 - `abandoned`: human cancelled an unreleased target; deletion or cleanup remains separately gated.
@@ -342,10 +342,16 @@ No branch record replaces Requirement, Product Brief, Feature Spec, Decision / A
 | Target Branch Gate | one development branch's unique aggregation target |
 | Integration Gate | exact commit, PR, merge, or integration action and scope |
 | Cleanup Gate | exact local/remote temporary branches to delete |
-| Release Gate | exact tag, push, release, publish, and sealed transition |
+| Tag Gate | creation of one exact tag at one exact commit |
+| Push Gate | push of exact refs to one exact remote |
+| Release Gate | creation or finalization of one exact release record for one version |
+| Publish Gate | publication of one exact package or artifact to one exact channel or destination |
+| Seal Gate | transition of one exact version to `released / sealed` after required release evidence succeeds |
 | Upgrade Gate | whether a customer moves to a new standard baseline/version |
 
-Each gate is action- and scope-specific. A previous answer may satisfy another gate only when one Human Review Summary explicitly disclosed every combined action and the human confirmed the combined bounded scope.
+Each gate is action- and scope-specific. Tag, Push, Release, Publish, and Seal remain independent decisions because their exact object, destination, evidence, external effect, rollback, and timing differ. Authorization for one row never authorizes another row.
+
+A Batch Human Review may present several action gates together, but each row remains an independent decision. Approving all displayed rows authorizes only those exact named rows, in the displayed order and subject to their stated preconditions. If an earlier action fails, its dependent later rows are not executable; the Agent reports the failure and returns to the applicable Human Review instead of treating the batch as blanket authorization.
 
 Auto modes and external branch helpers do not cross these gates.
 
@@ -356,7 +362,7 @@ Auto modes and external branch helpers do not cross these gates.
 - Execute Task / Story: recheck recorded context; branch creation or switching is never an implied execution step and requires its own Branch Action Gate.
 - Drift Check: compare native policy, accepted strategy, feature context, and Git reality; strategy changes require Human Review.
 - Project Memory Update: persist accepted/declined/not-needed durable results only after confirmation.
-- Submit / Integrate: load this reference when triggered or adopted; apply branch-specific fail-closed conditions only to an adopted strategy or versioned/customer delivery, record them as `not-applicable` for a confirmed simple path, show the exact requested action, and ask the applicable Human Gate.
+- Submit / Integrate: load this reference when triggered or adopted; apply branch-specific fail-closed conditions only to an adopted strategy or versioned/customer delivery, record them as `not-applicable` for a confirmed simple path, show the exact requested action, and ask the applicable Human Gate. Full-Worktree Git Fast Path preserves branch-policy facts without restoring normal Submit quality prerequisites: one lightweight Commit Confirmation authorizes only the listed Commit/Push action after showing the entire-worktree summary and proposed message, while sealed/customer isolation, repository/target ambiguity, conflict, and unrequested actions still stop.
 
 ## Fail-Closed Conditions
 
@@ -369,10 +375,10 @@ Stop dependent integration/release work only when an adopted Branch Strategy or 
 - the target release is `released / sealed`;
 - customer code would enter main, standard release, or another customer line without a separate product/generalization decision;
 - native policy conflicts with the recommended or recorded profile;
-- required verification, Review, Drift Check, or Human Gate is missing;
-- unrelated dirty work may be included;
+- required verification, Review, or Drift Check is missing for a normal Submit/readiness/release claim, or the exact applicable Human Gate is missing; Full-Worktree Git Fast Path may package unverified state only with its explicit no-completion claim;
+- unrelated dirty work may be unintentionally included on a normal scoped action; Full-Worktree Git Fast Path instead enumerates and Human-confirms the entire worktree;
 - worktree ownership of source/target is unclear;
-- branch creation, switch, merge, deletion, push, tag, release, or publish lacks exact authorization.
+- branch creation, switch, merge, deletion, push, tag, release, publish, or seal lacks exact authorization.
 
 Report the conflict, evidence, and one smallest next action. Never bypass by force, rename, rewriting a sealed version, or treating adoption as mutation permission.
 

@@ -109,14 +109,14 @@ Rules:
 - Eligibility is all-of and Feature hard triggers are any-of. A missing fact becomes `Feature trigger` or `uncertain`, never an optimistic lane assumption.
 - When uncertain, present few real options, one Agent recommendation, evidence/unknowns, and perform zero writes before the human answer.
 - The persisted card Plan always exists and never uses No-Plan Decision. Adapt its detail to risk without turning it into Feature `plan.md`.
-- Fact/config/path/domain/docs changes use targeted syntax/parse/reference/residual/dry-run evidence. A small isolatable behavior branch uses the smallest meaningful RED/GREEN plus focused regression.
+- Clearly eligible fact/config/path/domain/docs or isolated behavior changes use Repair-First Verification: apply only the disclosed bounded change, then run fresh failure-matched syntax/parse/reference/residual/dry-run or behavior proof and affected existing checks.
 - If reliable memory exists, run Project Skill Discovery Guard before generic action fallback and preserve the matched Project Skill Execution Gate.
 - Scope expansion stops before broader edits. Preserve current evidence, recommend exactly one Bug/Requirement/Feature route, and ask before keeping, reverting, or extending partial edits.
 - Completion requires fresh verification, diff and disclosed-scope review, rollback, durable-memory impact review, and Result / Residuals.
 - A changes-only root does not prove initialization. Reuse one legacy root, fail closed on dual roots, keep the creation month stable, use a collision suffix without overwrite, and run the read-only scanner after completion.
 - Resume accidental interruption only after branch/full-HEAD/dirty-diff/Scope/Plan/eligibility/verification/rollback revalidation. Planned durable continuation remains Feature work.
 - Three pending or an oldest pending age greater than seven days triggers Agent semantic consolidation; high-evidence sync requires an existing reliable owner and exact pre-write disclosure, while uncertain meaning remains visible for Human Review.
-- The card grants no branch, submit, commit, push, PR, merge, tag, release, publish, production, external, paid-call, configuration-write, destructive, Feature close, or Bug lifecycle action.
+- The card grants no branch, submit, commit, push, PR, merge, tag, release, publish, seal, production, external, paid-call, configuration-write, destructive, Feature close, or Bug lifecycle action.
 
 Write:
 
@@ -534,8 +534,9 @@ Flow:
 9. Write flow docs as `03-flows/<flow-name>.md` by default, not many small files.
 10. Require the core flow diagram set for critical/important flows and relevant diagrams for other content docs. Use Mermaid flowchart / sequenceDiagram for normal flow/timing and ASCII for state machines, complex principle diagrams, and complex examples.
 11. Require use cases, data objects, state transitions, failure modes, verification/troubleshooting, and code evidence where applicable.
-12. Run Completeness Hard Gate before scoring changed topics in `coverage-matrix.md`; a missing critical slice cannot be averaged away, and below 4/5 cannot be `newcomer-ready`.
-13. Record each batch in `batch-review.md`.
+12. Run the coverage Checker as a fact reader: `NOT_APPLICABLE` for no recognizable current-format scope, `CHANGED` for safely enumerable missing/stale per-flow facts, and `BLOCKED` only for unreadable/unsafe/ambiguous physical authority. Do not treat fixed wording or self-declared `covered` / `PASS` as semantic proof.
+13. Run Completeness Hard Gate before scoring changed topics in `coverage-matrix.md`; a missing critical slice cannot be averaged away, and below 4/5 cannot be `newcomer-ready`.
+14. Record each batch in `batch-review.md`.
 
 Exit:
 
@@ -808,11 +809,14 @@ Bug Management internal sequence:
 complete Bug Index metadata scan
 -> 90-day Feature metadata scan
 -> evidence-ranked deep read / evidence-driven extended scan
--> create/update/reopen Bug Record
--> Expected Behavior check
+-> new or non-closed Bug: create/update the Bug Record
+-> matched closed Bug remains `closed`; prepare a named reopen candidate without a lifecycle write
+-> Bug Reopen Gate for the matched closed Bug
+-> after explicit acceptance, append the Reopen Record and restore `Resolution: unresolved`
+-> resolve Expected Behavior
 -> Status/Resolution validation
 -> one Resolution Path recommendation
--> Human Gate
+-> Resolution Path Human Gate
 ```
 
 Rules:
@@ -820,6 +824,8 @@ Rules:
 - Bug Management is internal to this stage; do not add a canonical stage or message intent
 - ordinary Chat or read-only error explanation does not create a Bug artifact
 - Bug identity / duplicate / reopen scans all Bug Index metadata without a time cutoff
+- a matched closed Bug remains closed while the Agent presents the named trigger, new evidence, proposed return Status, preserved history, and exact Bug Reopen Gate; no Reopen Record or lifecycle field changes before explicit acceptance
+- after an accepted reopen, append the Reopen Record, preserve the prior Close/Status history, restore `Resolution: unresolved`, apply only the accepted return Status, and require a new Resolution Path recommendation and separate Gate
 - default Feature ownership is a 90-calendar-day metadata/summary scan; deep-read only evidence-overlapping candidates and extend beyond 90 days with `outside-default-window` evidence
 - calculate age from Feature `Last Updated / Closed`, not archive month, directory mtime, or archive operation time
 - code reality is current fact base for defect evidence
@@ -864,7 +870,7 @@ For every current Feature, bootstrap from `spec.md`, not `tasks.md` or `plan.md`
 python3 <skill-root>/scripts/check-feature-context.py --project-root <target-project-root> <feature-spec-path>
 ```
 
-`CURRENT` (`0`) permits the local Snapshot fast path. `CHANGED` (`0`) reports factual drift: the Agent reads the reasons and only changed/applicable Requirement and ADR meaning, records `no-semantic-impact | derived-context-update | feature-definition-impact | decision-impact | unresolved`, repairs derived Snapshot/Tasks/Tests/Plan/Handoffs when fact-determined, and reruns to `CURRENT` before downstream reliance. `BLOCKED` (`1`) is limited to physical/authority-resolution contradictions and routes to Recovery or source repair. Exit `0` alone is insufficient, and `CHANGED` never authorizes execution or selects a Human Gate. On Windows use `py -3`.
+Resolve the Feature Authority shape before interpreting any adapter-specific path. `CURRENT` (`0`) permits reliance on matching applicable facts. `CHANGED` (`0`) reports factual drift or an unknown-but-inspectable adapter: the Agent reads the reasons and applicable authority/Product/ADR meaning, records `no-semantic-impact | derived-context-update | feature-definition-impact | decision-impact | unresolved`, repairs derived Snapshot/Tasks/Tests/Plan/Handoffs when fact-determined, and reruns when the selected adapter can become `CURRENT`. `NOT_APPLICABLE` (`0`) from a specialized Checker selects another adapter or direct evidence without treating it as failure. `BLOCKED` (`1`) is limited to physical/authority-resolution contradictions and routes to Recovery or source repair. Exit `0` alone is insufficient, and neither `CHANGED` nor `NOT_APPLICABLE` authorizes execution or selects a Human Gate. On Windows use `py -3`.
 
 ## Feature Construction Two-Gate Review
 
@@ -884,13 +890,13 @@ When the package is complete, the Agent verifies complete Package Files coverage
 
 After package-only acceptance, a later explicit instruction to start this Feature may enable Feature Auto-Loop without repeating the full Gate 2 review only when Feature Context is still `CURRENT`, the Agent re-reads the recorded Package Files and current Feature artifacts, confirms the complete accepted package and execution boundary, assesses any change, verifies that the Human instruction is still reliable, and finds no new stop condition or Human-gated item. Preserve the original `package-only` Gate 2 decision/Auto-Loop/time baseline; record `Later Start Decision: approved`, the timezone-aware `Later Start Authorized At`, concrete `Later Start Evidence`, and current project `Gate Mode: Feature Auto-Loop` together before target implementation. Otherwise route `feature-definition-change` to Gate 1, `implementation-boundary-change` to Gate 2, and `unresolved` or uncertain Human provenance to one blocking Human question. No local Feature Gate preflight is required.
 
-Strict Mode remains available when the human explicitly requests stage-by-stage control. Delivery Contract creation/acceptance must be separately named with exact content inside Gate 2 or stop at its own gate; breaking changes always stop separately. Human-gated tasks, subagent dispatch, branch/Git actions, external mutation, production, credentials, submit, pause, close, release, and publish retain their independent gates.
+Strict Mode remains available when the human explicitly requests stage-by-stage control. Delivery Contract creation/acceptance must be separately named with exact content inside Gate 2 or stop at its own gate; breaking changes always stop separately. Human-gated tasks, subagent dispatch, branch/Git actions, external mutation, production, credentials, submit, pause, close, release, publish, and seal retain their independent gates.
 
 ## Feature Spec
 
-Entry: goal and source requirements are clear enough.
+Entry: goal, accepted Feature boundary, and authority evidence are clear enough.
 
-Every Feature start must reference an accepted Requirement Set with a confirmed Effective Product Definition, or an explicitly supported legacy effective source. For a narrow direct Feature request, create/review the minimum Brief before Feature Spec. This keeps product meaning, Design Readiness, lifecycle, and Feature Mapping in one Requirement-owned location without forcing Standard modeling.
+Every Feature start must declare one effective primary Feature Authority and may cite supporting authorities. Requirement Product Definition is the compatible Feature Authority sub-adapter for Requirement-driven product work; existing specs with only Product Requirement Source remain readable. A confirmed Bug repair, direct Human decision, or inspectable custom source may instead be primary without inventing a Requirement. Authority resolution never replaces the separate Feature create/reopen decision or Gate 1/2.
 
 Load:
 
@@ -907,11 +913,13 @@ Write:
 Include:
 
 - feature type: normal, maintenance-fix, or follow-up
+- Feature Authority: descriptive Authority Type, one Primary Authority Reference, optional Supporting Authority References, Authority Summary, and Agent Authority Assessment
+- An explicit Requirement Product Definition primary authority must identify the same Requirement Set README; applicable ADRs and contracts remain supporting evidence.
 - `Related Bugs` and the Human-confirmed Bug Resolution Path source when this Feature repairs Bugs; do not copy full Bug report/evidence
 - problem/goal
-- Product Requirement Source: Requirement Set, Effective Product Definition, Profile, Product Review Evidence, and Applicable Decisions
-- Feature Context Snapshot derived from that one resolved authority: project-root-relative Requirement/product/ADR paths, current lifecycle/review/profile, Product and Decision SHA-256 values generated after Markdown newline canonicalization (`CRLF` / lone `CR` -> `LF`), Product Slice references, verification time, Freshness, and the outcome/journey/rules/states/exceptions/recovery/boundary context needed downstream; legacy raw LF/CRLF digests remain reader-compatible
-- Product Slice rows mapping source sections/IDs/rules to Feature responsibility, acceptance, and `in-scope | out-of-scope | not-applicable` coverage
+- authority-neutral Feature Context Snapshot with detected adapter, primary/supporting locators, resolver-emitted deterministic semicolon-separated Authority Facts (including Authority Summary), verification time, Freshness, and the boundary/acceptance context needed downstream
+- when Requirement Product Definition applies: Product Requirement Source, lifecycle/review/profile, Product and Decision SHA-256 values generated after Markdown newline canonicalization (`CRLF` / lone `CR` -> `LF`), Product Slice references, and Product Slice rows mapping source sections/IDs/rules to Feature responsibility, acceptance, and coverage; legacy raw LF/CRLF digests remain reader-compatible
+- when Bug Authority applies: Bug identity, Expected Behavior locator, Resolution Path/Fix Feature locator, archive locator, and source freshness facts without deciding their meaning
 - requirement Delivery Phase reference when the feature implements a phase or phase slice
 - scope
 - stories
@@ -924,23 +932,23 @@ Include:
 Rules:
 
 - before fallback spec writing, run Stage Helper Capability Scan for applicable spec-writing support; helper availability alone does not trigger Brainstorm / Clarify
-- When Product Slice, applicable accepted ADR Design Slices, scope, exclusions, and acceptance are already clear, skip Brainstorm / Clarify and proceed directly with Feature Spec. Use brainstorming only for a named unresolved Feature-local scope, acceptance, or implementation-boundary question; route product or accepted-ADR changes back to their owning Human Review.
-- inspect the Effective Product Definition, original source links as needed, and Applicable Decisions before writing behavior and acceptance
-- use the dual reader: new `Effective Product Definition` requires Profile/Product Review `confirmed`; legacy `Effective Concept Foundation` / reviewed Requirement remains valid without migration
-- add Product Requirement Source and Product Slice to `spec.md`; do not require or create Feature `product.md`
-- create the default Snapshot inside `spec.md`; optional `context.md` is expanded derived context only for a Human-confirmed complex Feature and must keep exact source/digest parity
-- run the scanner after writing the Snapshot; `CHANGED` requires Agent assessment/repair and a rerun to `CURRENT` before Requirement Checklist acceptance, while physical `BLOCKED` routes to Recovery/source repair
-- Product Slice references source Concept/Model IDs and `product.md#<rule-anchor>`; it may narrow scope but cannot redefine accepted product meaning
+- When the accepted Feature boundary, applicable Product Slice/ADR Design Slices, scope, exclusions, and acceptance are already clear, skip Brainstorm / Clarify and proceed directly with Feature Spec. Use brainstorming only for a named unresolved Feature-local scope, acceptance, or implementation-boundary question; route source-authority, product, or accepted-ADR changes back to their owning Human Review.
+- resolve explicit Feature Authority before interpreting adapter-specific fields; preserve the descriptive type rather than validating against a closed enum
+- for Requirement Product Definition, inspect the Effective Product Definition, original source links as needed, and Applicable Decisions; new pointers require Profile/Product Review `confirmed`, while legacy `Effective Concept Foundation` / reviewed Requirement remains valid without migration
+- add Product Requirement Source and Product Slice only when that sub-adapter applies; do not require or create Feature `product.md` for Bug/Human/custom authority
+- create the default Snapshot inside `spec.md`; optional `context.md` is expanded derived context only for a Human-confirmed complex Feature and must keep exact applicable authority/source/digest parity
+- run the scanner after writing the Snapshot; `CHANGED` requires Agent assessment/repair/routing, `NOT_APPLICABLE` selects another adapter/direct evidence, and physical `BLOCKED` routes to Recovery/source repair
+- when applicable, Product Slice references source Concept/Model IDs and `product.md#<rule-anchor>`; it may narrow scope but cannot redefine accepted product meaning
 - do not let Feature Spec introduce a new meaning, state, invariant, role boundary, relationship, or product object for an accepted Concept ID; return to Requirements Discussion when product semantics must change
 - when Feature Spec uses Optional Visual Communication, limit the view to the accepted Product Slice, feature responsibility, or feature-local implementation and acceptance path; rewrite accepted feature-local clarification into `spec.md`; if the view reveals new product meaning, stop and return to Requirements Discussion instead of adding it to `spec.md` or editing Requirement `product.md`
-- block Feature Spec when Product Review is pending, the effective pointer is ambiguous/stale, or a triggered internal/legacy foundation is `candidate` or `reopened`
-- confirm Design Readiness is `design-not-needed` or `completed` before writing the Feature Spec
+- block a Requirement-driven Feature Spec when Product Review is pending, the effective pointer is ambiguous/stale, or a triggered internal/legacy foundation is `candidate` or `reopened`
+- confirm Design Readiness is `design-not-needed` or `completed` when Requirement Product Definition or shared design applies
 - for each applicable requirement-driven ADR, confirm its Effective Requirement Snapshot still resolves, `Upstream Compatibility` is `current`, and Requirement Model Technical Landing Trace coverage is complete
 - include `Applicable Decisions`, assigned Design Slice IDs in `Implements Decisions`, and feature-local `Design Decisions`
 - use Decision & Design before Feature Spec if the requirement needs shared business-flow, domain, data, architecture, recovery, or non-functional design
 - do not enter Feature Spec when shared design is unresolved or any required design slice is unassigned
 - do not treat `Applicable Decisions` alone as coverage; block when an in-scope Requirement Model ID lacks disposition, technical ownership, or verification
-- a Bug relationship does not replace the accepted Requirement/Expected Behavior source and does not authorize Feature creation, Requirement change, or Bug close
+- a Bug Authority may be primary only after its Expected Behavior and Resolution Path/Fix Feature evidence exist; it does not authorize Feature creation/reopen, Requirement change, Bug close, Gate 1, or Gate 2
 
 Exit:
 
@@ -979,7 +987,7 @@ Entry: draft spec exists.
 
 Check:
 
-- Feature Context Snapshot is complete, paths are project-root-relative, its source references resolve through one Requirement README, and the scanner returns `CURRENT` after any `CHANGED` assessment/derived repair
+- Feature Context Snapshot is complete, declared local paths remain project-root-relative, its primary/supporting authority references resolve for the selected adapter, and every `CHANGED`/`NOT_APPLICABLE` result has an Agent assessment and safe route before reliance
 - no major ambiguity
 - stories independently testable
 - acceptance criteria measurable
@@ -1010,7 +1018,7 @@ Write:
 Rules:
 
 - load `spec.md` and require a current Feature Context Snapshot before creating or revising Tasks
-- map every Task to a Product Slice responsibility/acceptance, an accepted ADR Design Slice, or an explicit technical prerequisite for a named later vertical Product Slice
+- map every Task to the accepted Feature boundary/acceptance, an applicable Product Slice responsibility, an accepted ADR Design Slice, or an explicit technical prerequisite for a named later vertical slice
 - default to vertical slices / tracer bullets
 - each normal task should form a narrow verifiable loop through the necessary layers
 - allow horizontal foundation tasks only when a verifiable product slice is not yet possible
@@ -1178,7 +1186,7 @@ Rules:
 - if technical design changes shared or project-level design, repeat Design Readiness and return to Decision & Design before plan execution
 - if the effective requirement source changed or an applicable ADR is `review-required`, stop before Plan and return to Decision & Design compatibility review
 - if an adopted branch strategy applies, resolve Current Branch Context from the accepted Target Release Context and Git evidence; stop rather than inventing target kind, version, customer slug, source branch, or target branch
-- a planned branch name or target does not authorize create, switch, merge, delete, push, tag, release, or publish
+- a planned branch name or target does not authorize create, switch, merge, delete, push, tag, release, publish, or seal
 
 Exit:
 
@@ -1337,7 +1345,8 @@ Rules:
 - Task Auto-Run requires an accepted plan for the selected task/story
 - in Feature Auto-Loop, execute only Agent-ready tasks and stop at Human-gated tasks
 - in Task Auto-Run, execute only the selected task/story and stop after evidence/review/drift updates and Task Done Gate status update
-- behavior-changing execution requires TDD; non-behavior work records TDD as `not-applicable`
+- initial Feature behavior execution and explicit Bug behavior execution require TDD; Human-requested TDD and an accepted Plan that requires RED/GREEN remain binding, while non-behavior work records TDD as `not-applicable`
+- Review Repair remains owned by Review and does not re-enter Execute Task / Story merely to manufacture RED after the implementation already exists
 - after mandatory helper resolution, use the loaded TDD Adapter; use fallback only for recorded `unavailable` or `load-failed`, while task status and evidence remain controlled by agent-loop
 - verify RED before implementation
 - verify GREEN after implementation
@@ -1376,7 +1385,9 @@ Rules:
 - find root cause
 - form one hypothesis at a time
 - write regression test when possible
+- a failed Required Verification or Existing Test Obligation remains current diagnosis evidence and is never downgraded into a future Regression Test Advisory
 - for a canonical checker failure, preserve its exact command/output/path/digest and classify `artifact-invalid | environment-invalid | checker-defect-candidate | unresolved` before changing checker or artifact logic
+- before proposing Checker repair, apply Agent Checker Rescue Level 1/2/3 to the exact canonical failure and exact rerun: continue only inside existing authorization with complete independent evidence, use `accepted-for-this-gate` only inside one already-required Human Gate, and stop on every Level 3 safety/semantic/verification/authorization boundary
 - reduce a checker candidate to a published-authority-backed positive fixture and negative controls; read-only diagnosis may continue without interruption
 - present the exact Temporary Checker Repair Review before any checker/support-file write; use an isolated temporary copy by default and require a separate in-place installed-Skill authorization
 - verify the unmodified copied checker produces RED, then the minimal patch produces GREEN while negative controls still fail
@@ -1413,6 +1424,8 @@ Rules:
 - run fresh verification
 - read output
 - record evidence
+- after a Repair-First write, run failure-matched fresh targeted verification and affected existing checks; proof collected before the write is stale for the repaired behavior
+- distinguish proof required for the current claim from an Additional Regression Test that would add future protection; missing current proof or an Existing Test Obligation blocks completion, while the additional recommendation is advisory
 - when the Feature resolves Bugs, execute the Bug Verification Matrix against the original reproduction or accepted substitute and regression/safety paths
 - after Feature evidence exists, move a related repair Bug from `in-progress` to `verifying`; do not set `closed`
 - failed Bug-specific verification returns the Bug to `in-progress` when the repair remains valid or `triaging` when Expected Behavior/diagnosis was invalidated; append the failure evidence
@@ -1442,6 +1455,14 @@ Load:
 
 - `skill-routing.md` for Stage Helper Capability Scan
 - `external-skill-adapters.md` when Stage Helper Capability Scan finds Superpowers or another code-review skill
+
+### Review Repair Fast Path
+
+For a Review finding, first classify the finding against current product, Feature, ADR, Contract, task, test, and implementation authority plus the current write authorization. When it is `within-approved-boundary`, repair the implementation first, then run fresh targeted verification and affected existing checks. Review the diff / scope / risk / rollback, record evidence in the existing Feature notes, and present a specific Regression Test Advisory or a concrete not-needed reason before continuing Review / Drift Check / Task Done / Feature Close.
+
+This fast path can write only inside the current accepted execution boundary and current authorization. A reviewer calling a local implementation issue a “bug” does not itself create Bug Management intent; explicit Bug recording, tracking, triage, or resolution intent still wins and routes to Bug Management.
+
+If product meaning, Feature definition, implementation boundary, public interface, ADR, Contract, security, data, permission, dependency, migration, architecture, authorization, rollback, or reliable verification changes, return to Gate 1, Gate 2, Decision & Design, Delivery Contract, Bug Management, Diagnose Failure, or the applicable Human Gate.
 
 Check:
 
@@ -1499,6 +1520,7 @@ Check:
 - when an adopted Branch Strategy or versioned/customer delivery applies, compare accepted Branch Strategy and Target Release Context vs feature Current Branch Context and current Git reality
 - in that applicable context, check sealed-release immutability, customer isolation, and whether any proposed cleanup has merge evidence plus separate human authorization; a confirmed simple `not-needed` path records these branch-specific checks as `not-applicable`
 - related Bug Expected Behavior, Resolution Path, Fix Feature, Status/Resolution, and verification/close evidence against Feature and Requirement/ADR/Contract authorities
+- whether every Review Repair classified `within-approved-boundary` preserves the accepted product, Feature, ADR, Contract, and execution meanings; a local implementation correction does not rewrite those accepted meanings, and any larger change returns to its owning Gate or stage
 
 Write after confirmation:
 
@@ -1572,7 +1594,7 @@ Exit:
 
 ## Submit / Integrate
 
-Entry: after Verify, Review, Drift Check, and Project Memory Update when human asks to submit, commit, prepare PR text, or package work for integration.
+Entry: after Verify, Review, Drift Check, and Project Memory Update when human asks for normal submit readiness, PR/merge/release preparation, or integration packaging. An explicit `commit` or `commit and push` request may enter the internal Full-Worktree Git Fast Path without first manufacturing those quality results, provided the Agent makes no completion or release-readiness claim.
 
 Load:
 
@@ -1585,14 +1607,15 @@ Rules:
 - before fallback submit/integrate preparation, run Stage Helper Capability Scan; when Superpowers finishing or another branch helper is available, use it only for completion options and branch hygiene
 - inspect diff and untracked files
 - separate product code changes from `agent-loop` artifact changes
-- identify unrelated dirty work
+- identify unrelated dirty work on the normal path; on Full-Worktree Git Fast Path disclose every worktree path and warning without Agent-controlled exclusion
 - if using an external finishing skill, use it only for completion options and branch hygiene; agent-loop still owns the submit gate
-- never commit, create final PR text, merge, release, publish, or claim submission readiness without human confirmation
-- a human saying "commit" starts Submit / Integrate but is not final commit approval; ask again after diff, verification, review, and drift summary
+- never commit, create final PR text, merge, release, publish, seal, or claim submission readiness without human confirmation
+- an explicit commit or commit-and-push request directly enters Full-Worktree Git Fast Path; present one lightweight Commit Confirmation of the entire-worktree summary and proposed message, without tests or code/quality Review merely for Git
 - default to prepare-only if the human has not explicitly requested commit/PR/merge
 - when an adopted Branch Strategy or versioned/customer delivery applies, run Branch Strategy Check and verify Source Branch, Branch Class, Target Release Context, Target Branch, sealed state, customer isolation, and requested Git action before asking for the final submit decision
 - for a confirmed simple `not-needed` path, record branch-specific fields as `not-applicable` and do not block Submit / Integrate because Target Release Context or Target Branch is absent
-- accepted strategy, an accepted plan, and a submit request never imply authorization for create, switch, merge, delete, push, tag, release, or publish
+- accepted strategy, an accepted plan, and a submit request never imply authorization for create, switch, merge, delete, push, tag, release, publish, or seal
+- Tag, Push, Release, Publish, and Seal keep separate Human Gate decisions. A batch review may present multiple exact Git/release actions together, but each action keeps an independent decision and precondition. A failed prerequisite stops dependent later actions.
 - temporary development-branch deletion requires merge evidence and a separate human cleanup decision; retained standard/customer aggregation branches are not cleanup candidates
 - when the Feature resolves Bugs, show Bug IDs, current Status, Bug-specific verification evidence, unresolved Bug Close Decisions, Target Release Context, and branch isolation
 - Submit/commit/push approval never closes a Bug, and Bug Close approval never authorizes Submit / Integrate
@@ -1601,6 +1624,17 @@ Rules:
 - for a conflict, inspect only its owner/direct dependencies and minimum evidence; let the Agent rewrite fact-determined meaning and ask the human only when multiple meanings remain legitimate
 - broad four-snapshot accounting and exact Plan Hash/transaction/restore gates are explicit Full Memory Audit / Recovery only
 - a resolved conflict permits only the next separately authorized Memory Commit or later Git gate; code merge, submit, auto-mode, or helper approval does not satisfy any Git gate
+
+### Full-Worktree Git Fast Path
+
+- use only for an explicit `commit` or `commit and push` request, never a readiness question or another lifecycle action
+- inspect repository/branch/HEAD/conflict/worktree facts, then show one lightweight Commit Confirmation with the complete worktree summary and proposed commit message; this is not a code/quality/Feature/verification/Drift/Completion Review
+- state `not run for this Git action; no completion or release-readiness claim` unless the Human explicitly conditioned the Git action on fresh checks
+- do not automatically run tests, Verify, code/quality Review, Drift Check, Project Memory Update, or Feature Completion Check merely for Git packaging; ask no second confirmation
+- after confirmation, run `git add -A` and confirm the index represents the entire worktree; do not exclude, restore, clean, stash, split, or discard files
+- plain `commit` authorizes Commit only; `commit and push` authorizes both in order, using the unique upstream after Commit succeeds
+- when Push destination is absent/ambiguous, finish Commit and ask only for remote/ref; stop on repository ambiguity, unresolved conflict, applicable sealed/customer policy violation, index mismatch, or command failure
+- Git permission does not prove fixed, verified, done, closed, completed, or release-ready status
 
 Write after confirmation:
 
@@ -1644,6 +1678,9 @@ Check:
 - all remaining in-scope tasks are done; skipped or deferred work was first removed through human-approved scope reconciliation
 - required tests or substitute verification recorded
 - fresh verification evidence exists
+- all Existing Test Obligations are complete
+- each Review Repair has fresh targeted verification and recorded evidence
+- Additional Regression Test recommendations and residual risk are visible; an unaccepted advisory alone does not block completion
 - Feature Close Review completed
 - feature-level Spec Review confirms product/spec/tasks/tests/acceptance and out-of-scope boundaries
 - feature-level Standards Review completed when triggered by large project, broad diff, directory or durable boundary change, security/data change, architecture change, or human request
@@ -1697,6 +1734,8 @@ Close requires:
 
 - Feature Context facts rechecked as `CURRENT`; unresolved `CHANGED` or physical `BLOCKED` stops Close and Auto Mode
 - fresh verification evidence
+- every Existing Test Obligation complete and every Review Repair supported by reliable fresh current proof
+- Additional Regression Test advice and residual risk visible when present; an unaccepted Additional Regression Test Advisory alone does not block Close
 - Feature Close Review
 - drift check
 - submit/integration status recorded if the human requested submission
