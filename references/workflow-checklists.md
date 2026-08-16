@@ -647,7 +647,7 @@ Before Execute Task / Story:
 
 - [ ] Do not execute immediately after task creation.
 - [ ] Decide whether this task/story requires construction-grade `plan.md`.
-- [ ] Scale Plan breadth by the recorded Feature Verification Profile tier (focused/standard/high-assurance); the construction-grade core is mandatory at every tier.
+- [ ] Scale Plan breadth by the recorded Feature Verification Profile tier (`focused | full | high-assurance`); the construction-grade core is mandatory at every tier.
 - [ ] A `high-assurance` Feature allows No-Plan only for documentation-only tasks.
 
 Create `plan.md` when:

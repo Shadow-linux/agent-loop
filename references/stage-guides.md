@@ -1356,7 +1356,7 @@ Rules:
 - verify RED before implementation; Proof First RED may be a newly written failing test, an existing failing test's failing run, a reproduction script with failure output, or API/UI reproduction evidence, and a new test is never manufactured solely for RED
 - verify GREEN after implementation
 - record evidence
-- during execution, watch the recorded Feature Verification Profile escalation triggers: an escalation records the trigger, old and new tier, and time in `notes.md` under `## Profile Escalation Log` and adds a Gate Drift Assessment row when applicable — both records, not just one; scope expansion still stops broader edits and returns to Human Review
+- during execution, watch the recorded Feature Verification Profile escalation triggers: an escalation records the trigger, old and new tier, and time in `notes.md` under `## Profile Escalation Log` and adds a Gate Drift Assessment row when applicable — both records, not just one; a tier raise re-binds the package (Test Design, Plan verification/rollback coverage, regression scope, Analyze Consistency) before work continues; scope expansion still stops broader edits and returns to Human Review
 - after implementation and all applicable fresh verification, set task status to `review`, not `done`
 - if only partial verification ran, keep the task `in-progress` or `blocked` and record the missing verification
 - mark task `done` only after Task Done Gate passes: evidence recorded, required review recorded, drift decision recorded, and task status linked to evidence
@@ -1432,7 +1432,7 @@ Rules:
 - record evidence
 - after a Repair-First write, run failure-matched fresh targeted verification and affected existing checks; proof collected before the write is stale for the repaired behavior
 - distinguish proof required for the current claim from an Additional Regression Test that would add future protection; missing current proof or an Existing Test Obligation blocks completion, while the additional recommendation is advisory
-- during verification, recheck the recorded Feature Verification Profile escalation triggers: a repeated failure, weak Test Oracle discovery, or an unknown regression failure escalates the tier directly to `high-assurance`; record the trigger, old and new tier, and time in `notes.md` under `## Profile Escalation Log`
+- during verification, recheck the recorded Feature Verification Profile escalation triggers: a repeated failure, weak Test Oracle discovery, or an unknown regression failure escalates the tier directly to `high-assurance`; record the trigger, old and new tier, and time in `notes.md` under `## Profile Escalation Log`, and re-bind the package to the new tier before work continues
 - when the Feature resolves Bugs, execute the Bug Verification Matrix against the original reproduction or accepted substitute and regression/safety paths
 - after Feature evidence exists, move a related repair Bug from `in-progress` to `verifying`; do not set `closed`
 - failed Bug-specific verification returns the Bug to `in-progress` when the repair remains valid or `triaging` when Expected Behavior/diagnosis was invalidated; append the failure evidence

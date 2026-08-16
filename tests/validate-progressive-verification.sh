@@ -80,8 +80,16 @@ assert_contains references/workflow-checklists.md 'Scale Plan breadth by the rec
 assert_contains references/workflow-checklists.md 'A `high-assurance` Feature allows No-Plan only for documentation-only tasks'
 assert_contains references/lightweight-change-lane.md 'public API, event, schema, persistence, product data, state flow, permission, security, credential, or trust-boundary change'
 
-# cross-surface floor anchors: shared safety categories stay routable in both surfaces
+assert_contains references/workflow-checklists.md 'Scale Plan breadth by the recorded Feature Verification Profile tier (`focused | full | high-assurance`)'
+assert_not_contains references/workflow-checklists.md 'standard/high-assurance'
+
+# cross-surface floor anchors: shared safety categories stay pinned in both surfaces
 assert_contains references/runtime.md 'auth, permission, payment, data deletion, data schema, migration, public API, security-sensitive code, or cross-module core logic'
+assert_contains references/runtime.md 'The shared lexical anchors pinned in both lists are permission, schema, public API, migration, and cross-module'
+for anchor in permission schema 'public API' migration cross-module; do
+  assert_contains references/runtime.md "$anchor"
+  assert_contains references/lightweight-change-lane.md "$anchor"
+done
 
 # anti-semantic guards: known-dangerous contradictory phrasings must not appear
 for file in SKILL.md references/runtime.md references/design.md references/stage-guides.md references/implementation-planning.md; do
@@ -283,5 +291,7 @@ run_mutation 'rebind-removed' references/runtime.md 's|A tier raise re-binds the
 run_mutation 'legacy-default-lowered' references/runtime.md 's|treat the effective tier as `full`|treat the effective tier as `focused`|'
 run_mutation 'plan-owner-sync-removed' references/implementation-planning.md '/the recorded Feature Verification Profile tier: it scales Plan breadth, never exactness/d'
 run_mutation 'lightweight-permission-trigger-deleted' references/lightweight-change-lane.md 's|public API, event, schema, persistence, product data, state flow, permission, security, credential, or trust-boundary change|public API, event, schema, persistence, product data, state flow, security, credential, or trust-boundary change|'
+run_mutation 'checklist-tier-name-corrupted' references/workflow-checklists.md 's#(`focused | full | high-assurance`)#(focused/standard/high-assurance)#'
+run_mutation 'floor-anchor-removed-from-runtime' references/runtime.md 's|data schema, migration, public API|public API|'
 
 printf 'PASS: Progressive Verification + Proof First contract is complete\n'

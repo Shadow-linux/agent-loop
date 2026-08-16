@@ -1,6 +1,6 @@
 # Proposal: Progressive Verification + Proof First
 
-状态：implemented on alpha/v1.5.7；awaiting Human release review and the archived full-validation report
+状态：implemented and validated on alpha/v1.5.7；awaiting final Human release review（验证证据：[RED baseline](../../reports/agent-loop-v1.5.7-progressive-verification-red-baseline-2026-08-16.md)；[full validation](../../reports/agent-loop-v1.5.7-progressive-verification-validation-2026-08-16.md)）
 
 目标版本：v1.5.7（alpha/v1.5.7 分支）
 
@@ -86,11 +86,11 @@ Profile Recomputed At: <Gate 2 前重算时间，可选>
 以下类目无论 Agent 自评结果如何，Profile 不得低于 `high-assurance`：
 
 ```text
-auth / permission / payment / data deletion / migration /
+auth / permission / payment / data deletion / data schema / migration /
 public API / security-sensitive code / cross-module core logic
 ```
 
-该清单与 Lightweight Change Assessment 的 Feature hard trigger 清单同源维护，实施时抽取为同一份定义避免两处分叉。
+实施说明：该清单与 Lightweight Change Assessment 的 Feature hard trigger 清单职能不同（入口路由 vs Feature 验证深度），实施后保留各自自然语言形态，通过"同一次变更同步更新"义务 + 共享锚点关键词双向断言（permission、schema、public API、migration、cross-module 在两处均为受钉锚点，语义等价项 auth≈credential/security、payment≈product data、data deletion≈persistence 一并人工复核）防止漂移；完全抽取为单一物理定义留待后续结构性变更。
 
 ### 2.5 升级触发矩阵
 
