@@ -31,7 +31,7 @@ exit=1
 
 ```text
 PASS: Progressive Verification + Proof First contract is complete
-（含沙箱对照组 + 16 个语义变异全部被捕获）
+（含沙箱对照组 + 15 个语义变异全部被捕获）
 ```
 
 ## 历史说明
@@ -40,4 +40,4 @@ PASS: Progressive Verification + Proof First contract is complete
 
 ## 结论
 
-RED 基线成立：契约测试对实施前源码失败、对实施后源码通过，且 16 个语义变异全部可被捕获。
+RED 基线成立：契约测试对实施前源码失败、对实施后源码通过，且 15 个语义变异全部可被捕获。

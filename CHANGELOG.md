@@ -2,7 +2,7 @@
 
 ## 1.5.7 — 2026-08-15
 
-_当前状态：开发中（技术验收就绪）；alpha/v1.5.7 分支实施 Progressive Verification + Proof First 提案（`docs/proposal/v1.5.x/progressive-verification-proof-first.md`），已通过 RED 基线、52 Shell + 420 Python 全量回归、16 变异契约、对抗性压测、E2E 模拟与三轮独立评审（证据存 `docs/reports/`）。等待最终 Human Review 接受与发布 Gates。_
+_当前状态：开发中（技术验收就绪）；alpha/v1.5.7 分支实施 Progressive Verification + Proof First 提案（`docs/proposal/v1.5.x/progressive-verification-proof-first.md`），已通过 RED 基线、52 Shell + 420 Python 全量回归、15 变异契约、对抗性压测、E2E 模拟与三轮独立评审（证据存 `docs/reports/`）。等待最终 Human Review 接受与发布 Gates。_
 
 ### Progressive Verification（Feature Verification Profile）
 - 新增 Feature 通道内部验证策略 Feature Verification Profile（`focused | full | high-assurance`）：Gate 1 后 package 准备期记录档位、理由、硬下限与升级触发器，Work Breakdown / Test Design / Plan / Review 强度消费档位；不是 canonical stage、message intent、status、Mode、Gate 或 artifact tree，也不治理 Lightweight Change 与 Review Repair。
@@ -45,7 +45,7 @@ _当前状态：开发中（技术验收就绪）；alpha/v1.5.7 分支实施 Pr
 
 ### 三轮复核修复与验证收尾（2026-08-16）
 - 修正 workflow-checklists 档位名笔误（standard→full）并以三档全名断言 + 变异钉住；Execute/Verify 执行面同步升档重绑要求；proposal 硬下限清单补 data schema 并记录"对齐义务 + 共享锚点（permission/schema/public API/migration/cross-module 双面断言）"实施形态。
-- 变异扩至 16 个（新增 checklist 档位名污染、runtime 下限锚点删除）。
+- 变异扩至 15 个（新增 checklist 档位名污染、runtime 下限锚点删除）。
 - 补建 RED 基线（实施前父提交 e043d69 上契约测试 exit=1）并存档报告；全量验证报告（52 Shell + 420 Python + 机械 + 压测 + E2E + 三轮评审，六域审计与已知风险）存档 `docs/reports/`；提案状态更新为 implemented and validated，awaiting final Human release review。
 
 ### 本版不包含

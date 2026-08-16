@@ -1,6 +1,6 @@
 # Proposal: Progressive Verification + Proof First
 
-状态：implemented and validated on alpha/v1.5.7；awaiting final Human release review（验证证据：[RED baseline](../../reports/agent-loop-v1.5.7-progressive-verification-red-baseline-2026-08-16.md)；[full validation](../../reports/agent-loop-v1.5.7-progressive-verification-validation-2026-08-16.md)）
+状态：implemented and validated on alpha/v1.5.7；awaiting final Human release review（验证证据：[RED baseline](../../reports/agent-loop-v1.5.7-progressive-verification-red-baseline-2026-08-16.md)；[full validation](../../reports/agent-loop-1.5.7-full-validation-2026-08-16.md)）
 
 目标版本：v1.5.7（alpha/v1.5.7 分支）
 
