@@ -86,6 +86,8 @@ assert_not_contains references/workflow-checklists.md 'standard/high-assurance'
 # cross-surface floor anchors: shared safety categories stay pinned in both surfaces
 assert_contains references/runtime.md 'auth, permission, payment, data deletion, data schema, migration, public API, security-sensitive code, or cross-module core logic'
 assert_contains references/runtime.md 'The shared lexical anchors pinned in both lists are permission, schema, public API, migration, and cross-module'
+assert_contains references/runtime.md 'not claimed as equivalences'
+assert_contains docs/proposal/v1.5.x/progressive-verification-proof-first.md '设计变更，经人类 2026-08-16 裁决批准'
 for anchor in permission schema 'public API' migration cross-module; do
   assert_contains references/runtime.md "$anchor"
   assert_contains references/lightweight-change-lane.md "$anchor"
@@ -244,7 +246,8 @@ RUBY
 build_sandbox() {
   local dir=$1
   rm -rf "$dir"
-  mkdir -p "$dir/references" "$dir/templates" "$dir/tests"
+  mkdir -p "$dir/references" "$dir/templates" "$dir/tests" "$dir/docs/proposal/v1.5.x"
+  cp "$root/docs/proposal/v1.5.x/progressive-verification-proof-first.md" "$dir/docs/proposal/v1.5.x/"
   cp "$root/SKILL.md" "$root/plugin.json" "$root/README.md" "$root/Usage.md" "$root/CHANGELOG.md" "$dir/"
   local f
   for f in runtime design stage-guides concepts document-templates validation-scenarios human-review-summary workflow-checklists skill-routing implementation-planning lightweight-change-lane; do

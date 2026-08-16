@@ -46,7 +46,7 @@ _当前状态：开发中（技术验收就绪）；alpha/v1.5.7 分支实施 Pr
 ### 三轮复核修复与验证收尾（2026-08-16）
 - 修正 workflow-checklists 档位名笔误（standard→full）并以三档全名断言 + 变异钉住；Execute/Verify 执行面同步升档重绑要求；proposal 硬下限清单补 data schema 并记录"对齐义务 + 共享锚点（permission/schema/public API/migration/cross-module 双面断言）"实施形态。
 - 变异扩至 15 个（新增 checklist 档位名污染、runtime 下限锚点删除）。
-- 补建 RED 基线（实施前父提交 e043d69 上契约测试 exit=1）并存档报告；全量验证报告（52 Shell + 420 Python + 机械 + 压测 + E2E + 三轮评审，六域审计与已知风险）存档 `docs/reports/`；提案状态更新为 implemented and validated，awaiting final Human release review。
+- 补建 RED 基线（实施前父提交 e043d69 上契约测试 exit=1）并存档报告；全量验证报告按规范文件名与 8 要素重写（总分 90/STRONG、六域评分、问题路径行号、Git 授权状态）存档 `docs/reports/`；提案 §2.4 设计变更（双清单+共享锚点替代单一物理定义）经人类 2026-08-16 裁决批准，伪等价映射删除并改为无共享词面类目的人工逐项复核义务；提案状态更新为 implemented and validated，awaiting final Human release review。
 
 ### 本版不包含
 - 不引入 `state.json` / `evidence.json` / `run.jsonl` 或任何第二套状态源；Markdown 保持单一状态源。Evidence-driven Runtime 保留为后续独立研究议题。

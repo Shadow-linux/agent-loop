@@ -90,7 +90,7 @@ auth / permission / payment / data deletion / data schema / migration /
 public API / security-sensitive code / cross-module core logic
 ```
 
-实施说明：该清单与 Lightweight Change Assessment 的 Feature hard trigger 清单职能不同（入口路由 vs Feature 验证深度），实施后保留各自自然语言形态，通过"同一次变更同步更新"义务 + 共享锚点关键词双向断言（permission、schema、public API、migration、cross-module 在两处均为受钉锚点，语义等价项 auth≈credential/security、payment≈product data、data deletion≈persistence 一并人工复核）防止漂移；完全抽取为单一物理定义留待后续结构性变更。
+实施说明（设计变更，经人类 2026-08-16 裁决批准）：该清单与 Lightweight Change Assessment 的 Feature hard trigger 清单职能不同（入口路由 vs Feature 验证深度），经人类批准保留各自自然语言形态，替代原"抽取为同一份定义"要求；防漂移机制为"同一次变更同步更新"义务 + 共享锚点关键词双向断言（permission、schema、public API、migration、cross-module 在两处均为受钉锚点）。两清单中无共享词面的类目（auth/payment/data deletion/security-sensitive code 与车道的 credential/product data/persistence/security）不声明等价关系，任一清单变更时人工逐项复核另一清单的覆盖并同次更新。抽取为单一物理定义留待后续独立提案。
 
 ### 2.5 升级触发矩阵
 
