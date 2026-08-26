@@ -1,8 +1,8 @@
 # Agent Loop Usage
 
-**版本：** 1.5.7（开发中）
+**版本：** 1.5.8（正式稳定版）
 
-Agent Loop 1.5.7 正在 `alpha/v1.5.7` 分支开发，新增 Progressive Verification（Feature Verification Profile）与 Proof First。当前正式稳定版仍为 1.5.6，稳定 tag 为 `stable-v1.5.6`。
+Agent Loop 1.5.8 是当前正式稳定版，新增零产物 Direct Edit Fast Path，以及新提议全量测试的一次一执行精确确认。稳定 tag 为 `stable-v1.5.8`。
 
 这是一份给人类使用的触发指南。你不需要记住 Agent Loop 的阶段名；只要说明目标、边界和你希望 Agent 自主推进到哪里，Agent 负责判断项目状态、选择流程、维护产物并在真正的 Human Gate 停下。
 
@@ -38,12 +38,12 @@ npx skills list -g
 
 ```bash
 # Public GitHub
-git clone --branch stable-v1.5.6 --depth 1 \
+git clone --branch stable-v1.5.8 --depth 1 \
   https://github.com/Shadow-linux/agent-loop.git \
   ~/.local/share/agent-loop-source
 
 # Private Git mirror
-git clone --branch stable-v1.5.6 --depth 1 \
+git clone --branch stable-v1.5.8 --depth 1 \
   <git-mirror-url> \
   ~/.local/share/agent-loop-source
 ```
@@ -118,12 +118,13 @@ Auto-Loop 不是无限授权。Agent 仍然必须停在需求变化、关键设�
 | 问问题、解释规则、查看状态 | Chat | 不默认创建 Requirement 或 Feature |
 | 测试、部署准备、运行、诊断、切换环境 | Operational Support | 不默认写代码或碰生产 |
 | 需求目标、范围、概念或产品行为仍在形成 | Requirements Discussion | 不提前创建 Feature |
-| 已明确、低风险、边界小、可回滚的普通非 Bug 变更 | Lightweight Change Lane | 不为了形式创建完整 Feature |
+| 真正琐碎、确定、边界极小、可回滚且能一次精确检查的普通非 Bug 变更 | Direct Edit Fast Path | 不创建卡片、Plan、新测试或逐次记忆 |
+| 已明确、低风险、可回滚，需要持久 scope/rollback/memory review 但仍可在当前会话完成的普通非 Bug 变更 | Lightweight Change Lane | 不为了形式创建完整 Feature，但保留可供意外中断恢复的执行卡；计划跨会话或 handoff 仍进入 Feature |
 | 行为/API/状态/数据/权限/安全/架构/迁移或影响不明 | Feature | 不走轻量旁路 |
 | 人类明确称为 Bug | Bug Management → Feature repair | 不把 Bug 降级成轻量 Change |
 | 代码已合并，已观察到 `.agent-loop/` 记忆冲突 | Post-Merge Memory Reconciliation | 无冲突不扫描、不写报告；有冲突只处理受影响事实 |
 
-如果 Agent 无法确定 Lightweight 与 Feature 的边界，它应零写入地给出少量真实选项、一个推荐及证据，然后问你。
+如果 Agent 无法确定 Direct Edit、Lightweight 与 Feature 的边界，它应零写入地给出少量真实选项、一个推荐及证据，然后问你。
 
 ## 项目接管、恢复与理解
 
@@ -168,8 +169,8 @@ Agent 会检查核心流程完整性，并按需要使用架构/边界图、ASCI
 这些说法都会路由到人类文档，而不是凭 Agent 记忆回答：
 
 ```text
-1.5.7 更新了什么？
-当前 1.5.7 使用的是什么流程？
+1.5.8 更新了什么？
+当前 1.5.8 使用的是什么流程？
 和 1.2.2 比有什么变化？
 现在 agent-loop 怎么用？
 ```
@@ -272,19 +273,27 @@ ADR 先用 `Effective Requirement Snapshot` 锁定已确认的 Product Definitio
 ## 做一个边界明确的小修改
 
 ```text
-把生产脚本中的旧域名替换为新域名。
-这是个小改动，用最轻但可靠的方式处理就行。
+把这个明确的文案错字改掉。
+把按钮间距从 12px 调到 16px；我可能会再试几个值，等我确认最终值后再检查一次。
 ```
 
-执行卡位于：
+Agent 先做 **Direct Edit Assessment**。只有目标已经确定，而且改动真正琐碎、确定、边界极小、可回滚、没有未知消费者，并能通过一次最终 diff + 最小匹配检查证明时，才直接修改。Direct Edit 不创建执行卡、Plan、No-Plan Decision、新测试、notes 或逐次项目记忆；失败、歧义或范围扩大时立即停止或升级。
+
+同一 accepted Feature 边界里的同一属性调参，可以先连续尝试几个可逆值。中间值不逐次测试、不逐次写卡片；你选定最终值后，Agent 才对最终 diff 做一次最小匹配检查。换了属性、目标或边界，就重新判断。
+
+下面这些即使只有一行，也不是 Direct Edit：公共 API/Schema/CLI 契约、数据或状态、角色权限、安全、迁移、外部 endpoint/环境、未知消费者，以及价格、配额、超时、重试、容量等 **business/runtime multiplier**。人类明确说是 Bug 时先走 Bug Management；需要跨会话恢复、新测试、handoff、长期观察或持久证据时，至少升级到 Lightweight Change。
+
+例如：已确认的内部文档 typo、不会影响消费者的展示文案、结构不变的单个 metadata 显示字段，可能符合 Direct Edit；“把生产脚本的旧域名换掉”必须先判断它是内部确定性引用，还是外部 endpoint/环境迁移，不能仅凭“字符串替换”走旁路。
+
+当工作仍然低风险、边界明确且可回滚，但需要持久记录时，才使用 Lightweight Change Lane。执行卡位于：
 
 ```text
 .agent-loop/changes/YYYY-MM/YYYY-MM-DD-<topic>.md
 ```
 
-它必须在第一次目标写入前记录背景、完成标准、范围、旁路理由、风险、Plan、进度、验证、回滚、Human Gates、结果和 Memory Review。明确符合轻量边界后，Agent 先应用披露的有限变更，再做新鲜、failure-matched 的 targeted verification，重跑受影响的既有检查，并复核 diff、范围、风险、回滚和记忆影响；不会为了制造 RED 而新建测试。
+Lightweight 卡必须在第一次目标写入前记录背景、完成标准、范围、旁路理由、风险、Plan、进度、验证、回滚、Human Gates、结果和 Memory Review。明确符合轻量边界后，Agent 先应用披露的有限变更，再做新鲜、failure-matched 的 targeted verification，重跑受影响的既有检查，并复核 diff、范围、风险、回滚和记忆影响；不会为了制造 RED 而新建测试。
 
-初始 Feature 实现和显式 Bug 修复仍使用 TDD。Feature Review 中已经属于 accepted boundary 的实现修正，以及明确 eligible 的 Lightweight Change，默认 repair first、fresh verify，再给出具体回归覆盖建议。Required Verification 和 Existing Test Obligation 始终是完成硬要求；只有 Additional Regression Test 是建议。
+初始 Feature 实现和显式 Bug 修复仍使用 TDD。Direct Edit 不调用 Plan/TDD helper，也不会借此取消所属 Feature/Bug 已有的测试义务。Feature Review 中已经属于 accepted boundary 的实现修正，以及明确 eligible 的 Lightweight Change，默认 repair first、fresh verify，再给出具体回归覆盖建议。Required Verification 和 Existing Test Obligation 始终是完成硬要求；只有 Additional Regression Test 是建议。
 
 例如，Agent 可以在同一轮结果中报告，不需要为建议另开 Gate：
 
@@ -296,7 +305,7 @@ ADR 先用 `Effective Requirement Snapshot` 锁定已确认的 Product Definitio
 这些 Additional Regression Tests 不替代上述 Required Verification，也不会自行创建新 Gate。
 ```
 
-以下任一情况升级 Feature：公共接口、数据、状态、权限、安全、架构、依赖、迁移、未知消费者、跨会话计划、handoff/subagent、长期观察、复杂证据或范围扩大。
+以下任一情况升级 Feature：公共接口、数据、状态、权限、安全、架构、依赖、迁移、未知消费者、复杂业务/runtime 参数、handoff/subagent、长期观察、复杂证据或范围扩大。跨会话恢复首先使 Direct Edit 失效；是否用 Lightweight 或 Feature 再按影响判断。
 
 三张 `completed + Memory Review: pending` 卡，或最早 pending 超过七个完整日历日，会触发 Agent 主动整理稳定项目事实。高置信度事实可在精确披露 owner、证据和 rollback 后写入现有可靠记忆；语义不确定时保留给人类确认。
 
@@ -398,7 +407,19 @@ Bug 与 Requirement 是可选多对多关系。产品含义不清时回到 Requi
 这个操作已经重复做过几次了，看看能不能整理成项目里的固定能力。
 ```
 
-Operational Support 默认先只读检查代码、配置、脚本、部署流程和环境事实。需要代码变更时再路由 Lightweight、Feature 或 Bug；不会用“运维”名义绕过写入门禁。
+Operational Support 默认先只读检查代码、配置、脚本、部署流程和环境事实。需要代码变更时先做 Direct Edit Assessment，再按证据路由 Lightweight、Feature 或 Bug；不会用“运维”名义绕过写入门禁。
+
+### 让 Agent 跑一次全量测试
+
+如果 focused 检查已经足够，而 Agent 新建议跑完整 Shell/Python matrix、六域 full validation 或 release suite，它会先展示 exact commands、repository/branch/HEAD、当前 dirty 输入边界、OS/target、预计时间/资源和要支撑的结论。你确认一次，只授权执行这一个具体集合一次：
+
+```text
+按你刚刚列出的命令、当前 HEAD 和当前工作区，执行这一次全量测试。
+```
+
+Feature Verification Profile、实现授权、`commit`、旧测试结果或“跑必要测试”都不是可复用的全量授权。相关输入/HEAD、命令、环境或 target 变化，以及失败、中断或手动重跑，默认都要重新确认；只有同一人类决定预先给出 an explicitly bounded retry count and condition，且输入仍完全匹配时，才可按该边界重试。如果 Gate 2 已经列明同一套命令和 clearly bound final-input rule，并且你接受了 package-and-start，第一次匹配执行不会重复询问。
+
+可选全量被拒绝时，Agent 保留 focused 证据并收窄完成结论，不会因此自动阻止一个独立的 Commit。发布硬要求的全量被拒绝时，Release 和 release-readiness 保持阻塞。
 
 ### 临时修正 Agent Loop Checker
 
@@ -665,6 +686,8 @@ Target 是当前理解的起点，不是永远正确的一方；Source 经验已
 明确要求 commit 或 commit and push 时，Agent 只展示一次轻量 Commit Confirmation：仓库、branch/HEAD、全部 staged/unstaged/untracked/deleted 变更摘要、风险提示、Agent 拟定的 commit message，以及 Push 被请求时的精确 remote/ref。这不是代码或质量 Review，也不会触发测试。人类接受后，Commit 使用 `git add -A` 纳入整个工作区；Agent 不会自行 exclude、restore、clean、stash、split 或 discard 文件。缓存、生成物或疑似敏感文件只会被显著提示，是否调整范围由人类决定。
 
 如果没有附加条件，本次 Git 动作不会运行测试，记录为 `not run for this Git action; no completion or release-readiness claim`。如果人类明确说“测试通过后提交”，测试才成为精确前置条件。Commit 和 Push 可以在同一次轻量确认中授权，但仍按 Commit 成功后再 Push 的顺序执行；Commit 不自动授权未请求的 Push，任何未列出的 PR、merge、tag、release、publish、seal、deploy、close 或 cleanup 也不获授权。
+
+当 Push 会按仓库配置自动触发 CI 时，Agent 会提前披露大致 workflow/target，不会为了 Push 再在本地重复同一套全量。自动 CI 失败后的 manual rerun/workflow dispatch 是新的外部动作，需要展示 exact workflow/ref/inputs 并重新确认；只有同一决定已经给出 an explicitly bounded retry count and condition，且 workflow/ref/inputs 未变时，才可复用该精确边界。可选全量被拒绝不自动阻止 Commit；仓库要求的 release full validation 被拒绝时，Release 和 release-readiness 仍然阻塞。
 
 确认后立即执行 `git add -A`；若执行前发现 branch、冲突状态或工作区事实已经变化，则停止并刷新轻量确认。Commit/Push 失败时保留 worktree/index 并报告，不通过 reset/clean/restore/stash 隐藏问题。Git 成功也不等于 Feature 已验证、完成、关闭或可发布。
 

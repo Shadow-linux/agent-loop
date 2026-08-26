@@ -2,6 +2,8 @@
 
 Use this file when a selected task/story needs `plan.md` or a dated plan cycle under `plans/`.
 
+Direct Edit Fast Path never creates a Plan or No-Plan Decision. It discloses target/correction/minimum-check/rollback response-locally, applies only the bounded edit, and exits the path if durable planning or new test design is needed.
+
 A Lightweight Execution Card is not a Feature `plan.md` and does not enter Plan Gate.
 
 Its Plan is persisted inside the monthly card, bounded to the disclosed change, and exact enough to expose progress, targeted verification, diff review, memory impact, and rollback. It does not enter the Feature Plan Gate or external `writing-plans` path. Construction-grade zero-context planning remains mandatory for Feature tasks under the existing triggers. No-Plan Decision is Feature-task-only and is never used by Lightweight Change Lane.

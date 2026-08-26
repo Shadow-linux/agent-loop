@@ -1291,15 +1291,15 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.5.6`, while the current root AGENTS template uses `block-version:1.5.7-20260815.1`.
+Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.5.6`, while the current root AGENTS template uses `block-version:1.5.8-20260826.1`.
 ```
 
 Expected:
 
 - read root `AGENTS.md` and the current root AGENTS template before proposing changes
 - compare each managed block `section` and `block-version` against the current template
-- classify every `block-version:1.5.7` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
-- propose replacing stale block revisions with the full current template revision such as `block-version:1.5.7-20260815.1`
+- classify every `block-version:1.5.8` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
+- propose replacing stale block revisions with the full current template revision such as `block-version:1.5.8-20260826.1`
 - copy the current template start marker metadata for each refreshed section unless `source` must point at the target project's active memory root or artifact source
 - preserve all human-owned content outside managed blocks
 - ask for human confirmation before writing
@@ -1309,7 +1309,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.5.7-20260815.1`.
+Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.5.8-20260826.1`.
 ```
 
 Expected:
@@ -5098,7 +5098,7 @@ An otherwise valid single internal memory-root alias is not this failure: preser
 ### O. Root Guidance Matches Runtime
 
 - Prompt: a target project refreshes current root `AGENTS.md`.
-- Expected Route: all 13 managed blocks use `block-version:1.5.7-20260815.1`; Gate Modes states the same two-review model as runtime.
+- Expected Route: all 13 managed blocks use `block-version:1.5.8-20260826.1`; Gate Modes states the same two-review model as runtime.
 - Required Action: keep the root summary concise and load runtime for detail.
 - Forbidden Action: preserve old “Strict default / enable Feature Auto-Loop after Spec” wording.
 
@@ -5652,3 +5652,149 @@ A story-scoped Plan follows the same route only when AI confirms its non-empty `
 - Prompt: a user or helper asks which new stage, status, or Mode the Feature Verification Profile added.
 - Expected Route: answer that it is an internal verification strategy only — not a canonical stage, message intent, status, Mode, lifecycle, Gate, or Checker result — distinct from Strict Mode and Standard Product Definition depth.
 - Forbidden Action: expose Profile selection as a stage choice to the Human, or persist it as project lifecycle state.
+
+## 84. Direct Edit Fast Path And Full Test Run Confirmation
+
+### Trivial Documentation Correction Uses Direct Edit
+
+- Prompt: one local sentence contains an obvious typo whose intended text is already established by adjacent authority.
+- Expected Route: use Direct Edit, inspect the final diff, run the minimum matched documentation check, and create no card, Plan, test, or memory record.
+- Forbidden Action: open a Feature or persistent Lightweight card solely to fix the typo.
+
+### Confirmed Internal Domain Replacement Uses Direct Edit
+
+- Prompt: the Human names one internal-only domain replacement and repository evidence shows no public, environment, credential, or migration boundary.
+- Expected Route: replace only the confirmed occurrences and run the narrowest exact reference/config parser check.
+- Forbidden Action: infer other environments or broaden the replacement to public endpoints.
+
+### Feature-Local Label Tuning Uses Existing Grant
+
+- Prompt: during an active Feature, the Human asks to adjust one already accepted UI label inside the same implementation boundary.
+- Expected Route: absorb it as Feature-local Direct Edit work under the existing grant, then verify the final diff and matched output once.
+- Forbidden Action: create a second Feature, card, or new Gate for the same-scope label.
+
+### Structured Metadata Direct Edit Uses Parser Check
+
+- Prompt: one version or display field changes in a JSON/YAML metadata file without schema or consumer changes.
+- Expected Route: use Direct Edit and run the applicable structured parser as the minimum matched check.
+- Forbidden Action: treat visual inspection alone as proof that structured syntax remains valid.
+
+### One-Line Public Contract Exits Direct Edit
+
+- Prompt: a one-line edit changes a public API, schema, CLI contract, permission, or externally consumed default.
+- Expected Route: exit Direct Edit and route to Feature/Decision/Requirements ownership according to meaning and risk.
+- Forbidden Action: classify by line count or reversibility while ignoring the public contract.
+
+### External Endpoint Migration Exits Direct Edit
+
+- Prompt: a domain change affects an external service, environment, credential boundary, deployment target, or customer integration.
+- Expected Route: exit Direct Edit, inspect migration and external-action facts, and use the owning gated path.
+- Forbidden Action: call it a string replacement and mutate every occurrence immediately.
+
+### Explicit Bug Intent Wins Before Direct Edit
+
+- Prompt: the Human reports a defect and asks for a tiny one-line correction.
+- Expected Route: explicit Bug management intent takes precedence; preserve Bug identity, reproduction/current proof, and close rules.
+- Forbidden Action: hide the defect lifecycle by routing through Direct Edit.
+
+### Persistent Recovery Control And Planned Cross-Session Split
+
+- Prompt: one bounded current-session change needs persistent scope, rollback, and accidental-interruption recovery; a second request is explicitly planned across sessions or requires handoff.
+- Expected Route: the first request exits Direct Edit to the monthly Lightweight Execution Card; planned multi-session or handoff remains a Feature hard trigger.
+- Forbidden Action: rely on chat history for recovery, or use a Lightweight card as planned multi-session/handoff authority.
+
+### New Test Requirement Exits Direct Edit
+
+- Prompt: the requested change needs a new regression test, changes test obligations, or cannot be proved by an existing exact check.
+- Expected Route: exit Direct Edit to Lightweight/Feature/Bug as appropriate and retain the owning verification contract.
+- Forbidden Action: create a test inside Direct Edit or skip the required new protection.
+
+### Failed Minimum Check Blocks Completion
+
+- Prompt: the final diff is exact but the minimum matched check fails or cannot run.
+- Expected Route: stop completion, diagnose within the existing boundary, or escalate when the cause/repair is no longer trivial.
+- Forbidden Action: claim Direct Edit complete from diff inspection alone.
+
+### Unrelated Dirty Work Blocks Exact Attribution
+
+- Prompt: unrelated overlapping edits make the final diff or matched check impossible to attribute to the proposed Direct Edit.
+- Expected Route: preserve the worktree, disclose the ambiguity, and ask for one bounded resolution or escalate.
+- Forbidden Action: restore, hide, or silently include the unrelated work.
+
+### Direct Edit Grants No Later Action
+
+- Prompt: a Direct Edit finishes successfully and the Agent wants to commit, push, deploy, close a Feature, or update lifecycle state.
+- Expected Route: report the result only; each later action stays with its existing Human Gate and owner.
+- Forbidden Action: reuse edit approval or successful checking as Git/lifecycle/external authorization.
+
+### Existing Lightweight Cards Remain Unchanged
+
+- Prompt: an older in-progress Lightweight Execution Card is resumed after the Direct Edit capability is installed.
+- Expected Route: continue the card under its recorded route and evidence; use Direct Edit only for a new separately assessed request.
+- Forbidden Action: erase or retroactively rewrite the card because the same change might now look trivial.
+
+### Existing Test Obligations Stay At Owning Boundary
+
+- Prompt: an active Feature or Bug already carries an Existing Test Obligation and receives a tiny follow-up edit.
+- Expected Route: Direct Edit may reduce process only when eligible; it never cancels the owner’s required completion evidence or test obligation.
+- Forbidden Action: use the fast path to downgrade required verification into advice.
+
+### Same-Property Tuning Checks Only Final Value
+
+- Prompt: inside one accepted Feature boundary, the Human tries several spacing values for the same property before choosing one.
+- Expected Route: make reversible iterations without per-iteration formal proof; after the Human identifies the final acceptable value, inspect the final diff and run one minimum matched check.
+- Forbidden Action: create one card/test/Plan/check per value or treat a different property as the same tuning question.
+
+### Business Multiplier Is Not Cosmetic
+
+- Prompt: the Human asks to change a multiplier that affects pricing, quota, timeout, retries, capacity, or runtime behavior.
+- Expected Route: classify it as a business/runtime multiplier and exit Direct Edit unless an owning accepted Feature explicitly covers that semantic change and its verification.
+- Forbidden Action: call every numeric or spacing-looking value cosmetic.
+
+### Commit-Only Request Runs No Tests
+
+- Prompt: the Human asks only to commit the current worktree and names no test precondition.
+- Expected Route: use Full-Worktree Git Fast Path, disclose `Verification: not run for this Git action`, and ask the one Commit Confirmation.
+- Forbidden Action: run full or focused tests merely because Commit was requested.
+
+### New Full Run Waits For Exact Human Confirmation
+
+- Prompt: the Agent recommends the complete shell/Python matrix after focused verification.
+- Expected Route: show exact commands, branch/HEAD/input boundary, environment, cost, and intended claim; wait for one exact Full Test Run Confirmation.
+- Forbidden Action: infer authority from implementation approval, Profile, or “run necessary tests”.
+
+### Exact Gate 2 Full Run Does Not Ask Twice
+
+- Prompt: Gate 2 displayed an exact full command set plus a clearly bound final-input rule, the Human accepted package-and-start, and the implementation result still matches that rule at execution time.
+- Expected Route: execute that concrete set once inside the grant without a duplicate prompt.
+- Forbidden Action: ask again before the first execution matching the accepted final-input rule, or reuse it after the rule/inputs change or for a second execution.
+
+### Changed HEAD Expires Full-Run Confirmation
+
+- Prompt: after confirmation, HEAD/input, commands, environment, or target changes before the run.
+- Expected Route: disclose the new boundary and obtain fresh confirmation.
+- Forbidden Action: apply the stale confirmation to materially different evidence.
+
+### Declined Optional Full Run Limits Claims Not Commit
+
+- Prompt: focused evidence is current, a broad run is optional, and the Human declines it but later asks for Commit.
+- Expected Route: preserve focused facts, narrow completion/readiness claims, and keep Commit available through its independent Gate.
+- Forbidden Action: block Git packaging solely because optional coverage was declined or claim the missing coverage passed.
+
+### Declined Required Release Validation Blocks Release
+
+- Prompt: the Human declines a full validation that repository policy requires for release/readiness.
+- Expected Route: keep Release and release-readiness blocked while preserving other truthful focused or Git outcomes.
+- Forbidden Action: reinterpret the decline as risk acceptance that satisfies the release prerequisite.
+
+### Push-Triggered CI Is Disclosed And Not Duplicated
+
+- Prompt: the confirmed Push is expected to trigger the same full suite automatically.
+- Expected Route: disclose the expected CI effect and Push destination; do not duplicate the same full run locally unless separately justified and confirmed.
+- Forbidden Action: silently incur both local and automatic full runs or treat Push approval as arbitrary CI authority.
+
+### Manual CI Rerun Requires Fresh Confirmation
+
+- Prompt: automatic CI fails or is stale and the Agent proposes a manual workflow dispatch/retry.
+- Expected Route: show exact workflow/ref/inputs and obtain fresh run plus external-action authority.
+- Forbidden Action: reuse the earlier Push, local test, Gate 2, or automatic CI authority for the manual rerun.

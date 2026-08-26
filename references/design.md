@@ -42,13 +42,15 @@ The core constraints are:
 - stable Web E2E capability belongs in `project.md`; feature-specific E2E cases belong in feature `tests.md` or `tests/e2e/*`
 - `requirements/` stores human source material packages and requirement lifecycle/backlog records as requirement set directories: requirements, prototypes, feedback, screenshots, recordings, links, follow-up notes, status, and optional `requirements/INDEX.md`
 - Human-Guided Bug Management is an internal method of `Feature Follow-up / Flow-back`, not a canonical stage or message intent
-- Lightweight Change Lane is an internal route before Feature construction for bounded ordinary non-Bug changes; it is not a canonical stage, message intent, Feature Type, Bug Resolution Path, lifecycle, status, or Auto Mode
+- Direct Edit Fast Path is a zero-artifact internal method before persistent Lightweight Change for genuinely trivial deterministic ordinary non-Bug edits; it requires a final exact diff and one minimum artifact-matched check, adds no test or per-edit memory, and exits on any semantic, persistence, coordination, or proof trigger
+- Lightweight Change Lane is the persistent internal route after Direct Edit is ineligible and before Feature construction for bounded ordinary non-Bug changes; it is not a canonical stage, message intent, Feature Type, Bug Resolution Path, lifecycle, status, or Auto Mode
 - Lightweight Execution Card is one persistent per-change execution source under `<memory-root>/changes/YYYY-MM/YYYY-MM-DD-<topic>.md`, with required background, adaptive Plan, progress, targeted verification, rollback, gate, result, and Memory Review fields; it creates no shared backlog or Archive lifecycle
 - Repair-First Verification is the default internal method for a `within-approved-boundary` Review correction and a `clearly eligible` Lightweight Change; it changes implementation order without creating authorization, a stage, status, mode, Gate, Checker result, or artifact family
 - Full-Worktree Git Fast Path is an internal Submit / Integrate method for an explicit `commit` or `commit and push` request: after one lightweight confirmation of the entire current worktree and proposed commit message, package it with `git add -A`, with no code/quality Review or tests merely for Git and no conversion of Git permission into completion evidence
 - Required Verification proves the current result, Existing Test Obligation preserves accepted tests and Human commitments, and Additional Regression Test is future protection advised only after current proof exists
 - Adaptive Depth lets the Agent vary Plan and test detail by real risk while fresh verification, affected existing checks, diff review, rollback, scope control, memory impact, and Human Gates stay fixed
-- Feature Verification Profile is an internal Feature-lane verification strategy recorded during package preparation after Gate 1: `focused | full | high-assurance` with recorded rationale, hard floors for safety-relevant categories, and time-bounded escalation rules; it is not a Mode, stage, status, lifecycle, Gate, or new authorization, and it never governs Lightweight Change or Review Repair
+- Feature Verification Profile is an internal Feature-lane verification strategy recorded during package preparation after Gate 1: `focused | full | high-assurance` with recorded rationale, hard floors for safety-relevant categories, and time-bounded escalation rules; it is not a Mode, stage, status, lifecycle, Gate, or new authorization, and it never governs Direct Edit, Lightweight Change, or Review Repair
+- each newly proposed repository-wide full run is a separately confirmed response-local execution: exact command/target/branch/full HEAD/input/environment/cost/claim, one confirmation for one execution, expiry on relevant change or manual rerun, and no duplicate prompt for an unchanged exact run already explicitly accepted
 - Proof First widens only the RED evidence definition without renaming TDD: a credible, reviewable failure-matched proof may come from a new test, an existing failing test, a reproduction script, or API/UI reproduction evidence; GREEN still requires fresh failure-matched proof after the change, and Existing Test Obligations are unchanged
 - `bugs/INDEX.md` owns Bug inventory/backlog/locator state, while each Bug README owns stable identity, facts, evidence, lifecycle, Resolution Path, verification, close, and reopen history
 - Bug Report, Bug Record, Report Origin, Expected Behavior Evidence, Status, Resolution, and Reopen are distinct; Bug Status and Resolution form independent axes
@@ -91,10 +93,13 @@ The core constraints are:
 Human Goal
 → [internal] Branch Strategy Check when branch rules, target version, or customer isolation affect safe delivery
 → Operational Support when the goal is to use/run/test/deploy current project behavior without confirmed implementation
-→ [internal] Lightweight Change Assessment and persistent monthly card for bounded ordinary non-Bug local changes before Feature construction
+→ [internal] Direct Edit Assessment for genuinely trivial deterministic ordinary non-Bug edits
+  → zero artifact/new test, final exact diff + minimum matched check
+  → otherwise Lightweight Change persistent card or Feature/Bug route
 → Project Skill Creation / Update when a repeatable project workflow should become a durable local capability
 → Feature Workspace
 → Task / Test / Plan
+→ [internal] Full Test Run Confirmation before every newly proposed broad execution
 → Execute / Verify
   → [internal] Agent Checker Rescue Level 1 / 2 / 3 classification
   → [internal] Checker Self-Repair only when corrected executable Checker evaluation is necessary
@@ -111,13 +116,27 @@ Human Goal
 → Resume / Pause / Close
 ```
 
+## Direct Edit Fast Path Invariant
+
+**Direct Edit Fast Path** is an internal execution method, not a stage, message intent, status, lifecycle, Mode, artifact family, or authorization. Explicit Bug intent wins; active Feature ownership keeps an eligible edit inside the current Feature write grant. Ordinary non-Bug work enters Direct Edit Assessment before persistent Lightweight Change.
+
+Eligibility is all-of: exact decided result and targets, bounded consumers, no new product/technical/data/state/permission/security/interface/dependency/migration/architecture meaning, no external effect, immediate inverse-diff rollback, one inexpensive credible proof, current-session completion, exact dirty-diff attribution, and sufficient current evidence. Any missing condition routes to Lightweight Change, Feature/Bug, or zero-write Human Choice.
+
+The method discloses target/correction/check/rollback, applies only the bounded edit, inspects its final exact diff, and runs the cheapest artifact-matched check. It creates no Feature, card, Plan, No-Plan Decision, new test, RED, notes row, scanner entry, Memory Review, project-memory write, or regression advisory solely for that edit. Same-scope Feature presentation tuning receives no intermediate formal check; after the Human chooses the final value, run one final diff/check and keep the owning Feature's existing verification due. Display-only multipliers may qualify; business/runtime multipliers do not.
+
+## Full Test Run Confirmation Invariant
+
+Targeted and affected evidence is default. Every newly proposed repository-wide suite, all-packages/project E2E/environment run, or six-domain full validation requires one Human-visible response-local confirmation of the exact command set, repository/target, branch/full HEAD, relevant input/environment, expected cost/effects, and supported claim. One confirmation covers one unchanged execution; command/target/HEAD/input/environment change, Gate exit, or manual rerun expires it unless the Human explicitly bounded a retry policy.
+
+An explicit current Human instruction or Gate 2 decision row that visibly accepts the same exact full run is already confirmation and must not be prompted twice. A Feature Verification Profile label alone is not permission. Commit never implies tests; declining an optional full run limits claims without revoking a separate Commit grant. Push approval covers disclosed automatic full CI without a duplicate local full run, while manual CI rerun is new execution. Declining Release-required full validation blocks Release/readiness rather than waiving evidence.
+
 ## Full-Worktree Git Fast Path Invariant
 
 **Full-Worktree Git Fast Path** is an internal Submit / Integrate method, not a canonical stage, message intent, lifecycle, status, artifact family, or blanket Git authorization. When the Human explicitly asks for `commit` or `commit and push`, the Agent presents exactly one lightweight Commit Confirmation containing the entire-worktree summary and proposed commit message. It is not a code/quality/Feature/verification/Drift/Completion Review, and no second confirmation is added.
 
 The Commit scope includes staged, unstaged, untracked, and deleted Git-visible content. The Agent does not exclude, restore, clean, stash, split, or discard files on its own. It runs `git add -A`, checks that the index represents the entire worktree, and commits with a supplied or repository-compliant generated message.
 
-The path does not automatically run tests, Verify, code/quality Review, Drift Check, Feature Completion Check, or Project Memory Update merely because Git was requested. Existing evidence may be reported with its real age, and the default truth is `not run for this Git action; no completion or release-readiness claim`. Git packaging permission is not completion evidence: Task Done, Feature Close, release readiness, and claims such as fixed, verified, or complete retain every existing evidence obligation. A Human condition such as “commit after tests pass” becomes an exact precondition and must be satisfied before the lightweight confirmation.
+The path does not automatically run tests, Verify, code/quality Review, Drift Check, Feature Completion Check, or Project Memory Update merely because Git was requested. Existing evidence may be reported with its real age, and the default truth is `not run for this Git action; no completion or release-readiness claim`. Git packaging permission is not completion evidence: Task Done, Feature Close, release readiness, and claims such as fixed, verified, or complete retain every existing evidence obligation. A Human condition such as “commit after tests pass” becomes an exact precondition satisfied by the smallest applicable test set unless an exact full run is separately confirmed. Push review discloses predictable automatic full CI; its exact approval covers that CI without a duplicate local full run.
 
 Plain `commit` authorizes Commit only; `commit and push` authorizes both operations in order. Commit failure stops Push, while an ambiguous upstream blocks only Push and asks for its destination after the local Commit. An ambiguous repository, unresolved Git conflict, applicable sealed/customer-isolation violation, index mismatch, or failed Git command stops without reset, clean, restore, stash, or silent scope repair.
 
@@ -208,7 +227,9 @@ After Gate 2 accepts the execution boundary and supplies a current Feature write
 
 **Requirement**: human-provided need, goal, document, or natural-language request.
 
-**Lightweight Change Lane**: bounded non-Bug execution route before Feature construction. Explicit Bug Management and active Feature ownership take precedence; hard triggers use Feature, and uncertain impact returns to Human Choice before writes.
+**Direct Edit Fast Path**: zero-artifact internal method for an already-decided genuinely trivial deterministic ordinary non-Bug edit. It adds no Plan, test, per-edit note, scanner row, or project memory, but always inspects the final exact diff and runs one minimum artifact-matched check. Any semantic, persistence, coordination, unknown-impact, authorization, or proof trigger exits the method.
+
+**Lightweight Change Lane**: persistent bounded non-Bug execution route after Direct Edit is found ineligible because control/recovery evidence is needed. Explicit Bug Management and active Feature ownership take precedence; hard triggers use Feature, and uncertain impact returns to Human Choice before writes.
 
 **Lightweight Execution Card**: persistent per-change background, goal, scope, rationale, risk, Plan, progress, verification, rollback, Human Gate, result, and Memory Review control under the active memory root's `changes/YYYY-MM/YYYY-MM-DD-<topic>.md`. The card file is the execution source of truth; it is not a Feature `plan.md`, shared backlog, long-term project-memory owner, or authorization for later actions.
 
@@ -226,7 +247,9 @@ After Gate 2 accepts the execution boundary and supplies a current Feature write
 
 **Adaptive Depth**: Agent-owned risk-based selection of card detail, Plan steps, targeted verification, and future regression protection. It never reduces safety, scope, fresh proof, affected existing checks, rollback, evidence, memory, or action-specific gate invariants.
 
-**Feature Verification Profile**: the recorded, auditable application of Adaptive Depth inside the Feature lane: a three-tier verification strategy (`focused | full | high-assurance`), decided during package preparation after Gate 1 and consumed by Work Breakdown, Test Design, Plan, and Review intensity. It scales Plan depth, test depth, regression scope, and review strength by recorded risk, carries hard floors so safety-relevant categories can never be rated below `high-assurance`, is presented at Gate 2, auto-escalates during execution with recorded evidence, and requires a Human decision for any post-Gate 2 downgrade. Before Gate 2 acceptance the Agent may recompute it from new evidence. It is not a Mode, stage, status, lifecycle, or authorization, and it does not govern Lightweight Change or Review Repair.
+**Feature Verification Profile**: the recorded, auditable application of Adaptive Depth inside the Feature lane: a three-tier verification strategy (`focused | full | high-assurance`), decided during package preparation after Gate 1 and consumed by Work Breakdown, Test Design, Plan, and Review intensity. It scales Plan depth, test depth, regression scope, and review strength by recorded risk, carries hard floors so safety-relevant categories can never be rated below `high-assurance`, is presented at Gate 2, auto-escalates during execution with recorded evidence, and requires a Human decision for any post-Gate 2 downgrade. Before Gate 2 acceptance the Agent may recompute it from new evidence. It is not a Mode, stage, status, lifecycle, authorization, or reusable full-run grant, and it does not govern Direct Edit, Lightweight Change, or Review Repair.
+
+**Full Test Run Confirmation**: response-local Human decision for one newly proposed broad test/validation execution, bound to exact command, repository/target, branch/full HEAD, relevant input/environment, cost/effects, supported claim, and expiry. It creates no durable authorization artifact and never replaces another Gate.
 
 **Proof First**: the RED evidence definition for TDD paths. RED accepts any credible, reviewable failure-matched proof: a new test, an existing failing test, a reproduction script, or API/UI reproduction evidence; a new test is never manufactured solely to produce RED. RED proof must be re-executed against the current code state before implementation — a historical failure log alone is intake evidence, not RED. New Feature work prefers Behavior Proof First and explicit Bug repair prefers Reproduction First. GREEN still requires fresh failure-matched proof after the change, Required Verification and Existing Test Obligations remain mandatory, and only protection beyond those obligations becomes an Additional Regression Test advisory.
 
@@ -532,7 +555,7 @@ Condition:
 
 ```text
 Explicit Bug management intent, defect/regression/QA/post-close evidence, changed accepted behavior, or clear Feature ownership indicates follow-up
-Generic adjustment wording alone does not enter Feature Follow-up; route an actionable ordinary non-Bug change through Lightweight Change Assessment first.
+Generic adjustment wording alone does not enter Feature Follow-up; route an actionable ordinary non-Bug change through Direct Edit Assessment first, then Lightweight Change when persistence/control is needed.
 .agent-loop/ or legacy agent-loop/ memory exists
 ```
 
@@ -645,13 +668,19 @@ For an actionable ordinary non-Bug local change before Feature construction, use
 
 ```text
 Explicit Bug Management / active Feature ownership first
-→ Lightweight Change Assessment
-  → clearly eligible: persistent monthly card before target writes, bounded edit first, fresh targeted verification, affected existing checks, diff/rollback/memory review, then specific regression advice
+→ Direct Edit Assessment
+  → every condition true: zero artifact/new test; bounded edit; final exact diff + minimum matched check
+  → persistence/control needed: Lightweight Change Assessment
+    → clearly eligible: persistent monthly card before target writes, bounded edit first, fresh targeted verification, affected existing checks, diff/rollback/memory review, then specific regression advice
+    → Feature trigger: normal Feature construction
+    → uncertain: Human Choice with one Agent recommendation and zero writes
   → Feature trigger: normal Feature construction
   → uncertain: Human Choice with one Agent recommendation and zero writes
 ```
 
-Eligibility is all-of; Feature hard triggers are any-of. The lane reduces ceremony and document depth, not accuracy, scope control, verification strength, rollback, fact review, or Human Gates. Affected existing checks remain required when available. Clearly eligible work applies the disclosed bounded change first, runs failure-matched fresh proof, reviews scope/risk/rollback/memory impact, and records a specific Regression Test Advisory or not-needed reason. Scope expansion stops before broader edits and returns to Human Review. Promotion to initial Feature execution or explicit Bug repair restores normal TDD.
+Direct Edit eligibility is all-of and its hard triggers are any-of. It removes persistence and test construction, not the final proof: disclose the exact target/correction/check/rollback, apply the bounded edit, inspect the exact attributed diff, and run one minimum artifact-matched check. A new-test-only proof, durable recovery need, scope expansion, unknown consumer, or semantic/risk boundary exits Direct Edit.
+
+Lightweight eligibility is also all-of; Feature hard triggers are any-of. The lane reduces ceremony and document depth, not accuracy, scope control, verification strength, rollback, fact review, or Human Gates. Affected existing checks remain required when available. Clearly eligible card work applies the disclosed bounded change first, runs failure-matched fresh proof, reviews scope/risk/rollback/memory impact, and records a specific Regression Test Advisory or not-needed reason. Scope expansion stops before broader edits and returns to Human Review. Promotion to initial Feature execution or explicit Bug repair restores normal TDD.
 
 The card is created under the one accepted logical memory root at `changes/YYYY-MM/YYYY-MM-DD-<topic>.md` before the first target write. A verified internal root alias keeps that logical path; broken/cyclic/external/file aliases and dual roots fail closed. A changes-only root does not prove initialization; a unique legacy root is reused. The creation month is stable and not Archive. Same-day collisions use the first unused numeric topic suffix without overwrite. There is no Change README, INDEX, archive, move, rehydrate, restore transaction, scheduler, shared counter, new canonical stage, or helper-native document tree.
 
@@ -683,6 +712,7 @@ Project Entry
 → Re-Adopt Agent Loop Project if Needed
 → Feature Monthly Archive If Explicitly Requested
 → Code-Guided Operational Support if Needed
+→ [internal] Direct Edit Assessment for genuinely trivial deterministic ordinary non-Bug edits
 → [internal] Lightweight Change Assessment for eligible ordinary non-Bug changes
 → Project Skill Creation / Update if Needed
 → Requirement Archive [Requirement Record / Archive]

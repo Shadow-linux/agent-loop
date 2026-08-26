@@ -222,10 +222,10 @@ assert_contains references/validation-scenarios.md '## 83. Progressive Verificat
 
 # --- version sync ---
 
-assert_contains SKILL.md 'Version: 1.5.7'
-assert_contains plugin.json '"version": "1.5.7"'
-assert_contains README.md '**Current version:** 1.5.7'
-assert_contains Usage.md '**版本：** 1.5.7'
+assert_contains SKILL.md 'Version: 1.5.8'
+assert_contains plugin.json '"version": "1.5.8"'
+assert_contains README.md '**Current version:** 1.5.8'
+assert_contains Usage.md '**版本：** 1.5.8'
 assert_contains CHANGELOG.md '## 1.5.7 — 2026-08-15'
 
 ruby - "$root/templates/root-AGENTS.md" <<'RUBY'
@@ -233,7 +233,7 @@ content = File.read(ARGV.fetch(0))
 blocks = content.scan(/<!-- agent-loop:managed-start section:([^ ]+) .*?block-version:([^ ]+) -->/)
 abort "FAIL: expected 13 root managed blocks, found #{blocks.length}" unless blocks.length == 13
 blocks.each do |section, revision|
-  expected = '1.5.7-20260815.1'
+  expected = '1.5.8-20260826.1'
   abort "FAIL: #{section} expected #{expected}, found #{revision}" unless revision == expected
 end
 abort 'FAIL: root AGENTS exceeds 190 lines' if content.lines.length > 190
@@ -289,7 +289,7 @@ run_mutation 'tier-difference-removed-from-plan' references/stage-guides.md 's|P
 run_mutation 'tier-difference-removed-from-breakdown' references/stage-guides.md 's|Profile tier scales breakdown breadth|Profile tier does not affect breakdown|'
 run_mutation 'tier-difference-removed-from-review' references/stage-guides.md 's|Profile tier scales review depth|Profile tier does not affect review depth|'
 run_mutation 'noplan-sync-removed' references/stage-guides.md '/a `high-assurance` Feature allows No-Plan Decisions only for documentation-only tasks/d'
-run_mutation 'exclusion-flipped' references/runtime.md 's|it never governs Lightweight Change Lane or Review Repair Fast Path|it always governs Lightweight Change Lane and Review Repair Fast Path|'
+run_mutation 'exclusion-flipped' references/runtime.md 's|It never governs Lightweight Change Lane or Review Repair Fast Path|It always governs Lightweight Change Lane and Review Repair Fast Path|'
 run_mutation 'rebind-removed' references/runtime.md 's|A tier raise re-binds the consuming package before work continues|A tier raise only records the new tier and work continues unchanged|'
 run_mutation 'legacy-default-lowered' references/runtime.md 's|treat the effective tier as `full`|treat the effective tier as `focused`|'
 run_mutation 'plan-owner-sync-removed' references/implementation-planning.md '/the recorded Feature Verification Profile tier: it scales Plan breadth, never exactness/d'

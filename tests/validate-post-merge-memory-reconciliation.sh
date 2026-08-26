@@ -170,18 +170,17 @@ python3 - "$root/references/runtime.md" <<'PY'
 from pathlib import Path
 import sys
 text = Path(sys.argv[1]).read_text(encoding='utf-8')
-tokens = [
-    'Code Merge Gate',
-    'Post-Merge Memory Reconciliation',
-    'Memory Commit Gate',
-    'Push Gate',
-    'Release Gate',
-    'Source Branch Cleanup Gate',
-]
-positions = [text.find(token) for token in tokens]
-if any(position < 0 for position in positions):
+section_marker = '## Memory After Code Integration'
+expected_chain = (
+    'Code Merge Gate -> Post-Merge Memory Reconciliation -> '
+    'Memory Commit Gate -> Push Gate -> Release Gate -> '
+    'Source Branch Cleanup Gate'
+)
+section_position = text.find(section_marker)
+if section_position < 0:
     raise SystemExit('FAIL: runtime memory/Git gate order is incomplete')
-if positions != sorted(positions):
+section = text[section_position:]
+if expected_chain not in section:
     raise SystemExit('FAIL: runtime memory/Git gate order is incorrect')
 PY
 

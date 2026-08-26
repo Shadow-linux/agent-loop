@@ -8,7 +8,7 @@ Load this reference when the human explicitly asks to record, manage, investigat
 
 Bug Management is not a canonical stage and does not add a message-intent value. The owning intent remains `feature-follow-up`; Project Entry and memory recovery still run first when reliable Agent Loop memory is unavailable.
 
-Explicit Bug management intent takes precedence over Lightweight Change Assessment.
+Explicit Bug management intent takes precedence over Direct Edit Assessment and Lightweight Change Assessment.
 
 Explicit intent is semantic: the human frames an expected-versus-observed defect, asks to record, track, manage, or investigate it as a Bug, explicitly asks for Bug handling, or confirms Bug handling after the Agent asks. The isolated words `fix`, “修一下”, “改一下”, or “small tweak” do not alone create a Bug Record. When Bug intent is ambiguous, stop and ask before either Bug artifacts or local edits.
 

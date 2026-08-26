@@ -116,6 +116,8 @@ tokens = [
   'explicit Bug management intent',
   'Human-Guided Bug Management',
   'actionable non-Bug change',
+  'Direct Edit Assessment',
+  'persistence/control required',
   'Lightweight Change Assessment',
   'clearly eligible',
   'Feature trigger',
@@ -136,6 +138,7 @@ abort 'FAIL: runtime Stage Order missing' unless stage_order
 canonical_lines = stage_order.lines.map(&:strip)
 abort 'FAIL: Lightweight Change Lane became a canonical stage' if canonical_lines.include?('Lightweight Change Lane')
 abort 'FAIL: Lightweight Change Assessment became a canonical stage' if canonical_lines.include?('Lightweight Change Assessment')
+abort 'FAIL: Direct Edit Assessment became a canonical stage' if canonical_lines.include?('Direct Edit Assessment')
 RUBY
 
 ruby - "$root/references/bug-management.md" <<'RUBY'
@@ -143,22 +146,22 @@ content = File.read(ARGV.fetch(0))
 allowed = 'investigate-first | flow-back | linked-feature | maintenance-fix | requirement | no-fix'
 abort 'FAIL: existing Bug Resolution Path contract changed' unless content.include?(allowed)
 abort 'FAIL: Lightweight Change became a Bug Resolution Path' if content.match?(/investigate-first \|[^\n]*lightweight/i)
-abort 'FAIL: explicit Bug intent precedence is missing' unless content.include?('Explicit Bug management intent takes precedence over Lightweight Change Assessment.')
+abort 'FAIL: explicit Bug intent precedence is missing' unless content.include?('Explicit Bug management intent takes precedence over Direct Edit Assessment and Lightweight Change Assessment.')
 RUBY
 
 assert_contains references/stage-guides.md 'A concrete bounded change request authorizes only the local scope disclosed in the card; it adds no separate Lightweight Mode gate.'
-assert_contains references/stage-guides.md 'If code or configuration changes are required, run Lightweight Change Assessment before defaulting to Feature construction, unless explicit Bug intent or a Feature hard trigger already decides the route.'
+assert_contains references/stage-guides.md 'If code or configuration changes are required, run Direct Edit Assessment first, then Lightweight Change Assessment when persistence/control is needed, before defaulting to Feature construction; explicit Bug intent, active Feature ownership, or a Feature hard trigger may already decide the route.'
 assert_contains references/feature-follow-up.md 'Generic “small tweak” wording does not by itself enter Bug Management or Feature Follow-up.'
 assert_not_contains references/design.md 'Human reports bug, regression, post-close correction, field/schema/algorithm/API change, test failure, screenshot issue, QA/user feedback, or small tweak'
-assert_contains references/design.md 'Generic adjustment wording alone does not enter Feature Follow-up; route an actionable ordinary non-Bug change through Lightweight Change Assessment first.'
+assert_contains references/design.md 'Generic adjustment wording alone does not enter Feature Follow-up; route an actionable ordinary non-Bug change through Direct Edit Assessment first, then Lightweight Change when persistence/control is needed.'
 assert_contains references/design.md 'For explicit Bug management, create/update a new or non-closed Bug Record. A matched closed Bug stays closed while the Agent prepares the named reopen evidence; the Bug Reopen Gate must be accepted before the Reopen Record, `Resolution: unresolved`, and return Status are written. Then verify Expected Behavior and recommend exactly one Resolution Path.'
 assert_not_line references/design.md 'For explicit Bug management, create/update/reopen the Bug Record, verify Expected Behavior, and recommend exactly one Resolution Path.'
 assert_not_contains references/concepts.md 'behavior tweak, "small tweak", test failure, or QA/user feedback belongs to an existing Feature'
-assert_contains references/concepts.md 'Generic adjustment wording alone routes an actionable ordinary non-Bug change through Lightweight Change Assessment before ownership scanning.'
+assert_contains references/concepts.md 'Generic adjustment wording alone routes an actionable ordinary non-Bug change through Direct Edit Assessment, then Lightweight Change Assessment when persistence/control is needed, before ownership scanning.'
 assert_not_contains references/workflow-checklists.md 'behavior tweak, "small tweak", test failure, or QA/user feedback.'
 assert_contains references/workflow-checklists.md 'Treat generic adjustment wording as assessment input only; require explicit Bug/defect evidence, changed accepted behavior, or clear Feature ownership before entering Feature Follow-up.'
-assert_contains references/project-guidance.md 'The Workflow Gateway Map contains one exact first-hop row for an already-defined actionable ordinary non-Bug change, pointing to `Lightweight Change Assessment` and `references/lightweight-change-lane.md`.'
-assert_contains references/project-guidance.md 'Lightweight Change Gateway: route only already-defined actionable bounded non-Bug work to `references/lightweight-change-lane.md`; unresolved product meaning remains in Requirements Discussion'
+assert_contains references/project-guidance.md 'The Workflow Gateway Map contains one exact first-hop row for an already-defined actionable ordinary non-Bug change, pointing first to `Direct Edit Assessment` and `references/direct-edit-fast-path.md`'
+assert_contains references/project-guidance.md 'Direct Edit / Lightweight Gateway: route only already-defined actionable non-Bug work first to `references/direct-edit-fast-path.md`; ineligible persistent bounded work escalates to `references/lightweight-change-lane.md`, while unresolved product meaning remains in Requirements Discussion'
 assert_contains references/implementation-planning.md 'A Lightweight Execution Card is not a Feature `plan.md` and does not enter Plan Gate.'
 assert_contains references/skill-routing.md 'Lightweight Change Lane does not enter mandatory Plan Gate / Plan or Execute Task / Story helper resolution.'
 assert_contains references/external-skill-adapters.md 'Do not expand a Lightweight Execution Card into `docs/superpowers/`, a Feature workspace, or a construction-grade plan.'
@@ -172,7 +175,7 @@ assert_contains references/lightweight-change-lane.md 'Post-merge entry alone do
 assert_contains references/runtime.md 'scripts/scan-lightweight-changes.py'
 assert_contains references/design.md 'The lane reduces ceremony and document depth, not accuracy, scope control, verification strength, rollback, fact review, or Human Gates.'
 
-assert_contains templates/root-AGENTS.md '| Already-defined actionable ordinary non-Bug change that appears bounded, reversible, and exactly verifiable | Lightweight Change Assessment | `references/lightweight-change-lane.md` |'
+assert_contains templates/root-AGENTS.md '| Already-defined actionable ordinary non-Bug change that may be trivial, deterministic, bounded, reversible, and exactly verifiable | Direct Edit Assessment | `references/direct-edit-fast-path.md` |'
 assert_contains templates/root-AGENTS.md 'Scope And Risk Gate'
 assert_not_contains templates/root-AGENTS.md '| Ordinary non-Bug change appears bounded, reversible, and exactly verifiable | Lightweight Change Assessment (internal route) |'
 assert_not_contains templates/root-AGENTS.md 'Lane Rationale:'
@@ -217,11 +220,11 @@ for scenario in \
   assert_contains references/validation-scenarios.md "### $scenario"
 done
 
-assert_contains SKILL.md 'Version: 1.5.7'
-assert_contains plugin.json '"version": "1.5.7"'
-assert_contains README.md '**Current version:** 1.5.7'
-assert_contains Usage.md '**版本：** 1.5.7'
-assert_contains CHANGELOG.md '## 1.5.7 — 2026-08-15'
+assert_contains SKILL.md 'Version: 1.5.8'
+assert_contains plugin.json '"version": "1.5.8"'
+assert_contains README.md '**Current version:** 1.5.8'
+assert_contains Usage.md '**版本：** 1.5.8'
+assert_contains CHANGELOG.md '## 1.5.8 — 2026-08-26'
 assert_contains CHANGELOG.md '## 1.5.4 — 2026-08-11'
 assert_contains CHANGELOG.md '## 1.5.0 — 2026-07-17'
 
@@ -231,7 +234,7 @@ blocks = content.scan(/<!-- agent-loop:managed-start section:([^ ]+) .*?block-ve
 abort 'FAIL: root AGENTS managed blocks missing' if blocks.empty?
 abort "FAIL: expected 13 managed blocks, found #{blocks.length}" unless blocks.length == 13
 blocks.each do |section, revision|
-  expected = '1.5.7-20260815.1'
+  expected = '1.5.8-20260826.1'
   abort "FAIL: #{section} expected #{expected}, found #{revision}" unless revision == expected
 end
 RUBY

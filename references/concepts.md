@@ -31,7 +31,9 @@ First version excludes:
 
 **Requirement**: Human-provided textual or conversational need.
 
-**Lightweight Change Lane**: Bounded non-Bug execution route before Feature construction. It requires all eligibility evidence, yields to explicit Bug Management and active Feature ownership, and stops for Human Choice when uncertain.
+**`Direct Edit Fast Path`**: Zero-artifact internal method before persistent Lightweight Change for an already-decided genuinely trivial deterministic ordinary non-Bug edit. It creates no Plan, No-Plan Decision, new test, per-edit note, scanner entry, or project-memory record, but always requires the final exact diff and one minimum artifact-matched check. Any semantic, persistence, coordination, authorization, unknown-impact, or new-test-only proof trigger exits the method.
+
+**Lightweight Change Lane**: Persistent bounded non-Bug execution route used after Direct Edit is ineligible because durable control/recovery evidence is needed. It requires all eligibility evidence, yields to explicit Bug Management and active Feature ownership, and stops for Human Choice when uncertain.
 
 **Lightweight Execution Card**: Persistent per-change background, scope, adaptive Plan, progress, targeted verification, rollback, Human Gate, result, and Memory Review control under `<memory-root>/changes/YYYY-MM/YYYY-MM-DD-<topic>.md`. The card file is the execution source of truth; it is not a Feature workspace, shared backlog, long-term project-memory fact, or later-action authorization.
 
@@ -39,7 +41,9 @@ First version excludes:
 
 **Adaptive Depth**: Risk-based detail selection for the card, Plan, and targeted test/verification method. It never reduces scope control, fresh evidence, rollback, memory impact review, or an existing Human Gate.
 
-**Feature Verification Profile**: The recorded, auditable application of Adaptive Depth inside the Feature lane: a three-tier verification strategy `focused | full | high-assurance`, decided during package preparation after Gate 1 and presented at Gate 2. It scales Plan depth, test depth, regression scope, and review strength by recorded risk; safety-relevant hard-floor categories can never be rated below `high-assurance`; execution auto-escalates with recorded evidence; a post-Gate 2 downgrade requires a Human decision. These tier names are verification-strategy values only: they are not Modes, stages, statuses, lifecycles, or Gates, and they are distinct from Strict Mode (stage-by-stage control) and from Standard Product Definition depth (`brief | standard`). The Profile does not govern Lightweight Change or Review Repair.
+**Feature Verification Profile**: The recorded, auditable application of Adaptive Depth inside the Feature lane: a three-tier verification strategy `focused | full | high-assurance`, decided during package preparation after Gate 1 and presented at Gate 2. It scales Plan depth, test depth, regression scope, and review strength by recorded risk; safety-relevant hard-floor categories can never be rated below `high-assurance`; execution auto-escalates with recorded evidence; a post-Gate 2 downgrade requires a Human decision. These tier names are verification-strategy values only: they are not Modes, stages, statuses, lifecycles, or Gates, and they are distinct from Strict Mode (stage-by-stage control) and from Standard Product Definition depth (`brief | standard`). They are not reusable full-run grants. The Profile does not govern Direct Edit, Lightweight Change, or Review Repair.
+
+**Full Test Run Confirmation**: Response-local Human decision for one newly proposed repository-wide or equivalent broad test/validation execution. It binds the exact command set, repository/target, branch/full HEAD, relevant input/environment, cost/effects, supported claim, and expiry. One confirmation covers one unchanged execution and creates no durable authorization artifact.
 
 **Proof First**: The RED evidence definition for TDD paths: any credible, reviewable failure-matched proof — a new test, an existing failing test, a reproduction script, or API/UI reproduction evidence — satisfies RED, and a new test is never manufactured solely to produce RED. GREEN obligations, Required Verification, and Existing Test Obligations are unchanged.
 
@@ -119,7 +123,7 @@ First version excludes:
 
 **Drift**: Mismatch between docs, code reality, or human decisions.
 
-**Feature Follow-up / Flow-back**: Feature-ownership route for explicit Bug management, defect/regression/QA/post-close evidence, changed accepted behavior, or clear active/closed Feature ownership. Generic adjustment wording alone routes an actionable ordinary non-Bug change through Lightweight Change Assessment before ownership scanning. When Follow-up applies, Bug identity scans all Bug Index metadata and Feature ownership defaults to 90 calendar days with evidence-driven extension; only explicit Bug management creates or updates a Bug Record.
+**Feature Follow-up / Flow-back**: Feature-ownership route for explicit Bug management, defect/regression/QA/post-close evidence, changed accepted behavior, or clear active/closed Feature ownership. Generic adjustment wording alone routes an actionable ordinary non-Bug change through Direct Edit Assessment, then Lightweight Change Assessment when persistence/control is needed, before ownership scanning. When Follow-up applies, Bug identity scans all Bug Index metadata and Feature ownership defaults to 90 calendar days with evidence-driven extension; only explicit Bug management creates or updates a Bug Record.
 
 **Code-Guided Operational Support**: Read-only support lane for using current project functionality to test, run, deploy, switch account/config/model/provider, check quota/rate limits, arrange rollout, diagnose production, or produce a runbook/checklist. It does not create a feature workspace or edit code/config by default; feature/fix escalation requires human confirmation.
 

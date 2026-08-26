@@ -30,7 +30,7 @@ Root guidance may navigate a user Agent to the Feature Monthly Archive procedure
 
 Root guidance may also route an observed post-code-integration memory conflict, but the targeted fact-resolution rules and optional Full Memory Audit / Recovery stay in `memory-reconciliation.md`. Root guidance must say no observed conflict is `reconciliation-not-needed`, with no whole-memory scan or extra gate. Refresh the root submit managed block when this concise route is absent or its full template block revision is stale; do not copy the detailed procedure into the target root file.
 
-The Workflow Gateway Map contains one exact first-hop row for an already-defined actionable ordinary non-Bug change, pointing to `Lightweight Change Assessment` and `references/lightweight-change-lane.md`. Product meaning that is still being shaped remains in Requirements Discussion. Eligibility, Feature hard triggers, card fields, Adaptive Plan/Repair-First Verification, scope expansion, completion, and gate details belong in that reference, not root `AGENTS.md`.
+The Workflow Gateway Map contains one exact first-hop row for an already-defined actionable ordinary non-Bug change, pointing first to `Direct Edit Assessment` and `references/direct-edit-fast-path.md`; that owner escalates ineligible work to `references/lightweight-change-lane.md`, Feature, Bug, Requirements Discussion, or Human Choice. Product meaning that is still being shaped remains in Requirements Discussion. Direct Edit eligibility, hard exits, exact final check, zero-artifact boundary, Lightweight card fields, Adaptive Plan/Repair-First Verification, scope expansion, completion, and gate details belong in those references, not root `AGENTS.md`.
 
 Root Agent Ownership projects only one concise Repair-First reminder: during Review, correct an authorized `within-approved-boundary` implementation first, verify it fresh, and surface specific optional regression protection. Detailed Review Repair ordering, current-proof versus advisory rules, Lightweight eligibility, evidence, and exit conditions remain owned by `references/runtime.md`, `references/stage-guides.md`, and `references/lightweight-change-lane.md`.
 
@@ -63,8 +63,8 @@ Every time `agent-loop` is used inside a target project, check root guidance bef
 - project uses `agent-loop`
 - Bootstrap Protocol is missing skill-loading/fallback rules: root guidance must say root `AGENTS.md` is a bootstrap cache rather than a replacement for the `agent-loop` skill, must load/use the available skill before agent-loop workflow decisions, and must say Stage Helper Capability Scan happens only after the controller is active or unavailable/load-failed
 - Message Intent Guard: distinguish Chat, Requirements Discussion, already-defined ordinary non-Bug change, explicit Bug/follow-up, Feature Request, Operational Support, Project Skill, Archive/Rehydrate, Memory Reconciliation, proposal/deferred, and lifecycle requests before project-state routing
-- Workflow Gateway Map: route each of the 17 startup signal families to exactly one first hop and exact published reference set; root guidance is navigation only, while `references/runtime.md` owns the complete leaf-stage order
-- Lightweight Change Gateway: route only already-defined actionable bounded non-Bug work to `references/lightweight-change-lane.md`; unresolved product meaning remains in Requirements Discussion
+- Workflow Gateway Map: route each startup signal family to exactly one first hop and exact published reference set; root guidance is navigation only, while `references/runtime.md` owns the complete leaf-stage order
+- Direct Edit / Lightweight Gateway: route only already-defined actionable non-Bug work first to `references/direct-edit-fast-path.md`; ineligible persistent bounded work escalates to `references/lightweight-change-lane.md`, while unresolved product meaning remains in Requirements Discussion
 - Bootstrap Protocol: inspect `.agent-loop/`, classify the stage, and recommend exactly one next action
 - Bootstrap Protocol lacks the concise Project Skill discovery-before-fallback reminder; detailed result names, drift handling, manifest procedure, and precedence remain in `references/runtime.md` and `references/project-skills.md`, not root guidance
 - Agent Ownership: agents own the project outcome as well as the loop, inspect safely available evidence before asking, and continue through authorized scope until verified completion or a concrete Human Gate
@@ -74,7 +74,7 @@ Every time `agent-loop` is used inside a target project, check root guidance bef
 - Required Stops: all six visible classes — Semantic, Scope And Risk, Execution, Evidence, External Mutation, and Git And Lifecycle — plus explicit Auto Mode non-bypass
 - Checker Recovery Gateway: exact rerun routes a canonical Agent Loop checker failure to `references/checker-recovery.md`; isolated repair is Human-authorized and cannot be presented as canonical pass
 - Completion Rules: code changes alone are not done; fresh verification, Review, Drift Check, project-memory evidence, Feature Completion Check, and Feature Close Review remain visible
-- Submit And Commit Rules: normal submit keeps intended-file review; an explicit commit or commit-and-push request enters Full-Worktree Git Fast Path, which shows one lightweight confirmation of the entire-worktree summary and Agent-proposed commit message, runs no tests or quality Review merely for Git, and never infers Push from plain commit
+- Submit And Commit Rules: normal submit keeps intended-file review; an explicit commit or commit-and-push request enters Full-Worktree Git Fast Path, which shows one lightweight confirmation of the entire-worktree summary and Agent-proposed commit message, runs no tests or quality Review merely for Git, never infers Push from plain commit, discloses predictable Push-triggered CI without duplicating it locally, and keeps required release validation separately confirmed
 - Artifact Authority: Requirement, Decision / ADR, Feature, Bug, Lightweight Execution Card, and project memory retain distinct ownership
 - Submit And Commit Rules lack the concise post-code-integration reminder to reconcile changed Agent Loop memory before push/release/Source cleanup
 - root/directory guidance boundaries and requirement archive rules
@@ -162,7 +162,7 @@ Rules:
 - Managed block maintenance rules belong here and in refresh tooling; do not require the target root `AGENTS.md` to include a separate Managed Block Rule prose section.
 - If an existing `AGENTS.md` has no managed blocks, propose adding the minimal needed managed blocks instead of replacing the whole file.
 - If a block-version is missing or older than the current template, treat that block as stale.
-- Treat bare skill-version-only block revisions such as `block-version:1.5.7` as stale because they cannot distinguish same-version template revisions.
+- Treat bare skill-version-only block revisions such as `block-version:1.5.8` as stale because they cannot distinguish same-version template revisions.
 - If a managed block exists in the current template but is missing from root AGENTS.md, treat it as a missing managed block and propose adding it.
 - If a managed block source is missing, stale, or contradictory, classify the block as stale and propose either source correction or block refresh through Human Review Summary.
 - If marker pairs are broken, duplicated, nested, or ambiguous, stop and ask before editing.

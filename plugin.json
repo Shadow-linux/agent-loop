@@ -1,7 +1,7 @@
 {
   "name": "agent-loop",
-  "version": "1.5.7",
-  "description": "Agent-guided single-human development loop with adaptive lightweight changes, full Feature workflows, and explicit human gates.",
+  "version": "1.5.8",
+  "description": "Agent-guided single-human development loop with direct edits, adaptive lightweight changes, full Feature workflows, and explicit human gates.",
   "author": {
     "name": "Shadow-linux",
     "url": "https://github.com/Shadow-linux"
@@ -21,7 +21,7 @@
   "interface": {
     "displayName": "Agent Loop",
     "shortDescription": "Agent-guided development loop from goal intake to verified close",
-    "longDescription": "The agent acts as controller: inspects project state, classifies the entry scenario, loads stage-specific references, produces or updates agent-loop artifacts, and stops at human gates. Initial Feature and explicit Bug execution use TDD; bounded Review repairs and clearly eligible Lightweight Changes repair first, verify fresh, and recommend specific regression coverage while preserving required verification and Human Gates.",
+    "longDescription": "The agent acts as controller: inspects project state, classifies the entry scenario, loads stage-specific references, produces or updates agent-loop artifacts when the selected route owns them, and stops at human gates. Truly trivial deterministic work may use a zero-artifact Direct Edit; persistent Lightweight work repairs first; initial Feature and explicit Bug execution use TDD. Full test runs, Git, and release actions keep exact independent Human authority.",
     "developerName": "Shadow-linux",
     "category": "Coding",
     "capabilities": [

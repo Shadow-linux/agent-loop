@@ -18,7 +18,7 @@ Bootstrap skill loading: AGENTS.md is bootstrap guidance, not a replacement for 
 
 Agent ownership is mandatory. The agent must not wait for the human to name the next internal stage. For every human goal, bug report, project-understanding question, vague product idea, or "what next" request, the agent classifies the current state and recommends exactly one next action with a reason. If required artifacts are missing, recommend creating or repairing them. If work appears ready, recommend the next stage. If work appears complete, run Feature Completion Check and recommend close, pause, or continue.
 
-An explicit safe one-off request is compatibility input to Lightweight Change Assessment, not a separate execution bypass. A bounded ordinary non-Bug edit may use the persistent Lightweight Execution Card only after eligibility, scope, verification, rollback, memory, branch, and gate checks pass.
+An explicit safe one-off request enters Direct Edit Assessment before persistent Lightweight Change. A genuinely trivial deterministic edit may use `Direct Edit Fast Path` only when every eligibility, scope, proof, rollback, dirty-work, ownership, and authorization condition in `direct-edit-fast-path.md` is true. Direct Edit is a zero-artifact internal method, not an undocumented bypass: it still requires an exact final diff and one minimum artifact-matched check. Work that needs persistence/control uses the Lightweight Execution Card; any Feature/Bug hard trigger keeps its owning route.
 
 These checks cannot be bypassed inside `agent-loop`: Project Entry classification, re-adoption minimum reconciliation, human source requirement preservation, Product Human Review confirmation for a new Effective Product Definition, Onboarding Spec acceptance and the later Full Execution Gate, Task Done Gate, Delivery Contract acceptance or breaking-change gate, fresh verification before completion claims, submit confirmation, and close confirmation.
 
@@ -108,14 +108,23 @@ Apply this sequence exactly:
 explicit Bug management intent
 -> Human-Guided Bug Management
 
+active Feature clearly owns the edit
+-> eligible Direct Edit inside current Feature | owning Feature route
+
 actionable non-Bug change
--> Lightweight Change Assessment
-   -> clearly eligible -> Lightweight Execution Card
+-> Direct Edit Assessment
+   -> every Direct Edit condition true -> Direct Edit Fast Path
+   -> persistence/control required -> Lightweight Change Assessment
+      -> clearly eligible -> Lightweight Execution Card
+      -> Feature trigger -> Feature Construction
+      -> uncertain -> Human Choice with Agent Recommendation
    -> Feature trigger -> Feature Construction
    -> uncertain -> Human Choice with Agent Recommendation
 ```
 
-Explicit Bug Management wins before assessment. An active Feature that clearly owns the change also blocks lane escape. Generic `fix`, “修一下”, “改一下”, “small tweak”, line count, file count, or step count does not decide eligibility.
+Explicit Bug Management wins before assessment. An active Feature that clearly owns the change also blocks lane escape: an eligible Direct Edit stays inside the current Feature rather than creating a nested card. Generic `fix`, “修一下”, “改一下”, “small tweak”, line count, file count, step count, or estimated time does not decide eligibility.
+
+Run `references/direct-edit-fast-path.md` first for an already-decided, bounded ordinary edit. Direct Edit creates no card, Plan, No-Plan Decision, new test, notes row, Memory Review, scanner entry, or project-memory write; it still requires one final exact diff plus the cheapest matched proof. If durable recovery, a new test design, cross-session work, unknown consumers, broader semantics, or another hard trigger appears, select Lightweight Change or Feature/Bug routing before broader writes.
 
 After Project Entry classification, perform only the minimum root-guidance, Git/dirty-state, target-scope, nearby-reference, safety, verification-entry, active-Feature, branch, sealed-release, and relied-on-memory checks needed for the route. A stale or conflicting memory claim that the route relies on stops for Recovery, Feature Construction, or Human Choice.
 
@@ -163,13 +172,13 @@ Required Verification proves the current result. Existing Test Obligation comes 
 
 If the change cannot be reliably verified without a new test, do not claim `fixed`, `done`, `completed`, or `closed`; present the exact test and ask whether to add it now, adjust the repair, roll back, or pause. A failed required check is never an advisory.
 
-TDD remains the default method for initial Feature Execute Task / Story, explicit Human-Guided Bug Management repair, Human-requested TDD, and an accepted Plan that requires RED/GREEN. Review Repair Fast Path and clearly eligible Lightweight Change do not invoke the TDD helper by default. If either path leaves its accepted boundary or enters Feature/Bug execution, normal TDD routing resumes.
+TDD remains the default method for initial Feature Execute Task / Story, explicit Human-Guided Bug Management repair, Human-requested TDD, and an accepted Plan that requires RED/GREEN. Direct Edit Fast Path, Review Repair Fast Path, and clearly eligible Lightweight Change do not invoke the TDD helper by default. Direct Edit adds no new test and does not manufacture RED; it exits when a new test is the only reliable proof. If any light path leaves its accepted boundary or enters Feature/Bug execution, normal TDD routing resumes.
 
 Proof First widens only the RED evidence definition and never renames or bypasses TDD: RED accepts any credible, reviewable failure-matched proof — a newly written failing test, an existing test's failing run, a reproduction script with its failure output, or API/UI reproduction evidence (DOM/assertion/console-text facts, not pixel-level subjective judgment). A new test is never manufactured solely to produce RED. RED proof must be reproduced against the current code state before implementation: run the existing failing test, reproduction script, or API/UI reproduction now — a historical failure log alone is Bug intake evidence, not RED, and proof that no longer fails on current code invalidates RED and routes to Diagnose Failure / `cannot-reproduce` assessment instead of implementation. New Feature work prefers Behavior Proof First; explicit Bug repair prefers Reproduction First, where the original reproduction satisfies RED after being re-executed against current code. GREEN still requires fresh failure-matched proof after the change; Required Verification, Existing Test Obligations, and the Bug Verification Matrix regression/safety columns are unchanged, and only protection beyond those obligations becomes an Additional Regression Test advisory.
 
 ## Feature Verification Profile
 
-Feature Verification Profile is the Feature lane's internal verification strategy, recorded during package preparation after Gate 1 and before Work Breakdown / Test Design consume it. It is not a canonical stage, message intent, status, Mode, Gate, Checker result, or artifact family, and it never governs Lightweight Change Lane or Review Repair Fast Path, which keep their existing rules; discovering an applicable hard-floor contact during either lane still escalates the owning Feature's Profile or returns to the owning Human Gate.
+Feature Verification Profile is the Feature lane's internal verification strategy, recorded during package preparation after Gate 1 and before Work Breakdown / Test Design consume it. It is not a canonical stage, message intent, status, Mode, Gate, Checker result, or artifact family. It never governs Lightweight Change Lane or Review Repair Fast Path and never assigns a tier to Direct Edit Fast Path; those methods keep their existing rules. Discovering an applicable hard-floor contact during any light path exits that path, escalates the owning Feature's Profile, or returns to the owning Human Gate.
 
 ```text
 Gate 1 accepted
@@ -198,6 +207,34 @@ Existing Feature notes without Profile fields remain reader-compatible (pre-1.5.
 Escalation during execution is automatic and must be recorded in Feature `notes.md`: unexpected files or cross-module modification, repeated same failure, or multiple speculative patches raise the tier one step; auth/permission contact, public API or schema change, weak Test Oracle (which also redoes the affected Test Design part before continuing), and unknown regression failure raise the tier directly to `high-assurance`. Multiple simultaneous triggers record one Profile Escalation Log row per trigger and converge on the highest resulting tier; a trigger firing while already at `high-assurance` is recorded without a further tier change. A tier raise re-binds the consuming package before work continues: refresh the affected Test Design, Plan verification/rollback coverage, and regression scope to the new tier's requirements, add any missing regression/safety task, and rerun Analyze Consistency — the work stays inside the existing execution grant, and any real execution-boundary change still returns to Gate 2. Each escalation records the trigger, the old and new tier, and the time in the `## Profile Escalation Log` table, and adds a Gate Drift Assessment row when applicable. Scope expansion still stops broader edits and returns to Human Review.
 
 Time-bounded tier movement: before Gate 2 acceptance, the Agent may recompute the Profile from new evidence, including a reasoned downgrade, recording `Profile Recomputed At`; after Gate 2 acceptance, the Agent may only auto-escalate during execution, and any downgrade requires presenting the changed risk evidence to the Human and recording the accepted decision before it takes effect. Human-approved substitute verification keeps its existing rules.
+
+## Full Test Run Confirmation
+
+Targeted and affected evidence is the default. Direct Edit uses its final diff plus minimum artifact-matched check; Lightweight Change uses targeted and affected existing checks; Feature uses its accepted Verification Profile and Existing Test Obligations. A parser, syntax check, focused module test, or bounded affected-test set is not a repository-wide full run.
+
+Before every newly proposed repository-wide suite, all-packages run, whole-project E2E run, supported-environment matrix, six-domain Agent Loop full validation, or equivalent broad execution, present one response-local `Full Test Run Confirmation` with:
+
+```text
+Reason / why focused evidence is insufficient
+Agent recommendation
+Exact command or bounded command set
+Repository and target
+Branch and current full HEAD
+Relevant input and environment scope
+Expected duration, resource cost, and material side effects when known
+Gate or claim the result supports
+Expiry: Gate end or relevant command/target/HEAD/input/environment change
+```
+
+One confirmation authorizes one execution of that concrete full run. A relevant input or HEAD change, different environment or target, materially changed command set, Gate exit, or manual rerun requires fresh confirmation. A bounded rerun policy is reusable only when the Human explicitly accepted its count and condition in the same decision. Do not create a durable authorization artifact, cache, stage, status, Mode, lifecycle, or generic force/skip parameter.
+
+An explicit current Human instruction to run the exact full suite already satisfies this confirmation. Gate 2 also satisfies it when the Human-visible Verification decision row contains and accepts the exact full command, repository/target, branch/full HEAD or a clearly bound current-input rule, and environment scope. Do not ask twice for the same unchanged execution. A Verification Profile label or broad phrase is not by itself execution permission.
+
+Commit never triggers tests merely because the files will be packaged in Git. A Human condition such as “commit after tests pass” selects the smallest applicable tests unless the exact full run was named or accepted. Declining an optional full run does not revoke a separately authorized Commit, but the Agent cannot claim full verification, Feature completion, or release readiness from focused evidence alone when those claims require broader proof.
+
+When Push predictably triggers full CI, disclose the automatic run at the Push Gate. Approval of that exact Push covers the disclosed automatic CI and must not cause a duplicate local full run. A manual CI rerun is a new execution and requires fresh confirmation unless an accepted bounded retry policy still applies.
+
+When Release or formal Checker-fix policy genuinely requires full validation, present the exact current run for confirmation. If required full validation is declined, Release, formal fix validation, and their readiness claims remain blocked; refusal never waives the evidence requirement or supplies another action's permission.
 
 ## Adaptive Product Definition Internal Routing
 
@@ -594,7 +631,7 @@ If `project.md` claims a legacy onboarding layout, lists onboarding-db files, or
 
 Project Entry has priority over feature-follow-up. If no .agent-loop/ or legacy agent-loop/ memory exists, do not classify directly as feature-follow-up; classify as `existing-project` or `new-project` first, preserve the bug/change report as intake context, and establish or confirm project memory before running Feature Follow-up.
 
-If explicit defect/regression/QA/post-close evidence or clear recent Feature ownership exists and reliable agent-loop memory is available, classify as `feature-follow-up` before deciding to create a new Feature. For explicit Bug management, load `references/bug-management.md` and `references/feature-follow-up.md`; scan complete Bug Index metadata for duplicate/reopen identity first, then inspect Feature metadata using the project-configured 90-day default plus evidence-driven extended scan. Create or update a new/non-closed Bug Record as appropriate. When the match is closed, keep it closed while preparing the named reopen evidence, wait for the separate Bug Reopen Gate, and only after explicit acceptance append the Reopen Record, restore `Resolution: unresolved`, and set the accepted return Status. Then resolve Expected Behavior and recommend exactly one of `investigate-first | flow-back | linked-feature | maintenance-fix | requirement | no-fix`. Wait for the new Resolution Path Gate and any separate Feature/Requirement action gate. Generic “small tweak”, `fix`, “修一下”, or “改一下” wording alone routes an actionable non-Bug change through Lightweight Change Assessment before Feature construction.
+If explicit defect/regression/QA/post-close evidence or clear recent Feature ownership exists and reliable agent-loop memory is available, classify as `feature-follow-up` before deciding to create a new Feature. For explicit Bug management, load `references/bug-management.md` and `references/feature-follow-up.md`; scan complete Bug Index metadata for duplicate/reopen identity first, then inspect Feature metadata using the project-configured 90-day default plus evidence-driven extended scan. Create or update a new/non-closed Bug Record as appropriate. When the match is closed, keep it closed while preparing the named reopen evidence, wait for the separate Bug Reopen Gate, and only after explicit acceptance append the Reopen Record, restore `Resolution: unresolved`, and set the accepted return Status. Then resolve Expected Behavior and recommend exactly one of `investigate-first | flow-back | linked-feature | maintenance-fix | requirement | no-fix`. Wait for the new Resolution Path Gate and any separate Feature/Requirement action gate. Generic “small tweak”, `fix`, “修一下”, or “改一下” wording alone routes an actionable non-Bug change through Direct Edit Assessment, then Lightweight Change Assessment when persistence/control is needed, before Feature construction.
 
 `maintenance-fix` is not a bypass. It uses the standard feature workspace under `.agent-loop/features/YYYY-MM-DD-fix-<slug>/` and must still pass spec, tasks, tests, plan, verification, review, drift, project memory update when needed, Feature Completion Check, and close.
 
@@ -678,11 +715,11 @@ Do not end an action report with only "done". Always include the next recommende
 
 This is an internal Submit / Integrate method for when the Human explicitly asks for `commit` or `commit and push`. It is not a canonical stage, message intent, completion route, or reusable permission.
 
-For this method, inspect repository/branch/HEAD/conflict facts, derive a repository-compliant commit message when none was supplied, then present one lightweight Commit Confirmation. It contains the complete worktree file/change summary, the proposed commit message, `Verification: not run for this Git action; no completion or release-readiness claim`, and, only when Push was requested, the exact remote/ref. This is not a code, quality, Feature, verification, Drift, or Completion Review. Do not run tests or perform those reviews merely because Git was requested, and do not ask a second confirmation.
+For this method, inspect repository/branch/HEAD/conflict facts, derive a repository-compliant commit message when none was supplied, then present one lightweight Commit Confirmation. It contains the complete worktree file/change summary, the proposed commit message, `Verification: not run for this Git action; no completion or release-readiness claim`, and, only when Push was requested, the exact remote/ref plus any predictable automatic full-CI consequence. This is not a code, quality, Feature, verification, Drift, or Completion Review. Do not run tests or perform those reviews merely because Git was requested, and do not ask a second confirmation.
 
 After Human confirmation, run `git add -A` immediately from the repository root and verify that the index represents staged, unstaged, untracked, and deleted Git-visible content. Do not exclude, restore, clean, stash, split, or discard content on the Agent's initiative. A plain `commit` confirmation authorizes Commit only. Push remains an independent requested action: an explicit `commit and push` confirmation authorizes Commit and Push in order; Push uses the confirmed remote/ref, and Commit failure stops Push. If no unique push target exists, the confirmation may authorize the local Commit only; after it succeeds, ask only for the missing Push destination.
 
-The path does not run Verify, Review, Drift Check, Feature Completion Check, or tests merely because Git was requested. Git packaging permission is not completion evidence. Existing evidence may be disclosed truthfully, but without fresh required proof the Agent cannot claim `fixed`, `verified`, `done`, `completed`, `closed`, or release-ready. A Human condition such as “only after tests pass” remains a required precondition.
+The path does not run Verify, Review, Drift Check, Feature Completion Check, or tests merely because Git was requested. Commit never triggers tests merely because the files will be packaged in Git. Git packaging permission is not completion evidence. Existing evidence may be disclosed truthfully, but without fresh required proof the Agent cannot claim `fixed`, `verified`, `done`, `completed`, `closed`, or release-ready. A Human condition such as “only after tests pass” remains a required precondition and selects the smallest applicable tests unless an exact full run is separately authorized. Approval of a Push that predictably triggers disclosed full CI covers that automatic CI without a duplicate local run; a later manual rerun uses Full Test Run Confirmation.
 
 Stop without reset/clean/restore/stash when the repository is ambiguous; a merge/rebase/cherry-pick conflict is unresolved; an applicable sealed/customer-isolation/branch policy forbids the action; `git add -A` produces an inconsistent index; or commit/push fails. Remote/ref ambiguity blocks only Push, not an already authorized Commit. Preserve and report the resulting worktree and index.
 
@@ -714,6 +751,7 @@ Remote Project Discovery if Needed
 Re-Adopt Agent Loop Project if Needed
 Feature Monthly Archive If Explicitly Requested
 Code-Guided Operational Support if Needed
+[internal] Direct Edit Assessment for genuinely trivial deterministic ordinary non-Bug edits
 [internal] Lightweight Change Assessment for eligible ordinary non-Bug changes
 Project Skill Creation / Update if Needed
 Requirement Archive [Requirement Record / Archive]
@@ -771,7 +809,7 @@ explicit implementation request
 
 For non-trivial gates, the approval prompt must include a Human Review Summary. The summary is the human-facing approval view; the full artifact files remain the source of truth.
 
-Gate 1 acceptance authorizes package preparation only and does not authorize target implementation. During package preparation, the Agent first records the Feature Verification Profile with rationale and hard-floor check, then completes Work Breakdown, Delivery Contract assessment, Test Design, E2E Discovery if applicable, Technical Design / Code Context, Plan Gate / Plan, coverage review, and Analyze Consistency without separate Work Breakdown, Test Design, E2E Discovery, Technical Design, or Plan approval prompts. Target implementation is forbidden until Gate 2.
+Gate 1 acceptance authorizes package preparation only and does not authorize target implementation. During package preparation, the Agent first records the Feature Verification Profile with rationale and hard-floor check, then completes Work Breakdown, Delivery Contract assessment, Test Design, E2E Discovery if applicable, Technical Design / Code Context, Plan Gate / Plan, coverage review, and Analyze Consistency without separate Work Breakdown, Test Design, E2E Discovery, Technical Design, or Plan approval prompts. When the Profile includes a full run, Gate 2 must show its exact command and scope under Full Test Run Confirmation; the label alone grants nothing. Target implementation is forbidden until Gate 2.
 
 Record this compact derived state in current Feature notes:
 
@@ -789,7 +827,7 @@ Feature `notes.md` must persist the Gate decisions and review baseline: `Gate 1 
 
 Existing Feature notes without Later Start fields remain reader-compatible. Their absence means no recorded later-start transition and never authorizes execution; it does not invalidate a truthful historical Gate 2 approve-and-start record. Add the three fields only when the Agent next performs an authorized Gate evidence refresh or records a valid package-only later start. Never infer or backfill Human approval from history, urgency, or current mode.
 
-The Agent verifies the complete implementation package directly from current Feature artifacts. `Gate 2 Package Files` must inventory `spec.md`, `tasks.md`, `tests.md`, `plan.md` when present, optional `context.md` / `contracts.md`, and every current file under triggered `tasks/`, `tests/`, `plans/`, and `contracts/` directories. The Agent also verifies the recorded Feature Verification Profile fields, Story/Task/Plan bindings, required roots, risk, rollback, verification, placeholders, and consistency before presenting Gate 2. This review is semantic and evidence-backed; no digest or local Feature Gate Checker is part of the authorization path.
+The Agent verifies the complete implementation package directly from current Feature artifacts. `Gate 2 Package Files` must inventory `spec.md`, `tasks.md`, `tests.md`, `plan.md` when present, optional `context.md` / `contracts.md`, and every current file under triggered `tasks/`, `tests/`, `plans/`, and `contracts/` directories. The Agent also verifies the recorded Feature Verification Profile fields, Story/Task/Plan bindings, required roots, risk, rollback, verification, placeholders, and consistency before presenting Gate 2. Any proposed full run is displayed as an exact command or bounded command set with repository, target, branch/full HEAD or bound current-input rule, relevant environment, expected cost, and supported claim. This review is semantic and evidence-backed; no digest or local Feature Gate Checker is part of the authorization path.
 
 Human authorization provenance is an Agent responsibility. At Gate 2, the Agent records `accepted`, the exact Gate 2 decision, matching Gate 2 Auto-Loop state, and a timezone-aware review time only after the corresponding Human choice is present in the current reliable conversation or preserved Human decision evidence. A later-start transition separately records its decision, authorization time, and Human instruction evidence. After context loss or when decision provenance is genuinely uncertain, the Agent asks one blocking Human confirmation instead of manufacturing evidence.
 

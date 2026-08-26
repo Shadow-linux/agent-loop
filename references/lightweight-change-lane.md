@@ -2,11 +2,11 @@
 
 ## Purpose And Position
 
-Lightweight Change Lane is an internal route before Feature construction for an ordinary actionable non-Bug change that is bounded, reversible, and exactly verifiable. It is not a canonical stage, message intent, Feature Type, Bug Resolution Path, task status, lifecycle, or Auto Mode.
+Lightweight Change Lane is the persistent internal route after Direct Edit Assessment for an ordinary actionable non-Bug change that is bounded, reversible, and exactly verifiable but needs durable execution/recovery control. It is not a canonical stage, message intent, Feature Type, Bug Resolution Path, task status, lifecycle, or Auto Mode.
 
 The lane reduces ceremony and document depth, not accuracy, scope control, verification strength, rollback, fact review, or Human Gates. Low risk, enumerable impact, and exact failure-matched verification are entry conditions.
 
-It avoids unnecessary Feature artifacts while persisting one bounded Lightweight Execution Card. The card file is the execution source of truth. The Agent may summarize it in the current response, but must keep the file current through execution and completion.
+It avoids unnecessary Feature artifacts while persisting one bounded Lightweight Execution Card. The card file is the execution source of truth. The Agent may summarize it in the current response, but must keep the file current through execution and completion. Genuinely trivial deterministic zero-artifact work belongs to `references/direct-edit-fast-path.md` instead.
 
 ## Intent And Precedence
 
@@ -16,14 +16,21 @@ Use this sequence before deciding that a small-looking request is Bug or Feature
 explicit Bug management intent
 -> Human-Guided Bug Management
 
+active Feature clearly owns the edit
+-> eligible Direct Edit inside current Feature | owning Feature route
+
 actionable non-Bug change
--> Lightweight Change Assessment
-   -> clearly eligible -> Lightweight Execution Card
+-> Direct Edit Assessment
+   -> every Direct Edit condition true -> Direct Edit Fast Path
+   -> persistence/control required -> Lightweight Change Assessment
+      -> clearly eligible -> Lightweight Execution Card
+      -> Feature trigger -> Feature Construction
+      -> uncertain -> Human Choice with Agent Recommendation
    -> Feature trigger -> Feature Construction
    -> uncertain -> Human Choice with Agent Recommendation
 ```
 
-Explicit Bug Management wins before this assessment.
+Explicit Bug Management wins before this assessment. Run Direct Edit Assessment before creating a persistent card. An active Feature keeps an eligible Direct Edit inside its existing write grant rather than creating a nested card.
 
 Generic words such as `fix`, “修一下”, “改一下”, “small tweak”, or “simple” do not by themselves establish Bug management intent or lightweight eligibility. Human intent, expected-versus-observed evidence, existing Feature ownership, and impact evidence decide the route.
 
@@ -31,7 +38,7 @@ When evidence clearly decides the route, the Agent owns the initial judgment. Th
 
 ## Project Entry Boundary
 
-Project Entry classification is required; creating or repairing long-term Agent Loop project memory is not required solely to run this lane.
+Project Entry classification is required; creating or repairing long-term Agent Loop project memory is not required solely to run this lane. Direct Edit performs only its bounded read-only scope check and creates no memory root; this section applies once persistent Lightweight control is selected.
 
 Before assessment, inspect the root guidance, current Git branch and dirty state, exact target scope, nearby references/consumers, safety boundaries, and available verification entrypoints. Protect unrelated dirty work.
 
@@ -43,7 +50,7 @@ If exactly one accepted legacy `agent-loop/` root exists, reuse it. If both `.ag
 
 ## Lightweight Change Assessment
 
-Assess the request by product meaning, boundary impact, scope, uncertainty, verification, reversibility, ownership, and tracking needs. File count, line count, elapsed time, and number of Plan steps are supporting evidence only; none independently decides the route.
+After Direct Edit is found ineligible because persistence/control is required and no Feature/Bug trigger already decides the route, assess the request by product meaning, boundary impact, scope, uncertainty, verification, reversibility, ownership, and tracking needs. File count, line count, elapsed time, and number of Plan steps are supporting evidence only; none independently decides the route.
 
 Before choosing, enumerate:
 
@@ -56,7 +63,7 @@ Before choosing, enumerate:
 - active Feature, explicit Bug, Project Skill, branch, sealed-release, and dirty-work evidence;
 - every action-specific Human Gate that remains.
 
-Choose exactly one result: `clearly eligible`, `Feature trigger`, or `uncertain`.
+Choose exactly one Lightweight result: `clearly eligible`, `Feature trigger`, or `uncertain`. Do not reclassify an already eligible Direct Edit into a card merely to produce a record.
 
 ## Eligibility
 
@@ -85,7 +92,7 @@ Any one of these signals routes to Feature Construction or the existing owning w
 - unknown consumers or impact that cannot be bounded;
 - ADR, Delivery Contract, complex E2E, multi-environment release design, or long observation need;
 - planned cross-session continuation, pause/resume, handoff, subagent, long observation, or long-term progress/evidence tracking;
-- clear ownership by an active Feature;
+- clear ownership by an active Feature when the edit cannot use Direct Edit inside the current accepted write grant;
 - explicit human request to manage the work as Feature or Bug;
 - scope expansion after the card is emitted.
 
@@ -96,7 +103,7 @@ Human wording such as “just one line” or “simple change” cannot override
 When route evidence is insufficient, stop before Feature creation, local edits, or external effects. Present only the few real routes available, with:
 
 - the concrete evidence and unknown;
-- the Lightweight and Feature/Bug consequences that actually apply;
+- the Direct Edit, Lightweight, and Feature/Bug consequences that actually apply;
 - one Agent recommendation and its reason;
 - the exact human choice needed.
 
@@ -114,6 +121,7 @@ Canonical order:
 
 ```text
 minimum Project Entry checks
+-> Direct Edit Assessment found persistence/control required
 -> Lightweight Change Assessment
 -> clearly eligible
 -> disclose Scope / Plan / Verification / Rollback / Gates
@@ -163,6 +171,8 @@ Eligibility and every Feature hard trigger remain unchanged. The Card must exist
 
 Required Verification and every Existing Test Obligation remain hard. A Regression Test Advisory is only future protection after current proof exists; it cannot replace an accepted test, Gate 2/acceptance/ADR/Contract/Bug obligation, or Human instruction. If no reliable proof exists without adding a new test, keep the Card non-terminal, describe the exact test needed, and ask at the existing Human Review. A failed required check is diagnosis evidence, never an advisory.
 
+Targeted and affected checks are the default. Do not widen a card to a repository-wide full run merely for reassurance. When a full run is genuinely needed for the intended claim, use `runtime.md` Full Test Run Confirmation: disclose the exact command/target/branch/full HEAD/input/environment/cost/claim and wait for its one-execution Human decision unless that exact run is already explicitly authorized.
+
 Scope expansion stops before broader edits. Promotion to initial Feature execution or explicit Bug repair restores normal TDD and mandatory helper routing. Repair-First neither authorizes a wider write nor permits a partial edit to cross a Feature hard trigger.
 
 Production-related facts receive local/static checks first. Any real production read, write, paid call, configuration write, deploy, credential use, or external effect waits for its existing authorization.
@@ -171,7 +181,7 @@ Production-related facts receive local/static checks first. Any real production 
 
 When a reliable memory root exists, run Project Skill Discovery Guard before generic action or helper fallback. A matched active Project Skill must pass manifest validation, load, and its per-invocation Execution Gate before use. Project Skill discovery or execution cannot widen the card Scope.
 
-Lightweight Change Lane does not enter the mandatory Plan Gate / Plan or Execute Task / Story helper-backed stages and does not invoke the TDD helper by default. The controller owns the persisted card Plan and selects fresh failure-matched verification. Optional method advice may not introduce helper-native directories, a Feature workspace, a construction-grade plan, or a new mode/gate. Promotion to initial Feature execution or explicit Bug repair restores all normal mandatory helper protocols, including TDD.
+Direct Edit and Lightweight Change Lane do not enter the mandatory Plan Gate / Plan or Execute Task / Story helper-backed stages and do not invoke the TDD helper by default. Direct Edit creates neither Plan nor No-Plan Decision; the controller owns the persisted Lightweight card Plan and selects fresh failure-matched verification. Optional method advice may not introduce helper-native directories, a Feature workspace, a construction-grade plan, or a new mode/gate. Promotion to initial Feature execution or explicit Bug repair restores all normal mandatory helper protocols, including TDD.
 
 ## Accidental Recovery
 
@@ -250,6 +260,7 @@ Commit, push, PR, merge, tag, release, publish, seal, deployment, production/ext
 ## Forbidden Behavior
 
 - Do not choose the lane because a diff looks small, changes one file, or has few steps.
+- Do not create a persistent card for work that satisfies every Direct Edit condition merely to preserve process evidence.
 - Do not let “simple” override Feature hard triggers.
 - Do not omit Plan, progress, fresh verification, diff review, rollback, or memory-impact review.
 - Do not manufacture RED evidence by reversing a completed write, breaking a fixture, using a bad command, or treating an unrelated failure as proof.

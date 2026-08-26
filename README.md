@@ -1,8 +1,8 @@
 # Agent Loop
 
-**Current version:** 1.5.7 (in development)
+**Current version:** 1.5.8 (stable)
 
-Agent Loop 1.5.7 is the current in-development version on `alpha/v1.5.7`, adding Progressive Verification (Feature Verification Profile) and Proof First. The current formal stable release remains 1.5.6; its stable tag is `stable-v1.5.6`.
+Agent Loop 1.5.8 is the current formal stable release, adding a zero-artifact Direct Edit Fast Path and exact one-execution Human confirmation for newly proposed full test runs. Its stable tag is `stable-v1.5.8`.
 
 Agent Loop is a reusable controller skill for single-human, CLI-agent software development. It lets the Agent own project diagnosis, workflow sequencing, implementation, verification, and memory maintenance while the human keeps control of goals, product meaning, consequential decisions, and external actions.
 
@@ -82,13 +82,18 @@ Onboarding and Lightweight Change scanners follow the same fact boundary. Onboar
 |---|---|---|
 | Chat | Questions, explanation, status, or discussion with no requested workflow action | No Requirement or Feature created by default |
 | Operational Support | Code-guided testing, diagnosis, rollout planning, or environment help | Read-only first; production/external actions remain gated |
-| Lightweight Change Lane | Bounded, reversible, ordinary non-Bug work with exact verification | Persistent monthly Change card, adaptive Plan, Repair-First Verification, diff review, rollback, Memory Review |
+| Direct Edit Fast Path | Truly trivial, deterministic, bounded, reversible ordinary non-Bug work with one exact final check | No card, Plan, new test, per-edit memory, or persistent workflow artifact |
+| Lightweight Change Lane | Bounded ordinary non-Bug work that needs persistence, recovery, broader checking, or more than a direct edit | Persistent monthly Change card, adaptive Plan, Repair-First Verification, diff review, rollback, Memory Review |
 | Feature | Behavior, API, state, data, permission, security, architecture, migration, broad impact, or uncertain consumers | Product Slice, spec, tasks, tests, Plan, initial TDD, verification, review, drift, memory |
 | Bug Follow-up | Explicit Bug identity, evidence, deduplication, expected behavior, ownership, repair, and close | `bugs/YYYY-MM-DD-<bug-slug>/` plus a Feature-owned TDD repair |
 
-Initial Feature implementation and explicit Bug repair keep TDD. A Review correction already inside the accepted boundary, or a clearly eligible Lightweight Change, repairs first, verifies the changed behavior with fresh evidence, reruns affected existing checks, and then recommends specific regression coverage. Fresh Required Verification and every Existing Test Obligation remain mandatory; only an Additional Regression Test is advisory.
+Initial Feature implementation and explicit Bug repair keep TDD. A truly eligible Direct Edit uses one final diff inspection plus the minimum matched check without manufacturing a test or persistent record. A Review correction already inside the accepted boundary, or a clearly eligible Lightweight Change, repairs first, verifies the changed behavior with fresh evidence, reruns affected existing checks, and then recommends specific regression coverage. Fresh Required Verification and every Existing Test Obligation remain mandatory; only an Additional Regression Test is advisory.
 
-An explicit commit or commit-and-push request may use the **Full-Worktree Git Fast Path**. The Agent presents the entire staged/unstaged/untracked/deleted worktree, warnings, exact commit message, and separate Commit/Push rows once; after Human confirmation it uses `git add -A` and does not silently drop files. Tests are not run merely for this Git action unless the Human makes them a condition. An unverified commit is reported as packaging only and never proves completion, close, or release readiness.
+For repeated tuning of the same property inside one accepted Feature boundary, intermediate values need no per-iteration card, Plan, test, or formal check. After the Human chooses the final value, the Agent verifies that final diff once. Public contracts, business/runtime multipliers, external endpoints, data/state/permission/security/migration changes, new test obligations, uncertain consumers, or cross-session recovery needs leave Direct Edit immediately.
+
+An explicit commit or commit-and-push request may use the **Full-Worktree Git Fast Path**. The Agent presents the entire staged/unstaged/untracked/deleted worktree, warnings, exact commit message, and separate Commit/Push rows once; after Human confirmation it uses `git add -A` and does not silently drop files. Tests are not run merely for this Git action unless the Human makes them a condition. Predictable Push-triggered CI is disclosed and not duplicated locally; a manual CI rerun needs fresh authority. An unverified commit is reported as packaging only and never proves completion, close, or release readiness.
+
+A newly proposed complete test matrix, six-domain validation, or release suite requires one exact **Full Test Run Confirmation** describing the commands, branch/HEAD and dirty input boundary, environment/target, cost, and intended claim. It authorizes one execution by default; Profile labels, implementation approval, Commit, input changes, or earlier runs do not create reusable test authority. Only the same Human decision's explicitly bounded retry count and condition may cover an unchanged retry. Declining optional coverage narrows claims without blocking an unrelated Commit, while declining required release validation keeps Release/readiness blocked.
 
 Feature delivery includes:
 
@@ -203,14 +208,14 @@ Use this route when `npx` is unavailable or the environment must install from a 
 ```bash
 # Public GitHub
 git clone \
-  --branch stable-v1.5.6 \
+  --branch stable-v1.5.8 \
   --depth 1 \
   https://github.com/Shadow-linux/agent-loop.git \
   ~/.local/share/agent-loop-source
 
 # Private Git mirror
 git clone \
-  --branch stable-v1.5.6 \
+  --branch stable-v1.5.8 \
   --depth 1 \
   <git-mirror-url> \
   ~/.local/share/agent-loop-source
@@ -242,7 +247,7 @@ For a later clone-based upgrade, fetch tags, check out the new stable tag explic
 
 ```bash
 git -C ~/.local/share/agent-loop-source fetch --tags origin
-git -C ~/.local/share/agent-loop-source checkout --detach stable-v1.5.6
+git -C ~/.local/share/agent-loop-source checkout --detach stable-v1.5.8
 ```
 
 `~/.agents/skills/agent-loop` is the preferred shared location. If an Agent runtime does not discover it, synchronize the same verified source into that runtime's configured Skill directory rather than maintaining divergent copies.

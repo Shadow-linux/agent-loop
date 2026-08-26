@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE = ROOT / "templates/root-AGENTS.md"
 RUNTIME = ROOT / "references/runtime.md"
-EXPECTED_REVISION = "1.5.7-20260815.1"
+EXPECTED_REVISION = "1.5.8-20260826.1"
 
 EXPECTED_SECTIONS = (
     ("bootstrap", ".agent-loop/project.md"),
@@ -41,12 +41,12 @@ EXPECTED_GATEWAYS = (
         "references/stage-guides.md", "references/artifact-rules.md",
         "references/feature-follow-up.md",
     )),
-    ("Explicit Bug intent, regression evidence, or clear Feature ownership",
+    ("Explicit Bug intent, regression evidence, or ownership by a closed or recent Feature",
      "Bug / Feature Follow-up", (
         "references/bug-management.md", "references/feature-follow-up.md",
     )),
-    ("Already-defined actionable ordinary non-Bug change that appears bounded, reversible, and exactly verifiable",
-     "Lightweight Change Assessment", ("references/lightweight-change-lane.md",)),
+    ("Already-defined actionable ordinary non-Bug change that may be trivial, deterministic, bounded, reversible, and exactly verifiable",
+     "Direct Edit Assessment", ("references/direct-edit-fast-path.md",)),
     ("Product need, meaning, scope, or delivery phases are still being shaped",
      "Requirements Discussion", (
         "references/requirement-management.md", "references/product-definition.md",
@@ -138,8 +138,8 @@ GATE_CLASSES = (
 ARTIFACT_AUTHORITY = (
     "Requirement owns human source and product meaning; Decision / ADR owns accepted "
     "technical landing; Feature owns implementation; Bug owns defect identity and "
-    "lifecycle; Lightweight Execution Card owns bounded change evidence; project memory "
-    "owns durable current facts."
+    "lifecycle; Direct Edit creates no artifact; Lightweight Execution Card owns persistent "
+    "bounded-change evidence; project memory owns durable current facts."
 )
 FORBIDDEN_DETAIL = (
     "Requirement Model Scope Inventory",

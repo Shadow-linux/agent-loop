@@ -87,7 +87,7 @@ class RootAgentsBlocksTests(unittest.TestCase):
 
     def test_stale_block_version_reports_changed(self) -> None:
         stale = self.template_text.replace(
-            "block-version:1.5.7-20260815.1",
+            "block-version:1.5.8-20260826.1",
             "block-version:1.4.0",
             1,
         )
@@ -115,7 +115,7 @@ class RootAgentsBlocksTests(unittest.TestCase):
         nested = (
             self.template_text[:line_end]
             + "<!-- agent-loop:managed-start section:nested "
-            + "source:.agent-loop/project.md block-version:1.5.7-20260815.1 -->\n"
+            + "source:.agent-loop/project.md block-version:1.5.8-20260826.1 -->\n"
             + "nested\n<!-- agent-loop:managed-end section:nested -->\n"
             + self.template_text[line_end:]
         )
@@ -125,7 +125,7 @@ class RootAgentsBlocksTests(unittest.TestCase):
         marker = "<!-- agent-loop:managed-end section:ownership -->"
         duplicate = (
             f"{marker}\n<!-- agent-loop:managed-start section:ownership "
-            "source:.agent-loop/project.md block-version:1.5.7-20260815.1 -->\n"
+            "source:.agent-loop/project.md block-version:1.5.8-20260826.1 -->\n"
             f"duplicate\n{marker}"
         )
         self.assert_invalid(self.template_text.replace(marker, duplicate, 1), "duplicate-section")

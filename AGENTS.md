@@ -137,6 +137,8 @@ When the human asks for a full validation, logic test, pressure test, scoring re
 
 Also run that method after coordinated changes to canonical stage order, routing axes or precedence, controller fallback, Human Gates, status lifecycle, project memory, Decision / ADR placement, root Stage Map, or cross-file workflow invariants. A focused edit may use affected tests only when it does not change those control surfaces.
 
+A full-validation trigger makes the evidence mandatory before the corresponding completion or release claim; it does not by itself authorize running a broad suite. First finish focused checks and present the exact full commands, repository/branch/HEAD and dirty-input boundary, environment/target, expected cost, and intended claim. Run that concrete full set once only after exact Human confirmation. Relevant input or HEAD changes, command/target changes, interruption, or rerun require fresh confirmation. Commit requests never imply tests; disclose predictable Push-triggered CI and do not duplicate the same full run locally.
+
 Full validation is a semantic audit plus executable regression testing. Mechanical checks alone are not sufficient. Preserve a RED baseline, add regression assertions for real loopholes, rerun all tests after repair, and save the Chinese report under `docs/reports/`.
 
 Do not put repository-maintenance validation rules in `references/`, `templates/root-AGENTS.md`, or target-project `.agent-loop/` artifacts. Those surfaces are for the Agent Loop user workflow; this `AGENTS.md` and `docs/maintenance/` govern development of the skill repository itself.

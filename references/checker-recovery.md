@@ -281,9 +281,11 @@ Formal repair must:
 1. occur in the Agent Loop source repository;
 2. retain the minimal failing regression test;
 3. update the canonical checker and any genuinely mismatched published authority;
-4. run focused and required full validation;
+4. run focused validation, then present the exact required full command set, repository/branch/HEAD, changed-input boundary, environment/target, expected cost, and claim through Full Test Run Confirmation before each full execution;
 5. pass normal Review and Drift Check;
 6. keep commit, push, tag, release, publish, seal, and installation/update as independent Human Gates;
 7. rerun the original target with the newly installed canonical checker.
 
 The Agent Loop source repository cannot release a checker fix using only its own isolated temporary patched result. Canonical source tests and the formally changed checker must pass.
+
+Checker Rescue, a one-Gate substitute, or approval to edit the Checker does not authorize a full suite. A relevant input or HEAD change, different target, command change, failed run, or manual rerun expires the earlier Full Test Run Confirmation. If required full validation is declined, preserve the focused facts and keep the dependent release/readiness claim blocked rather than changing the canonical Checker result or manufacturing a pass.

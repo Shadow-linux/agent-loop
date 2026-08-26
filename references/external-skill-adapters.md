@@ -92,6 +92,8 @@ This ownership is invariant even when a helper is mandatory. A helper may impose
 
 Do not copy an external skill's full workflow into `agent-loop`. Borrow the method, then translate the result into the current `agent-loop` artifact.
 
+Direct Edit Fast Path does not invoke an external helper. It remains a response-local controller method with no Plan/No-Plan Decision, TDD, new test, notes row, or helper artifact; promotion to another workflow resolves that workflow's helpers before acting.
+
 For Lightweight Change Lane, the persistent monthly card remains controller-owned and does not enter a mandatory helper-backed stage. Review Repair Fast Path remains owned by Review and keeps its Review helper resolution. Neither path invokes the TDD helper by default. Do not expand a Lightweight Execution Card into `docs/superpowers/`, a Feature workspace, or a construction-grade plan. An external helper may advise a method only when already appropriate; it cannot introduce a helper-specific path, artifact, mode, gate, or scope expansion. Promotion to initial Feature execution or explicit Bug repair restores the normal helper protocol.
 
 ## Path Override Rule
@@ -247,6 +249,8 @@ When Project Skill Creation / Update starts:
 When `Execute Task / Story` starts and Superpowers is available:
 
 The TDD Adapter remains mandatory for initial Feature execution and explicit Bug repair, not for Review Repair Fast Path or clearly eligible Lightweight Change.
+
+Direct Edit never enters the TDD Adapter. If the only reliable proof requires designing a new test, Direct Edit is inapplicable and the Agent reclassifies before implementation.
 
 1. Use `superpowers:test-driven-development` as the preferred method.
 2. Follow RED/GREEN/REFACTOR for the formal execution path, Human-requested TDD, and accepted Plans that require it.

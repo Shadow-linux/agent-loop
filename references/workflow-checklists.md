@@ -142,8 +142,22 @@ Before using an external skill or plugin inside a stage:
 - [ ] Use `references/runtime.md` for routing precedence and complete leaf-stage order; a Gateway never removes or reorders downstream stages.
 - [ ] Reclassify and select a new stage only when the latest human intent or project evidence changes.
 
+## Direct Edit Fast Path
+
+- [ ] Confirm explicit Bug management does not apply and active Feature ownership is either absent or supplies the current accepted write grant.
+- [ ] Run the minimum read-only branch/full-HEAD/dirty-diff/target/reference scope check.
+- [ ] Require every eligibility condition: exact decided result/paths, bounded consumers, no semantic or hard boundary, inverse-diff rollback, one inexpensive credible proof, current-session completion, and exact diff attribution.
+- [ ] Before writing, disclose exact target, intended correction, minimum check, and rollback in one concise response-local statement.
+- [ ] Create no Feature, Change card, Plan, No-Plan Decision, new test/RED, notes row, scanner entry, Memory Review, project-memory record, or helper artifact.
+- [ ] Apply only the bounded edit; inspect its exact final diff; run the cheapest artifact-matched parser/syntax/reference/residual check.
+- [ ] For same-scope Feature tuning, perform no per-iteration test or record; after the Human selects the final value, run one final diff plus minimum matched check and preserve owning Feature verification.
+- [ ] Reject business/runtime multipliers and every product/interface/data/state/permission/security/dependency/migration/architecture/external effect from Direct Edit.
+- [ ] If a new test is the only reliable proof, durable recovery is needed, scope expands, or attribution/proof fails, make no completion claim and route to Lightweight, Feature/Bug, or Human Choice before broader writes.
+- [ ] Confirm Direct Edit grants no Git, Release, production/external, Task Done, Feature Close, or readiness authority.
+
 ## Lightweight Change Lane
 
+- [ ] Run Direct Edit Assessment before creating a persistent card; enter Lightweight only when durable execution/recovery control is needed and no Feature/Bug trigger applies.
 - [ ] Confirm Project Entry classification and perform only the minimum root-guidance, Git/dirty-state, scope, nearby-reference, safety, branch/sealed, and verification-entry checks needed for the route.
 - [ ] Check explicit Bug Management and active Feature ownership before lightweight eligibility.
 - [ ] Require every eligibility condition; treat any Feature hard trigger as decisive.
@@ -201,7 +215,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Read `STRUCTURAL_CURRENT | STRUCTURAL_CHANGED | STRUCTURAL_INVALID` explicitly. A zero exit for `STRUCTURAL_CHANGED` still requires Agent impact review; compare project-owned block meaning to its declared source instead of treating the checker as semantic proof.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.7-20260815.1`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.8-20260826.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -288,7 +302,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Read `STRUCTURAL_CURRENT | STRUCTURAL_CHANGED | STRUCTURAL_INVALID` explicitly. A zero exit for `STRUCTURAL_CHANGED` still requires Agent impact review; compare project-owned block meaning to its declared source instead of treating the checker as semantic proof.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.7-20260815.1`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.8-20260826.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -476,6 +490,8 @@ Before using an external skill or plugin inside a stage:
 - [ ] Set `Implementation Readiness: review-ready` only after package completeness, placeholder, trace, real-code-context, verification, risk, rollback, and consistency checks pass.
 - [ ] Before Gate 2, have AI verify complete Package Files coverage and record the inventory, initial Agent-ready task IDs, `Gate 2 Accepted Stories`, initial Active Plan Scope, matching Plan/No-Plan evidence, the recorded Feature Verification Profile fields with hard-floor check, and `Implementation Readiness: review-ready`; leave review time pending until the reliable Human decision.
 - [ ] Gate 2 `Implementation Readiness Review` presents one compact decision table for Execution Boundary, Verification, Risk/Rollback, and execution choice; keep the complete package available and separately name every conditional action.
+- [ ] When Verification proposes a full run, display its exact command set, repository/target, branch/full HEAD or bound current-input rule, relevant environment, expected cost/effects, supported claim, and expiry; a Profile label alone grants nothing.
+- [ ] Treat Human acceptance of that exact unchanged Gate 2 full-run row as its one execution confirmation and do not ask twice.
 - [ ] Gate 2 choices are `Approve package and start implementation`, `Approve package only; do not implement yet`, `Revise package`, or `Pause`.
 - [ ] `Approve package only` sets readiness accepted but never authorizes execution.
 - [ ] `Approve package and start implementation` sets readiness accepted and enables Feature Auto-Loop without another generic enablement question.
@@ -645,6 +661,7 @@ Before using an external skill or plugin inside a stage:
 
 Before Execute Task / Story:
 
+- [ ] Confirm this is a Feature task/story; Direct Edit creates neither a Plan nor No-Plan Decision and never enters this checklist.
 - [ ] Do not execute immediately after task creation.
 - [ ] Decide whether this task/story requires construction-grade `plan.md`.
 - [ ] Scale Plan breadth by the recorded Feature Verification Profile tier (`focused | full | high-assurance`); the construction-grade core is mandatory at every tier.
@@ -789,6 +806,7 @@ Checklist:
 - [ ] Resolve and load `superpowers:verification-before-completion` or `verification-before-completion` before any completion claim; record Stage Helper Resolution, or record `unavailable` / `load-failed` before fallback.
 - [ ] If Superpowers `verification-before-completion` or another verification helper is available, use it through `external-skill-adapters.md` while recording evidence in agent-loop `notes.md`.
 - [ ] Identify what command or action proves the claim.
+- [ ] Default to focused and affected evidence. Before a newly proposed repository-wide/all-packages/project-E2E/environment/six-domain full run, use Full Test Run Confirmation; do not infer permission from a Profile label.
 - [ ] Run it fresh.
 - [ ] Read full output and exit status.
 - [ ] Record evidence in `notes.md`.
@@ -801,7 +819,18 @@ Checklist:
 - [ ] Accept temporary substitute evidence only for the named Gate after explicit Human decision; expire it on Gate, target, command, checker/support/input/authority digest, or negative-control change.
 - [ ] Keep residual canonical failure visible at every later action-specific Gate that relies on the result.
 - [ ] Require formal Agent Loop source repair and canonical focused/full validation before claiming the checker or Agent Loop itself fixed.
+- [ ] If a repair changes a confirmed full-run command/target/HEAD/input/environment, stop before rerun and obtain a fresh one-execution confirmation.
 - [ ] Do not claim completion without evidence.
+
+### Full Test Run Confirmation (internal method)
+
+- [ ] Treat this as response-local execution authority inside the owning stage, not a canonical stage, status, Mode, lifecycle, artifact, or replacement Human Gate.
+- [ ] Explain why focused evidence is insufficient or why the full run is recommended.
+- [ ] Present the exact command/bounded command set, repository/target, branch/full HEAD, relevant input/environment, expected duration/resource/external effects, supported Gate/claim, and expiry.
+- [ ] Record the Agent recommendation and wait unless the current Human instruction or Gate 2 already visibly accepts the same exact run.
+- [ ] Treat one confirmation as one execution. Relevant command/target/HEAD/input/environment change, Gate exit, or manual rerun requires fresh confirmation unless the same decision explicitly bounded retry count/condition.
+- [ ] Create no persistent authorization artifact, cache, stage, status, Mode, lifecycle, or generic force/skip parameter.
+- [ ] On decline, preserve focused evidence truthfully; block only the claim/action whose required evidence is missing.
 
 ## Review
 
@@ -915,6 +944,9 @@ The following checklist is normal-submit only; skip it entirely for Full-Worktre
 - [ ] Require merge evidence and a separate cleanup decision before deleting a temporary development branch; never treat a retained release aggregation branch as temporary cleanup.
 - [ ] Treat each create/switch/merge/delete/push/tag/release/publish/seal action as separately Human-gated even when the strategy and plan are accepted; create/switch uses the Branch Action Gate.
 - [ ] When using one Batch Human Review, keep each requested Git/release action as an independent decision row with exact scope and preconditions. Do not infer Tag, Push, Release, Publish, or Seal authorization from another row.
+- [ ] Commit never implies tests. Use the smallest applicable check for “commit after tests pass” unless the exact full run is separately confirmed; an optional full-run decline does not revoke an independent Commit grant but limits claims.
+- [ ] Disclose predictable automatic full CI in the Push row; exact Push approval covers it without a duplicate local full run. Require fresh confirmation for a manual CI rerun.
+- [ ] If Release-required full validation is declined, keep Release and release-readiness blocked.
 - [ ] Present submit/integrate decision with Human Review Summary table.
 - [ ] Ask human which action to take: prepare only, commit, PR text, merge note, tag, push, release, publish, seal, cleanup, or skip.
 - [ ] Only perform the exact commit, push, PR, merge, tag, release, publish, seal, or cleanup action after its explicit Human Gate decision.
@@ -925,12 +957,13 @@ The following checklist is normal-submit only; skip it entirely for Full-Worktre
 
 - [ ] Confirm the Human explicitly requested `commit` or `commit and push`; a readiness question stays on normal Submit.
 - [ ] Inspect repository, branch, HEAD, unresolved Git operation/conflict state, and the entire staged/unstaged/untracked/deleted worktree.
-- [ ] Present one lightweight Commit Confirmation with the complete worktree file/change summary, proposed commit message, verification truth, and exact remote/ref when Push was requested.
+- [ ] Present one lightweight Commit Confirmation with the complete worktree file/change summary, proposed commit message, verification truth, exact remote/ref, and predictable automatic full-CI effect when Push was requested.
 - [ ] Do not run tests or perform code/quality Review, Feature Review, verification Review, Drift Review, or Completion Review merely for this Git action; ask no second confirmation.
 - [ ] Do not exclude, restore, clean, stash, split, or discard content.
 - [ ] State `not run for this Git action; no completion or release-readiness claim` unless the Human supplied an exact verification precondition.
 - [ ] After confirmation, run `git add -A`, confirm the index represents the entire worktree, and commit immediately with the confirmed message.
 - [ ] Plain `commit` authorizes Commit only; `commit and push` authorizes both in order. Use the unique upstream; if absent/ambiguous, finish Commit and ask only for Push destination.
+- [ ] Do not duplicate an approved automatic Push CI run locally; a later manual CI rerun requires fresh Full Test Run Confirmation.
 - [ ] Preserve the worktree/index and report facts after any conflict, ambiguity, policy stop, index mismatch, commit failure, or push failure.
 - [ ] Do not use Git packaging permission as evidence for fixed, verified, done, completed, closed, or release-ready claims.
 

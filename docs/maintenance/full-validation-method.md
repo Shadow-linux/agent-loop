@@ -25,6 +25,8 @@
 
 如果人类只要求某个独立功能的评分、逻辑测试或专项压测，使用 `docs/maintenance/feature-validation-method.md`。单功能方法使用独立五域权重和 feature-scoped tests，但不替代本节触发条件已经要求的全量验证。
 
+触发条件说明全量证据在相应完成或发布判断前是必需的，但它本身不是运行命令的授权。维护 Agent 可以先完成 focused validation、机械检查、命令清单和风险评估；真正执行全量命令必须遵守下面的“具体全量执行确认”。
+
 ## 验证原则
 
 1. 先确定审计对象是 Git `HEAD`、某个 commit，还是当前工作区；报告中必须写明。
@@ -80,7 +82,23 @@
 2. 根据改动范围读取相关 `references/`、`templates/`、`examples/` 与 `tests/`。
 3. 检查 `git status --short --branch` 和 `git diff --stat`，记录审计边界。
 4. 列出受影响的不变量与跨文件入口，避免只跟随 diff 阅读。
-5. 运行现有 `tests/*.sh` 及基础语法检查，记录失败项，不要先修改后补基线。
+5. 准备现有 `tests/*.sh`、Python tests 与基础语法检查的 exact commands；在取得针对当前输入和命令集的具体全量执行确认后再运行并记录失败项，不要先修改后补基线。
+
+## 具体全量执行确认
+
+运行完整 `tests/*.sh`、全部 Python tests、六域 full validation、完整 release validation 或同等范围的广泛测试前，维护 Agent 必须向人类展示：
+
+- exact commands 或不可歧义的命令集合；
+- 仓库、branch、HEAD，以及当前 tracked/untracked/dirty 输入边界；
+- OS、运行环境和外部 target；
+- 预计时间、资源或外部 CI 影响；
+- 本次结果要支撑的完成、质量或发布判断。
+
+人类对该具体内容的一次确认只授权执行一次。`full` / `high-assurance` Profile、Proposal/Plan 接受、实现授权、Commit 请求或“跑必要测试”一类泛化表达都不是可复用的全量执行授权。相关输入或 HEAD 变化、命令集合变化、环境/target 变化、失败或中断、离开当前 Gate、手动重跑或 CI rerun，均须重新展示当前事实并取得新的确认。
+
+本源码仓库的维护级全量验证采用更严格边界，does not reuse the runtime bounded-retry exception：即使目标项目运行时允许人类在同一决定中预先限定重试次数和条件，本仓库的 full validation 失败、中断或重跑仍必须刷新当前事实并重新确认。
+
+若 Gate 2 已经展示相同命令、输入边界和目标，且人类明确接受 package-and-start，则不要为第一次执行重复询问。若可选全量被拒绝，保留 focused 结果并收窄结论；若该全量是 release/release-readiness 的硬前置，则阻断对应发布判断。Commit 不自动触发全量；Push 预期触发的自动 CI 应先披露，并不得同时重复本地同等全量。
 
 ## RED：记录修复前基线
 

@@ -139,6 +139,14 @@ AI judges whether a reliable Human decision exists, whether Package Files are co
 
 After a reliable Human choice, record the durable Gate 2 baseline fields directly. On later package-only start, the Agent re-reads that baseline and current Feature artifacts, checks the accepted boundary and Human instruction, preserves the original Gate 2 values, records separate Later Start decision/time/Human evidence, and updates current project `Gate Mode` only when reliable. If context loss leaves Human provenance uncertain, ask one blocking confirmation. Feature Gate acceptance and continuation require no local Feature review Checker.
 
+### Full Test Run Confirmation
+
+Before a newly proposed full suite, complete repository test matrix, six-domain validation, release validation, or equivalent broad run, show the exact commands or named command set, scope, repository/branch/HEAD, current input or worktree boundary, environment/target, expected cost or duration, and the claim that needs the evidence. Ask for one exact confirmation. One confirmation authorizes one execution of that concrete full run; it is neither a reusable testing grant nor authorization for Commit, Push, Release, or another action.
+
+When Gate 2 already displayed that exact full run plus a clearly bound final-input rule and the Human accepted package-and-start, the Verification decision authorizes its first matching execution inside the accepted boundary; do not ask twice. A Verification Profile label, `run the necessary tests`, an older approval, or a broad quality request is not enough. A relevant input or HEAD change, different environment or target, materially changed command set, Gate exit, failed or interrupted run, or manual rerun requires fresh confirmation unless the same Human decision supplied an explicitly bounded retry count and condition and every bound input still matches.
+
+If optional full coverage is declined, preserve the focused evidence and narrow the completion/readiness claim instead of blocking an unrelated Commit. If the declined run is a required release or release-readiness precondition, keep Release and release-readiness blocked and state the missing evidence. A Push-triggered automatic CI run and a manual CI rerun follow the separate rules in `submit-and-integrate.md`.
+
 ### Optional Agent Checker Rescue Evidence
 
 This is an optional evidence block inside the current response or an existing owning Feature, Bug, Change, Requirement, ADR, Onboarding, or guidance artifact. It is not a standalone report, lifecycle, stage, status, Gate, authorization record, or default directory.

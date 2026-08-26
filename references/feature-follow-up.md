@@ -1,6 +1,6 @@
 # Feature Follow-up And Flow-back
 
-Use this when explicit defect/regression/QA evidence, a post-close correction, or clear Feature ownership may require Flow-back. For explicit Bug record/manage/investigate/fix intent, load `references/bug-management.md`; Bug Management is the internal intake/triage method and this reference owns Feature relationship routing. An ordinary actionable non-Bug change enters Lightweight Change Assessment before candidate Feature scans unless ownership or a Feature hard trigger is already decisive.
+Use this when explicit defect/regression/QA evidence, a post-close correction, or clear Feature ownership may require Flow-back. For explicit Bug record/manage/investigate/fix intent, load `references/bug-management.md`; Bug Management is the internal intake/triage method and this reference owns Feature relationship routing. An ordinary actionable non-Bug change enters Direct Edit Assessment first, then Lightweight Change Assessment when persistence/control is needed, before candidate Feature scans unless ownership or a Feature hard trigger is already decisive.
 
 ## Purpose
 
@@ -14,7 +14,7 @@ Feature Follow-up requires existing agent-loop memory. If `.agent-loop/` or lega
 
 Generic “small tweak” wording does not by itself enter Bug Management or Feature Follow-up.
 
-The isolated words `fix`, “修一下”, “改一下”, “small tweak”, “quick tweak”, or “minor adjustment” require semantic assessment. If they describe a bounded ordinary non-Bug synchronization with no Feature hard trigger, route to Lightweight Change Assessment. If evidence shows expected-versus-observed defect management, regression/QA failure, accepted-behavior change, or active/closed Feature ownership, continue here.
+The isolated words `fix`, “修一下”, “改一下”, “small tweak”, “quick tweak”, or “minor adjustment” require semantic assessment. If they describe an already-decided genuinely trivial deterministic ordinary non-Bug edit, run Direct Edit Assessment; if durable control is needed but no Feature trigger applies, route to Lightweight Change Assessment. If evidence shows expected-versus-observed defect management, regression/QA failure, accepted-behavior change, or active/closed Feature ownership, continue here. An active Feature may absorb an eligible Direct Edit only under its current accepted write grant; a closed Feature cannot be silently reopened.
 
 Route here when the human says or implies:
 
@@ -83,7 +83,7 @@ Rules:
 
 ## Classification
 
-Before building the Candidate Match Matrix, exclude a clearly bounded ordinary non-Bug local change through Lightweight Change Assessment. Do not use this exclusion when an active/closed Feature owns the work, product behavior changes, explicit Bug management intent exists, or another Feature hard trigger applies.
+Before building the Candidate Match Matrix, exclude an eligible ordinary non-Bug local edit through Direct Edit Assessment, then persistent Lightweight Change Assessment when needed. Do not use this exclusion when a closed Feature owns the work, product behavior changes, explicit Bug management intent exists, or another Feature hard trigger applies. For an active owning Feature, Direct Edit may operate only inside that Feature's current accepted write grant and keeps all owning verification/close obligations.
 
 Use this table:
 

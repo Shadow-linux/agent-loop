@@ -23,6 +23,8 @@ Project memory must not be used as a backlog. Do not write future feature ideas,
 
 Do not store Lightweight Execution Card history, pending inventory, command logs, or a lightweight backlog in `project.md`. Persistent cards remain under `<memory-root>/changes/YYYY-MM/`; project memory stores only refined current facts.
 
+Direct Edit does not write project memory, create a Change card, or participate in pending-count/age consolidation. If the requested edit itself establishes a durable fact that future Agents must recover independently, it is not Direct Edit eligible; use Lightweight Change, the owning Feature, or the applicable memory workflow.
+
 A changes-only root does not prove that project memory is initialized or reliable. When only `changes/` exists, do not create `project.md`, create enterprise `project/*.md`, or switch Memory Mode automatically. Classify no-value candidates as `none`; route a valuable candidate without a reliable owner to `human-review` and recommend Project Entry / Project Memory Init.
 
 Run the read-only Lightweight Change scanner at Project Entry when Changes exist, after Change completion, and before release. `completed + pending >= 3` or oldest pending age greater than seven full calendar days starts proactive semantic consolidation; exactly seven days does not. Known drift and pre-release context are Agent/controller fact triggers rather than scanner flags. Post-merge reconciliation reads one relevant Change only when the observed conflict directly requires it.

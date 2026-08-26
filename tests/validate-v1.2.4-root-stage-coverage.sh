@@ -3,7 +3,7 @@ set -euo pipefail
 
 root=$(cd "$(dirname "$0")/.." && pwd)
 template="$root/templates/root-AGENTS.md"
-expected_revision="1.5.7-20260815.1"
+expected_revision="1.5.8-20260826.1"
 
 assert_contains() {
   local file=$1

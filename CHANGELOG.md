@@ -1,5 +1,24 @@
 # Agent Loop Changelog
 
+## 1.5.8 — 2026-08-27
+
+_当前状态：正式稳定版；最终 Human Review 与精确 Batch Release Gate 已接受，53/53 Shell contracts、420/420 Python tests、机械检查与六域审计通过，评分 96/100 STRONG。正式 tag 为 `stable-v1.5.8`；默认安装通道 `main` 与三个已配置发布端纳入同批同步，installed Skill 同步未授权。_
+
+### Direct Edit Fast Path
+- 在 persistent Lightweight Change 之前增加零产物 Direct Edit Assessment：只接受真正琐碎、确定、边界极小、可回滚、无未知消费者且能以最终 diff + 最小匹配检查精确证明的普通非 Bug 变更。
+- Direct Edit 不创建 card、Plan、No-Plan Decision、新测试、notes、逐次项目记忆、canonical stage/status/mode 或默认目录；显式 Bug、公共契约、数据/状态/权限/安全/迁移、外部 endpoint、business/runtime multiplier、未知消费者、新测试义务和跨会话恢复会退出该路径。
+- active Feature 内同一 accepted boundary、同一 tuning question 的可逆迭代不做逐值 formal check；人类选择最终值后只检查最终 diff 和最小匹配证据一次。既有 Feature/Bug 的 Required Verification 与 Existing Test Obligation 不因 Direct Edit 消失。
+- Persistent Lightweight Change 继续保留月度执行卡、Adaptive Plan、Repair-First Verification、rollback 和 Memory Review；历史卡片保持兼容，不被 Direct Edit 追溯重写。
+
+### Full Test Run Confirmation
+- 新提议的完整 test matrix、六域 full validation、release validation 或同等广泛运行，必须展示 exact commands、branch/HEAD/dirty 输入、环境/target、成本和目标结论；一次确认只授权一次具体执行。
+- Gate 2 已经精确展示命令和 clearly bound final-input rule 并接受的首次匹配执行不重复询问；Profile、实现许可、Commit、旧结果和泛化测试措辞不是授权。相关输入/HEAD、命令、target、失败/中断或 rerun 默认使确认失效；仅同一决定中的 explicitly bounded retry count and condition 可覆盖仍匹配的重试。
+- Commit 不自动运行测试；Push 预期触发的自动 CI 先披露且不在本地重复，manual CI rerun 需要新授权，除非同一决定的 explicitly bounded retry count and condition 仍精确适用。拒绝可选全量只收窄结论，拒绝 release 所需全量会阻断 Release/readiness。
+
+### 协调面与版本同步
+- 同步 runtime/design、stage/checklist、Human Review、Submit/CI/Release、Checker formal repair、project guidance、root managed blocks、人类 README/Usage 与压力场景；不新增通用 force/skip 参数，也不弱化既有 Human Gates。
+- Skill/metadata/人类文档版本更新为 1.5.8，13 个 root managed blocks 使用 `1.5.8-20260826.1`；正式发布使用稳定分支 `v1.5.8`、tag `stable-v1.5.8`，并将同一发布提交同步到默认安装通道 `main`。
+
 ## 1.5.7 — 2026-08-15
 
 _当前状态：开发中（技术验收就绪）；alpha/v1.5.7 分支实施 Progressive Verification + Proof First 提案（`docs/proposal/v1.5.x/progressive-verification-proof-first.md`），已通过 RED 基线、52 Shell + 420 Python 全量回归、15 变异契约、对抗性压测、E2E 模拟与三轮独立评审（证据存 `docs/reports/`）。等待最终 Human Review 接受与发布 Gates。_

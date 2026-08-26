@@ -42,6 +42,14 @@ Stop and preserve the worktree/index when the repository is ambiguous; merge/reb
 
 A Human condition such as “commit only after tests pass” is a binding precondition and routes through the named verification before returning to the lightweight confirmation. Without such a condition, no test is run merely to commit. Existing evidence may be disclosed with its real timestamp, but Git packaging permission is not completion evidence and cannot support a claim that work is fixed, verified, done, completed, closed, or release-ready.
 
+## Full Test, Push CI, And Release Boundary
+
+A Commit request never supplies Full Test Run Confirmation and never repeats an already completed test run merely to package the same worktree. When Push is requested, inspect the repository workflow if safely available and disclose whether the Push is expected to trigger CI, the likely suite/target, and whether the result will be externally observable. An expected automatic CI run must not cause a duplicate local full run; use the automatic result later only for claims its exact commit, target, and required checks actually support.
+
+A manual CI rerun, workflow dispatch, or retry is a separate external mutation and a new concrete run. Show its exact workflow/ref/inputs and obtain the applicable fresh confirmation and external-action authorization. Reuse is allowed only when the same Human decision supplied an explicitly bounded retry count and condition for that exact external action and every workflow/ref/input fact still matches; an ordinary earlier local-run, Push, or CI authority never authorizes the rerun.
+
+If optional broad coverage is declined, Commit can still proceed through its own Gate with the real focused evidence and without a completion or release-readiness claim. If required full validation is declined, Release and release-readiness remain blocked. Push, Release, Publish, and Seal remain independent Human Gates even when a required full run has passed.
+
 ## Entry Conditions
 
 For normal Submit readiness or any completion/release claim, enter this stage only after:

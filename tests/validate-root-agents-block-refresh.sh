@@ -23,7 +23,7 @@ assert_not_contains() {
 
 managed_count=$(grep -c '^<!-- agent-loop:managed-start' "$root/templates/root-AGENTS.md" || true)
 block_version_count=$(grep -c '^<!-- agent-loop:managed-start.*block-version:' "$root/templates/root-AGENTS.md" || true)
-current_block_version="1.5.7-20260815.1"
+current_block_version="1.5.8-20260826.1"
 
 if [ "$managed_count" -ne "$block_version_count" ]; then
   printf 'FAIL: every root AGENTS managed block needs block-version (%s managed, %s block-version)\n' "$managed_count" "$block_version_count" >&2
@@ -79,7 +79,8 @@ assert_not_contains "templates/root-AGENTS.md" "Product Brief / Feature Spec"
 assert_not_contains "templates/root-AGENTS.md" "| Operational Support |"
 assert_not_contains "templates/root-AGENTS.md" "When refreshing, compare each block against the current template by \`section\` and full \`block-version\`, e.g. \`$current_block_version\`. Bare versions like \`1.5.6\` are stale."
 assert_contains "templates/root-AGENTS.md" "Before normal submit/readiness actions, inspect the intended diff, fresh verification, Review, Drift Check, project-memory status, branch/release constraints, and unrelated work."
-assert_contains "templates/root-AGENTS.md" 'For an explicit commit or commit-and-push request, show one lightweight confirmation of the entire-worktree summary and proposed commit message; run no tests or code-quality Review merely for Git, then use `git add -A`; plain commit excludes Push, while commit-and-push authorizes both in order after confirmation.'
+assert_contains "templates/root-AGENTS.md" 'For an explicit commit or commit-and-push request, show one lightweight confirmation of the entire-worktree summary and proposed commit message; Commit never triggers tests merely for Git, then use `git add -A`; plain commit excludes Push, while commit-and-push authorizes both in order after confirmation.'
+assert_contains "templates/root-AGENTS.md" 'Disclose predictable Push-triggered CI without duplicating the same full run locally; manual CI reruns need fresh authority unless the same Human decision supplied an explicitly bounded retry count and condition that still applies, and declined required validation keeps Release/readiness blocked.'
 assert_not_contains "templates/root-AGENTS.md" "Agents may propose updates to managed blocks when source facts change"
 
 while IFS= read -r reference; do
@@ -104,7 +105,7 @@ assert_not_contains "references/project-guidance.md" "file-level managed version
 assert_contains "references/project-guidance.md" "Do not require a separate Managed Block Rule or Agent Loop Guidance Version prose section in target root \`AGENTS.md\`; managed block maintenance rules live in this reference and refresh tooling."
 assert_contains "references/project-guidance.md" 'Use `block-version:<agent-loop-version>-<YYYYMMDD>[.<same-day-revision>]`; do not shorten it to the skill version alone.'
 assert_contains "references/project-guidance.md" "Copy the exact start marker metadata for each refreshed section from the current root AGENTS template unless the section source must point at a target-project artifact."
-assert_contains "references/project-guidance.md" 'Treat bare skill-version-only block revisions such as `block-version:1.5.7` as stale because they cannot distinguish same-version template revisions.'
+assert_contains "references/project-guidance.md" 'Treat bare skill-version-only block revisions such as `block-version:1.5.8` as stale because they cannot distinguish same-version template revisions.'
 assert_contains "references/project-guidance.md" "Treat missing, older, bare skill-version-only, date-only, malformed, or different \`block-version\` values as stale; exact full template block-version match is required."
 assert_contains "references/project-guidance.md" "If a managed block exists in the current template but is missing from root AGENTS.md, treat it as a missing managed block and propose adding it."
 assert_contains "references/project-guidance.md" "Managed block maintenance rules belong here and in refresh tooling; do not require the target root \`AGENTS.md\` to include a separate Managed Block Rule prose section."
@@ -124,7 +125,7 @@ assert_contains "references/workflow-checklists.md" "Workflow Gateway Map routes
 assert_contains "references/workflow-checklists.md" 'If `scripts/check-root-agents-blocks.py` is available, run it with Python 3.10+ as a read-only drift check against the current root AGENTS template and target root `AGENTS.md`; use the report as Human Review Summary evidence.'
 assert_contains "references/workflow-checklists.md" "Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current."
 assert_not_contains "references/workflow-checklists.md" "managed guidance version"
-assert_contains "references/workflow-checklists.md" 'Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.7-20260815.1`.'
+assert_contains "references/workflow-checklists.md" 'Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.8-20260826.1`.'
 assert_contains "references/workflow-checklists.md" "Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required."
 assert_contains "references/workflow-checklists.md" "Do not require a separate Managed Block Rule prose section in target root \`AGENTS.md\`; managed block maintenance rules live in \`references/project-guidance.md\` and refresh tooling."
 assert_contains "references/workflow-checklists.md" 'Root guidance refresh may update only human-approved managed blocks.'
