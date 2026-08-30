@@ -3,6 +3,7 @@ from __future__ import annotations
 import tempfile
 import unittest
 import sys
+import re
 from unittest import mock
 from pathlib import Path
 
@@ -227,6 +228,364 @@ class FeatureMonthlyArchiveScanTests(unittest.TestCase):
                 "missing-archive-readiness", payload["candidates"][0]["blockers"]
             )
 
+    def test_legacy_close_review_remains_archive_readable(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = ArchiveWorkspace(Path(temp))
+            workspace.feature("2026-05-08-login", legacy_close_review=True)
+            result = self.scan(
+                workspace,
+                "--operation",
+                "archive",
+                "--month",
+                "2026-05",
+                "--as-of",
+                "2026-07-14",
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            payload = json_output(result)
+            self.assertEqual(
+                [move["feature_id"] for move in payload["moves"]],
+                ["2026-05-08-login"],
+            )
+
+    def test_retired_readiness_key_cannot_bypass_final_review_for_new_feature(
+        self,
+    ) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = ArchiveWorkspace(Path(temp))
+            feature = workspace.feature("2026-05-08-login")
+            notes = feature / "notes.md"
+            notes.write_text(
+                notes.read_text(encoding="utf-8").replace(
+                    "Final Review: complete", "Feature Close Review: complete"
+                ),
+                encoding="utf-8",
+                newline="\n",
+            )
+            result = self.scan(
+                workspace,
+                "--operation",
+                "archive",
+                "--month",
+                "2026-05",
+                "--as-of",
+                "2026-07-14",
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            payload = json_output(result)
+            self.assertEqual(payload["moves"], [])
+            self.assertIn(
+                "archive-readiness-final-review:missing",
+                payload["candidates"][0]["blockers"],
+            )
+
+    def test_current_final_review_readiness_requires_actual_record(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = ArchiveWorkspace(Path(temp))
+            feature = workspace.feature("2026-05-08-login")
+            notes = feature / "notes.md"
+            content = notes.read_text(encoding="utf-8")
+            content = re.sub(
+                r"## Final Review\n.*?(?=## Drift Check)",
+                "",
+                content,
+                flags=re.DOTALL,
+            )
+            notes.write_text(content, encoding="utf-8", newline="\n")
+            result = self.scan(
+                workspace,
+                "--operation",
+                "archive",
+                "--month",
+                "2026-05",
+                "--as-of",
+                "2026-07-14",
+            )
+            payload = json_output(result)
+            self.assertEqual(payload["moves"], [])
+            self.assertIn(
+                "archive-readiness-final-review-record:missing",
+                payload["candidates"][0]["blockers"],
+            )
+
+    def test_incomplete_current_final_review_record_is_blocked(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = ArchiveWorkspace(Path(temp))
+            feature = workspace.feature("2026-05-08-login")
+            notes = feature / "notes.md"
+            notes.write_text(
+                notes.read_text(encoding="utf-8").replace(
+                    "Finding Dispositions: complete", "Finding Dispositions: TODO"
+                ),
+                encoding="utf-8",
+                newline="\n",
+            )
+            result = self.scan(
+                workspace,
+                "--operation",
+                "archive",
+                "--month",
+                "2026-05",
+                "--as-of",
+                "2026-07-14",
+            )
+            payload = json_output(result)
+            self.assertEqual(payload["moves"], [])
+            self.assertIn(
+                "archive-readiness-final-review-dispositions:missing",
+                payload["candidates"][0]["blockers"],
+            )
+
+    def test_current_final_review_requires_every_concrete_evidence_field(self) -> None:
+        cases = (
+            (
+                "Final Reviewer: controller-fallback",
+                "Final Reviewer: TODO",
+                "archive-readiness-final-review-reviewer:missing",
+            ),
+            (
+                "Reviewed Inputs: accepted authority, final diff, verification, rollback",
+                "Reviewed Inputs: TBD",
+                "archive-readiness-final-review-inputs:missing",
+            ),
+            (
+                "Final Review Findings: no finding",
+                "Final Review Findings: TODO",
+                "archive-readiness-final-review-findings:missing",
+            ),
+            (
+                "Finding Dispositions: complete",
+                "Finding Dispositions: TODO",
+                "archive-readiness-final-review-dispositions:missing",
+            ),
+            (
+                "Post-Repair Freshness: current",
+                "Post-Repair Freshness: stale",
+                "archive-readiness-final-review-freshness:stale",
+            ),
+        )
+        for original, replacement, expected in cases:
+            with self.subTest(field=original), tempfile.TemporaryDirectory() as temp:
+                workspace = ArchiveWorkspace(Path(temp))
+                feature = workspace.feature("2026-05-08-login")
+                notes = feature / "notes.md"
+                notes.write_text(
+                    notes.read_text(encoding="utf-8").replace(original, replacement),
+                    encoding="utf-8",
+                    newline="\n",
+                )
+                result = self.scan(
+                    workspace,
+                    "--operation",
+                    "archive",
+                    "--month",
+                    "2026-05",
+                    "--as-of",
+                    "2026-07-14",
+                )
+                payload = json_output(result)
+                self.assertEqual(payload["moves"], [])
+                self.assertIn(expected, payload["candidates"][0]["blockers"])
+
+    def test_explicit_no_findings_and_no_dispositions_is_archive_ready(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = ArchiveWorkspace(Path(temp))
+            feature = workspace.feature("2026-05-08-login")
+            notes = feature / "notes.md"
+            notes.write_text(
+                notes.read_text(encoding="utf-8")
+                .replace("Final Review Findings: no finding", "Final Review Findings: none")
+                .replace("Finding Dispositions: complete", "Finding Dispositions: none"),
+                encoding="utf-8",
+                newline="\n",
+            )
+            result = self.scan(
+                workspace,
+                "--operation",
+                "archive",
+                "--month",
+                "2026-05",
+                "--as-of",
+                "2026-07-14",
+            )
+            payload = json_output(result)
+            self.assertEqual(
+                [move["feature_id"] for move in payload["moves"]],
+                ["2026-05-08-login"],
+            )
+
+    def test_post_cutoff_feature_cannot_use_legacy_readiness_alias(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = ArchiveWorkspace(Path(temp))
+            feature = workspace.feature(
+                "2026-08-30-login", legacy_close_review=True
+            )
+            result = self.scan(
+                workspace,
+                "--operation",
+                "archive",
+                "--month",
+                "2026-08",
+                "--as-of",
+                "2026-11-14",
+            )
+            payload = json_output(result)
+            self.assertEqual(payload["moves"], [])
+            self.assertIn(
+                "archive-readiness-final-review:missing",
+                payload["candidates"][0]["blockers"],
+            )
+
+    def test_feature_created_on_cutoff_cannot_use_legacy_readiness_alias(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = ArchiveWorkspace(Path(temp))
+            feature = workspace.feature(
+                "2026-05-08-login", legacy_close_review=True
+            )
+            notes = feature / "notes.md"
+            notes.write_text(
+                notes.read_text(encoding="utf-8").replace(
+                    "Created: 2026-05-08", "Created: 2026-08-29", 1
+                ),
+                encoding="utf-8",
+                newline="\n",
+            )
+            result = self.scan(
+                workspace,
+                "--operation",
+                "archive",
+                "--month",
+                "2026-05",
+                "--as-of",
+                "2026-11-14",
+            )
+            payload = json_output(result)
+            self.assertEqual(payload["moves"], [])
+            self.assertIn(
+                "archive-readiness-final-review:missing",
+                payload["candidates"][0]["blockers"],
+            )
+
+    def test_feature_closed_on_cutoff_cannot_use_legacy_readiness_alias(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = ArchiveWorkspace(Path(temp))
+            feature = workspace.feature(
+                "2026-05-08-login", legacy_close_review=True
+            )
+            notes = feature / "notes.md"
+            notes.write_text(
+                notes.read_text(encoding="utf-8").replace(
+                    "Closed At: 2026-05-20", "Closed At: 2026-08-29"
+                ),
+                encoding="utf-8",
+                newline="\n",
+            )
+            result = self.scan(
+                workspace,
+                "--operation",
+                "archive",
+                "--month",
+                "2026-05",
+                "--as-of",
+                "2026-11-14",
+            )
+            payload = json_output(result)
+            self.assertEqual(payload["moves"], [])
+            self.assertIn(
+                "archive-readiness-final-review:missing",
+                payload["candidates"][0]["blockers"],
+            )
+
+    def test_pre_cutoff_feature_closed_after_cutoff_requires_final_review(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = ArchiveWorkspace(Path(temp))
+            feature = workspace.feature(
+                "2026-05-08-login", legacy_close_review=True
+            )
+            notes = feature / "notes.md"
+            notes.write_text(
+                notes.read_text(encoding="utf-8").replace(
+                    "Closed At: 2026-05-20", "Closed At: 2026-08-30"
+                ),
+                encoding="utf-8",
+                newline="\n",
+            )
+            result = self.scan(
+                workspace,
+                "--operation",
+                "archive",
+                "--month",
+                "2026-05",
+                "--as-of",
+                "2026-11-14",
+            )
+            payload = json_output(result)
+            self.assertEqual(payload["moves"], [])
+            self.assertIn(
+                "archive-readiness-final-review:missing",
+                payload["candidates"][0]["blockers"],
+            )
+
+    def test_missing_created_date_cannot_claim_legacy_compatibility(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = ArchiveWorkspace(Path(temp))
+            feature = workspace.feature(
+                "2026-05-08-login", legacy_close_review=True
+            )
+            notes = feature / "notes.md"
+            notes.write_text(
+                notes.read_text(encoding="utf-8").replace(
+                    "Created: 2026-05-08\n\n", ""
+                ),
+                encoding="utf-8",
+                newline="\n",
+            )
+            result = self.scan(
+                workspace,
+                "--operation",
+                "archive",
+                "--month",
+                "2026-05",
+                "--as-of",
+                "2026-07-14",
+            )
+            payload = json_output(result)
+            self.assertEqual(payload["moves"], [])
+            self.assertIn(
+                "archive-readiness-final-review:missing",
+                payload["candidates"][0]["blockers"],
+            )
+
+    def test_current_review_heading_disables_legacy_compatibility_alias(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = ArchiveWorkspace(Path(temp))
+            feature = workspace.feature(
+                "2026-05-08-login", legacy_close_review=True
+            )
+            notes = feature / "notes.md"
+            notes.write_text(
+                notes.read_text(encoding="utf-8").replace(
+                    "## Drift Check", "## Task Completion Reviews\n\n## Drift Check"
+                ),
+                encoding="utf-8",
+                newline="\n",
+            )
+            result = self.scan(
+                workspace,
+                "--operation",
+                "archive",
+                "--month",
+                "2026-05",
+                "--as-of",
+                "2026-07-14",
+            )
+            payload = json_output(result)
+            self.assertEqual(payload["moves"], [])
+            self.assertIn(
+                "archive-readiness-final-review:missing",
+                payload["candidates"][0]["blockers"],
+            )
+
     def test_placeholder_delivered_summary_is_blocked(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             workspace = ArchiveWorkspace(Path(temp))
@@ -350,6 +709,70 @@ class FeatureMonthlyArchiveScanTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             payload = json_output(result)
             self.assertIn("project-memory-active", payload["candidates"][0]["blockers"])
+            self.assertNotIn(
+                "project-memory-paused", payload["candidates"][0]["blockers"]
+            )
+
+    def test_project_memory_multiline_paused_feature_is_blocked(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = ArchiveWorkspace(Path(temp))
+            feature_id = "2026-05-08-login"
+            workspace.feature(feature_id)
+            workspace.write(
+                ".agent-loop/project.md",
+                "# Project\n\n"
+                "## Current Work\n\n"
+                "Active Feature: none\n"
+                "Paused Features:\n"
+                "- `.agent-loop/features/2026-05-01-billing/` waiting on access\n"
+                f"- `.agent-loop/features/{feature_id}/` paused after verification\n\n"
+                "Next Suggested Action: resume later\n",
+            )
+            result = self.scan(
+                workspace,
+                "--operation",
+                "archive",
+                "--month",
+                "2026-05",
+                "--as-of",
+                "2026-07-14",
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            payload = json_output(result)
+            self.assertEqual(payload["moves"], [])
+            self.assertIn(
+                "project-memory-paused", payload["candidates"][0]["blockers"]
+            )
+
+    def test_project_memory_similar_paused_feature_id_is_not_a_blocker(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = ArchiveWorkspace(Path(temp))
+            feature_id = "2026-05-08-login"
+            workspace.feature(feature_id)
+            workspace.write(
+                ".agent-loop/project.md",
+                "# Project\n\n"
+                "## Current Work\n\n"
+                "Active Feature: none\n"
+                "Paused Features:\n"
+                "- `.agent-loop/features/2026-05-08-login-admin/` paused\n\n"
+                "Next Suggested Action: none\n",
+            )
+            result = self.scan(
+                workspace,
+                "--operation",
+                "archive",
+                "--month",
+                "2026-05",
+                "--as-of",
+                "2026-07-14",
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            payload = json_output(result)
+            self.assertNotIn(
+                "project-memory-paused", payload["candidates"][0]["blockers"]
+            )
+            self.assertEqual(len(payload["moves"]), 1)
 
     def test_scan_precomputes_literal_and_relative_link_edits(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

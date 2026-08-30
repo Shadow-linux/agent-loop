@@ -1,8 +1,8 @@
 # Agent Loop
 
-**Current version:** 1.5.8 (stable)
+**Current version:** 1.5.9 (development; not yet released)
 
-Agent Loop 1.5.8 is the current formal stable release, adding a zero-artifact Direct Edit Fast Path and exact one-execution Human confirmation for newly proposed full test runs. Its stable tag is `stable-v1.5.8`.
+Agent Loop 1.5.9 is the current development version. It inlines the fast Task Completion Review into Task Done Gate, automatically dispatches one read-only Feature-wide Final Review after all prerequisites are current, removes duplicate close review, and lets the Agent delegate inside existing authority. The latest formal stable installation tag remains `stable-v1.5.8` until 1.5.9 passes its remaining Human and release gates.
 
 Agent Loop is a reusable controller skill for single-human, CLI-agent software development. It lets the Agent own project diagnosis, workflow sequencing, implementation, verification, and memory maintenance while the human keeps control of goals, product meaning, consequential decisions, and external actions.
 
@@ -30,7 +30,8 @@ Human Goal
 → Product Definition
 → Design Readiness / Decision & Design If Needed
 → Right-sized Delivery
-→ Fresh Verification and Review
+→ Task Completion Review and Fresh Verification
+→ One Read-only Final Review
 → Project Memory and Verified Close
 ```
 
@@ -105,9 +106,9 @@ Feature delivery includes:
 - optional project-local Skills for repeatable, verified project operations
 - mandatory helper resolution for Project Skill Creation / Update, Brainstorm, Plan Gate, execution, diagnosis, verification, and review
 - Feature Auto-Loop and Task Auto-Run for uninterrupted Agent-ready work
-- approved subagent execution and complex artifact modes when scale requires them
+- Agent-owned subagent dispatch inside existing authorization, plus complex artifact modes when scale requires them
 
-Feature construction uses **two meaningful reviews** instead of interrupting the human after every internal quality stage. Feature Definition Review confirms Goal, Scope, Acceptance, and Explicit Exclusions. The Agent then writes and self-reviews tasks, tests, E2E evidence, code context, Plan, verification, risk, and rollback without changing target code. Implementation Readiness Review confirms the Execution Boundary, Verification, Risk/Rollback, and whether to start. The Agent directly owns Human intent, complete Package Files, Gate/action/time consistency, and all Task/Plan/product semantics; Feature Gate acceptance and continuation do not depend on a local digest or Feature review Checker. New Agent-ready Task IDs inside the same accepted Story/Product Slice/Acceptance do not require another Human Gate—even when every initial Task ID is replaced—but new execution boundaries do. Delivery Contract, Human-gated tasks, subagent, Git, external, submit, close, and release actions remain separately gated.
+Feature construction uses **two meaningful Human reviews** instead of interrupting the human after every internal quality stage. Feature Definition Review confirms Goal, Scope, Acceptance, and Explicit Exclusions. The Agent then writes and self-reviews tasks, tests, E2E evidence, code context, Plan, verification, risk, and rollback without changing target code. Implementation Readiness Review confirms the Execution Boundary, Verification, Risk/Rollback, and whether to start. The Agent directly owns Human intent, complete Package Files, Gate/action/time consistency, and all Task/Plan/product semantics; Feature Gate acceptance and continuation do not depend on a local digest or Feature review Checker. New Agent-ready Task IDs inside the same accepted Story/Product Slice/Acceptance do not require another Human Gate—even when every initial Task ID is replaced—but new execution boundaries do. Subagent dispatch is Agent-owned inside existing authorization; every delegated Product, ADR, Contract, Human-gated Task, Git, external, submit, close, and release action retains its own Gate.
 
 For a later start after package-only acceptance, the Agent re-reads the recorded package files and current Feature artifacts, compares them with the accepted boundary, checks the Human instruction and stop conditions, preserves the original Gate 2 baseline, and records a separate start transition plus current execution mode. If Human decision evidence is unavailable after context loss, the Agent asks once.
 
@@ -118,14 +119,16 @@ Agent Loop does not treat “code written” as done. Completion requires propor
 ```text
 Execute
 → Verify
-→ Review
+→ Built-in Task Completion Review
+→ Feature-wide Verification
+→ One Read-only Final Review
 → Drift Check
 → Project Memory Update
 → Feature Completion Check
 → Human-reviewed Submit / Pause / Close
 ```
 
-The Agent checks implementation, tests, requirement and decision coverage, unrelated changes, stale documentation, rollback, residual risk, and the next recoverable action. Structural validators help, but never replace semantic Human Review.
+Each Task gets a fast built-in completion review and keeps a current evidence pointer. After every in-scope Task is done or skipped, those pointers and Feature-wide verification are current, the Agent automatically dispatches exactly one read-only Final Review Subagent. The read-only reviewer returns its helper-resolution evidence without writing project files. A missing coordination helper still uses an available runtime dispatcher; only a runtime with no Subagent dispatch mechanism uses a fresh isolated controller-fallback review. Repeated dispatcher failures use a bounded attempt set and become an explicit recovery blocker rather than an endless loop. The owning Agent validates findings, repairs within existing authority, records type-valid dispositions and fresh proof, and requests a fresh reviewer only when the reviewed boundary materially changes. Feature Completion Check reuses that current evidence; Human Close remains independent. Structural validators help, but never replace semantic Human Review where a real Human Gate applies.
 
 ### Maintain project truth over time
 

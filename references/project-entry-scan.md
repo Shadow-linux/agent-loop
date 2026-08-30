@@ -43,7 +43,7 @@ If the human asks for newcomer-facing docs, durable onboarding docs, or a guided
 - Do not read the whole repository.
 - Do not start feature implementation during Project Entry Scan.
 - Ask human confirmation before writing `.agent-loop/`, `project.md`, `AGENTS.md`, `CLAUDE.md`, or directory-level guidance.
-- Subagents are optional accelerators for large Project Entry Scan only after human confirmation.
+- Subagents are optional Agent-owned accelerators for large Project Entry Scan; read-only dispatch adds no Human Gate and every brief keeps `Allowed Writes: none`.
 - Use DDD-inspired architecture mapping when useful, but record existing code reality. Do not rename or move code during Project Entry Scan.
 - Root `AGENTS.md` and `CLAUDE.md` are startup guidance artifacts for every `agent-loop`-managed project. During Project Entry Scan, check both. `CLAUDE.md` must load or point to `AGENTS.md`; do not maintain duplicated root guidance in two files.
 - Do not finish Project Entry Scan after writing only `.agent-loop/project.md`. Root guidance must be present, created, or explicitly deferred by the human, and that status must be recorded in `project.md`.
@@ -68,11 +68,11 @@ Treat Project Entry Scan as large or complex when any of these are true:
 - docs and code reality may disagree
 - a single agent cannot confidently hold the project shape in one pass
 
-When these triggers apply and subagents are available, recommend subagent scanning. If subagents are unavailable or the human declines, continue with the same layered scan in a single agent session.
+When these triggers apply and subagents are available, use bounded read-only Subagent scanning. If subagents are unavailable, continue with the same layered scan in a single agent session.
 
 ## Optional Subagent Scan
 
-Use subagents only after human confirmation.
+Subagent dispatch is Agent-owned and adds no Human Gate. This scan is read-only: every brief uses `Allowed Writes: none`, inherits only the current Project Entry scope, and forbids Git/external mutation.
 
 The main agent must first do a shallow repo-shape scan, then dispatch bounded scan briefs. Suggested scan lanes:
 

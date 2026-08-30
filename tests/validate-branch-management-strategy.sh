@@ -149,7 +149,7 @@ content = File.read(ARGV.fetch(0))
 blocks = content.scan(/<!-- agent-loop:managed-start section:([^ ]+) .*?block-version:([^ ]+) -->/)
 abort 'FAIL: root AGENTS managed blocks missing' if blocks.empty?
 blocks.each do |section, revision|
-  expected = '1.5.8-20260826.1'
+  expected = '1.5.9-20260829.1'
   abort "FAIL: #{section} expected #{expected}, found #{revision}" unless revision == expected
 end
 RUBY
@@ -172,7 +172,7 @@ assert_contains references/human-review-summary.md '### Branch Strategy And Acti
 assert_contains references/human-review-summary.md '| Requested Authorization |'
 assert_contains references/human-review-summary.md '| Explicitly Not Authorized |'
 assert_contains references/human-review-summary.md '| Observed Policy / Git Evidence |'
-assert_contains references/human-review-summary.md '| Verification / Review / Drift |'
+assert_contains references/human-review-summary.md '| Verification / Final Review / Drift |'
 assert_contains references/human-review-summary.md '| Remaining Risk / Blocker |'
 assert_contains references/human-review-summary.md '| Gate / Action | Exact Scope | Preconditions | Evidence | Human Decision |'
 assert_contains references/human-review-summary.md '| Tag Gate / Tag | exact tag + exact commit |'

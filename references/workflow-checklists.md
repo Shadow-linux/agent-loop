@@ -215,7 +215,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Read `STRUCTURAL_CURRENT | STRUCTURAL_CHANGED | STRUCTURAL_INVALID` explicitly. A zero exit for `STRUCTURAL_CHANGED` still requires Agent impact review; compare project-owned block meaning to its declared source instead of treating the checker as semantic proof.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.8-20260826.1`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.9-20260829.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -284,8 +284,8 @@ Before using an external skill or plugin inside a stage:
 - [ ] Read startup docs first.
 - [ ] Inspect shallow repo shape.
 - [ ] Decide whether large-project triggers apply.
-- [ ] If large and subagents are available, recommend bounded subagent scan.
-- [ ] Ask human confirmation before using subagents.
+- [ ] If large and subagents are available, dispatch bounded read-only scan lanes when they materially improve evidence quality or speed.
+- [ ] Treat dispatch as Agent-owned; require no extra Human Gate, and keep every delegated read/write/action inside the Project Entry authorization already in force.
 - [ ] If subagents are unavailable or declined, continue single-agent scan.
 - [ ] Detect runtime/tooling manifests.
 - [ ] Classify project shape: frontend | backend | fullstack | worker | cli/library.
@@ -302,7 +302,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Read `STRUCTURAL_CURRENT | STRUCTURAL_CHANGED | STRUCTURAL_INVALID` explicitly. A zero exit for `STRUCTURAL_CHANGED` still requires Agent impact review; compare project-owned block meaning to its declared source instead of treating the checker as semantic proof.
 - [ ] Compare each managed block `section` and `block-version` against the current root AGENTS template.
 - [ ] Treat missing block-version, older block-version, or missing managed sections as stale even when other sections look current.
-- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.8-20260826.1`.
+- [ ] Do not write bare `block-version:<agent-loop-version>` values; copy the full template block revision such as `block-version:1.5.9-20260829.1`.
 - [ ] Treat date-only, malformed, or different block-version values as stale; exact full template block-version match is required.
 - [ ] Do not require a separate Managed Block Rule prose section in target root `AGENTS.md`; managed block maintenance rules live in `references/project-guidance.md` and refresh tooling.
 - [ ] When refreshing a managed block, copy the current template marker metadata for the same `section`; adjust only `source` if the target project uses a different active memory root or artifact source.
@@ -505,7 +505,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Reject duplicate or history-sourced Task Mode/mapping/No-Plan metadata and duplicate initial Task IDs.
 - [ ] Treat Human decision provenance and Task/Plan semantics as Agent-owned checks. Do not invent approval from Markdown; after context loss, ask one blocking confirmation only when reliable Human evidence is unavailable.
 - [ ] Confirm Feature Gate acceptance and continuation require no local digest or Feature review Checker.
-- [ ] Preserve separate Delivery Contract breaking-change, Human-gated task, subagent, branch/Git, external, production, credentials, submit, commit, push, PR, merge, tag, release, publish, seal, pause, and close gates.
+- [ ] Treat Subagent dispatch as Agent-owned with no separate Gate; preserve separate Gates for delegated actions outside existing authority, Delivery Contract breaking changes, Human-gated tasks, branch/Git, external, production, credentials, submit, commit, push, PR, merge, tag, release, publish, seal, pause, and close.
 
 ## Feature Spec
 
@@ -602,7 +602,7 @@ Before using an external skill or plugin inside a stage:
 - [ ] Create or update `contracts.md`.
 - [ ] Create `contracts/<ID>-<slug>.md` detail when schema, examples, errors, history, or multiple consumers need more space.
 - [ ] Record interface shape, inputs, outputs, errors, side effects, permissions, compatibility, producer verification, and consumer notes.
-- [ ] Keep temporary subagent assignments in `handoffs/`, not Delivery Contracts.
+- [ ] Keep one reliable-session Subagent assignments response-local; use `handoffs/` only for cross-session recovery, complex handoff, or explicit audit value, never as Delivery Contracts.
 - [ ] Gate 2 may separately authorize exact contract creation and acceptance only when path, full content, consumers, compatibility, verification, and consequences are visible.
 - [ ] Outside that exact Gate 2 decision, ask before writing contract files or changing status to `accepted`.
 - [ ] Ask human confirmation and list affected consumers before a breaking contract change.
@@ -733,27 +733,20 @@ Checklist:
 - [ ] If gaps exist, stop and recommend exactly one next action: update spec, update tasks/tests, revise plan, ask clarification, or investigate first.
 - [ ] When package consistency passes, persist the review baseline, set `Implementation Readiness: review-ready`, and present Gate 2 instead of executing.
 
-## Subagent Execution If Approved
+## Agent-Owned Subagent Delegation
 
-- [ ] Require `CURRENT` Feature Context before preparing or dispatching an implementation handoff.
-- [ ] Put Feature path, Snapshot Product SHA-256/Freshness, Product Slice IDs/anchors, applicable ADR paths/digests, and exact assigned scope in the brief.
-- [ ] Expire the handoff on any Product/Decision digest change; the receiving Agent reruns freshness before acting.
-- [ ] Confirm the human explicitly approved this subagent dispatch.
-- [ ] Do not treat Feature Auto-Loop or Task Auto-Run approval as subagent approval.
-- [ ] If using one approval for a bounded task group, list included task/story IDs or scan lanes, allowed boundaries, one brief per subagent, stop conditions, and main-agent review responsibility before asking.
-- [ ] Load `skill-routing.md`.
-- [ ] Load `external-skill-adapters.md`.
-- [ ] After explicit bounded dispatch approval, resolve and load `superpowers:subagent-driven-development` or `subagent-driven-development` before dispatch; record Stage Helper Resolution.
-- [ ] Record approval date, exact IDs/lanes, allowed boundaries, and stop conditions; require new confirmation for expanded scope.
-- [ ] Confirm authorization status is `active` immediately before dispatch; reject consumed/revoked/expired records and mark the record `consumed` after the approved dispatch group returns or stops.
-- [ ] If Superpowers `subagent-driven-development` or another subagent helper is available, use it through `external-skill-adapters.md` after human approval while keeping briefs and returned summaries under agent-loop `handoffs/*`.
-- [ ] Verify tasks or scan lanes are independent, bounded, and reviewable.
-- [ ] Create one `templates/subagent-brief.md`-style brief per subagent.
-- [ ] Store briefs and returned summaries under `handoffs/*`.
-- [ ] Require returned changed files, commands, evidence, drift, open questions, and next step.
-- [ ] Main agent reviews returned work before updating `tasks.md`, `tests.md`, `notes.md`, or proposed `project.md`.
-- [ ] Prevent subagents from closing features, submitting code, updating project memory directly, accepting Delivery Contracts, approving breaking changes, or marking tasks `done`.
-- [ ] If independence or review responsibility is unclear, do not dispatch; continue single-agent execution or mark `Human-gated`.
+- [ ] Treat dispatch as an internal method of the current stage, not a Human Gate or execution authorization.
+- [ ] Resolve the Subagent coordination helper before substantive delegated execution when available; helper loading creates no permission.
+- [ ] Bind the assignment to current stage scope, existing authorization/write grant, and one disclosed task boundary.
+- [ ] State inputs, outputs, allowed writes, forbidden actions, verification, expiry, and stop conditions.
+- [ ] Use no allowed writes for read-only analysis or review.
+- [ ] Confirm an implementation assignment is already covered by Gate 2, Task Auto-Run, Review Repair, or another current write grant.
+- [ ] Preserve Product/Requirement/ADR/Contract/Bug and branch/worktree/Git/release/external/destructive/credential/paid Human Gates.
+- [ ] Permit concurrent implementation only for mechanically non-overlapping write sets; a known same writable path must be serialized or use an already-authorized isolated worktree with a distinct physical write boundary.
+- [ ] Use `templates/subagent-brief.md` only when a durable handoff is useful; a response-local brief is otherwise sufficient.
+- [ ] Inspect returned evidence and actual diff; reconcile unexpected overlap and contradictions before integration. Reconciliation is not permission for known same-file concurrency.
+- [ ] Main Agent owns verification, status, memory, routing, and Human-facing claims.
+- [ ] Stop integration when inputs are stale, writes overlap unexpectedly, or the assignment exceeds existing authority.
 
 ## Execute Task / Story
 
@@ -762,11 +755,11 @@ Checklist:
 - [ ] Confirm Plan Gate passed: accepted `plan.md` / `plans/*`, or recorded No-Plan Decision for a trivial task.
 - [ ] If Task Auto-Run is enabled, confirm an accepted plan exists; No-Plan Decision is insufficient.
 - [ ] If Feature Auto-Loop is enabled, execute only Agent-ready tasks.
-- [ ] If Task Auto-Run is enabled, execute only the selected task/story and stop after evidence/review/drift updates and Task Done Gate status update.
+- [ ] If Task Auto-Run is enabled, execute only the selected task/story and never start another implementation Task. After Task Done Gate, automatically dispatch Final Review when it is the last in-scope Task and every prerequisite is current. Use Feature-wide Verify as the single next action only when Feature-wide Required Verification alone is missing/stale; route every other missing prerequisite to its owning Task, authority recovery/Human Gate, workspace owner, rollback owner, stage, or Human Gate. Do not ask permission for Final Review dispatch.
 - [ ] Stop at Human-gated tasks or any stop condition.
 - [ ] Resolve and load `superpowers:test-driven-development` or `test-driven-development` before every Execute Task / Story invocation; record Stage Helper Resolution, or record `unavailable` / `load-failed` before fallback.
 - [ ] Use TDD for initial Feature behavior execution, explicit Bug behavior execution, Human-requested TDD, or an accepted Plan that requires RED/GREEN; for non-behavior work record TDD as `not-applicable` with a reason after helper resolution.
-- [ ] Keep Review Repair in Review; do not re-enter Execute Task / Story merely to manufacture RED for an implementation that already exists.
+- [ ] Keep Review Repair in Task Completion Review or Final Review finding assessment; do not re-enter Execute Task / Story merely to manufacture RED for an implementation that already exists.
 - [ ] If Superpowers `test-driven-development` or another TDD helper is available, use it through `external-skill-adapters.md` while keeping evidence and task status under agent-loop.
 - [ ] Verify RED before implementation.
 - [ ] Write minimal GREEN implementation.
@@ -832,39 +825,45 @@ Checklist:
 - [ ] Create no persistent authorization artifact, cache, stage, status, Mode, lifecycle, or generic force/skip parameter.
 - [ ] On decline, preserve focused evidence truthfully; block only the claim/action whose required evidence is missing.
 
-## Review
-
-- [ ] Recheck Feature Context freshness and review against the current Snapshot plus authoritative acceptance references.
-- [ ] Report code/product disagreement as drift; never overwrite the Snapshot from current code behavior.
-- [ ] Resolve and load `superpowers:requesting-code-review` or `requesting-code-review` before each task, submit, or feature-close review scope; record a fresh Stage Helper Resolution, or record `unavailable` / `load-failed` before fallback.
-- [ ] If Superpowers `requesting-code-review` or another review helper is available, use it through `external-skill-adapters.md` while recording findings in agent-loop `notes.md`.
-- [ ] Classify the finding as `within-approved-boundary` before a Review Repair write.
-- [ ] Repair first only inside current authorization, then run fresh targeted verification and affected existing checks.
-- [ ] Perform lightweight Spec Review for every task before marking it `done`.
-- [ ] Perform Spec Review before Submit / Integrate.
-- [ ] Compare implementation against `product.md` when present, `spec.md`, acceptance criteria, scope, and out-of-scope.
-- [ ] Review implementation against accepted Decision & Design records and the design slices assigned to this feature.
-- [ ] Perform Standards Review for large projects, broad diffs, directory or durable boundary changes, security/data changes, architecture changes, or human request.
-- [ ] Compare implementation against root/directory `AGENTS.md`, `project.md`, testing rules, directory boundaries, and local conventions.
-- [ ] Record findings, accepted fixes, and rejected fixes in `notes.md`.
-- [ ] Compare producer code and tests against relevant Delivery Contracts.
-- [ ] Batch specific Regression Test Advisory items in the next existing review/completion summary.
-- [ ] Keep task status as `review` if required review is missing.
-- [ ] An ordinary `within-approved-boundary` implementation behavior correction inside current authorization requires no new per-finding Human confirmation; repair first and report it in the next existing Review or completion summary.
-- [ ] Ask Human confirmation or return to the owning Gate only when a Review finding changes product meaning, Feature definition or acceptance, the accepted implementation boundary, a public interface, an ADR or Contract, security, data, permission, dependency, migration, architecture, external action, authorization, rollback, or reliable verification.
-
 ## Task Done Gate
 
 - [ ] Implementation scope complete.
-- [ ] Required tests or substitute verification ran fresh.
+- [ ] Perform Task Completion Review against accepted authority and the accepted Task/Story and Feature implementation boundary.
+- [ ] Review implementation against accepted Decision & Design records and the design slices assigned to this feature.
+- [ ] Inspect the exact diff and attribute unrelated dirty work without absorbing it.
+- [ ] Required Verification and every Existing Test Obligation or substitute verification ran fresh.
 - [ ] Do not downgrade an Existing Test Obligation into a Regression Test Advisory.
 - [ ] If current proof is insufficient without a new test, keep the task/change non-terminal and ask at the existing Human Review.
 - [ ] Evidence recorded in `notes.md`.
-- [ ] Lightweight Spec Review recorded.
+- [ ] Task Completion Review uses current evidence and does not require a review helper by default.
+- [ ] Risk and rollback remain inside the accepted boundary.
 - [ ] Standards Review recorded when triggered.
 - [ ] Drift decision recorded, including `no drift` when applicable.
 - [ ] `tasks.md` or task detail names the evidence location.
+- [ ] The Task Completion Review evidence pointer is current for the final Task/diff/verification inputs.
 - [ ] Only now mark task `done`; otherwise keep `review`, `in-progress`, or `blocked`.
+
+### Final Review after all Tasks
+
+- [ ] Enter only when all in-scope Tasks are `done` or Human-approved `skipped`.
+- [ ] Require every `done` Task to name a current Task Completion Review evidence pointer; any missing/stale pointer returns to the owning Task.
+- [ ] Require current Feature-wide Required Verification, authority, final diff boundary, dirty-work attribution, and current rollback evidence.
+- [ ] Block on any incomplete Task, stale verification, unresolved authority, ambiguous dirty work, or missing/stale rollback evidence.
+- [ ] Dispatch exactly one read-only Final Review Subagent and provide authority, scope, artifacts, diff, verification, rollback evidence, residuals, questions, and prohibited actions.
+- [ ] Persist coordination-helper resolution before dispatch; require the read-only reviewer to form and return a response-local Reviewer Helper Resolution before substantive review, then persist it before findings are used.
+- [ ] Review the complete Feature against current Product/Requirement authority, accepted Decision & Design records, assigned design slices, and applicable Delivery Contracts.
+- [ ] Perform Standards Review for large projects, broad diffs, directory or durable boundary changes, security/data changes, architecture changes, or human request as a Final Review depth requirement, not another stage or Gate.
+- [ ] Require the reviewer to report findings only and never edit, change status, accept a Gate, or perform Git/external actions.
+- [ ] Owning Agent validates each finding and records every finding disposition.
+- [ ] Apply the fail-closed disposition matrix: blocking defect/verification gap cannot be accepted as residual; semantic/boundary conflict is routed to its owner; only non-blocking improvement may be accepted/deferred with owner, rationale, evidence, and any required Human decision; unsupported findings are rejected with evidence.
+- [ ] Classify the finding as `within-approved-boundary` before a Review Repair write. For an implementation behavior correction inside existing authorization, repair the implementation first and require no new per-finding Human confirmation, then run fresh targeted verification and affected existing checks.
+- [ ] Stop at the owning Gate for product meaning, Feature definition, accepted implementation boundary, public interface, ADR, Contract, security, data, permission, dependency, migration, architecture, authorization, rollback, or reliable verification change.
+- [ ] Preserve every Existing Test Obligation and record an Additional Regression Test Advisory when future protection is useful.
+- [ ] Record a post-repair assessment; ordinary bounded repair does not automatically dispatch another reviewer.
+- [ ] Ordinary bounded repair does not reopen a completed Task or repeat formal Task Completion Review, but refreshes the affected Task Completion Review evidence pointer/currentness after fresh proof; otherwise return it to `review`.
+- [ ] Dispatch a fresh Final Review Subagent when boundary, cross-task integration, consumers, risk, rollback, or verification coverage materially changes.
+- [ ] A missing/load-failed coordination helper uses helper fallback but still dispatches when the runtime dispatcher exists; use `Final Reviewer: controller-fallback` only when the active runtime genuinely has no Subagent dispatch mechanism. A failed runtime dispatch enters Diagnose Failure under the unchanged brief; permit at most one diagnostic retry for the failed dispatcher and one attempt per other distinct exposed dispatcher. If every bounded attempt fails while mechanisms remain advertised, record Final Review blocked with runtime-dispatcher owner/recovery evidence, forbid controller-fallback, and do not loop.
+- [ ] Continue to Drift Check only with a current review and complete finding dispositions.
 
 ## Drift Check
 
@@ -975,13 +974,16 @@ The following checklist is normal-submit only; skip it entirely for Full-Worktre
 - [ ] Run after likely completion, before starting a new feature with an Active Feature, or on resume with an Active Feature.
 - [ ] Confirm accepted spec exists.
 - [ ] Confirm all remaining in-scope tasks are `done`; skipped/deferred work must already be removed through human-approved scope reconciliation.
+- [ ] Confirm every `done` Task still points to current Task Completion Review evidence; stale/missing pointers return to the owning Task.
 - [ ] Confirm required tests or substitute verification are recorded.
 - [ ] Confirm fresh verification evidence exists.
 - [ ] Confirm all Existing Test Obligations are complete.
 - [ ] Confirm every Review Repair has fresh targeted verification and evidence.
 - [ ] Confirm Additional Regression Test recommendations and residual risk are visible; an unaccepted advisory alone does not block Feature close.
 - [ ] Batch specific Regression Test Advisory items in the next existing review/completion summary.
-- [ ] Confirm Feature Close Review completed.
+- [ ] Confirm the current Final Review covers current accepted authority, implementation diff, Feature-wide Required Verification, risk/rollback boundary, and consumer surface.
+- [ ] Confirm every Final Review finding has a disposition and every bounded Review Repair has fresh targeted proof; require a fresh reviewer after any material input change.
+- [ ] Do not accept a blocking defect or unresolved verification gap as residual; require type-valid dispositions with owner/evidence and any applicable Human decision.
 - [ ] Feature close is blocked until all assigned design slices have implementation and verification evidence, or a human-approved decision reassigns, defers, removes, or supersedes the slice.
 - [ ] Confirm feature-level Spec Review covers `product.md` when present, `spec.md`, `tasks.md`, `tests.md`, acceptance criteria, and out-of-scope boundaries.
 - [ ] Confirm feature-level Standards Review completed when large project, broad diff, directory or durable boundary change, security/data change, architecture change, or human request applies.
@@ -1019,10 +1021,11 @@ Close:
 - [ ] Every Existing Test Obligation is complete; missing required current proof is not an advisory.
 - [ ] Additional Regression Test advice and residual risk are visible when present, without making an unaccepted advisory a new Close gate.
 - [ ] Drift check completed.
-- [ ] Feature Close Review completed.
+- [ ] Current Final Review and all finding dispositions are complete; Pause / Close does not perform another review.
 - [ ] Submit/integration status recorded if requested.
 - [ ] `project.md` updated for long-term changes.
 - [ ] Requirement Reconciliation completed when the feature references or creates requirement sets.
 - [ ] `notes.md` has close record.
 - [ ] Human explicitly confirms close.
+- [ ] Treat Final Review as evidence only; preserve the Human Close Gate as the sole close authorization.
 - [ ] After confirmation, set feature lifecycle status to `closed`, remove it from Active/Paused pointers, set `Active Feature: none`, and clear feature-scoped auto-mode authorization.

@@ -46,6 +46,10 @@ The core constraints are:
 - Lightweight Change Lane is the persistent internal route after Direct Edit is ineligible and before Feature construction for bounded ordinary non-Bug changes; it is not a canonical stage, message intent, Feature Type, Bug Resolution Path, lifecycle, status, or Auto Mode
 - Lightweight Execution Card is one persistent per-change execution source under `<memory-root>/changes/YYYY-MM/YYYY-MM-DD-<topic>.md`, with required background, adaptive Plan, progress, targeted verification, rollback, gate, result, and Memory Review fields; it creates no shared backlog or Archive lifecycle
 - Repair-First Verification is the default internal method for a `within-approved-boundary` Review correction and a `clearly eligible` Lightweight Change; it changes implementation order without creating authorization, a stage, status, mode, Gate, Checker result, or artifact family
+- Task Completion Review is the mandatory lightweight internal assessment inside Task Done Gate; it uses current authority, diff, verification, risk, rollback, and drift evidence, and every `done` Task retains a current evidence pointer without creating a standalone Review stage or requiring a review helper by default
+- after all in-scope Tasks, their Task Completion Review pointers, and Feature-wide verification are current, one read-only Final Review Subagent reviews the whole Feature; the owner first persists coordination-helper resolution, the reviewer forms and returns response-local review-helper resolution before substantive review without writing files, and the owner persists that evidence before using findings; failed dispatch uses one bounded attempt set, ends with an explicit runtime-dispatcher recovery blocker while any mechanism remains exposed, and permits controller fallback only when no mechanism is exposed; the owning Agent validates, repairs, verifies, routes, and owns every status or completion claim
+- Agent-owned Subagent delegation is an internal method, not a Human Gate: dispatch may proceed directly, while every delegated action inherits only existing stage scope, write authorization, and the disclosed assignment boundary; concurrent implementation requires mechanically non-overlapping write sets, while a known same writable path is serialized or uses an already-authorized isolated worktree
+- Feature Close Review is retired as an active requirement; Feature Completion Check consumes current Final Review/finding evidence and Human Close remains mandatory
 - Full-Worktree Git Fast Path is an internal Submit / Integrate method for an explicit `commit` or `commit and push` request: after one lightweight confirmation of the entire current worktree and proposed commit message, package it with `git add -A`, with no code/quality Review or tests merely for Git and no conversion of Git permission into completion evidence
 - Required Verification proves the current result, Existing Test Obligation preserves accepted tests and Human commitments, and Additional Regression Test is future protection advised only after current proof exists
 - Adaptive Depth lets the Agent vary Plan and test detail by real risk while fresh verification, affected existing checks, diff review, rollback, scope control, memory impact, and Human Gates stay fixed
@@ -103,9 +107,11 @@ Human Goal
 → Execute / Verify
   → [internal] Agent Checker Rescue Level 1 / 2 / 3 classification
   → [internal] Checker Self-Repair only when corrected executable Checker evaluation is necessary
-→ Review
+→ [internal] Task Completion Review inside Task Done Gate
   → [internal] Review Repair Fast Path for a within-approved-boundary correction
   → fresh targeted proof, affected existing checks, and specific Regression Test Advisory
+→ [internal] Feature-wide Required Verification and one read-only Final Review Subagent
+  → owning-Agent finding assessment, repair, freshness decision, and routing
 → Drift Check
 → Feature Follow-up / Flow-back with internal Bug Management when explicit defect management appears
 → Feature Monthly Archive when the human explicitly asks to compact closed-history discovery
@@ -191,10 +197,10 @@ resolved Feature Authority
 -> Feature Context Snapshot
 -> Product Slice when Requirement Product Definition applies
 -> Tasks / Tests / Plan
--> Execute / Verify / Review
+-> Execute / Verify / Task Completion Review / Final Review
 ```
 
-Before Task, Test, Plan, Resume, Execute, Subagent Handoff, Verify, Review, Drift Check, or Close relies on Feature context, the read-only scanner resolves the authority shape and applicable facts. `CURRENT / 0` permits factual reliance inside existing authorization. `CHANGED / 0` requires Agent impact assessment and the applicable repair/route. `NOT_APPLICABLE / 0` sends a specialized Checker to another adapter or direct evidence. `BLOCKED / 1` is reserved for physical authority-resolution or exact-executor contradictions. Auto Mode cannot treat a prefix or exit `0` alone as authorization.
+Before Task, Test, Plan, Resume, Execute, Subagent Handoff, Verify, Task Completion Review, Final Review, Drift Check, or Close relies on Feature context, the read-only scanner resolves the authority shape and applicable facts. `CURRENT / 0` permits factual reliance inside existing authorization. `CHANGED / 0` requires Agent impact assessment and the applicable repair/route. `NOT_APPLICABLE / 0` sends a specialized Checker to another adapter or direct evidence. `BLOCKED / 1` is reserved for physical authority-resolution or exact-executor contradictions. Auto Mode cannot treat a prefix or exit `0` alone as authorization.
 
 ## Feature Construction Two-Gate Invariant
 
@@ -211,7 +217,7 @@ explicit implementation request
 
 Gate 1 freezes what will be built and authorizes package preparation only. Package preparation retains Work Breakdown, conditional Delivery Contract assessment, Test Design, E2E Discovery, Technical Design / Code Context, Plan Gate, and Analyze Consistency as mandatory Agent quality methods, but does not modify target implementation and does not interrupt the human after each method. Gate 2 reviews the complete trace from acceptance through tasks, tests, code context, Plan, risk, verification, and rollback.
 
-`Approve package only` records readiness without execution. `Approve package and start implementation` also enables Feature Auto-Loop for the disclosed execution boundary; no third generic enablement prompt exists. Only those two approval choices set readiness `accepted`; `Revise package` returns to preparation and `Pause` records a separate workflow transition without claiming acceptance. The Agent owns complete package inventory, Gate/action consistency, Human provenance, semantic completeness, accepted Story/Product Slice boundaries, Task/Plan/No-Plan bindings, and boundary drift. Later artifact changes are reviewed directly against Goal/Scope/Acceptance and the accepted execution boundary; a recorded within-boundary transition may continue, while feature-definition, implementation-boundary, and unresolved changes route to the owning review or one blocking Human question. Initial Gate 2 Task IDs remain reviewed decomposition rather than an immutable whitelist, and `Gate 2 Accepted Stories` remains Agent-reviewed semantic memory. A new Agent-ready Task inside the accepted Story/Product Slice/Acceptance and unchanged execution boundary does not by itself repeat Gate 2, even when all initial Task IDs were replaced. Separately owned Delivery Contract, Human-gated Task, subagent, Git, external, submit, close, and release actions retain their exact Human Gates.
+`Approve package only` records readiness without execution. `Approve package and start implementation` also enables Feature Auto-Loop for the disclosed execution boundary; no third generic enablement prompt exists. Only those two approval choices set readiness `accepted`; `Revise package` returns to preparation and `Pause` records a separate workflow transition without claiming acceptance. The Agent owns complete package inventory, Gate/action consistency, Human provenance, semantic completeness, accepted Story/Product Slice boundaries, Task/Plan/No-Plan bindings, and boundary drift. Later artifact changes are reviewed directly against Goal/Scope/Acceptance and the accepted execution boundary; a recorded within-boundary transition may continue, while feature-definition, implementation-boundary, and unresolved changes route to the owning review or one blocking Human question. Initial Gate 2 Task IDs remain reviewed decomposition rather than an immutable whitelist, and `Gate 2 Accepted Stories` remains Agent-reviewed semantic memory. A new Agent-ready Task inside the accepted Story/Product Slice/Acceptance and unchanged execution boundary does not by itself repeat Gate 2, even when all initial Task IDs were replaced. Separately owned Delivery Contract, Human-gated Task, Git, external, submit, close, and release actions retain their exact Human Gates. Subagent dispatch itself is Agent-owned; the delegated action retains the exact Gate it would require if performed by the owning Agent.
 
 Human Gate provenance remains an Agent-owned conversation judgment. The Agent writes the durable Gate decision pair and timestamp only after reliable Human evidence and independently verifies package completeness, current artifacts, Plan/No-Plan evidence, readiness, and action consistency. The Gate 2 pair remains the immutable original review baseline rather than the live execution-mode pointer. After package-only acceptance, later start records a separate decision/time/Human-evidence transition and updates current project `Gate Mode` without rewriting the Gate 2 baseline. Pause clears the current mode in project state and records the transition without rewriting accepted Gate or later-start evidence, while Resume requires a newly confirmed applicable mode. No local Feature Gate script or digest is required for Gate acceptance, later start, task rotation, or continuation. On context loss or uncertain provenance, the Agent asks one blocking confirmation.
 
@@ -729,16 +735,18 @@ Project Entry
 → Technical Design / Code Context
 → Plan Gate / Plan if Needed
 → Analyze Consistency
-→ Subagent Execution If Approved
 → Execute Task / Story
 → Verify
-→ Review
+→ [internal] Task Completion Review inside Task Done Gate
+→ [internal] Feature-wide Required Verification and automatic Final Review Subagent after all Tasks
 → Drift Check
 → Project Memory Update
 → Feature Completion Check
 → Submit / Integrate
 → Pause / Close
 ```
+
+Task Completion Review, Final Review Subagent, Agent-owned delegation, finding assessment, and Review Repair are internal methods of the existing execution/completion flow. The design does not add a canonical stage, does not add a lifecycle status, does not add an Auto Mode, does not add a checker, and does not add a default artifact directory.
 
 ## First-Version Exclusions
 

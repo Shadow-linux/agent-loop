@@ -1,5 +1,28 @@
 # Agent Loop Changelog
 
+## 1.5.9 — 2026-08-29
+
+_当前状态：开发中；Phase 1 implementation、Review Repair、focused contracts 与独立 proposal-blind pressure review 已完成，单功能评分 98/100 STRONG。版本与 13 个 root managed blocks 已同步；全量/六域验证、最终 Human Review、commit、push、tag、release、publish 与 installed Skill 同步尚未完成或授权。本节不声明 `stable-v1.5.9` 已存在。_
+
+### Inline Task Review 与 Final Review
+- 将快速且强制的 Task Completion Review 内联到 Task Done Gate；每个 `done` Task 保留 current evidence pointer，普通边界内修复以 fresh proof 刷新 currentness，无法真实刷新时返回 `review`。
+- 全部 in-scope Tasks、Feature-wide Required Verification、authority、dirty-work attribution 与 rollback 前置 current 后，Agent 自动派发一次只读 Final Review Subagent；Feature Completion 与 Close 消费该证据，不再重复 Feature Close Review，Human Close Gate 保持不变。
+- Task Auto-Run 完成最后 Task 后采用互斥终点：全部前置 current 时 dispatch Final Review；仅 Feature-wide verification 缺失/过期时进入 Verify；其他缺口返回 owning Task、authority recovery/Human Gate、workspace、rollback 或对应 stage owner。
+
+### Agent-Owned Delegation 与 Review Repair
+- Subagent dispatch 本身不新增 Human Gate；委派行为只继承当前 stage、已有授权/write grant 与 assignment boundary 的交集，Product、ADR、Contract、Git、Release、External Action 等既有 Human Gates 均保留。
+- helper 缺失不再等同 runtime dispatcher 缺失；dispatch 失败先进入 Diagnose Failure 并重试可用 dispatcher，只在诊断证明没有任何 Subagent dispatch mechanism 后才允许 recorded controller fallback。
+- Final Reviewer 的 helper resolution 采用只读嵌套协议：owner 先持久化协调 helper，reviewer 在实质审阅前形成 response-local review-helper 证据并返回，owner 使用 findings 前再持久化；reviewer 不写项目文件。
+- dispatcher 诊断采用有界尝试集；所有仍被 runtime 暴露的机制均失败时记录明确的 runtime-dispatcher recovery blocker，禁止无限重试或把失败机制直接降级成 controller fallback。
+- 同一可靠会话中的 Subagent brief/return 默认 response-local；仅跨会话恢复、复杂 handoff 或明确审计价值触发 `handoffs/*`。
+- Final Review finding 使用 fail-closed disposition：blocking defect 与 verification gap 不得 residual-close，semantic/boundary conflict 返回 owner，只有 non-blocking improvement 可在完整 provenance 下接受或延期。
+- 已知同一可写路径必须串行或使用已授权的真实隔离 worktree；普通 Review Repair 要求 fresh targeted proof，material boundary/risk/coverage/rollback 变化会使旧 Final Review 过期。
+
+### 兼容、验证与版本同步
+- Feature Monthly Archive 读取 current Final Review 证据，同时保留严格日期和证据形状约束的 pre-1.5.9 legacy dual-read；`2026-08-29` cutoff 当日由精确回归保护，历史记录不能形成当前授权。
+- focused RED/GREEN、mutation、archive、root guidance、version assertions、Shell contracts 与机械检查已通过；完整 Shell/Python 与六域 full validation 仍需绑定当前输入的一次性 Human confirmation 后执行。
+- Skill/metadata/人类文档版本更新为 1.5.9，13 个 root managed blocks 使用 `1.5.9-20260829.1`。稳定 branch/tag、默认 `main`、多远端与 installed Skill 同步均保留后续独立 Human Gates。
+
 ## 1.5.8 — 2026-08-27
 
 _当前状态：正式稳定版；最终 Human Review 与精确 Batch Release Gate 已接受，53/53 Shell contracts、420/420 Python tests、机械检查与六域审计通过，评分 96/100 STRONG。正式 tag 为 `stable-v1.5.8`；默认安装通道 `main` 与三个已配置发布端纳入同批同步，installed Skill 同步未授权。_

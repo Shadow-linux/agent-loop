@@ -6,7 +6,7 @@ The agent is responsible for steering the workflow. Do not wait for the human to
 
 Guidance language should follow this project's language preference. Keep stable artifact names, stage names, and file paths in English, such as `agent-loop`, `Requirement Archive`, `Feature Spec`, `Feature Auto-Loop`, `Task Auto-Run`, `project.md`, and `requirements/`.
 
-<!-- agent-loop:managed-start section:bootstrap source:.agent-loop/project.md block-version:1.5.8-20260826.1 -->
+<!-- agent-loop:managed-start section:bootstrap source:.agent-loop/project.md block-version:1.5.9-20260829.1 -->
 ## Bootstrap Protocol
 
 Before development work:
@@ -22,7 +22,7 @@ Before development work:
 9. Check the closest directory guidance, classify current intent and project state, and recommend exactly one next action.
 <!-- agent-loop:managed-end section:bootstrap -->
 
-<!-- agent-loop:managed-start section:ownership source:.agent-loop/project.md block-version:1.5.8-20260826.1 -->
+<!-- agent-loop:managed-start section:ownership source:.agent-loop/project.md block-version:1.5.9-20260829.1 -->
 ## Agent Ownership
 
 When existing branch rules are confused, the target version is unclear, or customer isolation is at risk, load `references/branch-management.md`, recommend one optional strategy, and adopt it only after explicit human acceptance.
@@ -35,13 +35,13 @@ When existing branch rules are confused, the target version is unclear, or custo
 - After each meaningful stage, report changed artifacts, fresh evidence, drift, and the next recommendation; use a table-first Human Review Summary for non-trivial confirmation.
 
 Core workflow:
-Inspect -> Classify Intent And Project State -> Recommend One Next Action -> Human Gate When Required -> Act Through Loaded Reference -> Verify -> Review / Drift -> Record Memory -> Submit / Pause / Close
+Inspect -> Classify Intent And Project State -> Recommend One Next Action -> Human Gate When Required -> Act Through Loaded Reference -> Verify -> Task Completion / Final Review / Drift -> Record Memory -> Submit / Pause / Close
 
 Product delivery:
-Requirements / Product Definition -> Decision / ADR If Needed -> Feature Product Slice -> Plan -> Execute -> Verify / Review / Drift -> Memory -> Submit / Close
+Requirements / Product Definition -> Decision / ADR If Needed -> Feature Product Slice -> Plan -> Execute -> Verify / Task Completion / Final Review / Drift -> Memory -> Submit / Close
 <!-- agent-loop:managed-end section:ownership -->
 
-<!-- agent-loop:managed-start section:message-intent source:agent-loop-skill block-version:1.5.8-20260826.1 -->
+<!-- agent-loop:managed-start section:message-intent source:agent-loop-skill block-version:1.5.9-20260829.1 -->
 ## Message Intent Guard
 
 Classify the latest human message before project-state routing:
@@ -60,7 +60,7 @@ Classify the latest human message before project-state routing:
 Intent may change with the latest message. When it is genuinely unclear, inspect all safely available evidence first, recommend one route, and ask exactly one blocking question.
 <!-- agent-loop:managed-end section:message-intent -->
 
-<!-- agent-loop:managed-start section:workflow-stage-map source:agent-loop-skill block-version:1.5.8-20260826.1 -->
+<!-- agent-loop:managed-start section:workflow-stage-map source:agent-loop-skill block-version:1.5.9-20260829.1 -->
 ## Workflow Gateway Map
 
 Use this after Bootstrap and Message Intent. Apply: Safety Stop -> Remote Discovery -> Memory Recovery -> Feature Archive Maintenance -> Active Feature Guard -> Blocker Resolution -> Intent Routing -> Normal Stage Continuation. Select one first hop and load its published owner before acting.
@@ -85,30 +85,30 @@ Use this after Bootstrap and Message Intent. Apply: Safety Stop -> Remote Discov
 | Submit, commit, PR, merge, release, publish, seal, pause, close, or cleanup is requested | Lifecycle Boundary | `references/submit-and-integrate.md`, `references/stage-guides.md` |
 | Ordinary question or discussion has no artifact or action intent | Chat | `references/runtime.md` |
 
-The complete Product Definition, Feature Spec/Product Slice, Requirement Checklist, Work Breakdown, Delivery Contract, Test Design, E2E, Technical Design, Plan, Execute, Verify, Review, Drift Check, Project Memory Update, Feature Completion Check, and lifecycle order remains owned by `references/runtime.md` and loaded references. A Gateway selects its owner family; it never removes or reorders a downstream stage.
+The complete Product Definition, Feature Spec/Product Slice, Requirement Checklist, Work Breakdown, Delivery Contract, Test Design, E2E, Technical Design, Plan, Execute, Verify, Task Completion Review, Feature-wide Required Verification, Final Review, Drift Check, Project Memory Update, Feature Completion Check, and lifecycle order remains owned by `references/runtime.md` and loaded references. A Gateway selects its owner family; it never removes or reorders a downstream stage.
 
 No observed memory conflict means `reconciliation-not-needed`: do not scan all memory, create a report, or add a Human Gate.
 <!-- agent-loop:managed-end section:workflow-stage-map -->
 
-<!-- agent-loop:managed-start section:gates source:.agent-loop/project.md block-version:1.5.8-20260826.1 -->
+<!-- agent-loop:managed-start section:gates source:.agent-loop/project.md block-version:1.5.9-20260829.1 -->
 ## Gate Modes
 
 - Feature construction normally stops at two reviews: Gate 1 confirms Goal, Scope, Acceptance, and Explicit Exclusions and authorizes package preparation; Gate 2 confirms Execution Boundary, Verification, Risk/Rollback, and whether to start Feature Auto-Loop.
 - Package preparation first records the Feature Verification Profile (`focused | full | high-assurance`) with rationale, hard floors, and escalation triggers, then completes applicable Tasks, Tests, E2E, code context, Plan, coverage, risk, rollback, and consistency without per-stage prompts or target implementation; Gate 2 shows the Profile fields in the Verification decision row, execution only auto-escalates, and a post-Gate 2 downgrade requires presented changed-risk evidence and Human acceptance; hard floors are never lowered by urgency or acceptance claims.
 - AI evaluates Package Files completeness, Gate/action/time consistency, later semantic/boundary drift, and current Story/Task/Plan meaning directly; Feature Gate acceptance and continuation require no local digest or Feature review Checker. A new Task ID inside the accepted boundary does not itself repeat Gate 2. `Approve package only` never executes; `Approve package and start implementation` enables Feature Auto-Loop without another generic prompt. A valid separate later-start transition may also enable it, but preserves the package-only Gate 2 baseline.
-- Strict Mode is available when the human explicitly requests stage-by-stage control and is mandatory when controller fallback forces it.
-- Task Auto-Run requires an accepted task/story plan and explicit human enablement for one execution unit, beginning with Analyze Consistency.
+- Strict Mode is available when the human explicitly requests stage-by-stage control and is mandatory when the agent-loop controller is unavailable or load-failed.
+- Task Auto-Run requires an accepted task/story plan and explicit human enablement for one execution unit, beginning with Analyze Consistency. It never starts another implementation Task; after the last Task it dispatches Final Review when prerequisites are current, stops at Feature-wide Verify only when Feature-wide verification alone is missing/stale, and otherwise returns the missing prerequisite to its exact owner.
 - Auto modes continue only Agent-ready work inside their grant and stop at every independent Gate below.
 - A newly proposed full suite needs one exact Full Test Run Confirmation for one execution; Profile labels, Commit requests, and changed inputs/HEAD do not provide reusable test authority. A rerun needs fresh authority unless the same Human decision supplied an explicitly bounded retry count and condition that still match unchanged inputs.
 - Before Task/Test/Plan/Execute/Resume relies on a Feature, load its Feature Context Snapshot, resolve its open Feature Authority, and run the fact scanner: `CURRENT` permits applicable fact reliance, `CHANGED` requires Agent assessment, `NOT_APPLICABLE` selects another adapter/direct evidence, and physical `BLOCKED` routes to Recovery/source repair.
 <!-- agent-loop:managed-end section:gates -->
 
-<!-- agent-loop:managed-start section:required-stops source:.agent-loop/project.md block-version:1.5.8-20260826.1 -->
+<!-- agent-loop:managed-start section:required-stops source:.agent-loop/project.md block-version:1.5.9-20260829.1 -->
 ## Required Stops
 
 - Semantic Gate: Requirement, Concept, acceptance, Product, or Decision / ADR meaning is unresolved or would be redefined downstream.
 - Scope And Risk Gate: scope expansion or architecture, security, data, permission, dependency, migration, public interface, customer isolation, or durable boundary changes.
-- Execution Gate: Requirement/Feature lifecycle, plan execution, Project Skill, subagent, Delivery Contract, Archive/rehydrate, or another independently authorized action.
+- Execution Gate: Requirement/Feature lifecycle, plan execution, Project Skill, Delivery Contract, Archive/rehydrate, or another independently authorized action. Subagent dispatch itself is Agent-owned; a delegated action inherits only existing authorization and keeps every applicable Gate.
 - Evidence Gate: controller/infrastructure unavailable, repeated verification failure, unresolved memory/artifact conflict outside a reversible fact-determined Post-Merge Memory Reconciliation rewrite, blocking dirty work, or missing Review/Drift/Memory evidence.
 - A canonical checker failure first uses Agent Checker Rescue inside existing authority; Level 2 is one named Gate only, Level 3 stops, and actual Checker Self-Repair remains isolated and Human-authorized. Rescue never creates permission or a canonical pass; upstream Issue creation keeps an independent External Mutation Gate.
 - External Mutation Gate: secrets, paid quota, credentials, configuration, external service, production/staging, deploy, release, or destructive action.
@@ -117,30 +117,31 @@ No observed memory conflict means `reconciliation-not-needed`: do not scan all m
 Auto modes do not bypass these six Gate classes.
 <!-- agent-loop:managed-end section:required-stops -->
 
-<!-- agent-loop:managed-start section:completion source:.agent-loop/project.md block-version:1.5.8-20260826.1 -->
+<!-- agent-loop:managed-start section:completion source:.agent-loop/project.md block-version:1.5.9-20260829.1 -->
 ## Completion Rules
 
 - Code changes alone never make a task or Feature done.
 - Direct Edit creates no card, Plan, test, or memory record; it completes only after exact final diff inspection and the minimum matched check, otherwise it escalates or stops.
 - RED accepts any credible failure-matched proof (new test, existing failing test, reproduction script, or API/UI reproduction evidence); no test is manufactured solely for RED, while post-fix proof and regression obligations still gate done.
-- Fresh verification, Review, Drift Check, and required Project Memory evidence precede completion.
-- Task Done Gate also requires accepted scope, recorded evidence, Spec Review, triggered Standards Review, and evidence-linked status.
+- Fresh verification, Task Completion Review, Final Review, Drift Check, and required Project Memory evidence precede completion.
+- Task Done Gate performs a built-in Task Completion Review against accepted scope, evidence, diff, rollback, and drift, and every `done` Task keeps a current evidence pointer; after all pointers and Feature-wide verification are current, Agent dispatches exactly one read-only Final Review. Helper fallback still uses an available runtime dispatcher; dispatch diagnosis uses a bounded attempt set, blocks with a runtime-dispatcher recovery owner when advertised mechanisms remain unusable, and permits controller fallback only after diagnosis proves the runtime exposes no Subagent dispatch mechanism.
 - Run Feature Completion Check after likely completion, before another Feature starts, and when an active Feature may already be complete.
-- Feature Close Review, applicable accepted-design/contract evidence, drift resolution, memory updates, and explicit human close confirmation remain required.
+- Feature Completion Check consumes the current Final Review and finding dispositions without another review; applicable accepted-design/contract evidence, drift resolution, memory updates, and the explicit Human Close Gate remain required.
 <!-- agent-loop:managed-end section:completion -->
 
-<!-- agent-loop:managed-start section:submit source:.agent-loop/project.md block-version:1.5.8-20260826.1 -->
+<!-- agent-loop:managed-start section:submit source:.agent-loop/project.md block-version:1.5.9-20260829.1 -->
 ## Submit And Commit Rules
 
 - Submit, commit, push, PR, merge, tag, release, publish, seal, pause, close, and cleanup remain independent Human Gates.
-- Before normal submit/readiness actions, inspect the intended diff, fresh verification, Review, Drift Check, project-memory status, branch/release constraints, and unrelated work.
+- Before normal submit/readiness actions, inspect the intended diff, fresh verification, current Final Review/finding dispositions, Drift Check, project-memory status, branch/release constraints, and unrelated work.
+- Final Review reuse also requires unchanged review coverage/residuals; merge resolution, generated output, packaging change, or late edit expires it.
 - For an explicit commit or commit-and-push request, show one lightweight confirmation of the entire-worktree summary and proposed commit message; Commit never triggers tests merely for Git, then use `git add -A`; plain commit excludes Push, while commit-and-push authorizes both in order after confirmation.
 - Disclose predictable Push-triggered CI without duplicating the same full run locally; manual CI reruns need fresh authority unless the same Human decision supplied an explicitly bounded retry count and condition that still applies, and declined required validation keeps Release/readiness blocked.
 - After verified code integration, use `reconciliation-not-needed` when no memory conflict exists; otherwise resolve only the observed conflict before any applicable later memory commit, tag, push, release, publish, seal, or source cleanup Gate.
 - Use repository commit rules when present; otherwise use a clear type, summary, and concrete body. Record authorized results in the owning feature evidence.
 <!-- agent-loop:managed-end section:submit -->
 
-<!-- agent-loop:managed-start section:artifacts source:.agent-loop/project.md block-version:1.5.8-20260826.1 -->
+<!-- agent-loop:managed-start section:artifacts source:.agent-loop/project.md block-version:1.5.9-20260829.1 -->
 ## Project Memory And Artifacts
 
 - Requirement owns human source and product meaning; Decision / ADR owns accepted technical landing; Feature owns implementation; Bug owns defect identity and lifecycle; Direct Edit creates no artifact; Lightweight Execution Card owns persistent bounded-change evidence; project memory owns durable current facts.
@@ -150,13 +151,13 @@ Auto modes do not bypass these six Gate classes.
 - Root `AGENTS.md` contains only startup-critical navigation and stable constraints; it does not own task logs, raw requirements, backlog detail, temporary plans, or test transcripts.
 <!-- agent-loop:managed-end section:artifacts -->
 
-<!-- agent-loop:managed-start section:architecture source:.agent-loop/project.md block-version:1.5.8-20260826.1 -->
+<!-- agent-loop:managed-start section:architecture source:.agent-loop/project.md block-version:1.5.9-20260829.1 -->
 ## Architecture Snapshot
 
 Add only startup-critical architecture boundaries that every future agent must know immediately. If the project has `ARCHITECTURE.md`, this block may use `source:ARCHITECTURE.md` instead. Keep details in `ARCHITECTURE.md`, `.agent-loop/project.md`, or enterprise `.agent-loop/project/*.md`.
 <!-- agent-loop:managed-end section:architecture -->
 
-<!-- agent-loop:managed-start section:directory-guidance source:.agent-loop/project.md block-version:1.5.8-20260826.1 -->
+<!-- agent-loop:managed-start section:directory-guidance source:.agent-loop/project.md block-version:1.5.9-20260829.1 -->
 ## Directory Guidance
 
 - Directory-level `AGENTS.md` files are for long-lived boundary rules only.
@@ -164,7 +165,7 @@ Add only startup-critical architecture boundaries that every future agent must k
 - Do not create directory-level `AGENTS.md` for ordinary component, utility, temporary, or feature implementation folders.
 <!-- agent-loop:managed-end section:directory-guidance -->
 
-<!-- agent-loop:managed-start section:commands source:.agent-loop/project.md block-version:1.5.8-20260826.1 -->
+<!-- agent-loop:managed-start section:commands source:.agent-loop/project.md block-version:1.5.9-20260829.1 -->
 ## Project Commands
 
 ```bash
@@ -174,7 +175,7 @@ Add only startup-critical architecture boundaries that every future agent must k
 ```
 <!-- agent-loop:managed-end section:commands -->
 
-<!-- agent-loop:managed-start section:hard-constraints source:.agent-loop/project.md block-version:1.5.8-20260826.1 -->
+<!-- agent-loop:managed-start section:hard-constraints source:.agent-loop/project.md block-version:1.5.9-20260829.1 -->
 ## Project-Specific Hard Constraints
 
 Add only stable constraints that every future agent must know at startup.

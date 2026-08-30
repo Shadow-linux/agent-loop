@@ -196,10 +196,10 @@ repair_tokens = [
   'Regression Test Advisory'
 ]
 
-review = h2(guides, 'Review')
+review = h2(guides, 'Task Done Gate And Final Review')
 abort 'FAIL: Review Repair order is missing or reversed' unless ordered?(review, repair_tokens)
 
-review_checklist = h2(checklists, 'Review')
+review_checklist = h2(checklists, 'Task Done Gate')
 abort 'FAIL: Review checklist restores per-finding confirmation or loses fast-path exit owners' unless review_authorization_boundary?(review_checklist)
 
 task_done = h2(runtime, 'Task Done Gate')
@@ -263,18 +263,18 @@ for forbidden in \
   done
 done
 
-assert_contains SKILL.md 'Version: 1.5.8'
-assert_contains plugin.json '"version": "1.5.8"'
-assert_contains README.md '**Current version:** 1.5.8'
-assert_contains Usage.md '**版本：** 1.5.8'
-assert_contains CHANGELOG.md '## 1.5.8 — 2026-08-26'
+assert_contains SKILL.md 'Version: 1.5.9'
+assert_contains plugin.json '"version": "1.5.9"'
+assert_contains README.md '**Current version:** 1.5.9'
+assert_contains Usage.md '**版本：** 1.5.9'
+assert_contains CHANGELOG.md '## 1.5.9 — 2026-08-29'
 
 ruby - "$root/templates/root-AGENTS.md" <<'RUBY'
 content = File.read(ARGV.fetch(0))
 blocks = content.scan(/<!-- agent-loop:managed-start section:([^ ]+) .*?block-version:([^ ]+) -->/)
 abort "FAIL: expected 13 root managed blocks, found #{blocks.length}" unless blocks.length == 13
 blocks.each do |section, revision|
-  expected = '1.5.8-20260826.1'
+  expected = '1.5.9-20260829.1'
   abort "FAIL: #{section} expected #{expected}, found #{revision}" unless revision == expected
 end
 abort 'FAIL: root AGENTS exceeds 190 lines' if content.lines.length > 190

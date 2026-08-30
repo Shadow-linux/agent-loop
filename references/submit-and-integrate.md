@@ -26,7 +26,7 @@ Code integration completes and is verified before Target memory reconciliation c
 
 Use this internal method only when the Human explicitly asks for `commit` or `commit and push`. A request to inspect readiness, prepare a PR, merge, tag, release, publish, seal, close, or merely “see whether this can be committed” remains on the normal Submit path.
 
-Git Fast Path packages Git state; it does not prove implementation quality. Agents do not automatically run tests, Verify, Review, Drift Check, Project Memory Update, or Feature Completion Check for this Git request. The default evidence line is exactly:
+Git Fast Path packages Git state; it does not prove implementation quality and does not make a completion claim. Agents do not automatically run tests, Verify, Task Completion Review, Final Review, Drift Check, Project Memory Update, or Feature Completion Check for this Git request. The default evidence line is exactly:
 
 ```text
 not run for this Git action; no completion or release-readiness claim
@@ -56,7 +56,7 @@ For normal Submit readiness or any completion/release claim, enter this stage on
 
 - implementation for the selected task/story/feature is complete
 - fresh verification evidence exists in `notes.md`
-- required Review is complete: Spec Review always, Standards Review when triggered
+- the current Final Review is complete, all findings have dispositions, and its reviewed inputs remain unchanged
 - drift check is complete
 - long-term project facts are updated in `project.md`, or no long-term project facts changed
 - `tasks.md` reflects current task status
@@ -86,6 +86,8 @@ Default to `prepare only` when the human has not explicitly asked to commit.
 
 ## Normal Submit Required Checks
 
+Normal Submit reuses the current Final Review only while its reviewed inputs remain unchanged. Recheck the accepted authority, implementation diff, Feature-wide verification, risk/rollback evidence, consumer boundary, review coverage, finding dispositions, and residual risk against the recorded review. A merge resolution, generated output, packaging change, late edit, or any other change to those inputs makes the evidence expire: route to fresh Feature-wide verification and a fresh Final Review before making a submit-readiness or completion claim. This reuse creates no Git authorization and does not add another review stage.
+
 Before submit:
 
 1. Inspect current diff and untracked files.
@@ -95,7 +97,7 @@ Before submit:
 5. Review linked requirement records for lifecycle, Delivery Phase status, Feature Mapping, and approved deferrals when the feature references requirement sets.
 6. Confirm project memory and root/directory guidance impact is completed, explicitly not needed, or human-approved to defer.
 7. Confirm verification evidence is fresh enough for the submit claim.
-8. Confirm required Review is complete and recorded.
+8. Confirm the current Final Review, finding dispositions, reviewed-input identity, and post-repair freshness are complete and recorded.
 9. Confirm drift check result and remaining known drift.
 10. When an adopted Branch Strategy or versioned/customer delivery applies, compare accepted Branch Strategy and Target Release Context with current Git reality and feature Current Branch Context.
 11. In that applicable context, fail closed when the target is `released / sealed`, customer isolation would be violated, or the requested action/scope is ambiguous.
@@ -229,7 +231,7 @@ Append to `notes.md`:
 - Diff Summary:
 - Verification:
 - Drift Check:
-- Review:
+- Final Review / Finding Dispositions:
 - Commit:
 - Commit Decision:
 - Push Decision / Remote / Ref:

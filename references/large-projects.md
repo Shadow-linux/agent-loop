@@ -75,7 +75,7 @@ For Project Entry Scan, prefer the layered scan in `project-entry-scan.md`. This
 - assign confidence labels instead of pretending certainty
 - identify package/app/service boundaries before task splitting
 - defer deep code reading to a targeted feature scan
-- when subagents are available and the human confirms, parallelize Project Entry Scan with bounded scan lanes
+- when subagents are available and useful, parallelize Project Entry Scan with bounded read-only scan lanes without adding a dispatch Gate
 - evaluate whether simple project memory is still enough, or whether enterprise mode should be recommended
 
 Recommend enterprise Project Memory Mode when any hard trigger applies, including about 200k+ LOC, 5+ durable boundaries, 2+ test systems, 3+ execution environments, `project.md` above about 600 lines, repeated re-scans, or 5+ directory-level guidance files.
@@ -129,7 +129,7 @@ For each feature, identify boundaries in `spec.md` or `tasks.md`:
 
 If the affected boundaries are unclear, stop and clarify or run a bounded scan before task split.
 
-When a boundary has downstream consumers, load `delivery-contracts.md` and propose a Delivery Contract. Write `contracts.md` or optional `contracts/` details only after human confirmation. Keep temporary subagent briefs in `handoffs/`; keep confirmed durable interface handoffs in `contracts.md` and optional `contracts/` details.
+When a boundary has downstream consumers, load `delivery-contracts.md` and propose a Delivery Contract. Write `contracts.md` or optional `contracts/` details only after human confirmation. Keep Subagent briefs/returns response-local in one reliable session; use `handoffs/` only for cross-session recovery, complex handoff, or explicit audit value. Keep confirmed durable interface handoffs in `contracts.md` and optional `contracts/` details.
 
 For old-project Project Entry Scan, also record each stable boundary in `project.md` with its guidance status:
 
@@ -199,7 +199,7 @@ For large projects, every active plan must include:
 
 ## Subagent Rules At Scale
 
-Use subagents only after human confirmation and only for independent tasks or story slices.
+Use subagents only for independent tasks or story slices. Dispatch is Agent-owned, but implementation writes must already be covered by the current accepted execution grant; branch/worktree/Git/external actions retain their own Human Gates.
 
 When subagents are used:
 

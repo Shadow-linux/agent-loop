@@ -4,7 +4,7 @@
 
 This reference is reader-only compatibility for an existing Feature `product.md`. New Product Definition authoring belongs to `references/product-definition.md` and writes Requirement `product.md` only through Product Human Review plus Requirement Record / Archive.
 
-Read an existing Feature Product Brief during Resume, Follow-up, Review, Close, or Recovery. Do not create `feature/product.md` for new work.
+Read an existing Feature Product Brief during Resume, Follow-up, Task Completion Review, Final Review, Close, or Recovery. Do not create `feature/product.md` for new work.
 
 If it conflicts with the Effective Product Definition, stop for Requirement conflict/recovery; do not rewrite either source silently.
 
@@ -14,8 +14,8 @@ Existing Feature Product Briefs remain valid historical/working evidence during:
 
 - Resume;
 - Feature Follow-up / Flow-back discovery;
-- Review and Drift Check;
-- Feature Completion / Close Review;
+- Task Completion Review, Final Review, and Drift Check;
+- Feature Completion / Human Close Gate;
 - Recovery / Backfill;
 - audit of behavior that predates Adaptive Product Definition.
 
@@ -63,7 +63,7 @@ Legacy Product Brief presence, status, or earlier human acceptance grants none o
 
 ## Completion And Close Compatibility
 
-For a legacy Feature, Feature Close Review still compares implementation and `spec.md` against the existing Product Brief when present. For new Features, compare implementation against the Requirement Product Definition via `spec.md` Product Slice; absence of Feature `product.md` is expected and is not drift.
+For a legacy Feature, the current Final Review still compares implementation and `spec.md` against the existing Product Brief when present. Pre-1.5.9 legacy Feature Close Review records remain readable historical evidence, but they are not current execution or close authorization. For new Features, compare implementation against the Requirement Product Definition via `spec.md` Product Slice; absence of Feature `product.md` is expected and is not drift.
 
 ## Stop Rules
 

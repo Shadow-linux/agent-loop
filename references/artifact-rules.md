@@ -57,7 +57,7 @@ New human source material should be archived inside a requirement set directory.
 | `tasks/*` | detailed task instructions when complex mode is triggered | feature-wide ledger |
 | `tests/*` | detailed test cases when complex mode is triggered | raw test output |
 | `plans/*` | dated plan cycles when complex mode is triggered | current-state summary |
-| `handoffs/*` | subagent briefs and returned summaries when subagent mode is triggered | authoritative task status |
+| `handoffs/*` | optional durable Subagent briefs/returns for cross-session recovery, complex handoff, or explicit audit value | one-session response-local coordination or authoritative task status |
 | `contracts/*` | optional confirmed durable producer-consumer contract details when interface detail is needed | temporary task logs |
 | `features/archive.md` | Feature Monthly Archive locator and move ledger: stable Feature ID, current path, archive state, close date, one-line delivery locator, source/decision locators, last move | feature lifecycle, product meaning, requirement meaning, decision content, verification evidence |
 | `memory-merges/MM-<merged-code-short-sha>-<conflict-topic>/README.md` | optional durable record for several coupled conflicts, cross-session handoff, substantial rollback/recovery evidence, or an explicitly requested report | small conversation-resolvable conflict, unchanged/all-path inventory, code merge, project encyclopedia, or authorization for later Git actions |
@@ -122,13 +122,19 @@ Task Done Gate:
 
 ```text
 done = implementation complete
+     + Task Completion Review passed accepted authority, scope, diff, risk, rollback, and drift
      + required tests or substitute verification run fresh
      + evidence recorded in notes.md
-     + lightweight Spec Review recorded
      + Standards Review recorded when triggered
      + drift decision recorded
-     + tasks.md or task detail names the evidence location
+     + tasks.md or task detail names the current evidence pointer
 ```
+
+Every `done` Task keeps its Task Completion Review evidence pointer current. A bounded Review Repair refreshes the affected pointer after fresh proof without repeating formal Task Completion Review; stale currentness returns the Task to `review`.
+
+After all in-scope Tasks are `done` or Human-approved `skipped`, their Task Completion Review pointers are current, and Feature-wide Required Verification is current, record one read-only Final Review plus every type-valid owning-Agent finding disposition in `notes.md`. A current Final Review is completion evidence, not close, Git, release, or external-action authorization.
+
+Archive dual-read is date-bounded rather than inferred from optional old review sections. A Feature whose `notes.md` (or fallback `spec.md`) has both `Created` and matching Close Record / Archive Readiness `Closed At` before `2026-08-29`, contains no current `Final Review` / `Task Completion Reviews` heading, and records the v1.5.8 Archive Readiness key `Feature Close Review: complete` remains legacy-readable without migration. A Feature created or closed on/after that contract cutoff, or any artifact containing a current review heading, must use `Final Review: complete` plus concrete current Final Review evidence. The legacy alias is historical compatibility only, not a current-format bypass.
 
 Task mode:
 

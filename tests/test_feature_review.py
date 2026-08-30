@@ -271,8 +271,8 @@ class FeatureReviewContractTests(unittest.TestCase):
         checklists = (ROOT / "references/workflow-checklists.md").read_text(
             encoding="utf-8"
         )
-        review = markdown_h2_section(stage_guides, "Review")
-        review_checklist = markdown_h2_section(checklists, "Review")
+        review = markdown_h2_section(stage_guides, "Task Done Gate And Final Review")
+        review_checklist = markdown_h2_section(checklists, "Task Done Gate")
         assert_ordered_contract(
             self,
             review,
@@ -285,7 +285,7 @@ class FeatureReviewContractTests(unittest.TestCase):
             ),
         )
         self.assertIn("inside the current accepted execution boundary", review)
-        self.assertNotIn("Gate 3", review)
+        self.assertNotIn("requires a third Human review", review)
         self.assertFalse((ROOT / "scripts/check-review-repair.py").exists())
         assert_review_authorization_boundary(self, review_checklist)
 
@@ -471,7 +471,7 @@ class FeatureReviewContractTests(unittest.TestCase):
             "Human Gate Modes",
             required=(
                 "Delivery Contract creation and acceptance",
-                "subagent dispatch",
+                "delegated action outside existing authorization",
                 "commit, push, PR, merge, tag, release, publish, seal",
                 "Submit / Integrate",
                 "Pause / Close",
@@ -490,7 +490,7 @@ class FeatureReviewContractTests(unittest.TestCase):
 
         independent_stops = (
             "Delivery Contract creation and acceptance",
-            "subagent dispatch",
+            "delegated action outside existing authorization",
             "external mutation",
             "Submit / Integrate",
             "commit, push, PR, merge, tag, release, publish, seal",

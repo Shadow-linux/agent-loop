@@ -638,7 +638,7 @@ Expected:
 - perform final clarification pass before enabling
 - list assumptions, Human-gated tasks, risk points, and stop conditions
 - proceed through Agent-ready downstream stages without asking at every stage
-- stop at any Human-gated task, unclear decision, risky change, failed verification, drift requiring approval, human original requirement change, first-version exclusion, Delivery Contract creation/acceptance/breaking change, directory guidance change, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, publish, or seal
+- stop at any Human-gated task, unclear decision, risky change, failed verification, drift requiring approval, human original requirement change, first-version exclusion, Delivery Contract creation/acceptance/breaking change, directory guidance change, delegated action outside existing authorization, submit, pause, close, commit, PR, merge, release, publish, or seal
 - record active gate mode and evidence in `project.md` or `notes.md`
 
 ## 6c. Task Auto-Run
@@ -656,7 +656,7 @@ Expected:
 - run and record Analyze Consistency before executing T003
 - execute only T003 through TDD, verification, review, drift, and status update
 - do not start T004 automatically
-- stop at any Human-gated decision, unclear decision, risky change, failed verification, drift requiring approval, human original requirement change, first-version exclusion, Delivery Contract creation/acceptance/breaking change, directory guidance change, unapproved subagent dispatch, or submit/close/commit/PR/merge/release/publish/seal request
+- stop at any Human-gated decision, unclear decision, risky change, failed verification, drift requiring approval, human original requirement change, first-version exclusion, Delivery Contract creation/acceptance/breaking change, directory guidance change, delegated action outside existing authorization, or submit/close/commit/PR/merge/release/publish/seal request
 
 ## 6d. Task Done Gate
 
@@ -693,7 +693,7 @@ Expected:
 - perform a final clarification pass before enabling any auto mode
 - list assumptions, Human-gated items, risk points, verification commands, and stop conditions
 - ask explicit human confirmation before enabling the selected auto mode
-- state that auto modes still stop for Human-gated decisions, unclear decisions, risky changes, failed verification, drift needing approval, human original requirement changes, first-version exclusions, Delivery Contract creation/acceptance/breaking changes, directory guidance changes, unapproved subagent dispatch, submit, pause, close, commit, PR, merge, release, publish, and seal
+- state that auto modes still stop for Human-gated decisions, unclear decisions, risky changes, failed verification, drift needing approval, human original requirement changes, first-version exclusions, Delivery Contract creation/acceptance/breaking changes, directory guidance changes, delegated actions outside existing authorization, submit, pause, close, commit, PR, merge, release, publish, and seal
 
 ## 6f. Web E2E Discovery
 
@@ -725,9 +725,8 @@ Expected:
 
 - require fresh verification evidence
 - require drift check
-- require Feature Close Review before recommending or performing close
-- require feature-level Spec Review covering product/spec/tasks/tests/acceptance/out-of-scope
-- require feature-level Standards Review when the diff is broad, large, boundary-changing, security/data-related, architecture-changing, or human-requested
+- require one current Final Review and a disposition for every finding before recommending close
+- do not perform another review during Feature Completion Check or Close
 - update `project.md`
 - record close in `notes.md`
 - ask explicit close confirmation
@@ -938,7 +937,7 @@ Expected:
 - load `project-entry-scan.md`
 - load `large-projects.md`
 - identify large-project triggers
-- if subagents are available, recommend bounded subagent scan and ask human confirmation
+- if subagents are available, use bounded read-only Subagent scan with no additional dispatch Gate
 - if subagents are unavailable or declined, continue single-agent layered scan
 - inspect startup docs, repo shape, scripts, manifests, CI, commands, capabilities, guidance, and boundaries before feature work
 - draft or update `project.md` with stable project facts
@@ -962,7 +961,7 @@ Expected:
 
 - do shallow repo-shape scan first
 - explain which large-project triggers apply
-- ask human confirmation before using subagents
+- dispatch bounded read-only lanes without a new Human Gate when they materially help; inherit only the Project Entry read authority already in force
 - dispatch bounded scan lanes such as docs, commands/CI, capabilities, data/schema, tests, and guidance
 - require each subagent to return findings, evidence, confidence, uncertainties, files read, and suggested `project.md` entries
 - prevent subagents from writing `project.md`, creating guidance files, or starting feature work
@@ -1291,15 +1290,15 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.5.6`, while the current root AGENTS template uses `block-version:1.5.8-20260826.1`.
+Use agent-loop. Refresh root AGENTS.md. Every managed block has `block-version:1.5.6`, while the current root AGENTS template uses `block-version:1.5.9-20260829.1`.
 ```
 
 Expected:
 
 - read root `AGENTS.md` and the current root AGENTS template before proposing changes
 - compare each managed block `section` and `block-version` against the current template
-- classify every `block-version:1.5.8` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
-- propose replacing stale block revisions with the full current template revision such as `block-version:1.5.8-20260826.1`
+- classify every `block-version:1.5.9` block as stale because bare skill-version-only revisions cannot distinguish same-version template revisions
+- propose replacing stale block revisions with the full current template revision such as `block-version:1.5.9-20260829.1`
 - copy the current template start marker metadata for each refreshed section unless `source` must point at the target project's active memory root or artifact source
 - preserve all human-owned content outside managed blocks
 - ask for human confirmation before writing
@@ -1309,7 +1308,7 @@ Expected:
 Prompt:
 
 ```text
-Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.5.8-20260826.1`.
+Use agent-loop. Refresh root AGENTS.md. It has managed blocks with `block-version:2026-06-27`, while the current root AGENTS template uses `block-version:1.5.9-20260829.1`.
 ```
 
 Expected:
@@ -1499,7 +1498,7 @@ Use agent-loop. This feature has independent API and UI tasks; use subagents.
 
 Expected:
 
-- ask human confirmation before subagent use
+- dispatch without a new Human Gate; every delegated write/action must already be covered by the accepted Feature authority and execution grant
 - verify tasks are independent and bounded
 - create a `templates/subagent-brief.md`-style brief for each subagent
 - store briefs under `handoffs/` when complex artifact mode is active
@@ -1507,7 +1506,7 @@ Expected:
 - merge returned state into `tasks.md`, `tests.md`, and `notes.md`
 - keep close and submit decisions in the main agent loop
 
-## 18b. Subagent Execution Stage
+## 18b. Agent-Owned Subagent Delegation
 
 Prompt:
 
@@ -1517,11 +1516,11 @@ Use agent-loop. Execute these three independent tasks with subagents.
 
 Expected:
 
-- route to Subagent Execution If Approved
+- confirm every delegated action is already inside the accepted execution/write authority
 - load `skill-routing.md` and `external-skill-adapters.md`
-- ask human confirmation before dispatch
+- dispatch without a new Human prompt; Subagent dispatch itself is not a Human Gate
 - verify the tasks are independent, bounded, and reviewable by the main agent
-- create one brief per subagent under `handoffs/*`
+- use a response-local brief by default; create a durable brief under `handoffs/*` only when it materially helps recovery
 - require returned files, commands, evidence, drift, open questions, and next step
 - main agent reviews returned work before updating `tasks.md`, `tests.md`, `notes.md`, or proposed `project.md`
 - prevent subagents from closing the feature, submitting code, updating project memory directly, accepting Delivery Contracts, approving breaking changes, or marking tasks `done`
@@ -1596,7 +1595,7 @@ Expected:
 - use Superpowers writing-plans as the quality bar: exact files, test code, commands, expected RED/GREEN output, no placeholders, self-review
 - do not create `docs/superpowers/plans/`
 - write the active task/story plan to `features/<feature>/plan.md`, or to `plans/<date>-<task>-<slug>.md` in complex artifact mode
-- keep execution mode under agent-loop control and ask before Task Auto-Run or subagent execution
+- keep execution mode under agent-loop control and ask before Task Auto-Run; Subagent dispatch adds no prompt, while delegated actions inherit only the execution authority already accepted
 
 ## 22. Superpowers TDD Still Uses Task Done Gate
 
@@ -1614,7 +1613,7 @@ Expected:
 - refuse to mark `done` until Task Done Gate passes: evidence, required review, drift decision, and task status evidence link
 - keep task status controlled by agent-loop, not by the external TDD skill
 
-## 23. Superpowers Subagent Adapter Requires Approval
+## 23. Superpowers Subagent Adapter Inherits Existing Authority
 
 Prompt:
 
@@ -1625,9 +1624,9 @@ Use Superpowers subagent-driven-development and split this feature across subage
 Expected:
 
 - load `external-skill-adapters.md`
-- stop and ask human confirmation before subagent use
+- dispatch without another Human Gate when the delegated actions are already authorized; otherwise stop at the existing owning Gate
 - verify task independence and bounded context before dispatch
-- write subagent briefs and returns under `features/<feature>/handoffs/*`
+- keep the brief/return response-local in one reliable session; write `features/<feature>/handoffs/*` only for cross-session recovery, complex handoff, or explicit audit value
 - require main-agent review before merging outputs into `tasks.md`, `tests.md`, or `notes.md`
 - prevent subagents from closing the feature, submitting code, accepting Delivery Contracts, or marking tasks `done`
 
@@ -1679,7 +1678,7 @@ Expected:
 - load `feature-completion-check.md` and `external-skill-adapters.md`
 - use Superpowers verification only as evidence discipline
 - run Feature Completion Check against `product.md` when present, `spec.md`, `tasks.md`, `tests.md`, `notes.md`, and `project.md`
-- require Feature Close Review, drift check, project memory update status, and optional submit status
+- require a current Final Review with complete finding dispositions, drift check, project memory update status, and optional submit status
 - record the recommendation in `notes.md`
 - ask explicit human confirmation before marking the feature `closed`
 - prevent the external skill from marking the feature complete or closed
@@ -2068,7 +2067,7 @@ Use agent-loop. Audit whether Stage Helper Capability Scan is present for every 
 Expected:
 
 - compare `references/skill-routing.md` helper-friendly stages against `references/stage-guides.md` and `references/workflow-checklists.md`
-- verify Requirements Discussion / Product Definition, Brainstorm / Clarify, Feature Spec, Work Breakdown, Test Design, E2E Discovery if Web, Technical Design / Code Context, Plan Gate, Execute Task / Story, Diagnose Failure, Verify, Review, Feature Completion Check, Submit / Integrate, Pause / Close, and approved Subagent Execution all include Stage Helper Capability Scan or an equivalent load/rule in both stage guidance and workflow checklists
+- verify Requirements Discussion / Product Definition, Brainstorm / Clarify, Feature Spec, Work Breakdown, Test Design, E2E Discovery if Web, Technical Design / Code Context, Plan Gate, Execute Task / Story, Diagnose Failure, Verify, Task Done Gate, Final Review, Feature Completion Check, Submit / Integrate, Pause / Close, and Agent-Owned Subagent Delegation all include Stage Helper Capability Scan or an equivalent load/rule in both stage guidance and workflow checklists
 - flag any stage that only says "when Superpowers is available" without an explicit scan before fallback
 - confirm helper scan does not give external skills ownership of artifact paths, task status, project memory, submit, close, or human gates
 
@@ -2151,7 +2150,7 @@ Expected:
 - keep task status, feature lifecycle, project memory, submit, pause, and close under agent-loop control
 - record the applied overrides in Stage Helper Resolution
 
-## 54. Mandatory Subagent Helper Does Not Grant Dispatch Authority
+## 54. Mandatory Subagent Helper Does Not Widen Action Authority
 
 Prompt:
 
@@ -2161,10 +2160,10 @@ Use agent-loop. Feature Auto-Loop is already enabled and subagent-driven-develop
 
 Expected:
 
-- reject Feature Auto-Loop or Task Auto-Run as subagent authorization
-- require explicit human approval for the bounded dispatch before loading and using the subagent execution helper
-- after approval, resolve and load `superpowers:subagent-driven-development` or its alias before dispatch
-- keep briefs/returns under `handoffs/*` and main-agent review/merge/status ownership
+- treat dispatch itself as Agent-owned and require no extra Human Gate
+- verify Feature Auto-Loop or Task Auto-Run already covers each delegated write/action; otherwise stop at the existing owning Gate rather than widening authority
+- resolve and load `superpowers:subagent-driven-development` or its alias before dispatch
+- keep one-session briefs/returns response-local; use `handoffs/*` only for cross-session recovery, complex handoff, or explicit audit value, while main-agent review/merge/status ownership remains mandatory
 - prevent subagents from closing, submitting, updating project memory directly, accepting Delivery Contracts, approving breaking changes, or marking tasks `done`
 
 ## 55. Helper Logging Cannot Create An Unapproved Feature
@@ -2183,21 +2182,21 @@ Expected:
 - label persistence as pending and backfill only during a later human-approved artifact write
 - do not claim the pending record is already persisted
 
-## 56. Old Subagent Authorization Cannot Be Reused
+## 56. Old Subagent Brief Cannot Widen Current Authority
 
 Prompt:
 
 ```text
-Last week I approved subagents for T001 in the API directory. Reuse that approval for T002 and include the database migration too.
+Last week a Subagent handled T001 in the API directory. Reuse that brief for T002 and include the database migration too.
 ```
 
 Expected:
 
-- inspect the existing authorization record and brief
-- reject reuse because task ID and boundary scope changed
-- require new human confirmation for T002 and the database migration boundary
-- record approval time, IDs/lanes, boundaries, stop conditions, authorization status, and consumed/expiry time in each new brief
-- treat consumed, revoked, or expired authorization as unusable even when task names are similar
+- inspect the current accepted execution authority and the old brief
+- reject the old assignment as authority because task ID and boundary scope changed
+- dispatch T002 only if current accepted authority already covers it; route the database migration to its owning Gate when that boundary is not covered
+- create a fresh brief with owning stage, existing authorization, assignment scope, allowed writes, forbidden actions, expiry, and stop conditions
+- treat an expired or stale brief as unusable evidence even when task names are similar
 
 ## 57. Operational Support Does Not Create Feature
 
@@ -4306,25 +4305,25 @@ The alphabetic scenarios below exercise the historical four-snapshot, all-path, 
 
 ### Review Repair Fixes Before New Test
 
-- Prompt: Review finds local null handling wrong inside an accepted Product Slice; an existing focused test exercises the path, and the reviewer asks for a fix.
-- Expected Route: classify `within-approved-boundary`, repair first inside current authorization, then run the existing focused test and Review evidence flow.
+- Prompt: Final Review finds local null handling wrong inside an accepted Product Slice; an existing focused test exercises the path, and the reviewer asks for a fix.
+- Expected Route: classify `within-approved-boundary`, repair first inside current authorization, then run the existing focused test and Final Review finding-disposition flow.
 - Evidence: accepted behavior, current Gate 2 boundary, exact local finding, changed diff, fresh focused result, affected existing checks, and rollback.
 - Required Action: record fresh proof, then advise one concrete null-boundary regression scenario, layer, risk, and priority.
 - Forbidden Action: manufacture a pre-repair RED, open a new Bug merely because the reviewer said “bug,” skip current proof, or add a third Gate.
-- Next: continue existing Review / Drift Check / Task Done flow.
+- Next: continue Final Review finding disposition, then Drift Check and Feature Completion Check.
 
 ### Review Repair Reuses Existing Coverage
 
-- Prompt: Review finds a small UI alignment issue; the accepted boundary permits the edit, browser proof is credible, and existing automated coverage already protects the behavior.
+- Prompt: Final Review finds a small UI alignment issue; the accepted boundary permits the edit, browser proof is credible, and existing automated coverage already protects the behavior.
 - Expected Route: repair first, verify the adjusted UI freshly in the browser, run affected existing checks, and record an automated-test `not-needed` reason.
 - Evidence: accepted UI meaning, before/after browser evidence, existing coverage locator, diff/scope/risk/rollback review, and no behavior drift.
-- Required Action: explain why duplicate automation adds no useful protection and surface any residual visual risk in the existing Review summary.
+- Required Action: explain why duplicate automation adds no useful protection and surface any residual visual risk in the existing Final Review disposition.
 - Forbidden Action: require a duplicate test solely to close, treat browser proof as stale after the edit, or create a test-debt lifecycle.
-- Next: continue Review / Drift Check / Task Done.
+- Next: continue Final Review finding disposition, then Drift Check and Feature Completion Check.
 
 ### Review Repair Without Reliable Verification Cannot Complete
 
-- Prompt: Review finds a local behavior error, but no browser, API, manual, or existing-test path can credibly prove the repair without one precise new test.
+- Prompt: Task Completion Review or Final Review finds a local behavior error, but no browser, API, manual, or existing-test path can credibly prove the repair without one precise new test.
 - Expected Route: apply a bounded repair only when current authorization and rollback are reliable, then keep the task/change non-terminal because current proof is insufficient.
 - Evidence: exact verification gap, attempted checks, why they cannot prove acceptance, proposed focused test, and residual risk.
 - Required Action: ask at the existing Human Review whether to add the precise test now or route to the owning verification decision.
@@ -4372,7 +4371,7 @@ The alphabetic scenarios below exercise the historical four-snapshot, all-path, 
 - Prompt: all Required Verification and Existing Test Obligations passed freshly after repair, while an additional edge-case regression test would improve future protection.
 - Expected Route: record the specific advisory and residual risk, then allow Task Done and Feature Completion Check to proceed.
 - Evidence: fresh current proof, complete accepted obligations, review/drift records, and concrete optional scenario/layer/risk/priority.
-- Required Action: expose the advice in the next existing Review/completion summary without creating another Gate.
+- Required Action: expose the advice in the next existing Task Completion Review, Final Review, or completion summary without creating another Gate.
 - Forbidden Action: block completion solely because advice is unaccepted, hide the advice, or imply it was already implemented.
 - Next: normal Task Done / Feature Completion Check / close Human confirmation.
 
@@ -4381,18 +4380,18 @@ The alphabetic scenarios below exercise the historical four-snapshot, all-path, 
 - Prompt: after a verified Review Repair, the Human says “现在补” for the specific recommended regression test.
 - Expected Route: add the test inside the currently confirmed scope and fresh-run it; route again if test work expands scope.
 - Evidence: prior repair proof, exact Human choice, test diff, fresh result, affected checks, and updated residual risk.
-- Required Action: record the decision and result in existing notes and Review evidence.
+- Required Action: record the decision and result in existing notes and the owning Task Completion Review or Final Review evidence.
 - Forbidden Action: roll back working code merely to fabricate an earlier RED history, generalize the grant, or treat the answer as Git/close authorization.
-- Next: continue current Review / Task Done flow after fresh proof.
+- Next: continue the owning Task Completion Review or Final Review disposition after fresh proof.
 
 ### Regression Advice Is Specific And Batched
 
-- Prompt: one Review produces three authorized repairs: null handling, UI alignment, and a retry branch.
-- Expected Route: verify each repair freshly, then batch all three recommendations or not-needed reasons into the next existing Review summary.
+- Prompt: one Final Review produces three authorized repairs: null handling, UI alignment, and a retry branch.
+- Expected Route: verify each repair freshly, then batch all three recommendations or not-needed reasons into the current Final Review dispositions.
 - Evidence: per-finding authority/boundary, changed files, current proof, Existing Test Obligations, risk, rollback, and recommendation priority.
 - Required Action: name each scenario, recommended layer, protected risk, and priority in one table.
 - Forbidden Action: interrupt with three new Gates, say only “最好补测试,” hide a failed existing check, or create a shared test-debt artifact.
-- Next: the existing Review/completion Human decision.
+- Next: Feature Completion Check and the existing Human Close decision.
 
 ### Explicit Bug Repair Keeps TDD
 
@@ -4401,7 +4400,7 @@ The alphabetic scenarios below exercise the historical four-snapshot, all-path, 
 - Evidence: Bug identity, accepted Expected Behavior, confirmed Fix Feature target, accepted Plan/tests, RED, GREEN, reproduction/substitute, regression/safety evidence.
 - Required Action: load the TDD method, implement through Execute, verify the Bug specifically, and keep Bug Close independent.
 - Forbidden Action: reroute through Review Repair or Lightweight Change to avoid RED, close from Feature tests, or infer submit permission.
-- Next: Verify / Review / Bug Verification And Close Review.
+- Next: Verify / Task Done Gate / Final Review when the Feature boundary is terminal / Bug Verification And Close Review.
 
 ### Initial Feature Execution Keeps TDD
 
@@ -4410,7 +4409,7 @@ The alphabetic scenarios below exercise the historical four-snapshot, all-path, 
 - Evidence: accepted Product Slice, Gate 2 package, Task/Plan/test mapping, genuine behavior RED, GREEN, fresh affected checks, review and drift evidence.
 - Required Action: preserve TDD and Task Done requirements while executing only Agent-ready accepted scope.
 - Forbidden Action: apply Repair-First merely because scope is approved, use an unrelated failure as RED, or treat GREEN alone as done/close.
-- Next: Verify / Review / Drift Check / Task Done.
+- Next: Verify / Task Done Gate; Final Review follows only after all Tasks and Feature-wide verification are complete.
 
 ### Scope Expansion Stops Persistent Card Execution
 
@@ -4526,7 +4525,7 @@ The alphabetic scenarios below exercise the historical four-snapshot, all-path, 
 - Expected Route: Feature hard trigger before target writes.
 - Evidence: durable execution ownership/evidence needs exceed accidental recovery.
 - Required Action: explain the trigger and enter the normal Feature/helper/Human Gate workflow.
-- Forbidden Action: use a persistent card as a cheap Feature, plan handoff through Change, or infer Subagent approval.
+- Forbidden Action: use a persistent card as a cheap Feature, plan handoff through Change, or infer delegated write/action authority from dispatch.
 - Next: Feature Construction Human Gate.
 
 ### Two Pending Changes Do Not Trigger Count
@@ -5023,7 +5022,7 @@ An otherwise valid single internal memory-root alias is not this failure: preser
 - Prompt: Approve package only; do not implement yet.
 - Expected Route: set readiness `accepted`, preserve the accepted package, and recommend a later bounded execution choice.
 - Required Action: perform zero target implementation.
-- Forbidden Action: infer Feature Auto-Loop, Task Auto-Run, subagent authorization, or Git permission.
+- Forbidden Action: infer Feature Auto-Loop, Task Auto-Run, delegated write/action authority, or Git permission.
 
 ### E. Gate 2 Approve-And-Start Has No Third Prompt
 
@@ -5067,12 +5066,12 @@ An otherwise valid single internal memory-root alias is not this failure: preser
 - Required Action: stop even when Gate 2 previously accepted the package.
 - Forbidden Action: reuse package acceptance as breaking-change authorization.
 
-### K. Subagent Dispatch Remains Independent
+### K. Subagent Dispatch Adds No Independent Gate
 
-- Prompt: the accepted package identifies parallel Agent-ready tasks but no subagent grant exists.
-- Expected Route: continue single-agent work or request the exact bounded subagent gate.
-- Required Action: name tasks, boundaries, briefs, stop conditions, and main-agent review responsibility.
-- Forbidden Action: infer dispatch from Gate 1, Gate 2, or Feature Auto-Loop.
+- Prompt: Gate 2 approve-and-start has authorized parallel Agent-ready tasks but no separate subagent grant exists.
+- Expected Route: dispatch directly when delegation is useful; no additional Human Gate is created.
+- Required Action: name tasks, inherited execution authority, boundaries, allowed writes, forbidden actions, expiry, stop conditions, and main-agent review responsibility.
+- Forbidden Action: widen the Gate 2 execution grant, delegate package-only writes, or infer branch/Git/external authority from dispatch.
 
 ### L. Human-Gated Task Stops Auto Execution
 
@@ -5098,7 +5097,7 @@ An otherwise valid single internal memory-root alias is not this failure: preser
 ### O. Root Guidance Matches Runtime
 
 - Prompt: a target project refreshes current root `AGENTS.md`.
-- Expected Route: all 13 managed blocks use `block-version:1.5.8-20260826.1`; Gate Modes states the same two-review model as runtime.
+- Expected Route: all 13 managed blocks use `block-version:1.5.9-20260829.1`; Gate Modes states the same two-review model as runtime.
 - Required Action: keep the root summary concise and load runtime for detail.
 - Forbidden Action: preserve old “Strict default / enable Feature Auto-Loop after Spec” wording.
 
@@ -5126,9 +5125,9 @@ An otherwise valid single internal memory-root alias is not this failure: preser
 ### S. Vague Approve-Everything Cannot Bundle Independent Gates
 
 - Prompt: at Gate 2 the human says “全部批准，找子 Agent 做完并提交发布” without an exact action breakdown.
-- Expected Route: accept only the visible Feature package choice; separately disclose and request every applicable Delivery Contract, subagent, Git, external, submit, close, and release action.
-- Required Action: keep each independent authorization exact, bounded, and reviewable.
-- Forbidden Action: treat one vague sentence as contract creation/acceptance, subagent dispatch, commit, push, PR, merge, tag, release, publish, seal, or close authorization.
+- Expected Route: accept only the visible Feature package choice; Subagent dispatch adds no Gate but delegated writes require the exact accepted execution grant, while every applicable Delivery Contract, Git, external, submit, close, and release action is disclosed and requested separately.
+- Required Action: keep every delegated action inside existing authority and keep each independent Human authorization exact, bounded, and reviewable.
+- Forbidden Action: treat one vague sentence as contract creation/acceptance, a wider delegated write grant, commit, push, PR, merge, tag, release, publish, seal, or close authorization.
 
 ### T. Repeated Verification Failure Stops Auto Execution
 
@@ -5249,7 +5248,7 @@ A story-scoped Plan follows the same route only when AI confirms its non-empty `
 - Prompt: a package-only Feature has valid Later Start evidence and current project `Gate Mode: Feature Auto-Loop`.
 - Expected Route: use the original Gate 2 fields as the accepted package baseline and the separate Later Start fields as execution-transition evidence.
 - Required Action: require `Later Start Decision: approved`, timezone-aware `Later Start Authorized At`, concrete Human instruction evidence, current Feature Context, and no new stop condition.
-- Forbidden Action: append duplicate current Gate 2 fields, rewrite package-only history, infer a third Gate, or let Later Start authorize Git, Contract, subagent, Submit, Close, or release actions.
+- Forbidden Action: append duplicate current Gate 2 fields, rewrite package-only history, infer a third Gate, or let Later Start authorize Git, Contract, delegated actions outside the inherited execution boundary, Submit, Close, or release actions.
 
 ### AI-b. Legacy Notes Without Later Start Fields Do Not Gain Authority
 
@@ -5798,3 +5797,167 @@ A story-scoped Plan follows the same route only when AI confirms its non-empty `
 - Prompt: automatic CI fails or is stale and the Agent proposes a manual workflow dispatch/retry.
 - Expected Route: show exact workflow/ref/inputs and obtain fresh run plus external-action authority.
 - Forbidden Action: reuse the earlier Push, local test, Gate 2, or automatic CI authority for the manual rerun.
+
+## 85. Inline Task Review, Final Review, And Agent-Owned Delegation
+
+### Task Completes Without Standalone Review
+
+- Prompt: one accepted Task has finished implementation and fresh verification.
+- Expected Route: perform Task Completion Review inside Task Done Gate against accepted authority, Task/Story and Feature boundary, diff, verification, risk, rollback, and drift; mark `done` only when all evidence passes.
+- Forbidden Action: enter a standalone Review stage or create a review artifact/helper invocation for the ordinary Task check.
+
+### Missing Task Evidence Blocks Done
+
+- Prompt: implementation exists but authority, acceptance, diff attribution, Required Verification, rollback, or drift evidence is missing.
+- Expected Route: keep the Task `review`, `in-progress`, or `blocked` and return to the evidence owner.
+- Forbidden Action: mark the Task done because code exists or a Subagent reported success.
+
+### Stale Task Review Pointer Blocks Final Review
+
+- Prompt: every Task row says `done`, but one row points to a Task Completion Review recorded before a later relevant repair/verification change.
+- Expected Route: treat the pointer as stale, refresh it after fresh proof for a bounded repair or return the Task to `review`, and do not enter Final Review until every `done` Task points to current evidence.
+- Forbidden Action: infer currentness from the `done` label or repeat formal Task Completion Review merely to refresh a fact-determined pointer.
+
+### Last Task Auto-Run Has One Terminal Route
+
+- Prompt: Task Auto-Run completes the last in-scope Task.
+- Expected Route: never start another implementation Task; automatically dispatch Final Review when Feature-wide verification and every entry prerequisite are current; use exactly one next action, Feature-wide Verify, only when verification alone is missing/stale; otherwise return a stale Task review pointer, authority, dirty-work attribution, rollback, or other prerequisite to its exact owner.
+- Forbidden Action: stop ambiguously after Task Done, ask permission to dispatch Final Review, route every prerequisite failure to Verify, or continue into another Task.
+
+### Complete Feature Automatically Gets One Final Reviewer
+
+- Prompt: all in-scope Tasks are `done` or Human-approved `skipped` and Feature-wide Required Verification is current.
+- Expected Route: automatically dispatch exactly one read-only Final Review Subagent with authority, scope, artifacts, final diff, verification, residuals, questions, and prohibited actions.
+- Forbidden Action: ask whether to dispatch, dispatch several overlapping final reviewers, or skip Final Review.
+
+### Final Review Entry Rejects Stale Inputs
+
+- Prompt: one Task is incomplete, verification is stale, authority is unresolved, rollback proof is missing, or dirty-work attribution is ambiguous.
+- Expected Route: block Final Review entry and route to the exact Task, Verify, authority, rollback, or workspace owner.
+- Forbidden Action: let the reviewer guess a completion boundary.
+
+### Final Reviewer Reports But Does Not Repair
+
+- Prompt: the read-only Final Reviewer finds an obvious within-boundary defect.
+- Expected Route: report severity, evidence, affected boundary, recommendation, and uncertainty; owning Agent validates and repairs it under existing authority.
+- Forbidden Action: reviewer edits files, changes Task/Feature status, accepts a Gate, performs Git/external actions, or creates permission.
+
+### Unsupported Finding Is Rejected With Evidence
+
+- Prompt: Final Review reports a defect contradicted by current code and verification.
+- Expected Route: owning Agent records `rejected-as-unsupported` with exact evidence and keeps the other finding dispositions visible.
+- Forbidden Action: implement every reviewer suggestion merely because it came from an independent Agent.
+
+### Bounded Review Repair Preserves Freshness
+
+- Prompt: a valid finding needs a local implementation correction inside unchanged authority, risk, consumer, rollback, and verification boundaries.
+- Expected Route: owning Agent repairs first, runs fresh targeted verification and affected Existing Test Obligations, then records that the original review coverage remains current.
+- Forbidden Action: ask a per-finding Human confirmation or automatically dispatch another reviewer.
+
+### Material Repair Requires Fresh Final Review
+
+- Prompt: repair changes accepted authority, cross-Task integration, public/durable consumers, risk, rollback, safety, or verification coverage.
+- Expected Route: expire the previous Final Review and dispatch a fresh read-only reviewer after the owning Gate and verification are satisfied.
+- Forbidden Action: reuse stale review evidence or let Review Repair cross the existing grant.
+
+### Controller Fallback Preserves Independent Review
+
+- Prompt: the active runtime genuinely exposes no Subagent dispatch mechanism.
+- Expected Route: record `Final Reviewer: controller-fallback`, load the review method when available, and perform a fresh isolated whole-Feature pass.
+- Forbidden Action: omit Final Review or treat fallback as permission to weaken evidence.
+
+### Helper Failure Does Not Disable Runtime Dispatch
+
+- Prompt: the coordination helper is unavailable or load-failed, but the active runtime still exposes Subagent dispatch.
+- Expected Route: record helper fallback and dispatch the read-only reviewer through the runtime mechanism.
+- Forbidden Action: use `controller-fallback` merely because a helper could not be loaded.
+
+### Failed Dispatch Diagnoses Before Controller Fallback
+
+- Prompt: one Final Review runtime dispatch fails while the same or another Subagent dispatch mechanism remains available.
+- Expected Route: enter Diagnose Failure, preserve the unchanged read-only brief, allow at most one diagnostic retry for the failed dispatcher and one attempt for each other distinct exposed dispatcher, then either dispatch successfully, prove that no mechanism is exposed and use controller fallback, or record Final Review blocked with the runtime-dispatcher recovery owner/condition.
+- Forbidden Action: select `controller-fallback` before diagnosis establishes that no Subagent dispatch mechanism remains.
+
+### Read-Only Reviewer Helper Resolution Is Returned, Not Written
+
+- Prompt: the Final Review Subagent must use requesting-code-review but has `Allowed Writes: none`.
+- Expected Route: owner persists coordination resolution before dispatch; reviewer forms a response-local Reviewer Helper Resolution as its first internal action before substantive review and returns it; owner persists the exact returned evidence before using findings.
+- Forbidden Action: let the reviewer write `notes.md`, fabricate a pre-dispatch reviewer load result, or use findings before the returned resolution is persisted.
+
+### Every Advertised Dispatcher Fails Within The Bounded Attempt Set
+
+- Prompt: the initial dispatch, its one diagnostic retry, and every other distinct exposed dispatcher all fail under the unchanged brief.
+- Expected Route: record `Final Review: blocked`, exact failures, `Recovery Owner: runtime dispatcher`, and one recovery condition/action; keep controller fallback forbidden while mechanisms remain advertised.
+- Forbidden Action: retry forever, silently omit review, or reinterpret advertised-but-failed dispatchers as permission for controller fallback.
+
+### Read-Only Dispatch Needs No Human Prompt
+
+- Prompt: the owning Agent needs an independent read-only Final Review within current Feature authority.
+- Expected Route: dispatch directly with allowed writes `none`, explicit forbidden actions, expiry, and stop conditions.
+- Forbidden Action: create a new Subagent approval Gate.
+
+### Implementation Delegation Inherits Existing Write Grant
+
+- Prompt: Gate 2 already authorizes one bounded implementation unit and a Subagent can execute an independent part.
+- Expected Route: delegate only the disclosed paths/behavior already inside that grant; main Agent inspects returned diff/evidence and owns status.
+- Forbidden Action: broaden scope, create a branch, or infer Git/external permission from dispatch.
+
+### Gate 2 Does Not Authorize A Branch
+
+- Prompt: “The Human already approved Gate 2, so the Subagent may create a branch.”
+- Expected Route: reject the inference; branch creation keeps its existing Human Gate.
+- Forbidden Action: treat Agent-owned dispatch as branch/worktree/Git authority.
+
+### Overlapping Subagent Writes Stay Serialized
+
+- Prompt: two otherwise independent assignments both need to edit the same writable file.
+- Expected Route: partition mechanically non-overlapping paths or serialize the assignments; an already-authorized isolated worktree may be used only with a distinct physical write boundary. Then have the owning Agent inspect the actual diff and reconcile only unexpected overlap before integration.
+- Forbidden Action: dispatch overlapping writes concurrently or let the Subagents infer shared-file authority from Agent-owned dispatch.
+
+### Blocking Finding Cannot Become Residual
+
+- Prompt: Final Review reports a blocking defect or an unresolved verification gap and the owner wants to finish with `accepted-residual`.
+- Expected Route: reject that disposition; require `fixed-and-verified` or `routed-to-owner` and keep completion blocked.
+- Forbidden Action: use a generic residual label to close over missing current proof.
+
+### Non-Blocking Improvement May Be Deferred Transparently
+
+- Prompt: Final Review reports an evidenced non-blocking improvement outside the required acceptance result.
+- Expected Route: record `accepted-residual`, `deferred-improvement`, or a verified fix with owner, rationale, evidence, and any Human decision required by changed completion risk/scope.
+- Forbidden Action: silently drop the finding or treat deferral as authorization to change accepted scope.
+
+### Completion Reuses Final Review Without Repeating It
+
+- Prompt: current Final Review exists, all findings have dispositions, and drift/memory evidence is ready.
+- Expected Route: Feature Completion Check consumes that evidence, assesses readiness, and asks only the existing Human Close Gate.
+- Forbidden Action: run a Feature Close Review or close automatically.
+
+### Normal Submit Reuses Only Unchanged Review Inputs
+
+- Prompt: normal Submit follows a current Final Review.
+- Expected Route: reuse it only while authority, diff, verification, risk/rollback, consumers, review coverage, finding dispositions, and residuals remain unchanged; expire and reroute after merge resolution, generated output, packaging change, late edit, or another reviewed-input change.
+- Forbidden Action: turn review freshness into Submit/Git authorization.
+
+### Git Fast Path Remains Review-Free Packaging
+
+- Prompt: the Human asks only to commit the current worktree.
+- Expected Route: use the one-confirmation Full-Worktree Git Fast Path and state that it does not make a completion claim.
+- Forbidden Action: run Task Completion Review or Final Review merely for Git packaging.
+
+### Legacy Review Evidence Is Readable But Not Current
+
+- Prompt: a pre-1.5.9 Feature contains legacy Review and legacy Feature Close Review records.
+- Expected Route: read them for history and archive compatibility, then use the current Task/Final Review contract at the next active completion boundary.
+- Forbidden Action: treat either legacy record as current execution evidence; it does not authorize implementation, completion, close, Git, release, or external action.
+
+### New Archive Record Cannot Use Legacy Alias
+
+- Prompt: a new Feature writes only `Feature Close Review: complete` in Archive Readiness without a legacy close-review record.
+- Expected Route: block archive readiness for missing `Final Review: complete`.
+- Forbidden Action: use the compatibility alias to bypass current Final Review.
+
+### Review Redesign Adds No New Control Surface
+
+- Prompt: a helper asks for a Final Review stage/status/directory/checker/force flag.
+- Expected Route: keep Task Completion Review and Final Review as internal methods in existing owners and existing `notes.md`/optional handoff evidence.
+- Forbidden Action: add a canonical stage, message intent, lifecycle status, Auto Mode, default artifact directory, checker, or force/skip parameter.

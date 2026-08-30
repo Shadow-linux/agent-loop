@@ -111,7 +111,7 @@ Revise definition
 Pause
 ```
 
-State clearly: this compact table is the decision view; the checked `spec.md`, Product Slice, Requirement Checklist, and applicable decisions remain authoritative and available for inspection. Gate 1 authorizes writing the Feature's implementation-package artifacts only. It does not authorize target implementation, Feature Auto-Loop, Delivery Contract action, subagent dispatch, external mutation, Git, submit, or close.
+State clearly: this compact table is the decision view; the checked `spec.md`, Product Slice, Requirement Checklist, and applicable decisions remain authoritative and available for inspection. Gate 1 authorizes writing the Feature's implementation-package artifacts only. Subagent dispatch adds no authority: Gate 1 does not authorize target implementation, Feature Auto-Loop, Delivery Contract action, delegated target writes outside package preparation, external mutation, Git, submit, or close.
 
 ## Implementation Readiness Review Summary
 
@@ -323,7 +323,7 @@ For breaking changes, list every affected consumer, scan evidence, compatibility
 | Item | Summary | Evidence | Confidence | Human Decision |
 |---|---|---|---|---|
 | Scope | safe project memory / root guidance / commands / boundaries / uncertainties |  |  | approve / revise |
-| Subagents | none / proposed lanes |  |  | approve / skip |
+| Subagents | none / Agent-owned proposed lanes |  |  | informational; delegated actions retain their own Gates |
 | Explicit Non-Goals | no onboarding-db / no deep dives / no onboarding diagrams |  |  | approve / revise |
 | Write Plan | project memory / guidance |  |  | approve / revise |
 
@@ -414,7 +414,7 @@ Until this Gate is explicitly accepted, the matched Bug remains closed and no Re
 | Fix Feature | exact Feature or no-fix | Feature Spec/notes and locator | acknowledge / revise |
 | Original Reproduction / Substitute | pass / fail / incomplete | Bug Verification Matrix | accept / rerun |
 | Regression / Safety Evidence | pass / fail / incomplete | fresh commands/results | accept / revise |
-| Review / Drift | complete / missing / conflict | current records | proceed / stop |
+| Final Review / Drift | complete / missing / conflict | current records | proceed / stop |
 | Remaining Risk | none / concrete risk | evidence and impact | accept / resolve |
 | Bug Close Decision | confirm / revise / keep-verifying | Bug-specific closure evidence | human only |
 | Feature Close Decision | confirm / continue / pause / revise-scope | Feature Completion Check | human only |
@@ -427,8 +427,9 @@ Bug Close and Feature Close may appear in one summary but remain separate decisi
 | Check | Status | Evidence | Issue |
 |---|---|---|---|
 | Tasks | pass / fail |  |  |
+| Task Completion Review Pointers | current / stale / missing | Task rows/details + notes evidence | return stale/missing to owner |
 | Tests | pass / fail |  |  |
-| Feature Close Review | pass / fail |  |  |
+| Final Review / Finding Dispositions | current / stale / incomplete |  |  |
 | Drift Check | pass / fail |  |  |
 | Project Memory | pass / fail |  |  |
 | Submit Status | done / skipped / needed |  |  |
@@ -442,7 +443,9 @@ Human Decision:
 
 ## Review Repair And Regression Test Advisory
 
-Use this inside the next existing Review or completion summary after one or more authorized, `within-approved-boundary` Review repairs. It reports current proof and future protection without creating another approval stage.
+Use this inside the current Final Review finding disposition or the next completion summary after one or more authorized, `within-approved-boundary` Review repairs. It reports current proof and future protection without creating another approval stage.
+
+Do not offer `accepted-residual` for a blocking defect or unresolved verification gap. Route semantic/boundary conflicts to their owner; only non-blocking improvements may be accepted/deferred with owner, rationale, evidence, and any Human decision required by changed completion risk/scope.
 
 | Finding | Accepted boundary | Changed files/behavior | Fresh verification | Existing obligations | Regression Test Advisory | Residual risk |
 |---|---|---|---|---|---|---|
@@ -473,7 +476,7 @@ Full-Worktree Git Fast Path uses a lightweight Commit Confirmation, not a Human 
 | Target Release Context / Target Branch |  | accepted policy + plan | acknowledge / revise |
 | Sealed Check | open / released / sealed / unknown | release evidence | proceed / stop |
 | Customer Isolation | pass / fail / unknown | branch ancestry and policy | proceed / stop |
-| Verification / Review / Drift | pass / fail / missing | current feature evidence; normal Submit prerequisite, Git Fast Path disclosure | normal: proceed / stop; fast path: acknowledge truth |
+| Verification / Final Review / Drift | pass / fail / missing | current feature evidence; normal Submit prerequisite, Git Fast Path disclosure | normal: proceed / stop; fast path: acknowledge truth |
 | Merge Evidence / Deletion Policy | complete / missing / not-applicable | merge/submit evidence | delete / retain / stop |
 | Requested Authorization | prepare / create / switch / commit / push / merge / delete / tag / release / publish / seal | latest human request | human only |
 | Explicitly Not Authorized | every action outside the request | review summary | acknowledge |

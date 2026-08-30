@@ -1,8 +1,8 @@
 # Agent Loop Usage
 
-**版本：** 1.5.8（正式稳定版）
+**版本：** 1.5.9（开发中，尚未正式发布）
 
-Agent Loop 1.5.8 是当前正式稳定版，新增零产物 Direct Edit Fast Path，以及新提议全量测试的一次一执行精确确认。稳定 tag 为 `stable-v1.5.8`。
+Agent Loop 1.5.9 是当前开发版本：Task Done Gate 内联快速 Task Completion Review，全部前置条件就绪后自动派发一次只读 Feature-wide Final Review，Close 不重复审阅，Subagent 只继承已有授权。正式安装仍使用 `stable-v1.5.8`，直到 1.5.9 完成剩余 Human Gate 与发布流程。
 
 这是一份给人类使用的触发指南。你不需要记住 Agent Loop 的阶段名；只要说明目标、边界和你希望 Agent 自主推进到哪里，Agent 负责判断项目状态、选择流程、维护产物并在真正的 Human Gate 停下。
 
@@ -169,8 +169,8 @@ Agent 会检查核心流程完整性，并按需要使用架构/边界图、ASCI
 这些说法都会路由到人类文档，而不是凭 Agent 记忆回答：
 
 ```text
-1.5.8 更新了什么？
-当前 1.5.8 使用的是什么流程？
+1.5.9 更新了什么？
+当前 1.5.9 使用的是什么流程？
 和 1.2.2 比有什么变化？
 现在 agent-loop 怎么用？
 ```
@@ -368,7 +368,7 @@ Feature 工作从 `spec.md` 里的开放 **Feature Authority** 和本地 **Featu
 
 Agent 会核对保存的范围、产品来源、技术决策和完整实施包。内容没变就直接继续；范围、任务或稳定方案发生变化时，才会再次请你确认。
 
-任务拆分、测试设计、E2E、技术设计和 Plan 仍然会完成，只是不再逐项打断你。Delivery Contract、subagent、Git、外部系统、生产、提交、关闭和发布仍各自需要确认。同一时间最多一个 Active Feature；切换时会先保存恢复点。
+任务拆分、测试设计、E2E、技术设计和 Plan 仍然会完成，只是不再逐项打断你。Subagent 派发由 Agent 自主管理，不新增确认；被委派的写入或操作只能继承已有授权。Delivery Contract、Git、外部系统、生产、提交、关闭和发布仍保留各自的 Human Gate。同一时间最多一个 Active Feature；切换时会先保存恢复点。
 
 ### 判断是否需要交付约定
 
@@ -695,7 +695,7 @@ Target 是当前理解的起点，不是永远正确的一方；Source 经验已
 帮我看看这个功能是不是真的可以关闭，还有没有风险或后续工作。
 ```
 
-Feature Close Review 先确认所有任务、验收、测试、决策切片、Bug、drift、memory、残余风险和后续工作。关闭需要人类确认，不能由测试通过自动推导。
+每个 Task 完成时先做内置的快速 Task Completion Review，并保留当前证据指针；全部 Task 的指针和 Feature 级验证都有效后，Agent 自动派一个只读 Final Review Subagent 对整个 Feature 做一次独立审阅。只读审阅者先形成并返回 response-local helper resolution，不写项目文件，再由主 Agent 持久化。协调 helper 缺失但运行时仍能派 Subagent 时继续派发，只有运行时确实没有派发机制才使用 controller fallback；多个 dispatcher 连续失败时采用有界尝试并形成明确恢复 blocker，不会无限重试。修复普通边界内问题后由主 Agent 补新鲜验证并刷新受影响的 Task 指针，不重复派审阅者；若输入边界发生实质变化，才重新做 Final Review。Feature Completion Check 复用这份当前证据，关闭仍需要独立的 Human Close Gate，不能由测试或审阅通过自动推导。
 
 ## 常用产物
 

@@ -135,11 +135,11 @@ assert_contains references/validation-scenarios.md 'a clearly bound final-input 
 assert_contains references/validation-scenarios.md 'planned multi-session or handoff remains a Feature hard trigger'
 
 # The release version and every root projection revision move together.
-assert_contains SKILL.md 'Version: 1.5.8'
-assert_contains plugin.json '"version": "1.5.8"'
-assert_contains README.md '**Current version:** 1.5.8'
-assert_contains Usage.md '**版本：** 1.5.8'
-assert_contains CHANGELOG.md '## 1.5.8 — 2026-08-27'
+assert_contains SKILL.md 'Version: 1.5.9'
+assert_contains plugin.json '"version": "1.5.9"'
+assert_contains README.md '**Current version:** 1.5.9'
+assert_contains Usage.md '**版本：** 1.5.9'
+assert_contains CHANGELOG.md '## 1.5.9 — 2026-08-29'
 
 ruby - "$root/references/direct-edit-fast-path.md" "$root/references/runtime.md" "$root/references/submit-and-integrate.md" <<'RUBY'
 direct = File.read(ARGV.fetch(0))
@@ -233,7 +233,7 @@ content = File.read(ARGV.fetch(0))
 blocks = content.scan(/<!-- agent-loop:managed-start section:([^ ]+) .*?block-version:([^ ]+) -->/)
 abort "FAIL: expected 13 root managed blocks, found #{blocks.length}" unless blocks.length == 13
 blocks.each do |section, revision|
-  expected = '1.5.8-20260826.1'
+  expected = '1.5.9-20260829.1'
   abort "FAIL: #{section} expected #{expected}, found #{revision}" unless revision == expected
 end
 abort 'FAIL: root AGENTS exceeds 190 lines' if content.lines.length > 190

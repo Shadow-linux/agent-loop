@@ -81,7 +81,7 @@ Scan only enough to recover useful state:
 
 Do not perform a whole-repo deep audit unless the human asks or the project memory is unusable.
 
-For large or stale re-adoption, recommend bounded subagent scan when available and human-confirmed. Useful scan lanes include commands/tests, recent outside-loop features, durable boundaries, and guidance files. Subagents may return findings, evidence, confidence, uncertainties, files read, and suggested entries only; the main agent owns synthesis and writes.
+For large or stale re-adoption, use a bounded read-only Subagent scan when available and useful. Useful scan lanes include commands/tests, recent outside-loop features, durable boundaries, and guidance files. Dispatch adds no Human Gate; allowed writes are `none`. Subagents may return findings, evidence, confidence, uncertainties, files read, and suggested entries only; the main agent owns synthesis and any separately authorized writes.
 
 ## Compare Matrix
 

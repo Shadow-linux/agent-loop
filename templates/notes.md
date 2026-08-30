@@ -65,7 +65,7 @@ This context does not authorize create, switch, merge, delete, push, tag, releas
 ### YYYY-MM-DD — <Stage>
 
 - Requested Helper:
-- Invocation Scope: task | story | task-review | submit-review | feature-close-review | subagent-group | other
+- Invocation Scope: task | story | final-review | subagent-group | other
 - Execution Unit:
 - Resolved At:
 - First Stage Action At:
@@ -142,12 +142,29 @@ Feature verification does not close a Bug automatically. Bug Close and Feature C
 
 ## Diagnosis
 
-## Review
+## Task Completion Reviews
+
+| Date | Task / Story | Accepted Authority / Boundary | Required Verification | Existing Checks | Diff / Rollback / Drift | Result | Evidence Pointer | Currentness |
+|---|---|---|---|---|---|---|---|---|
+
+## Final Review
+
+- Final Reviewer: subagent:<id> | controller-fallback
+- Coordination Helper Resolution:
+- Reviewer Helper Resolution:
+- Reviewed Inputs:
+- Reviewed Input Identity / Digests:
+- Feature-wide Verification:
+- Final Review Findings:
+- Finding Dispositions:
+- Finding Disposition Rule: blocking defect / verification gap cannot be accepted-residual; semantic/boundary conflict routes to owner; only non-blocking improvement may be accepted/deferred with owner/evidence and any required Human decision
+- Post-Repair Freshness: current | fresh-review-required
+- Residual Risk:
 
 ## Review Repair Evidence
 
-| Date | Finding / Source | Authority / Boundary | Changed Files | Fresh Verification | Existing Test Obligations | Regression Test Advisory / Not-Needed Reason | Residual Risk | Human Decision |
-|---|---|---|---|---|---|---|---|---|
+| Date | Finding / Source | Authority / Boundary | Changed Files | Fresh Verification | Existing Test Obligations | Affected Task Review Pointer / Currentness | Regression Test Advisory / Not-Needed Reason | Residual Risk | Human Decision |
+|---|---|---|---|---|---|---|---|---|---|
 
 ### Spec Review
 
@@ -163,16 +180,14 @@ Feature verification does not close a Bug automatically. Bug Close and Feature C
 - Findings:
 - Accepted fixes:
 
-## Feature Close Review
-
-### Feature-Level Spec Review
+### Feature-Level Spec Review Findings
 
 - Date:
 - Scope:
 - Findings:
 - Accepted fixes:
 
-### Feature-Level Standards Review
+### Feature-Level Standards Review Findings
 
 - Date:
 - Trigger: required | not-triggered
@@ -215,7 +230,9 @@ Feature verification does not close a Bug automatically. Bug Close and Feature C
 - Date:
 - Result: recommend-close | continue | pause-before-new-feature | update-scope | blocked
 - Evidence:
-- Feature Close Review:
+- Final Review:
+- Finding Dispositions:
+- Post-Repair Freshness:
 - Remaining Work:
 - Drift:
 - Project Memory:
@@ -237,7 +254,7 @@ Human Decision: <confirmed-by-human>
 Closed At: <same YYYY-MM-DD as Close Record>
 Delivered Summary: <one concrete line describing delivered behavior>
 Verification: complete
-Feature Close Review: complete
+Final Review: complete
 Drift: resolved
 Project Memory Impact: complete | none
 Open Follow-up: none | <FU-001, FU-002>

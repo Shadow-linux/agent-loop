@@ -9,23 +9,29 @@ Story:
 Task:
 Brief ID: YYYY-MM-DD-<task-or-story>-<slug>
 
-## Dispatch Authorization
+## Delegated Authority
 
-Approved At:
+Owning Stage:
 
-Approved IDs / Lanes:
+Existing Authorization:
 
-Approved Boundaries:
+Assignment Scope:
+
+Allowed Writes: none | <exact paths already covered by Existing Authorization>
+
+Write Concurrency: mechanically-non-overlapping | serialized | existing-authorized-isolated-worktree | not-applicable
+
+Forbidden Actions:
+
+Read-Only Reviewer: yes | no
+
+Rollback Evidence: current | not-applicable — <evidence and reason>
+
+Expiry:
 
 Stop Conditions:
 
-Authorization Status: active | consumed | revoked | expired
-
-Expires / Consumed At:
-
-Any new task, lane, file boundary, or expanded scope requires new human confirmation and a refreshed authorization record.
-
-Dispatch only while status is `active`. Set status to `consumed` when this approved dispatch group returns or stops; never reuse a consumed, revoked, or expired record.
+Subagent dispatch is not a Human Gate. The assignment inherits only the Existing Authorization and accepted write boundary; it cannot create or widen authorization. If the requested action exceeds that boundary, stop and return it to the owning Agent or the existing Human Gate.
 
 ## Assignment
 
@@ -62,6 +68,8 @@ Additional verification:
 ## Constraints
 
 - You are a subagent. Stay inside this assignment and return findings to the main agent.
+- When `Read-Only Reviewer: yes`, do not edit any file or mutate external state.
+- When `Read-Only Reviewer: yes`, resolve the requested review helper as the first internal action, form the response-local Reviewer Helper Resolution before substantive review, and return it without persisting any file.
 - Do not close the feature.
 - Do not submit code, commit, create PR text, merge, release, publish, or seal.
 - Do not update `.agent-loop/project.md`, enterprise `.agent-loop/project/*.md`, root `AGENTS.md`, `CLAUDE.md`, or directory guidance directly. Return proposed durable memory/guidance updates instead.
@@ -72,6 +80,14 @@ Additional verification:
 - Record any drift or uncertainty in the return.
 
 ## Return Format
+
+Reviewer Helper Resolution (read-only Final Review only):
+- Requested Helper:
+- Candidates Checked:
+- Resolved Helper: <name> | none
+- Status: loaded | unavailable | load-failed
+- Load / Fallback Evidence:
+- Method Used:
 
 Changed files:
 

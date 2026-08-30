@@ -139,7 +139,9 @@ First version excludes:
 
 **Full Memory Audit / Recovery**: Explicitly Human-authorized forensic mode that retains four-snapshot Target Canonical Memory Spine, Path Accounting Ledger, Desired Target Memory Snapshot, exact Plan Hash, and transactional Apply/Restore controls. It is not the normal merge route.
 
-**Subagent Brief**: A bounded assignment for an optional helper agent. The main agent owns state, merge, drift, submit, and close decisions.
+**Subagent Brief**: An optional bounded assignment for a helper Agent. It records the owning stage, existing authorization, allowed writes, forbidden actions, verification, and expiry. It creates no permission; the owning Agent retains state, integration, evidence, drift, submit, and close responsibility.
+
+**Agent-Owned Subagent Delegation**: Internal method that lets the owning Agent dispatch read-only or already-authorized work without a separate dispatch Human Gate. The Subagent inherits only current stage scope, the current write grant when one exists, and the disclosed assignment boundary; it cannot create or widen authorization.
 
 **Delivery Contract**: A durable producer-consumer boundary handoff in `contracts.md` and optional `contracts/*` details. It records API, service, event, async workflow, data, UI-behavior, library, or runtime interfaces that downstream work depends on. It is distinct from temporary subagent briefs.
 
@@ -155,11 +157,17 @@ First version excludes:
 
 **Feature Auto-Loop**: Feature-level execution authorization created by Gate 2 `Approve package and start implementation`, or by a separate valid later-start transition after Gate 2 package-only acceptance. Later start preserves the original Gate 2 baseline, records its own Human decision/time/evidence, and updates current project `Gate Mode`; it does not create a third Gate. The agent may advance only Agent-ready work inside the accepted Story/Product Slice/Acceptance and execution boundary. `Gate 2 Agent-ready Tasks` preserves the initial decomposition while `Gate 2 Accepted Stories` preserves the durable Story snapshot; later Task replacement or Plan rotation may continue inside that boundary after Plan Gate, consistency, and exact current assessment when needed. A new execution boundary repeats Gate 2. It must stop before every preserved independent Human Gate, Submit / Integrate, and Close.
 
-**Task Auto-Run**: Task/story-level authorization after the selected task/story plan is accepted. The agent runs Analyze Consistency before TDD execution, then may complete only that task/story through verification, review, drift, and status update.
+**Task Auto-Run**: Task/story-level authorization after the selected task/story plan is accepted. The agent runs Analyze Consistency before TDD execution, then may complete only that task/story through verification, Task Done Gate with its internal Task Completion Review/drift disposition, and status update.
+
+**Task Completion Review**: Mandatory lightweight internal assessment inside Task Done Gate. It checks accepted authority, Task/Story and Feature boundary, diff attribution, Required Verification and Existing Test Obligations, risk, rollback, and drift before `done`. Every `done` Task retains a current evidence pointer. A bounded Review Repair refreshes that pointer after fresh proof without repeating formal review; stale currentness returns the Task to `review`. It is not a canonical stage and does not require a review helper by default.
+
+**Final Review Subagent**: One read-only whole-Feature reviewer automatically dispatched after all in-scope Tasks, their Task Completion Review evidence pointers, and Feature-wide verification are current. It reports evidence-backed findings only. The owner persists coordination-helper resolution before dispatch; the reviewer returns a response-local Reviewer Helper Resolution formed before substantive review, and the owner persists it before using findings. The owning Agent validates findings, owns repairs and workflow routing, records type-valid dispositions, and decides whether a material boundary/risk/coverage change requires a fresh reviewer. Helper fallback does not imply dispatcher fallback; controller fallback applies only when the active runtime genuinely has no Subagent dispatch mechanism. Advertised dispatchers use a bounded attempt set and end in an explicit runtime-dispatcher blocker rather than an infinite retry.
 
 **Feature Completion Check**: Proactive check that determines whether an active feature should be closed, continued, paused before a new feature, or have scope updated. Humans do not need to ask for close by name; the agent recommends it when conditions pass.
 
-**Feature Close Review**: Required feature-level review before recommending or performing close. It verifies the whole feature against `product.md` when present, `spec.md`, `tasks.md`, `tests.md`, acceptance criteria, out-of-scope boundaries, and project standards. It is separate from per-task review.
+**Legacy Review / Legacy Feature Close Review**: Pre-1.5.9 review records remain readable historical evidence but do not authorize current execution, satisfy a current Final Review boundary, or replace the Human Close Gate. New Features use Task Completion Review and one Final Review Subagent instead.
+
+A legacy Review and a legacy Feature Close Review may be read for history or archive compatibility, but either record does not authorize implementation, completion, close, Git, release, or external action. Archive compatibility requires both pre-1.5.9 `Created` and `Closed At` dates plus the retired readiness key because v1.5.8 did not require stable fields inside the old review sections; current headings or a post-cutoff creation/close date require the current Final Review contract.
 
 **Human Review Summary**: Table-first, human-facing approval view shown before non-trivial confirmations. It summarizes artifacts, evidence, risks, blockers, and requested decisions while full artifact files remain the source of truth.
 

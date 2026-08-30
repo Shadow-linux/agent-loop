@@ -73,7 +73,7 @@ Every time `agent-loop` is used inside a target project, check root guidance bef
 - Feature Context startup invariant: before Task/Test/Plan/Execute/Resume relies on a Feature, load `spec.md` and run the Requirement/ADR fact scanner; `CURRENT` permits reliance, `CHANGED` requires Agent impact assessment/refresh, and only physical authority contradictions return `BLOCKED`
 - Required Stops: all six visible classes — Semantic, Scope And Risk, Execution, Evidence, External Mutation, and Git And Lifecycle — plus explicit Auto Mode non-bypass
 - Checker Recovery Gateway: exact rerun routes a canonical Agent Loop checker failure to `references/checker-recovery.md`; isolated repair is Human-authorized and cannot be presented as canonical pass
-- Completion Rules: code changes alone are not done; fresh verification, Review, Drift Check, project-memory evidence, Feature Completion Check, and Feature Close Review remain visible
+- Completion Rules: code changes alone are not done; every Task passes its built-in Task Completion Review, the complete Feature gets one current read-only Final Review with finding dispositions, and fresh verification, Drift Check, project-memory evidence, Feature Completion Check, and the Human Close Gate remain visible
 - Submit And Commit Rules: normal submit keeps intended-file review; an explicit commit or commit-and-push request enters Full-Worktree Git Fast Path, which shows one lightweight confirmation of the entire-worktree summary and Agent-proposed commit message, runs no tests or quality Review merely for Git, never infers Push from plain commit, discloses predictable Push-triggered CI without duplicating it locally, and keeps required release validation separately confirmed
 - Artifact Authority: Requirement, Decision / ADR, Feature, Bug, Lightweight Execution Card, and project memory retain distinct ownership
 - Submit And Commit Rules lack the concise post-code-integration reminder to reconcile changed Agent Loop memory before push/release/Source cleanup
@@ -162,7 +162,7 @@ Rules:
 - Managed block maintenance rules belong here and in refresh tooling; do not require the target root `AGENTS.md` to include a separate Managed Block Rule prose section.
 - If an existing `AGENTS.md` has no managed blocks, propose adding the minimal needed managed blocks instead of replacing the whole file.
 - If a block-version is missing or older than the current template, treat that block as stale.
-- Treat bare skill-version-only block revisions such as `block-version:1.5.8` as stale because they cannot distinguish same-version template revisions.
+- Treat bare skill-version-only block revisions such as `block-version:1.5.9` as stale because they cannot distinguish same-version template revisions.
 - If a managed block exists in the current template but is missing from root AGENTS.md, treat it as a missing managed block and propose adding it.
 - If a managed block source is missing, stale, or contradictory, classify the block as stale and propose either source correction or block refresh through Human Review Summary.
 - If marker pairs are broken, duplicated, nested, or ambiguous, stop and ask before editing.
@@ -264,7 +264,7 @@ Keep it short and long-lived:
 - use table-first Human Review Summary for non-trivial confirmations
 - Autonomous Execution After Approval: Gate 1 preparation continues across internal quality stages without target implementation; Gate 2 approve-and-start enables Feature Auto-Loop; Task Auto-Run continues one accepted execution unit; none bypass the six Gate classes
 - before Task/Test/Plan/Execute/Resume relies on a Feature, load its Feature Context Snapshot and run the Requirement/ADR fact scanner; `CHANGED` is advisory evidence requiring Agent assessment and refresh to `CURRENT`, while physical `BLOCKED` stops Auto Mode for Recovery/source repair
-- completion and submit projection: fresh verification, Review, Drift Check, Project Memory evidence, Feature Completion Check, Feature Close Review, intended-file-only submit scope, and independent lifecycle/Git confirmations
+- completion and submit projection: built-in Task Completion Review, one current Final Review with finding dispositions, fresh verification, Drift Check, Project Memory evidence, Feature Completion Check, Human Close Gate, intended-file-only submit scope, and independent lifecycle/Git confirmations
 - stable project commands and hard constraints, only if every agent should know them immediately
 - managed block markers for `agent-loop` maintained sections, so future updates do not overwrite human-owned content
 - stale detection: if future agents cannot learn Bootstrap, project-outcome Agent Ownership, Message Intent Guard, Workflow Gateway Map, Gate Modes/six stop classes, Completion, Submit, and Artifact Authority from root guidance, if any Gateway reference does not resolve in the installed package, or if managed block revisions differ from the current template, propose a Human-reviewed root update

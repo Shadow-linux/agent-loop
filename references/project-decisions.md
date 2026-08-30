@@ -315,7 +315,7 @@ Rules:
 | Feature Spec | Load applicable decisions and implement assigned design slices before writing final behavior and acceptance |
 | Technical Design / Code Context | Re-scan if implementation introduces long-term boundaries, dependencies, data, transactions, consistency, concurrency, or recovery choices |
 | Plan Gate | Block plans that bypass unresolved required decisions |
-| Review / Drift Check / Close | Verify assigned design slices conform to accepted decisions; backfill references or recommend a new/superseding decision when reality changed |
+| Task Completion Review / Final Review / Drift Check / Close | Verify assigned design slices conform to accepted decisions; backfill references or recommend a new/superseding decision when reality changed |
 
 ## Naming
 

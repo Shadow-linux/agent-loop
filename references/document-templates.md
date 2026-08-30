@@ -523,7 +523,7 @@ Use `templates/contracts.md` only after human confirmation when work crosses a d
 
 Use `templates/delivery-contract.md` for detailed contracts under `contracts/`.
 
-Keep `handoffs/` for temporary subagent briefs and returned summaries. Delivery Contracts are durable interface handoffs for downstream consumers.
+Keep Subagent briefs and returned summaries response-local in one reliable session. Use `handoffs/` only for cross-session recovery, complex handoff, or explicit audit value. Delivery Contracts are durable interface handoffs for downstream consumers.
 
 Human confirmation is required before creating/updating contract files, before a contract becomes `accepted`, and before breaking changes to accepted contracts.
 
@@ -1067,7 +1067,8 @@ Default Split: vertical-slice
 
 - Do not mark a task `done` from code changes alone.
 - After implementation and fresh verification, use `Status: review` until Task Done Gate passes.
-- Task Done Gate: implementation complete, required tests or substitute verification run fresh, evidence recorded in `notes.md`, lightweight Spec Review recorded, Standards Review recorded when triggered, drift decision recorded, and evidence location named below.
+- Task Done Gate: implementation complete, Task Completion Review passes accepted authority/scope/diff/risk/rollback, required tests or substitute verification run fresh, evidence is recorded in `notes.md`, Standards Review is recorded when triggered, drift has a disposition, and the current evidence pointer is named below.
+- A later bounded Review Repair may preserve `done` without repeating formal Task Completion Review only after fresh proof refreshes this Task's review evidence pointer/currentness. A stale or missing pointer returns the Task to `review`.
 - A Feature No-Plan path records the current Task ID in `notes.md` and `No-Plan Decision: accepted` in the selected task row/detail; the Agent still proves that no Plan trigger applies.
 
 ## Split Rules
@@ -1096,7 +1097,8 @@ Default Split: vertical-slice
   - Acceptance:
   - Verification:
   - Evidence:
-  - Review:
+  - Task Completion Review:
+  - Task Completion Review Currentness: current | stale
   - Drift:
   - Detail: tasks/US1/T001-<slug>.md
   - Proved By Future Slices:
@@ -1526,22 +1528,37 @@ Feature verification does not close a Bug automatically. Bug Close and Feature C
 
 ## Diagnosis
 
-## Review
+## Task Completion Reviews
+
+| Date | Task / Story | Accepted Authority / Boundary | Required Verification | Existing Checks | Diff / Rollback / Drift | Result | Evidence Pointer | Currentness |
+|---|---|---|---|---|---|---|---|---|
+
+## Final Review
+
+- Final Reviewer: subagent:<id> | controller-fallback
+- Coordination Helper Resolution:
+- Reviewer Helper Resolution:
+- Reviewed Inputs:
+- Reviewed Input Identity / Digests:
+- Feature-wide Verification:
+- Final Review Findings:
+- Finding Dispositions:
+- Finding Disposition Rule: blocking defect / verification gap cannot be accepted-residual; semantic/boundary conflict routes to owner; only non-blocking improvement may be accepted/deferred with owner/evidence and any required Human decision
+- Post-Repair Freshness: current | fresh-review-required
+- Residual Risk:
 
 ### Spec Review
 
 ### Standards Review
 
-## Feature Close Review
-
-### Feature-Level Spec Review
+### Feature-Level Spec Review Findings
 
 - Date:
 - Scope:
 - Findings:
 - Accepted fixes:
 
-### Feature-Level Standards Review
+### Feature-Level Standards Review Findings
 
 - Date:
 - Trigger: required | not-triggered
@@ -1573,7 +1590,9 @@ Feature verification does not close a Bug automatically. Bug Close and Feature C
 - Date:
 - Result: recommend-close | continue | pause-before-new-feature | update-scope | blocked
 - Evidence:
-- Feature Close Review:
+- Final Review:
+- Finding Dispositions:
+- Post-Repair Freshness:
 - Remaining Work:
 - Drift:
 - Project Memory:
@@ -1595,7 +1614,7 @@ Human Decision: <confirmed-by-human>
 Closed At: <same YYYY-MM-DD as Close Record>
 Delivered Summary: <one concrete line describing delivered behavior>
 Verification: complete
-Feature Close Review: complete
+Final Review: complete
 Drift: resolved
 Project Memory Impact: complete | none
 Open Follow-up: none | <FU-001, FU-002>

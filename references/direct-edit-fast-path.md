@@ -21,7 +21,7 @@ explicit Bug management intent
 active Feature clearly owns the edit
 -> current Feature write authorization valid?
    -> yes + every Direct Edit condition true -> Direct Edit inside the Feature
-   -> otherwise -> owning Feature Execute / Review / Gate route
+   -> otherwise -> owning Feature Execute / Task Completion Review / Final Review / Gate route
 
 ordinary actionable non-Bug change
 -> Direct Edit Assessment

@@ -6,11 +6,13 @@ Use this when a feature might be finished but not explicitly closed.
 
 Humans may interrupt or redirect the agent at any time. They should not need to know the word `close` or remember whether the previous feature is formally complete. The agent must actively check completion state and recommend close, pause, or the next unfinished item.
 
+At this stage helpers support evidence discipline and close-decision presentation only. They must not perform another code review; Feature Completion Check consumes the current Final Review and finding dispositions instead of recreating Review.
+
 ## Trigger Points
 
 Run this check:
 
-- after Verify, Review, Drift Check, and Project Memory Update indicate work may be complete
+- after Feature-wide Required Verification, Final Review, Drift Check, and Project Memory Update indicate work may be complete
 - before starting a new feature while another feature is active
 - during resume when `project.md` has an Active Feature
 - after Submit / Integrate when the feature appears done
@@ -37,13 +39,15 @@ Check:
 
 - Is the feature spec accepted?
 - Are all remaining in-scope tasks `done`?
+- Does every `done` Task name a current Task Completion Review evidence pointer, with no later relevant authority, Task, diff, or verification change making it stale?
 - Were skipped or deferred items first removed from current scope through human-approved spec/tasks/tests/requirement reconciliation?
 - Are all required tests or substitute verification recorded?
 - Is there fresh verification evidence in `notes.md`?
 - Are all Existing Test Obligations complete?
 - Does each Review Repair have fresh targeted verification and evidence?
 - Are Additional Regression Test recommendations and residual risk visible?
-- Did Feature Close Review complete?
+- Is the current Final Review tied to the current accepted authority, implementation diff, Feature-wide Required Verification, risk/rollback boundary, and consumer surface?
+- Is every finding disposition recorded under the fail-closed finding matrix below?
 - Did feature-level Spec Review confirm the Requirement Product Definition, Feature Spec Product Slice, `tasks.md`, `tests.md`, acceptance criteria, and out-of-scope boundaries are satisfied, plus any existing legacy Feature `product.md` when present?
 - Does every Product Slice row still resolve to the effective source without redefining product meaning, and is any source change routed through compatibility/drift review?
 - Did feature-level Standards Review complete when triggered by large project, broad diff, directory or durable boundary change, security/data change, architecture change, or human request?
@@ -60,6 +64,16 @@ Check:
 - Are there unresolved Human-gated decisions, blockers, or open questions?
 
 An unaccepted Additional Regression Test Advisory does not by itself block Feature close. If the proposed test is needed to prove acceptance, a Bug fix, a Delivery Contract, security/data correctness, or another Existing Test Obligation, it is not advisory and completion remains blocked until the current proof or an accepted substitute exists.
+
+Finding dispositions are constrained by type:
+
+- a `blocking defect` or unresolved `verification gap` cannot be accepted as residual; it must be `fixed-and-verified` or `routed-to-owner` and continues to block completion;
+- a `semantic/boundary conflict` is `routed-to-owner` for its existing Product, ADR, Feature, Contract, Bug, or Human Gate and requires fresh Final Review when the reviewed inputs materially change;
+- a `within-boundary correction` is `fixed-and-verified` with fresh proof;
+- only a `non-blocking improvement` may be `accepted-residual` or `deferred-improvement`, and must record owner, rationale, and evidence plus a Human decision when accepting it changes completion risk or accepted scope;
+- an unsupported finding is `rejected-as-unsupported` with contradictory evidence; `no finding` is `not-applicable`.
+
+An ordinary bounded repair does not reopen the Task or repeat its formal Task Completion Review, but it refreshes the affected Task Completion Review evidence pointer and currentness assessment after fresh proof. A stale or missing pointer returns the Task to `review` and blocks completion.
 
 Feature close is blocked until all assigned design slices have implementation and verification evidence, or a human-approved decision explicitly reassigns, defers, removes, or supersedes the slice.
 
@@ -88,7 +102,7 @@ Then list evidence and ask for explicit close confirmation.
 
 Do not close automatically, even in Feature Auto-Loop.
 
-Do not recommend close if Feature Close Review is missing. Recommend Review as the next stage instead.
+Do not recommend close when the current Final Review is missing, stale, or has an unresolved finding. Route to the missing Task/verification work, a fresh Final Review, or the owning Human Gate. Feature Completion Check does not perform another review; it consumes the current Final Review evidence and then asks only the existing Human Close Gate.
 
 ### Recommend Next Unfinished Item
 
@@ -188,7 +202,9 @@ Record the check in `notes.md`:
 - Date:
 - Result: recommend-close | continue | pause-before-new-feature | update-scope | blocked
 - Evidence:
-- Feature Close Review:
+- Final Review:
+- Finding Dispositions:
+- Post-Repair Freshness:
 - Remaining Work:
 - Drift:
 - Project Memory:
@@ -211,7 +227,7 @@ The same close update writes this deterministic Feature Monthly Archive readines
 Closed At: <same concrete date as Close Record>
 Delivered Summary: <one concrete line describing delivered behavior>
 Verification: complete
-Feature Close Review: complete
+Final Review: complete
 Drift: resolved
 Project Memory Impact: complete | none
 Open Follow-up: none | <FU-001, FU-002>

@@ -19,13 +19,13 @@ External skill default paths are advisory only. If a preferred skill says to wri
 
 ## Mandatory Helper Resolution Protocol
 
-The mandatory helper-backed stages are Brainstorm / Clarify, Project Skill Creation / Update, Plan Gate / Plan, Execute Task / Story, Diagnose Failure, Verify, Review / Feature Close Review, and approved Subagent Execution.
+The mandatory helper-backed methods are Brainstorm / Clarify, Project Skill Creation / Update, Plan Gate / Plan, Execute Task / Story, Diagnose Failure, Verify, and the Feature-wide Final Review Subagent. Agent-owned substantive delegation resolves the Subagent coordination helper before dispatch. Task Completion Review is built into Task Done Gate and does not resolve a review helper by default.
 
 Lightweight Change Lane does not enter mandatory Plan Gate / Plan or Execute Task / Story helper resolution.
 
 Direct Edit does not invoke Plan or TDD helpers. It creates no Plan, No-Plan Decision, new test, helper-resolution record, or helper-native artifact; the controller performs the bounded edit and minimum matched check response-locally. If a Direct Edit hard trigger promotes the work, resolve the helpers required by the newly owning stage before that stage acts.
 
-Review Repair Fast Path and Lightweight Change Lane do not invoke the TDD helper by default. The Review helper remains active for Review ownership, while the controller selects fresh failure-matched verification. Card persistence does not enter Plan Gate or make `writing-plans` mandatory. Do not add Lightweight Change Lane or Review Repair Fast Path to the mandatory stage table. Promotion to initial Feature execution or explicit Bug repair restores normal `writing-plans` and `test-driven-development` helper resolution before Feature execution.
+Review Repair Fast Path and Lightweight Change Lane do not invoke the TDD helper by default. The Final Review Subagent loads requesting-code-review, while the controller owns Task Completion Review and selects fresh failure-matched verification. Card persistence does not enter Plan Gate or make `writing-plans` mandatory. Do not add Lightweight Change Lane, Task Completion Review, or Review Repair Fast Path to the mandatory method table. Promotion to initial Feature execution or explicit Bug repair restores normal `writing-plans` and `test-driven-development` helper resolution before Feature execution.
 
 Proof First applies inside the loaded TDD helper as well. When a helper treats RED as authoring a new test by default, agent-loop's RED evidence definition controls: an existing failing test's failing run, a reproduction script with its failure output, or API/UI reproduction evidence is a valid RED, and a new test is never manufactured solely to produce RED. Helper defaults never override the controller's artifact, gate, or evidence rules.
 
@@ -34,13 +34,15 @@ For each mandatory stage:
 1. Identify the required helper from the table below.
 2. Check the canonical name first, then the supported alias. Continue to the supported alias when the canonical candidate is absent or `load-failed`; one broken registration must not hide a usable helper.
 3. If found, load the complete helper `SKILL.md` before any stage action. Do not rely on remembered content or description metadata.
-4. Initial resolution must be recorded before the first stage action. Record candidate results, resolved helper, status, and load evidence in the current feature `notes.md` using `templates/notes.md`; append method, fallback, and artifact evidence before exit.
+4. Initial resolution must be recorded before the first stage action. Record candidate results, resolved helper, status, and load evidence in the current feature `notes.md` using `templates/notes.md`; append method, fallback, and artifact evidence before exit. For a read-only Final Reviewer, use the nested resolution rule below instead of requiring the reviewer to write `notes.md`.
 5. Use the helper method while preserving agent-loop artifacts, gates, status, and lifecycle control.
 6. Before stage exit, assert that the resolution record exists.
 
 Fallback is allowed only when resolution status is `unavailable` or `load-failed`. Silently skipping resolution or using fallback after a successful load is a protocol violation.
 
 If no confirmed feature workspace exists, do not create one merely to record helper resolution. Surface a response-local pending record before the first stage action, then backfill it into `notes.md` during the next human-approved artifact write. Label it pending until persisted; do not claim artifact-backed completion.
+
+Final Review uses two ordered resolution owners. Before dispatch, the owning Agent persists the Subagent coordination resolution. As the first internal reviewer action, before any substantive review, the read-only reviewer resolves requesting-code-review and forms a response-local Reviewer Helper Resolution containing candidates, result, status, load/fallback evidence, and method source. The reviewer returns that exact record without writing files. Before validating findings or exiting Final Review, the owning Agent persists the returned Reviewer Helper Resolution in `notes.md`. Missing or contradictory reviewer resolution blocks use of the findings. This narrow nested rule does not defer persistence for any writable mandatory stage.
 
 Resolution status follows this truth table:
 
@@ -57,8 +59,8 @@ Resolution status follows this truth table:
 | Execute Task / Story | `superpowers:test-driven-development` | `test-driven-development` |
 | Diagnose Failure | `superpowers:systematic-debugging` | `systematic-debugging` |
 | Verify | `superpowers:verification-before-completion` | `verification-before-completion` |
-| Review / Feature Close Review | `superpowers:requesting-code-review` | `requesting-code-review` |
-| Subagent Execution If Approved | `superpowers:subagent-driven-development` | `subagent-driven-development` |
+| Final Review Subagent — reviewer method | `superpowers:requesting-code-review` | `requesting-code-review` |
+| Agent-Owned Subagent Delegation — coordination | `superpowers:subagent-driven-development` | `subagent-driven-development` |
 
 An equivalent helper under another runtime namespace may be used only when its capability is verified. Record its actual resolved name and the evidence used to classify it as equivalent.
 
@@ -66,7 +68,7 @@ Project Skill Creation / Update has an additional independent candidate: `skill-
 
 ## Stage Helper Capability Scan
 
-Run this scan at Project Entry and before every helper-friendly stage listed in the Preferred Skills table below, including Pause / Close and approved Subagent execution.
+Run this scan at Project Entry and before every helper-friendly stage listed in the Preferred Skills table below, including Pause / Close and Agent-owned substantive Subagent execution.
 
 How to scan:
 
@@ -77,7 +79,7 @@ How to scan:
 5. Keep all outputs in agent-loop artifacts and record Stage Helper Resolution in `notes.md`.
 6. If no matching helper is present after all candidates are checked, record `unavailable`; if all discoverable candidates fail to load, record `load-failed`; only then continue with fallback guidance.
 
-Do not ask the human whether to use a helper just because it exists. Announce or otherwise expose helper use when the loaded helper requires it, but do not turn helper selection into a new human gate. Continue to stop for external directories, subagents, commits, PRs, releases, or other agent-loop Human-gated actions.
+Do not ask the human whether to use a helper just because it exists. Announce or otherwise expose helper use when the loaded helper requires it, but do not turn helper selection into a new human gate. Subagent dispatch is Agent-owned; continue to stop when the delegated action itself requires an ungranted Product/ADR/Contract/Task/Git/release/external Human Gate.
 
 ## Preferred Skills
 
@@ -99,8 +101,8 @@ Do not ask the human whether to use a helper just because it exists. Announce or
 | Execute Task / Story | test-driven-development | Use RED/GREEN flow in `stage-guides.md` |
 | Diagnose Failure | systematic debugging | Reproduce, isolate, hypothesize, verify |
 | Verify | verification-before-completion | Run fresh proof and record output |
-| Review | requesting-code-review | Record Spec Review for every task; record Standards Review when triggered |
-| Feature Close Review | requesting-code-review | Run whole-feature Spec Review and triggered Standards Review before close |
+| Task Completion Review | controller built-in checklist | Review current Task authority, diff, proof, risk, rollback, and drift inside Task Done Gate |
+| Final Review Subagent | subagent-driven-development + requesting-code-review | Coordinate one read-only whole-Feature review; reviewer reports findings and the owning Agent decides dispositions |
 | Feature Completion Check | finishing / verification / close decision support | Use `feature-completion-check.md` |
 | Submit / Integrate | finishing-a-development-branch | Use `submit-and-integrate.md` and require human confirmation |
 | Pause / Close | finishing/handoff | Use close gate in `runtime.md` |
@@ -119,24 +121,25 @@ If Superpowers is available, these map cleanly:
 - `test-driven-development`: initial Feature Execute Task / Story and explicit Bug repair; Direct Edit does not invoke it, while Review Repair Fast Path and clearly eligible Lightweight Change use Repair-First Verification instead. Evidence still goes to `notes.md` and task status still follows Task Done Gate.
 - `systematic-debugging`: Diagnose Failure; root cause and fix evidence go to `notes.md`.
 - `verification-before-completion`: Verify and Close; completion still requires agent-loop evidence, review, drift, memory, and human gates.
-- `requesting-code-review`: Review; findings go to `notes.md` and cannot directly mark tasks `done`.
+- `requesting-code-review`: Final Review Subagent reviewer method; findings go to `notes.md` and cannot edit files, authorize actions, or directly mark Tasks/Feature `done`.
 - `finishing-a-development-branch`: Submit / Integrate and Close decision support; agent-loop submit/close gates still apply.
-- `subagent-driven-development`: for explicitly parallel independent tasks, or bounded large Project Entry Scan lanes when the human confirms; briefs and returns go to `handoffs/*`.
+- `subagent-driven-development`: coordination for Agent-owned independent work or the Final Review Subagent. Dispatch itself needs no Human approval, but every delegated write/action must already be authorized and remains bounded by the owning stage.
 
 Browser, Chrome, and computer-use tools are execution tools, not assumptions. Use them for Web E2E only after `e2e-discovery.md` has established the app URL, start command, auth/test data, and appropriate automation route.
 
 ## Subagent Rule
 
-Subagents are optional. In v1, use them only when:
+Subagent dispatch is Agent-owned and is not a Human Gate. Use a Subagent only when:
 
-- the human confirms this specific subagent dispatch
-- or the human explicitly confirms one bounded task group after the agent lists task boundaries, subagent briefs, stop conditions, and main-agent review responsibility
-- Feature Auto-Loop or Task Auto-Run approval is not subagent approval
-- tasks or scan lanes are independent
-- each subagent has a bounded task/story or Project Entry Scan lane
-- each implementation subagent receives a `templates/subagent-brief.md`-style brief
-- Project Entry Scan subagents return findings, evidence, confidence, uncertainties, files read, and suggested `project.md` entries
-- outputs can be merged back into `tasks.md`, `tests.md`, `notes.md`, or proposed `project.md`; Project Skill authoring pressure-test briefs/returns are instead persisted in the confirmed skill's `validation.md`
+- tasks, scans, or review lanes are independent or their overlap is explicitly coordinated
+- each assignment has a bounded input/output, allowed-write set, forbidden actions, verification, expiry, and stop conditions
+- a read-only assignment has no write authority
+- implementation writes are already covered by the current Feature/Task/Review Repair or other accepted grant
+- the Subagent cannot create or widen authorization or bypass Product/ADR/Contract/Task/Git/release/external Gates
+- concurrent implementation paths are mechanically non-overlapping; a known same writable path is serialized or uses an already-authorized isolated worktree, while the owning Agent may reconcile only unexpected overlap after return
+- the owning Agent can inspect the output/diff, validate findings, run required proof, and own status/memory claims
+- durable `templates/subagent-brief.md` and `handoffs/*` are used only when useful; one reliable-session assignment may remain response-local
+- Project Entry Scan Subagents return findings, evidence, confidence, uncertainties, and files read; they never write accepted project memory directly
 
 Default remains one task in the current agent session.
 

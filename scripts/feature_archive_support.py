@@ -46,6 +46,7 @@ ARCHIVE_COLUMNS = (
 ARCHIVE_STATES = frozenset({"archived", "rehydrated"})
 UTF8_BOM = b"\xef\xbb\xbf"
 MAX_MARKDOWN_BYTES = 2 * 1024 * 1024
+FINAL_REVIEW_CONTRACT_CUTOFF = date(2026, 8, 29)
 EXCLUDED_SCAN_DIRS = frozenset(
     {".git", ".archive-txn", "node_modules", "vendor", ".venv", "dist", "build"}
 )
@@ -556,12 +557,87 @@ def _readiness_values(notes: str) -> dict[str, str]:
         "Closed At",
         "Delivered Summary",
         "Verification",
+        "Final Review",
         "Feature Close Review",
         "Drift",
         "Project Memory Impact",
         "Open Follow-up",
     )
     return {name: (metadata(body, name) or "").strip() for name in names}
+
+
+def _record_value(body: str, name: str) -> str:
+    """Read a record field whether the Markdown author used a list marker or not."""
+    match = re.search(
+        rf"(?mi)^\s*-?\s*{re.escape(name)}\s*:\s*(.*?)\s*$", body
+    )
+    return match.group(1).strip() if match else ""
+
+
+def _metadata_with_bullets(text: str, name: str) -> str:
+    """Read one metadata value plus its immediately following Markdown bullets."""
+    field = re.compile(rf"^\s*{re.escape(name)}\s*:\s*(.*?)\s*$", re.IGNORECASE)
+    bullet = re.compile(r"^\s*[-*+]\s+(.*?)\s*$")
+    lines = text.splitlines()
+    for index, line in enumerate(lines):
+        match = field.match(line)
+        if match is None:
+            continue
+        values = [match.group(1).strip()] if match.group(1).strip() else []
+        for following in lines[index + 1 :]:
+            item = bullet.match(following)
+            if item is not None:
+                values.append(item.group(1).strip())
+                continue
+            if not following.strip() and not values:
+                continue
+            break
+        return "\n".join(values)
+    return ""
+
+
+def _references_feature(value: str, feature_id: str) -> bool:
+    candidates = re.findall(
+        r"(?<![a-z0-9-])\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])-[a-z0-9][a-z0-9-]*(?![a-z0-9-])",
+        value,
+    )
+    return feature_id in candidates
+
+
+def _current_final_review_blockers(notes: str) -> list[str]:
+    body = optional_section(notes, "Final Review")
+    if body is None:
+        return ["archive-readiness-final-review-record:missing"]
+
+    blockers: list[str] = []
+    reviewer = _record_value(body, "Final Reviewer")
+    reviewed_inputs = _record_value(body, "Reviewed Inputs") or _record_value(
+        body, "Reviewed Input Identity / Digests"
+    )
+    findings = _record_value(body, "Final Review Findings")
+    dispositions = _record_value(body, "Finding Dispositions")
+    freshness = _record_value(body, "Post-Repair Freshness")
+    for name, value in (
+        ("reviewer", reviewer),
+        ("inputs", reviewed_inputs),
+    ):
+        if not _concrete_summary(value):
+            blockers.append(f"archive-readiness-final-review-{name}:missing")
+    no_finding_values = {"none", "no finding", "no findings"}
+    findings_value = strip_code_span(findings).strip().lower()
+    dispositions_value = strip_code_span(dispositions).strip().lower()
+    if findings_value not in no_finding_values and not _concrete_summary(findings):
+        blockers.append("archive-readiness-final-review-findings:missing")
+    if findings_value in no_finding_values:
+        if dispositions_value not in {"none", "complete", "not-applicable"}:
+            blockers.append("archive-readiness-final-review-dispositions:missing")
+    elif not _concrete_summary(dispositions):
+        blockers.append("archive-readiness-final-review-dispositions:missing")
+    if freshness != "current":
+        blockers.append(
+            f"archive-readiness-final-review-freshness:{freshness or 'missing'}"
+        )
+    return blockers
 
 
 def inspect_feature(
@@ -599,7 +675,6 @@ def inspect_feature(
         blockers.append("non-concrete-delivered-summary")
     required_values = {
         "Verification": {"complete"},
-        "Feature Close Review": {"complete"},
         "Drift": {"resolved"},
         "Project Memory Impact": {"complete", "none"},
     }
@@ -609,6 +684,42 @@ def inspect_feature(
             blockers.append(
                 f"archive-readiness-{name.lower().replace(' ', '-')}:{actual or 'missing'}"
             )
+
+    final_review = readiness.get("Final Review", "")
+    legacy_close_review = readiness.get("Feature Close Review", "")
+    current_review_record = (
+        optional_section(notes, "Final Review") is not None
+        or optional_section(notes, "Task Completion Reviews") is not None
+    )
+    created_value = (metadata(notes, "Created") or metadata(spec, "Created") or "").strip()
+    try:
+        created_at = date.fromisoformat(created_value)
+    except ValueError:
+        created_at = None
+    try:
+        legacy_closed_at = date.fromisoformat(close_at)
+    except ValueError:
+        legacy_closed_at = None
+    if final_review:
+        if final_review != "complete":
+            blockers.append(f"archive-readiness-final-review:{final_review}")
+        else:
+            blockers.extend(_current_final_review_blockers(notes))
+    elif (
+        legacy_close_review == "complete"
+        and created_at is not None
+        and created_at < FINAL_REVIEW_CONTRACT_CUTOFF
+        and legacy_closed_at is not None
+        and legacy_closed_at < FINAL_REVIEW_CONTRACT_CUTOFF
+        and not current_review_record
+    ):
+        # v1.5.8 required only the retired readiness key; its Review sections did
+        # not carry a stable completion field. Pre-contract Created and Closed At
+        # dates identify an already-closed historical record. Current-format
+        # headings always disable this reader path even on an older Feature.
+        pass
+    else:
+        blockers.append("archive-readiness-final-review:missing")
     readiness_closed_at = readiness.get("Closed At", "")
     if readiness and (
         not re.fullmatch(r"\d{4}-\d{2}-\d{2}", readiness_closed_at)
@@ -636,11 +747,12 @@ def inspect_feature(
     if not close_complete:
         blockers.append("incomplete-close-evidence")
 
-    active = strip_code_span(metadata(project, "Active Feature") or "")
-    paused = strip_code_span(metadata(project, "Paused Features") or "")
-    if active and active.lower() != "none" and feature_id in active:
+    current_work = optional_section(project, "Current Work") or project
+    active = strip_code_span(metadata(current_work, "Active Feature") or "")
+    paused = _metadata_with_bullets(current_work, "Paused Features")
+    if active and active.lower() != "none" and _references_feature(active, feature_id):
         blockers.append("project-memory-active")
-    if paused and paused.lower() != "none" and feature_id in paused:
+    if paused and paused.lower() != "none" and _references_feature(paused, feature_id):
         blockers.append("project-memory-paused")
 
     return ArchiveCandidate(

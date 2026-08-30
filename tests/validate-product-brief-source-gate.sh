@@ -21,7 +21,7 @@ assert_not_contains() {
 
 assert_contains "references/product-brief.md" '# Legacy Feature Product Brief Compatibility'
 assert_contains "references/product-brief.md" 'Do not create `feature/product.md` for new work.'
-assert_contains "references/product-brief.md" 'Read an existing Feature Product Brief during Resume, Follow-up, Review, Close, or Recovery.'
+assert_contains "references/product-brief.md" 'Read an existing Feature Product Brief during Resume, Follow-up, Task Completion Review, Final Review, Close, or Recovery.'
 assert_contains "references/product-brief.md" 'If it conflicts with the Effective Product Definition, stop for Requirement conflict/recovery; do not rewrite either source silently.'
 assert_contains "references/stage-guides.md" '## Legacy Feature Product Brief Compatibility (Non-stage)'
 assert_contains "references/workflow-checklists.md" 'New Feature work does not create Feature `product.md`'

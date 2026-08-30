@@ -7,7 +7,7 @@ Default rule: do not create a Delivery Contract for every feature. Simple single
 ## Core Rule
 
 ```text
-handoffs/* = temporary subagent assignment and return notes
+handoffs/* = optional durable subagent assignment and return notes when cross-session recovery, complex handoff, or explicit audit value requires them
 contracts.md + contracts/* = durable producer-consumer delivery boundary
 ```
 

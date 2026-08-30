@@ -94,18 +94,19 @@ Migration:
 
 ## Task Done Gate
 
-AI owns task-detail meaning and reviews current checkbox, `Status`, `Evidence`, `Review`, and `Drift` values directly against the accepted Story/Product Slice and execution boundary.
+AI owns task-detail meaning and reviews current checkbox, `Status`, `Evidence`, `Task Completion Review`, and `Drift` values directly against accepted authority, Story/Product Slice, and execution boundary.
 
 - [ ] Implementation scope complete.
 - [ ] Required tests or substitute verification ran fresh.
 - [ ] Evidence recorded in `notes.md`.
-- [ ] Lightweight Spec Review recorded.
+- [ ] Task Completion Review covers accepted authority/scope, diff, risk, rollback, and drift.
 - [ ] Standards Review recorded when triggered.
 - [ ] Drift decision recorded, including `no drift` when applicable.
-- [ ] `tasks.md` or this task detail names the evidence location.
+- [ ] `tasks.md` or this task detail names the current evidence pointer.
 
 Evidence:
-Review:
+Task Completion Review:
+Task Completion Review Currentness: current | stale
 Drift:
 
 ## Related Tests

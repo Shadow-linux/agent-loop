@@ -447,7 +447,7 @@ Safety Stop -> Remote Discovery -> Memory Recovery -> Feature Archive Maintenanc
 
 Rules:
 
-1. Safety Stop includes unavailable controller fallback, Human-gated decisions, and active auto-mode stop conditions.
+1. Safety Stop includes the agent-loop controller-unavailable fallback, Human-gated decisions, and active auto-mode stop conditions.
 2. Remote Discovery runs before local existing-project handling.
 3. `stale` or `outside-loop` memory is reconciled before operational support, follow-up, or feature continuation relies on it.
 4. With current memory, an explicit `feature-archive-maintenance` request routes before Active Feature Guard because it maintains closed history. Declared lifecycle/readiness facts keep selected active/paused or incomplete candidates out of the move plan without switching current work; reference findings remain Agent-reviewed evidence rather than Checker authorization.
@@ -768,16 +768,20 @@ E2E Discovery if Web
 Technical Design / Code Context
 Plan Gate / Plan if Needed
 Analyze Consistency
-Subagent Execution If Approved
 Execute Task / Story
 Verify
-Review
+[internal] Task Completion Review inside Task Done Gate
+[internal] Feature-wide Required Verification and automatic Final Review Subagent
 Drift Check
 Project Memory Update
 Feature Completion Check
 Submit / Integrate
 Pause / Close
 ```
+
+Task Completion Review, Agent-owned Subagent delegation, Final Review Subagent, finding assessment, and Review Repair are internal methods owned by existing execution/completion stages. This change does not add a canonical stage, does not add a lifecycle status, does not add an Auto Mode, does not add a checker, and does not add a default artifact directory.
+
+Final Review has two ordered helper owners: the owning Agent persists Subagent coordination resolution before dispatch; the read-only reviewer forms a response-local Reviewer Helper Resolution as its first internal action before substantive review, returns it without writing files, and the owner persists it before using findings. Runtime dispatch failure uses one bounded attempt set under the unchanged brief: after the initial failure, at most one diagnostic retry for that dispatcher and one attempt for each other distinct exposed dispatcher. If all attempts fail while mechanisms remain advertised, record `Final Review: blocked`, `Recovery Owner: runtime dispatcher`, exact failure/recovery evidence, and one recovery action; do not loop or use controller fallback. `Final Reviewer: controller-fallback` is allowed only when diagnosis proves the runtime exposes no Subagent dispatch mechanism.
 
 Feature Spec enters Brainstorm / Clarify only when concrete feature-local scope, acceptance, or implementation-boundary uncertainty remains after loading the resolved Feature Authority, accepted Feature boundary, applicable Product Slice, and applicable ADRs. If those applicable sources, scope, exclusions, and measurable acceptance are already clear, classify the method response-locally as `brainstorm-not-needed` and proceed directly to Feature Spec. This label is not a lifecycle status or artifact field. Helper availability alone never triggers the method. Brainstorming may compare or clarify Feature-local alternatives, but it cannot reopen source-authority, Requirement product, Bug Expected Behavior, or accepted ADR meaning or add scope; ambiguity returns to the owning existing Human Review.
 
@@ -857,9 +861,9 @@ Available control modes:
 | Mode | Authorization scope | When it can start | What it may do without another stage gate |
 |---|---|---|---|
 | Normal two-gate construction | one current Feature definition/package | explicit implementation request, then Gate 1 | write the complete implementation-package artifacts without modifying target implementation |
-| Strict Mode | one stage at a time | human explicitly requests stage-by-stage control, or controller fallback forces it | nothing beyond the confirmed stage |
+| Strict Mode | one stage at a time | human explicitly requests stage-by-stage control, or the agent-loop controller is unavailable/load-failed | nothing beyond the confirmed stage |
 | Feature Auto-Loop | current accepted Feature package | Gate 2 selects `Approve package and start implementation`, or a valid separate later-start transition follows package-only acceptance | execute and advance Agent-ready tasks for the feature |
-| Task Auto-Run | one task or one story | after the task/story plan is accepted and human explicitly enables it | run Analyze Consistency, then complete that task/story through TDD, verification, review, drift, Task Done Gate, and task status update |
+| Task Auto-Run | one task or one story | after the task/story plan is accepted and human explicitly enables it | run Analyze Consistency, then complete that task/story through TDD, verification, Task Done Gate with its internal Task Completion Review/drift disposition, and task status update |
 
 Feature Auto-Loop means:
 
@@ -867,9 +871,11 @@ Feature Auto-Loop means:
 Feature Auto-Loop = give one feature a bounded release lane.
 ```
 
-In this mode, the agent may continue through Analyze Consistency, Execute Agent-ready Tasks, Verify, Review, Drift Check, and Project Memory Update for the current accepted package. It must not skip Plan Gate before execution. It must stop before a Feature Verification Profile downgrade after Gate 2 that lacks a recorded Human acceptance, Bug Resolution Path decisions, Bug close/reopen, Feature creation/reopen, Requirement creation/lifecycle reconciliation, Feature Monthly Archive or rehydrate and their Batch Human Gates, branch creation, switching, deletion, push, or tag, creating or materially updating a project-local skill, executing a project-local skill without a current invocation grant, Delivery Contract creation and acceptance not separately named in Gate 2, breaking contract changes, subagent dispatch, external mutation, Submit / Integrate, commit, push, PR, merge, tag, release, publish, seal, and Pause / Close.
+In this mode, the agent may continue through Analyze Consistency, Execute Agent-ready Tasks, Verify, Task Completion Review, Feature-wide Required Verification, automatic Final Review, Drift Check, and Project Memory Update for the current accepted package. It must not skip Plan Gate before execution. It may dispatch a Subagent when useful, but the delegated action inherits only the current stage scope, accepted write grant, and disclosed assignment boundary. It must stop before a Feature Verification Profile downgrade after Gate 2 that lacks a recorded Human acceptance, Bug Resolution Path decisions, Bug close/reopen, Feature creation/reopen, Requirement creation/lifecycle reconciliation, Feature Monthly Archive or rehydrate and their Batch Human Gates, branch creation, switching, deletion, push, or tag, creating or materially updating a project-local skill, executing a project-local skill without a current invocation grant, Delivery Contract creation and acceptance not separately named in Gate 2, breaking contract changes, a delegated action outside existing authorization, external mutation, Submit / Integrate, commit, push, PR, merge, tag, release, publish, seal, and Pause / Close.
 
-Within Review, Feature Auto-Loop may apply a `within-approved-boundary` Review Repair without a new Gate when the Feature Authority, accepted Product Slice/Acceptance, implementation boundary, risk, verification path, rollback, and current execution grant remain valid. This is use of existing authorization, not a new write grant; definition or implementation-boundary drift returns to Gate 1 or Gate 2, and any independently Human-gated action still stops.
+Subagent dispatch itself is not a Human Gate. It cannot create or widen the authority for the delegated action.
+
+Within Task Completion Review or Final Review finding assessment, Feature Auto-Loop may apply a `within-approved-boundary` Review Repair without a new Gate when the Feature Authority, accepted Product Slice/Acceptance, implementation boundary, risk, verification path, rollback, and current execution grant remain valid. This is use of existing authorization, not a new write grant; definition or implementation-boundary drift returns to Gate 1 or Gate 2, and any independently Human-gated action still stops.
 
 For multiple Agent-ready tasks, Feature Auto-Loop may rotate `plan.md` and Active Plan Scope without repeating Gate 2 when the Agent confirms the current task/story Plan passes Plan Gate and Analyze Consistency and interfaces/risk/rollback/verification obligations remain inside the accepted execution boundary. `Gate 2 Agent-ready Tasks` is the initial reviewed decomposition, not an immutable whitelist, while `Gate 2 Accepted Stories` is the durable semantic snapshot derived at Gate 2 and is not rebuilt from current Task rows. A new Task ID does not by itself repeat Gate 2. A new Agent-ready Task may execute only when the Agent verifies that it exists in `tasks.md`, maps to the accepted Story/Product Slice/Acceptance, any `Derived From` value is valid trace rather than substitute authorization, and the current delta is `within-approved-boundary`. A new Story/Product Slice/Acceptance, Human-gated Task, missing Task identity, story mismatch, changed interface/risk/rollback/verification boundary, or classified implementation-boundary change returns to Gate 2.
 
@@ -879,7 +885,7 @@ Task Auto-Run means:
 Task Auto-Run = give one task/story a bounded execution lane.
 ```
 
-In this mode, the agent first runs and records Analyze Consistency for the accepted plan, then may complete the selected task/story only. It must stop after updating evidence, review notes, drift notes, and task/story status. It must not start the next task without a new human instruction or a Feature Auto-Loop grant.
+In this mode, the agent first runs and records Analyze Consistency for the accepted plan, then may complete the selected task/story only. It must not start another implementation Task without a new human instruction or a Feature Auto-Loop grant. After updating evidence, review notes, drift notes, and task/story status, use one deterministic terminal route. When the selected Task is the last in-scope Task and all Final Review prerequisites are current, automatically dispatch the read-only Final Review Subagent. This terminal route does not ask for permission to dispatch Final Review. When only Feature-wide Required Verification is missing/stale and every other Final Review prerequisite is current, stop with exactly one next action: Feature-wide Verify. Otherwise return each missing prerequisite to its exact owner: Task review pointer -> owning Task; authority -> authority recovery or its Human Gate; dirty work -> workspace owner; rollback -> rollback owner; any other prerequisite -> its owning stage or Human Gate. Task Auto-Run must not route every prerequisite failure to Verify and never advances into another implementation Task.
 
 ## Task Done Gate
 
@@ -900,17 +906,23 @@ The task may enter `review` after implementation and all applicable fresh verifi
 
 Required Verification proves the current result, while every Existing Test Obligation from accepted `tests.md`, Gate 2, acceptance, ADR, Delivery Contract, Bug Verification Matrix, or current Human instruction remains required. An Additional Regression Test is future protection proposed after current proof exists. An unaccepted Additional Regression Test Advisory does not by itself block Task Done when Required Verification and every Existing Test Obligation are complete.
 
+Before `done`, the owning Agent performs an internal **Task Completion Review**. It evaluates the current implementation against accepted authority, the accepted Task/Story and Feature implementation boundary, current diff attribution, Required Verification and every Existing Test Obligation, risk, rollback viability, and drift. It is intentionally quick for bounded work and does not require a review helper by default.
+
+The Task Completion Review records one compact result in `notes.md` and the Task row/detail names that evidence through a current evidence pointer. It blocks `done` when accepted authority is unresolved, the diff leaves the accepted boundary, Required Verification or an Existing Test Obligation is stale/missing/failed, risk or unrelated dirty work is unexplained, rollback is no longer viable, or drift lacks a disposition.
+
 The task may enter `done` only when all required items are true:
 
 - accepted implementation scope is complete
 - Required Verification and every Existing Test Obligation or applicable Human-approved substitute ran fresh
 - verification evidence is recorded in `notes.md`
-- lightweight Spec Review is recorded for the task
+- Task Completion Review is recorded for the task
 - Standards Review is recorded when triggered by large project, broad diff, directory or durable boundary change, security/data change, architecture change, or human request
 - drift decision is recorded, even if the decision is "no drift"
 - `tasks.md` or task detail names the evidence location
 
 If any item is missing, keep the task as `review`, `in-progress`, or `blocked`; never use `done`.
+
+Final Review and Feature Completion Check must verify that every `done` Task still points to a current Task Completion Review and that no later relevant Task, diff, authority, or verification change has made that evidence pointer stale. An ordinary bounded repair does not reopen the Task or repeat its formal Task Completion Review, but after fresh proof the owning Agent refreshes the affected Task Completion Review evidence pointer and currentness assessment. If currentness cannot be established, return the Task to `review` rather than relying on stale completion evidence.
 
 Before Gate 2 may start Feature Auto-Loop, or before enabling Task Auto-Run, perform a final clarification pass:
 
@@ -933,7 +945,7 @@ Use the normal two-gate path without asking the human to choose a mode after eve
 Recommended wording:
 
 ```text
-First review what will be built. After you accept the checked Feature definition, I will prepare tasks, tests, code context, Plan, verification, risk, and rollback without changing target code. The second review accepts the complete package and can either stop there or start Agent-ready implementation. Delivery Contract, subagent, Git, external, submit, close, and release actions keep their own gates.
+First review what will be built. After you accept the checked Feature definition, I will prepare tasks, tests, code context, Plan, verification, risk, and rollback without changing target code. The second review accepts the complete package and can either stop there or start Agent-ready implementation. Subagent dispatch adds no Gate and inherits only existing authorization; Delivery Contract, Git, external, submit, close, and release actions keep their own gates.
 ```
 
 Do not offer an auto mode as a substitute for missing clarification. If scope, acceptance, test approach, data rules, or affected boundaries are unclear, clarify first.
@@ -961,7 +973,7 @@ Auto modes do not remove stop conditions. Stop and ask when:
 - TDD cannot be followed on an initial Feature, explicit Bug repair, Human-requested TDD, or accepted RED/GREEN Plan; or Required Verification repeatedly fails or cannot reliably prove the current result
 - a canonical Agent Loop checker failure needs a temporary patch but the exact Temporary Checker Repair Review or one-Gate substitute decision is missing, expired, or being widened
 - review finds product meaning, Feature definition, accepted implementation boundary, public interface, architecture, security, data, permission, authorization, rollback, or reliable-verification drift; a `within-approved-boundary` implementation correction remains inside Review Repair Fast Path
-- subagents are needed but not yet approved
+- a delegated action would exceed the current stage scope, accepted write grant, or disclosed assignment boundary
 - branch creation, switching, deletion, push, or tag is requested
 - submit, commit, PR, merge, release, publish, seal, pause, or close is requested
 
@@ -990,7 +1002,7 @@ Humans do not need to explicitly say `close`.
 
 Run `references/feature-completion-check.md` when:
 
-- Verify, Review, Drift Check, and Project Memory Update indicate the feature may be done
+- Verify, Task Completion Review, Final Review, Drift Check, and Project Memory Update indicate the feature may be done
 - the human asks to start a new feature while `project.md` has an Active Feature
 - resuming a project with an Active Feature that may already be complete
 - after Submit / Integrate when the feature appears done
@@ -1021,13 +1033,14 @@ Feature close is forbidden unless all are true:
 
 - accepted feature spec exists
 - tasks are done or explicitly removed from scope
+- every `done` Task still names a current Task Completion Review evidence pointer; a stale or missing pointer returns that Task to `review`
 - every Existing Test Obligation or applicable Human-approved substitute is recorded
 - Delivery Contracts are implemented and verified when downstream consumers rely on them
 - accepted Delivery Contracts match producer code/tests and have no unapproved breaking changes
 - fresh verification evidence exists in `notes.md`
 - every Review Repair has fresh targeted verification and evidence in `notes.md`
 - every Additional Regression Test Advisory and its residual risk is visible; an unaccepted advisory does not by itself block Feature Close
-- Feature Close Review completed and recorded in `notes.md`
+- a current read-only Final Review Subagent result (or recorded `Final Reviewer: controller-fallback`) and its persisted applicable helper-resolution evidence exist, and every finding has a type-valid owning-Agent disposition; a blocking defect or unresolved verification gap cannot be accepted as residual
 - drift check completed
 - long-term changes reflected in `project.md`
 - submit/integration status recorded when the human requested submission

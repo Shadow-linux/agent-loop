@@ -19,11 +19,11 @@ If Superpowers is available, prefer these helpers:
 | Execute Task / Story | `superpowers:test-driven-development` |
 | Diagnose Failure | `superpowers:systematic-debugging` |
 | Verify / Completion claim | `superpowers:verification-before-completion` |
-| Review / Feature Close Review | `superpowers:requesting-code-review` |
+| Final Review Subagent | `superpowers:subagent-driven-development` for coordination plus `superpowers:requesting-code-review` for the reviewer method |
 | Feature Completion Check | verification / finishing helpers when available |
 | Submit / Integrate | `superpowers:finishing-a-development-branch` |
 | Pause / Close | finishing / handoff helpers when available |
-| Approved Subagent execution | `superpowers:subagent-driven-development` |
+| Agent-Owned Subagent Delegation | `superpowers:subagent-driven-development` |
 
 For mandatory helper-backed stages, resolve canonical and alias names using `skill-routing.md`, then load the complete helper before stage actions. If it is absent, record `unavailable`; if it is discovered but cannot be loaded, record `load-failed`. Only those two statuses allow fallback.
 
@@ -94,7 +94,7 @@ Do not copy an external skill's full workflow into `agent-loop`. Borrow the meth
 
 Direct Edit Fast Path does not invoke an external helper. It remains a response-local controller method with no Plan/No-Plan Decision, TDD, new test, notes row, or helper artifact; promotion to another workflow resolves that workflow's helpers before acting.
 
-For Lightweight Change Lane, the persistent monthly card remains controller-owned and does not enter a mandatory helper-backed stage. Review Repair Fast Path remains owned by Review and keeps its Review helper resolution. Neither path invokes the TDD helper by default. Do not expand a Lightweight Execution Card into `docs/superpowers/`, a Feature workspace, or a construction-grade plan. An external helper may advise a method only when already appropriate; it cannot introduce a helper-specific path, artifact, mode, gate, or scope expansion. Promotion to initial Feature execution or explicit Bug repair restores the normal helper protocol.
+For Lightweight Change Lane, the persistent monthly card remains controller-owned and does not enter a mandatory helper-backed stage. Review Repair Fast Path remains owned by Task Completion Review or Final Review finding assessment. Task Completion Review uses the controller checklist without a review helper by default; the Final Review Subagent loads the reviewer method. Neither repair path invokes the TDD helper by default. Do not expand a Lightweight Execution Card into `docs/superpowers/`, a Feature workspace, or a construction-grade plan. An external helper may advise a method only when already appropriate; it cannot introduce a helper-specific path, artifact, mode, gate, or scope expansion. Promotion to initial Feature execution or explicit Bug repair restores the normal helper protocol.
 
 ## Path Override Rule
 
@@ -110,7 +110,7 @@ Write to the current `agent-loop` artifact instead.
 | debugging notes | `.agent-loop/features/<feature>/notes.md`; link bounded reproduction/root-cause evidence from the Bug README when Bug Management applies |
 | verification evidence | `.agent-loop/features/<feature>/notes.md` |
 | review findings | `.agent-loop/features/<feature>/notes.md` |
-| subagent brief / return | `.agent-loop/features/<feature>/handoffs/*` |
+| durable subagent brief / return when cross-session recovery, complex handoff, or explicit audit value requires it | `.agent-loop/features/<feature>/handoffs/*`; otherwise keep the brief/return response-local |
 | project-local skill package | `.agent-loop/skills/<skill-name>/` |
 
 The table uses the default `.agent-loop/` memory root. When an existing project uses the accepted legacy `agent-loop/` root, keep that current memory root for feature and project-memory artifacts; never create repository-root `features/`. The Project-local skill package is the exception: it always uses `.agent-loop/skills/<skill-name>/` and never inherits the legacy `agent-loop/` root.
@@ -119,7 +119,7 @@ Do not create `docs/superpowers/` in a target project unless the human explicitl
 
 ## Stage Helper Resolution Record
 
-Create the initial `templates/notes.md` Stage Helper Resolution record before the first stage action, then finish its method/fallback/evidence fields before stage exit. If no feature workspace has been confirmed, use the response-local pending-record rule from `skill-routing.md` instead of creating files without approval. Project Skill Creation / Update uses a response-local record before Gate 1 and persists the completed record to `.agent-loop/skills/<skill-name>/validation.md` after the proposed directory exists.
+Create the initial `templates/notes.md` Stage Helper Resolution record before the first stage action, then finish its method/fallback/evidence fields before stage exit. If no feature workspace has been confirmed, use the response-local pending-record rule from `skill-routing.md` instead of creating files without approval. Project Skill Creation / Update uses a response-local record before Gate 1 and persists the completed record to `.agent-loop/skills/<skill-name>/validation.md` after the proposed directory exists. Final Review uses the nested read-only Reviewer Helper Resolution rule below.
 
 The record includes:
 
@@ -133,7 +133,7 @@ The record includes:
 
 Before the first action, `loaded` requires `Fallback Used: no`, a resolved helper, and complete load evidence. Before stage exit, it additionally requires method-used evidence. `Fallback Used: yes` requires `unavailable` or `load-failed`, a `none` resolved helper, and candidate-by-candidate failure evidence. Missing or inconsistent initial fields block stage action; missing or inconsistent exit fields block completion.
 
-Each invocation scope gets its own record. Task Review, Submit review, and Feature Close Review may use the same helper name, but Feature Close Review requires a new resolution record and may not reuse a prior task-review load record.
+Each mandatory invocation scope gets its own record. Task Completion Review creates no helper-resolution record by default. For Final Review, the owning Agent persists Subagent coordination resolution before dispatch. The read-only reviewer resolves requesting-code-review as its first internal action, forms a response-local Reviewer Helper Resolution before substantive review, and returns the exact candidates/result/status/load/fallback/method evidence without writing files. The owning Agent persists that returned record before validating findings or exiting Final Review. A fresh reviewer after material input change creates a fresh resolution rather than reusing stale evidence. Normal Submit reuses a current Final Review instead of creating a separate review-helper invocation.
 
 ## Gate Override Rule
 
@@ -173,13 +173,14 @@ Use Superpowers when available for these stages, while applying the path and gat
 | Feature Spec with real feature-local uncertainty | brainstorming/spec methods | clarify unresolved local scope, acceptance, or implementation-boundary alternatives | write only accepted Feature-local clarification to `spec.md`; never redefine Product Slice or accepted ADR meaning |
 | Plan Gate / Plan If Needed | `superpowers:writing-plans` | decide plan vs recorded No-Plan Decision; construction-grade plan, exact paths, test code, commands, expected outputs, no placeholders, self-review | write to `plan.md` or `plans/*`, or record No-Plan Decision only for trivial tasks; preserve Branch Context Evidence and never let plan approval authorize Git actions; do not write `docs/superpowers/plans/`; execution mode remains agent-loop controlled |
 | Execute Task / Story | `superpowers:test-driven-development` | RED, verify RED, GREEN, verify GREEN, refactor | task status still controlled by Task Done Gate; evidence to `notes.md` |
-| Diagnose Failure | `superpowers:systematic-debugging` | reproduce, isolate, trace root cause before fixing | findings to `notes.md`; return to Execute / Verify / Review |
+| Diagnose Failure | `superpowers:systematic-debugging` | reproduce, isolate, trace root cause before fixing | findings to `notes.md`; return to Execute, Verify, Task Done Gate, or Final Review finding assessment |
 | Verify | `superpowers:verification-before-completion` | evidence before completion claim | evidence to `notes.md`; completion still controlled by agent-loop |
-| Review | `superpowers:requesting-code-review` | rigorous review pass | findings to `notes.md`; task moves to `done` only after Task Done Gate |
-| Feature Completion Check | verification / finishing helpers when available | evidence discipline and close-decision support | agent-loop owns completion result, blocker routing, and close confirmation |
+| Task Completion Review | controller built-in checklist | fast current-evidence assessment | no helper by default; Task Done Gate owns status |
+| Final Review Subagent | `superpowers:subagent-driven-development` plus `superpowers:requesting-code-review` | independent read-only whole-Feature review | reviewer reports findings only; owning Agent validates, repairs, routes, and owns completion |
+| Feature Completion Check | verification / finishing helpers when available | evidence discipline and close-decision support only; no code review | agent-loop owns completion result, blocker routing, and close confirmation |
 | Submit / Integrate | `superpowers:finishing-a-development-branch` | completion options and branch hygiene | submit still requires agent-loop Branch Strategy Check, sealed/customer-isolation checks, diff review, verification, drift check, and action-specific human confirmation |
-| Pause / Close | finishing / handoff helpers when available | close options, handoff structure, and completion hygiene | close still requires Feature Completion Check, Feature Close Review, drift, memory status, and explicit human confirmation |
-| Subagent execution | `superpowers:subagent-driven-development` | bounded independent execution with review | only after human confirms; briefs/returns in `handoffs/*`; main agent owns merge and status |
+| Pause / Close | finishing / handoff helpers when available | close options, handoff structure, and completion hygiene | close still requires Feature Completion Check, current Final Review evidence, drift, memory status, and explicit Human Close Gate |
+| Agent-Owned Subagent Delegation | `superpowers:subagent-driven-development` | bounded independent execution or review | dispatch is Agent-owned; delegated actions inherit existing authorization; main Agent owns integration, evidence, and status |
 
 ## Brainstorming Adapter
 
@@ -227,7 +228,7 @@ When `Plan Gate / Plan If Needed` starts and Superpowers is available:
 5. Save the plan to `plan.md` for the active task/story, or to `plans/YYYY-MM-DD-<task>-<slug>.md` in complex artifact mode.
 6. If a plan is not required, record the No-Plan Decision in `notes.md` and the selected task row/detail with exact files, exact verification command, and why no trigger applies.
 7. Do not create `docs/superpowers/plans/*` unless the human explicitly requests native Superpowers docs and confirms the external directory after path-override explanation.
-8. Do not let the external skill choose execution mode. Agent Loop owns normal two-gate Feature construction, human-selected Strict Mode, Gate 2 Feature Auto-Loop, Task Auto-Run, and human-approved subagent execution. Task Auto-Run still requires an accepted plan.
+8. Do not let the external skill choose execution mode. Agent Loop owns normal two-gate Feature construction, human-selected Strict Mode, Gate 2 Feature Auto-Loop, Task Auto-Run, and Agent-owned Subagent delegation inside existing authorization. Task Auto-Run still requires an accepted plan.
 
 ## Project Skill Authoring Adapter
 
@@ -267,7 +268,7 @@ When verification fails or unexpected behavior appears:
 3. Record root cause, evidence, fix decision, and follow-up verification in Feature `notes.md`; Bug Management may link the evidence in the Bug README.
 4. The helper must not create, merge, close, reopen, or change Bug Records; select a Resolution Path; create a Requirement/Feature; mutate lifecycle; or widen Git authority.
 5. If a canonical Agent Loop checker remains failed after an exact rerun and the checker may be defective, load `checker-recovery.md`; the debugging helper may reduce the fixture but cannot authorize or apply a temporary checker patch by itself.
-6. Return to Execute / Verify / Review under `agent-loop`.
+6. Return to Execute / Verify / Task Done Gate and Final Review under `agent-loop`.
 
 ## Submit / Integrate Adapter
 
@@ -287,36 +288,23 @@ When `Submit / Integrate` starts and Superpowers is available:
 
 ## Subagent Adapter
 
-Subagents are optional and require explicit human confirmation before dispatch. A Feature Auto-Loop or Task Auto-Run grant is not subagent approval.
+Subagent dispatch is not a Human Gate. The owning Agent may dispatch read-only or already-authorized work when isolation, parallelism, specialized analysis, or independent review materially helps. Dispatch never supplies the authority for the delegated action.
 
-One confirmation may cover a bounded task group only when the agent first lists:
-
-- task/story IDs or scan lanes included
-- files or boundaries each subagent may inspect or change
-- one brief per subagent
-- stop conditions
-- main-agent review and merge responsibility
-
-Use only when:
-
-- tasks or scan lanes are independent
-- the context can be bounded
-- each subagent has a clear brief
-- the main agent can review and merge outputs
-
-Artifact destinations:
+Effective authority inherits only:
 
 ```text
-.agent-loop/features/<feature>/handoffs/<date>-<task>-brief.md
-.agent-loop/features/<feature>/handoffs/<date>-<task>-return.md
-.agent-loop/features/<feature>/notes.md summary
-.agent-loop/features/<feature>/tasks.md status updates only after main-agent review
+current accepted stage scope
++ existing authorization and accepted write grant, if any
++ explicitly disclosed assignment boundary
+- every action not already authorized
 ```
 
-Project Skill authoring pressure tests are the no-feature exception: after the Candidate/Gate 1 explicitly satisfies every bounded-dispatch field above, persist approval, per-agent briefs, exact returns/rationalizations, main-agent review, and consumed status in `.agent-loop/skills/<skill-name>/validation.md`. Do not create a feature or `handoffs/` only for skill-authoring tests.
+A Subagent cannot create or widen authorization. Read-only work has `allowed writes: none`. Implementation requires a current Gate 2, Task Auto-Run, Review Repair, or other explicit write grant that already covers every allowed path and behavior. Product/Requirement/ADR/Contract/Bug lifecycle meaning and branch, worktree, commit, push, release, publish, production, destructive, credential, paid, or external actions keep their existing Human Gates.
 
-Record the approval date, approved task/story IDs or scan lanes, allowed file/boundary scope, and stop conditions in `notes.md` and each brief. Expanding the approved scope requires new human confirmation; old approval cannot be reused for new tasks or boundaries.
+Before dispatch, disclose the owning stage, existing authorization, assignment scope, inputs, outputs, allowed writes, forbidden actions, verification, expiry, and stop conditions. Use the optional `templates/subagent-brief.md` only when durable handoff evidence is useful; a response-local brief is sufficient inside one reliable session.
 
-Authorization Status must be `active` immediately before dispatch. Reject `consumed`, `revoked`, or `expired` records even when IDs and boundaries are unchanged. Mark the authorization `consumed` after the approved dispatch group returns or is stopped; a retry or later dispatch requires fresh human confirmation and a new authorization record.
+The owning Agent permits concurrent implementation only for mechanically non-overlapping write sets. A known same writable path must be serialized or placed in already-authorized isolated worktrees with distinct physical write boundaries; coordination text alone does not make concurrent same-file writes safe. After return it inspects the output and actual diff, validates findings, reconciles unexpected overlap, runs or validates Required Verification, and owns all status, memory, routing, integration, and Human-facing claims. Subagent output is evidence, not authority.
 
-Subagents must never close a feature, submit code, update project memory directly, accept Delivery Contracts, or approve breaking contract changes. They must never mark tasks `done`. Only the main agent may mark a task `done` after Task Done Gate passes.
+The Final Review Subagent is always read-only. It reports findings and must not edit files, mark Tasks or the Feature done, accept a Human Gate, perform Git, perform external actions, close a Feature, update project memory, or accept/change Delivery Contracts. The owning Agent handles every finding disposition and any authorized repair.
+
+When the Subagent coordination helper is unavailable or load-failed, record the helper fallback. A missing helper does not mean the runtime dispatcher is unavailable: when the runtime still exposes Subagent dispatch, dispatch through the runtime mechanism with the same bounded brief. `controller-fallback` is allowed only when the active runtime genuinely has no Subagent dispatch mechanism; then record `Final Reviewer: controller-fallback` and perform a fresh isolated whole-Feature review pass. Never silently omit review. A failed runtime dispatch enters Diagnose Failure under the unchanged brief. After the initial failure, allow at most one diagnostic retry for that dispatcher and one attempt for each other distinct exposed dispatcher. Controller fallback remains forbidden while any mechanism is exposed. If every bounded attempt fails while mechanisms remain advertised, record `Final Review: blocked`, the failed mechanisms/evidence, `Recovery Owner: runtime dispatcher`, and the exact recovery condition; recommend that one recovery action and do not loop. Post-return reconciliation handles unexpected overlap only. Unexpected overlap, stale input, failed dispatch with uncertain evidence, or a request outside inherited authority stops integration and returns to the owning stage or Human Gate.

@@ -26,7 +26,7 @@ Route here when the human says or implies:
 - "线上/联调/验收发现问题"
 - error screenshots, browser screenshots, logs, stack traces, failing tests, API mismatch, E2E failure, or user feedback tied to active, paused, closed, or recent feature work
 
-Also route here after Verify, Review, Drift Check, or Submit reveals a defect likely tied to a recent feature.
+Also route here after Verify, Task Completion Review, Final Review finding assessment, Drift Check, or Submit reveals a defect likely tied to a recent feature.
 
 ## Lookback Window
 

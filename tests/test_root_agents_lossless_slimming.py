@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE = ROOT / "templates/root-AGENTS.md"
 RUNTIME = ROOT / "references/runtime.md"
-EXPECTED_REVISION = "1.5.8-20260826.1"
+EXPECTED_REVISION = "1.5.9-20260829.1"
 
 EXPECTED_SECTIONS = (
     ("bootstrap", ".agent-loop/project.md"),
@@ -105,10 +105,10 @@ RUNTIME_LEAF_STAGES = (
     "Technical Design / Code Context",
     "Plan Gate / Plan if Needed",
     "Analyze Consistency",
-    "Subagent Execution If Approved",
     "Execute Task / Story",
     "Verify",
-    "Review",
+    "[internal] Task Completion Review inside Task Done Gate",
+    "[internal] Feature-wide Required Verification and automatic Final Review Subagent",
     "Drift Check",
     "Project Memory Update",
     "Feature Completion Check",
@@ -125,11 +125,11 @@ OUTCOME_OWNER = (
 CORE_SPINE = (
     "Inspect -> Classify Intent And Project State -> Recommend One Next Action "
     "-> Human Gate When Required -> Act Through Loaded Reference -> Verify "
-    "-> Review / Drift -> Record Memory -> Submit / Pause / Close"
+    "-> Task Completion / Final Review / Drift -> Record Memory -> Submit / Pause / Close"
 )
 PRODUCT_SPINE = (
     "Requirements / Product Definition -> Decision / ADR If Needed -> Feature Product Slice -> Plan "
-    "-> Execute -> Verify / Review / Drift -> Memory -> Submit / Close"
+    "-> Execute -> Verify / Task Completion / Final Review / Drift -> Memory -> Submit / Close"
 )
 GATE_CLASSES = (
     "Semantic Gate", "Scope And Risk Gate", "Execution Gate", "Evidence Gate",
@@ -237,9 +237,9 @@ def contract_issues(text: str) -> list[str]:
         issues.append("auto-mode-gate-bypass")
     for required in (
         "Code changes alone never make a task or Feature done.",
-        "Fresh verification, Review, Drift Check, and required Project Memory evidence precede completion.",
+        "Fresh verification, Task Completion Review, Final Review, Drift Check, and required Project Memory evidence precede completion.",
         "Feature Completion Check",
-        "Feature Close Review",
+        "Human Close Gate",
     ):
         if required not in text:
             issues.append(f"missing-completion:{required}")

@@ -51,7 +51,7 @@ Result: passed for T001/T002 foundation tests
 
 - No active failure. T003 plan notes possible risk around route auth context.
 
-## Review
+## Task Completion Reviews
 
 ### Spec Review
 
@@ -62,6 +62,10 @@ Result: passed for T001/T002 foundation tests
 ### Standards Review
 
 - Pending. Required for this large project because the feature crosses domain, API, DB, and web UI boundaries.
+
+## Final Review
+
+- Not started: T003 and Feature-wide verification are incomplete.
 
 ## Spec Drift
 

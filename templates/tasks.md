@@ -18,8 +18,9 @@ Default Split: vertical-slice
 
 - Do not mark a task `done` from code changes alone.
 - After implementation and fresh verification, use `Status: review` until Task Done Gate passes.
-- Task Done Gate: implementation complete, required tests or substitute verification run fresh, evidence recorded in `notes.md`, lightweight Spec Review recorded, Standards Review recorded when triggered, drift decision recorded, and evidence location named below.
-- AI reviews each `T<digits>` checkbox plus its `Status`, `Review`, and `Drift` values directly and remains responsible for all Task semantics.
+- Task Done Gate: implementation complete, Task Completion Review passes accepted authority/scope/diff/risk/rollback, required tests or substitute verification run fresh, evidence is recorded in `notes.md`, Standards Review is recorded when triggered, drift has a disposition, and the current evidence pointer is named below.
+- A later bounded Review Repair may preserve `done` without repeating formal Task Completion Review only after fresh proof refreshes this Task's review evidence pointer/currentness. A stale or missing pointer returns the Task to `review`.
+- AI reviews each `T<digits>` checkbox plus its `Status`, `Task Completion Review`, and `Drift` values directly and remains responsible for all Task semantics.
 - `Gate 2 Agent-ready Tasks` records the initial reviewed decomposition, not an immutable whitelist. A later Agent-ready Task still needs an accepted Story/Product Slice mapping and an exact current `within-approved-boundary` Gate 2 assessment before execution. A new Task ID alone does not repeat Gate 2; a new execution boundary does.
 - Use `Derived From` to trace a split or refinement back to an initially reviewed Task. It never substitutes for `Covers Stories`, never authorizes a new Story/Acceptance, and must reference an initially reviewed Task when present.
 - When `Gate 2 Plan Evidence` uses `no-plan:<task ID>`, that Task row or its detail must record `No-Plan Decision: accepted`; this is structural evidence only, while the Agent remains responsible for proving no Plan trigger applies.
@@ -51,7 +52,8 @@ Default Split: vertical-slice
   - Acceptance:
   - Verification:
   - Evidence:
-  - Review:
+  - Task Completion Review:
+  - Task Completion Review Currentness: current | stale
   - Drift:
   - Proved By Future Slices:
 

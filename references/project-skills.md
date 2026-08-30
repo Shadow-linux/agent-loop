@@ -35,7 +35,7 @@ Example triggers include:
 - “这个步骤以后经常用，做成项目常驻能力。”
 - “更新项目里的部署 skill。”
 
-Project Entry or reliable project memory must exist before Project Skill Creation / Update writes files. This stage does not create a requirement set or feature workspace and is not blocked by paused feature work. It must not interrupt unfinished Verify, Review, Drift Check, Project Memory Update, or Close work for an active feature.
+Project Entry or reliable project memory must exist before Project Skill Creation / Update writes files. This stage does not create a requirement set or feature workspace and is not blocked by paused feature work. It must not interrupt unfinished Verify, Task Done Gate, Final Review, Drift Check, Project Memory Update, or Close work for an active feature.
 
 ## Proactive Project Skill Candidate
 
@@ -63,7 +63,7 @@ The Candidate must state:
 | Verification | RED/GREEN/REFACTOR and forward-test plan |
 | File Tree | exact `.agent-loop/skills/<skill-name>/` output |
 
-When pressure testing will use subagents, the Candidate must satisfy the existing subagent-dispatch contract rather than replace it: list bounded independent scenario lanes, one brief/role per agent, allowed read/write boundaries, stop conditions, main-agent review responsibility, and the active/consumed authorization lifecycle. Human confirmation of that explicit Candidate may satisfy the dispatch gate for those authoring tests only; it does not authorize implementation or operational subagents outside the Candidate. After Gate 1 creates `validation.md`, persist the approval, briefs, exact returns/rationalizations, and consumed status there instead of creating a feature or `handoffs/` directory.
+When pressure testing will use subagents, the Candidate must satisfy Agent-Owned Subagent Delegation rather than replace it: list bounded independent scenario lanes, one brief/role per agent, inherited Gate 1 write scope or read-only boundary, allowed writes, forbidden actions, expiry, stop conditions, and main-agent review responsibility. Dispatch adds no Human Gate, but it cannot widen the Candidate or Gate 1 authority and cannot authorize operational use of the finished skill. After Gate 1 creates `validation.md`, persist useful briefs and exact returns/rationalizations there instead of creating a feature or `handoffs/` directory.
 
 ## Gate 1: Create Project Skill
 
