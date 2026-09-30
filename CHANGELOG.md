@@ -2,7 +2,7 @@
 
 ## 1.5.9 — 2026-08-29
 
-_当前状态：开发中；Phase 1 implementation、Review Repair、focused contracts 与独立 proposal-blind pressure review 已完成，单功能评分 98/100 STRONG。版本与 13 个 root managed blocks 已同步；全量/六域验证、最终 Human Review、commit、push、tag、release、publish 与 installed Skill 同步尚未完成或授权。本节不声明 `stable-v1.5.9` 已存在。_
+_当前状态：正式稳定版；最终 Human Review、54/54 Shell contracts、464/464 Python tests、机械检查与六域审计通过，评分 99/100 STRONG。正式发布使用稳定分支 `v1.5.9`、tag `stable-v1.5.9`，默认安装通道 `main` 与三个已配置发布端使用同一发布提交；installed Skill 同步不属于本次发布授权。_
 
 ### Inline Task Review 与 Final Review
 - 将快速且强制的 Task Completion Review 内联到 Task Done Gate；每个 `done` Task 保留 current evidence pointer，普通边界内修复以 fresh proof 刷新 currentness，无法真实刷新时返回 `review`。
@@ -20,8 +20,8 @@ _当前状态：开发中；Phase 1 implementation、Review Repair、focused con
 
 ### 兼容、验证与版本同步
 - Feature Monthly Archive 读取 current Final Review 证据，同时保留严格日期和证据形状约束的 pre-1.5.9 legacy dual-read；`2026-08-29` cutoff 当日由精确回归保护，历史记录不能形成当前授权。
-- focused RED/GREEN、mutation、archive、root guidance、version assertions、Shell contracts 与机械检查已通过；完整 Shell/Python 与六域 full validation 仍需绑定当前输入的一次性 Human confirmation 后执行。
-- Skill/metadata/人类文档版本更新为 1.5.9，13 个 root managed blocks 使用 `1.5.9-20260829.1`。稳定 branch/tag、默认 `main`、多远端与 installed Skill 同步均保留后续独立 Human Gates。
+- focused RED/GREEN、mutation、archive、root guidance、version assertions 与机械检查通过；修复后精确绑定输入的全量验证完成 54/54 Shell、464/464 Python，并通过六域语义审计与最终 Human Review。
+- Skill/metadata/人类文档版本更新为 1.5.9，13 个 root managed blocks 使用 `1.5.9-20260829.1`；正式发布使用 `v1.5.9`、`stable-v1.5.9` 与同提交 `main`，installed Skill 同步保持独立授权边界。
 
 ## 1.5.8 — 2026-08-27
 

@@ -1,8 +1,8 @@
 # Agent Loop
 
-**Current version:** 1.5.9 (development; not yet released)
+**Current version:** 1.5.9 (stable)
 
-Agent Loop 1.5.9 is the current development version. It inlines the fast Task Completion Review into Task Done Gate, automatically dispatches one read-only Feature-wide Final Review after all prerequisites are current, removes duplicate close review, and lets the Agent delegate inside existing authority. The latest formal stable installation tag remains `stable-v1.5.8` until 1.5.9 passes its remaining Human and release gates.
+Agent Loop 1.5.9 is the current formal stable version. It inlines the fast Task Completion Review into Task Done Gate, automatically dispatches one read-only Feature-wide Final Review after all prerequisites are current, removes duplicate close review, and lets the Agent delegate inside existing authority. The formal stable installation tag is `stable-v1.5.9`, and the default `main` installation channel resolves to the same release commit.
 
 Agent Loop is a reusable controller skill for single-human, CLI-agent software development. It lets the Agent own project diagnosis, workflow sequencing, implementation, verification, and memory maintenance while the human keeps control of goals, product meaning, consequential decisions, and external actions.
 
@@ -211,14 +211,14 @@ Use this route when `npx` is unavailable or the environment must install from a 
 ```bash
 # Public GitHub
 git clone \
-  --branch stable-v1.5.8 \
+  --branch stable-v1.5.9 \
   --depth 1 \
   https://github.com/Shadow-linux/agent-loop.git \
   ~/.local/share/agent-loop-source
 
 # Private Git mirror
 git clone \
-  --branch stable-v1.5.8 \
+  --branch stable-v1.5.9 \
   --depth 1 \
   <git-mirror-url> \
   ~/.local/share/agent-loop-source
@@ -250,7 +250,7 @@ For a later clone-based upgrade, fetch tags, check out the new stable tag explic
 
 ```bash
 git -C ~/.local/share/agent-loop-source fetch --tags origin
-git -C ~/.local/share/agent-loop-source checkout --detach stable-v1.5.8
+git -C ~/.local/share/agent-loop-source checkout --detach stable-v1.5.9
 ```
 
 `~/.agents/skills/agent-loop` is the preferred shared location. If an Agent runtime does not discover it, synchronize the same verified source into that runtime's configured Skill directory rather than maintaining divergent copies.

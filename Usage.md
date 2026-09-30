@@ -1,8 +1,8 @@
 # Agent Loop Usage
 
-**版本：** 1.5.9（开发中，尚未正式发布）
+**版本：** 1.5.9（正式稳定版）
 
-Agent Loop 1.5.9 是当前开发版本：Task Done Gate 内联快速 Task Completion Review，全部前置条件就绪后自动派发一次只读 Feature-wide Final Review，Close 不重复审阅，Subagent 只继承已有授权。正式安装仍使用 `stable-v1.5.8`，直到 1.5.9 完成剩余 Human Gate 与发布流程。
+Agent Loop 1.5.9 是当前正式稳定版：Task Done Gate 内联快速 Task Completion Review，全部前置条件就绪后自动派发一次只读 Feature-wide Final Review，Close 不重复审阅，Subagent 只继承已有授权。正式安装使用 `stable-v1.5.9`，默认 `main` 安装通道与该正式发布提交保持一致。
 
 这是一份给人类使用的触发指南。你不需要记住 Agent Loop 的阶段名；只要说明目标、边界和你希望 Agent 自主推进到哪里，Agent 负责判断项目状态、选择流程、维护产物并在真正的 Human Gate 停下。
 
@@ -38,12 +38,12 @@ npx skills list -g
 
 ```bash
 # Public GitHub
-git clone --branch stable-v1.5.8 --depth 1 \
+git clone --branch stable-v1.5.9 --depth 1 \
   https://github.com/Shadow-linux/agent-loop.git \
   ~/.local/share/agent-loop-source
 
 # Private Git mirror
-git clone --branch stable-v1.5.8 --depth 1 \
+git clone --branch stable-v1.5.9 --depth 1 \
   <git-mirror-url> \
   ~/.local/share/agent-loop-source
 ```

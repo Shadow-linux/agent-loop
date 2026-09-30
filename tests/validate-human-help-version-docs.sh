@@ -30,13 +30,13 @@ assert_contains "Usage.md" "Usage.md"
 assert_contains "CHANGELOG.md" "Human Help / Version Questions"
 assert_contains "CHANGELOG.md" "CHANGELOG.md is the source of truth for version-change answers"
 
-assert_contains "README.md" "**Current version:** 1.5.9 (development; not yet released)"
-assert_contains "README.md" 'latest formal stable installation tag remains `stable-v1.5.8`'
-assert_contains "README.md" "--branch stable-v1.5.8"
-assert_contains "Usage.md" "**版本：** 1.5.9（开发中，尚未正式发布）"
-assert_contains "Usage.md" '正式安装仍使用 `stable-v1.5.8`'
-assert_contains "Usage.md" "git clone --branch stable-v1.5.8"
+assert_contains "README.md" "**Current version:** 1.5.9 (stable)"
+assert_contains "README.md" 'formal stable installation tag is `stable-v1.5.9`'
+assert_contains "README.md" "--branch stable-v1.5.9"
+assert_contains "Usage.md" "**版本：** 1.5.9（正式稳定版）"
+assert_contains "Usage.md" '正式安装使用 `stable-v1.5.9`'
+assert_contains "Usage.md" "git clone --branch stable-v1.5.9"
 assert_contains "CHANGELOG.md" '## 1.5.9 — 2026-08-29'
-assert_contains "CHANGELOG.md" '本节不声明 `stable-v1.5.9` 已存在'
+assert_contains "CHANGELOG.md" '正式发布使用稳定分支 `v1.5.9`、tag `stable-v1.5.9`'
 
 printf "PASS: human help and version docs routing contract is complete\n"
